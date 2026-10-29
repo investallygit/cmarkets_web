@@ -1,0 +1,165 @@
+{
+  "app": {
+    "connecting": "Connexion à CMarket",
+    "sessionError": "Impossible de charger votre session.",
+    "retry": "Réessayer"
+  },
+  "common": {
+    "loading": "Chargement",
+    "retry": "Réessayer",
+    "noData": "Aucune donnée",
+    "yesterdayShort": "Hier"
+  },
+  "shell": {
+    "commandLabel": "Barre de commande",
+    "commandPlaceholder": "Valeur + fonction, ex. SEMC DES",
+    "go": "<GO>",
+    "unknownFunction": "Code fonction inconnu : {{code}}",
+    "unknownSecurity": "Aucune valeur ne correspond à {{query}}",
+    "needsSecurity": "{{code}} s'applique à une valeur, ex. SEMC {{code}}",
+    "notApplicable": "{{code}} ne s'applique pas à {{security}}",
+    "marketOpen": "Marché ouvert",
+    "marketClosed": "Marché fermé",
+    "clockCity": "Douala",
+    "alerts": "Alertes",
+    "backOffice": "Back-office",
+    "expandMenu": "Déplier le menu",
+    "collapseMenu": "Replier le menu",
+    "mainMenu": "Menu principal",
+    "realtime": {
+      "connecting": "Connexion",
+      "connected": "Temps réel connecté",
+      "reconnecting": "Reconnexion",
+      "disconnected": "Temps réel déconnecté"
+    },
+    "source": "Source",
+    "lastUpdate": "dernière mise à jour",
+    "prototypeData": "Prototype — données fictives",
+    "language": "Langue",
+    "prototypeAccount": "Prototype : type de compte"
+  },
+  "accountTypes": {
+    "student": "Étudiant",
+    "analyst": "Analyste",
+    "manager": "Gérant de portefeuille",
+    "trader": "Trader",
+    "dataAdmin": "Admin données",
+    "admin": "Admin"
+  },
+  "accountBadge": {
+    "student": "Étudiant",
+    "analyst": "Analyste",
+    "manager": "Gérant",
+    "trader": "Trader",
+    "dataAdmin": "Admin données",
+    "admin": "Admin"
+  },
+  "screens": {
+    "MKT": { "title": "Tableau de bord du marché", "menu": "Marché" },
+    "DES": { "title": "Fiche valeur", "menu": "Fiche" },
+    "EQS": { "title": "Filtre actions et analyse fondamentale", "menu": "Analyse" },
+    "YCRV": { "title": "Courbes de taux et calculateur obligataire", "menu": "Taux" },
+    "YAS": { "title": "Courbes de taux et calculateur obligataire", "menu": "Oblig." },
+    "PORT": { "title": "Portefeuille", "menu": "Portef." },
+    "PUB": { "title": "Bibliothèque de recherche", "menu": "Recherche" },
+    "PUBNEW": { "title": "Studio de publication", "menu": "Studio" },
+    "N": { "title": "Actualités", "menu": "Actus" },
+    "CAL": { "title": "Calendrier du marché", "menu": "Calendrier" },
+    "ALRT": { "title": "Alertes", "menu": "Alertes" },
+    "CFG": { "title": "Paramètres", "menu": "Réglages" },
+    "DATA": { "title": "Couverture de la séance", "menu": "Séance" },
+    "IMP": { "title": "Import de données", "menu": "Imports" },
+    "CORR": { "title": "Corrections de données", "menu": "Correct." },
+    "NEWS": { "title": "Actualités et documents", "menu": "Actus" },
+    "EODH": { "title": "Connecteur EODHD", "menu": "EODHD" },
+    "HIST": { "title": "Historique des imports", "menu": "Historique" },
+    "USER": { "title": "Administration des comptes", "menu": "Comptes" },
+    "ANLY": { "title": "Demandes de statut analyste", "menu": "Analystes" },
+    "MOD": { "title": "Modération", "menu": "Modérat." },
+    "PAY": { "title": "Versements aux analystes", "menu": "Versem." },
+    "ADMCFG": { "title": "Paramètres de la plateforme", "menu": "Réglages" },
+    "AUDT": { "title": "Journal d'audit", "menu": "Audit" }
+  },
+  "functions": {
+    "DES": "Fiche valeur",
+    "GP": "Graphique de cours",
+    "FA": "Analyse fondamentale",
+    "DVD": "Historique des dividendes",
+    "N": "Actualités",
+    "DOC": "Documents de l'émetteur",
+    "HDS": "Actionnaires",
+    "ANA": "Recherche sur la valeur",
+    "YAS": "Calculateur obligataire"
+  },
+  "status": {
+    "notFound": "Cet écran n'existe pas.",
+    "forbidden": "Cet écran n'est pas disponible pour votre type de compte.",
+    "unexpected": "Une erreur est survenue sur cet écran.",
+    "backHome": "Retour à l'accueil"
+  },
+  "panels": {
+    "indices": "Indices",
+    "indexChart": "Graphique d'indice",
+    "topMovers": "Plus fortes variations",
+    "watchlist": "Liste de suivi : {{name}}",
+    "ratesFx": "Taux et changes",
+    "news": "Actualités",
+    "calendar": "Calendrier du marché",
+    "alertsToday": "Mes alertes déclenchées aujourd'hui",
+    "sessionSummary": "Résumé de séance"
+  },
+  "market": {
+    "movers": {
+      "gainers": "Hausses",
+      "losers": "Baisses",
+      "volume": "Volume"
+    },
+    "newsTopics": {
+      "all": "Tout",
+      "issuer": "Émetteurs",
+      "regulator": "Régulateur"
+    },
+    "next7Days": "7 prochains jours",
+    "eventTypes": {
+      "session": "Séance",
+      "auction": "Adjudication",
+      "dividend": "Dividende",
+      "meeting": "Assemblée",
+      "maturity": "Échéance",
+      "earnings": "Résultats"
+    },
+    "summary": {
+      "advancers": "En hausse",
+      "decliners": "En baisse",
+      "unchanged": "Inchangées",
+      "valueTraded": "Capitaux échangés"
+    },
+    "fixedPeg": "parité fixe",
+    "add": "Ajouter",
+    "noAlertsToday": "Aucune alerte déclenchée aujourd'hui"
+  },
+  "columns": {
+    "index": "Indice",
+    "value": "Valeur",
+    "change": "Var.",
+    "changePct": "Var. %",
+    "security": "Valeur",
+    "last": "Dernier",
+    "volume": "Volume",
+    "volumeShares": "Vol. (titres)",
+    "fiveDays": "5 jours",
+    "instrument": "Instrument",
+    "date": "Date",
+    "type": "Type",
+    "event": "Événement"
+  },
+  "menu": {
+    "openProfile": "Ouvrir la fiche",
+    "addToList": "Ajouter à une liste",
+    "createAlert": "Créer une alerte",
+    "export": "Exporter (CSV)"
+  },
+  "placeholder": {
+    "notBuilt": "Panneau prévu, pas encore développé"
+  }
+}

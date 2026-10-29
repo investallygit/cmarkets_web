@@ -1,0 +1,165 @@
+{
+  "app": {
+    "connecting": "Connecting to CMarket",
+    "sessionError": "Your session could not be loaded.",
+    "retry": "Retry"
+  },
+  "common": {
+    "loading": "Loading",
+    "retry": "Retry",
+    "noData": "No data",
+    "yesterdayShort": "Yest."
+  },
+  "shell": {
+    "commandLabel": "Command bar",
+    "commandPlaceholder": "Security + function, e.g. SEMC DES",
+    "go": "<GO>",
+    "unknownFunction": "Unknown function code {{code}}",
+    "unknownSecurity": "No security matches {{query}}",
+    "needsSecurity": "{{code}} applies to a security, e.g. SEMC {{code}}",
+    "notApplicable": "{{code}} does not apply to {{security}}",
+    "marketOpen": "Market open",
+    "marketClosed": "Market closed",
+    "clockCity": "Douala",
+    "alerts": "Alerts",
+    "backOffice": "Back-office",
+    "expandMenu": "Expand menu",
+    "collapseMenu": "Collapse menu",
+    "mainMenu": "Main menu",
+    "realtime": {
+      "connecting": "Connecting",
+      "connected": "Real-time connected",
+      "reconnecting": "Reconnecting",
+      "disconnected": "Real-time disconnected"
+    },
+    "source": "Source",
+    "lastUpdate": "last update",
+    "prototypeData": "Prototype — sample data",
+    "language": "Language",
+    "prototypeAccount": "Prototype: account type"
+  },
+  "accountTypes": {
+    "student": "Student",
+    "analyst": "Analyst",
+    "manager": "Portfolio manager",
+    "trader": "Trader",
+    "dataAdmin": "Data admin",
+    "admin": "Admin"
+  },
+  "accountBadge": {
+    "student": "Student",
+    "analyst": "Analyst",
+    "manager": "Manager",
+    "trader": "Trader",
+    "dataAdmin": "Data admin",
+    "admin": "Admin"
+  },
+  "screens": {
+    "MKT": { "title": "Market dashboard", "menu": "Market" },
+    "DES": { "title": "Security profile", "menu": "Profile" },
+    "EQS": { "title": "Equity screener and fundamental analysis", "menu": "Analysis" },
+    "YCRV": { "title": "Yield curves and bond calculator", "menu": "Rates" },
+    "YAS": { "title": "Yield curves and bond calculator", "menu": "Bonds" },
+    "PORT": { "title": "Portfolio", "menu": "Portf." },
+    "PUB": { "title": "Research library", "menu": "Research" },
+    "PUBNEW": { "title": "Publishing studio", "menu": "Studio" },
+    "N": { "title": "News", "menu": "News" },
+    "CAL": { "title": "Market calendar", "menu": "Calendar" },
+    "ALRT": { "title": "Alerts", "menu": "Alerts" },
+    "CFG": { "title": "Settings", "menu": "Settings" },
+    "DATA": { "title": "Session coverage", "menu": "Session" },
+    "IMP": { "title": "Data import", "menu": "Imports" },
+    "CORR": { "title": "Data corrections", "menu": "Fixes" },
+    "NEWS": { "title": "News and documents", "menu": "News" },
+    "EODH": { "title": "EODHD connector", "menu": "EODHD" },
+    "HIST": { "title": "Upload history", "menu": "History" },
+    "USER": { "title": "Account administration", "menu": "Accounts" },
+    "ANLY": { "title": "Analyst status requests", "menu": "Analysts" },
+    "MOD": { "title": "Moderation", "menu": "Moderat." },
+    "PAY": { "title": "Analyst payouts", "menu": "Payouts" },
+    "ADMCFG": { "title": "Platform settings", "menu": "Settings" },
+    "AUDT": { "title": "Audit log", "menu": "Audit" }
+  },
+  "functions": {
+    "DES": "Security profile",
+    "GP": "Price chart",
+    "FA": "Fundamental analysis",
+    "DVD": "Dividend history",
+    "N": "News",
+    "DOC": "Issuer documents",
+    "HDS": "Shareholders",
+    "ANA": "Research on the security",
+    "YAS": "Bond calculator"
+  },
+  "status": {
+    "notFound": "This screen does not exist.",
+    "forbidden": "This screen is not available for your account type.",
+    "unexpected": "Something went wrong on this screen.",
+    "backHome": "Back to home"
+  },
+  "panels": {
+    "indices": "Indices",
+    "indexChart": "Index chart",
+    "topMovers": "Top movers",
+    "watchlist": "Watchlist: {{name}}",
+    "ratesFx": "Rates and FX",
+    "news": "News",
+    "calendar": "Market calendar",
+    "alertsToday": "My alerts triggered today",
+    "sessionSummary": "Session summary"
+  },
+  "market": {
+    "movers": {
+      "gainers": "Gainers",
+      "losers": "Losers",
+      "volume": "Volume"
+    },
+    "newsTopics": {
+      "all": "All",
+      "issuer": "Issuers",
+      "regulator": "Regulator"
+    },
+    "next7Days": "Next 7 days",
+    "eventTypes": {
+      "session": "Session",
+      "auction": "Auction",
+      "dividend": "Dividend",
+      "meeting": "Meeting",
+      "maturity": "Maturity",
+      "earnings": "Earnings"
+    },
+    "summary": {
+      "advancers": "Advancers",
+      "decliners": "Decliners",
+      "unchanged": "Unchanged",
+      "valueTraded": "Value traded"
+    },
+    "fixedPeg": "fixed peg",
+    "add": "Add",
+    "noAlertsToday": "No alert triggered today"
+  },
+  "columns": {
+    "index": "Index",
+    "value": "Value",
+    "change": "Chg.",
+    "changePct": "Chg. %",
+    "security": "Security",
+    "last": "Last",
+    "volume": "Volume",
+    "volumeShares": "Vol. (shares)",
+    "fiveDays": "5 days",
+    "instrument": "Instrument",
+    "date": "Date",
+    "type": "Type",
+    "event": "Event"
+  },
+  "menu": {
+    "openProfile": "Open profile",
+    "addToList": "Add to a list",
+    "createAlert": "Create an alert",
+    "export": "Export (CSV)"
+  },
+  "placeholder": {
+    "notBuilt": "Planned panel, not built yet"
+  }
+}

@@ -1,0 +1,149 @@
+@import 'tailwindcss';
+
+/*
+ * Colour tokens, spec section 8: "use the values below exactly as given in the front-end theme".
+ * The custom properties keep the spec names; @theme maps them to utilities
+ * (bg-app, bg-panel, bg-panel-header, bg-row-alt, bg-selected, border, text-primary,
+ * text-secondary, text-accent-amber, text-up, text-down, text-info, text-warning...).
+ */
+:root {
+  --bg-app: #000000;
+  --bg-panel: #0b0b0b;
+  --bg-panel-header: #1a1a1a;
+  --bg-row-alt: #111111;
+  --bg-selected: #1e3a5f;
+  --border: #2a2a2a;
+  --text-primary: #e6e6e6;
+  --text-secondary: #8c8c8c;
+  --accent-amber: #ff9f1a;
+  --up: #19d27a;
+  --down: #ff4d4d;
+  --info: #36c5f0;
+  --warning: #ffd23f;
+  /* Logo, login screen and marketing pages only. */
+  --brand-navy: #0b1f3a;
+  --brand-green: #1fb57a;
+}
+
+/* Only the tokens above exist: Tailwind's default palette is removed. */
+@theme inline {
+  --color-*: initial;
+  --color-app: var(--bg-app);
+  --color-panel: var(--bg-panel);
+  --color-panel-header: var(--bg-panel-header);
+  --color-row-alt: var(--bg-row-alt);
+  --color-selected: var(--bg-selected);
+  --color-border: var(--border);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-accent-amber: var(--accent-amber);
+  --color-up: var(--up);
+  --color-down: var(--down);
+  --color-info: var(--info);
+  --color-warning: var(--warning);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-green: var(--brand-green);
+}
+
+/* Typography and density, spec section 8. */
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'IBM Plex Mono', ui-monospace, monospace;
+
+  --text-*: initial;
+  --text-caption: 10px;
+  --text-caption--line-height: 12px;
+  --text-title: 11px; /* panel titles */
+  --text-title--line-height: 14px;
+  --text-data: 12px; /* figures, codes, tables */
+  --text-data--line-height: 16px;
+  --text-label: 13px; /* labels and long text */
+  --text-label--line-height: 18px;
+  --text-figure: 20px;
+  --text-figure--line-height: 24px;
+  --text-price: 26px; /* last price in the security header */
+  --text-price--line-height: 30px;
+
+  --tracking-title: 0.5px;
+
+  /* No corner radius above 2 px. */
+  --radius-*: initial;
+  --radius-xs: 2px;
+
+  --spacing-row: 22px; /* table rows and panel title bars */
+  --spacing-topbar: 40px;
+  --spacing-ticker: 24px;
+  --spacing-statusbar: 22px;
+  --spacing-menu: 56px;
+  --spacing-menu-expanded: 200px;
+
+  /* A value that changes in real time flashes for 400 ms on a 25% up / down background. */
+  --animate-flash-up: flash-up 400ms step-end;
+  --animate-flash-down: flash-down 400ms step-end;
+
+  @keyframes flash-up {
+    0%,
+    100% {
+      background-color: color-mix(in srgb, var(--up) 25%, transparent);
+    }
+  }
+
+  @keyframes flash-down {
+    0%,
+    100% {
+      background-color: color-mix(in srgb, var(--down) 25%, transparent);
+    }
+  }
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border);
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    overflow: hidden;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  ::selection {
+    background-color: var(--bg-selected);
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+/* react-grid-layout ships unlayered CSS, so these overrides stay unlayered too. */
+.react-grid-item.react-grid-placeholder {
+  background: var(--bg-selected);
+  opacity: 0.35;
+}
+
+.react-grid-item > .react-resizable-handle {
+  background-image: none;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  border-color: var(--text-secondary);
+}

@@ -1,0 +1,143 @@
+import { http, HttpResponse } from 'msw'
+import type {
+  HistoryInterval,
+  IndexQuoteDto,
+  MarketStatusDto,
+  MarketSummaryDto,
+  MoverDto,
+  TickerItemDto,
+} from '@/shared/api/contracts'
+import { toMarketDay } from '@/shared/lib/format'
+import {
+  changePct,
+  currentAccountType,
+  indices,
+  securities,
+  type MockIndex,
+  type MockSecurity,
+} from '../db'
+import { generateHistory } from '../lib/history'
+import { api, latency, problem } from '../lib/http'
+
+const INTERVALS: readonly HistoryInterval[] = ['5m', '30m', '1d', '1w']
+/** BVMAC bonds trade by nominal of XAF 10,000, quoted per 100. */
+const BOND_NOMINAL = 10_000
+
+function toIndexQuote(index: MockIndex): IndexQuoteDto {
+  return {
+    code: index.code,
+    name: index.name,
+    value: index.value,
+    previousClose: index.previousClose,
+    change: index.value - index.previousClose,
+    changePct: changePct(index.value, index.previousClose),
+    timestamp: index.updatedAt,
+  }
+}
+
+function equities(): MockSecurity[] {
+  return [...securities.values()].filter((security) => security.type === 'equity')
+}
+
+function toMover(security: MockSecurity): MoverDto {
+  return {
+    securityId: security.id,
+    code: security.code,
+    name: security.name,
+    type: security.type,
+    currency: security.currency,
+    last: security.last,
+    changePct: changePct(security.last, security.previousClose),
+    volume: security.volume,
+    // Students see delayed prices (spec section 12).
+    isDelayed: currentAccountType() === 'student',
+  }
+}
+
+function valueTraded(security: MockSecurity): number {
+  return security.type === 'bond'
+    ? (security.volume * BOND_NOMINAL * security.last) / 100
+    : security.volume * security.last
+}
+
+export const marketHandlers = [
+  http.get(api('/market/status'), async () => {
+    await latency()
+    // The prototype keeps the market open so that real-time updates show at any hour.
+    return HttpResponse.json<MarketStatusDto>({
+      status: 'open',
+      nextOpen: null,
+      sources: ['BVMAC', 'BEAC'],
+      asOf: new Date().toISOString(),
+    })
+  }),
+
+  http.get(api('/market/summary'), async () => {
+    await latency()
+    const all = [...securities.values()]
+    const changes = all.map((security) =>
+      Math.round((security.last - security.previousClose) * 100),
+    )
+    return HttpResponse.json<MarketSummaryDto>({
+      indices: [...indices.values()].map(toIndexQuote),
+      advancers: changes.filter((change) => change > 0).length,
+      decliners: changes.filter((change) => change < 0).length,
+      unchanged: changes.filter((change) => change === 0).length,
+      valueTraded: all.reduce((sum, security) => sum + valueTraded(security), 0),
+      currency: 'XAF',
+      asOf: new Date().toISOString(),
+    })
+  }),
+
+  http.get(api('/market/movers'), async ({ request }) => {
+    await latency()
+    const type = new URL(request.url).searchParams.get('type') ?? 'gainers'
+    const movers = equities().map(toMover)
+    if (type === 'volume') movers.sort((a, b) => b.volume - a.volume)
+    else if (type === 'losers') movers.sort((a, b) => a.changePct - b.changePct)
+    else movers.sort((a, b) => b.changePct - a.changePct)
+    return HttpResponse.json(movers)
+  }),
+
+  http.get(api('/market/ticker'), async () => {
+    await latency()
+    const main = indices.get('BVMAC-A')
+    const items: TickerItemDto[] = equities().map((security) => ({
+      kind: 'security',
+      symbol: security.id,
+      label: security.code,
+      type: security.type,
+      currency: security.currency,
+      last: security.last,
+      changePct: changePct(security.last, security.previousClose),
+    }))
+    if (main) {
+      items.unshift({
+        kind: 'index',
+        symbol: main.code,
+        label: main.code,
+        type: 'index',
+        currency: 'XAF',
+        last: main.value,
+        changePct: changePct(main.value, main.previousClose),
+      })
+    }
+    return HttpResponse.json(items)
+  }),
+
+  http.get(api('/indices'), async () => {
+    await latency()
+    return HttpResponse.json([...indices.values()].map(toIndexQuote))
+  }),
+
+  http.get(api('/indices/:code/history'), async ({ params, request }) => {
+    await latency()
+    const index = indices.get(String(params.code))
+    if (!index) return problem(404, 'Unknown index', `No index ${String(params.code)}.`)
+    const query = new URL(request.url).searchParams
+    const interval = INTERVALS.find((candidate) => candidate === query.get('interval')) ?? '1d'
+    const to = query.get('to') ?? toMarketDay(Date.now())
+    const from = query.get('from') ?? to
+    return HttpResponse.json(generateHistory(index.code, index.value, from, to, interval))
+  }),
+]
