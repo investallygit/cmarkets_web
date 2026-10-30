@@ -38,34 +38,66 @@ that use them.
 
 ## Architecture
 
+The code follows [Feature-Sliced Design](https://feature-sliced.design) (FSD): six layers, each
+split into slices by business domain, each slice into segments (`ui`, `model`, `api`, `lib`,
+`config`).
+
 ```
 src/
-  main.tsx    composition root: real back end or mocks
-  app/        router, app shell (top bar, command bar, ticker, menu, status bar), navigation
-  screens/    one folder per screen; arranges feature panels in a workspace
-  features/   business modules: API hooks, state, panels (market, watchlists, news...)
-  shared/     no business knowledge: API client and contracts, real-time, UI kit, i18n, formatting
+  main.tsx    entry point: real back end or mocks
+  app/        providers, router, app shell layout, global styles
+  pages/      one slice per screen: market-dashboard, placeholder (screens not built yet), status
+  widgets/    self-contained blocks: the panels (indices-panel, news-panel...) and the shell bars
+              (top-bar, side-menu, status-bar, ticker-tape)
+  features/   user actions: command-bar, security-actions, switch-language, switch-account,
+              workspace-layout
+  entities/   business data: session, security, quote (live prices), market, watchlist, rate,
+              news, calendar-event, notification
+  shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
+              UI kit, i18n, formatting
   mocks/      fake back end for the prototype (MSW handlers, sample data, simulated hub)
 ```
 
-A layer only imports the layers below it: `app -> screens -> features -> shared`. Features
-import each other through their `index.ts` only; `mocks/` only sees `shared/`, like a real
-server only shares the API contract. ESLint (`no-restricted-imports`) enforces these rules.
+ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
+
+- A layer only imports the layers below it:
+  `app -> pages -> widgets -> features -> entities -> shared`.
+- A slice never imports another slice of its own layer: pages compose widgets, widgets compose
+  features and entities.
+- Another slice is reached only through its public `index.ts` (`@/entities/market`); inside a
+  slice, imports are relative.
+- `mocks/` only sees `shared/`, like a real server only shares the API contract; only `main.tsx`
+  loads it.
+
+Where new code goes:
+
+| Code                                                         | Place                                                                      |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| A screen of the spec                                         | `SCREENS` in `shared/routes/screens.ts`, its page in `app/routes/pages.ts` |
+| The page of a screen: which panels, default layout           | `pages/<screen>`                                                           |
+| A panel, or any block shown on several screens               | `widgets/<name>`                                                           |
+| A user action (add to a list, create an alert, buy a report) | `features/<verb>-<noun>`                                                   |
+| A business object: types, API hooks, live state, small UI    | `entities/<object>`                                                        |
+| Anything without business knowledge                          | `shared/`                                                                  |
+
+When two widgets of a page must talk (the Indices panel picks the index of the chart), the page
+holds the state and passes props: see `pages/market-dashboard/model/indexSelection.ts`.
 
 ### Data flow
 
 - **REST**: `shared/api/client.ts` calls `/api/v1`, with errors as RFC 7807 `ApiError`.
-  Each feature wraps its endpoints in TanStack Query hooks (`features/*/api.ts`).
+  Each entity wraps its endpoints in TanStack Query hooks (`entities/*/api/queries.ts`).
   DTOs live in `shared/api/contracts`; they mirror spec section 10 and will be replaced by the
   client generated from the OpenAPI contract (Orval) once `CMarket.Api` exists.
 - **Real time**: `shared/realtime` defines a `RealtimeClient` interface with a SignalR
-  implementation (`/hubs/market`) and ref-counted symbol subscriptions. Live quotes go into a
-  Zustand store (`features/market/live`), so a tick re-renders one table cell, which flashes
-  for 400 ms.
-- **Layouts**: each screen declares its panels and default grid; the user's layout is saved
-  through `GET/PUT /me/layouts/{screen}`.
-- **Permissions**: `/me` returns the user's permissions; the menu, the command bar and the
-  routes only offer allowed screens. The server stays the authority.
+  implementation (`/hubs/market`) and ref-counted symbol subscriptions. Each entity handles the
+  hub events it owns (`use*RealtimeSync`, mounted once by `app/layouts/AppShell.tsx`). Live
+  quotes go into a Zustand store (`entities/quote/model`), so a tick re-renders one table cell,
+  which flashes for 400 ms.
+- **Layouts**: each page declares its panels and default grid (`pages/*/config`);
+  `features/workspace-layout` saves the user's layout through `GET/PUT /me/layouts/{screen}`.
+- **Permissions**: `/me` returns the user's permissions; `entities/session` decides which
+  screens the menu, the command bar and the routes offer. The server stays the authority.
 
 ### Design system
 

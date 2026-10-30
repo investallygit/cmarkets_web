@@ -1,7 +1,7 @@
 import { useRef, type ReactNode } from 'react'
 import ReactGridLayout from 'react-grid-layout'
-import { useElementSize } from '@/shared/hooks/useElementSize'
-import { useMediaQuery } from '@/shared/hooks/useMediaQuery'
+import { useElementSize } from '@/shared/lib/useElementSize'
+import { useMediaQuery } from '@/shared/lib/useMediaQuery'
 
 /** Position of a panel in grid units (12 columns x 26 rows fill the workspace). */
 export interface WorkspaceItem {
