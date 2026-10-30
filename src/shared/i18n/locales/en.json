@@ -8,7 +8,9 @@
     "loading": "Loading",
     "retry": "Retry",
     "noData": "No data",
-    "yesterdayShort": "Yest."
+    "yesterdayShort": "Yest.",
+    "close": "Close",
+    "cancel": "Cancel"
   },
   "shell": {
     "commandLabel": "Command bar",
@@ -157,7 +159,27 @@
     "openProfile": "Open profile",
     "addToList": "Add to a list",
     "createAlert": "Create an alert",
-    "export": "Export (CSV)"
+    "exportXlsx": "Export to Excel",
+    "exportCsv": "Export to CSV",
+    "exportFailed": "Export failed: {{message}}"
+  },
+  "form": {
+    "reason": "Reason",
+    "reasonRequired": "Required",
+    "datePlaceholder": "DD/MM/YYYY",
+    "dropFile": "Drop a file here or click to browse",
+    "maxFileSize": "{{size}} max",
+    "fileTypeRejected": "{{name}}: only {{types}} files are accepted",
+    "fileTooLarge": "{{name}} is larger than {{size}}",
+    "removeFile": "Remove the file"
+  },
+  "chart": {
+    "open": "O",
+    "high": "H",
+    "low": "L",
+    "close": "C",
+    "volume": "Volume",
+    "volumeShort": "Vol"
   },
   "placeholder": {
     "notBuilt": "Planned panel, not built yet"

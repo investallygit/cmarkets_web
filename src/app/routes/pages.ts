@@ -16,6 +16,11 @@ const PAGES: Partial<Record<ScreenTextKey, Page>> = {
   MKT: MarketDashboardPage,
 }
 
+/** Prototype only: the shared UI components on one page, at /_kit. */
+export const UiKitPage = lazy(() =>
+  import('@/pages/ui-kit').then((module) => ({ default: module.UiKitPage })),
+)
+
 /** Page of a screen; screens not built yet show the panels planned in their mockup. */
 export function pageOf(screen: ScreenDefinition): Page {
   return PAGES[screen.id] ?? PlaceholderPage

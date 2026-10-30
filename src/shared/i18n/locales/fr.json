@@ -8,7 +8,9 @@
     "loading": "Chargement",
     "retry": "Réessayer",
     "noData": "Aucune donnée",
-    "yesterdayShort": "Hier"
+    "yesterdayShort": "Hier",
+    "close": "Fermer",
+    "cancel": "Annuler"
   },
   "shell": {
     "commandLabel": "Barre de commande",
@@ -157,7 +159,27 @@
     "openProfile": "Ouvrir la fiche",
     "addToList": "Ajouter à une liste",
     "createAlert": "Créer une alerte",
-    "export": "Exporter (CSV)"
+    "exportXlsx": "Exporter vers Excel",
+    "exportCsv": "Exporter en CSV",
+    "exportFailed": "Échec de l'export : {{message}}"
+  },
+  "form": {
+    "reason": "Motif",
+    "reasonRequired": "Obligatoire",
+    "datePlaceholder": "JJ/MM/AAAA",
+    "dropFile": "Déposez un fichier ici ou cliquez pour parcourir",
+    "maxFileSize": "{{size}} maximum",
+    "fileTypeRejected": "{{name}} : seuls les fichiers {{types}} sont acceptés",
+    "fileTooLarge": "{{name}} dépasse {{size}}",
+    "removeFile": "Retirer le fichier"
+  },
+  "chart": {
+    "open": "O",
+    "high": "H",
+    "low": "B",
+    "close": "C",
+    "volume": "Volume",
+    "volumeShort": "Vol"
   },
   "placeholder": {
     "notBuilt": "Panneau prévu, pas encore développé"

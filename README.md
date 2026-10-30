@@ -23,7 +23,8 @@ npm run dev        # http://localhost:5173
 | `npm run e2e`                   | Playwright end-to-end tests (first run: `npx playwright install chromium`) |
 
 In the prototype, the user badge at the top right switches language (FR / EN) and account type,
-so every menu and permission of spec section 12 can be previewed.
+so every menu and permission of spec section 12 can be previewed. `/_kit` shows the shared UI
+components (form controls, dialogs, toasts, price chart, table export) with sample content.
 
 ## Stack (spec section 7)
 
@@ -31,7 +32,7 @@ React 18, strict TypeScript, Vite · TanStack Query (server data) · Zustand (la
 selection) · TanStack Table + Virtual · TradingView Lightweight Charts · react-grid-layout ·
 `@microsoft/signalr` · Tailwind CSS with the section 8 tokens · i18next (FR / EN) · Vitest,
 Testing Library, Playwright. Supporting choices: React Router 7, lucide-react icons,
-MSW 3 for the mock back end.
+MSW 3 for the mock back end, write-excel-file for the Excel export of tables.
 
 Recharts (allocation, performance) and TipTap (publishing studio) are added with the screens
 that use them.
@@ -54,7 +55,7 @@ src/
   entities/   business data: session, security, quote (live prices), market, watchlist, rate,
               news, calendar-event, notification
   shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
-              UI kit, i18n, formatting
+              UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
   mocks/      fake back end for the prototype (MSW handlers, sample data, simulated hub)
 ```
 
@@ -105,7 +106,13 @@ holds the state and passes props: see `pages/market-dashboard/model/indexSelecti
 (`--bg-panel`, `--accent-amber`...) and maps them to Tailwind utilities (`bg-panel`,
 `text-accent-amber`, `text-up`...). Tailwind's default palette is removed, so only these colours
 exist. Numbers use `shared/lib/format.ts` (`52 500,25` in French, `52,500.25` in English, dates
-`DD/MM/YYYY`, Douala time). Icons come from `lucide-react`.
+`DD/MM/YYYY`, Douala time), and inputs read them back with `shared/lib/parse.ts`. Icons come from
+`lucide-react`.
+
+Screens build on `shared/ui`: `Panel`, `DataTable` (sorting, right-click menu, Excel and CSV export
+unless the user lacks `analysis:export`), `charts/` (`PriceChart`, `AreaChart`), `form/` (buttons,
+fields, selects, number and date inputs in the user's format, checkboxes, segmented choices, file
+drop zone), `Dialog` (also as a side form), `ConfirmDialog` (with a required reason) and `toast`.
 
 ## Connecting the real back end
 
@@ -120,6 +127,9 @@ The screens do not change: they only know the API contract.
 | Screen                                                                    | State                                                         |
 | ------------------------------------------------------------------------- | ------------------------------------------------------------- |
 | App shell: top bar, command bar, ticker, menu by account type, status bar | Done                                                          |
+| Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
 | 1 · Market dashboard (MKT)                                                | Done on mock data, real-time quotes and indices               |
 | 2 to 9 and the back-office screens                                        | Placeholders with the mockup layout and the API of each panel |
 | Login, OTP, token refresh                                                 | Not started                                                   |
+
+The plan for the remaining screens, step by step, is in [ROADMAP.md](ROADMAP.md).

@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { DataTable } from './DataTable'
 import { createDataColumnHelper } from './dataColumns'
+import { TableExportContext } from './tableExport'
 
 interface Quote {
   code: string
@@ -37,6 +38,22 @@ describe('DataTable', () => {
 
     await user.click(screen.getByRole('button', { name: 'Security' }))
     expect(bodyCodes()).toEqual(['SIAT', 'SEMC', 'BANGE'])
+  })
+
+  it('offers Excel and CSV export, unless the user may not export', async () => {
+    const user = userEvent.setup()
+    const table = <DataTable data={data} columns={columns} getRowId={getRowId} />
+    const { unmount } = render(table)
+    await user.pointer({ keys: '[MouseRight]', target: screen.getByRole('cell', { name: 'SEMC' }) })
+    expect(screen.getAllByRole('menuitem').map((item) => item.textContent)).toEqual([
+      'Export to Excel',
+      'Export to CSV',
+    ])
+    unmount()
+
+    render(<TableExportContext.Provider value={false}>{table}</TableExportContext.Provider>)
+    await user.pointer({ keys: '[MouseRight]', target: screen.getByRole('cell', { name: 'SEMC' }) })
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument()
   })
 
   it('reports the clicked row', async () => {

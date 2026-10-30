@@ -1,14 +1,17 @@
 import { useTable, type Row, type RowData } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { clsx } from 'clsx'
-import { ChevronDown, ChevronUp, Download } from 'lucide-react'
-import { useCallback, useRef, useState, type MouseEvent } from 'react'
+import { ChevronDown, ChevronUp, Download, FileSpreadsheet } from 'lucide-react'
+import { useCallback, useContext, useRef, useState, type MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { downloadCsv, type CsvCell } from '@/shared/lib/csv'
+import { downloadXlsx } from '@/shared/lib/xlsx'
 import { ContextMenu } from './ContextMenu'
 import { dataTableFeatures, type DataColumns, type DataTableFeatures } from './dataColumns'
 import type { MenuItem } from './menu'
 import { PanelEmpty } from './StatusViews'
+import { TableExportContext } from './tableExport'
+import { toast } from './toast'
 
 /** Table row height, spec section 8. */
 const ROW_HEIGHT = 22
@@ -22,7 +25,7 @@ export interface DataTableProps<TRow extends RowData> {
   selectedRowId?: string | null
   onRowClick?: (row: TRow) => void
   onRowDoubleClick?: (row: TRow) => void
-  /** Row entries of the right-click menu; "Export" is always appended. */
+  /** Row entries of the right-click menu; the export entries follow when the user may export. */
   rowMenu?: (row: TRow) => MenuItem[]
   exportName?: string
   rowClassName?: (row: TRow) => string | undefined
@@ -42,7 +45,7 @@ function toCsvCell(value: unknown): CsvCell {
 
 /**
  * Dense terminal table: 22 px rows, alternate row background, sorting by clicking a column
- * header, right-click menu with CSV export, virtualization for thousands of rows.
+ * header, right-click menu with Excel and CSV export, virtualization for thousands of rows.
  */
 export function DataTable<TRow extends RowData>({
   data,
@@ -58,6 +61,7 @@ export function DataTable<TRow extends RowData>({
   emptyMessage,
 }: DataTableProps<TRow>) {
   const { t } = useTranslation()
+  const canExport = useContext(TableExportContext)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [menu, setMenu] = useState<MenuState | null>(null)
   const closeMenu = useCallback(() => setMenu(null), [])
@@ -80,21 +84,47 @@ export function DataTable<TRow extends RowData>({
     .map((column) => column.columnDef.meta?.width ?? '1fr')
     .join(' ')
 
-  const exportCsv = () => {
+  /** The rows as shown, sorting included. */
+  const exportTable = (format: 'csv' | 'xlsx') => {
     const exported = leafColumns.filter((column) => column.columnDef.meta?.exportable !== false)
     const header = exported.map((column) =>
       typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id,
     )
     const body = rows.map((row) => exported.map((column) => toCsvCell(row.getValue(column.id))))
-    downloadCsv(exportName, [header, ...body])
+    if (format === 'csv') return downloadCsv(exportName, [header, ...body])
+    downloadXlsx(exportName, [header, ...body]).catch((error: unknown) => {
+      toast.error(
+        t('menu.exportFailed', { message: error instanceof Error ? error.message : String(error) }),
+      )
+    })
   }
 
   const openMenu = (event: MouseEvent, row: TRow) => {
+    const rowItems = rowMenu?.(row) ?? []
+    const exportItems: MenuItem[] = canExport
+      ? [
+          {
+            id: 'export-xlsx',
+            label: t('menu.exportXlsx'),
+            icon: FileSpreadsheet,
+            onSelect: () => exportTable('xlsx'),
+          },
+          {
+            id: 'export-csv',
+            label: t('menu.exportCsv'),
+            icon: Download,
+            onSelect: () => exportTable('csv'),
+          },
+        ]
+      : []
+    const separator: MenuItem[] =
+      rowItems.length > 0 && exportItems.length > 0
+        ? [{ id: 'export-separator', label: '', kind: 'separator' }]
+        : []
+    const items = [...rowItems, ...separator, ...exportItems]
+    // Nothing to offer: the browser shows its own menu.
+    if (items.length === 0) return
     event.preventDefault()
-    const items: MenuItem[] = [
-      ...(rowMenu?.(row) ?? []),
-      { id: 'export', label: t('menu.export'), icon: Download, onSelect: exportCsv },
-    ]
     setMenu({ x: event.clientX, y: event.clientY, items })
   }
 

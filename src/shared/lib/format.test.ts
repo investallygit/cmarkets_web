@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   formatCompact,
   formatDate,
+  formatFileSize,
+  formatIsoDate,
   formatNumber,
   formatPercent,
   formatSigned,
@@ -35,6 +37,12 @@ describe('number formats (spec section 8)', () => {
     expect(formatCompact(148_200_000, 'en')).toBe(`148.2${NBSP}M`)
     expect(formatCompact(1_214_600_000_000, 'fr')).toBe(`1${NBSP}214,6${NBSP}Md`)
   })
+
+  it('formats file sizes per language', () => {
+    expect(formatFileSize(512, 'en')).toBe(`512${NBSP}B`)
+    expect(formatFileSize(1_258_291, 'en')).toBe(`1.2${NBSP}MB`)
+    expect(formatFileSize(1_258_291, 'fr')).toBe(`1,2${NBSP}Mo`)
+  })
 })
 
 describe('dates and times', () => {
@@ -42,6 +50,10 @@ describe('dates and times', () => {
     // 23:30 UTC is already the next day in Douala (UTC+1).
     expect(formatDate('2026-10-29T23:30:00Z')).toBe('30/10/2026')
     expect(toMarketDay('2026-10-29T23:30:00Z')).toBe('2026-10-30')
+  })
+
+  it('shows calendar dates as DD/MM/YYYY without a time zone shift', () => {
+    expect(formatIsoDate('2026-10-30')).toBe('30/10/2026')
   })
 
   it('shows the session clock in Douala time', () => {

@@ -7,6 +7,8 @@ import { useNewsRealtimeSync } from '@/entities/news'
 import { useNotificationRealtimeSync } from '@/entities/notification'
 import { useQuoteRealtimeSync } from '@/entities/quote'
 import { useMe } from '@/entities/session'
+import { TableExportContext } from '@/shared/ui/tableExport'
+import { Toaster } from '@/shared/ui/Toaster'
 import { SideMenu } from '@/widgets/side-menu'
 import { StatusBar } from '@/widgets/status-bar'
 import { TickerTape } from '@/widgets/ticker-tape'
@@ -50,17 +52,21 @@ export function AppShell() {
   }
 
   return (
-    <div className="grid h-full grid-cols-[auto_minmax(0,1fr)] grid-rows-[40px_24px_minmax(0,1fr)_22px]">
-      <TopBar className="col-span-2" />
-      <div className="col-span-2 min-w-0 border-b bg-app">
-        <TickerTape />
+    // Spec section 12: Students cannot export tables.
+    <TableExportContext.Provider value={me.data.permissions.includes('analysis:export')}>
+      <div className="grid h-full grid-cols-[auto_minmax(0,1fr)] grid-rows-[40px_24px_minmax(0,1fr)_22px]">
+        <TopBar className="col-span-2" />
+        <div className="col-span-2 min-w-0 border-b bg-app">
+          <TickerTape />
+        </div>
+        <SideMenu />
+        <main className="min-h-0 min-w-0 overflow-hidden bg-app">
+          <Outlet />
+        </main>
+        <StatusBar className="col-span-2" />
       </div>
-      <SideMenu />
-      <main className="min-h-0 min-w-0 overflow-hidden bg-app">
-        <Outlet />
-      </main>
-      <StatusBar className="col-span-2" />
-    </div>
+      <Toaster />
+    </TableExportContext.Provider>
   )
 }
 

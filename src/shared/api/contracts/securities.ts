@@ -19,6 +19,17 @@ export interface SearchResultsDto {
   securities: SecuritySearchItemDto[]
 }
 
+/** One bar of GET /securities/{id}/history?from=&to=&interval= (OHLCV, spec section 10). */
+export interface PriceBarDto {
+  /** Start of the bar: the session date for daily bars. */
+  time: IsoDateTime
+  open: number
+  high: number
+  low: number
+  close: number
+  volume: number
+}
+
 /** GET /securities/{id}/quote, example response in spec section 10. */
 export interface QuoteDto {
   securityId: string

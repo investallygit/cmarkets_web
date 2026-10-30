@@ -67,6 +67,23 @@ export function formatCompact(value: number, locale: Locale, decimals = 1): stri
   return formatNumber(value, locale, 0)
 }
 
+const FILE_SIZE_UNITS: Record<Locale, readonly string[]> = {
+  en: ['B', 'KB', 'MB', 'GB'],
+  fr: ['o', 'Ko', 'Mo', 'Go'],
+}
+
+/** File sizes such as "1.2 MB" ("1,2 Mo" in French). */
+export function formatFileSize(bytes: number, locale: Locale): string {
+  const units = FILE_SIZE_UNITS[locale]
+  let size = bytes
+  let unit = 0
+  while (size >= 1024 && unit < units.length - 1) {
+    size /= 1024
+    unit += 1
+  }
+  return `${formatNumber(size, locale, unit === 0 ? 0 : 1)}${NBSP}${units[unit]}`
+}
+
 type DateInput = Date | string | number
 
 interface DateTimeParts {
@@ -104,6 +121,12 @@ function getParts(date: DateInput, timeZone: string): DateTimeParts {
 /** DD/MM/YYYY in both languages (spec section 8). */
 export function formatDate(date: DateInput, timeZone = MARKET_TIME_ZONE): string {
   const { day, month, year } = getParts(date, timeZone)
+  return `${day}/${month}/${year}`
+}
+
+/** A calendar date such as "2026-10-30" as DD/MM/YYYY, with no time zone conversion. */
+export function formatIsoDate(isoDate: string): string {
+  const [year, month, day] = isoDate.split('-')
   return `${day}/${month}/${year}`
 }
 

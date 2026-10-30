@@ -1,27 +1,9 @@
-import {
-  AreaSeries,
-  ColorType,
-  createChart,
-  CrosshairMode,
-  LineStyle,
-  type IChartApi,
-  type ISeriesApi,
-  type Time,
-  type UTCTimestamp,
-} from 'lightweight-charts'
+import { AreaSeries, createChart, type IChartApi, type ISeriesApi } from 'lightweight-charts'
 import { useEffect, useRef } from 'react'
 import type { HistoryPointDto } from '@/shared/api/contracts'
 import { useLocale } from '@/shared/i18n'
-import { formatNumber, toMarketDay } from '@/shared/lib/format'
 import { cssVar, withAlpha } from '@/shared/lib/theme'
-
-/** Douala is UTC+1 all year round; the chart displays timestamps as given, so shift them. */
-const DOUALA_OFFSET_SECONDS = 3600
-
-function toChartTime(iso: string, intraday: boolean): Time {
-  if (!intraday) return toMarketDay(iso)
-  return (Math.floor(Date.parse(iso) / 1000) + DOUALA_OFFSET_SECONDS) as UTCTimestamp
-}
+import { baseChartOptions, chartLocalization, toChartTime } from './chartOptions'
 
 interface AreaChartProps {
   points: readonly HistoryPointDto[]
@@ -41,24 +23,7 @@ export function AreaChart({ points, intraday, decimals, liveValue }: AreaChartPr
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
-    const chart = createChart(container, {
-      autoSize: true,
-      layout: {
-        background: { type: ColorType.Solid, color: cssVar('--bg-panel') },
-        textColor: cssVar('--text-secondary'),
-        fontFamily: "'JetBrains Mono Variable', monospace",
-        fontSize: 11,
-        // Required by the Lightweight Charts licence unless TradingView is credited elsewhere.
-        attributionLogo: true,
-      },
-      grid: {
-        vertLines: { visible: false },
-        horzLines: { color: cssVar('--border'), style: LineStyle.Dotted },
-      },
-      rightPriceScale: { borderColor: cssVar('--border') },
-      timeScale: { borderColor: cssVar('--border') },
-      crosshair: { mode: CrosshairMode.Normal },
-    })
+    const chart = createChart(container, baseChartOptions())
     const lineColor = cssVar('--info')
     seriesRef.current = chart.addSeries(AreaSeries, {
       lineColor,
@@ -76,13 +41,7 @@ export function AreaChart({ points, intraday, decimals, liveValue }: AreaChartPr
   }, [])
 
   useEffect(() => {
-    chartRef.current?.applyOptions({
-      localization: {
-        locale: locale === 'fr' ? 'fr-FR' : 'en-US',
-        dateFormat: 'dd/MM/yyyy',
-        priceFormatter: (price: number) => formatNumber(price, locale, decimals),
-      },
-    })
+    chartRef.current?.applyOptions({ localization: chartLocalization(locale, decimals) })
   }, [locale, decimals])
 
   useEffect(() => {

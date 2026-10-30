@@ -7,6 +7,8 @@
  * text-secondary, text-accent-amber, text-up, text-down, text-info, text-warning...).
  */
 :root {
+  /* Native controls (drop-down lists, scroll bars) in their dark version. */
+  color-scheme: dark;
   --bg-app: #000000;
   --bg-panel: #0b0b0b;
   --bg-panel-header: #1a1a1a;
@@ -127,6 +129,12 @@
 
   ::selection {
     background-color: var(--bg-selected);
+  }
+
+  /* Options of the drop-down lists, where the browser lets them be styled. */
+  option {
+    background-color: var(--bg-panel-header);
+    color: var(--text-primary);
   }
 
   button:not(:disabled) {
