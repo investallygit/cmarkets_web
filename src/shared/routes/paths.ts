@@ -1,3 +1,5 @@
+import type { SecurityType } from '@/shared/api/contracts'
+
 /** Route patterns, shared by the router (app/) and by features that link to other screens. */
 export const routes = {
   market: '/mkt',
@@ -29,6 +31,18 @@ export const routes = {
 /** Tabs of the security profile, each matching a command bar code (spec section 9, screen 2). */
 export const SECURITY_FUNCTIONS = ['des', 'gp', 'fa', 'dvd', 'n', 'doc', 'hds', 'ana'] as const
 export type SecurityFunction = (typeof SECURITY_FUNCTIONS)[number]
+
+/** Fundamentals, dividends and shareholders only exist for equities. */
+const EQUITY_ONLY_FUNCTIONS: ReadonlySet<SecurityFunction> = new Set(['fa', 'dvd', 'hds'])
+
+/** Security types a tab of the profile applies to; all types when absent. */
+export function securityFunctionTypes(fn: SecurityFunction): readonly SecurityType[] | undefined {
+  return EQUITY_ONLY_FUNCTIONS.has(fn) ? ['equity'] : undefined
+}
+
+export function isSecurityFunction(value: string | undefined): value is SecurityFunction {
+  return SECURITY_FUNCTIONS.some((fn) => fn === value)
+}
 
 export function securityPath(securityId: string, fn: SecurityFunction = 'des'): string {
   return `/securities/${encodeURIComponent(securityId)}/${fn}`

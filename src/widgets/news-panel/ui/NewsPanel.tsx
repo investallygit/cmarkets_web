@@ -1,39 +1,28 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
-import { useNews, type NewsFilter } from '@/entities/news'
-import { useFormat } from '@/shared/i18n'
-import { toMarketDay } from '@/shared/lib/format'
-import { useNow } from '@/shared/lib/useNow'
+import { NewsTime, useNews } from '@/entities/news'
+import type { NewsTopic } from '@/shared/api/contracts'
 import { routes } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs } from '@/shared/ui/PanelTabs'
 import { QueryView } from '@/shared/ui/QueryView'
 
+type NewsFilter = 'all' | Extract<NewsTopic, 'issuer' | 'regulator'>
+
 const FILTERS: readonly NewsFilter[] = ['all', 'issuer', 'regulator']
-const DAY_MS = 86_400_000
 
 /** Screen 1, News: time, source in amber, headline; click = article. API /news. */
 export function NewsPanel() {
   const { t } = useTranslation()
-  const format = useFormat()
   const navigate = useNavigate()
-  const now = useNow(60_000)
   const [filter, setFilter] = useState<NewsFilter>('all')
-  const news = useNews(filter)
+  const news = useNews({ topic: filter === 'all' ? undefined : filter })
 
   const tabs = useMemo(
     () => FILTERS.map((value) => ({ value, label: t(`market.newsTopics.${value}`) })),
     [t],
   )
-  const today = toMarketDay(now)
-  const yesterday = toMarketDay(now - DAY_MS)
-  const when = (publishedAt: string) => {
-    const day = toMarketDay(publishedAt)
-    if (day === today) return format.time(publishedAt)
-    if (day === yesterday) return t('common.yesterdayShort')
-    return format.dayMonth(publishedAt)
-  }
 
   return (
     <Panel
@@ -52,7 +41,7 @@ export function NewsPanel() {
                   className="grid w-full grid-cols-[48px_minmax(0,1fr)] gap-x-2 px-2 py-1.5 text-left hover:bg-panel-header"
                 >
                   <span className="font-mono text-data text-secondary">
-                    {when(item.publishedAt)}
+                    <NewsTime publishedAt={item.publishedAt} />
                   </span>
                   <span className="min-w-0">
                     <span className="block font-mono text-title font-semibold text-accent-amber">

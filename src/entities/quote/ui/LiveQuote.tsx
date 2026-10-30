@@ -23,6 +23,20 @@ export function LivePrice({ symbol, value, decimals, isDelayed = false }: LivePr
   )
 }
 
+/** Change since the previous close, with its sign and arrow: "▲ +600". */
+export function LiveChange({
+  symbol,
+  value,
+  decimals,
+}: {
+  symbol: string
+  value: number
+  decimals: number
+}) {
+  const change = useLiveQuote(symbol)?.change ?? value
+  return <ChangeText value={change} decimals={decimals} showIcon />
+}
+
 export function LiveChangePct({ symbol, value }: { symbol: string; value: number }) {
   const changePct = useLiveQuote(symbol)?.changePct ?? value
   return <ChangeText value={changePct} percent />

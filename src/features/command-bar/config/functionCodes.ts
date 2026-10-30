@@ -4,6 +4,7 @@ import type { TranslationKey } from '@/shared/i18n'
 import {
   bondCalculatorPath,
   routes,
+  securityFunctionTypes,
   securityPath,
   type SecurityFunction,
 } from '@/shared/routes/paths'
@@ -27,17 +28,16 @@ interface SecurityTab {
   code: string
   fn: SecurityFunction
   labelKey: TranslationKey
-  appliesTo?: readonly SecurityType[]
 }
 
 /** Tabs of the security profile; each one matches a command bar code (spec section 9, screen 2). */
 const SECURITY_TABS: readonly SecurityTab[] = [
   { code: 'DES', fn: 'des', labelKey: 'functions.DES' },
   { code: 'GP', fn: 'gp', labelKey: 'functions.GP' },
-  { code: 'FA', fn: 'fa', labelKey: 'functions.FA', appliesTo: ['equity'] },
-  { code: 'DVD', fn: 'dvd', labelKey: 'functions.DVD', appliesTo: ['equity'] },
+  { code: 'FA', fn: 'fa', labelKey: 'functions.FA' },
+  { code: 'DVD', fn: 'dvd', labelKey: 'functions.DVD' },
   { code: 'DOC', fn: 'doc', labelKey: 'functions.DOC' },
-  { code: 'HDS', fn: 'hds', labelKey: 'functions.HDS', appliesTo: ['equity'] },
+  { code: 'HDS', fn: 'hds', labelKey: 'functions.HDS' },
   { code: 'ANA', fn: 'ana', labelKey: 'functions.ANA' },
 ]
 
@@ -45,12 +45,12 @@ const SECURITY_SCREENS = new Set(['DES', 'YAS', 'N'])
 
 /** Every function code of the command bar (spec section 8). */
 export const FUNCTION_CODES: readonly FunctionCode[] = [
-  ...SECURITY_TABS.map(({ code, fn, labelKey, appliesTo }): FunctionCode => ({
+  ...SECURITY_TABS.map(({ code, fn, labelKey }): FunctionCode => ({
     code,
     labelKey,
     target: 'security',
     screen: screenById('DES'),
-    appliesTo,
+    appliesTo: securityFunctionTypes(fn),
     resolve: (securityId) => securityPath(securityId ?? '', fn),
   })),
   {

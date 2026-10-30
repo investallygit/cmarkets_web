@@ -108,7 +108,22 @@
     "news": "Actualités",
     "calendar": "Calendrier du marché",
     "alertsToday": "Mes alertes déclenchées aujourd'hui",
-    "sessionSummary": "Résumé de séance"
+    "sessionSummary": "Résumé de séance",
+    "priceChart": "Graphique de cours",
+    "orderBook": "Carnet d'ordres",
+    "latestTrades": "Dernières transactions",
+    "keyData": "Données clés",
+    "bondTerms": "Caractéristiques",
+    "dividends": "Dividendes",
+    "redemptions": "Échéancier de remboursement",
+    "documentsNews": "Documents et actualités",
+    "documents": "Documents",
+    "document": "Document",
+    "securityNews": "Actualités",
+    "article": "Article",
+    "shareholders": "Actionnariat",
+    "fundamentals": "Analyse fondamentale",
+    "research": "Recherche"
   },
   "market": {
     "movers": {
@@ -153,7 +168,23 @@
     "instrument": "Instrument",
     "date": "Date",
     "type": "Type",
-    "event": "Événement"
+    "event": "Événement",
+    "time": "Heure",
+    "price": "Cours",
+    "quantity": "Quantité",
+    "fiscalYear": "Exercice",
+    "netPerShare": "Net / action",
+    "payment": "Paiement",
+    "yield": "Rendement",
+    "exDate": "Date ex",
+    "holder": "Actionnaire",
+    "shares": "Actions",
+    "capitalPct": "% du capital",
+    "coupon": "Coupon",
+    "amortization": "Amortissement",
+    "outstanding": "Encours",
+    "title": "Titre",
+    "source": "Source"
   },
   "menu": {
     "openProfile": "Ouvrir la fiche",
@@ -179,7 +210,124 @@
     "low": "B",
     "close": "C",
     "volume": "Volume",
-    "volumeShort": "Vol"
+    "volumeShort": "Vol",
+    "types": {
+      "candles": "Bougies",
+      "bars": "Barres",
+      "line": "Ligne"
+    },
+    "indicators": {
+      "ma20": "MM20",
+      "ma50": "MM50",
+      "bollinger": "Boll",
+      "rsi": "RSI",
+      "macd": "MACD"
+    },
+    "compare": "Comparer",
+    "comparePlaceholder": "Valeur ou indice",
+    "removeComparison": "Retirer {{label}}",
+    "draw": {
+      "trendline": "Tendance",
+      "horizontal": "Niveau",
+      "undo": "Annuler",
+      "clear": "Effacer",
+      "trendlineHint": "Cliquez deux points du graphique",
+      "horizontalHint": "Cliquez un cours du graphique",
+      "unavailable": "Les tracés s'affichent en barres journalières et hebdomadaires, sans comparaison",
+      "saveFailed": "Tracés non enregistrés : {{message}}"
+    }
+  },
+  "security": {
+    "types": {
+      "equity": "Action ordinaire",
+      "bond": "Obligation"
+    },
+    "tabsLabel": "Fonctions de la valeur",
+    "tabs": {
+      "des": "Fiche",
+      "gp": "Graphique",
+      "fa": "Fondamentaux",
+      "dvd": "Dividendes",
+      "n": "Actualités",
+      "doc": "Documents",
+      "hds": "Actionnaires",
+      "ana": "Recherche"
+    },
+    "figures": {
+      "open": "Ouverture",
+      "high": "Plus haut",
+      "low": "Plus bas",
+      "volume": "Volume",
+      "marketCap": "Capitalisation",
+      "pe": "PER",
+      "yield": "Rendement",
+      "coupon": "Coupon",
+      "maturity": "Échéance"
+    },
+    "delayed": "Différé",
+    "notFound": "Aucune valeur {{id}}.",
+    "notApplicable": "{{code}} ne s'applique pas à {{security}}.",
+    "planned": {
+      "fa": "L'analyse fondamentale arrive avec le filtre actions (EQS), étape 4 de la feuille de route.",
+      "ana": "La recherche sur la valeur arrive avec la bibliothèque de recherche (PUB), étape 6 de la feuille de route."
+    }
+  },
+  "keyData": {
+    "isin": "Code ISIN",
+    "sector": "Secteur",
+    "shares": "Nombre d'actions",
+    "freeFloat": "Flottant",
+    "range52w": "Plus haut / bas 52 semaines",
+    "beta": "Bêta (1 an vs {{index}})",
+    "lastDividend": "Dernier dividende net",
+    "nextEvent": "Prochain événement",
+    "issuer": "Émetteur",
+    "coupon": "Coupon",
+    "issueDate": "Date d'émission",
+    "maturity": "Échéance",
+    "amortization": "Amortissement",
+    "amortizations": {
+      "bullet": "In fine",
+      "straight": "Constant, {{share}} par an"
+    },
+    "frequencies": {
+      "annual": "annuel",
+      "halfYearly": "semestriel",
+      "quarterly": "trimestriel"
+    },
+    "dayCount": "Base de calcul",
+    "outstanding": "Encours",
+    "insufficientData": "Données insuffisantes"
+  },
+  "orderBook": {
+    "bestLimits": "5 meilleures limites",
+    "bidQty": "Qté achat",
+    "bid": "Achat",
+    "ask": "Vente",
+    "askQty": "Qté vente",
+    "notIncluded": "Le carnet d'ordres et les transactions de la séance ne font pas partie d'un compte {{type}}."
+  },
+  "dividendKinds": {
+    "final": "Solde",
+    "interim": "Acompte",
+    "special": "Exceptionnel"
+  },
+  "documents": {
+    "badges": {
+      "pdf": "PDF",
+      "notice": "Avis",
+      "decision": "Décision",
+      "news": "Actu"
+    },
+    "pages_one": "{{count}} page",
+    "pages_other": "{{count}} pages",
+    "select": "Choisissez un document pour le lire ici."
+  },
+  "news": {
+    "select": "Choisissez une actualité pour la lire ici."
+  },
+  "shareholders": {
+    "asOf": "Au {{date}}"
   },
   "placeholder": {
     "notBuilt": "Panneau prévu, pas encore développé"

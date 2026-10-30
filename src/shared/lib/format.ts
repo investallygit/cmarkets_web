@@ -67,6 +67,22 @@ export function formatCompact(value: number, locale: Locale, decimals = 1): stri
   return formatNumber(value, locale, 0)
 }
 
+const countryNames = new Map<Locale, Intl.DisplayNames>()
+
+/** "CM" -> "Cameroon" in English, "Cameroun" in French. */
+export function formatCountry(code: string, locale: Locale): string {
+  let names = countryNames.get(locale)
+  if (!names) {
+    names = new Intl.DisplayNames([INTL_LOCALE[locale]], { type: 'region' })
+    countryNames.set(locale, names)
+  }
+  try {
+    return names.of(code) ?? code
+  } catch {
+    return code
+  }
+}
+
 const FILE_SIZE_UNITS: Record<Locale, readonly string[]> = {
   en: ['B', 'KB', 'MB', 'GB'],
   fr: ['o', 'Ko', 'Mo', 'Go'],

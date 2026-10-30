@@ -2,8 +2,8 @@
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`.
 
-Screen 1 (MKT) is built. The other 23 screens are placeholders: their route, menu entry,
-permission and mockup layout exist, with the API each panel will call
+Screens 1 (MKT) and 2 (DES) are built. The other 22 screens are placeholders: their route, menu
+entry, permission and mockup layout exist, with the API each panel will call
 (`src/pages/placeholder/config/plans.ts`). Login is not started.
 
 DATA, HIST and EODH are planned with IMP, and ANLY and MOD with USER: in the mockups they are
@@ -14,7 +14,7 @@ panels of the same screen. Sizes are relative: S < M < L < XL.
 | Step | Work                                                            | Status |
 | ---- | --------------------------------------------------------------- | ------ |
 | 1    | Shared groundwork, batch 1: form kit, `PriceChart`, XLSX export | Done   |
-| 2    | DES                                                             | To do  |
+| 2    | DES                                                             | Done   |
 | 3    | Watchlist editing (MKT), N, CAL, ALRT                           | To do  |
 | 4    | EQS / FA, then YCRV / YAS                                       | To do  |
 | 5    | PORT                                                            | To do  |
@@ -37,13 +37,19 @@ Done in step 1, shown on `/_kit` in the prototype:
   chart" block of PUB NEW. Moving averages and other indicators come from `/indicators`.
 - **XLSX export** next to CSV in every data table, hidden without `analysis:export` (Student).
 
+Done in step 2, with DES:
+
+- **`PriceChart`** gained indicator panes (RSI, MACD), comparison rebased to 100 and drawings.
+- **Embedded PDF viewer** (`shared/ui/PdfViewer`): the file is fetched through the API client, so
+  the request carries the user's session, then shown by the browser's viewer.
+- **Screen tabs** (`shared/ui/ScreenTabs`), one route per tab.
+
 Still to do, with the first screen that needs it:
 
 - **Recharts**, named by the spec for allocation and performance; it also draws the yield curves
   (log maturity axis) and the EQS comparison bars. PNG and PDF export of charts (spec section 3).
 - **Pagination**: the `{ items, page, pageSize, totalCount }` convention and a pager (PUB, USER,
   HIST, AUDT).
-- **Embedded PDF viewer** (DES, N, PUB, ANLY).
 - **Subscription gating** (Monitoring, Analysis, Portfolio, free trial): `/me` does not return the
   modules yet, so the contract needs them; a locked screen offers an upgrade instead of a 403.
 
@@ -64,26 +70,22 @@ Still to do, with the first screen that needs it:
   entry, disabled today.
 - A click on a news item opens the N screen, not the article yet: done with N.
 
-### DES · Security profile (screen 2): L
+### DES · Security profile (screen 2): done
 
-- **UI**: header with the last price at 26 px, the change and 7 key figures (Open, High, Low,
-  Volume, Market cap, P/E, Yield); 8 tabs DES, GP, FA, DVD, N, DOC, HDS, ANA, each with its own
-  layout. The DES tab has 6 panels: price chart, order book (5 levels, green and red depth bars),
-  latest trades, key data, dividends, documents and news (a document opens in the embedded PDF
-  viewer).
-- **Data**: `/securities/{id}`, `/quote`, `/history`, `/orderbook`, `/trades`, `/dividends`,
-  `/shareholders`, `/documents`, `/indicators`, `/charts/{id}/drawings`. Only `/search` is mocked
-  today.
-- **Watch for**: GP adds RSI, MACD, Bollinger bands, drawing tools saved per user, and several
-  securities rebased to 100. Students get no order book or intraday data, and delayed prices
-  shown in yellow. The hub has no order book or trades event: poll, or ask the back end for one.
-  The mockup only shows an equity; a bond needs its own layout (coupon, maturity, redemption
-  schedule).
-- **Depends on**: the FA tab reuses the EQS panels and the ANA tab the PUB list, so both tabs come
-  later.
+- **Built**: header (last price at 26 px, change, 7 key figures, delayed tag for Students) and
+  the tabs DES, GP, DVD, N, DOC, HDS, each with its own saved layout (`DES`, `DES-GP`...). DES
+  follows the mockup: price chart, order book with depth bars, latest trades, key data,
+  dividends, documents and news. GP adds 1D to 10Y, candles / bars / line, Bollinger bands, RSI
+  and MACD panes, comparison with securities and indices rebased to 100, and trend lines and
+  levels saved per user. A bond gets its terms and redemption schedule instead of the key data
+  and dividends, and no FA, DVD or HDS tab.
+- **Still to do**: the FA tab comes with EQS (step 4), the ANA tab with PUB (step 6). PNG and PDF
+  export of the chart stays in the shared groundwork.
 
 ### N · News (no mockup): M
 
+- The list and article panels exist (`widgets/news-list-panel`, `news-article-panel`, built for
+  the N tab of DES): the screen adds the filters and the documents tab.
 - News list on the left, filtered by security, country and topic; the full article on the right
   (`/news/{id}`).
 - Documents tab: full-text search (`/documents?q=`) and the embedded PDF viewer.
@@ -238,7 +240,10 @@ Still to do, with the first screen that needs it:
 - **IMP**: the Discard and Replace file buttons have no endpoint; where is the "Alert checked"
   tick stored (a PATCH of the row?).
 - **USER**: no endpoint returns the counters by account type.
-- **Real time**: no event for the order book and latest trades.
+- **Real time**: no event for the order book and latest trades; the prototype polls them every
+  5 seconds.
+- **Quote**: the security header shows the session's open, high and low, which the example of
+  `GET /securities/{id}/quote` lacks; the prototype adds them to the response.
 - **Subscriptions**: `/me` returns neither the subscribed modules nor the trial status.
 - **In the spec, not in the mockups**: the bond profile, US and European curves,
   `/global/indices` and `/commodities` on MKT.

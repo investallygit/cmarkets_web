@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, queryOptions, useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/shared/api'
 import type {
   HistoryPointDto,
@@ -54,15 +54,18 @@ export function useTicker() {
   })
 }
 
-export function useIndexHistory(code: string | undefined, period: ChartPeriod) {
-  return useQuery({
-    queryKey: marketKeys.indexHistory(code ?? '', period),
+export function indexHistoryQuery(code: string, period: ChartPeriod) {
+  return queryOptions({
+    queryKey: marketKeys.indexHistory(code, period),
     // The range is computed at fetch time, so a refetch follows the clock.
     queryFn: ({ signal }) =>
-      apiClient.get<HistoryPointDto[]>(`/indices/${encodeURIComponent(code ?? '')}/history`, {
+      apiClient.get<HistoryPointDto[]>(`/indices/${encodeURIComponent(code)}/history`, {
         query: periodRange(period),
         signal,
       }),
-    enabled: Boolean(code),
   })
+}
+
+export function useIndexHistory(code: string | undefined, period: ChartPeriod) {
+  return useQuery({ ...indexHistoryQuery(code ?? '', period), enabled: Boolean(code) })
 }

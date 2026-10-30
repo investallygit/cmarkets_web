@@ -2,8 +2,11 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   formatCompact,
+  formatCountry,
   formatDate,
   formatDayMonth,
+  formatFileSize,
+  formatIsoDate,
   formatNumber,
   formatPercent,
   formatSigned,
@@ -29,6 +32,9 @@ export function useFormat() {
       percent: (value: number, decimals = 2, signed = true) =>
         formatPercent(value, locale, decimals, signed),
       compact: (value: number, decimals = 1) => formatCompact(value, locale, decimals),
+      country: (code: string) => formatCountry(code, locale),
+      fileSize: (bytes: number) => formatFileSize(bytes, locale),
+      isoDate: (isoDate: string) => formatIsoDate(isoDate),
       date: (value: Date | string | number) => formatDate(value),
       dayMonth: (value: Date | string | number) => formatDayMonth(value),
       time: (value: Date | string | number, withSeconds = false) =>

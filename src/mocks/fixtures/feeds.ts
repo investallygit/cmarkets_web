@@ -38,6 +38,18 @@ export function createNews(now: number): NewsItemDto[] {
   }))
 }
 
+/** Text of an article; the samples above only have headlines. */
+export function articleBody(item: NewsItemDto): string[] {
+  return [
+    `Announcement published by ${item.source}.`,
+    'This is a sample article of the CMarket prototype. African news is entered by the Data ' +
+      'admin in the back-office; news on European and US markets comes from EODHD.',
+    item.securityIds.length > 0
+      ? `Securities concerned: ${item.securityIds.join(', ')}. The article also appears in the N tab of their profile.`
+      : 'The announcement concerns the whole market.',
+  ]
+}
+
 type AlertContent = { subject: string; message: string; severity: AlertSeverity }
 
 // prettier-ignore

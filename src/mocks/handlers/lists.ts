@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw'
 import type {
   CalendarEventDto,
   FxRateDto,
+  NewsArticleDto,
   NewsItemDto,
   Paged,
   PolicyRateDto,
@@ -9,6 +10,7 @@ import type {
 } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
 import { calendar, changePct, currentAccountType, news, notifications, securities } from '../db'
+import { articleBody } from '../fixtures/feeds'
 import { FX_FIXTURES, POLICY_RATE_FIXTURES } from '../fixtures/market'
 import { WATCHLIST_FIXTURES } from '../fixtures/users'
 import { api, latency, noContent, paginate, problem } from '../lib/http'
@@ -76,6 +78,13 @@ export const listHandlers = [
         (!country || item.country === country),
     )
     return HttpResponse.json<Paged<NewsItemDto>>(paginate(items, query))
+  }),
+
+  http.get(api('/news/:id'), async ({ params }) => {
+    await latency()
+    const item = news.find((candidate) => candidate.id === params.id)
+    if (!item) return problem(404, 'News not found', `No news ${String(params.id)}.`)
+    return HttpResponse.json<NewsArticleDto>({ ...item, body: articleBody(item) })
   }),
 
   http.get(api('/calendar'), async ({ request }) => {

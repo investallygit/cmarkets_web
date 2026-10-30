@@ -6,6 +6,7 @@ import { useMarketRealtimeSync } from '@/entities/market'
 import { useNewsRealtimeSync } from '@/entities/news'
 import { useNotificationRealtimeSync } from '@/entities/notification'
 import { useQuoteRealtimeSync } from '@/entities/quote'
+import { useSecurityRealtimeSync } from '@/entities/security'
 import { useMe } from '@/entities/session'
 import { TableExportContext } from '@/shared/ui/tableExport'
 import { Toaster } from '@/shared/ui/Toaster'
@@ -25,6 +26,7 @@ export function AppShell() {
   useMarketRealtimeSync()
   useNewsRealtimeSync()
   useNotificationRealtimeSync()
+  useSecurityRealtimeSync()
 
   if (me.isPending) {
     return (

@@ -1,17 +1,13 @@
 import { clsx } from 'clsx'
 import { useEffect, useState } from 'react'
-import {
-  PriceChart,
-  type PriceChartOverlay,
-  type PriceChartType,
-} from '@/shared/ui/charts/PriceChart'
+import { PriceChart, type PriceChartLine, type PriceChartType } from '@/shared/ui/charts/PriceChart'
 import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs, type PanelTabOption } from '@/shared/ui/PanelTabs'
 import { movingAverage, sampleBars } from '../lib/sampleBars'
 
 const BARS = sampleBars('2026-10-28')
 const LAST_CLOSE = BARS.at(-1)?.close ?? 0
-const OVERLAYS: PriceChartOverlay[] = [
+const OVERLAYS: PriceChartLine[] = [
   { id: 'ma20', label: 'MA20', color: '--accent-amber', points: movingAverage(BARS, 20) },
   { id: 'ma50', label: 'MA50', color: '--info', points: movingAverage(BARS, 50) },
 ]

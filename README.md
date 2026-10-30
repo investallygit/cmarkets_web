@@ -47,13 +47,14 @@ split into slices by business domain, each slice into segments (`ui`, `model`, `
 src/
   main.tsx    entry point: real back end or mocks
   app/        providers, router, app shell layout, global styles
-  pages/      one slice per screen: market-dashboard, placeholder (screens not built yet), status
-  widgets/    self-contained blocks: the panels (indices-panel, news-panel...) and the shell bars
-              (top-bar, side-menu, status-bar, ticker-tape)
-  features/   user actions: command-bar, security-actions, switch-language, switch-account,
-              workspace-layout
-  entities/   business data: session, security, quote (live prices), market, watchlist, rate,
-              news, calendar-event, notification
+  pages/      one slice per screen: market-dashboard, security-profile, placeholder (screens not
+              built yet), status
+  widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel...),
+              the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
+  features/   user actions: command-bar, security-actions, draw-on-chart, compare-securities,
+              switch-language, switch-account, workspace-layout
+  entities/   business data: session, security, quote (live prices), market, bond, document,
+              chart-drawing, watchlist, rate, news, calendar-event, notification
   shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
               UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
   mocks/      fake back end for the prototype (MSW handlers, sample data, simulated hub)
@@ -94,7 +95,8 @@ holds the state and passes props: see `pages/market-dashboard/model/indexSelecti
   implementation (`/hubs/market`) and ref-counted symbol subscriptions. Each entity handles the
   hub events it owns (`use*RealtimeSync`, mounted once by `app/layouts/AppShell.tsx`). Live
   quotes go into a Zustand store (`entities/quote/model`), so a tick re-renders one table cell,
-  which flashes for 400 ms.
+  which flashes for 400 ms. The order book and the latest trades have no hub event: they are
+  polled every 5 seconds.
 - **Layouts**: each page declares its panels and default grid (`pages/*/config`);
   `features/workspace-layout` saves the user's layout through `GET/PUT /me/layouts/{screen}`.
 - **Permissions**: `/me` returns the user's permissions; `entities/session` decides which
@@ -109,8 +111,9 @@ exist. Numbers use `shared/lib/format.ts` (`52 500,25` in French, `52,500.25` in
 `DD/MM/YYYY`, Douala time), and inputs read them back with `shared/lib/parse.ts`. Icons come from
 `lucide-react`.
 
-Screens build on `shared/ui`: `Panel`, `DataTable` (sorting, right-click menu, Excel and CSV export
-unless the user lacks `analysis:export`), `charts/` (`PriceChart`, `AreaChart`), `form/` (buttons,
+Screens build on `shared/ui`: `Panel`, `ScreenTabs`, `DataTable` (sorting, right-click menu, Excel
+and CSV export unless the user lacks `analysis:export`), `charts/` (`PriceChart` with indicator
+panes, comparison rebased to 100 and drawings; `AreaChart`), `PdfViewer`, `form/` (buttons,
 fields, selects, number and date inputs in the user's format, checkboxes, segmented choices, file
 drop zone), `Dialog` (also as a side form), `ConfirmDialog` (with a required reason) and `toast`.
 
@@ -129,7 +132,8 @@ The screens do not change: they only know the API contract.
 | App shell: top bar, command bar, ticker, menu by account type, status bar | Done                                                          |
 | Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
 | 1 · Market dashboard (MKT)                                                | Done on mock data, real-time quotes and indices               |
-| 2 to 9 and the back-office screens                                        | Placeholders with the mockup layout and the API of each panel |
+| 2 · Security profile (DES, GP, DVD, N, DOC, HDS)                          | Done on mock data; FA comes with EQS, ANA with PUB            |
+| 3 to 9 and the back-office screens                                        | Placeholders with the mockup layout and the API of each panel |
 | Login, OTP, token refresh                                                 | Not started                                                   |
 
 The plan for the remaining screens, step by step, is in [ROADMAP.md](ROADMAP.md).

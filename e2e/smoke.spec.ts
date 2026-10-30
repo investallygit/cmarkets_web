@@ -19,6 +19,32 @@ test('the command bar opens a security profile', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Price chart' })).toBeVisible()
 })
 
+test('the security profile follows the mockup and opens a document', async ({ page }) => {
+  await page.goto('/securities/SEMC/des')
+  for (const title of [
+    'Price chart',
+    'Order book',
+    'Latest trades',
+    'Key data',
+    'Dividends',
+    'Documents and news',
+  ]) {
+    await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible()
+  }
+  await page.getByRole('link', { name: /2025 annual report/ }).click()
+  await expect(page).toHaveURL(/\/securities\/SEMC\/doc\?doc=doc-semc-annual-2025$/)
+  await expect(page.locator('iframe[title="2025 annual report"]')).toBeAttached()
+})
+
+test('a bond profile shows its terms and redemption schedule', async ({ page }) => {
+  await page.goto('/securities/ECMR-6.25-2029/des')
+  await expect(page.getByRole('heading', { name: 'Bond terms' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Redemption schedule' })).toBeVisible()
+  const tabs = page.getByRole('navigation', { name: 'Security functions' })
+  await expect(tabs.getByRole('link', { name: 'GP Chart' })).toBeVisible()
+  await expect(tabs.getByRole('link', { name: 'FA Fundamentals' })).toHaveCount(0)
+})
+
 test('the back-office menu replaces the client menu for a Data admin', async ({ page }) => {
   await page.goto('/mkt')
   await page.getByRole('button', { name: /analyst/i }).click()

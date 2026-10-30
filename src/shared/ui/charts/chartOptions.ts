@@ -27,6 +27,17 @@ export function toChartTime(iso: string, intraday: boolean): Time {
   return (Math.floor(Date.parse(iso) / 1000) + DOUALA_OFFSET_SECONDS) as UTCTimestamp
 }
 
+/** Inverse of toChartTime: the ISO date of a day, or the UTC timestamp of an intraday time. */
+export function fromChartTime(time: Time, intraday: boolean): string {
+  if (typeof time === 'string') return time
+  if (typeof time === 'number') {
+    const seconds = intraday ? time - DOUALA_OFFSET_SECONDS : time
+    return new Date(seconds * 1000).toISOString()
+  }
+  const pad = (value: number) => String(value).padStart(2, '0')
+  return `${time.year}-${pad(time.month)}-${pad(time.day)}`
+}
+
 /** A chart time back as text: "28/10/2026", or "28/10/2026 10:42" for intraday data. */
 export function formatChartTime(time: Time): string {
   if (typeof time === 'string') return formatIsoDate(time)
@@ -61,14 +72,19 @@ export function baseChartOptions(): DeepPartial<ChartOptions> {
   }
 }
 
-/** Prices in the user's number format, dates as DD/MM/YYYY. */
+/**
+ * Dates as DD/MM/YYYY and, with `decimals`, every price in the user's number format. A chart
+ * whose series need different formats (prices, volumes) gives each series its own priceFormat.
+ */
 export function chartLocalization(
   locale: Locale,
-  decimals: number,
+  decimals?: number,
 ): DeepPartial<LocalizationOptions<Time>> {
   return {
     locale: locale === 'fr' ? 'fr-FR' : 'en-US',
     dateFormat: 'dd/MM/yyyy',
-    priceFormatter: (price: number) => formatNumber(price, locale, decimals),
+    ...(decimals === undefined
+      ? {}
+      : { priceFormatter: (price: number) => formatNumber(price, locale, decimals) }),
   }
 }

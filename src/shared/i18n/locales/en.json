@@ -108,7 +108,22 @@
     "news": "News",
     "calendar": "Market calendar",
     "alertsToday": "My alerts triggered today",
-    "sessionSummary": "Session summary"
+    "sessionSummary": "Session summary",
+    "priceChart": "Price chart",
+    "orderBook": "Order book",
+    "latestTrades": "Latest trades",
+    "keyData": "Key data",
+    "bondTerms": "Bond terms",
+    "dividends": "Dividends",
+    "redemptions": "Redemption schedule",
+    "documentsNews": "Documents and news",
+    "documents": "Documents",
+    "document": "Document",
+    "securityNews": "News",
+    "article": "Article",
+    "shareholders": "Shareholders",
+    "fundamentals": "Fundamental analysis",
+    "research": "Research"
   },
   "market": {
     "movers": {
@@ -153,7 +168,23 @@
     "instrument": "Instrument",
     "date": "Date",
     "type": "Type",
-    "event": "Event"
+    "event": "Event",
+    "time": "Time",
+    "price": "Price",
+    "quantity": "Quantity",
+    "fiscalYear": "Fiscal year",
+    "netPerShare": "Net / share",
+    "payment": "Payment",
+    "yield": "Yield",
+    "exDate": "Ex-date",
+    "holder": "Holder",
+    "shares": "Shares",
+    "capitalPct": "% of capital",
+    "coupon": "Coupon",
+    "amortization": "Amortization",
+    "outstanding": "Outstanding",
+    "title": "Title",
+    "source": "Source"
   },
   "menu": {
     "openProfile": "Open profile",
@@ -179,7 +210,124 @@
     "low": "L",
     "close": "C",
     "volume": "Volume",
-    "volumeShort": "Vol"
+    "volumeShort": "Vol",
+    "types": {
+      "candles": "Candles",
+      "bars": "Bars",
+      "line": "Line"
+    },
+    "indicators": {
+      "ma20": "MA20",
+      "ma50": "MA50",
+      "bollinger": "Boll",
+      "rsi": "RSI",
+      "macd": "MACD"
+    },
+    "compare": "Compare",
+    "comparePlaceholder": "Security or index",
+    "removeComparison": "Remove {{label}}",
+    "draw": {
+      "trendline": "Trend line",
+      "horizontal": "Level",
+      "undo": "Undo",
+      "clear": "Clear",
+      "trendlineHint": "Click two points on the chart",
+      "horizontalHint": "Click a price on the chart",
+      "unavailable": "Drawings show on daily and weekly bars, without comparison",
+      "saveFailed": "Drawings not saved: {{message}}"
+    }
+  },
+  "security": {
+    "types": {
+      "equity": "Ordinary share",
+      "bond": "Bond"
+    },
+    "tabsLabel": "Security functions",
+    "tabs": {
+      "des": "Profile",
+      "gp": "Chart",
+      "fa": "Fundamentals",
+      "dvd": "Dividends",
+      "n": "News",
+      "doc": "Documents",
+      "hds": "Shareholders",
+      "ana": "Research"
+    },
+    "figures": {
+      "open": "Open",
+      "high": "High",
+      "low": "Low",
+      "volume": "Volume",
+      "marketCap": "Market cap",
+      "pe": "P/E",
+      "yield": "Yield",
+      "coupon": "Coupon",
+      "maturity": "Maturity"
+    },
+    "delayed": "Delayed",
+    "notFound": "No security {{id}}.",
+    "notApplicable": "{{code}} does not apply to {{security}}.",
+    "planned": {
+      "fa": "Fundamental analysis comes with the equity screener (EQS), step 4 of the roadmap.",
+      "ana": "Research on the security comes with the research library (PUB), step 6 of the roadmap."
+    }
+  },
+  "keyData": {
+    "isin": "ISIN code",
+    "sector": "Sector",
+    "shares": "Shares outstanding",
+    "freeFloat": "Free float",
+    "range52w": "52-week high / low",
+    "beta": "Beta (1Y vs {{index}})",
+    "lastDividend": "Last net dividend",
+    "nextEvent": "Next event",
+    "issuer": "Issuer",
+    "coupon": "Coupon",
+    "issueDate": "Issue date",
+    "maturity": "Maturity",
+    "amortization": "Amortization",
+    "amortizations": {
+      "bullet": "At maturity",
+      "straight": "Straight, {{share}} a year"
+    },
+    "frequencies": {
+      "annual": "annual",
+      "halfYearly": "half-yearly",
+      "quarterly": "quarterly"
+    },
+    "dayCount": "Day count",
+    "outstanding": "Amount outstanding",
+    "insufficientData": "Insufficient data"
+  },
+  "orderBook": {
+    "bestLimits": "Best 5 limits",
+    "bidQty": "Bid qty",
+    "bid": "Bid",
+    "ask": "Ask",
+    "askQty": "Ask qty",
+    "notIncluded": "The order book and the trades of the session are not part of a {{type}} account."
+  },
+  "dividendKinds": {
+    "final": "Final",
+    "interim": "Interim",
+    "special": "Special"
+  },
+  "documents": {
+    "badges": {
+      "pdf": "PDF",
+      "notice": "Notice",
+      "decision": "Decision",
+      "news": "News"
+    },
+    "pages_one": "{{count}} page",
+    "pages_other": "{{count}} pages",
+    "select": "Select a document to read it here."
+  },
+  "news": {
+    "select": "Select a news item to read it here."
+  },
+  "shareholders": {
+    "asOf": "As of {{date}}"
   },
   "placeholder": {
     "notBuilt": "Planned panel, not built yet"

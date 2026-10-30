@@ -13,3 +13,9 @@ export interface NewsItemDto {
   securityIds: string[]
   country: string | null
 }
+
+/** GET /news/{id}: the full article. */
+export interface NewsArticleDto extends NewsItemDto {
+  /** Paragraphs of plain text. */
+  body: string[]
+}

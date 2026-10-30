@@ -1,4 +1,5 @@
 export {
+  indexHistoryQuery,
   marketKeys,
   useIndexHistory,
   useMarketMovers,

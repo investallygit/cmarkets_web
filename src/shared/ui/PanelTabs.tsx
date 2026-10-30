@@ -36,3 +36,28 @@ export function PanelTabs<T extends string>({ value, options, onChange }: PanelT
     </div>
   )
 }
+
+interface PanelToggleProps {
+  active: boolean
+  onChange: (active: boolean) => void
+  disabled?: boolean
+  children: string
+}
+
+/** A panel option switched on and off on its own, e.g. MA20; in brackets while on. */
+export function PanelToggle({ active, onChange, disabled = false, children }: PanelToggleProps) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      disabled={disabled}
+      onClick={() => onChange(!active)}
+      className={clsx(
+        'panel-no-drag uppercase disabled:text-secondary/50',
+        active ? 'text-primary' : 'text-secondary enabled:hover:text-primary',
+      )}
+    >
+      {active ? `[${children}]` : children}
+    </button>
+  )
+}

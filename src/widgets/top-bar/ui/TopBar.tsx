@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
 import { MarketStatusBadge } from '@/entities/market'
+import { useSecurityProfile } from '@/entities/security'
 import { audienceOf, canAccessScreen, useCurrentUser } from '@/entities/session'
 import { CommandBar } from '@/features/command-bar'
 import { screenById } from '@/shared/routes/screens'
@@ -21,7 +22,9 @@ export function TopBar({ className }: { className?: string }) {
   const backOffice = audienceOf(user.accountType) === 'backoffice'
   const alerts = screenById('ALRT')
   const subject = params.securityId ?? params.bondId
-  const title = screen ? `${subject ? `${subject} — ` : ''}${t(screen.titleKey)}` : ''
+  // The security's name once loaded, as in the screen 2 mockup; its code until then.
+  const subjectName = useSecurityProfile(subject).data?.name ?? subject
+  const title = screen ? `${subjectName ? `${subjectName} — ` : ''}${t(screen.titleKey)}` : ''
 
   return (
     <header className={clsx('flex min-w-0 items-center gap-4 border-b bg-app px-3', className)}>

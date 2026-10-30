@@ -1,10 +1,12 @@
 import {
   ACCOUNT_TYPES,
   type AccountType,
+  type ChartDrawingDto,
   type LayoutItemDto,
   type MeDto,
   type NewsItemDto,
   type NotificationDto,
+  type TradeDto,
 } from '@/shared/api/contracts'
 import {
   createCalendar,
@@ -17,6 +19,7 @@ import { INDEX_FIXTURES, type IndexFixture } from './fixtures/market'
 import { SECURITY_FIXTURES, type SecurityFixture } from './fixtures/securities'
 import { DEMO_USERS, ROLE_PERMISSIONS, ROLE_QUOTAS } from './fixtures/users'
 import { generateSparkline } from './lib/history'
+import { initialTrades } from './lib/trades'
 
 /**
  * In-memory state of the fake back end. REST handlers and the simulated hub share it,
@@ -27,6 +30,13 @@ export interface MockSecurity extends SecurityFixture {
   /** Opening level that random ticks are pulled back to. */
   anchor: number
   updatedAt: string
+  open: number
+  high: number
+  low: number
+  /** Volume of an ordinary session, for the generated history. */
+  typicalVolume: number
+  /** Latest trades of the session, newest first; each tick is a trade. */
+  trades: TradeDto[]
 }
 
 export interface MockIndex extends IndexFixture {
@@ -38,16 +48,25 @@ const startedAt = Date.now()
 const startedAtIso = new Date(startedAt).toISOString()
 
 export const securities = new Map<string, MockSecurity>(
-  SECURITY_FIXTURES.map((security) => [
-    security.id,
-    {
+  SECURITY_FIXTURES.map((security) => {
+    const open = security.open ?? security.previousClose
+    const mock: MockSecurity = {
       ...security,
       sparkline: generateSparkline(security.id, security.last),
       anchor: security.last,
       updatedAt: startedAtIso,
-    },
-  ]),
+      open,
+      high: security.high ?? Math.max(open, security.last),
+      low: security.low ?? Math.min(open, security.last),
+      typicalVolume: security.volume,
+      trades: initialTrades({ ...security, open }, startedAt),
+    }
+    return [security.id, mock]
+  }),
 )
+
+/** Trades kept per security for GET /securities/{id}/trades. */
+const MAX_TRADES = 50
 
 export const indices = new Map<string, MockIndex>(
   INDEX_FIXTURES.map((index) => [
@@ -76,10 +95,15 @@ export function tickSecurity(id: string): MockSecurity | undefined {
   const noise = (Math.random() - 0.5) * (bond ? 0.0008 : 0.004)
   const pull = ((security.anchor - security.last) / security.anchor) * 0.15
   const next = Math.round((security.last * (1 + noise + pull)) / tickSize) * tickSize
+  const quantity = Math.ceil(Math.random() * (bond ? 40 : 12))
   security.last = Number(Math.max(tickSize, next).toFixed(bond ? 2 : 0))
-  security.volume += Math.ceil(Math.random() * (bond ? 40 : 12))
+  security.high = Math.max(security.high, security.last)
+  security.low = Math.min(security.low, security.last)
+  security.volume += quantity
   security.updatedAt = new Date().toISOString()
   security.sparkline[security.sparkline.length - 1] = security.last
+  security.trades.unshift({ time: security.updatedAt, price: security.last, quantity })
+  security.trades.length = Math.min(security.trades.length, MAX_TRADES)
   return security
 }
 
@@ -176,4 +200,23 @@ export function readLayout(screen: string): LayoutItemDto[] | undefined {
 
 export function writeLayout(screen: string, items: LayoutItemDto[]): void {
   writeStorage(layoutKey(screen), JSON.stringify(items))
+}
+
+function drawingsKey(securityId: string): string {
+  return `cmarket.prototype.drawings.${currentUser().id}.${securityId}`
+}
+
+/** Chart drawings are saved per user (spec section 3). */
+export function readDrawings(securityId: string): ChartDrawingDto[] {
+  const stored = readStorage(drawingsKey(securityId))
+  if (!stored) return []
+  try {
+    return JSON.parse(stored) as ChartDrawingDto[]
+  } catch {
+    return []
+  }
+}
+
+export function writeDrawings(securityId: string, drawings: ChartDrawingDto[]): void {
+  writeStorage(drawingsKey(securityId), JSON.stringify(drawings))
 }

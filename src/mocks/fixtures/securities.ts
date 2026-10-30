@@ -12,6 +12,10 @@ export interface SecurityFixture {
   last: number
   previousClose: number
   volume: number
+  /** Today's session so far; by default it opened at the previous close. */
+  open?: number
+  high?: number
+  low?: number
   /** Other ways users type the security in the command bar, e.g. "ECMR 6.25 2029". */
   aliases?: string[]
 }
@@ -19,7 +23,7 @@ export interface SecurityFixture {
 /** Sample figures from the spec mockups (section 9); they are not market data. */
 // prettier-ignore
 export const SECURITY_FIXTURES: SecurityFixture[] = [
-  { id: 'SEMC', code: 'SEMC', name: 'Société des Eaux Minérales du Cameroun', type: 'equity', sector: 'Beverages', country: 'CM', currency: 'XAF', exchange: 'BVMAC', last: 52500, previousClose: 51900, volume: 96 },
+  { id: 'SEMC', code: 'SEMC', name: 'Société des Eaux Minérales du Cameroun', type: 'equity', sector: 'Beverages', country: 'CM', currency: 'XAF', exchange: 'BVMAC', last: 52500, previousClose: 51900, volume: 96, open: 51900, high: 52800, low: 51900 },
   { id: 'SAFACAM', code: 'SAFACAM', name: 'Société Africaine Forestière et Agricole du Cameroun', type: 'equity', sector: 'Agribusiness', country: 'CM', currency: 'XAF', exchange: 'BVMAC', last: 38900, previousClose: 39100, volume: 74 },
   { id: 'SOCAPALM', code: 'SOCAPALM', name: 'Société Camerounaise de Palmeraies', type: 'equity', sector: 'Agribusiness', country: 'CM', currency: 'XAF', exchange: 'BVMAC', last: 41200, previousClose: 41200, volume: 218 },
   { id: 'SIAT', code: 'SIAT', name: 'SIAT Gabon', type: 'equity', sector: 'Agribusiness', country: 'GA', currency: 'XAF', exchange: 'BVMAC', last: 18500, previousClose: 18700, volume: 355 },

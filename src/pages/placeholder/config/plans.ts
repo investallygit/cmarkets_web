@@ -23,18 +23,9 @@ const YIELD_CURVES: PanelPlan[] = [
   { id: 'auctions', title: 'Latest government securities auctions (BEAC)', code: 'CAL', api: ['GET /auctions?country=&from=&to='], x: 0, y: 15, w: 12, h: 11 },
 ]
 
-/** Panel layouts of the mockups in spec section 9 (screens 2 to 9), keyed by screen id. */
+/** Panel layouts of the mockups in spec section 9 (screens 3 to 9), keyed by screen id. */
 // prettier-ignore
 export const SCREEN_PLANS: Partial<Record<string, PanelPlan[]>> = {
-  DES: [
-    { id: 'header', title: 'Security header', code: 'DES', api: ['GET /securities/{id}', 'GET /securities/{id}/quote'], x: 0, y: 0, w: 12, h: 3 },
-    { id: 'chart', title: 'Price chart', code: 'GP', api: ['GET /securities/{id}/history', 'GET /indicators/{id}'], x: 0, y: 3, w: 8, h: 14 },
-    { id: 'orderbook', title: 'Order book', code: 'DES', api: ['GET /securities/{id}/orderbook'], x: 8, y: 3, w: 4, h: 7 },
-    { id: 'trades', title: 'Latest trades', code: 'DES', api: ['GET /securities/{id}/trades'], x: 8, y: 10, w: 4, h: 7 },
-    { id: 'keydata', title: 'Key data', code: 'DES', api: ['GET /securities/{id}'], x: 0, y: 17, w: 4, h: 9 },
-    { id: 'dividends', title: 'Dividends', code: 'DVD', api: ['GET /securities/{id}/dividends'], x: 4, y: 17, w: 4, h: 9 },
-    { id: 'documents', title: 'Documents and news', code: 'DOC', api: ['GET /documents?securityId=', 'GET /news?securityId='], x: 8, y: 17, w: 4, h: 9 },
-  ],
   EQS: [
     { id: 'criteria', title: 'Criteria', code: 'EQS', api: ['POST /analysis/screener', 'GET /analysis/screens'], x: 0, y: 0, w: 3, h: 26 },
     { id: 'results', title: 'Results', code: 'EQS', api: ['POST /analysis/screener'], x: 3, y: 0, w: 9, h: 8 },

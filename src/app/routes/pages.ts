@@ -8,12 +8,16 @@ type Page = LazyExoticComponent<ComponentType<ScreenProps>>
 const MarketDashboardPage = lazy(() =>
   import('@/pages/market-dashboard').then((module) => ({ default: module.MarketDashboardPage })),
 )
+const SecurityProfilePage = lazy(() =>
+  import('@/pages/security-profile').then((module) => ({ default: module.SecurityProfilePage })),
+)
 const PlaceholderPage = lazy(() =>
   import('@/pages/placeholder').then((module) => ({ default: module.PlaceholderPage })),
 )
 
 const PAGES: Partial<Record<ScreenTextKey, Page>> = {
   MKT: MarketDashboardPage,
+  DES: SecurityProfilePage,
 }
 
 /** Prototype only: the shared UI components on one page, at /_kit. */

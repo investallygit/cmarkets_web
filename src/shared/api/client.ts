@@ -51,6 +51,13 @@ async function request<T>(method: string, path: string, options: RequestOptions 
   return (await response.json()) as T
 }
 
+/** A file, such as a PDF document, fetched with the same session as the JSON calls. */
+async function requestBlob(path: string, options: Omit<RequestOptions, 'body'> = {}) {
+  const response = await fetch(buildUrl(path, options.query), { signal: options.signal })
+  if (!response.ok) throw new ApiError(await readProblem(response))
+  return response.blob()
+}
+
 /**
  * Hand-written client for the prototype. Once CMarket.Api publishes its OpenAPI contract,
  * the generated client (Orval) replaces these calls behind the same feature hooks.
@@ -58,6 +65,7 @@ async function request<T>(method: string, path: string, options: RequestOptions 
 export const apiClient = {
   get: <T>(path: string, options?: Omit<RequestOptions, 'body'>) =>
     request<T>('GET', path, options),
+  getBlob: requestBlob,
   post: <T>(path: string, body?: unknown, options?: Omit<RequestOptions, 'body'>) =>
     request<T>('POST', path, { ...options, body }),
   put: <T>(path: string, body?: unknown, options?: Omit<RequestOptions, 'body'>) =>
