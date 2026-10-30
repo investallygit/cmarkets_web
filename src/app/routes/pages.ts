@@ -11,6 +11,13 @@ const MarketDashboardPage = lazy(() =>
 const SecurityProfilePage = lazy(() =>
   import('@/pages/security-profile').then((module) => ({ default: module.SecurityProfilePage })),
 )
+const NewsPage = lazy(() => import('@/pages/news').then((module) => ({ default: module.NewsPage })))
+const MarketCalendarPage = lazy(() =>
+  import('@/pages/market-calendar').then((module) => ({ default: module.MarketCalendarPage })),
+)
+const AlertsPage = lazy(() =>
+  import('@/pages/alerts').then((module) => ({ default: module.AlertsPage })),
+)
 const PlaceholderPage = lazy(() =>
   import('@/pages/placeholder').then((module) => ({ default: module.PlaceholderPage })),
 )
@@ -18,6 +25,9 @@ const PlaceholderPage = lazy(() =>
 const PAGES: Partial<Record<ScreenTextKey, Page>> = {
   MKT: MarketDashboardPage,
   DES: SecurityProfilePage,
+  N: NewsPage,
+  CAL: MarketCalendarPage,
+  ALRT: AlertsPage,
 }
 
 /** Prototype only: the shared UI components on one page, at /_kit. */

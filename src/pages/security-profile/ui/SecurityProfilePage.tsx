@@ -103,7 +103,7 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
     n: {
       list: (
         <NewsListPanel
-          securityId={id}
+          query={{ securityId: id, pageSize: 50 }}
           selectedId={searchParams.get('article')}
           onSelect={select('article')}
         />
@@ -113,12 +113,14 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
     doc: {
       list: (
         <DocumentListPanel
-          securityId={id}
+          query={{ securityId: id }}
           selectedId={searchParams.get('doc')}
           onSelect={select('doc')}
         />
       ),
-      viewer: <DocumentViewerPanel securityId={id} documentId={searchParams.get('doc')} />,
+      viewer: (
+        <DocumentViewerPanel query={{ securityId: id }} documentId={searchParams.get('doc')} />
+      ),
     },
     hds: {
       shareholders: <ShareholdersPanel securityId={id} />,

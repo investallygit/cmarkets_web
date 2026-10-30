@@ -1,6 +1,7 @@
 import {
   ACCOUNT_TYPES,
   type AccountType,
+  type AlertCondition,
   type ChartDrawingDto,
   type LayoutItemDto,
   type MeDto,
@@ -8,16 +9,27 @@ import {
   type NotificationDto,
   type TradeDto,
 } from '@/shared/api/contracts'
-import {
-  createCalendar,
-  createNews,
-  createNotifications,
-  UPCOMING_ALERTS,
-  UPCOMING_NEWS,
-} from './fixtures/feeds'
+import { toMarketDay } from '@/shared/lib/format'
+import { createAlerts, type StoredAlert } from './fixtures/alerts'
+import { createAuctions } from './fixtures/auctions'
+import { createCalendar } from './fixtures/calendar'
+import { createNews, createNotifications, UPCOMING_NEWS } from './fixtures/feeds'
 import { INDEX_FIXTURES, type IndexFixture } from './fixtures/market'
 import { SECURITY_FIXTURES, type SecurityFixture } from './fixtures/securities'
-import { DEMO_USERS, ROLE_PERMISSIONS, ROLE_QUOTAS } from './fixtures/users'
+import {
+  DEMO_USERS,
+  ROLE_PERMISSIONS,
+  ROLE_QUOTAS,
+  WATCHLIST_FIXTURES,
+  type WatchlistFixture,
+} from './fixtures/users'
+import {
+  crossesThreshold,
+  exceedsVolume,
+  quoteAlertMessage,
+  severityOf,
+  type QuoteState,
+} from './lib/alerts'
 import { generateSparkline } from './lib/history'
 import { initialTrades } from './lib/trades'
 
@@ -77,19 +89,33 @@ export const indices = new Map<string, MockIndex>(
 
 export const news: NewsItemDto[] = createNews(startedAt)
 export const notifications: NotificationDto[] = createNotifications(startedAt)
-export const calendar = createCalendar(startedAt)
+export const auctions = createAuctions(startedAt)
+export const calendar = createCalendar(startedAt, auctions)
 
 const upcomingNews = [...UPCOMING_NEWS]
-const upcomingAlerts = [...UPCOMING_ALERTS]
 
 export function changePct(last: number, previousClose: number): number {
   return previousClose === 0 ? 0 : ((last - previousClose) / previousClose) * 100
 }
 
-/** One trade: a small random move, pulled back toward the opening level, on the tick size. */
-export function tickSecurity(id: string): MockSecurity | undefined {
+function quoteState(security: MockSecurity): QuoteState {
+  return {
+    last: security.last,
+    changePct: changePct(security.last, security.previousClose),
+    volume: security.volume,
+  }
+}
+
+/**
+ * One trade: a small random move, pulled back toward the opening level, on the tick size.
+ * Returns the notifications of the user's alerts that the trade set off.
+ */
+export function tickSecurity(
+  id: string,
+): { security: MockSecurity; alerts: NotificationDto[] } | undefined {
   const security = securities.get(id)
   if (!security) return undefined
+  const before = quoteState(security)
   const bond = security.type === 'bond'
   const tickSize = bond ? 0.01 : 5
   const noise = (Math.random() - 0.5) * (bond ? 0.0008 : 0.004)
@@ -104,7 +130,7 @@ export function tickSecurity(id: string): MockSecurity | undefined {
   security.sparkline[security.sparkline.length - 1] = security.last
   security.trades.unshift({ time: security.updatedAt, price: security.last, quantity })
   security.trades.length = Math.min(security.trades.length, MAX_TRADES)
-  return security
+  return { security, alerts: checkQuoteAlerts(security, before) }
 }
 
 export function tickIndex(code: string): MockIndex | undefined {
@@ -117,31 +143,18 @@ export function tickIndex(code: string): MockIndex | undefined {
   return index
 }
 
-export function publishNextNews(): NewsItemDto | undefined {
-  const content = upcomingNews.shift()
-  if (!content) return undefined
+/** Publishes the next sample news item, with the notifications of the alerts it sets off. */
+export function publishNextNews(): { item: NewsItemDto; alerts: NotificationDto[] } | undefined {
+  const next = upcomingNews.shift()
+  if (!next) return undefined
+  const { auctionResults = false, ...content } = next
   const item = {
     ...content,
     id: `news-live-${news.length + 1}`,
     publishedAt: new Date().toISOString(),
   }
   news.unshift(item)
-  return item
-}
-
-export function triggerNextAlert(): NotificationDto | undefined {
-  const content = upcomingAlerts.shift()
-  if (!content) return undefined
-  const number = notifications.length + 1
-  const notification = {
-    ...content,
-    id: `notification-${number}`,
-    alertId: `alert-${number}`,
-    triggeredAt: new Date().toISOString(),
-    read: false,
-  }
-  notifications.unshift(notification)
-  return notification
+  return { item, alerts: checkNewsAlerts(item, auctionResults) }
 }
 
 function readStorage(key: string): string | null {
@@ -182,6 +195,122 @@ export function currentUser(): MeDto {
     permissions: ROLE_PERMISSIONS[accountType],
     quotas: ROLE_QUOTAS[accountType],
   }
+}
+
+/** Data of the current user, kept in localStorage so that the prototype remembers it on reload. */
+function userStore<T extends object[]>(name: string, initial: () => T) {
+  const cache = new Map<string, T>()
+  const keyOf = () => `cmarket.prototype.${name}.${currentUser().id}`
+  return {
+    read(): T {
+      const key = keyOf()
+      let value = cache.get(key)
+      if (!value) {
+        value = parseArray<T>(readStorage(key)) ?? initial()
+        cache.set(key, value)
+      }
+      return value
+    },
+    write(value: T): void {
+      const key = keyOf()
+      cache.set(key, value)
+      writeStorage(key, JSON.stringify(value))
+    },
+  }
+}
+
+function parseArray<T extends object[]>(stored: string | null): T | undefined {
+  if (!stored) return undefined
+  try {
+    const value: unknown = JSON.parse(stored)
+    return Array.isArray(value) ? (value as T) : undefined
+  } catch {
+    return undefined
+  }
+}
+
+export type StoredWatchlist = WatchlistFixture
+
+export const watchlistStore = userStore<StoredWatchlist[]>('watchlists', () =>
+  WATCHLIST_FIXTURES.map((list) => ({
+    ...list,
+    columns: [...list.columns],
+    securityIds: [...list.securityIds],
+  })),
+)
+
+export const alertStore = userStore<StoredAlert[]>('alerts', () => createAlerts(startedAt))
+
+/** Records that an alert went off: a notification for the user and the time on the alert. */
+function triggerAlert(alert: StoredAlert, subject: string, message: string): NotificationDto {
+  const triggeredAt = new Date().toISOString()
+  alert.lastTriggeredAt = triggeredAt
+  const notification: NotificationDto = {
+    id: `notification-${notifications.length + 1}`,
+    alertId: alert.id,
+    triggeredAt,
+    subject,
+    message,
+    severity: severityOf(alert.condition),
+    read: false,
+  }
+  notifications.unshift(notification)
+  return notification
+}
+
+function triggerAll(
+  match: (
+    condition: AlertCondition,
+    alert: StoredAlert,
+  ) => [subject: string, message: string] | null,
+): NotificationDto[] {
+  const alerts = alertStore.read()
+  const triggered = alerts.flatMap((alert) => {
+    const found = alert.enabled ? match(alert.condition, alert) : null
+    return found ? [triggerAlert(alert, ...found)] : []
+  })
+  if (triggered.length > 0) alertStore.write(alerts)
+  return triggered
+}
+
+/**
+ * Price and volume alerts go off when a trade crosses their threshold. The prototype lets each one
+ * go off once a session, so a price hovering around the threshold does not repeat it.
+ */
+function checkQuoteAlerts(security: MockSecurity, before: QuoteState): NotificationDto[] {
+  const after = quoteState(security)
+  const today = toMarketDay(Date.now())
+  return triggerAll((condition, alert) => {
+    if (condition.type !== 'price' && condition.type !== 'volume') return null
+    if (condition.securityId !== security.id) return null
+    if (alert.lastTriggeredAt && toMarketDay(alert.lastTriggeredAt) === today) return null
+    const crossed =
+      condition.type === 'price'
+        ? crossesThreshold(condition, before, after)
+        : exceedsVolume(condition, before, after, security.typicalVolume)
+    return crossed ? [security.code, quoteAlertMessage(condition, security)] : null
+  })
+}
+
+/** Release alerts follow the issuer's news, auction alerts the BEAC results. */
+function checkNewsAlerts(item: NewsItemDto, auctionResults: boolean): NotificationDto[] {
+  return triggerAll((condition) => {
+    if (
+      condition.type === 'release' &&
+      item.topic === 'issuer' &&
+      item.securityIds.includes(condition.securityId)
+    ) {
+      return [item.source, `New release: ${item.headline}`]
+    }
+    if (
+      condition.type === 'auction' &&
+      auctionResults &&
+      (condition.country === null || condition.country === item.country)
+    ) {
+      return [item.source, item.headline]
+    }
+    return null
+  })
 }
 
 function layoutKey(screen: string): string {

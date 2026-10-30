@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <HomeRedirect /> },
       ...SCREENS.map((screen) => ({
-        path: screen.path,
+        path: screen.routePattern ?? screen.path,
         element: <ScreenRoute screen={screen} page={pageOf(screen)} />,
         handle: { screen } satisfies ScreenRouteHandle,
       })),

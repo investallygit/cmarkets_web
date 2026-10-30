@@ -1,1 +1,1 @@
-export { useSecurityMenu } from './model/useSecurityMenu'
+export { useSecurityMenu, type MenuSecurity } from './model/useSecurityMenu'

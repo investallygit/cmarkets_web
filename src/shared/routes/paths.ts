@@ -11,6 +11,8 @@ export const routes = {
   library: '/pub',
   publishingStudio: '/pub/new',
   news: '/n',
+  /** Tabs of the N screen: /n (news) and /n/documents. */
+  newsTabs: '/n/:tab?',
   calendar: '/cal',
   alerts: '/alrt',
   settings: '/cfg',
@@ -46,6 +48,19 @@ export function isSecurityFunction(value: string | undefined): value is Security
 
 export function securityPath(securityId: string, fn: SecurityFunction = 'des'): string {
   return `/securities/${encodeURIComponent(securityId)}/${fn}`
+}
+
+/** Tabs of the N screen: the news feed and the document library (spec section 5). */
+export const NEWS_TABS = ['news', 'documents'] as const
+export type NewsTab = (typeof NEWS_TABS)[number]
+
+/** The N screen, with an article open: "/n?article=news-1". */
+export function newsPath(articleId?: string): string {
+  return articleId ? `${routes.news}?article=${encodeURIComponent(articleId)}` : routes.news
+}
+
+export function newsTabPath(tab: NewsTab): string {
+  return tab === 'news' ? routes.news : `${routes.news}/${tab}`
 }
 
 export function bondCalculatorPath(bondId: string): string {

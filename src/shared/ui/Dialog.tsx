@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import { X } from 'lucide-react'
 import { useEffect, useId, useRef, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 
 /** First control of the dialog content to focus on opening; the close button comes last. */
@@ -22,7 +23,9 @@ interface DialogProps {
 
 /**
  * Modal dialog on the native <dialog>: focus stays inside, Escape closes, the rest of the page is
- * inert. The content is mounted only while open, so a form starts empty each time.
+ * inert. The content is mounted only while open, so a form starts empty each time. It is rendered
+ * in <body>, so a dialog opened from a panel title bar neither inherits its upper-case text nor
+ * sits inside its drag handle.
  */
 export function Dialog({
   open,
@@ -48,7 +51,7 @@ export function Dialog({
     }
   }, [open])
 
-  return (
+  return createPortal(
     <dialog
       ref={dialogRef}
       aria-labelledby={titleId}
@@ -89,7 +92,8 @@ export function Dialog({
           </button>
         </>
       )}
-    </dialog>
+    </dialog>,
+    document.body,
   )
 }
 

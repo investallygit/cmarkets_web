@@ -10,7 +10,9 @@
     "noData": "No data",
     "yesterdayShort": "Yest.",
     "close": "Close",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "save": "Save",
+    "done": "Done"
   },
   "shell": {
     "commandLabel": "Command bar",
@@ -123,7 +125,10 @@
     "article": "Article",
     "shareholders": "Shareholders",
     "fundamentals": "Fundamental analysis",
-    "research": "Research"
+    "research": "Research",
+    "alerts": "My alerts",
+    "alertHistory": "Triggered alerts",
+    "auctions": "Latest government securities auctions (BEAC)"
   },
   "market": {
     "movers": {
@@ -184,7 +189,20 @@
     "amortization": "Amortization",
     "outstanding": "Outstanding",
     "title": "Title",
-    "source": "Source"
+    "source": "Source",
+    "name": "Name",
+    "country": "Country",
+    "amountOffered": "Amount offered (M)",
+    "bids": "Bids (M)",
+    "coverRatio": "Cover ratio",
+    "averageRate": "Average rate",
+    "marginalRate": "Marginal rate",
+    "subject": "Subject",
+    "condition": "Condition",
+    "channels": "Channels",
+    "lastTriggered": "Last triggered",
+    "enabled": "On",
+    "message": "Message"
   },
   "menu": {
     "openProfile": "Open profile",
@@ -192,7 +210,8 @@
     "createAlert": "Create an alert",
     "exportXlsx": "Export to Excel",
     "exportCsv": "Export to CSV",
-    "exportFailed": "Export failed: {{message}}"
+    "exportFailed": "Export failed: {{message}}",
+    "newList": "New list…"
   },
   "form": {
     "reason": "Reason",
@@ -321,15 +340,217 @@
     },
     "pages_one": "{{count}} page",
     "pages_other": "{{count}} pages",
-    "select": "Select a document to read it here."
+    "select": "Select a document to read it here.",
+    "search": "Search the documents",
+    "type": "Document type",
+    "allTypes": "All types",
+    "types": {
+      "annual-report": "Annual report",
+      "financial-statements": "Financial statements",
+      "information-note": "Information note",
+      "notice": "Notice",
+      "release": "Release",
+      "decision": "Decision",
+      "articles": "Articles of association"
+    },
+    "noMatch": "No document matches these filters"
   },
   "news": {
-    "select": "Select a news item to read it here."
+    "select": "Select a news item to read it here.",
+    "tabsLabel": "News functions",
+    "tabs": {
+      "news": "News",
+      "documents": "Documents"
+    },
+    "topics": {
+      "all": "All topics",
+      "issuer": "Issuers",
+      "regulator": "Regulators",
+      "market": "Market"
+    },
+    "allCountries": "All countries",
+    "topic": "Topic",
+    "country": "Country",
+    "security": "Filter by security",
+    "related": "Securities concerned",
+    "empty": "No news for these filters"
   },
   "shareholders": {
     "asOf": "As of {{date}}"
   },
   "placeholder": {
     "notBuilt": "Planned panel, not built yet"
+  },
+  "countries": {
+    "CM": "Cameroon",
+    "GA": "Gabon",
+    "CG": "Congo",
+    "TD": "Chad",
+    "CF": "CAR",
+    "GQ": "Eq. Guinea"
+  },
+  "securityPicker": {
+    "placeholder": "Code or name",
+    "clear": "Clear"
+  },
+  "watchlists": {
+    "actions": "Watchlist actions",
+    "newList": "New list",
+    "newTitle": "New watchlist",
+    "editTitle": "Watchlist {{code}}",
+    "settings": "Name and columns",
+    "delete": "Delete the list",
+    "deleteTitle": "Delete {{code}}",
+    "deleteMessage": "Delete the list “{{name}}”? Its securities stay in your other lists.",
+    "deleted": "{{list}} deleted",
+    "name": "Name",
+    "nameRequired": "Give the list a name",
+    "columns": "Columns",
+    "codeAlwaysShown": "The security code is always shown.",
+    "columnNames": {
+      "name": "Security name",
+      "last": "Last",
+      "change": "Change",
+      "changePct": "Change %",
+      "volume": "Volume",
+      "sparkline": "5-day chart"
+    },
+    "startsWith_one": "{{codes}} will be in the new list.",
+    "startsWith_other": "{{codes}} will be in the new list.",
+    "create": "Create",
+    "created": "{{list}} created",
+    "saved": "{{list}} saved",
+    "saveFailed": "Watchlist not saved: {{message}}",
+    "addPlaceholder": "Add a security: code or name",
+    "addTo": "Add a security to {{code}}",
+    "added": "{{security}} added to {{list}}",
+    "removed": "{{security}} removed from {{list}}",
+    "removeFrom": "Remove from {{code}}",
+    "emptyList": "No security yet: use + Add, or right-click a security in any table.",
+    "noList": "No watchlist yet"
+  },
+  "alerts": {
+    "newAlert": "New alert",
+    "newTitle": "New alert",
+    "editTitle": "Edit the alert",
+    "create": "Create",
+    "created": "Alert created",
+    "saved": "Alert saved",
+    "deleted": "Alert deleted",
+    "saveFailed": "Alert not saved: {{message}}",
+    "quotaUsed": "{{used}} of {{quota}} alerts used ({{type}} account)",
+    "quotaUnlimited": "{{used}} alerts, no limit",
+    "quotaReached": "Your account allows {{quota}} alerts. Delete one to set another.",
+    "quotaShort": "{{used}} / {{quota}}",
+    "type": "Type",
+    "types": {
+      "price": "Price or change",
+      "volume": "Unusual volume",
+      "release": "Issuer release",
+      "auction": "Auction results",
+      "portfolio": "Portfolio limit",
+      "publication": "New research"
+    },
+    "publicationAbout": "Research",
+    "about": {
+      "analysts": "Followed analysts",
+      "security": "On a security",
+      "country": "On a country"
+    },
+    "security": "Security",
+    "metric": "Watch",
+    "metrics": {
+      "price": "Price",
+      "changePct": "Change %"
+    },
+    "direction": "Goes",
+    "directionOptions": {
+      "above": "Above",
+      "below": "Below"
+    },
+    "directions": {
+      "above": "above",
+      "below": "below"
+    },
+    "threshold": "Threshold",
+    "lastQuote": "Last {{last}} · {{change}} today",
+    "multiple": "Volume above",
+    "multipleHint": "times the 20-day average volume",
+    "country": "Country",
+    "allCountries": "All CEMAC countries",
+    "chooseCountry": "Choose a country",
+    "portfolioHint": "Goes off when a limit of one of your portfolios is breached. Limits are set on the PORT screen.",
+    "channels": "Send by",
+    "channelNames": {
+      "push": "Push",
+      "email": "E-mail",
+      "sms": "SMS"
+    },
+    "enabled": "Alert on",
+    "errors": {
+      "required": "Required",
+      "positive": "Must be above 0",
+      "aboveOne": "Must be above 1",
+      "channels": "Choose at least one channel"
+    },
+    "conditions": {
+      "price": "Price {{direction}} {{threshold}}",
+      "changePct": "Change {{direction}} {{threshold}}",
+      "volume": "Volume above {{multiple}}× the 20-day average",
+      "release": "New release from the issuer",
+      "auction": "Results of a BEAC auction",
+      "portfolio": "A portfolio limit is breached",
+      "publication": {
+        "analysts": "New research from a followed analyst",
+        "security": "New research on the security",
+        "country": "New research on the country"
+      }
+    },
+    "subjects": {
+      "portfolios": "My portfolios",
+      "analysts": "Followed analysts"
+    },
+    "edit": "Edit",
+    "turnOn": "Turn on",
+    "turnOff": "Turn off",
+    "delete": "Delete",
+    "deleteTitle": "Delete the alert",
+    "deleteMessage": "Delete the alert {{alert}}?",
+    "toggleLabel": "Alert {{alert}} on",
+    "never": "Never",
+    "noAlerts": "No alert yet: create one here, or right-click a security in any table.",
+    "historyEmpty": "No alert has gone off yet",
+    "unread": "Unread"
+  },
+  "calendar": {
+    "views": {
+      "day": "Day",
+      "week": "Week"
+    },
+    "previous": "Previous",
+    "next": "Next",
+    "today": "Today",
+    "types": "Event types",
+    "allCountries": "All countries",
+    "country": "Country",
+    "weekOf": "Week of {{date}}",
+    "noEvents": "No event",
+    "noSession": "No session",
+    "openSecurity": "Double-click or Enter opens the security profile"
+  },
+  "auctions": {
+    "bta_one": "BTA {{count}} wk",
+    "bta_other": "BTA {{count}} wk",
+    "ota_one": "OTA {{count}} yr",
+    "ota_other": "OTA {{count}} yr",
+    "allCountries": "All countries",
+    "instruments": {
+      "all": "BTA + OTA",
+      "BTA": "BTA",
+      "OTA": "OTA"
+    },
+    "filters": "Filters:",
+    "country": "Country",
+    "instrument": "Instrument"
   }
 }

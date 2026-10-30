@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 import { useUpcomingEvents } from '@/entities/calendar-event'
 import type { CalendarEventDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
+import { securityPath } from '@/shared/routes/paths'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { DataTable } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
@@ -11,10 +13,11 @@ import { QueryView } from '@/shared/ui/QueryView'
 const helper = createDataColumnHelper<CalendarEventDto>()
 const getEventId = (event: CalendarEventDto) => event.id
 
-/** Screen 1, Market calendar: the next 7 days. API /calendar. */
+/** Screen 1, Market calendar: the next 7 days; a double-click opens the security. API /calendar. */
 export function CalendarPanel() {
   const { t } = useTranslation()
   const format = useFormat()
+  const navigate = useNavigate()
   const events = useUpcomingEvents()
 
   const columns = useMemo(
@@ -41,7 +44,15 @@ export function CalendarPanel() {
     <Panel title={t('panels.calendar')} code="CAL" options={<span>{t('market.next7Days')}</span>}>
       <QueryView query={events}>
         {(data) => (
-          <DataTable data={data} columns={columns} getRowId={getEventId} exportName="calendar" />
+          <DataTable
+            data={data}
+            columns={columns}
+            getRowId={getEventId}
+            onRowDoubleClick={(event) => {
+              if (event.securityId) void navigate(securityPath(event.securityId))
+            }}
+            exportName="calendar"
+          />
         )}
       </QueryView>
     </Panel>

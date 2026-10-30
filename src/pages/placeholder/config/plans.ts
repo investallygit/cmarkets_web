@@ -55,9 +55,6 @@ export const SCREEN_PLANS: Partial<Record<string, PanelPlan[]>> = {
     { id: 'editor', title: 'Editor', code: 'PUB', api: ['POST /publications', 'PUT /publications/{id}', 'POST /publications/{id}/charts'], x: 3, y: 0, w: 6, h: 26 },
     { id: 'settings', title: 'Publication settings', code: 'PUB', api: ['PUT /publications/{id}/pricing', 'POST /publications/{id}/attachments', 'POST /publications/{id}/submit'], x: 9, y: 0, w: 3, h: 26 },
   ],
-  N: fullScreen('News', 'N', ['GET /news?securityId=&country=&topic=', 'GET /news/{id}', 'GET /documents?q=']),
-  CAL: fullScreen('Market calendar', 'CAL', ['GET /calendar?from=&to=&type=']),
-  ALRT: fullScreen('Alerts', 'ALRT', ['GET /alerts', 'POST /alerts', 'GET /notifications']),
   CFG: fullScreen('Settings', 'CFG', ['GET /me', 'GET /organization', 'GET /subscription', 'GET /invoices']),
   DATA: fullScreen('Session coverage', 'DATA', ['GET /data/coverage?date=', 'GET /data/import-types/{type}/template']),
   IMP: [

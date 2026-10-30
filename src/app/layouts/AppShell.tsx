@@ -2,12 +2,15 @@ import { LoaderCircle, RefreshCw, TriangleAlert } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Outlet } from 'react-router'
+import { useAlertRealtimeSync } from '@/entities/alert'
 import { useMarketRealtimeSync } from '@/entities/market'
 import { useNewsRealtimeSync } from '@/entities/news'
 import { useNotificationRealtimeSync } from '@/entities/notification'
 import { useQuoteRealtimeSync } from '@/entities/quote'
 import { useSecurityRealtimeSync } from '@/entities/security'
 import { useMe } from '@/entities/session'
+import { AlertDialogHost } from '@/features/manage-alerts'
+import { WatchlistDialogHost } from '@/features/manage-watchlists'
 import { TableExportContext } from '@/shared/ui/tableExport'
 import { Toaster } from '@/shared/ui/Toaster'
 import { SideMenu } from '@/widgets/side-menu'
@@ -26,6 +29,7 @@ export function AppShell() {
   useMarketRealtimeSync()
   useNewsRealtimeSync()
   useNotificationRealtimeSync()
+  useAlertRealtimeSync()
   useSecurityRealtimeSync()
 
   if (me.isPending) {
@@ -67,6 +71,9 @@ export function AppShell() {
         </main>
         <StatusBar className="col-span-2" />
       </div>
+      {/* Forms opened from the right-click menu of any security. */}
+      <WatchlistDialogHost />
+      <AlertDialogHost />
       <Toaster />
     </TableExportContext.Provider>
   )

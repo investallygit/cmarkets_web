@@ -1,10 +1,12 @@
 import { http, HttpResponse } from 'msw'
 import type {
+  FxRateDto,
   HistoryInterval,
   IndexQuoteDto,
   MarketStatusDto,
   MarketSummaryDto,
   MoverDto,
+  PolicyRateDto,
   TickerItemDto,
 } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
@@ -16,6 +18,7 @@ import {
   type MockIndex,
   type MockSecurity,
 } from '../db'
+import { FX_FIXTURES, POLICY_RATE_FIXTURES } from '../fixtures/market'
 import { generateHistory } from '../lib/history'
 import { api, latency, problem } from '../lib/http'
 
@@ -139,5 +142,27 @@ export const marketHandlers = [
     const to = query.get('to') ?? toMarketDay(Date.now())
     const from = query.get('from') ?? to
     return HttpResponse.json(generateHistory(index.code, index.value, from, to, interval))
+  }),
+
+  http.get(api('/rates/policy'), async () => {
+    await latency()
+    const asOf = toMarketDay(Date.now())
+    return HttpResponse.json<PolicyRateDto[]>(
+      POLICY_RATE_FIXTURES.map((rate) => ({ ...rate, asOf })),
+    )
+  }),
+
+  http.get(api('/fx'), async ({ request }) => {
+    await latency()
+    const pairs = new URL(request.url).searchParams.get('pairs')?.split(',') ?? []
+    const timestamp = new Date().toISOString()
+    const rates: FxRateDto[] = FX_FIXTURES.filter(
+      (fx) => pairs.length === 0 || pairs.includes(fx.pair),
+    ).map(({ previousClose, ...fx }) => ({
+      ...fx,
+      changePct: changePct(fx.value, previousClose),
+      timestamp,
+    }))
+    return HttpResponse.json(rates)
   }),
 ]

@@ -1,17 +1,9 @@
 import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
-import { useTodayNotifications } from '@/entities/notification'
-import type { AlertSeverity } from '@/shared/api/contracts'
+import { SEVERITY_TEXT, useTodayNotifications } from '@/entities/notification'
 import { useFormat } from '@/shared/i18n'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
-
-/** Colour by severity (spec section 9). */
-const SEVERITY_TEXT: Record<AlertSeverity, string> = {
-  info: 'text-info',
-  warning: 'text-warning',
-  critical: 'text-down',
-}
 
 /** Screen 1, My alerts triggered today. API /notifications, real-time AlertTriggered. */
 export function TriggeredAlertsPanel() {

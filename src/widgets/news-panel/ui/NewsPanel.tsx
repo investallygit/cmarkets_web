@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { NewsTime, useNews } from '@/entities/news'
 import type { NewsTopic } from '@/shared/api/contracts'
-import { routes } from '@/shared/routes/paths'
+import { newsPath } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs } from '@/shared/ui/PanelTabs'
 import { QueryView } from '@/shared/ui/QueryView'
@@ -37,7 +37,7 @@ export function NewsPanel() {
               <li key={item.id}>
                 <button
                   type="button"
-                  onClick={() => void navigate(routes.news)}
+                  onClick={() => void navigate(newsPath(item.id))}
                   className="grid w-full grid-cols-[48px_minmax(0,1fr)] gap-x-2 px-2 py-1.5 text-left hover:bg-panel-header"
                 >
                   <span className="font-mono text-data text-secondary">

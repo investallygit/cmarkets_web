@@ -10,7 +10,9 @@
     "noData": "Aucune donnée",
     "yesterdayShort": "Hier",
     "close": "Fermer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "done": "Terminé"
   },
   "shell": {
     "commandLabel": "Barre de commande",
@@ -123,7 +125,10 @@
     "article": "Article",
     "shareholders": "Actionnariat",
     "fundamentals": "Analyse fondamentale",
-    "research": "Recherche"
+    "research": "Recherche",
+    "alerts": "Mes alertes",
+    "alertHistory": "Alertes déclenchées",
+    "auctions": "Dernières adjudications de titres publics (BEAC)"
   },
   "market": {
     "movers": {
@@ -184,7 +189,20 @@
     "amortization": "Amortissement",
     "outstanding": "Encours",
     "title": "Titre",
-    "source": "Source"
+    "source": "Source",
+    "name": "Nom",
+    "country": "Pays",
+    "amountOffered": "Montant offert (M)",
+    "bids": "Soumissions (M)",
+    "coverRatio": "Taux de couverture",
+    "averageRate": "Taux moyen",
+    "marginalRate": "Taux marginal",
+    "subject": "Objet",
+    "condition": "Condition",
+    "channels": "Canaux",
+    "lastTriggered": "Déclenchée le",
+    "enabled": "Active",
+    "message": "Message"
   },
   "menu": {
     "openProfile": "Ouvrir la fiche",
@@ -192,7 +210,8 @@
     "createAlert": "Créer une alerte",
     "exportXlsx": "Exporter vers Excel",
     "exportCsv": "Exporter en CSV",
-    "exportFailed": "Échec de l'export : {{message}}"
+    "exportFailed": "Échec de l'export : {{message}}",
+    "newList": "Nouvelle liste…"
   },
   "form": {
     "reason": "Motif",
@@ -321,15 +340,217 @@
     },
     "pages_one": "{{count}} page",
     "pages_other": "{{count}} pages",
-    "select": "Choisissez un document pour le lire ici."
+    "select": "Choisissez un document pour le lire ici.",
+    "search": "Rechercher dans les documents",
+    "type": "Type de document",
+    "allTypes": "Tous les types",
+    "types": {
+      "annual-report": "Rapport annuel",
+      "financial-statements": "États financiers",
+      "information-note": "Note d'information",
+      "notice": "Avis",
+      "release": "Communiqué",
+      "decision": "Décision",
+      "articles": "Statuts"
+    },
+    "noMatch": "Aucun document ne correspond à ces filtres"
   },
   "news": {
-    "select": "Choisissez une actualité pour la lire ici."
+    "select": "Choisissez une actualité pour la lire ici.",
+    "tabsLabel": "Fonctions d'actualité",
+    "tabs": {
+      "news": "Actualités",
+      "documents": "Documents"
+    },
+    "topics": {
+      "all": "Tous les sujets",
+      "issuer": "Émetteurs",
+      "regulator": "Régulateurs",
+      "market": "Marché"
+    },
+    "allCountries": "Tous les pays",
+    "topic": "Sujet",
+    "country": "Pays",
+    "security": "Filtrer par titre",
+    "related": "Titres concernés",
+    "empty": "Aucune actualité pour ces filtres"
   },
   "shareholders": {
     "asOf": "Au {{date}}"
   },
   "placeholder": {
     "notBuilt": "Panneau prévu, pas encore développé"
+  },
+  "countries": {
+    "CM": "Cameroun",
+    "GA": "Gabon",
+    "CG": "Congo",
+    "TD": "Tchad",
+    "CF": "RCA",
+    "GQ": "Guinée éq."
+  },
+  "securityPicker": {
+    "placeholder": "Code ou nom",
+    "clear": "Effacer"
+  },
+  "watchlists": {
+    "actions": "Actions sur la liste",
+    "newList": "Nouvelle liste",
+    "newTitle": "Nouvelle liste de suivi",
+    "editTitle": "Liste {{code}}",
+    "settings": "Nom et colonnes",
+    "delete": "Supprimer la liste",
+    "deleteTitle": "Supprimer {{code}}",
+    "deleteMessage": "Supprimer la liste « {{name}} » ? Ses titres restent dans vos autres listes.",
+    "deleted": "{{list}} supprimée",
+    "name": "Nom",
+    "nameRequired": "Donnez un nom à la liste",
+    "columns": "Colonnes",
+    "codeAlwaysShown": "Le code du titre est toujours affiché.",
+    "columnNames": {
+      "name": "Nom du titre",
+      "last": "Dernier",
+      "change": "Variation",
+      "changePct": "Variation %",
+      "volume": "Volume",
+      "sparkline": "Graphique 5 jours"
+    },
+    "startsWith_one": "{{codes}} sera dans la nouvelle liste.",
+    "startsWith_other": "{{codes}} seront dans la nouvelle liste.",
+    "create": "Créer",
+    "created": "{{list}} créée",
+    "saved": "{{list}} enregistrée",
+    "saveFailed": "Liste non enregistrée : {{message}}",
+    "addPlaceholder": "Ajouter un titre : code ou nom",
+    "addTo": "Ajouter un titre à {{code}}",
+    "added": "{{security}} ajouté à {{list}}",
+    "removed": "{{security}} retiré de {{list}}",
+    "removeFrom": "Retirer de {{code}}",
+    "emptyList": "Aucun titre : utilisez + Ajouter, ou le clic droit sur un titre dans n'importe quel tableau.",
+    "noList": "Aucune liste de suivi"
+  },
+  "alerts": {
+    "newAlert": "Nouvelle alerte",
+    "newTitle": "Nouvelle alerte",
+    "editTitle": "Modifier l'alerte",
+    "create": "Créer",
+    "created": "Alerte créée",
+    "saved": "Alerte enregistrée",
+    "deleted": "Alerte supprimée",
+    "saveFailed": "Alerte non enregistrée : {{message}}",
+    "quotaUsed": "{{used}} alertes sur {{quota}} (compte {{type}})",
+    "quotaUnlimited": "{{used}} alertes, sans limite",
+    "quotaReached": "Votre compte permet {{quota}} alertes. Supprimez-en une pour en créer une autre.",
+    "quotaShort": "{{used}} / {{quota}}",
+    "type": "Type",
+    "types": {
+      "price": "Cours ou variation",
+      "volume": "Volume inhabituel",
+      "release": "Communiqué de l'émetteur",
+      "auction": "Résultats d'adjudication",
+      "portfolio": "Limite de portefeuille",
+      "publication": "Nouvelle recherche"
+    },
+    "publicationAbout": "Recherche",
+    "about": {
+      "analysts": "Analystes suivis",
+      "security": "Sur un titre",
+      "country": "Sur un pays"
+    },
+    "security": "Titre",
+    "metric": "Surveiller",
+    "metrics": {
+      "price": "Cours",
+      "changePct": "Variation %"
+    },
+    "direction": "Passe",
+    "directionOptions": {
+      "above": "Au-dessus",
+      "below": "En dessous"
+    },
+    "directions": {
+      "above": "au-dessus de",
+      "below": "en dessous de"
+    },
+    "threshold": "Seuil",
+    "lastQuote": "Dernier {{last}} · {{change}} aujourd'hui",
+    "multiple": "Volume supérieur à",
+    "multipleHint": "fois le volume moyen sur 20 jours",
+    "country": "Pays",
+    "allCountries": "Tous les pays CEMAC",
+    "chooseCountry": "Choisissez un pays",
+    "portfolioHint": "Se déclenche quand une limite de l'un de vos portefeuilles est dépassée. Les limites se règlent sur l'écran PORT.",
+    "channels": "Envoyer par",
+    "channelNames": {
+      "push": "Push",
+      "email": "E-mail",
+      "sms": "SMS"
+    },
+    "enabled": "Alerte active",
+    "errors": {
+      "required": "Obligatoire",
+      "positive": "Doit être supérieur à 0",
+      "aboveOne": "Doit être supérieur à 1",
+      "channels": "Choisissez au moins un canal"
+    },
+    "conditions": {
+      "price": "Cours {{direction}} {{threshold}}",
+      "changePct": "Variation {{direction}} {{threshold}}",
+      "volume": "Volume supérieur à {{multiple}}× la moyenne sur 20 jours",
+      "release": "Nouveau communiqué de l'émetteur",
+      "auction": "Résultats d'une adjudication BEAC",
+      "portfolio": "Une limite de portefeuille est dépassée",
+      "publication": {
+        "analysts": "Nouvelle recherche d'un analyste suivi",
+        "security": "Nouvelle recherche sur le titre",
+        "country": "Nouvelle recherche sur le pays"
+      }
+    },
+    "subjects": {
+      "portfolios": "Mes portefeuilles",
+      "analysts": "Analystes suivis"
+    },
+    "edit": "Modifier",
+    "turnOn": "Activer",
+    "turnOff": "Désactiver",
+    "delete": "Supprimer",
+    "deleteTitle": "Supprimer l'alerte",
+    "deleteMessage": "Supprimer l'alerte {{alert}} ?",
+    "toggleLabel": "Alerte {{alert}} active",
+    "never": "Jamais",
+    "noAlerts": "Aucune alerte : créez-en une ici, ou par le clic droit sur un titre dans n'importe quel tableau.",
+    "historyEmpty": "Aucune alerte déclenchée pour l'instant",
+    "unread": "Non lue"
+  },
+  "calendar": {
+    "views": {
+      "day": "Jour",
+      "week": "Semaine"
+    },
+    "previous": "Précédent",
+    "next": "Suivant",
+    "today": "Aujourd'hui",
+    "types": "Types d'événement",
+    "allCountries": "Tous les pays",
+    "country": "Pays",
+    "weekOf": "Semaine du {{date}}",
+    "noEvents": "Aucun événement",
+    "noSession": "Pas de séance",
+    "openSecurity": "Double-clic ou Entrée ouvre la fiche valeur"
+  },
+  "auctions": {
+    "bta_one": "BTA {{count}} sem.",
+    "bta_other": "BTA {{count}} sem.",
+    "ota_one": "OTA {{count}} an",
+    "ota_other": "OTA {{count}} ans",
+    "allCountries": "Tous les pays",
+    "instruments": {
+      "all": "BTA + OTA",
+      "BTA": "BTA",
+      "OTA": "OTA"
+    },
+    "filters": "Filtres :",
+    "country": "Pays",
+    "instrument": "Instrument"
   }
 }

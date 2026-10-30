@@ -1,5 +1,7 @@
 // DTOs of the CMarket REST API (spec section 10). Provisional: to be replaced by the
 // types generated from the OpenAPI contract once CMarket.Api exists.
+export type * from './alerts'
+export type * from './auctions'
 export type * from './bonds'
 export type * from './calendar'
 export type * from './common'

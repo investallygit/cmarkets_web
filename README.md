@@ -24,7 +24,9 @@ npm run dev        # http://localhost:5173
 
 In the prototype, the user badge at the top right switches language (FR / EN) and account type,
 so every menu and permission of spec section 12 can be previewed. `/_kit` shows the shared UI
-components (form controls, dialogs, toasts, price chart, table export) with sample content.
+components (form controls, dialogs, toasts, price chart, table export) with sample content. The
+mock back end keeps each demo user's watchlists, alerts, layouts and chart drawings in
+localStorage, and sets off their alerts when a price crosses a threshold or a release comes out.
 
 ## Stack (spec section 7)
 
@@ -47,14 +49,14 @@ split into slices by business domain, each slice into segments (`ui`, `model`, `
 src/
   main.tsx    entry point: real back end or mocks
   app/        providers, router, app shell layout, global styles
-  pages/      one slice per screen: market-dashboard, security-profile, placeholder (screens not
-              built yet), status
+  pages/      one slice per screen: market-dashboard, security-profile, news, market-calendar,
+              alerts, placeholder (screens not built yet), status
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
-  features/   user actions: command-bar, security-actions, draw-on-chart, compare-securities,
-              switch-language, switch-account, workspace-layout
+  features/   user actions: command-bar, security-actions, manage-watchlists, manage-alerts,
+              draw-on-chart, compare-securities, switch-language, switch-account, workspace-layout
   entities/   business data: session, security, quote (live prices), market, bond, document,
-              chart-drawing, watchlist, rate, news, calendar-event, notification
+              chart-drawing, watchlist, alert, auction, rate, news, calendar-event, notification
   shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
               UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
   mocks/      fake back end for the prototype (MSW handlers, sample data, simulated hub)
@@ -80,10 +82,14 @@ Where new code goes:
 | A panel, or any block shown on several screens               | `widgets/<name>`                                                           |
 | A user action (add to a list, create an alert, buy a report) | `features/<verb>-<noun>`                                                   |
 | A business object: types, API hooks, live state, small UI    | `entities/<object>`                                                        |
+| A form opened from several screens (an alert, a list)        | `features/`, opened through a store in `entities/<object>/model`           |
 | Anything without business knowledge                          | `shared/`                                                                  |
 
 When two widgets of a page must talk (the Indices panel picks the index of the chart), the page
-holds the state and passes props: see `pages/market-dashboard/model/indexSelection.ts`.
+holds the state and passes props: see `pages/market-dashboard/model/indexSelection.ts`. When a
+feature must open the form of another one ("Create an alert" in the right-click menu of a
+security), it asks through the entity's store (`openAlertDialog`), since features never import
+each other; the app shell mounts the form once.
 
 ### Data flow
 
@@ -111,11 +117,13 @@ exist. Numbers use `shared/lib/format.ts` (`52 500,25` in French, `52,500.25` in
 `DD/MM/YYYY`, Douala time), and inputs read them back with `shared/lib/parse.ts`. Icons come from
 `lucide-react`.
 
-Screens build on `shared/ui`: `Panel`, `ScreenTabs`, `DataTable` (sorting, right-click menu, Excel
-and CSV export unless the user lacks `analysis:export`), `charts/` (`PriceChart` with indicator
-panes, comparison rebased to 100 and drawings; `AreaChart`), `PdfViewer`, `form/` (buttons,
-fields, selects, number and date inputs in the user's format, checkboxes, segmented choices, file
-drop zone), `Dialog` (also as a side form), `ConfirmDialog` (with a required reason) and `toast`.
+Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of a title bar),
+`ScreenTabs`, `DataTable` (sorting, right-click menu, Excel and CSV export unless the user lacks
+`analysis:export`), `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
+drawings; `AreaChart`), `PdfViewer`, `form/` (buttons, fields, selects, number and date inputs in
+the user's format, checkboxes, segmented choices, file drop zone), `Dialog` (also as a side form),
+`ConfirmDialog` (with a required reason) and `toast`. Entities add small business components, such
+as the security picker of `entities/security`.
 
 ## Connecting the real back end
 
@@ -131,8 +139,9 @@ The screens do not change: they only know the API contract.
 | ------------------------------------------------------------------------- | ------------------------------------------------------------- |
 | App shell: top bar, command bar, ticker, menu by account type, status bar | Done                                                          |
 | Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
-| 1 · Market dashboard (MKT)                                                | Done on mock data, real-time quotes and indices               |
+| 1 · Market dashboard (MKT)                                                | Done on mock data, real-time quotes and indices, watchlists   |
 | 2 · Security profile (DES, GP, DVD, N, DOC, HDS)                          | Done on mock data; FA comes with EQS, ANA with PUB            |
+| News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done on mock data; the mock sets off the alerts               |
 | 3 to 9 and the back-office screens                                        | Placeholders with the mockup layout and the API of each panel |
 | Login, OTP, token refresh                                                 | Not started                                                   |
 

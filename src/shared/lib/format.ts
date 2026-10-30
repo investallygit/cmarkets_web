@@ -140,6 +140,23 @@ export function formatDate(date: DateInput, timeZone = MARKET_TIME_ZONE): string
   return `${day}/${month}/${year}`
 }
 
+const weekdayFormats = new Map<string, Intl.DateTimeFormat>()
+
+/** Day of the week of a calendar date: "Mon" / "lun." (short), "Monday" / "lundi" (long). */
+export function formatWeekday(
+  isoDate: string,
+  locale: Locale,
+  style: 'short' | 'long' = 'short',
+): string {
+  const key = `${locale}|${style}`
+  let format = weekdayFormats.get(key)
+  if (!format) {
+    format = new Intl.DateTimeFormat(INTL_LOCALE[locale], { weekday: style, timeZone: 'UTC' })
+    weekdayFormats.set(key, format)
+  }
+  return format.format(new Date(`${isoDate}T12:00:00Z`))
+}
+
 /** A calendar date such as "2026-10-30" as DD/MM/YYYY, with no time zone conversion. */
 export function formatIsoDate(isoDate: string): string {
   const [year, month, day] = isoDate.split('-')

@@ -12,10 +12,15 @@ export function latency(): Promise<void> {
   return delay(80 + Math.random() * 160)
 }
 
-/** RFC 7807 error body, the format CMarket.Api returns (spec section 10). */
-export function problem(status: number, title: string, detail?: string) {
+/** RFC 7807 error body, the format CMarket.Api returns (spec section 10), with errors by field. */
+export function problem(
+  status: number,
+  title: string,
+  detail?: string,
+  errors?: Record<string, string[]>,
+) {
   return HttpResponse.json(
-    { type: 'about:blank', title, status, detail },
+    { type: 'about:blank', title, status, detail, errors },
     { status, headers: { 'Content-Type': 'application/problem+json' } },
   )
 }

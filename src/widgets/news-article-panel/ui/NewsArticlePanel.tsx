@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import { useNewsArticle } from '@/entities/news'
 import { useFormat } from '@/shared/i18n'
+import { securityPath } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { PanelEmpty } from '@/shared/ui/StatusViews'
 
-/** The full text of a news item (screen 2, N tab; the N screen next). API /news/{id}. */
+/** The full text of a news item, with links to the securities it concerns. API /news/{id}. */
 export function NewsArticlePanel({ articleId }: { articleId: string | null }) {
   const { t } = useTranslation()
   const format = useFormat()
@@ -30,6 +32,20 @@ export function NewsArticlePanel({ articleId }: { articleId: string | null }) {
                   {paragraph}
                 </p>
               ))}
+              {item.securityIds.length > 0 && (
+                <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t pt-2 font-sans text-data text-secondary">
+                  {t('news.related')}
+                  {item.securityIds.map((securityId) => (
+                    <Link
+                      key={securityId}
+                      to={securityPath(securityId)}
+                      className="font-mono text-info hover:underline"
+                    >
+                      {securityId}
+                    </Link>
+                  ))}
+                </p>
+              )}
             </article>
           )}
         </QueryView>

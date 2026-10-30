@@ -84,7 +84,7 @@ export function TopMoversPanel() {
             selectedRowId={selectedId ?? data.at(0)?.securityId}
             onRowClick={(mover) => setSelectedId(mover.securityId)}
             onRowDoubleClick={(mover) => void navigate(securityPath(mover.securityId))}
-            rowMenu={(mover) => securityMenu(mover.securityId)}
+            rowMenu={(mover) => securityMenu({ id: mover.securityId, code: mover.code })}
             exportName={`top-movers-${type}`}
           />
         )}

@@ -12,3 +12,4 @@ export {
   useTrades,
 } from './api/queries'
 export { useSecurityRealtimeSync } from './api/useSecurityRealtimeSync'
+export { SecurityPicker } from './ui/SecurityPicker'

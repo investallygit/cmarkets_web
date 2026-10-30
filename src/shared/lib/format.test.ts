@@ -8,6 +8,7 @@ import {
   formatPercent,
   formatSigned,
   formatTime,
+  formatWeekday,
   toMarketDay,
 } from './format'
 
@@ -54,6 +55,11 @@ describe('dates and times', () => {
 
   it('shows calendar dates as DD/MM/YYYY without a time zone shift', () => {
     expect(formatIsoDate('2026-10-30')).toBe('30/10/2026')
+  })
+
+  it('names the day of the week in the user language', () => {
+    expect(formatWeekday('2026-10-30', 'en')).toBe('Fri')
+    expect(formatWeekday('2026-10-30', 'fr', 'long')).toBe('vendredi')
   })
 
   it('shows the session clock in Douala time', () => {

@@ -4,21 +4,14 @@ import type {
   RealtimeEventMap,
   RealtimeEventName,
 } from '@/shared/realtime'
-import {
-  changePct,
-  indices,
-  publishNextNews,
-  tickIndex,
-  tickSecurity,
-  triggerNextAlert,
-} from './db'
+import type { NotificationDto } from '@/shared/api/contracts'
+import { changePct, indices, publishNextNews, tickIndex, tickSecurity } from './db'
 
 type AnyHandler = (payload: unknown) => void
 
 const QUOTE_TICK_MS = 1_200
 const INDEX_TICK_MS = 4_000
 const NEWS_EVERY_MS = 45_000
-const ALERT_EVERY_MS = 70_000
 
 /** Simulates the /hubs/market SignalR hub with the same messages (spec section 10). */
 export function createMockRealtimeClient(): RealtimeClient {
@@ -43,8 +36,9 @@ export function createMockRealtimeClient(): RealtimeClient {
     if (symbols.length === 0) return
     const trades = 1 + Math.floor(Math.random() * Math.min(3, symbols.length))
     for (let trade = 0; trade < trades; trade++) {
-      const security = tickSecurity(symbols[Math.floor(Math.random() * symbols.length)])
-      if (!security) continue
+      const result = tickSecurity(symbols[Math.floor(Math.random() * symbols.length)])
+      if (!result) continue
+      const { security, alerts } = result
       emit('QuoteUpdated', {
         symbol: security.id,
         last: security.last,
@@ -53,6 +47,7 @@ export function createMockRealtimeClient(): RealtimeClient {
         volume: security.volume,
         ts: security.updatedAt,
       })
+      alerts.forEach(emitAlert)
     }
   }
 
@@ -70,26 +65,25 @@ export function createMockRealtimeClient(): RealtimeClient {
   }
 
   function publishNews() {
-    const item = publishNextNews()
-    if (item) {
-      emit('NewsPublished', {
-        id: item.id,
-        title: item.headline,
-        securityIds: item.securityIds,
-        ts: item.publishedAt,
-      })
-    }
+    const published = publishNextNews()
+    if (!published) return
+    const { item, alerts } = published
+    emit('NewsPublished', {
+      id: item.id,
+      title: item.headline,
+      securityIds: item.securityIds,
+      ts: item.publishedAt,
+    })
+    alerts.forEach(emitAlert)
   }
 
-  function triggerAlert() {
-    const notification = triggerNextAlert()
-    if (notification) {
-      emit('AlertTriggered', {
-        alertId: notification.alertId ?? notification.id,
-        message: notification.message,
-        ts: notification.triggeredAt,
-      })
-    }
+  // The user's alerts are checked against each trade and each news item, as the server would.
+  function emitAlert(notification: NotificationDto) {
+    emit('AlertTriggered', {
+      alertId: notification.alertId ?? notification.id,
+      message: notification.message,
+      ts: notification.triggeredAt,
+    })
   }
 
   return {
@@ -105,7 +99,6 @@ export function createMockRealtimeClient(): RealtimeClient {
         window.setInterval(tickQuotes, QUOTE_TICK_MS),
         window.setInterval(tickIndices, INDEX_TICK_MS),
         window.setInterval(publishNews, NEWS_EVERY_MS),
-        window.setInterval(triggerAlert, ALERT_EVERY_MS),
       )
     },
     async stop() {

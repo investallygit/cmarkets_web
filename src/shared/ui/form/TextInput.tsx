@@ -1,6 +1,6 @@
 import { clsx } from 'clsx'
 import type { LucideIcon } from 'lucide-react'
-import type { InputHTMLAttributes } from 'react'
+import type { InputHTMLAttributes, ReactNode } from 'react'
 import { useField } from './fieldContext'
 import { FRAMED_CONTROL, InputFrame } from './InputFrame'
 
@@ -15,6 +15,8 @@ interface TextInputProps extends Omit<
   highlight?: boolean
   /** Codes and figures use the monospaced font (spec section 8). */
   mono?: boolean
+  /** Inside the frame after the text, e.g. a button that clears it. */
+  trailing?: ReactNode
   className?: string
 }
 
@@ -24,6 +26,7 @@ export function TextInput({
   icon: Icon,
   highlight,
   mono = false,
+  trailing,
   className,
   id,
   type = 'text',
@@ -48,6 +51,7 @@ export function TextInput({
         aria-invalid={field?.invalid || undefined}
         className={clsx(FRAMED_CONTROL, mono ? 'font-mono' : 'font-sans')}
       />
+      {trailing}
     </InputFrame>
   )
 }

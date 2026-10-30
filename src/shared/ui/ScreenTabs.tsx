@@ -22,6 +22,7 @@ export function ScreenTabs({ tabs, label }: ScreenTabsProps) {
         <NavLink
           key={tab.to}
           to={tab.to}
+          end
           className={({ isActive }) =>
             clsx(
               'inline-flex h-6 shrink-0 items-center gap-2 border px-3 font-sans text-data whitespace-nowrap',

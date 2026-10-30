@@ -2,7 +2,7 @@
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`.
 
-Screens 1 (MKT) and 2 (DES) are built. The other 22 screens are placeholders: their route, menu
+MKT, DES, N, CAL and ALRT are built. The other 19 screens are placeholders: their route, menu
 entry, permission and mockup layout exist, with the API each panel will call
 (`src/pages/placeholder/config/plans.ts`). Login is not started.
 
@@ -15,7 +15,7 @@ panels of the same screen. Sizes are relative: S < M < L < XL.
 | ---- | --------------------------------------------------------------- | ------ |
 | 1    | Shared groundwork, batch 1: form kit, `PriceChart`, XLSX export | Done   |
 | 2    | DES                                                             | Done   |
-| 3    | Watchlist editing (MKT), N, CAL, ALRT                           | To do  |
+| 3    | Watchlist editing (MKT), N, CAL, ALRT                           | Done   |
 | 4    | EQS / FA, then YCRV / YAS                                       | To do  |
 | 5    | PORT                                                            | To do  |
 | 6    | PUB, then PUB NEW                                               | To do  |
@@ -44,6 +44,19 @@ Done in step 2, with DES:
   the request carries the user's session, then shown by the browser's viewer.
 - **Screen tabs** (`shared/ui/ScreenTabs`), one route per tab.
 
+Done in step 3, with the monitoring screens:
+
+- **Security picker** (`entities/security`): code or name, suggestions from `/search`, arrow keys
+  and Enter. Used by "+ Add" in a watchlist, the news filter and the alert form.
+- **Forms opened from anywhere**: the right-click menu of any security opens the list and alert
+  forms. Each entity holds a small store saying what to open (`openWatchlistDialog`,
+  `openAlertDialog`), the feature holds the form, and the app shell mounts it once.
+- **Dialogs** are rendered in `<body>`: a dialog opened from a panel title bar no longer inherits
+  its upper-case text or sits inside its drag handle.
+- **`PanelSelect`** for choices in a panel title bar ("ALL COUNTRIES"), **`useSearchParamsUpdate`**
+  for filters kept in the URL, the CEMAC country list with the short names of the mockups.
+- **BEAC auctions panel** (`widgets/auctions-panel`), shown by CAL now and by YCRV in step 4.
+
 Still to do, with the first screen that needs it:
 
 - **Recharts**, named by the spec for allocation and performance; it also draws the yield curves
@@ -63,12 +76,15 @@ Still to do, with the first screen that needs it:
 
 ## Client screens
 
-### MKT · Market dashboard (remaining: S)
+### MKT · Market dashboard (screen 1): done
 
-- Watchlist editing: create, rename and delete a list, choose its columns, add and remove
-  securities (`POST / PUT / DELETE /watchlists...`). This enables the "Add to a list" right-click
-  entry, disabled today.
-- A click on a news item opens the N screen, not the article yet: done with N.
+- **Built in step 3**: watchlist editing. "…" creates a list, changes its name and columns (name,
+  last, change, change %, volume, 5-day chart) or deletes it; "+ Add" adds securities; the
+  right-click menu of a row removes it. "Add to a list" in the right-click menu of any security
+  ticks the lists that hold it and offers "New list…". A click on a news item opens the article
+  on the N screen; a double-click on a calendar event opens the security.
+- **Still to do**: sharing a list with colleagues of the same organisation (spec section 6) has no
+  API yet.
 
 ### DES · Security profile (screen 2): done
 
@@ -82,28 +98,40 @@ Still to do, with the first screen that needs it:
 - **Still to do**: the FA tab comes with EQS (step 4), the ANA tab with PUB (step 6). PNG and PDF
   export of the chart stays in the shared groundwork.
 
-### N · News (no mockup): M
+### N · News (no mockup): done
 
-- The list and article panels exist (`widgets/news-list-panel`, `news-article-panel`, built for
-  the N tab of DES): the screen adds the filters and the documents tab.
-- News list on the left, filtered by security, country and topic; the full article on the right
-  (`/news/{id}`).
-- Documents tab: full-text search (`/documents?q=`) and the embedded PDF viewer.
-- New items arrive in real time through `NewsPublished`, already handled.
+- **Built**: two tabs, `/n` and `/n/documents`, each with its saved layout (`N`, `N-DOC`). News on
+  the left, filtered by security, country and topic, the article on the right with links to the
+  securities concerned; new items arrive through `NewsPublished`. Documents: full-text search
+  (`/documents?q=`), type filter and the embedded PDF viewer. Filters and the open item are in
+  the URL, so `/n?article=news-1` opens an article.
+- **Still to do**: the list shows the 50 newest items; "load more" comes with the pagination of
+  the shared groundwork.
 
-### CAL · Market calendar (no mockup): S-M
+### CAL · Market calendar (no mockup): done
 
-- Day or week view of sessions, auctions, ex-dividend dates, bond maturities, general meetings
-  and earnings releases, filtered by type and country; a click opens the security (DES).
-- Reuses the `calendar-event` entity and the auctions panel of YCRV.
+- **Built**: week (Monday to Sunday, today in amber, weekends without a session) or day view
+  (a table that sorts and exports) of sessions, auctions, ex-dividend dates, bond redemptions,
+  general meetings and earnings releases, filtered by type and country; an event on a security
+  opens its profile. Below, the latest BEAC auctions of the screen 4 mockup, cover ratio in green
+  above 1 and red below. The view, the day and the filters are in the URL.
+- **Mock**: holidays at fixed dates close BVMAC, redemptions come from the bond schedules, held
+  auctions from the auction results.
 
-### ALRT · Alerts (no mockup): M
+### ALRT · Alerts (no mockup): done
 
-- Alert list (condition, push / e-mail / SMS channels, on / off), create and edit form, history of
-  triggered alerts (`/notifications`).
-- The 6 alert types of spec section 5; quota by account type (10, 50, 100, unlimited) from
-  `/me` quotas.
-- Enables the "Create an alert" right-click entry, with the security filled in.
+- **Built**: the alert list (on / off, type, subject, condition, channels, last time it went off;
+  edit, turn off and delete from the right-click menu), the form for the 6 types of spec
+  section 5 with push, e-mail and SMS, and the history of triggered alerts (`/notifications`): a
+  click marks it read and points at its alert. The quota of the account type (10, 50, 100,
+  unlimited) comes from `/me`. "Create an alert" in the right-click menu of any security opens the
+  form with the security filled in and its last price as a hint.
+- **Mock**: the fake server sets off the user's alerts as a server would: price and volume alerts
+  when a trade crosses their threshold (once a session), release and auction alerts when the news
+  arrives.
+- **Still to do**: choosing one portfolio for a limit alert comes with PORT (step 5), following
+  analysts with PUB (step 6), the phone number and e-mail address for SMS and e-mail with CFG
+  (step 7).
 
 ### EQS / FA · Equity screener and fundamental analysis (screen 3): L
 
@@ -247,4 +275,12 @@ Still to do, with the first screen that needs it:
 - **Subscriptions**: `/me` returns neither the subscribed modules nor the trial status.
 - **In the spec, not in the mockups**: the bond profile, US and European curves,
   `/global/indices` and `/commodities` on MKT.
-- **Calendar**: the Data admin "manages the calendar", but no API writes it.
+- **Calendar**: the Data admin "manages the calendar", but no API writes it. The prototype adds a
+  `country` filter to `/calendar` and accepts several `type` values; `/auctions` gets an
+  `instrument` filter.
+- **Watchlists**: the request bodies are not specified. The prototype sends `{ name, columns }`,
+  with the first securities of a new list, and `POST .../items/{securityId}` returns the item.
+  Sharing a list with colleagues (spec section 6) has no endpoint.
+- **Alerts**: does the quota count alerts that are off (the prototype counts every alert)? Does a
+  price alert go off at each crossing, or once (the prototype: once a session)? The notification
+  text should be written in the user's language.

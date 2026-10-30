@@ -1,20 +1,20 @@
 import { useTranslation } from 'react-i18next'
-import { useDocumentFile, useDocuments } from '@/entities/document'
+import { useDocumentFile, useDocuments, type DocumentQuery } from '@/entities/document'
 import { Panel } from '@/shared/ui/Panel'
 import { PdfViewer } from '@/shared/ui/PdfViewer'
 import { QueryView } from '@/shared/ui/QueryView'
 import { PanelEmpty } from '@/shared/ui/StatusViews'
 
 interface DocumentViewerPanelProps {
-  securityId: string
+  /** The query of the list next to it, whose cache gives the title. */
+  query: DocumentQuery
   documentId: string | null
 }
 
-/** Screen 2, DOC tab: the selected document in the embedded PDF viewer. API /documents/{id}/file. */
-export function DocumentViewerPanel({ securityId, documentId }: DocumentViewerPanelProps) {
+/** The selected document in the embedded PDF viewer. API /documents/{id}/file. */
+export function DocumentViewerPanel({ query, documentId }: DocumentViewerPanelProps) {
   const { t } = useTranslation()
-  // Same query as the list next to it: the title comes from the cache.
-  const document = useDocuments({ securityId }).data?.items.find((item) => item.id === documentId)
+  const document = useDocuments(query).data?.items.find((item) => item.id === documentId)
   const file = useDocumentFile(documentId)
   const title = document?.title ?? t('panels.document')
 

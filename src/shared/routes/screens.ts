@@ -35,7 +35,10 @@ export interface ScreenDefinition {
   id: ScreenTextKey
   /** Function code shown in the left menu and typed in the command bar (spec section 8). */
   code: string
+  /** Link to the screen, used by the menu and the command bar. */
   path: string
+  /** Route pattern when the screen has routes of its own below `path`, e.g. tabs. */
+  routePattern?: string
   audience: Audience
   permission?: Permission
   /** Listed in the left menu (spec section 9). */
@@ -54,6 +57,7 @@ export interface ScreenProps {
 interface ScreenOptions {
   permission?: Permission
   inMenu?: boolean
+  routePattern?: string
 }
 
 function screen(
@@ -62,12 +66,13 @@ function screen(
   path: string,
   audience: Audience,
   icon: LucideIcon,
-  { permission, inMenu = false }: ScreenOptions = {},
+  { permission, inMenu = false, routePattern }: ScreenOptions = {},
 ): ScreenDefinition {
   return {
     id,
     code,
     path,
+    routePattern,
     audience,
     permission,
     inMenu,
@@ -89,7 +94,7 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', inMenu: true }),
   screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', inMenu: true }),
   screen('PUB', 'PUB', routes.library, 'client', BookOpen, { permission: 'research:read', inMenu: true }),
-  screen('N', 'N', routes.news, 'client', Newspaper, { permission: 'market:read', inMenu: true }),
+  screen('N', 'N', routes.news, 'client', Newspaper, { permission: 'market:read', inMenu: true, routePattern: routes.newsTabs }),
   screen('ALRT', 'ALRT', routes.alerts, 'client', Bell, { permission: 'alerts:write', inMenu: true }),
   screen('CFG', 'CFG', routes.settings, 'client', Settings, { inMenu: true }),
 
