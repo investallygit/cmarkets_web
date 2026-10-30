@@ -1,12 +1,15 @@
 import { clsx } from 'clsx'
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { Lock, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router'
-import { canAccessScreen, useCurrentUser } from '@/entities/session'
+import { canAccessScreen, lockedModule, useCurrentUser } from '@/entities/session'
 import { SCREENS } from '@/shared/routes/screens'
 import { useUiPreferences } from '../model/uiPreferences'
 
-/** Left menu (56 px collapsed, 200 px expanded); its items depend on the account type. */
+/**
+ * Left menu (56 px collapsed, 200 px expanded); its items depend on the account type. A screen
+ * outside the user's plan shows a lock and opens on the plans.
+ */
 export function SideMenu() {
   const { t } = useTranslation()
   const user = useCurrentUser()
@@ -23,49 +26,60 @@ export function SideMenu() {
       )}
     >
       <ul className="min-h-0 flex-1 overflow-y-auto">
-        {items.map((screen) => (
-          <li key={screen.id}>
-            <NavLink
-              to={screen.path}
-              title={t(screen.titleKey)}
-              className={({ isActive }) =>
-                clsx(
-                  'flex border-l-[3px]',
-                  isActive
-                    ? 'border-accent-amber bg-selected'
-                    : 'border-transparent hover:bg-panel-header',
-                  expanded
-                    ? 'h-10 items-center gap-3 px-3'
-                    : 'h-14 flex-col items-center justify-center gap-0.5',
-                )
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  {expanded && (
-                    <screen.icon aria-hidden className="size-4 shrink-0 text-secondary" />
-                  )}
-                  <span
-                    className={clsx(
-                      'font-mono text-data font-bold',
-                      isActive ? 'text-accent-amber' : 'text-primary',
+        {items.map((screen) => {
+          const locked = lockedModule(user, screen)
+          return (
+            <li key={screen.id}>
+              <NavLink
+                to={screen.path}
+                title={
+                  locked
+                    ? t('subscription.locked.menuTitle', {
+                        screen: t(screen.titleKey),
+                        module: t(`modules.${locked}`),
+                      })
+                    : t(screen.titleKey)
+                }
+                className={({ isActive }) =>
+                  clsx(
+                    'flex border-l-[3px]',
+                    isActive
+                      ? 'border-accent-amber bg-selected'
+                      : 'border-transparent hover:bg-panel-header',
+                    expanded
+                      ? 'h-10 items-center gap-3 px-3'
+                      : 'h-14 flex-col items-center justify-center gap-0.5',
+                  )
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {expanded && (
+                      <screen.icon aria-hidden className="size-4 shrink-0 text-secondary" />
                     )}
-                  >
-                    {screen.code}
-                  </span>
-                  <span
-                    className={clsx(
-                      'truncate font-sans text-secondary',
-                      expanded ? 'text-label' : 'text-caption',
-                    )}
-                  >
-                    {t(screen.menuKey)}
-                  </span>
-                </>
-              )}
-            </NavLink>
-          </li>
-        ))}
+                    <span
+                      className={clsx(
+                        'inline-flex items-center gap-1 font-mono text-data font-bold',
+                        isActive ? 'text-accent-amber' : locked ? 'text-secondary' : 'text-primary',
+                      )}
+                    >
+                      {screen.code}
+                      {locked && <Lock aria-hidden className="size-2.5" />}
+                    </span>
+                    <span
+                      className={clsx(
+                        'truncate font-sans text-secondary',
+                        expanded ? 'text-label' : 'text-caption',
+                      )}
+                    >
+                      {t(screen.menuKey)}
+                    </span>
+                  </>
+                )}
+              </NavLink>
+            </li>
+          )
+        })}
       </ul>
       <button
         type="button"

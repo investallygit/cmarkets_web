@@ -21,8 +21,10 @@ import { docBlocks } from '@/shared/lib/richText'
 import {
   analystStore,
   contentReportStore,
+  currentAccount,
   currentUser,
   followStore,
+  invoiceStore,
   myRatingStore,
   publicationStore,
   purchaseStore,
@@ -30,7 +32,9 @@ import {
   readStore,
   researchMarket,
 } from '../db'
+import { TAX_RATE_PCT } from '../fixtures/billing'
 import { PUBLICATION_RULES } from '../fixtures/research'
+import { invoiceNumber, publicationInvoice } from '../lib/billing'
 import { api, latency, noContent, paginate, problem } from '../lib/http'
 import { createPdf } from '../lib/pdf'
 import {
@@ -45,10 +49,8 @@ import {
   type StoredPublication,
 } from '../lib/research'
 import { analystProfile, libraryItem, libraryPublication } from '../lib/researchViews'
+import { newPaymentId, settleDue, startPayment } from '../payments'
 
-/** Time for a reader to approve a mobile money payment on their phone, and for a card. */
-const MOBILE_MONEY_MS = 3500
-const CARD_MS = 2000
 const MAX_COMMENT_LENGTH = 1000
 
 const SUBJECT_TYPES: readonly SubjectType[] = ['company', 'country']
@@ -104,41 +106,10 @@ function currentMonth(publication: StoredPublication) {
   return (publication.monthly[month] ??= { ...EMPTY_MONTH })
 }
 
-interface PendingPayment {
-  payment: PaymentDto
-  userId: string
-  settleAt: number
-  declined: boolean
-}
-
-const payments = new Map<string, PendingPayment>()
-
-/** Payments the provider has answered by now, whether or not the reader is still asking. */
-function settleDue(): void {
-  const userId = currentUser().id
-  for (const entry of payments.values()) {
-    if (
-      entry.userId === userId &&
-      entry.payment.status === 'pending' &&
-      Date.now() >= entry.settleAt
-    ) {
-      settle(entry)
-    }
-  }
-}
-
-/** The provider's confirmation (POST /payments/webhooks/{provider}) as the mock plays it. */
-function settle(entry: PendingPayment): void {
-  const { payment } = entry
-  if (entry.declined) {
-    payment.status = 'failed'
-    payment.failureReason = 'The operator declined the payment: insufficient balance.'
-    return
-  }
-  payment.status = 'confirmed'
-  payment.confirmedAt = new Date().toISOString()
+/** Once paid, the reader owns the publication and the analyst has a sale; the receipt follows. */
+function recordPurchase(payment: PaymentDto): void {
   const { publications, publication } = findPublication(payment.publicationId)
-  if (!publication) return
+  if (!publication || !payment.confirmedAt) return
   const month = currentMonth(publication)
   month.sales += 1
   month.revenue += payment.amount
@@ -146,13 +117,27 @@ function settle(entry: PendingPayment): void {
   purchaseStore.write([
     ...purchaseStore.read(),
     {
-      publicationId: payment.publicationId,
+      publicationId: publication.id,
       paymentId: payment.id,
       amount: payment.amount,
       method: payment.method,
       purchasedAt: payment.confirmedAt,
     },
   ])
+  const invoices = invoiceStore.read()
+  invoices.push(
+    publicationInvoice({
+      id: `invoice-${payment.id}`,
+      number: invoiceNumber(invoices, payment.confirmedAt),
+      userId: currentAccount().id,
+      title: latestVersion(publication)?.content.title ?? publication.draft.title,
+      total: payment.amount,
+      taxRatePct: TAX_RATE_PCT,
+      method: payment.method,
+      paidAt: payment.confirmedAt,
+    }),
+  )
+  invoiceStore.write(invoices)
 }
 
 const PDF_WORDS = {
@@ -283,7 +268,7 @@ export const libraryHandlers = [
   http.get(api('/library'), async ({ request }) => {
     await latency()
     if (!allowed('research:read')) return forbidden('This account cannot read research.')
-    settleDue()
+    settleDue(currentAccount().id)
     const query = new URL(request.url).searchParams
     const context = readerContext()
     const filter = readFilter(query)
@@ -299,7 +284,7 @@ export const libraryHandlers = [
   // The prototype filters purchases like the library, for the Purchased tab.
   http.get(api('/me/purchases'), async ({ request }) => {
     await latency()
-    settleDue()
+    settleDue(currentAccount().id)
     const query = new URL(request.url).searchParams
     const context = readerContext()
     const filter = readFilter(query)
@@ -318,7 +303,7 @@ export const libraryHandlers = [
   http.get(api('/library/:id'), async ({ params }) => {
     await latency()
     if (!allowed('research:read')) return forbidden('This account cannot read research.')
-    settleDue()
+    settleDue(currentAccount().id)
     const { publications, publication } = findPublication(params.id)
     if (!publication) return notFound(params.id)
     const context = readerContext()
@@ -362,8 +347,10 @@ export const libraryHandlers = [
       })
     }
     const payment: PaymentDto = {
-      id: `payment-${Date.now().toString(36)}`,
+      id: newPaymentId(),
+      purpose: 'publication',
       publicationId: publication.id,
+      planId: null,
       amount: dto.priceToPay ?? 0,
       currency: 'XAF',
       method: body.method,
@@ -372,24 +359,12 @@ export const libraryHandlers = [
       confirmedAt: null,
       failureReason: null,
     }
-    payments.set(payment.id, {
-      payment,
-      userId: currentUser().id,
-      settleAt: Date.now() + (body.method === 'card' ? CARD_MS : MOBILE_MONEY_MS),
-      // A number ending in 0000 has no money left: the failure path of the prototype.
-      declined: body.method === 'mobileMoney' && digits.endsWith('0000'),
+    startPayment(payment, {
+      userId: currentAccount().id,
+      phone: body.phone ?? null,
+      onConfirmed: recordPurchase,
     })
     return HttpResponse.json(payment, { status: 202 })
-  }),
-
-  http.get(api('/payments/:id'), async ({ params }) => {
-    await latency()
-    const entry = payments.get(String(params.id))
-    if (!entry || entry.userId !== currentUser().id) {
-      return problem(404, 'Payment not found', `No payment ${String(params.id)}.`)
-    }
-    if (entry.payment.status === 'pending' && Date.now() >= entry.settleAt) settle(entry)
-    return HttpResponse.json(entry.payment)
   }),
 
   http.get(api('/library/:id/pdf'), async ({ params, request }) => {

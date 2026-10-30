@@ -7,7 +7,7 @@ interface RealtimeProviderProps {
   children: ReactNode
 }
 
-/** The connection is started once in main.tsx and lives as long as the app. */
+/** main.tsx opens the connection when a session starts and closes it when the session ends. */
 export function RealtimeProvider({ client, children }: RealtimeProviderProps) {
   return <RealtimeContext.Provider value={client}>{children}</RealtimeContext.Provider>
 }

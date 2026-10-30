@@ -1,4 +1,4 @@
-import type { AccountType, MeDto } from '@/shared/api/contracts'
+import type { AccountType, MeDto, ModuleCode } from '@/shared/api/contracts'
 import { routes } from '@/shared/routes/paths'
 import type { ScreenDefinition } from '@/shared/routes/screens'
 import { audienceOf } from './accountTypes'
@@ -15,6 +15,17 @@ export function canAccessScreen(
 ): boolean {
   if (audienceOf(user.accountType) !== screen.audience) return false
   return screen.permission === undefined || user.permissions.includes(screen.permission)
+}
+
+/**
+ * The subscription module a screen needs and the user's plan lacks (spec section 6), if any: the
+ * screen then offers an upgrade rather than its content.
+ */
+export function lockedModule(
+  user: Pick<MeDto, 'modules'>,
+  screen: Pick<ScreenDefinition, 'module'>,
+): ModuleCode | null {
+  return screen.module && !user.modules.includes(screen.module) ? screen.module : null
 }
 
 const HOME_SCREEN: Record<AccountType, string> = {

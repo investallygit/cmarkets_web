@@ -149,7 +149,12 @@
     "myPublications": "Mes publications",
     "earnings": "Mes revenus",
     "editor": "Éditeur",
-    "publicationSettings": "Paramètres de la publication"
+    "publicationSettings": "Paramètres de la publication",
+    "profile": "Profil",
+    "security": "Sécurité",
+    "subscription": "Abonnement",
+    "organization": "Organisation",
+    "invoices": "Factures"
   },
   "market": {
     "movers": {
@@ -223,7 +228,8 @@
     "channels": "Canaux",
     "lastTriggered": "Déclenchée le",
     "enabled": "Active",
-    "message": "Message"
+    "message": "Message",
+    "status": "Statut"
   },
   "menu": {
     "openProfile": "Ouvrir la fiche",
@@ -242,7 +248,9 @@
     "maxFileSize": "{{size}} maximum",
     "fileTypeRejected": "{{name}} : seuls les fichiers {{types}} sont acceptés",
     "fileTooLarge": "{{name}} dépasse {{size}}",
-    "removeFile": "Retirer le fichier"
+    "removeFile": "Retirer le fichier",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe"
   },
   "chart": {
     "open": "O",
@@ -539,7 +547,9 @@
     "historyEmpty": "Aucune alerte déclenchée pour l'instant",
     "unread": "Non lue",
     "portfolio": "Portefeuille",
-    "allPortfolios": "Tous mes portefeuilles"
+    "allPortfolios": "Tous mes portefeuilles",
+    "channelsTo": "E-mail à {{email}}, SMS au {{phone}}.",
+    "smsNeedsPhone": "E-mail à {{email}}. Pour les SMS, ajoutez un mobile dans les Paramètres (CFG)."
   },
   "calendar": {
     "views": {
@@ -1478,5 +1488,260 @@
       "rejectedTitle": "Statut d'analyste refusé",
       "rejected": "Un administrateur a refusé votre demande de statut d'analyste. Contactez CMarket pour en connaître la raison ou envoyer de nouveaux documents."
     }
+  },
+  "modules": {
+    "monitoring": "Suivi",
+    "analysis": "Analyse",
+    "portfolio": "Portefeuille"
+  },
+  "auth": {
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordRule": "8 caractères au moins, dont une lettre et un chiffre.",
+    "footer": "© CMarket · Douala · marchés de la CEMAC",
+    "ended": {
+      "logout": "Vous êtes déconnecté.",
+      "expired": "Votre session a expiré : reconnectez-vous.",
+      "inactivity": "Vous avez été déconnecté après 30 minutes sans activité."
+    },
+    "login": {
+      "title": "Connexion à CMarket",
+      "subtitle": "Cours, analyses et études sur les marchés de la CEMAC.",
+      "submit": "Se connecter",
+      "forgot": "Mot de passe oublié ?",
+      "noAccount": "Nouveau sur CMarket ?",
+      "signUp": "Créer un compte",
+      "wrongCredentials": "Adresse e-mail ou mot de passe incorrect.",
+      "suspended": "Ce compte est suspendu. Contactez CMarket.",
+      "locked_one": "Trop de mots de passe erronés : réessayez dans {{count}} minute.",
+      "locked_other": "Trop de mots de passe erronés : réessayez dans {{count}} minutes.",
+      "tooManyAttempts": "Trop de tentatives : réessayez plus tard."
+    },
+    "otp": {
+      "sentTo": {
+        "email": "Un code a été envoyé par e-mail à {{destination}}.",
+        "sms": "Un code a été envoyé par SMS au {{destination}}."
+      },
+      "code": "Code",
+      "validUntil": "Valable jusqu'à {{time}}.",
+      "verify": "Valider",
+      "back": "Utiliser un autre compte",
+      "resend": "Envoyer un nouveau code",
+      "resendIn": "Nouveau code dans {{seconds}} s",
+      "wrongCode": "Code incorrect.",
+      "wrongCodeLeft_one": "Code incorrect : encore {{count}} essai.",
+      "wrongCodeLeft_other": "Code incorrect : encore {{count}} essais.",
+      "expired": "Ce code a expiré : demandez-en un nouveau.",
+      "tooManyAttempts": "Trop de codes erronés : demandez-en un nouveau."
+    },
+    "signUp": {
+      "title": "Créer un compte",
+      "subtitle": "Tous les modules de votre type de compte, gratuits pendant 14 jours.",
+      "accountType": "Type de compte",
+      "types": {
+        "student": "Étudiants et enseignants en finance : données différées, portefeuilles simulés, études.",
+        "analyst": "Publiez des études sur une société ou un pays, gratuites ou payantes.",
+        "manager": "Gérez, valorisez et suivez des portefeuilles ; rapports clients.",
+        "trader": "Cours en temps réel, carnet d'ordres, intraday et alertes."
+      },
+      "name": "Nom complet",
+      "phone": "Téléphone mobile",
+      "phoneHint": "Facultatif : pour les alertes et les codes par SMS.",
+      "organization": "Organisation",
+      "organizationHint": "Facultatif : ouvre aussi un compte pour vos collègues.",
+      "studentNote": "Avec une adresse e-mail d'établissement, aucun justificatif n'est demandé ; sinon, joignez un certificat de scolarité.",
+      "analystNote": "Un Admin vérifie ces documents avant votre première publication ; CMarket vous est ouvert en attendant.",
+      "documents": {
+        "proofOfEnrolment": "Certificat de scolarité",
+        "identityDocument": "Pièce d'identité",
+        "cv": "CV",
+        "licence": "Agrément"
+      },
+      "optional": "{{label}} (facultatif)",
+      "terms": "J'accepte les conditions d'utilisation et la politique de confidentialité.",
+      "submit": "Créer le compte",
+      "haveAccount": "Déjà un compte ?",
+      "logIn": "Se connecter",
+      "errors": {
+        "required": "Obligatoire.",
+        "email": "Une adresse e-mail, par exemple nom@societe.cm.",
+        "password": "8 caractères au moins, dont une lettre et un chiffre.",
+        "mismatch": "Les deux mots de passe diffèrent.",
+        "phone": "Un numéro de téléphone, par exemple +237 6 70 12 34 56.",
+        "terms": "Acceptez les conditions d'utilisation."
+      }
+    },
+    "reset": {
+      "title": "Réinitialiser le mot de passe",
+      "intro": "Indiquez l'adresse e-mail de votre compte : un code y sera envoyé.",
+      "send": "Envoyer le code",
+      "sent": "Si un compte utilise {{email}}, un code y a été envoyé, valable 15 minutes.",
+      "newPassword": "Nouveau mot de passe",
+      "submit": "Enregistrer le mot de passe",
+      "again": "Envoyer un nouveau code",
+      "done": "Votre mot de passe est changé, et vos sessions sur d'autres appareils sont fermées.",
+      "toLogin": "Retour à la connexion"
+    },
+    "prototype": {
+      "code": "Prototype : le code envoyé est",
+      "fill": "Remplir",
+      "accounts": "Prototype : comptes de démonstration, mot de passe {{password}}"
+    }
+  },
+  "session": {
+    "logout": "Se déconnecter",
+    "inactivity": {
+      "title": "Toujours là ?",
+      "warning_one": "Sans activité, vous serez déconnecté dans {{count}} seconde.",
+      "warning_other": "Sans activité, vous serez déconnecté dans {{count}} secondes.",
+      "stay": "Rester connecté"
+    }
+  },
+  "settings": {
+    "saved": "Enregistré",
+    "profile": {
+      "email": "E-mail (identifiant)",
+      "accountType": "Type de compte",
+      "organization": "Organisation",
+      "individual": "Compte individuel",
+      "analystStatus": {
+        "pending": "en attente d'approbation",
+        "approved": "approuvé",
+        "rejected": "non approuvé"
+      },
+      "name": "Nom",
+      "phone": "Téléphone mobile",
+      "phoneHint": "Pour les alertes SMS et, si vous le choisissez, les codes de connexion.",
+      "language": "Langue",
+      "timeZone": "Fuseau horaire",
+      "timeZoneHint": "Les dates et heures s'y affichent ; l'horloge de séance reste à l'heure de Douala."
+    },
+    "security": {
+      "currentPassword": "Mot de passe actuel",
+      "changePassword": "Changer le mot de passe",
+      "passwordChanged": "Mot de passe changé",
+      "wrongPassword": "Mot de passe incorrect.",
+      "twoFactor": "Codes de connexion",
+      "channels": {
+        "email": "Par e-mail",
+        "sms": "Par SMS"
+      },
+      "codesByEmail": "Chaque connexion demande un code envoyé à {{email}}.",
+      "codesBySms": "Chaque connexion demande un code envoyé par SMS au {{phone}}.",
+      "smsNeedsPhone": "Le SMS demande un téléphone mobile dans le profil.",
+      "inactivity_one": "CMarket vous déconnecte après {{count}} minute sans activité. Un nouveau mot de passe ferme vos sessions sur les autres appareils.",
+      "inactivity_other": "CMarket vous déconnecte après {{count}} minutes sans activité. Un nouveau mot de passe ferme vos sessions sur les autres appareils."
+    }
+  },
+  "subscription": {
+    "xaf": "{{amount}} XAF",
+    "current": "Formule actuelle",
+    "currentTag": "Actuelle",
+    "none": "Aucune formule ne couvre ce compte : choisissez-en une ci-dessous.",
+    "status": {
+      "trial": "Essai gratuit jusqu'au {{date}}",
+      "active": "Payée {{cycle}}, renouvelée le {{date}}",
+      "expired": "Terminée le {{date}}"
+    },
+    "cycles": {
+      "monthly": "au mois",
+      "yearly": "à l'année"
+    },
+    "yearlySaving": "À l'année −{{pct}} %",
+    "paidByUser": "Payée par vous",
+    "paidByOrganization_one": "Payée par votre organisation pour {{count}} utilisateur",
+    "paidByOrganization_other": "Payée par votre organisation pour {{count}} utilisateurs",
+    "noModule": "aucun module",
+    "invoiceDue": "Une facture est à régler par virement : voir les factures.",
+    "managedByAdmins": "Les administrateurs de votre organisation choisissent sa formule.",
+    "plans": "Formules",
+    "plan": "Formule",
+    "pricePer": {
+      "monthly": "Par utilisateur, mois",
+      "yearly": "Par utilisateur, an"
+    },
+    "included": "Inclus",
+    "notIncluded": "Non inclus",
+    "choose": "Choisir",
+    "chooseNamed": "Choisir {{plan}}",
+    "trialBadge_one": "Essai · {{count}} jour",
+    "trialBadge_other": "Essai · {{count}} jours",
+    "locked": {
+      "title": "Le module {{module}} n'est pas dans votre formule.",
+      "detail": "Choisissez une formule qui le comprend dans les Paramètres, ou demandez à l'administrateur de votre organisation.",
+      "seePlans": "Voir les formules",
+      "menuTitle": "{{screen}} : hors de votre formule ({{module}})"
+    },
+    "methods": {
+      "card": "Carte",
+      "mobileMoney": "Mobile money",
+      "transfer": "Virement"
+    },
+    "checkout": {
+      "title": "Formule {{plan}}",
+      "perUser_one": "{{count}} utilisateur × {{price}}, {{cycle}}",
+      "perUser_other": "{{count}} utilisateurs × {{price}}, {{cycle}}",
+      "vat": "TVA {{rate}} %",
+      "total": "Total",
+      "pay": "Payer {{amount}}",
+      "getInvoice": "Recevoir la facture",
+      "hints": {
+        "card": "Vous confirmez le paiement sur la page sécurisée du prestataire ; la formule démarre une fois le paiement confirmé.",
+        "mobileMoney": "MTN Mobile Money ou Orange Money : validez le paiement sur votre téléphone ; la formule démarre dès que l'opérateur le confirme.",
+        "transfer": "La formule démarre tout de suite ; la facture, avec les coordonnées bancaires de CMarket, est à régler sous 15 jours."
+      },
+      "approveOnPhone": "Validez le paiement de {{amount}} sur votre téléphone. La formule démarre dès que votre opérateur le confirme.",
+      "confirmingCard": "Confirmation du paiement par carte de {{amount}}…",
+      "confirmed": "Paiement confirmé : votre nouvelle formule est active.",
+      "closeAndWait": "Fermer et patienter",
+      "transferIssued": "Votre formule est active. Réglez la facture par virement, avec sa référence :"
+    }
+  },
+  "organization": {
+    "individual": "Un compte individuel. Un compte organisation regroupe les collègues d'une société ou d'un établissement : ses administrateurs les invitent et choisissent la formule.",
+    "summary_one": "{{count}} membre",
+    "summary_other": "{{count}} membres",
+    "yourRole": {
+      "admin": "vous êtes administrateur",
+      "member": "vous êtes membre"
+    },
+    "you": "vous",
+    "role": "Rôle",
+    "roles": {
+      "admin": "Administrateur",
+      "member": "Membre"
+    },
+    "invitedOn": "Invité le {{date}}",
+    "inviteEmail": "Inviter par e-mail",
+    "invitePlaceholder": "nom@societe.cm",
+    "invite": "Inviter",
+    "alreadyMember": "{{email}} est déjà membre ou invité.",
+    "menuHint": "Clic droit sur un membre pour changer son rôle ou le retirer.",
+    "adminsOnly": "Les administrateurs de l'organisation invitent et retirent les membres.",
+    "makeAdmin": "Nommer administrateur",
+    "makeMember": "Rendre membre",
+    "remove": "Retirer de l'organisation",
+    "withdraw": "Retirer l'invitation",
+    "removeMessage": "{{name}} garde son compte mais quitte l'organisation et sa formule.",
+    "withdrawMessage": "L'invitation envoyée à {{email}} ne fonctionnera plus."
+  },
+  "invoices": {
+    "number": "Numéro",
+    "description": "Libellé",
+    "total": "Total XAF",
+    "plan": "Formule {{plan}}, {{cycle}}, du {{from}} au {{to}}",
+    "publication": "Étude : {{title}}",
+    "status": {
+      "paid": "Payée",
+      "due": "À régler",
+      "void": "Annulée"
+    },
+    "dueBy": "Avant le {{date}}",
+    "dueOn": "À régler avant le",
+    "bank": "Banque",
+    "reference": "Référence",
+    "download": "Télécharger la facture {{number}} en PDF",
+    "none": "Aucune facture pour l'instant."
   }
 }

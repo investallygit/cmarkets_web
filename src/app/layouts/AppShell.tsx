@@ -1,5 +1,3 @@
-import { LoaderCircle, RefreshCw, TriangleAlert } from 'lucide-react'
-import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Outlet } from 'react-router'
 import { useAlertRealtimeSync } from '@/entities/alert'
@@ -9,7 +7,8 @@ import { usePublicationRealtimeSync } from '@/entities/publication'
 import { useNotificationRealtimeSync } from '@/entities/notification'
 import { useQuoteRealtimeSync } from '@/entities/quote'
 import { useSecurityRealtimeSync } from '@/entities/security'
-import { useMe } from '@/entities/session'
+import { useMe, useProfilePreferences } from '@/entities/session'
+import { InactivityLogout } from '@/features/log-out'
 import { AlertDialogHost } from '@/features/manage-alerts'
 import { WatchlistDialogHost } from '@/features/manage-watchlists'
 import { TableExportContext } from '@/shared/ui/tableExport'
@@ -18,6 +17,7 @@ import { SideMenu } from '@/widgets/side-menu'
 import { StatusBar } from '@/widgets/status-bar'
 import { TickerTape } from '@/widgets/ticker-tape'
 import { TopBar } from '@/widgets/top-bar'
+import { FullScreenStatus } from './FullScreenStatus'
 
 /**
  * Layout shared by all screens (spec section 8): top bar 40 px, ticker tape 24 px,
@@ -26,6 +26,7 @@ import { TopBar } from '@/widgets/top-bar'
 export function AppShell() {
   const { t } = useTranslation()
   const me = useMe()
+  useProfilePreferences(me.data)
   useQuoteRealtimeSync()
   useMarketRealtimeSync()
   useNewsRealtimeSync()
@@ -34,28 +35,14 @@ export function AppShell() {
   useAlertRealtimeSync()
   useSecurityRealtimeSync()
 
-  if (me.isPending) {
-    return (
-      <FullScreen>
-        <LoaderCircle aria-hidden className="size-4 animate-spin" />
-        {t('app.connecting')}
-      </FullScreen>
-    )
-  }
+  if (me.isPending) return <FullScreenStatus kind="loading" />
   if (me.isError) {
     return (
-      <FullScreen>
-        <TriangleAlert aria-hidden className="size-4 text-down" />
-        {t('app.sessionError')}
-        <button
-          type="button"
-          onClick={() => void me.refetch()}
-          className="inline-flex items-center gap-1 border px-2 py-0.5 hover:text-primary"
-        >
-          <RefreshCw aria-hidden className="size-3" />
-          {t('app.retry')}
-        </button>
-      </FullScreen>
+      <FullScreenStatus
+        kind="error"
+        message={t('app.sessionError')}
+        onRetry={() => void me.refetch()}
+      />
     )
   }
 
@@ -76,15 +63,8 @@ export function AppShell() {
       {/* Forms opened from the right-click menu of any security. */}
       <WatchlistDialogHost />
       <AlertDialogHost />
+      <InactivityLogout />
       <Toaster />
     </TableExportContext.Provider>
-  )
-}
-
-function FullScreen({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex h-full items-center justify-center gap-2 font-sans text-label text-secondary">
-      {children}
-    </div>
   )
 }

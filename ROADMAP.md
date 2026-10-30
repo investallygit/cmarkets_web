@@ -2,10 +2,10 @@
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`.
 
-MKT, DES (with its FA and ANA tabs), EQS, YCRV, YAS, PORT, PUB, PUB NEW, N, CAL and ALRT are
-built. The other 13 screens are placeholders: their route, menu entry, permission and mockup layout
-exist, with the API each panel will call (`src/pages/placeholder/config/plans.ts`). Login is not
-started.
+MKT, DES (with its FA and ANA tabs), EQS, YCRV, YAS, PORT, PUB, PUB NEW, N, CAL, ALRT and CFG
+are built, with the login, sign-up and password reset pages. The other 12 screens, all of the
+back-office, are placeholders: their route, menu entry, permission and mockup layout exist, with
+the API each panel will call (`src/pages/placeholder/config/plans.ts`).
 
 DATA, HIST and EODH are planned with IMP, and ANLY and MOD with USER: in the mockups they are
 panels of the same screen. Sizes are relative: S < M < L < XL.
@@ -20,7 +20,7 @@ panels of the same screen. Sizes are relative: S < M < L < XL.
 | 4    | EQS / FA, then YCRV / YAS                                       | Done   |
 | 5    | PORT                                                            | Done   |
 | 6    | PUB, then PUB NEW                                               | Done   |
-| 7    | CFG, login and OTP (needed before connecting the real back end) | To do  |
+| 7    | CFG, login and OTP (needed before connecting the real back end) | Done   |
 | 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS  | To do  |
 | 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY            | To do  |
 
@@ -97,12 +97,33 @@ Done in step 6, with PUB and PUB NEW:
 - **Mock**: `sharedStore` keeps what every account sees (publications, analysts) next to each
   user's own data; the PDF writer prints a watermark.
 
+Done in step 7, with CFG and the login pages:
+
+- **Session**: `shared/api/session.ts` keeps the access token in memory and renews it with the
+  refresh cookie (`POST /auth/refresh`) at start-up, before it expires and after a 401, once for
+  all the requests waiting; a refused renewal ends the session. The app shell needs a session
+  (`RequireSession`), the login page brings the user back to `?next=`, and the hub connects with
+  the session (SignalR takes the token). The tabs of a browser log in and out together; 30 minutes
+  without an action in any tab log the user out after a one-minute warning
+  (`shared/lib/activity`). Logging in or out empties the query cache.
+- **Subscription gating**: `/me` returns the modules of the user's plan (`modules`, and
+  `trialEndsAt` while the free trial runs); each screen names its module (Monitoring: MKT, DES, N,
+  CAL, ALRT; Analysis: EQS, YCRV, YAS and the FA tab; Portfolio: PORT); a screen outside the plan
+  shows a lock in the menu and offers the plans instead of its content (`ModuleLocked`). The mock
+  refuses the analysis and portfolio data the same way.
+- **User time zone**: `useFormat` shows dates and times in the profile's time zone; a calendar
+  day keeps its date in every zone; the session clock stays in Douala time.
+- **Forms and payments**: `PasswordInput`, a brand-green button for the login pages,
+  `shared/lib/billing` (VAT on a price per user, VAT inside a price) and `shared/lib/phone`. The
+  mock's payments (`mocks/payments.ts`) serve research and plans alike; a confirmed purchase of
+  research also issues its receipt.
+- **Tests**: a Playwright `setup` project logs in once through the login page; the other tests
+  start from that session.
+
 Still to do, with the first screen that needs it:
 
 - **PNG and PDF export of charts** (spec section 3), for the price chart, the comparison bars and
   the curves alike.
-- **Subscription gating** (Monitoring, Analysis, Portfolio, free trial): `/me` does not return the
-  modules yet, so the contract needs them; a locked screen offers an upgrade instead of a 403.
 
 ## Done for every screen
 
@@ -170,9 +191,10 @@ Still to do, with the first screen that needs it:
   arrives.
 - **Built in step 5**: a portfolio limit alert watches one portfolio or all of them, and goes off
   when a transaction or a limit change breaches a limit.
+- **Built in step 7**: SMS go to the mobile phone of the profile (CFG): without one, the SMS
+  channel is off and the form says where to add it; e-mail goes to the login address.
 - **Still to do**: setting off the publication alerts (a followed analyst, a security or a country)
-  when a publication goes out: the analysts are followed from PUB since step 6. The phone number
-  and e-mail address for SMS and e-mail come with CFG (step 7).
+  when a publication goes out: the analysts are followed from PUB since step 6.
 
 ### EQS / FA · Equity screener and fundamental analysis (screen 3): done
 
@@ -292,18 +314,44 @@ Still to do, with the first screen that needs it:
 - **Still to do**: ratio and yield curve charts in a publication (price charts only); a version
   history readers can open (the library shows the latest version and its date).
 
-### CFG · Settings (no mockup): M
+### CFG · Settings (no mockup): done
 
-- Profile (language, time zone: `GET / PUT /me`), organisation (members, invite, remove),
-  subscription (plans, payment by card, mobile money or transfer), PDF invoices.
+- **Built**: five panels. Profile: the login address, the account type (an Analyst's status), the
+  organisation, then the name, the mobile phone, the language and the time zone, which apply at
+  once (`PUT /me`). Security: the password (`PUT /me/password`, which closes the sessions of other
+  devices), where the login codes go (e-mail, or SMS once a phone is set), the automatic logout.
+  Subscription: the plan that covers the user, with its modules, its renewal or the end of the
+  trial, who pays (the user, or the organisation for its members), then the plans by month or year
+  per user; Choose opens the checkout: card or mobile money followed until confirmed, or a bank
+  transfer against an invoice due in 15 days, the plan applying at once. Organisation: the members
+  and the invitations; an administrator invites by e-mail and, from the right-click menu, changes
+  a role or removes a member (with a confirmation); the last administrator stays. Invoices: the
+  plan's, the organisation's for its administrators and the receipts of research bought, each in
+  PDF; a transfer still due shows its date. Members of an organisation read its plan without
+  changing it.
+- **Mock**: four plans (Monitoring, Analysis, Professional, and Student for students), prices per
+  user and month excluding VAT at 19.25%, a year for ten months. K. Atangana pays Professional
+  yearly by card; Asset manager A pays Professional monthly and Bank C Analysis yearly (no
+  Portfolio: PORT is locked for T. Bekale), both by transfer; University B has the student plan.
+- **Still to do**: accepting an invitation (the e-mail link and its sign-up); the status of a
+  Student's proof of enrolment.
 
-### Login, OTP, sign-up, password reset: M
+### Login, OTP, sign-up, password reset: done
 
-- Not in `SCREENS`: outside the app shell, in the brand navy and green colours (spec section 8).
-- Access token 15 min, refresh token 7 days: `shared/api/client.ts` refreshes on a 401. Automatic
-  logout after inactivity; a logout entry in the user menu.
-- Sign-up with the account type (Student needs a school e-mail or proof of enrolment, Analyst
-  waits for an Admin's approval). The prototype account switch goes away with the real back end.
+- **Built**: `/login`, `/signup` and `/reset-password`, outside the app shell in the brand navy and
+  green, in French or English. Login: e-mail and password, then the one-time code of 6 digits sent
+  by e-mail or SMS (`POST /auth/login` answers where it went; `/auth/otp/verify` gives the tokens),
+  5 tries, a new code after 30 seconds by logging in again; wrong passwords lock the account for 15
+  minutes after the fifth. Sign-up: the account type of spec section 12, the user, a proof of
+  enrolment for a Student without a school address, an identity document and a CV (and a licence)
+  for an Analyst, whose status then waits for an Admin; the code then confirms the address and the
+  14-day trial of the account type's plan starts. Password reset: a code sent to the address, then
+  the new password; the answer is the same whether an account uses the address or not. Logout from
+  the user menu, in every tab; automatic logout after 30 minutes without activity.
+- **Mock**: the accounts of the six demo users and of their colleagues (password `cmarket2026`),
+  salted SHA-256 hashes, access tokens of 15 minutes, refresh tokens of 7 days in the cookie the
+  mock keeps for the browser, codes shown by the prototype (`GET /_prototype/codes`). The account
+  switch of the user menu opens a session for a demo user.
 
 ## Back-office
 
@@ -368,7 +416,34 @@ Still to do, with the first screen that needs it:
   5 seconds.
 - **Quote**: the security header shows the session's open, high and low, which the example of
   `GET /securities/{id}/quote` lacks; the prototype adds them to the response.
-- **Subscriptions**: `/me` returns neither the subscribed modules nor the trial status.
+- **Login**: the spec gives a JWT of 15 minutes, a refresh token of 7 days and a code, without
+  saying where the refresh token lives, how the code goes or for how long. The prototype keeps the
+  access token in memory and expects the refresh token in an `HttpOnly` cookie on `/auth`
+  (`POST /auth/refresh` without a body answers `{ accessToken, tokenType, expiresIn }`).
+  `/auth/login` answers `{ challengeId, channel, destination, codeLength, expiresAt, resendAt }`:
+  6 digits valid 5 minutes, 5 tries, a new code by logging in again after 30 seconds; 401 for wrong
+  credentials, 429 after 5 wrong passwords (locked 15 minutes), 410 for an expired code. Does every
+  client log in with a code (the prototype: yes, by e-mail or SMS as chosen in CFG; section 12 says
+  "mandatory" for employees only), and is an authenticator app (TOTP) wanted? Does the refresh
+  token rotate, and how do two tabs renew it at once? How long is the inactivity (the prototype: 30
+  minutes, with a warning in the last one)? Which password rules (the prototype: 8 characters, a
+  letter and a digit)? `/auth/register` takes a multipart form with the documents and answers a code
+  that confirms the address: which domains make a school address, and does an Admin check a proof
+  of enrolment? Changing one's password has no endpoint: the prototype adds `PUT /me/password`.
+- **Subscriptions**: `/me` returns neither the modules nor the trial: the prototype adds `modules`
+  and `trialEndsAt`, with `phone` and `twoFactorChannel`. No plan, price or VAT is given: the
+  prototype offers Monitoring, Analysis, Professional and Student, per user and month excluding
+  VAT at 19.25%, a year for ten months, and a 14-day trial of every module of the account type.
+  Which screens belong to which module (the prototype: Monitoring MKT, DES, N, CAL, ALRT; Analysis
+  EQS, YCRV, YAS and the FA tab; Portfolio PORT; research and settings in none)?
+  `POST /subscription/checkout` takes `{ planId, billingCycle, method, phone }` and answers
+  `{ payment, invoice, subscription }`: a transfer applies the plan at once, the invoice due in 15
+  days; a change of plan starts a new period, without proration. Does an organisation pay for
+  each member (the prototype: yes), and how is an invitation accepted? `GET /organization` answers
+  404 for an individual account; `PUT /organization/members/{id}` takes `{ role }`. Is VAT due on
+  research sold for the analysts (the prototype's receipts include it)?
+- **Time zone**: what does the profile's time zone change? The prototype shows dates and times in
+  it; the session clock and the market's days stay in Douala time.
 - **In the spec, not in the mockups**: the bond profile, US and European curves,
   `/global/indices` and `/commodities` on MKT.
 - **Calendar**: the Data admin "manages the calendar", but no API writes it. The prototype adds a

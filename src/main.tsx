@@ -8,6 +8,7 @@ import '@/shared/i18n'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from '@/app/App'
+import { onSessionChange } from '@/shared/api'
 import { env } from '@/shared/config/env'
 import { createSignalRRealtimeClient, type RealtimeClient } from '@/shared/realtime'
 
@@ -22,7 +23,11 @@ async function createRealtimeClient(): Promise<RealtimeClient> {
 
 async function bootstrap() {
   const realtime = await createRealtimeClient()
-  void realtime.start()
+  // The hub serves logged-in users only: it connects with the session and closes with it.
+  onSessionChange(({ status }) => {
+    if (status === 'authenticated') void realtime.start()
+    else void realtime.stop()
+  })
 
   createRoot(document.getElementById('root')!).render(
     <StrictMode>

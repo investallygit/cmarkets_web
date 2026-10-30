@@ -265,9 +265,16 @@ function AlertForm({ request, onClose }: { request: AlertDialogRequest; onClose:
                   })
                 }
                 label={t(`alerts.channelNames.${channel}`)}
+                // SMS go to the phone number of the profile (CFG).
+                disabled={channel === 'sms' && !user.phone && !form.channels.includes('sms')}
               />
             ))}
           </div>
+          <p className="font-sans text-title text-secondary">
+            {user.phone
+              ? t('alerts.channelsTo', { email: user.email, phone: user.phone })
+              : t('alerts.smsNeedsPhone', { email: user.email })}
+          </p>
           {errors.channels && (
             <p className="font-sans text-title text-down">{t('alerts.errors.channels')}</p>
           )}

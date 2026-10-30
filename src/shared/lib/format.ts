@@ -113,7 +113,15 @@ interface DateTimeParts {
 
 const dateTimeFormats = new Map<string, Intl.DateTimeFormat>()
 
+const CALENDAR_DAY = /^(\d{4})-(\d{2})-(\d{2})$/
+
 function getParts(date: DateInput, timeZone: string): DateTimeParts {
+  // A calendar day such as "2026-10-28" is the same day in every time zone.
+  const calendarDay = typeof date === 'string' ? CALENDAR_DAY.exec(date) : null
+  if (calendarDay) {
+    const [, year, month, day] = calendarDay
+    return { year, month, day, hour: '00', minute: '00', second: '00' }
+  }
   let format = dateTimeFormats.get(timeZone)
   if (!format) {
     format = new Intl.DateTimeFormat('en-GB', {
@@ -197,4 +205,26 @@ export function formatTime(
 export function toMarketDay(date: DateInput, timeZone = MARKET_TIME_ZONE): string {
   const { year, month, day } = getParts(date, timeZone)
   return `${year}-${month}-${day}`
+}
+
+/** An IANA time zone this browser knows, such as "Europe/Paris". */
+export function isTimeZone(timeZone: string): boolean {
+  try {
+    new Intl.DateTimeFormat('en-US', { timeZone })
+    return true
+  } catch {
+    return false
+  }
+}
+
+/** Offset of a time zone from UTC at a moment: "UTC+01:00", "UTC−05:00". */
+export function formatUtcOffset(timeZone: string, date: DateInput = Date.now()): string {
+  const at = date instanceof Date ? date : new Date(date)
+  const { year, month, day, hour, minute, second } = getParts(at, timeZone)
+  const local = Date.UTC(+year, +month - 1, +day, +hour, +minute, +second)
+  const minutes = Math.round((local - Math.floor(at.getTime() / 1000) * 1000) / 60_000)
+  const sign = minutes < 0 ? '\u2212' : '+'
+  const absolute = Math.abs(minutes)
+  const hours = String(Math.floor(absolute / 60)).padStart(2, '0')
+  return `UTC${sign}${hours}:${String(absolute % 60).padStart(2, '0')}`
 }

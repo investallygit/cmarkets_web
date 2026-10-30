@@ -8,6 +8,7 @@ import {
   type LibraryQuery,
 } from '@/entities/publication'
 import { useSecurityProfile } from '@/entities/security'
+import { ModuleLocked, useCurrentUser } from '@/entities/session'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
 import { useSymbolSubscription } from '@/shared/realtime'
@@ -81,6 +82,7 @@ export function SecurityProfilePage() {
 
 function ProfileTab({ fn, security }: { fn: SecurityFunction; security: SecurityProfileDto }) {
   const { t } = useTranslation()
+  const user = useCurrentUser()
   const [searchParams, setSearchParams] = useSearchParams()
   const select = (param: 'doc' | 'article') => (id: string) =>
     setSearchParams({ [param]: id }, { replace: true })
@@ -92,6 +94,8 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
       />
     )
   }
+  // Fundamental analysis belongs to the Analysis module, as EQS (spec section 6).
+  if (fn === 'fa' && !user.modules.includes('analysis')) return <ModuleLocked module="analysis" />
 
   const { id, type, currency, code } = security
   const chart = (variant: 'compact' | 'full') => (

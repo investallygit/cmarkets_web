@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isCemacCountry } from '@/shared/config/countries'
+import { useDisplayTimeZone } from '@/shared/lib/displayTimeZone'
 import {
   formatCompact,
   formatCountry,
@@ -14,7 +15,6 @@ import {
   formatSigned,
   formatTime,
   formatWeekday,
-  MARKET_TIME_ZONE,
   type Locale,
 } from '@/shared/lib/format'
 
@@ -23,13 +23,18 @@ export function useLocale(): Locale {
   return i18n.resolvedLanguage === 'fr' ? 'fr' : 'en'
 }
 
-/** Formatters bound to the current language (numbers) and to Douala time (dates). */
+/**
+ * Formatters bound to the current language (numbers) and to the user's time zone (dates and
+ * times, Douala unless the profile says otherwise). A calendar day keeps its date everywhere.
+ */
 export function useFormat() {
   const { t } = useTranslation()
   const locale = useLocale()
+  const timeZone = useDisplayTimeZone((state) => state.timeZone)
   return useMemo(
     () => ({
       locale,
+      timeZone,
       number: (value: number, decimals = 2) => formatNumber(value, locale, decimals),
       signed: (value: number, decimals = 2, plusSign = true) =>
         formatSigned(value, locale, decimals, plusSign),
@@ -43,11 +48,11 @@ export function useFormat() {
       isoDate: (isoDate: string) => formatIsoDate(isoDate),
       weekday: (isoDate: string, style?: 'short' | 'long') => formatWeekday(isoDate, locale, style),
       month: (month: string) => formatMonth(month, locale),
-      date: (value: Date | string | number) => formatDate(value),
-      dayMonth: (value: Date | string | number) => formatDayMonth(value),
+      date: (value: Date | string | number) => formatDate(value, timeZone),
+      dayMonth: (value: Date | string | number) => formatDayMonth(value, timeZone),
       time: (value: Date | string | number, withSeconds = false) =>
-        formatTime(value, MARKET_TIME_ZONE, withSeconds),
+        formatTime(value, timeZone, withSeconds),
     }),
-    [locale, t],
+    [locale, t, timeZone],
   )
 }

@@ -1,23 +1,32 @@
-import { UserRound } from 'lucide-react'
+import { Settings, UserRound } from 'lucide-react'
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { audienceOf, initialOf, useCurrentUser } from '@/entities/session'
+import { useNavigate } from 'react-router'
+import { audienceOf, canAccessScreen, initialOf, useCurrentUser } from '@/entities/session'
+import { useLogoutMenuItems } from '@/features/log-out'
 import { useAccountMenuItems } from '@/features/switch-account'
 import { useLanguageMenuItems } from '@/features/switch-language'
+import { screenById } from '@/shared/routes/screens'
 import { ContextMenu } from '@/shared/ui/ContextMenu'
 import type { MenuItem } from '@/shared/ui/menu'
 
 const MENU_WIDTH = 216
 
-/** User badge of the top bar ("K. ANALYST"), with language and prototype account switch. */
+/**
+ * User badge of the top bar ("K. ANALYST"): settings, language, the prototype's account switch and
+ * the logout.
+ */
 export function UserMenu() {
   const { t } = useTranslation()
   const user = useCurrentUser()
-  const languageItems = useLanguageMenuItems()
-  const accountItems = useAccountMenuItems()
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null)
   const close = useCallback(() => setPosition(null), [])
+  const languageItems = useLanguageMenuItems()
+  const accountItems = useAccountMenuItems()
+  const logoutItems = useLogoutMenuItems()
+  const navigate = useNavigate()
+  const settings = screenById('CFG')
 
   const badge = t(`accountBadge.${user.accountType}`)
   const label =
@@ -25,8 +34,19 @@ export function UserMenu() {
 
   const items: MenuItem[] = [
     { id: 'user', kind: 'label', label: user.displayName },
+    ...(canAccessScreen(user, settings)
+      ? [
+          {
+            id: 'settings',
+            label: t(settings.titleKey),
+            icon: Settings,
+            onSelect: () => navigate(settings.path),
+          },
+        ]
+      : []),
     ...languageItems,
     ...accountItems,
+    ...logoutItems,
   ]
 
   return (

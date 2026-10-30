@@ -2,6 +2,10 @@ import type { SecurityType } from '@/shared/api/contracts'
 
 /** Route patterns, shared by the router (app/) and by features that link to other screens. */
 export const routes = {
+  // Outside the app shell, before the session (spec section 10).
+  login: '/login',
+  signUp: '/signup',
+  resetPassword: '/reset-password',
   market: '/mkt',
   security: '/securities/:securityId/:fn',
   screener: '/eqs',
@@ -101,4 +105,16 @@ export function studioPath(publicationId?: string): string {
   return publicationId
     ? `${routes.publishingStudio}?id=${encodeURIComponent(publicationId)}`
     : routes.publishingStudio
+}
+
+/** The login page, back to `next` once logged in. */
+export function loginPath(next?: string): string {
+  return next && next !== '/' ? `${routes.login}?next=${encodeURIComponent(next)}` : routes.login
+}
+
+/** A page of the app to go back to after login: a path of this site only, never another site. */
+export function safeNextPath(next: string | null): string {
+  return next && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\')
+    ? next
+    : '/'
 }

@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { marketData } from '../db'
+import { marketData, setSessionUser } from '../db'
 import { portfolioValuation, positionsOf, riskOf } from '../lib/portfolioEngine'
 import { createPortfolios } from './portfolios'
 
 describe('sample portfolios', () => {
+  // Quotes are delayed or not by the account type of the user logged in.
+  setSessionUser('user-analyst')
   const market = marketData()
 
   it('end with the lines of the screen 5 mockup, the bonds in BVMAC nominals of 10,000', () => {

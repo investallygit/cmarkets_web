@@ -10,6 +10,7 @@ import { useCurrentRoute } from '@/shared/routes/useCurrentRoute'
 import { Logo } from '@/shared/ui/Logo'
 import { AlertsIndicator } from './AlertsIndicator'
 import { SessionClock } from './SessionClock'
+import { TrialBadge } from './TrialBadge'
 import { UserMenu } from './UserMenu'
 
 /**
@@ -40,6 +41,7 @@ export function TopBar({ className }: { className?: string }) {
             {t('shell.backOffice')}
           </span>
         )}
+        {user.trialEndsAt && <TrialBadge endsOn={user.trialEndsAt} />}
         <MarketStatusBadge />
         <SessionClock />
         <AlertsIndicator to={canAccessScreen(user, alerts) ? alerts.path : undefined} />

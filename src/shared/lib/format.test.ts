@@ -9,7 +9,9 @@ import {
   formatPercent,
   formatSigned,
   formatTime,
+  formatUtcOffset,
   formatWeekday,
+  isTimeZone,
   toMarketDay,
 } from './format'
 
@@ -66,6 +68,22 @@ describe('dates and times', () => {
   it('shows the session clock in Douala time', () => {
     expect(formatTime('2026-10-28T09:42:15Z', undefined, true)).toBe('10:42:15')
     expect(formatTime('2026-10-28T09:42:15Z')).toBe('10:42')
+  })
+
+  it("shows a moment in the user's time zone, a calendar day as it is", () => {
+    expect(formatTime('2026-10-28T09:42:15Z', 'America/New_York')).toBe('05:42')
+    expect(formatDate('2026-10-29T02:00:00Z', 'America/New_York')).toBe('28/10/2026')
+    // A calendar day such as a reference date stays the same day in New York.
+    expect(formatDate('2026-10-28', 'America/New_York')).toBe('28/10/2026')
+    expect(toMarketDay('2026-10-28', 'Asia/Dubai')).toBe('2026-10-28')
+  })
+
+  it('names the offset of a time zone and refuses an unknown one', () => {
+    expect(formatUtcOffset('Africa/Douala')).toBe('UTC+01:00')
+    expect(formatUtcOffset('Europe/Paris', '2026-07-01T12:00:00Z')).toBe('UTC+02:00')
+    expect(formatUtcOffset('America/New_York', '2026-12-01T12:00:00Z')).toBe('UTC\u221205:00')
+    expect(isTimeZone('Europe/Paris')).toBe(true)
+    expect(isTimeZone('Mars/Olympus')).toBe(false)
   })
 })
 

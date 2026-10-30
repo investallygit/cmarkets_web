@@ -5,11 +5,11 @@ import { usePurchase } from '@/entities/publication'
 import { isApiError } from '@/shared/api'
 import type { LibraryPublicationDto, PaymentDto, PaymentMethod } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
+import { isPhoneNumber } from '@/shared/lib/phone'
 import { Dialog, DialogBody, DialogFooter } from '@/shared/ui/Dialog'
 import { Button } from '@/shared/ui/form/Button'
 import { Field } from '@/shared/ui/form/Field'
 import { TextInput } from '@/shared/ui/form/TextInput'
-import { isPhoneNumber } from '../lib/phone'
 
 interface PaymentDialogProps {
   open: boolean

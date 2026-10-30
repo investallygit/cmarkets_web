@@ -301,7 +301,10 @@ export type PaymentStatus = 'pending' | 'confirmed' | 'failed'
 /** GET /payments/{id}: asked again until confirmed or failed. */
 export interface PaymentDto {
   id: string
-  publicationId: string
+  /** A publication of the library, or a subscription plan (CFG). */
+  purpose: 'publication' | 'subscription'
+  publicationId: string | null
+  planId: string | null
   amount: number
   currency: CurrencyCode
   method: PaymentMethod

@@ -2,13 +2,15 @@ import { clsx } from 'clsx'
 import { LoaderCircle, type LucideIcon } from 'lucide-react'
 import type { ButtonHTMLAttributes } from 'react'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'info' | 'success' | 'danger' | 'link'
+export type ButtonVariant =
+  'primary' | 'secondary' | 'info' | 'success' | 'danger' | 'link' | 'brand'
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * primary: the main action, amber (Run, Publish, Buy); secondary: other actions; info: links
-   * shown as buttons (Download file templates); success / danger: Approve / Reject, Suspend.
+   * shown as buttons (Download file templates); success / danger: Approve / Reject, Suspend;
+   * brand: the main action of the login pages, in the brand green (spec section 8).
    */
   variant?: ButtonVariant
   size?: ButtonSize
@@ -25,6 +27,8 @@ const VARIANTS: Record<ButtonVariant, string> = {
   success: 'border border-up/70 font-semibold text-up enabled:hover:bg-up/10 disabled:opacity-50',
   danger: 'border border-down/70 text-down enabled:hover:bg-down/10 disabled:opacity-50',
   link: 'text-info enabled:hover:underline disabled:text-secondary',
+  brand:
+    'border border-brand-green bg-brand-green font-semibold tracking-title text-brand-navy uppercase enabled:hover:bg-brand-green/85 disabled:opacity-40',
 }
 
 const SIZES: Record<ButtonSize, string> = {

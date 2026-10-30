@@ -1,11 +1,13 @@
 import { HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr'
+import { getAccessToken } from '@/shared/api'
 import type { ConnectionState, RealtimeClient } from './client'
 
 const RETRY_DELAYS_MS = [2_000, 5_000, 10_000, 30_000]
 
 export function createSignalRRealtimeClient(hubUrl: string): RealtimeClient {
   const connection = new HubConnectionBuilder()
-    .withUrl(hubUrl)
+    // The hub authenticates with the access token too, renewed when it runs out.
+    .withUrl(hubUrl, { accessTokenFactory: async () => (await getAccessToken()) ?? '' })
     .withAutomaticReconnect()
     .configureLogging(LogLevel.Warning)
     .build()
@@ -13,6 +15,7 @@ export function createSignalRRealtimeClient(hubUrl: string): RealtimeClient {
   const stateListeners = new Set<(state: ConnectionState) => void>()
   let state: ConnectionState = 'disconnected'
   let stopped = false
+  let stopping: Promise<void> | null = null
   let failedAttempts = 0
 
   function setState(next: ConnectionState) {
@@ -54,13 +57,18 @@ export function createSignalRRealtimeClient(hubUrl: string): RealtimeClient {
     get state() {
       return state
     },
-    start() {
+    async start() {
       stopped = false
+      // After a logout, the connection may still be closing.
+      await stopping
       return connect()
     },
     async stop() {
       stopped = true
-      await connection.stop()
+      stopping = connection.stop().finally(() => {
+        stopping = null
+      })
+      await stopping
     },
     subscribe: (symbols) => invoke('Subscribe', symbols),
     unsubscribe: (symbols) => invoke('Unsubscribe', symbols),

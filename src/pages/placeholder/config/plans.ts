@@ -19,7 +19,6 @@ function fullScreen(title: string, code: string, api: string[]): PanelPlan[] {
 /** Panel layouts of the mockups in spec section 9 (screens 5 to 9), keyed by screen id. */
 // prettier-ignore
 export const SCREEN_PLANS: Partial<Record<string, PanelPlan[]>> = {
-  CFG: fullScreen('Settings', 'CFG', ['GET /me', 'GET /organization', 'GET /subscription', 'GET /invoices']),
   DATA: fullScreen('Session coverage', 'DATA', ['GET /data/coverage?date=', 'GET /data/import-types/{type}/template']),
   IMP: [
     { id: 'coverage', title: 'Session coverage', code: 'DATA', api: ['GET /data/coverage', 'GET /data/import-types/{type}/template'], x: 0, y: 0, w: 3, h: 12 },

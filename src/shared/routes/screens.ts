@@ -23,7 +23,7 @@ import {
   Wrench,
   type LucideIcon,
 } from 'lucide-react'
-import type { Permission } from '@/shared/api/contracts'
+import type { ModuleCode, Permission } from '@/shared/api/contracts'
 import type { ScreenTextKey, TranslationKey } from '@/shared/i18n'
 import { routes } from './paths'
 
@@ -41,6 +41,8 @@ export interface ScreenDefinition {
   routePattern?: string
   audience: Audience
   permission?: Permission
+  /** Subscription module the screen belongs to (spec section 6); none for research and settings. */
+  module?: ModuleCode
   /** Listed in the left menu (spec section 9). */
   inMenu: boolean
   icon: LucideIcon
@@ -56,6 +58,7 @@ export interface ScreenProps {
 
 interface ScreenOptions {
   permission?: Permission
+  module?: ModuleCode
   inMenu?: boolean
   routePattern?: string
 }
@@ -66,7 +69,7 @@ function screen(
   path: string,
   audience: Audience,
   icon: LucideIcon,
-  { permission, inMenu = false, routePattern }: ScreenOptions = {},
+  { permission, module, inMenu = false, routePattern }: ScreenOptions = {},
 ): ScreenDefinition {
   return {
     id,
@@ -75,6 +78,7 @@ function screen(
     routePattern,
     audience,
     permission,
+    module,
     inMenu,
     icon,
     titleKey: `screens.${id}.title`,
@@ -89,20 +93,20 @@ function screen(
 // prettier-ignore
 export const SCREENS: readonly ScreenDefinition[] = [
   // Client menu, in the mockup order: MKT, EQS, YCRV, PORT, PUB, N, ALRT, CFG.
-  screen('MKT', 'MKT', routes.market, 'client', LayoutDashboard, { permission: 'market:read', inMenu: true }),
-  screen('EQS', 'EQS', routes.screener, 'client', ScanSearch, { permission: 'analysis:read', inMenu: true }),
-  screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', inMenu: true }),
-  screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', inMenu: true, routePattern: routes.portfolioTabs }),
+  screen('MKT', 'MKT', routes.market, 'client', LayoutDashboard, { permission: 'market:read', module: 'monitoring', inMenu: true }),
+  screen('EQS', 'EQS', routes.screener, 'client', ScanSearch, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
+  screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
+  screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', module: 'portfolio', inMenu: true, routePattern: routes.portfolioTabs }),
   screen('PUB', 'PUB', routes.library, 'client', BookOpen, { permission: 'research:read', inMenu: true }),
-  screen('N', 'N', routes.news, 'client', Newspaper, { permission: 'market:read', inMenu: true, routePattern: routes.newsTabs }),
-  screen('ALRT', 'ALRT', routes.alerts, 'client', Bell, { permission: 'alerts:write', inMenu: true }),
+  screen('N', 'N', routes.news, 'client', Newspaper, { permission: 'market:read', module: 'monitoring', inMenu: true, routePattern: routes.newsTabs }),
+  screen('ALRT', 'ALRT', routes.alerts, 'client', Bell, { permission: 'alerts:write', module: 'monitoring', inMenu: true }),
   screen('CFG', 'CFG', routes.settings, 'client', Settings, { inMenu: true }),
 
   // Client screens opened from the command bar or from another screen.
-  screen('DES', 'DES', routes.security, 'client', FileText, { permission: 'market:read' }),
-  screen('YAS', 'YAS', routes.bondCalculator, 'client', Calculator, { permission: 'analysis:read' }),
+  screen('DES', 'DES', routes.security, 'client', FileText, { permission: 'market:read', module: 'monitoring' }),
+  screen('YAS', 'YAS', routes.bondCalculator, 'client', Calculator, { permission: 'analysis:read', module: 'analysis' }),
   screen('PUBNEW', 'PUB NEW', routes.publishingStudio, 'client', PenLine, { permission: 'publications:write' }),
-  screen('CAL', 'CAL', routes.calendar, 'client', CalendarDays, { permission: 'market:read' }),
+  screen('CAL', 'CAL', routes.calendar, 'client', CalendarDays, { permission: 'market:read', module: 'monitoring' }),
 
   // Back-office, Data admin (screen 6).
   screen('DATA', 'DATA', routes.dataSession, 'backoffice', Database, { permission: 'data:import', inMenu: true }),

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { MeDto } from '@/shared/api/contracts'
 import { SCREENS, screenById } from '@/shared/routes/screens'
-import { canAccessScreen, homePathFor } from './access'
+import { canAccessScreen, homePathFor, lockedModule } from './access'
 
 type Access = Pick<MeDto, 'accountType' | 'permissions'>
 
@@ -32,5 +32,20 @@ describe('screen access (spec section 12)', () => {
     expect(homePathFor(student, SCREENS)).toBe('/mkt')
     expect(homePathFor(dataAdmin, SCREENS)).toBe('/imp')
     expect(homePathFor(admin, SCREENS)).toBe('/admin/users')
+  })
+})
+
+describe('subscription modules (spec section 6)', () => {
+  it('locks the screens of a module the plan lacks', () => {
+    const user = { modules: ['monitoring', 'analysis'] } satisfies Pick<MeDto, 'modules'>
+    expect(lockedModule(user, screenById('PORT'))).toBe('portfolio')
+    expect(lockedModule(user, screenById('EQS'))).toBeNull()
+  })
+
+  it('leaves research and settings out of the plans', () => {
+    const user = { modules: [] } satisfies Pick<MeDto, 'modules'>
+    expect(lockedModule(user, screenById('PUB'))).toBeNull()
+    expect(lockedModule(user, screenById('CFG'))).toBeNull()
+    expect(lockedModule(user, screenById('MKT'))).toBe('monitoring')
   })
 })

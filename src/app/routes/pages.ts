@@ -33,6 +33,9 @@ const MarketCalendarPage = lazy(() =>
 const AlertsPage = lazy(() =>
   import('@/pages/alerts').then((module) => ({ default: module.AlertsPage })),
 )
+const SettingsPage = lazy(() =>
+  import('@/pages/settings').then((module) => ({ default: module.SettingsPage })),
+)
 const PlaceholderPage = lazy(() =>
   import('@/pages/placeholder').then((module) => ({ default: module.PlaceholderPage })),
 )
@@ -49,7 +52,19 @@ const PAGES: Partial<Record<ScreenTextKey, Page>> = {
   N: NewsPage,
   CAL: MarketCalendarPage,
   ALRT: AlertsPage,
+  CFG: SettingsPage,
 }
+
+// The login pages share a chunk, loaded before the session.
+export const LoginPage = lazy(() =>
+  import('@/pages/auth').then((module) => ({ default: module.LoginPage })),
+)
+export const SignUpPage = lazy(() =>
+  import('@/pages/auth').then((module) => ({ default: module.SignUpPage })),
+)
+export const PasswordResetPage = lazy(() =>
+  import('@/pages/auth').then((module) => ({ default: module.PasswordResetPage })),
+)
 
 /** Prototype only: the shared UI components on one page, at /_kit. */
 export const UiKitPage = lazy(() =>

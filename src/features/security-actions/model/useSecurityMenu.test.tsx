@@ -17,9 +17,13 @@ const analyst: MeDto = {
   organization: null,
   language: 'en',
   timeZone: 'Africa/Douala',
+  phone: null,
+  twoFactorChannel: 'email',
   permissions: ['market:read', 'alerts:write'],
   quotas: { portfolios: 5, alerts: 50 },
   analystStatus: 'approved',
+  modules: ['monitoring', 'analysis', 'portfolio'],
+  trialEndsAt: null,
 }
 
 const list = (id: string, code: string, name: string, securityIds: string[]): WatchlistDto => ({

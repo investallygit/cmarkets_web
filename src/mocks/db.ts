@@ -1,10 +1,12 @@
 import {
-  ACCOUNT_TYPES,
+  MODULES,
+  type AccessTokenDto,
   type AccountType,
   type AlertCondition,
   type ChartDrawingDto,
   type LayoutItemDto,
   type MeDto,
+  type ModuleCode,
   type NewsItemDto,
   type NotificationDto,
   type PaymentMethod,
@@ -14,8 +16,17 @@ import {
 import { toMarketDay } from '@/shared/lib/format'
 import { addDays } from '@/shared/lib/isoDate'
 import type { RealtimeEventMap } from '@/shared/realtime'
+import {
+  createAccounts,
+  INVITATION_FIXTURES,
+  ORGANIZATION_FIXTURES,
+  type StoredAccount,
+  type StoredInvitation,
+  type StoredOrganization,
+} from './fixtures/accounts'
 import { createAlerts, type StoredAlert } from './fixtures/alerts'
 import { createAuctions } from './fixtures/auctions'
+import { createInvoices, createSubscriptions, PLANS } from './fixtures/billing'
 import { BOND_FIXTURES, cashFlows } from './fixtures/bonds'
 import { createCalendar } from './fixtures/calendar'
 import { createNews, createNotifications, UPCOMING_NEWS } from './fixtures/feeds'
@@ -33,7 +44,6 @@ import { PROFILE_FIXTURES } from './fixtures/profiles'
 import { SAVED_SCREEN_FIXTURES } from './fixtures/screens'
 import { SECURITY_FIXTURES, type SecurityFixture } from './fixtures/securities'
 import {
-  DEMO_USERS,
   ROLE_PERMISSIONS,
   ROLE_QUOTAS,
   WATCHLIST_FIXTURES,
@@ -46,7 +56,16 @@ import {
   severityOf,
   type QuoteState,
 } from './lib/alerts'
+import { ACCESS_TOKEN_SECONDS, randomToken, REFRESH_TOKEN_MS } from './lib/auth'
 import { priceHistory, sessionStarted } from './lib/bars'
+import {
+  isExpired,
+  renewed,
+  samePayer,
+  type Payer,
+  type StoredInvoice,
+  type StoredSubscription,
+} from './lib/billing'
 import { generateSparkline } from './lib/history'
 import { indexCloses, indexMembers } from './lib/indexHistory'
 import type { MarketData, PortfolioBond, StoredPortfolio } from './lib/portfolioEngine'
@@ -195,28 +214,62 @@ function writeStorage(key: string, value: string): void {
   }
 }
 
-const ACCOUNT_TYPE_KEY = 'cmarket.prototype.accountType'
-
-/** Account type chosen in the user menu; Analyst by default, as in the screen 1 mockup. */
-export function currentAccountType(): AccountType {
-  const stored = readStorage(ACCOUNT_TYPE_KEY)
-  return ACCOUNT_TYPES.find((accountType) => accountType === stored) ?? 'analyst'
+function removeStorage(key: string): void {
+  try {
+    window.localStorage.removeItem(key)
+  } catch {
+    // Storage disabled: nothing was kept.
+  }
 }
 
-export function setAccountType(accountType: AccountType): void {
-  writeStorage(ACCOUNT_TYPE_KEY, accountType)
+let sessionUserId: string | null = null
+
+/** The user of the request being answered: the auth gate reads it from the access token. */
+export function setSessionUser(userId: string | null): void {
+  sessionUserId = userId
+}
+
+export function hasSession(): boolean {
+  return sessionUserId !== null
+}
+
+/** The account of the user logged in; the auth gate lets no request through without one. */
+export function currentAccount(): StoredAccount {
+  const account = sessionUserId ? findAccount(sessionUserId) : undefined
+  if (!account) throw new Error('No session: the request did not go through the auth gate.')
+  return account
+}
+
+export function currentAccountType(): AccountType {
+  return currentAccount().accountType
 }
 
 export function currentUser(): MeDto {
-  const accountType = currentAccountType()
+  const account = currentAccount()
+  const organization = organizationStore
+    .read()
+    .find((candidate) => candidate.id === account.organizationId)
+  const subscription = subscriptionOf(account)
+  const today = toMarketDay(Date.now())
+  const { id, displayName, email, accountType, language, timeZone, phone } = account
   return {
-    ...DEMO_USERS[accountType],
+    id,
+    displayName,
+    email,
     accountType,
-    language: 'en',
-    timeZone: 'Africa/Douala',
+    organization: organization ? { id: organization.id, name: organization.name } : null,
+    language,
+    timeZone,
+    phone,
+    twoFactorChannel: account.twoFactorChannel,
     permissions: ROLE_PERMISSIONS[accountType],
     quotas: ROLE_QUOTAS[accountType],
-    analystStatus: accountType === 'analyst' ? 'approved' : null,
+    analystStatus: accountType === 'analyst' ? account.analystStatus : null,
+    modules: modulesOf(account),
+    trialEndsAt:
+      subscription?.status === 'trial' && !isExpired(subscription, today)
+        ? subscription.periodEnd
+        : null,
   }
 }
 
@@ -243,7 +296,7 @@ function storedArray<T extends object[]>(keyOf: () => string, initial: () => T) 
 
 /** Data of the current user. */
 function userStore<T extends object[]>(name: string, initial: () => T) {
-  return storedArray(() => `cmarket.prototype.${name}.${currentUser().id}`, initial)
+  return storedArray(() => `cmarket.prototype.${name}.${currentAccount().id}`, initial)
 }
 
 /** Data every account sees, such as the research library. */
@@ -259,6 +312,161 @@ function parseArray<T extends object[]>(stored: string | null): T | undefined {
   } catch {
     return undefined
   }
+}
+
+/** Accounts of every user: the demo users, their colleagues, and whoever signs up. */
+export const accountStore = sharedStore<StoredAccount[]>('accounts', createAccounts)
+
+export const organizationStore = sharedStore<StoredOrganization[]>('organizations', () =>
+  ORGANIZATION_FIXTURES.map((organization) => ({ ...organization })),
+)
+
+export const invitationStore = sharedStore<StoredInvitation[]>('invitations', () =>
+  INVITATION_FIXTURES.map((invitation) => ({ ...invitation })),
+)
+
+export function findAccount(id: string): StoredAccount | undefined {
+  return accountStore.read().find((account) => account.id === id)
+}
+
+export function accountByEmail(email: string): StoredAccount | undefined {
+  const address = email.trim().toLowerCase()
+  return accountStore.read().find((account) => account.email.toLowerCase() === address)
+}
+
+/** Writes back an account changed in place. */
+export function saveAccounts(): void {
+  accountStore.write(accountStore.read())
+}
+
+/** A refresh token: 7 days, unless a logout or a new password revokes it first. */
+export interface StoredSession {
+  token: string
+  userId: string
+  createdAt: number
+  expiresAt: number
+  revoked: boolean
+}
+
+export const sessionStore = sharedStore<StoredSession[]>('sessions', () => [])
+
+const REFRESH_COOKIE_KEY = 'cmarket.prototype.refreshCookie'
+
+/**
+ * The HttpOnly cookie that carries the refresh token. The browser keeps it and scripts cannot
+ * read it; the mock plays the browser's part, so the client code never touches it either.
+ */
+export const refreshCookie = {
+  read: () => readStorage(REFRESH_COOKIE_KEY),
+  write: (token: string | null) =>
+    token ? writeStorage(REFRESH_COOKIE_KEY, token) : removeStorage(REFRESH_COOKIE_KEY),
+}
+
+/** Access tokens of this tab's mock, by value; a reload starts again from the cookie. */
+const accessTokens = new Map<string, { userId: string; expiresAt: number }>()
+
+export function issueAccessToken(userId: string): AccessTokenDto {
+  const accessToken = `mock-access.${randomToken()}`
+  accessTokens.set(accessToken, { userId, expiresAt: Date.now() + ACCESS_TOKEN_SECONDS * 1000 })
+  return { accessToken, tokenType: 'Bearer', expiresIn: ACCESS_TOKEN_SECONDS }
+}
+
+/** The user of a valid access token. */
+export function userOfAccessToken(token: string): string | null {
+  const entry = accessTokens.get(token)
+  if (!entry || entry.expiresAt <= Date.now()) return null
+  return findAccount(entry.userId)?.status === 'active' ? entry.userId : null
+}
+
+/** A new refresh token for the user, set as the cookie. */
+export function openSession(userId: string): void {
+  const now = Date.now()
+  const token = randomToken(32)
+  const sessions = sessionStore.read().filter((session) => session.expiresAt > now)
+  sessions.push({
+    token,
+    userId,
+    createdAt: now,
+    expiresAt: now + REFRESH_TOKEN_MS,
+    revoked: false,
+  })
+  sessionStore.write(sessions)
+  refreshCookie.write(token)
+}
+
+/** The session of the cookie, if still valid. */
+export function cookieSession(): StoredSession | undefined {
+  const token = refreshCookie.read()
+  return sessionStore
+    .read()
+    .find(
+      (session) => session.token === token && !session.revoked && session.expiresAt > Date.now(),
+    )
+}
+
+/** POST /auth/logout: the refresh token is revoked and the cookie deleted. */
+export function closeSession(): void {
+  const token = refreshCookie.read()
+  const sessions = sessionStore.read()
+  sessions.forEach((session) => {
+    if (session.token === token) session.revoked = true
+  })
+  sessionStore.write(sessions)
+  refreshCookie.write(null)
+}
+
+/** A new password logs out the user's sessions: the others, or all after a reset. */
+export function revokeSessions(userId: string, { keepCurrent }: { keepCurrent: boolean }): void {
+  const token = keepCurrent ? refreshCookie.read() : null
+  const sessions = sessionStore.read()
+  sessions.forEach((session) => {
+    if (session.userId === userId && session.token !== token) session.revoked = true
+  })
+  sessionStore.write(sessions)
+  for (const [value, entry] of accessTokens) {
+    if (entry.userId === userId && !keepCurrent) accessTokens.delete(value)
+  }
+}
+
+export const payerOf = (account: StoredAccount): Payer =>
+  account.organizationId
+    ? { type: 'organization', id: account.organizationId }
+    : { type: 'user', id: account.id }
+
+/** Users a plan covers: the account, or the organisation's members. */
+export function seatsOf(payer: Payer): number {
+  if (payer.type === 'user') return 1
+  return accountStore.read().filter((account) => account.organizationId === payer.id).length
+}
+
+export const subscriptionStore = sharedStore<StoredSubscription[]>('subscriptions', () =>
+  createSubscriptions(toMarketDay(startedAt)),
+)
+
+export const invoiceStore = sharedStore<StoredInvoice[]>('invoices', () =>
+  createInvoices(toMarketDay(startedAt), subscriptionStore.read(), seatsOf),
+)
+
+/** The subscription that covers an account: its own, or its organisation's, renewed if due. */
+export function subscriptionOf(account: StoredAccount): StoredSubscription | undefined {
+  const payer = payerOf(account)
+  const subscriptions = subscriptionStore.read()
+  const index = subscriptions.findIndex((subscription) => samePayer(subscription.payer, payer))
+  if (index < 0) return undefined
+  const current = renewed(subscriptions[index], toMarketDay(Date.now()))
+  if (current !== subscriptions[index]) {
+    subscriptions[index] = current
+    subscriptionStore.write(subscriptions)
+  }
+  return current
+}
+
+/** Modules of the plan or trial that covers an account; employees use every module. */
+export function modulesOf(account: StoredAccount): ModuleCode[] {
+  if (account.accountType === 'dataAdmin' || account.accountType === 'admin') return [...MODULES]
+  const subscription = subscriptionOf(account)
+  if (!subscription || isExpired(subscription, toMarketDay(Date.now()))) return []
+  return PLANS.find((plan) => plan.id === subscription.planId)?.modules ?? []
 }
 
 export type StoredWatchlist = WatchlistFixture
@@ -469,6 +677,8 @@ function triggerAll(
     alert: StoredAlert,
   ) => [subject: string, message: string] | null,
 ): NotificationDto[] {
+  // Between a logout and the next login, nobody's alerts are watched.
+  if (!hasSession()) return []
   const alerts = alertStore.read()
   const triggered = alerts.flatMap((alert) => {
     const found = alert.enabled ? match(alert.condition, alert) : null
@@ -543,7 +753,7 @@ function checkNewsAlerts(item: NewsItemDto, auctionResults: boolean): Notificati
 }
 
 function layoutKey(screen: string): string {
-  return `cmarket.prototype.layout.${currentUser().id}.${screen}`
+  return `cmarket.prototype.layout.${currentAccount().id}.${screen}`
 }
 
 export function readLayout(screen: string): LayoutItemDto[] | undefined {
@@ -561,7 +771,7 @@ export function writeLayout(screen: string, items: LayoutItemDto[]): void {
 }
 
 function drawingsKey(securityId: string): string {
-  return `cmarket.prototype.drawings.${currentUser().id}.${securityId}`
+  return `cmarket.prototype.drawings.${currentAccount().id}.${securityId}`
 }
 
 /** Chart drawings are saved per user (spec section 3). */

@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/shared/api'
-import type { MeDto, Permission } from '@/shared/api/contracts'
+import type { MeDto, MeUpdateDto, PasswordChangeDto, Permission } from '@/shared/api/contracts'
 
-export const sessionKeys = { me: ['me'] as const }
+export const sessionKeys = { me: ['me'] as const, restore: ['session', 'restore'] as const }
 
 export function useMe() {
   return useQuery({
@@ -21,4 +21,26 @@ export function useCurrentUser(): MeDto {
 
 export function useHasPermission(permission: Permission): boolean {
   return useCurrentUser().permissions.includes(permission)
+}
+
+/** The editable part of /me, to send back with one field changed. */
+export function profileOf(me: MeDto): MeUpdateDto {
+  const { displayName, phone, language, timeZone, twoFactorChannel } = me
+  return { displayName, phone, language, timeZone, twoFactorChannel }
+}
+
+/** PUT /me: the profile of CFG; the language and time zone apply at once. */
+export function useUpdateProfile() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (update: MeUpdateDto) => apiClient.put<MeDto>('/me', update),
+    onSuccess: (me) => queryClient.setQueryData(sessionKeys.me, me),
+  })
+}
+
+/** PUT /me/password: the current password, then the new one. */
+export function useChangePassword() {
+  return useMutation({
+    mutationFn: (change: PasswordChangeDto) => apiClient.put<void>('/me/password', change),
+  })
 }

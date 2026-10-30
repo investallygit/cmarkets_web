@@ -10,8 +10,9 @@ export function NewsTime({ publishedAt }: { publishedAt: string }) {
   const { t } = useTranslation()
   const format = useFormat()
   const now = useNow(60_000)
-  const day = toMarketDay(publishedAt)
-  if (day === toMarketDay(now)) return <>{format.time(publishedAt)}</>
-  if (day === toMarketDay(now - DAY_MS)) return <>{t('common.yesterdayShort')}</>
+  // Today and yesterday where the user is.
+  const day = toMarketDay(publishedAt, format.timeZone)
+  if (day === toMarketDay(now, format.timeZone)) return <>{format.time(publishedAt)}</>
+  if (day === toMarketDay(now - DAY_MS, format.timeZone)) return <>{t('common.yesterdayShort')}</>
   return <>{format.dayMonth(publishedAt)}</>
 }

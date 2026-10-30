@@ -22,15 +22,19 @@ npm run dev        # http://localhost:5173
 | `npm test` / `npm run test:run` | Vitest unit and component tests                                            |
 | `npm run e2e`                   | Playwright end-to-end tests (first run: `npx playwright install chromium`) |
 
-In the prototype, the user badge at the top right switches language (FR / EN) and account type,
-so every menu and permission of spec section 12 can be previewed. `/_kit` shows the shared UI
+The app opens on the login page. In the prototype, it lists a demo account per account type (all
+with the password `cmarket2026`) and shows the one-time code the mock would have sent by e-mail or
+SMS; a sign-up gets the 14-day free trial. Once in, the user badge at the top right opens the
+settings (CFG), switches language (FR / EN) and, in the prototype, account type, so every menu and
+permission of spec section 12 can be previewed, and logs out. `/_kit` shows the shared UI
 components (form controls, dialogs, toasts, price chart, table export) with sample content. The
-mock back end keeps each demo user's watchlists, alerts, saved screens, portfolios, purchases,
-layouts and chart drawings in localStorage, with the research library that every account shares,
-and sets off their alerts when a price crosses a threshold, a release comes out or a portfolio
+mock back end keeps the accounts, organisations, plans and invoices, and each user's watchlists,
+alerts, saved screens, portfolios, purchases, layouts and chart drawings in localStorage, with the
+research library that every account shares; it plays the browser's part for the refresh token
+cookie. It sets off the alerts when a price crosses a threshold, a release comes out or a portfolio
 limit is breached. It runs the bond calculator with the formulas of spec section 14.1 and values
 portfolios with those of sections 14.2 and 14.3, each tested against the spec's cases; it plays
-the mobile money and card payments of research and watermarks the PDFs it writes.
+the mobile money and card payments of research and plans and watermarks the PDFs it writes.
 
 ## Stack (spec section 7)
 
@@ -54,17 +58,21 @@ src/
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile, equity-screener,
               yield-curves (YCRV and YAS), portfolio, research-library, publishing-studio, news,
-              market-calendar, alerts, placeholder (screens not built yet), status
-  widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel...),
-              the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
-  features/   user actions: command-bar, security-actions, manage-watchlists, manage-alerts,
-              screen-equities, manage-portfolios, record-transaction, generate-portfolio-report,
-              buy-publication, rate-publication, report-publication, follow-analyst,
-              create-publication, edit-publication, draw-on-chart, compare-securities,
-              switch-language, switch-account, workspace-layout
-  entities/   business data: session, security, quote (live prices), market, bond, yield-curve,
-              fundamentals, screener, portfolio, publication, analyst, document, chart-drawing,
-              watchlist, alert, auction, rate, news, calendar-event, notification
+              market-calendar, alerts, settings (CFG), placeholder (screens not built yet),
+              auth (login, sign-up, password reset), status
+  widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
+              subscription-panel...), the security header and the shell bars (top-bar, side-menu,
+              status-bar, ticker-tape)
+  features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
+              security-actions, manage-watchlists, manage-alerts, screen-equities,
+              manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
+              rate-publication, report-publication, follow-analyst, create-publication,
+              edit-publication, draw-on-chart, compare-securities, edit-profile, change-password,
+              choose-plan, manage-members, switch-language, switch-account, workspace-layout
+  entities/   business data: session, subscription, organization, security, quote (live
+              prices), market, bond, yield-curve, fundamentals, screener, portfolio, publication,
+              analyst, document, chart-drawing, watchlist, alert, auction, rate, news,
+              calendar-event, notification
   shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
               UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
   mocks/      fake back end for the prototype (MSW handlers, sample data, simulated hub)
@@ -114,8 +122,17 @@ each other; the app shell mounts the form once.
   polled every 5 seconds.
 - **Layouts**: each page declares its panels and default grid (`pages/*/config`);
   `features/workspace-layout` saves the user's layout through `GET/PUT /me/layouts/{screen}`.
-- **Permissions**: `/me` returns the user's permissions; `entities/session` decides which
-  screens the menu, the command bar and the routes offer. The server stays the authority.
+- **Session** (spec section 10): `shared/api/session.ts` keeps the access token (15 minutes) in
+  memory only; the refresh token (7 days) is an HttpOnly cookie that `POST /auth/refresh` trades
+  for a new access token, at start-up and when a token runs out. A 401 renews the token once and
+  sends the request again; several requests share one renewal; a refused renewal ends the session
+  and the login page opens on `?next=` the page asked for. The hub connects with the session and
+  takes the same token. The tabs of a browser log in and out together (`BroadcastChannel`), and
+  30 minutes without an action in any of them log the user out after a one-minute warning.
+- **Permissions**: `/me` returns the user's permissions and the modules of their plan;
+  `entities/session` decides which screens the menu, the command bar and the routes offer, and a
+  screen outside the plan offers the plans instead of its content. The server stays the
+  authority.
 
 ### Design system
 
@@ -123,8 +140,10 @@ each other; the app shell mounts the form once.
 (`--bg-panel`, `--accent-amber`...) and maps them to Tailwind utilities (`bg-panel`,
 `text-accent-amber`, `text-up`...). Tailwind's default palette is removed, so only these colours
 exist. Numbers use `shared/lib/format.ts` (`52 500,25` in French, `52,500.25` in English, dates
-`DD/MM/YYYY`, Douala time), and inputs read them back with `shared/lib/parse.ts`. Icons come from
-`lucide-react`.
+`DD/MM/YYYY` in the time zone of the user's profile, Douala by default; a calendar day keeps its
+date in every zone, and the session clock stays in Douala time), and inputs read them back with
+`shared/lib/parse.ts`. The login pages use the brand navy and green, kept for them and the logo.
+Icons come from `lucide-react`.
 
 Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of a title bar),
 `ScreenTabs`, `Pager` (pages of a server list), `DataTable` (sorting, right-click menu, Excel and CSV export unless the user lacks
@@ -132,9 +151,9 @@ Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of
 the sorting), `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
 drawings; `AreaChart`; `useChartTheme`, the section 8 colours for Recharts, which draws in SVG,
 and the `--chart-*` series palette checked for colour-blind separation), `PdfViewer`, `form/`
-(buttons, fields, selects, number and date inputs in the user's format, checkboxes, segmented
-choices, file drop zone), `Dialog` (also as a side form), `ConfirmDialog` (with a required
-reason) and `toast`. Entities add small business components, such as the security picker of
+(buttons, fields, selects, number and date inputs in the user's format, password inputs,
+checkboxes, segmented choices, file drop zone), `Dialog` (also as a side form), `ConfirmDialog`
+(with a required reason) and `toast`. Entities add small business components, such as the security picker of
 `entities/security`.
 
 ## Connecting the real back end
@@ -142,8 +161,12 @@ reason) and `toast`. Entities add small business components, such as the securit
 1. Set `VITE_USE_MOCKS=false` in `.env.local`.
 2. Point `DEV_PROXY_TARGET` at `CMarket.Api` for local development, or set `VITE_API_BASE_URL`
    and `VITE_REALTIME_HUB_URL` for a deployed API.
+3. Have `POST /auth/otp/verify` and `/auth/refresh` set the refresh token as an `HttpOnly`,
+   `Secure` cookie on the `/auth` path. The login calls are sent with credentials; an API on
+   another origin needs CORS with credentials for this site, and `SameSite=None` on the cookie.
 
-The screens do not change: they only know the API contract.
+The screens do not change: they only know the API contract. The prototype's account switch and
+the demo accounts of the login page go with the mock.
 
 ## Status
 
@@ -159,7 +182,8 @@ The screens do not change: they only know the API contract.
 | 7 · Publishing studio (PUB NEW)                                           | Done on mock data, autosave, versions, frozen charts          |
 | 8 · Research library (PUB)                                                | Done; the mock plays mobile money and card payments           |
 | News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done on mock data; the mock sets off the alerts               |
+| Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
+| Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
 | 6, 9 and the back-office screens                                          | Placeholders with the mockup layout and the API of each panel |
-| Login, OTP, token refresh                                                 | Not started                                                   |
 
 The plan for the remaining screens, step by step, is in [ROADMAP.md](ROADMAP.md).
