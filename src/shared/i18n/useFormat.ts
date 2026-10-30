@@ -8,6 +8,7 @@ import {
   formatDayMonth,
   formatFileSize,
   formatIsoDate,
+  formatMonth,
   formatNumber,
   formatPercent,
   formatSigned,
@@ -41,6 +42,7 @@ export function useFormat() {
       fileSize: (bytes: number) => formatFileSize(bytes, locale),
       isoDate: (isoDate: string) => formatIsoDate(isoDate),
       weekday: (isoDate: string, style?: 'short' | 'long') => formatWeekday(isoDate, locale, style),
+      month: (month: string) => formatMonth(month, locale),
       date: (value: Date | string | number) => formatDate(value),
       dayMonth: (value: Date | string | number) => formatDayMonth(value),
       time: (value: Date | string | number, withSeconds = false) =>

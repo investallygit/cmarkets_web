@@ -46,7 +46,11 @@ export interface MeDto {
   permissions: Permission[]
   /** null means unlimited. */
   quotas: { portfolios: number | null; alerts: number | null }
+  /** An Analyst publishes once an Admin approved the status (spec section 12); null for others. */
+  analystStatus: AnalystStatus | null
 }
+
+export type AnalystStatus = 'pending' | 'approved' | 'rejected'
 
 /** One panel of a workspace grid, in grid units. */
 export interface LayoutItemDto {

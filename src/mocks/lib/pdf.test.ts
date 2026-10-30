@@ -31,4 +31,14 @@ describe('createPdf', () => {
     expect(pdf).toContain('(Société \\(SEMC\\)) Tj')
     expect(pdf).toContain('/Title (Note)')
   })
+
+  it('prints the watermark under the text of every page', () => {
+    const lines = Array.from({ length: 60 }, (_, index) => `Line ${index + 1}`)
+    const pdf = new TextDecoder('latin1').decode(
+      createPdf('Note', lines, { watermark: 'P. Owona - 30/10/2026' }),
+    )
+    // Twice on each of the two pages, before the page's text.
+    expect(pdf.match(/\(P\. Owona - 30\/10\/2026\) Tj/g)).toHaveLength(4)
+    expect(pdf.indexOf('(P. Owona')).toBeLessThan(pdf.indexOf('(Line 1) Tj'))
+  })
 })

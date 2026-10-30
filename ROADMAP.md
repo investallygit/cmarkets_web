@@ -2,9 +2,10 @@
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`.
 
-MKT, DES (with its FA tab), EQS, YCRV, YAS, PORT, N, CAL and ALRT are built. The other 15 screens
-are placeholders: their route, menu entry, permission and mockup layout exist, with the API each
-panel will call (`src/pages/placeholder/config/plans.ts`). Login is not started.
+MKT, DES (with its FA and ANA tabs), EQS, YCRV, YAS, PORT, PUB, PUB NEW, N, CAL and ALRT are
+built. The other 13 screens are placeholders: their route, menu entry, permission and mockup layout
+exist, with the API each panel will call (`src/pages/placeholder/config/plans.ts`). Login is not
+started.
 
 DATA, HIST and EODH are planned with IMP, and ANLY and MOD with USER: in the mockups they are
 panels of the same screen. Sizes are relative: S < M < L < XL.
@@ -18,7 +19,7 @@ panels of the same screen. Sizes are relative: S < M < L < XL.
 | 3    | Watchlist editing (MKT), N, CAL, ALRT                           | Done   |
 | 4    | EQS / FA, then YCRV / YAS                                       | Done   |
 | 5    | PORT                                                            | Done   |
-| 6    | PUB, then PUB NEW                                               | To do  |
+| 6    | PUB, then PUB NEW                                               | Done   |
 | 7    | CFG, login and OTP (needed before connecting the real back end) | To do  |
 | 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS  | To do  |
 | 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY            | To do  |
@@ -82,12 +83,24 @@ Done in step 5, with PORT:
   closes, so an index and its securities move together; `read-excel-file` reads Excel uploads;
   MSW builds into a chunk of its own.
 
+Done in step 6, with PUB and PUB NEW:
+
+- **Pagination**: `Pager` under a list of `{ items, page, pageSize, totalCount }`, the page kept in
+  the URL. USER, HIST and AUDT will use it.
+- **Rich text**: TipTap for the studio, loaded with that screen only. The library draws the same
+  JSON without the editor (`PublicationBody`) and follows safe links and images only; both share
+  the `publication-text` styles, so the reader preview is what readers get. `shared/lib/richText`
+  gives the contents, the page count and the text of a PDF to the front end and the mock alike.
+- **Forms and charts**: one segment of `SegmentedControl` can be disabled (Paid once read for
+  free); `AreaChart` takes a colour and a fixed mode for a chart inside a document;
+  `format.month`.
+- **Mock**: `sharedStore` keeps what every account sees (publications, analysts) next to each
+  user's own data; the PDF writer prints a watermark.
+
 Still to do, with the first screen that needs it:
 
 - **PNG and PDF export of charts** (spec section 3), for the price chart, the comparison bars and
   the curves alike.
-- **Pagination**: the `{ items, page, pageSize, totalCount }` convention and a pager (PUB, USER,
-  HIST, AUDT).
 - **Subscription gating** (Monitoring, Analysis, Portfolio, free trial): `/me` does not return the
   modules yet, so the contract needs them; a locked screen offers an upgrade instead of a 403.
 
@@ -121,8 +134,8 @@ Still to do, with the first screen that needs it:
   levels saved per user. A bond gets its terms and redemption schedule instead of the key data
   and dividends, and no FA, DVD or HDS tab.
 - **Built in step 4**: the FA tab, with the panels of EQS (see below).
-- **Still to do**: the ANA tab comes with PUB (step 6). PNG and PDF export of the chart stays in
-  the shared groundwork.
+- **Built in step 6**: the ANA tab, with the list, the preview and the analyst of PUB.
+- **Still to do**: PNG and PDF export of the chart stays in the shared groundwork.
 
 ### N · News (no mockup): done
 
@@ -157,8 +170,9 @@ Still to do, with the first screen that needs it:
   arrives.
 - **Built in step 5**: a portfolio limit alert watches one portfolio or all of them, and goes off
   when a transaction or a limit change breaches a limit.
-- **Still to do**: following analysts with PUB (step 6), the phone number and e-mail address for
-  SMS and e-mail with CFG (step 7).
+- **Still to do**: setting off the publication alerts (a followed analyst, a security or a country)
+  when a publication goes out: the analysts are followed from PUB since step 6. The phone number
+  and e-mail address for SMS and e-mail come with CFG (step 7).
 
 ### EQS / FA · Equity screener and fundamental analysis (screen 3): done
 
@@ -233,28 +247,50 @@ Still to do, with the first screen that needs it:
   leaves the logo out of the PDF; a portfolio in EUR holds XAF securities at the peg, no floating
   currency.
 
-### PUB · Research library (screen 8): L
+### PUB · Research library (screen 8): done
 
-- **UI**: filter bar (subject, country, sector, access, rating, sort, search); list with tabs All
-  / Purchased / Followed analysts; preview (before purchase: summary, locked contents, rating,
-  price, Mobile money or Card, buy button; after purchase: full content, watermarked with the
-  buyer's name); analyst panel with Follow.
-- **Data**: `/library`, `/library/{id}`, `/purchase`, `/payments/{id}` (polled until confirmed),
-  `/me/purchases`, `/pdf`, `/rating`, `/report`, `/analysts/{id}`, `/follow`.
-- **Watch for**: the publication list is shared with the ANA tab of DES and the country page.
-  Students pay the student price; Data admins and Admins only read free research.
+- **Built**: filter bar (subject, country, sector, access, rating, sort, free text) kept in the
+  URL; the list with its tabs All / Purchased / Followed analysts, 20 a page: price in amber or FREE
+  in green, title, subject, analyst, coloured rating, date, readers' score, Read or Bought. The
+  preview: summary, locked contents, rating with the upside from the reference price, price (the
+  student price for a Student), Mobile money or Card. The payment is followed until the operator
+  confirms, with its dialog closed or not; the full content then replaces the preview with the
+  buyer's name as a watermark, the disclosures, the watermarked PDF, the attachment, a 1 to 5 rating
+  and "Report content". The analyst: Follow, the four figures of the mockup and each Buy / Hold /
+  Sell against the price 12 months later. The same list and preview make the ANA tab of a security
+  (a bond shows the research on its country).
+- **Rules**: Data admins and Admins cannot buy (the server refuses, the preview says why); an
+  author reads without buying or rating; a free publication read once cannot become paid; a
+  withdrawn one stays readable by its buyers only.
+- **Mock**: 128 publications by five analysts, the first eight those of the mockup. K. Atangana's
+  profile gives the mockup's 42 publications, 4.4 / 5, 412 followers and 68% of ratings
+  confirmed, worked out from the price history. Mobile money confirms after about 3 seconds; a
+  number ending in 0000 is declined. Reads, sales and ratings are counted by month for screen 7.
+- **Still to do**: the country page (open question); notifying the followers of an analyst or a
+  subject (the hub sends `PublicationPublished`, alerts of type "publication" are not set off
+  yet); card payment through the provider's page (3-D Secure) and its return. Employees read free
+  research through the moderation queue (MOD, step 9): the library is a client screen.
 
-### PUB NEW · Publishing studio (screen 7): XL
+### PUB NEW · Publishing studio (screen 7): done
 
-- **UI**: my publications (status badge, price), my earnings, editor (Company / Country, title,
-  summary, TipTap with a "CMarket chart" block frozen at insertion), settings (Free / Paid, price
-  within the Admin's range, student price, free after a delay, Buy / Hold / Sell or a country
-  outlook, target, horizon, mandatory disclosures, attachment).
-- **Rules**: autosave every 10 s; Submit only once every disclosure is ticked; a publication read
-  for free never becomes paid; versions and archiving (`/versions`, `/archive`); concurrent edits
-  detected (rowversion).
-- **Depends on**: TipTap; "Reader preview" uses the PUB reader and the chart block uses
-  `PriceChart`. An Analyst not yet approved only sees a waiting message.
+- **Built**: my publications (status badge, access, "Update draft" when a published one has changes
+  not out yet) with + New on a company or a country; my earnings for a month (reads, sales,
+  revenue, CMarket's commission, net payable, rating, followers) and the monthly payouts; the
+  editor (subject, title, summary, TipTap with B, I, H2, H3, list, table, image, CMarket chart and
+  link); the settings (Free / Paid within the Admin's range, student price, free after a delay,
+  rating or outlook, target, horizon, reference price, the three disclosures, PDF attachment,
+  moderation mode). Reader preview, before and after purchase. Submit is enabled once the three
+  disclosures are ticked and shows the automatic checks by field; a published publication gets
+  Publish update; Archive or Withdraw takes a reason. An Analyst not approved yet sees why.
+- **Rules**: autosave every 10 seconds, and on leaving the publication or the screen; each save
+  carries the row version, and a 409 offers to reload the copy saved elsewhere. Closing a tab with
+  unsaved changes asks first. A CMarket chart (security, period, line or candles) is frozen by the
+  server at insertion and the body holds its id; images are uploaded as attachments. A new price
+  applies to readers at once; a change of content becomes a new version.
+- **Mock**: K. Atangana's 44 publications, with the SEMC update of the mockup in progress (the
+  sources to tick again) and its chart frozen on 28/10/2026; October gives the mockup's earnings.
+- **Still to do**: ratio and yield curve charts in a publication (price charts only); a version
+  history readers can open (the library shows the latest version and its date).
 
 ### CFG · Settings (no mockup): M
 
@@ -366,6 +402,24 @@ Still to do, with the first screen that needs it:
   1,248.65 M; "Upcoming income (3 months)" of 18.4 M against 63.8 M listed). The prototype computes
   them, leaves principal out of upcoming income, and holds 15,000 and 11,000 bonds of XAF 10,000
   for the mockup's 1,500 and 1,100.
+- **Research**: the bodies are not specified. The prototype saves the TipTap JSON as the body; a
+  "CMarket chart" node holds the id of a chart frozen by `POST /publications/{id}/charts`
+  (`{ securityId, period, type, title }`, answered with the bars as of today). The price range,
+  commission and moderation mode come from `GET /publications/rules`, which the spec lacks (the
+  Admin's settings are under /admin), and `/me` gets `analystStatus`. `/library` takes
+  `followed=true` for the Followed analysts tab and `q` for the search; `/me/purchases` takes the
+  same filters; `GET /library/{id}/attachment` serves the attachment to readers.
+  `POST /library/{id}/purchase` takes `{ method, phone }` and answers 202 with the payment. When
+  is a rating "confirmed at 12 months" (the prototype: a Buy by a rise, a Sell by a fall, a Hold by
+  a move within ±10%)? Is a read counted once per reader (the prototype) or at each opening? Does
+  an update need the disclosures ticked again and go through moderation again (the prototype: yes,
+  as the moderation mode says)? May the price change after publication (the prototype applies it
+  at once)?
+- **Screens 7 and 8 mockups**: the SEMC note is a draft on screen 7 but published on 28/10/2026 on
+  screen 8; the prototype publishes it and shows an update in progress in the studio. Screen 8
+  lists Apple and TotalEnergies notes, but the prototype's master list has no US or European
+  security yet: SCG-RE and REGIONALE notes take their places. Screen 7 shows a note in moderation
+  although the moderation mode is "post-publication review".
 - **Bond calculator**: the body is `{ settlementDate, faceAmount, cleanPrice | yieldPct }` in the
   prototype, with a 400 for a date before the issue or after the last payment and a 422 when no
   yield fits. Which settlement lag (the mockup shows two business days) and which curve date for

@@ -4,6 +4,7 @@ import {
   formatDate,
   formatFileSize,
   formatIsoDate,
+  formatMonth,
   formatNumber,
   formatPercent,
   formatSigned,
@@ -65,5 +66,12 @@ describe('dates and times', () => {
   it('shows the session clock in Douala time', () => {
     expect(formatTime('2026-10-28T09:42:15Z', undefined, true)).toBe('10:42:15')
     expect(formatTime('2026-10-28T09:42:15Z')).toBe('10:42')
+  })
+})
+
+describe('month names', () => {
+  it('names a month in the user language', () => {
+    expect(formatMonth('2026-10', 'en')).toBe('October 2026')
+    expect(formatMonth('2026-02', 'fr')).toBe('février 2026')
   })
 })

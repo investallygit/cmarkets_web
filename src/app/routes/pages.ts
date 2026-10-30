@@ -20,6 +20,12 @@ const YieldCurvesPage = lazy(() =>
 const PortfolioPage = lazy(() =>
   import('@/pages/portfolio').then((module) => ({ default: module.PortfolioPage })),
 )
+const ResearchLibraryPage = lazy(() =>
+  import('@/pages/research-library').then((module) => ({ default: module.ResearchLibraryPage })),
+)
+const PublishingStudioPage = lazy(() =>
+  import('@/pages/publishing-studio').then((module) => ({ default: module.PublishingStudioPage })),
+)
 const NewsPage = lazy(() => import('@/pages/news').then((module) => ({ default: module.NewsPage })))
 const MarketCalendarPage = lazy(() =>
   import('@/pages/market-calendar').then((module) => ({ default: module.MarketCalendarPage })),
@@ -38,6 +44,8 @@ const PAGES: Partial<Record<ScreenTextKey, Page>> = {
   YCRV: YieldCurvesPage,
   YAS: YieldCurvesPage,
   PORT: PortfolioPage,
+  PUB: ResearchLibraryPage,
+  PUBNEW: PublishingStudioPage,
   N: NewsPage,
   CAL: MarketCalendarPage,
   ALRT: AlertsPage,

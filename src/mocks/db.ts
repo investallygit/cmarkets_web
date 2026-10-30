@@ -7,10 +7,13 @@ import {
   type MeDto,
   type NewsItemDto,
   type NotificationDto,
+  type PaymentMethod,
   type SavedScreenDto,
   type TradeDto,
 } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
+import { addDays } from '@/shared/lib/isoDate'
+import type { RealtimeEventMap } from '@/shared/realtime'
 import { createAlerts, type StoredAlert } from './fixtures/alerts'
 import { createAuctions } from './fixtures/auctions'
 import { BOND_FIXTURES, cashFlows } from './fixtures/bonds'
@@ -18,6 +21,14 @@ import { createCalendar } from './fixtures/calendar'
 import { createNews, createNotifications, UPCOMING_NEWS } from './fixtures/feeds'
 import { INDEX_FIXTURES, type IndexFixture } from './fixtures/market'
 import { createPortfolios } from './fixtures/portfolios'
+import {
+  ANALYST_FIXTURES,
+  COUNTRY_NAMES,
+  createLibrary,
+  FOLLOW_FIXTURES,
+  READ_FIXTURES,
+  type ResearchMarket,
+} from './fixtures/research'
 import { PROFILE_FIXTURES } from './fixtures/profiles'
 import { SAVED_SCREEN_FIXTURES } from './fixtures/screens'
 import { SECURITY_FIXTURES, type SecurityFixture } from './fixtures/securities'
@@ -39,6 +50,8 @@ import { priceHistory, sessionStarted } from './lib/bars'
 import { generateSparkline } from './lib/history'
 import { indexCloses, indexMembers } from './lib/indexHistory'
 import type { MarketData, PortfolioBond, StoredPortfolio } from './lib/portfolioEngine'
+import type { StoredAnalyst, StoredPublication } from './lib/research'
+import type { ReaderContext } from './lib/researchViews'
 import { businessDays } from './lib/time'
 import { initialTrades } from './lib/trades'
 
@@ -203,13 +216,13 @@ export function currentUser(): MeDto {
     timeZone: 'Africa/Douala',
     permissions: ROLE_PERMISSIONS[accountType],
     quotas: ROLE_QUOTAS[accountType],
+    analystStatus: accountType === 'analyst' ? 'approved' : null,
   }
 }
 
-/** Data of the current user, kept in localStorage so that the prototype remembers it on reload. */
-function userStore<T extends object[]>(name: string, initial: () => T) {
+/** An array kept in localStorage, so that the prototype remembers it on reload. */
+function storedArray<T extends object[]>(keyOf: () => string, initial: () => T) {
   const cache = new Map<string, T>()
-  const keyOf = () => `cmarket.prototype.${name}.${currentUser().id}`
   return {
     read(): T {
       const key = keyOf()
@@ -226,6 +239,16 @@ function userStore<T extends object[]>(name: string, initial: () => T) {
       writeStorage(key, JSON.stringify(value))
     },
   }
+}
+
+/** Data of the current user. */
+function userStore<T extends object[]>(name: string, initial: () => T) {
+  return storedArray(() => `cmarket.prototype.${name}.${currentUser().id}`, initial)
+}
+
+/** Data every account sees, such as the research library. */
+function sharedStore<T extends object[]>(name: string, initial: () => T) {
+  return storedArray(() => `cmarket.prototype.${name}`, initial)
 }
 
 function parseArray<T extends object[]>(stored: string | null): T | undefined {
@@ -332,6 +355,96 @@ export function marketData(now = Date.now()): MarketData {
 export const portfolioStore = userStore<StoredPortfolio[]>('portfolios', () =>
   createPortfolios(currentAccountType(), marketData()),
 )
+
+/** Prices of the research library: closes on a day, and the bars of a frozen chart. */
+export function researchMarket(now = Date.now()): ResearchMarket {
+  return {
+    today: toMarketDay(now),
+    security: (id) => securities.get(id),
+    closeOn(id, day) {
+      const security = securities.get(id)
+      return security
+        ? priceHistory(security, addDays(day, -10), day, '1d', now).at(-1)?.close
+        : undefined
+    },
+    bars(id, from, to, interval) {
+      const security = securities.get(id)
+      return security ? priceHistory(security, from, to, interval, now) : []
+    },
+  }
+}
+
+/** Publications of every analyst, shared by all accounts. */
+export const publicationStore = sharedStore<StoredPublication[]>('publications', () =>
+  createLibrary(researchMarket()),
+)
+
+export const analystStore = sharedStore<StoredAnalyst[]>('analysts', () =>
+  ANALYST_FIXTURES.map((analyst) => ({ ...analyst })),
+)
+
+export interface StoredPurchase {
+  publicationId: string
+  paymentId: string
+  amount: number
+  method: PaymentMethod
+  purchasedAt: string
+}
+
+export const purchaseStore = userStore<StoredPurchase[]>('purchases', () => [])
+
+export const followStore = userStore<{ analystId: string }[]>('follows', () =>
+  FOLLOW_FIXTURES.map((analystId) => ({ analystId })),
+)
+
+/** The user's rating of a publication, and the month it counts in. */
+export const myRatingStore = userStore<{ publicationId: string; stars: number; month: string }[]>(
+  'ratings',
+  () => [],
+)
+
+export const readStore = userStore<{ publicationId: string }[]>('reads', () =>
+  READ_FIXTURES.map((publicationId) => ({ publicationId })),
+)
+
+/** Reports of readers, for the moderation queue of the Admin (screen 9). */
+export const contentReportStore = sharedStore<
+  { publicationId: string; userId: string; reason: string; comment: string; reportedAt: string }[]
+>('contentReports', () => [])
+
+/** The current user as the research library sees them: what they bought, read and rated. */
+export function readerContext(now = Date.now()): ReaderContext {
+  const user = currentUser()
+  const analysts = analystStore.read()
+  return {
+    today: toMarketDay(now),
+    user: {
+      id: user.id,
+      displayName: user.displayName,
+      accountType: user.accountType,
+      canBuy: user.permissions.includes('research:buy'),
+    },
+    security: (id) => securities.get(id),
+    countryName: (code) => COUNTRY_NAMES[code],
+    analyst: (id) => analysts.find((analyst) => analyst.id === id),
+    purchases: new Map(purchaseStore.read().map((purchase) => [purchase.publicationId, purchase])),
+    reads: new Set(readStore.read().map((read) => read.publicationId)),
+    myRatings: new Map(myRatingStore.read().map((rating) => [rating.publicationId, rating.stars])),
+  }
+}
+
+type PublicationEvent = RealtimeEventMap['PublicationPublished']
+const publicationListeners = new Set<(event: PublicationEvent) => void>()
+
+/** Publications and updates, for the simulated hub to push to followers. */
+export function onPublicationPublished(listener: (event: PublicationEvent) => void): () => void {
+  publicationListeners.add(listener)
+  return () => publicationListeners.delete(listener)
+}
+
+export function announcePublication(event: PublicationEvent): void {
+  publicationListeners.forEach((listener) => listener(event))
+}
 
 /** Records that an alert went off: a notification for the user and the time on the alert. */
 function triggerAlert(alert: StoredAlert, subject: string, message: string): NotificationDto {

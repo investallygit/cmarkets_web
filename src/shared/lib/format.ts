@@ -157,6 +157,22 @@ export function formatWeekday(
   return format.format(new Date(`${isoDate}T12:00:00Z`))
 }
 
+const monthFormats = new Map<Locale, Intl.DateTimeFormat>()
+
+/** A month such as "2026-10" as "October 2026" or "octobre 2026". */
+export function formatMonth(month: string, locale: Locale): string {
+  let format = monthFormats.get(locale)
+  if (!format) {
+    format = new Intl.DateTimeFormat(INTL_LOCALE[locale], {
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    })
+    monthFormats.set(locale, format)
+  }
+  return format.format(new Date(`${month}-01T12:00:00Z`))
+}
+
 /** A calendar date such as "2026-10-30" as DD/MM/YYYY, with no time zone conversion. */
 export function formatIsoDate(isoDate: string): string {
   const [year, month, day] = isoDate.split('-')

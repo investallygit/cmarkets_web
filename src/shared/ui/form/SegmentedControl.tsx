@@ -9,6 +9,8 @@ export interface SegmentOption<T extends string> {
   label: ReactNode
   /** Green or red choice, e.g. Buy and Sell. */
   tone?: Exclude<Tone, 'neutral'>
+  /** One choice not offered, e.g. Paid for a publication already read for free. */
+  disabled?: boolean
 }
 
 interface SegmentedControlProps<T extends string> {
@@ -59,6 +61,7 @@ export function SegmentedControl<T extends string>({
       {options.map((option) => {
         const active = option.value === value
         const tone = option.tone ?? 'neutral'
+        const off = disabled || option.disabled
         return (
           <label
             key={option.value}
@@ -66,7 +69,7 @@ export function SegmentedControl<T extends string>({
               'flex h-7 min-w-0 items-center justify-center border px-2 font-sans text-data',
               'has-focus-visible:ring-1 has-focus-visible:ring-accent-amber has-focus-visible:ring-offset-1 has-focus-visible:ring-offset-app',
               active ? ACTIVE[tone] : IDLE[tone],
-              disabled ? 'opacity-50' : 'cursor-pointer',
+              off ? 'opacity-50' : 'cursor-pointer',
             )}
           >
             <input
@@ -74,7 +77,7 @@ export function SegmentedControl<T extends string>({
               name={name}
               value={option.value}
               checked={active}
-              disabled={disabled}
+              disabled={off}
               onChange={() => onChange(option.value)}
               className="sr-only"
             />

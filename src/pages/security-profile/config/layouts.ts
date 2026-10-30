@@ -48,7 +48,11 @@ export const PROFILE_LAYOUTS: Record<SecurityFunction, readonly WorkspaceItem[]>
     { i: 'keydata', x: 7, y: 0, w: 5, h: 11, minW: 3, minH: 5 },
     { i: 'chart', x: 0, y: 11, w: 12, h: 15, minW: 4, minH: 8 },
   ],
-  ana: [{ i: 'planned', x: 0, y: 0, w: 12, h: 26, minW: 4, minH: 4 }],
+  ana: [
+    { i: 'list', x: 0, y: 0, w: 7, h: 26, minW: 4, minH: 8 },
+    { i: 'preview', x: 7, y: 0, w: 5, h: 17, minW: 3, minH: 8 },
+    { i: 'analyst', x: 7, y: 17, w: 5, h: 9, minW: 3, minH: 5 },
+  ],
 }
 
 /** Layout key of a tab for /me/layouts/{screen}: DES, DES-GP, DES-DVD... */

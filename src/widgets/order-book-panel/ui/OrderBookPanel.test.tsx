@@ -16,6 +16,7 @@ const analyst: MeDto = {
   timeZone: 'Africa/Douala',
   permissions: ['market:read', 'market:orderbook'],
   quotas: { portfolios: 5, alerts: 50 },
+  analystStatus: 'approved',
 }
 
 const book: OrderBookDto = {

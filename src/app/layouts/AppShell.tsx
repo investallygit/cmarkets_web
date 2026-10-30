@@ -5,6 +5,7 @@ import { Outlet } from 'react-router'
 import { useAlertRealtimeSync } from '@/entities/alert'
 import { useMarketRealtimeSync } from '@/entities/market'
 import { useNewsRealtimeSync } from '@/entities/news'
+import { usePublicationRealtimeSync } from '@/entities/publication'
 import { useNotificationRealtimeSync } from '@/entities/notification'
 import { useQuoteRealtimeSync } from '@/entities/quote'
 import { useSecurityRealtimeSync } from '@/entities/security'
@@ -28,6 +29,7 @@ export function AppShell() {
   useQuoteRealtimeSync()
   useMarketRealtimeSync()
   useNewsRealtimeSync()
+  usePublicationRealtimeSync()
   useNotificationRealtimeSync()
   useAlertRealtimeSync()
   useSecurityRealtimeSync()

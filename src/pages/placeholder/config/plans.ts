@@ -19,18 +19,6 @@ function fullScreen(title: string, code: string, api: string[]): PanelPlan[] {
 /** Panel layouts of the mockups in spec section 9 (screens 5 to 9), keyed by screen id. */
 // prettier-ignore
 export const SCREEN_PLANS: Partial<Record<string, PanelPlan[]>> = {
-  PUB: [
-    { id: 'filters', title: 'Filters', code: 'PUB', api: ['GET /library?subjectType=&country=&sector=&access=&rating=&sort='], x: 0, y: 0, w: 12, h: 3 },
-    { id: 'list', title: 'Publications', code: 'PUB', api: ['GET /library'], x: 0, y: 3, w: 7, h: 23 },
-    { id: 'preview', title: 'Preview', code: 'PUB', api: ['GET /library/{id}', 'POST /library/{id}/purchase', 'GET /payments/{id}'], x: 7, y: 3, w: 5, h: 14 },
-    { id: 'analyst', title: 'Analyst', code: 'PUB', api: ['GET /analysts/{id}', 'POST /analysts/{id}/follow'], x: 7, y: 17, w: 5, h: 9 },
-  ],
-  PUBNEW: [
-    { id: 'mine', title: 'My publications', code: 'PUB', api: ['GET /me/publications?status='], x: 0, y: 0, w: 3, h: 15 },
-    { id: 'earnings', title: 'My earnings', code: 'PUB', api: ['GET /me/publications/stats', 'GET /me/payouts'], x: 0, y: 15, w: 3, h: 11 },
-    { id: 'editor', title: 'Editor', code: 'PUB', api: ['POST /publications', 'PUT /publications/{id}', 'POST /publications/{id}/charts'], x: 3, y: 0, w: 6, h: 26 },
-    { id: 'settings', title: 'Publication settings', code: 'PUB', api: ['PUT /publications/{id}/pricing', 'POST /publications/{id}/attachments', 'POST /publications/{id}/submit'], x: 9, y: 0, w: 3, h: 26 },
-  ],
   CFG: fullScreen('Settings', 'CFG', ['GET /me', 'GET /organization', 'GET /subscription', 'GET /invoices']),
   DATA: fullScreen('Session coverage', 'DATA', ['GET /data/coverage?date=', 'GET /data/import-types/{type}/template']),
   IMP: [

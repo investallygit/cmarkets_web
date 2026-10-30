@@ -1,5 +1,5 @@
 import { AreaSeries, createChart, type IChartApi, type ISeriesApi } from 'lightweight-charts'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { HistoryPointDto } from '@/shared/api/contracts'
 import { useLocale } from '@/shared/i18n'
 import { cssVar, withAlpha } from '@/shared/lib/theme'
@@ -11,11 +11,24 @@ interface AreaChartProps {
   decimals: number
   /** Latest real-time value, applied to the last point. */
   liveValue?: number
+  /** Design token of the line and its fill. */
+  color?: `--${string}`
+  /** In a document: no wheel zoom or drag, so the page scrolls over the chart. */
+  fixed?: boolean
 }
 
 /** Price area chart (TradingView Lightweight Charts, spec section 7). */
-export function AreaChart({ points, intraday, decimals, liveValue }: AreaChartProps) {
+export function AreaChart({
+  points,
+  intraday,
+  decimals,
+  liveValue,
+  color = '--info',
+  fixed = false,
+}: AreaChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  // The chart is created with them: they do not change afterwards.
+  const [style] = useState({ color, fixed })
   const chartRef = useRef<IChartApi | null>(null)
   const seriesRef = useRef<ISeriesApi<'Area'> | null>(null)
   const locale = useLocale()
@@ -23,8 +36,11 @@ export function AreaChart({ points, intraday, decimals, liveValue }: AreaChartPr
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
-    const chart = createChart(container, baseChartOptions())
-    const lineColor = cssVar('--info')
+    const chart = createChart(container, {
+      ...baseChartOptions(),
+      ...(style.fixed && { handleScroll: false, handleScale: false }),
+    })
+    const lineColor = cssVar(style.color)
     seriesRef.current = chart.addSeries(AreaSeries, {
       lineColor,
       lineWidth: 2,
@@ -38,7 +54,7 @@ export function AreaChart({ points, intraday, decimals, liveValue }: AreaChartPr
       chartRef.current = null
       seriesRef.current = null
     }
-  }, [])
+  }, [style])
 
   useEffect(() => {
     chartRef.current?.applyOptions({ localization: chartLocalization(locale, decimals) })

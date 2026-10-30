@@ -12,12 +12,27 @@ const escapeText = (text: string) => text.replace(/[\\()]/g, (char) => `\\${char
 const FIRST_PAGE_LINES = 40
 const PAGE_LINES = 44
 
-function pageContent(lines: readonly string[], title: string | null): string {
+/** Light grey text across the page at 45°, under the text, twice a page. */
+function watermarkContent(watermark: string): string[] {
+  return [0, 300].flatMap((offset) => [
+    'q',
+    '0.82 g',
+    'BT',
+    '/F1 26 Tf',
+    `0.7071 0.7071 -0.7071 0.7071 ${110 + offset / 3} ${150 + offset} Tm`,
+    `(${escapeText(watermark)}) Tj`,
+    'ET',
+    'Q',
+  ])
+}
+
+function pageContent(lines: readonly string[], title: string | null, watermark?: string): string {
   const heading =
     title === null
       ? ['/F1 11 Tf', '56 790 Td']
       : ['/F1 18 Tf', '56 770 Td', `(${escapeText(title)}) Tj`, '/F1 11 Tf', '0 -32 Td']
   return [
+    ...(watermark ? watermarkContent(watermark) : []),
     'BT',
     ...heading,
     ...lines.flatMap((line) => [`(${escapeText(line)}) Tj`, '0 -17 Td']),
@@ -27,9 +42,14 @@ function pageContent(lines: readonly string[], title: string | null): string {
 
 /**
  * An A4 PDF with a title and lines of text, standing in for an issuer document or a portfolio
- * report; the lines run on over as many pages as they need.
+ * report; the lines run on over as many pages as they need. A watermark, such as the buyer's name
+ * on a publication, is printed across every page.
  */
-export function createPdf(title: string, lines: readonly string[]): Uint8Array<ArrayBuffer> {
+export function createPdf(
+  title: string,
+  lines: readonly string[],
+  options: { watermark?: string } = {},
+): Uint8Array<ArrayBuffer> {
   const pages = [lines.slice(0, FIRST_PAGE_LINES)]
   for (let start = FIRST_PAGE_LINES; start < lines.length; start += PAGE_LINES) {
     pages.push(lines.slice(start, start + PAGE_LINES))
@@ -43,7 +63,7 @@ export function createPdf(title: string, lines: readonly string[]): Uint8Array<A
     // Shown by the PDF viewer instead of the file name.
     `<< /Title (${escapeText(title)}) /Producer (CMarket prototype) >>`,
     ...pages.flatMap((pageLines, index) => {
-      const content = pageContent(pageLines, index === 0 ? title : null)
+      const content = pageContent(pageLines, index === 0 ? title : null, options.watermark)
       return [
         `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents ${pageNumber(index) + 1} 0 R >>`,
         `<< /Length ${content.length} >>\nstream\n${content}\nendstream`,

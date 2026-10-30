@@ -1,7 +1,12 @@
-import { Construction } from 'lucide-react'
 import { lazy, Suspense, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useParams, useSearchParams } from 'react-router'
+import {
+  LIBRARY_PAGE_SIZE,
+  useLibrary,
+  useLibraryPublication,
+  type LibraryQuery,
+} from '@/entities/publication'
 import { useSecurityProfile } from '@/entities/security'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
@@ -12,8 +17,8 @@ import {
   securityPath,
   type SecurityFunction,
 } from '@/shared/routes/paths'
-import { Panel } from '@/shared/ui/Panel'
 import { PanelEmpty, PanelError, PanelLoading } from '@/shared/ui/StatusViews'
+import { AnalystPanel } from '@/widgets/analyst-panel'
 import { DividendsPanel } from '@/widgets/dividends-panel'
 import { DocumentListPanel } from '@/widgets/document-list-panel'
 import { DocumentViewerPanel } from '@/widgets/document-viewer-panel'
@@ -27,6 +32,8 @@ import { NewsArticlePanel } from '@/widgets/news-article-panel'
 import { NewsListPanel } from '@/widgets/news-list-panel'
 import { OrderBookPanel } from '@/widgets/order-book-panel'
 import { PriceChartPanel } from '@/widgets/price-chart-panel'
+import { PublicationListPanel } from '@/widgets/publication-list-panel'
+import { PublicationPreviewPanel } from '@/widgets/publication-preview-panel'
 import { RatiosPanel } from '@/widgets/ratios-panel'
 import { RedemptionSchedulePanel } from '@/widgets/redemption-schedule-panel'
 import { SecurityDocumentsPanel } from '@/widgets/security-documents-panel'
@@ -149,7 +156,11 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
       keydata: keyData,
       chart: chart('compact'),
     },
-    ana: { planned: <PlannedTab title={t('panels.research')} /> },
+    ana: {
+      list: <ResearchList security={security} />,
+      preview: <ResearchPreview security={security} />,
+      analyst: <ResearchAnalyst security={security} />,
+    },
   }
 
   return (
@@ -161,15 +172,47 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
   )
 }
 
-/** ANA comes with the research library, whose publication list it shares (see ROADMAP.md). */
-function PlannedTab({ title }: { title: string }) {
-  const { t } = useTranslation()
+/**
+ * ANA: the research library's list for one security (spec section 9, screen 2); a bond shows the
+ * research on its issuing country. The open publication and the page live in the URL; the first
+ * publication opens when none is chosen.
+ */
+function useResearchSelection(security: SecurityProfileDto) {
+  const [searchParams] = useSearchParams()
+  const query: LibraryQuery = {
+    tab: 'all',
+    ...(security.type === 'bond'
+      ? ({ subjectType: 'country', subjectId: security.country } as const)
+      : ({ subjectType: 'company', subjectId: security.id } as const)),
+    page: Math.max(1, Number(searchParams.get('page')) || 1),
+    pageSize: LIBRARY_PAGE_SIZE,
+  }
+  const list = useLibrary(query)
+  const selectedId = searchParams.get('publication') ?? list.data?.items.at(0)?.id ?? null
+  return { query, selectedId }
+}
+
+function ResearchList({ security }: { security: SecurityProfileDto }) {
+  const [, setSearchParams] = useSearchParams()
+  const { query, selectedId } = useResearchSelection(security)
+  const page: Record<string, string> = query.page > 1 ? { page: String(query.page) } : {}
   return (
-    <Panel title={title} code={TAB_CODES.ana}>
-      <div className="flex h-full items-center justify-center gap-2 p-3 text-center font-sans text-label text-secondary">
-        <Construction aria-hidden className="size-4 shrink-0" />
-        {t('security.planned.ana')}
-      </div>
-    </Panel>
+    <PublicationListPanel
+      query={query}
+      selectedId={selectedId}
+      onSelect={(publication) => setSearchParams({ ...page, publication }, { replace: true })}
+      onPageChange={(next) =>
+        setSearchParams(next > 1 ? { page: String(next) } : {}, { replace: true })
+      }
+    />
   )
+}
+
+function ResearchPreview({ security }: { security: SecurityProfileDto }) {
+  return <PublicationPreviewPanel publicationId={useResearchSelection(security).selectedId} />
+}
+
+function ResearchAnalyst({ security }: { security: SecurityProfileDto }) {
+  const { selectedId } = useResearchSelection(security)
+  return <AnalystPanel analystId={useLibraryPublication(selectedId).data?.analyst.id ?? null} />
 }

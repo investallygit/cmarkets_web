@@ -9,6 +9,7 @@ import {
   changePct,
   indices,
   onAlertTriggered,
+  onPublicationPublished,
   publishNextNews,
   tickIndex,
   tickSecurity,
@@ -27,6 +28,7 @@ export function createMockRealtimeClient(): RealtimeClient {
   const subscribed = new Set<string>()
   const timers: number[] = []
   let stopAlerts: (() => void) | null = null
+  let stopPublications: (() => void) | null = null
   let state: ConnectionState = 'disconnected'
 
   function setState(next: ConnectionState) {
@@ -110,11 +112,14 @@ export function createMockRealtimeClient(): RealtimeClient {
       )
       // Portfolio limits are checked when a transaction or a limit changes.
       stopAlerts = onAlertTriggered(emitAlert)
+      stopPublications = onPublicationPublished((event) => emit('PublicationPublished', event))
     },
     async stop() {
       timers.splice(0).forEach((timer) => window.clearInterval(timer))
       stopAlerts?.()
       stopAlerts = null
+      stopPublications?.()
+      stopPublications = null
       setState('disconnected')
     },
     async subscribe(symbols) {

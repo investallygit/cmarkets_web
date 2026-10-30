@@ -88,3 +88,17 @@ export function portfolioPath(portfolioId: string, tab: PortfolioTab = 'position
   const base = `${routes.portfolio}/${encodeURIComponent(portfolioId)}`
   return tab === 'positions' ? base : `${base}/${tab}`
 }
+
+/** The research library with a publication open: /pub?id=pub-semc-volumes. */
+export function libraryPath(publicationId?: string): string {
+  return publicationId
+    ? `${routes.library}?id=${encodeURIComponent(publicationId)}`
+    : routes.library
+}
+
+/** The publishing studio with a publication open: /pub/new?id=pub-semc-volumes. */
+export function studioPath(publicationId?: string): string {
+  return publicationId
+    ? `${routes.publishingStudio}?id=${encodeURIComponent(publicationId)}`
+    : routes.publishingStudio
+}

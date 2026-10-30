@@ -174,3 +174,108 @@
 .react-grid-item > .react-resizable-handle::after {
   border-color: var(--text-secondary);
 }
+
+/*
+ * Text of a publication (spec section 13): the editor of the studio and the reader of the
+ * library share these rules, so the reader preview is exactly what readers get.
+ */
+@layer components {
+  .publication-text {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .publication-text > * + * {
+    margin-top: 0.6em;
+  }
+
+  .publication-text h2 {
+    margin-top: 1.1em;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .publication-text h3 {
+    margin-top: 0.9em;
+    font-weight: 600;
+  }
+
+  .publication-text strong {
+    font-weight: 600;
+  }
+
+  .publication-text a {
+    color: var(--info);
+    text-decoration: underline;
+  }
+
+  .publication-text ul {
+    padding-left: 1.4em;
+    list-style: disc;
+  }
+
+  .publication-text ol {
+    padding-left: 1.4em;
+    list-style: decimal;
+  }
+
+  .publication-text table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .publication-text th,
+  .publication-text td {
+    position: relative;
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    text-align: right;
+    vertical-align: top;
+  }
+
+  .publication-text th {
+    background-color: var(--bg-panel-header);
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  .publication-text :is(th, td):first-child {
+    font-family: var(--font-sans);
+    text-align: left;
+  }
+
+  .publication-text img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* TipTap's editing marks. */
+  .publication-text.ProseMirror:focus {
+    outline: none;
+  }
+
+  .publication-text .is-editor-empty:first-child::before {
+    float: left;
+    height: 0;
+    color: var(--text-secondary);
+    content: attr(data-placeholder);
+    pointer-events: none;
+  }
+
+  .publication-text .selectedCell::after {
+    position: absolute;
+    inset: 0;
+    background-color: color-mix(in srgb, var(--info) 18%, transparent);
+    content: '';
+    pointer-events: none;
+  }
+
+  .publication-text .ProseMirror-selectednode {
+    outline: 1px solid var(--accent-amber);
+  }
+}
