@@ -16,25 +16,9 @@ function fullScreen(title: string, code: string, api: string[]): PanelPlan[] {
   return [{ id: 'main', title, code, api, x: 0, y: 0, w: 12, h: 26 }]
 }
 
-// prettier-ignore
-const YIELD_CURVES: PanelPlan[] = [
-  { id: 'curves', title: 'CEMAC sovereign yield curves', code: 'YCRV', api: ['GET /yield-curves?country=&date='], x: 0, y: 0, w: 8, h: 15 },
-  { id: 'calculator', title: 'Bond calculator', code: 'YAS', api: ['GET /bonds/{id}', 'POST /bonds/{id}/calculate'], x: 8, y: 0, w: 4, h: 15 },
-  { id: 'auctions', title: 'Latest government securities auctions (BEAC)', code: 'CAL', api: ['GET /auctions?country=&from=&to='], x: 0, y: 15, w: 12, h: 11 },
-]
-
-/** Panel layouts of the mockups in spec section 9 (screens 3 to 9), keyed by screen id. */
+/** Panel layouts of the mockups in spec section 9 (screens 5 to 9), keyed by screen id. */
 // prettier-ignore
 export const SCREEN_PLANS: Partial<Record<string, PanelPlan[]>> = {
-  EQS: [
-    { id: 'criteria', title: 'Criteria', code: 'EQS', api: ['POST /analysis/screener', 'GET /analysis/screens'], x: 0, y: 0, w: 3, h: 26 },
-    { id: 'results', title: 'Results', code: 'EQS', api: ['POST /analysis/screener'], x: 3, y: 0, w: 9, h: 8 },
-    { id: 'comparison', title: 'Comparison', code: 'FA', api: ['GET /analysis/compare?ids=', 'GET /securities/{id}/ratios'], x: 3, y: 8, w: 4, h: 18 },
-    { id: 'income', title: 'Income statement', code: 'FA', api: ['GET /securities/{id}/financials?statement=income'], x: 7, y: 8, w: 5, h: 10 },
-    { id: 'balance', title: 'Balance sheet & cash flow', code: 'FA', api: ['GET /securities/{id}/financials?statement=balance|cashflow'], x: 7, y: 18, w: 5, h: 8 },
-  ],
-  YCRV: YIELD_CURVES,
-  YAS: YIELD_CURVES,
   PORT: [
     { id: 'header', title: 'Portfolio', code: 'PORT', api: ['GET /portfolios', 'GET /portfolios/{id}'], x: 0, y: 0, w: 12, h: 3 },
     { id: 'positions', title: 'Valued positions', code: 'PORT', api: ['GET /portfolios/{id}/positions'], x: 0, y: 3, w: 7, h: 13 },

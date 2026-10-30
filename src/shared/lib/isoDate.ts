@@ -9,6 +9,15 @@ export function addDays(day: string, days: number): string {
   return new Date(toTime(day) + days * DAY_MS).toISOString().slice(0, 10)
 }
 
+/** The same day `months` months away, or the month's last day: 31/03 minus one month is 28/02. */
+export function addMonths(day: string, months: number): string {
+  const [year, month, date] = day.split('-').map(Number)
+  const target = new Date(Date.UTC(year, month - 1 + months, 1))
+  const lastDay = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0))
+  target.setUTCDate(Math.min(date, lastDay.getUTCDate()))
+  return target.toISOString().slice(0, 10)
+}
+
 /** ISO weekday: 1 for Monday to 7 for Sunday. */
 export function isoWeekday(day: string): number {
   return new Date(toTime(day)).getUTCDay() || 7

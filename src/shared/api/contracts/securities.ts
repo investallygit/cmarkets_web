@@ -16,6 +16,11 @@ export interface SecuritySearchItemDto {
   currency: CurrencyCode
 }
 
+/** GET /securities?type=&sector=&country=&market=: the securities of a market. */
+export interface SecurityListItemDto extends SecuritySearchItemDto {
+  sector: string
+}
+
 /** GET /search?q= (command bar autocomplete). Function codes are resolved by the front end. */
 export interface SearchResultsDto {
   securities: SecuritySearchItemDto[]

@@ -1,1 +1,1 @@
-export { bondKeys, useBond } from './api/queries'
+export { bondKeys, useBond, useBondCalculation, useBonds } from './api/queries'

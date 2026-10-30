@@ -1,5 +1,5 @@
 import { Construction } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { lazy, Suspense, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useParams, useSearchParams } from 'react-router'
 import { useSecurityProfile } from '@/entities/security'
@@ -17,12 +17,17 @@ import { PanelEmpty, PanelError, PanelLoading } from '@/shared/ui/StatusViews'
 import { DividendsPanel } from '@/widgets/dividends-panel'
 import { DocumentListPanel } from '@/widgets/document-list-panel'
 import { DocumentViewerPanel } from '@/widgets/document-viewer-panel'
+import {
+  FinancialStatementsPanel,
+  FinancialSummaryPanel,
+} from '@/widgets/financial-statements-panel'
 import { KeyDataPanel } from '@/widgets/key-data-panel'
 import { LatestTradesPanel } from '@/widgets/latest-trades-panel'
 import { NewsArticlePanel } from '@/widgets/news-article-panel'
 import { NewsListPanel } from '@/widgets/news-list-panel'
 import { OrderBookPanel } from '@/widgets/order-book-panel'
 import { PriceChartPanel } from '@/widgets/price-chart-panel'
+import { RatiosPanel } from '@/widgets/ratios-panel'
 import { RedemptionSchedulePanel } from '@/widgets/redemption-schedule-panel'
 import { SecurityDocumentsPanel } from '@/widgets/security-documents-panel'
 import { SecurityHeader } from '@/widgets/security-header'
@@ -30,6 +35,13 @@ import { ShareholdersPanel } from '@/widgets/shareholders-panel'
 import { layoutKey, PROFILE_LAYOUTS } from '../config/layouts'
 import { TAB_CODES } from '../config/tabs'
 import { SecurityTabs } from './SecurityTabs'
+
+// The chart library of the comparison loads with the FA tab, not with every profile.
+const FundamentalsComparison = lazy(() =>
+  import('./FundamentalsComparison').then((module) => ({
+    default: module.FundamentalsComparison,
+  })),
+)
 
 /**
  * Screen 2, security profile (DES and the other tabs of spec section 9): header, tabs, then the
@@ -74,7 +86,7 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
     )
   }
 
-  const { id, type, currency } = security
+  const { id, type, currency, code } = security
   const chart = (variant: 'compact' | 'full') => (
     <PriceChartPanel securityId={id} securityType={type} currency={currency} variant={variant} />
   )
@@ -94,7 +106,17 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
       documents: <SecurityDocumentsPanel securityId={id} />,
     },
     gp: { chart: chart('full') },
-    fa: { planned: <PlannedTab fn="fa" title={t('panels.fundamentals')} /> },
+    fa: {
+      comparison: (
+        <Suspense fallback={<PanelLoading />}>
+          <FundamentalsComparison security={security} />
+        </Suspense>
+      ),
+      ratios: <RatiosPanel securityId={id} code={code} />,
+      statements: <FinancialStatementsPanel securityId={id} code={code} />,
+      summary: <FinancialSummaryPanel securityId={id} code={code} />,
+      chart: chart('compact'),
+    },
     dvd: {
       dividends: <DividendsPanel securityId={id} variant="full" />,
       keydata: keyData,
@@ -127,7 +149,7 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
       keydata: keyData,
       chart: chart('compact'),
     },
-    ana: { planned: <PlannedTab fn="ana" title={t('panels.research')} /> },
+    ana: { planned: <PlannedTab title={t('panels.research')} /> },
   }
 
   return (
@@ -139,14 +161,14 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
   )
 }
 
-/** FA and ANA come with the screens they share their panels with (see ROADMAP.md). */
-function PlannedTab({ fn, title }: { fn: 'fa' | 'ana'; title: string }) {
+/** ANA comes with the research library, whose publication list it shares (see ROADMAP.md). */
+function PlannedTab({ title }: { title: string }) {
   const { t } = useTranslation()
   return (
-    <Panel title={title} code={TAB_CODES[fn]}>
+    <Panel title={title} code={TAB_CODES.ana}>
       <div className="flex h-full items-center justify-center gap-2 p-3 text-center font-sans text-label text-secondary">
         <Construction aria-hidden className="size-4 shrink-0" />
-        {t(`security.planned.${fn}`)}
+        {t('security.planned.ana')}
       </div>
     </Panel>
   )

@@ -17,6 +17,7 @@ import {
   type Locale,
 } from '@/shared/lib/format'
 import { cssVar } from '@/shared/lib/theme'
+import { CHART_FONT } from './chartTheme'
 
 /** Douala is UTC+1 all year round; the chart displays timestamps as given, so shift them. */
 const DOUALA_OFFSET_SECONDS = 3600
@@ -57,7 +58,7 @@ export function baseChartOptions(): DeepPartial<ChartOptions> {
     layout: {
       background: { type: ColorType.Solid, color: cssVar('--bg-panel') },
       textColor: cssVar('--text-secondary'),
-      fontFamily: "'JetBrains Mono Variable', monospace",
+      fontFamily: CHART_FONT,
       fontSize: 11,
       // Required by the Lightweight Charts licence unless TradingView is credited elsewhere.
       attributionLogo: true,

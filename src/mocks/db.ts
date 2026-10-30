@@ -7,6 +7,7 @@ import {
   type MeDto,
   type NewsItemDto,
   type NotificationDto,
+  type SavedScreenDto,
   type TradeDto,
 } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
@@ -15,6 +16,7 @@ import { createAuctions } from './fixtures/auctions'
 import { createCalendar } from './fixtures/calendar'
 import { createNews, createNotifications, UPCOMING_NEWS } from './fixtures/feeds'
 import { INDEX_FIXTURES, type IndexFixture } from './fixtures/market'
+import { SAVED_SCREEN_FIXTURES } from './fixtures/screens'
 import { SECURITY_FIXTURES, type SecurityFixture } from './fixtures/securities'
 import {
   DEMO_USERS,
@@ -240,6 +242,10 @@ export const watchlistStore = userStore<StoredWatchlist[]>('watchlists', () =>
 )
 
 export const alertStore = userStore<StoredAlert[]>('alerts', () => createAlerts(startedAt))
+
+export const savedScreenStore = userStore<SavedScreenDto[]>('screens', () =>
+  SAVED_SCREEN_FIXTURES.map((screen) => ({ ...screen, criteria: [...screen.criteria] })),
+)
 
 /** Records that an alert went off: a notification for the user and the time on the alert. */
 function triggerAlert(alert: StoredAlert, subject: string, message: string): NotificationDto {

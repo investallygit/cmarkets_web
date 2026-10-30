@@ -17,7 +17,7 @@ const INSTRUMENTS = ['', 'BTA', 'OTA'] as const
 
 /**
  * Screen 4 mockup, latest government securities auctions (BEAC): amounts in millions of XAF,
- * cover ratio in green above 1 and red below. Shown by CAL, and by YCRV next. API /auctions.
+ * cover ratio in green above 1 and red below. Shown by CAL and YCRV. API /auctions.
  */
 export function AuctionsPanel() {
   const { t } = useTranslation()

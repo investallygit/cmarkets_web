@@ -124,11 +124,12 @@
     "securityNews": "Actualités",
     "article": "Article",
     "shareholders": "Actionnariat",
-    "fundamentals": "Analyse fondamentale",
     "research": "Recherche",
     "alerts": "Mes alertes",
     "alertHistory": "Alertes déclenchées",
-    "auctions": "Dernières adjudications de titres publics (BEAC)"
+    "auctions": "Dernières adjudications de titres publics (BEAC)",
+    "yieldCurves": "Courbes des taux souverains CEMAC",
+    "bondCalculator": "Calculateur obligataire"
   },
   "market": {
     "movers": {
@@ -287,7 +288,6 @@
     "notFound": "Aucune valeur {{id}}.",
     "notApplicable": "{{code}} ne s'applique pas à {{security}}.",
     "planned": {
-      "fa": "L'analyse fondamentale arrive avec le filtre actions (EQS), étape 4 de la feuille de route.",
       "ana": "La recherche sur la valeur arrive avec la bibliothèque de recherche (PUB), étape 6 de la feuille de route."
     }
   },
@@ -552,5 +552,195 @@
     "filters": "Filtres :",
     "country": "Pays",
     "instrument": "Instrument"
+  },
+  "screener": {
+    "criteria": "Critères",
+    "save": "Enregistrer",
+    "fields": {
+      "market": "Marché",
+      "country": "Pays",
+      "sector": "Secteur",
+      "marketCap": "Capitalisation",
+      "pe": "PER",
+      "dividendYield": "Rendement du dividende",
+      "roe": "ROE",
+      "netDebtToEquity": "Dette nette / Fonds propres",
+      "change1y": "Variation sur 1 an",
+      "priceToBook": "Cours / valeur comptable",
+      "netMargin": "Marge nette",
+      "revenueGrowth": "Croissance du CA (TCAM 5 ans)",
+      "beta": "Bêta"
+    },
+    "allMarkets": "Tous les marchés",
+    "markets": {
+      "BVMAC": "BVMAC — Actions"
+    },
+    "allCountries": "Tous ({{count}})",
+    "allSectors": "Tous",
+    "operators": {
+      "any": "Tous",
+      "above": "Au moins",
+      "below": "Au plus",
+      "between": "Entre"
+    },
+    "operatorOf": "{{label}} : condition",
+    "minOf": "{{label}} : minimum",
+    "maxOf": "{{label}} : maximum",
+    "billions": "Md",
+    "invertedBounds": "Le minimum dépasse le maximum.",
+    "removeCriterion": "Retirer {{label}}",
+    "addCriterion": "Ajouter un critère",
+    "run": "Lancer",
+    "reset": "Réinitialiser",
+    "notRun": "Critères modifiés : lancez pour mettre à jour les résultats.",
+    "savedScreens": "Filtres enregistrés :",
+    "noSavedScreen": "aucun pour l'instant",
+    "deleteScreen": "Supprimer {{name}}",
+    "deleteTitle": "Supprimer le filtre enregistré",
+    "deleteMessage": "Supprimer le filtre « {{name}} » ?",
+    "delete": "Supprimer",
+    "deleted": "« {{name}} » supprimé",
+    "deleteFailed": "Filtre non supprimé : {{message}}",
+    "saveTitle": "Enregistrer le filtre",
+    "screenName": "Nom",
+    "nameRequired": "Donnez un nom au filtre",
+    "saveSummary_one": "{{count}} critère sera enregistré.",
+    "saveSummary_other": "{{count}} critères seront enregistrés.",
+    "saved": "Filtre « {{name}} » enregistré",
+    "results_one": "Résultats : {{count}} valeur sur {{universe}}",
+    "results_other": "Résultats : {{count}} valeurs sur {{universe}}",
+    "resultsTitle": "Résultats",
+    "export": "Exporter",
+    "columnsMenu": "Colonnes",
+    "dayChange": "Variation du jour",
+    "columns": {
+      "sector": "Secteur",
+      "marketCap": "Capi. (Md)",
+      "pe": "PER",
+      "dividendYield": "Rdt",
+      "priceToBook": "C/VC",
+      "roe": "ROE",
+      "netMargin": "Marge nette",
+      "netDebtToEquity": "Dette nette/FP",
+      "revenueGrowth": "Croiss. CA",
+      "beta": "Bêta",
+      "change1y": "Var. 1 an",
+      "changePct": "Var. jour"
+    },
+    "noResult": "Aucune valeur ne remplit tous les critères.",
+    "resultsHint": "Clic : détails ci-dessous. Double-clic : ouvre DES. Clic droit : fiche, listes, alertes, export."
+  },
+  "comparison": {
+    "title": "Comparaison : {{metric}}",
+    "tabs": {
+      "pe": "PER",
+      "dividendYield": "Rdt",
+      "roe": "ROE",
+      "netMargin": "Marge"
+    },
+    "metrics": {
+      "pe": "PER",
+      "dividendYield": "Rendement du dividende",
+      "priceToBook": "Cours / valeur comptable",
+      "roe": "ROE",
+      "netDebtToEquity": "Dette nette / Fonds propres",
+      "ebitdaMargin": "Marge d'EBITDA",
+      "netMargin": "Marge nette"
+    },
+    "sectorAverage": "Moyenne du secteur {{value}}",
+    "noSecurity": "Choisissez une valeur dans les résultats."
+  },
+  "financials": {
+    "tabs": {
+      "income": "Résultat",
+      "balance": "Bilan",
+      "cashflow": "Flux"
+    },
+    "statements": {
+      "income": "Compte de résultat",
+      "balance": "Bilan",
+      "cashflow": "Tableau des flux de trésorerie"
+    },
+    "title": "{{code}} — {{statement}} ({{unit}})",
+    "unit": "M {{currency}}",
+    "summary": "Bilan et flux de trésorerie",
+    "summaryTitle": "Bilan et flux de trésorerie ({{unit}})",
+    "lineItem": "Poste",
+    "cagr": "TCAM",
+    "points": "pt",
+    "noSecurity": "Choisissez une valeur dans les résultats.",
+    "lines": {
+      "revenue": "Chiffre d'affaires",
+      "ebitda": "EBITDA",
+      "operatingIncome": "Résultat opérationnel",
+      "netIncome": "Résultat net",
+      "eps": "BPA ({{currency}})",
+      "netMargin": "Marge nette",
+      "roe": "ROE",
+      "totalAssets": "Total du bilan",
+      "shareholdersEquity": "Capitaux propres",
+      "financialDebt": "Dettes financières",
+      "cash": "Trésorerie",
+      "netFinancialDebt": "Endettement net",
+      "bookValuePerShare": "Actif net par action ({{currency}})",
+      "operatingCashFlow": "Flux d'exploitation",
+      "capitalExpenditure": "Investissements",
+      "freeCashFlow": "Flux de trésorerie disponible",
+      "dividendsPaid": "Dividendes versés"
+    }
+  },
+  "ratios": {
+    "titleShort": "Ratios",
+    "title": "Ratios {{year}} face à {{sector}}",
+    "ratio": "Ratio",
+    "sectorAverage": "Moy. secteur"
+  },
+  "curves": {
+    "months_one": "{{count}}M",
+    "months_other": "{{count}}M",
+    "years_one": "{{count}}A",
+    "years_other": "{{count}}A",
+    "date": "Date {{date}}",
+    "compareTo": "Comparer à :",
+    "offsets": {
+      "none": "Aucune date",
+      "1w": "1 semaine avant",
+      "1m": "1 mois avant",
+      "3m": "3 mois avant",
+      "1y": "1 an avant"
+    },
+    "pastLegend": "{{country}} {{offset}}",
+    "show": "Afficher {{country}}",
+    "hide": "Masquer {{country}}",
+    "auction": "adjudication"
+  },
+  "calculator": {
+    "bond": "Obligation",
+    "noBond": "Aucune obligation cotée",
+    "bullet": "Remboursement in fine",
+    "straight": "{{share}} remboursés par an",
+    "coupon": "coupon {{frequency}}",
+    "settlementDate": "Date de règlement",
+    "cleanPrice": "Prix pied de coupon",
+    "yield": "Rendement actuariel",
+    "faceAmount": "Nominal ({{currency}})",
+    "dateRequired": "Saisissez une date JJ/MM/AAAA",
+    "positiveAmount": "Saisissez un montant supérieur à 0",
+    "hint": "Saisissez le prix ou le rendement : l'autre est recalculé.",
+    "outstanding": "Encours au règlement",
+    "accruedInterest": "Coupon couru",
+    "accruedDays": "{{days}} jours courus sur {{period}}",
+    "dirtyPrice": "Prix coupon couru inclus",
+    "settlementAmount": "Montant à régler",
+    "averageLife": "Durée de vie moyenne",
+    "years": "{{value}} ans",
+    "macaulay": "Duration de Macaulay",
+    "modified": "Duration modifiée",
+    "convexity": "Convexité",
+    "dv01": "DV01",
+    "spread": "Spread / courbe {{country}}",
+    "curveYield": "courbe {{value}}",
+    "basisPoints": "{{value}} pb",
+    "outsideCurve": "La durée de vie moyenne sort de la courbe, qui n'est pas extrapolée."
   }
 }

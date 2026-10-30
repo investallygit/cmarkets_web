@@ -1,4 +1,5 @@
-import type { BondCashFlowDto, BondDto } from '@/shared/api/contracts'
+import type { BondCashFlowDto, BondDto, BondSummaryDto } from '@/shared/api/contracts'
+import { toMarketDay } from '@/shared/lib/format'
 
 type BondTerms = Omit<BondDto, 'schedule' | 'amountOutstanding'> & {
   /** Face value at issue, in the bond's currency. */
@@ -44,4 +45,26 @@ export function cashFlows(terms: BondTerms): BondCashFlowDto[] {
     outstanding = Number((outstanding - amortization).toFixed(4))
     return { date, coupon: Number(coupon.toFixed(4)), amortization, outstanding }
   })
+}
+
+/** The terms, with the amount still outstanding after the payments made by `today`. */
+function summaryOf(terms: BondTerms, schedule: BondCashFlowDto[], today: string): BondSummaryDto {
+  const { amountIssued, ...summary } = terms
+  const paid = schedule.filter((flow) => flow.date <= today).at(-1)
+  return { ...summary, amountOutstanding: (amountIssued * (paid?.outstanding ?? 100)) / 100 }
+}
+
+/** GET /bonds/{id}: the terms and every payment. */
+export function bondOf(id: string, now = Date.now()): BondDto | undefined {
+  const terms = BOND_FIXTURES[id]
+  if (!terms) return undefined
+  const schedule = cashFlows(terms)
+  return { ...summaryOf(terms, schedule, toMarketDay(now)), schedule }
+}
+
+/** GET /bonds */
+export function bondSummaries(now = Date.now()): BondSummaryDto[] {
+  return Object.values(BOND_FIXTURES).map((terms) =>
+    summaryOf(terms, cashFlows(terms), toMarketDay(now)),
+  )
 }

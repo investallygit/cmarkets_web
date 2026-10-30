@@ -1,4 +1,6 @@
 import { alertHandlers } from './alerts'
+import { analysisHandlers } from './analysis'
+import { bondHandlers } from './bonds'
 import { calendarHandlers } from './calendar'
 import { documentHandlers } from './documents'
 import { marketHandlers } from './market'
@@ -11,6 +13,8 @@ export const handlers = [
   ...sessionHandlers,
   ...marketHandlers,
   ...securityHandlers,
+  ...analysisHandlers,
+  ...bondHandlers,
   ...documentHandlers,
   ...newsHandlers,
   ...calendarHandlers,

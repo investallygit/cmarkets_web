@@ -7,8 +7,10 @@ import type {
   OrderBookDto,
   PriceBarDto,
   SearchResultsDto,
+  SecurityListItemDto,
   SecurityProfileDto,
   SecuritySearchItemDto,
+  SecurityType,
   ShareholdersDto,
   TradeDto,
 } from '@/shared/api/contracts'
@@ -66,6 +68,25 @@ export async function findSecurity(
     (security) => security.code.toUpperCase() === wanted || security.id.toUpperCase() === wanted,
   )
   return exact ?? securities.at(0) ?? null
+}
+
+export interface SecurityFilters {
+  type?: SecurityType
+  sector?: string
+  country?: string
+  /** Exchange code, e.g. "BVMAC". */
+  market?: string
+}
+
+/** GET /securities: the securities of a market, e.g. a peer group or the choices of a filter. */
+export function useSecurities(filters: SecurityFilters, { enabled = true } = {}) {
+  return useQuery({
+    queryKey: ['security-list', filters] as const,
+    queryFn: ({ signal }) =>
+      apiClient.get<SecurityListItemDto[]>('/securities', { query: { ...filters }, signal }),
+    staleTime: 60 * 60_000,
+    enabled,
+  })
 }
 
 /** GET /securities/{id}: reference data, which changes rarely. */

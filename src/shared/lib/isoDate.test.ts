@@ -1,11 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { addDays, daysBetween, isoWeekday, isWeekend, startOfWeek } from './isoDate'
+import { addDays, addMonths, daysBetween, isoWeekday, isWeekend, startOfWeek } from './isoDate'
 
 describe('ISO dates', () => {
   it('adds days across months and years', () => {
     expect(addDays('2026-10-30', 3)).toBe('2026-11-02')
     expect(addDays('2026-12-31', 1)).toBe('2027-01-01')
     expect(addDays('2026-03-01', -1)).toBe('2026-02-28')
+  })
+
+  it('adds months, keeping the day when the month has it', () => {
+    expect(addMonths('2026-10-28', -1)).toBe('2026-09-28')
+    expect(addMonths('2026-03-31', -1)).toBe('2026-02-28')
+    expect(addMonths('2026-01-15', -3)).toBe('2025-10-15')
+    expect(addMonths('2026-10-28', -12)).toBe('2025-10-28')
   })
 
   it('finds the weekday and the Monday of the week', () => {

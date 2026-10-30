@@ -9,7 +9,8 @@ import type { WorkspaceItem } from '@/shared/ui/Workspace'
  *   chart    chart    | trades
  *   keydata | income  | documents
  *
- * "income" holds the dividends of an equity or the redemption schedule of a bond.
+ * "income" holds the dividends of an equity or the redemption schedule of a bond. FA shows the
+ * comparison and the statements of the screen 3 mockup, with the ratios and the price chart.
  */
 // prettier-ignore
 export const PROFILE_LAYOUTS: Record<SecurityFunction, readonly WorkspaceItem[]> = {
@@ -22,7 +23,13 @@ export const PROFILE_LAYOUTS: Record<SecurityFunction, readonly WorkspaceItem[]>
     { i: 'documents', x: 8, y: 16, w: 4, h: 10, minW: 3, minH: 4 },
   ],
   gp: [{ i: 'chart', x: 0, y: 0, w: 12, h: 26, minW: 6, minH: 10 }],
-  fa: [{ i: 'planned', x: 0, y: 0, w: 12, h: 26, minW: 4, minH: 4 }],
+  fa: [
+    { i: 'comparison', x: 0, y: 0, w: 4, h: 15, minW: 3, minH: 8 },
+    { i: 'ratios', x: 0, y: 15, w: 4, h: 11, minW: 3, minH: 6 },
+    { i: 'statements', x: 4, y: 0, w: 8, h: 10, minW: 4, minH: 6 },
+    { i: 'summary', x: 4, y: 10, w: 8, h: 6, minW: 4, minH: 4 },
+    { i: 'chart', x: 4, y: 16, w: 8, h: 10, minW: 4, minH: 8 },
+  ],
   dvd: [
     { i: 'dividends', x: 0, y: 0, w: 8, h: 11, minW: 4, minH: 4 },
     { i: 'keydata', x: 8, y: 0, w: 4, h: 11, minW: 3, minH: 5 },

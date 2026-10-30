@@ -1,6 +1,5 @@
 import { http, HttpResponse } from 'msw'
 import type {
-  BondDto,
   ChartDrawingDto,
   ChartDrawingsDto,
   DividendDto,
@@ -11,6 +10,7 @@ import type {
   OrderBookDto,
   QuoteDto,
   SearchResultsDto,
+  SecurityListItemDto,
   SecurityProfileDto,
   SecuritySearchItemDto,
   ShareholdersDto,
@@ -25,7 +25,7 @@ import {
   writeDrawings,
   type MockSecurity,
 } from '../db'
-import { BOND_FIXTURES, cashFlows } from '../fixtures/bonds'
+import { bondOf } from '../fixtures/bonds'
 import { PROFILE_FIXTURES } from '../fixtures/profiles'
 import { dayOffset, priceHistory, warmUpDays } from '../lib/bars'
 import { api, latency, noContent, problem } from '../lib/http'
@@ -53,16 +53,6 @@ function toSearchItem(security: MockSecurity): SecuritySearchItemDto {
 
 function unknownSecurity(id: unknown) {
   return problem(404, 'Unknown security', `No security ${String(id)}.`)
-}
-
-function bondOf(id: string): BondDto | undefined {
-  const terms = BOND_FIXTURES[id]
-  if (!terms) return undefined
-  const { amountIssued, ...rest } = terms
-  const schedule = cashFlows(terms)
-  const today = toMarketDay(Date.now())
-  const paid = schedule.filter((flow) => flow.date <= today).at(-1)
-  return { ...rest, amountOutstanding: (amountIssued * (paid?.outstanding ?? 100)) / 100, schedule }
 }
 
 function toProfile(security: MockSecurity): SecurityProfileDto | undefined {
@@ -173,6 +163,29 @@ export const securityHandlers = [
     })
   }),
 
+  http.get(api('/securities'), async ({ request }) => {
+    await latency()
+    const query = new URL(request.url).searchParams
+    const filters = {
+      type: query.get('type'),
+      sector: query.get('sector'),
+      country: query.get('country'),
+      exchange: query.get('market'),
+    }
+    const items = [...securities.values()]
+      .filter((security) =>
+        Object.entries(filters).every(
+          ([field, value]) => !value || security[field as keyof typeof filters] === value,
+        ),
+      )
+      .map((security): SecurityListItemDto => ({
+        ...toSearchItem(security),
+        sector: security.sector,
+      }))
+      .sort((a, b) => a.code.localeCompare(b.code))
+    return HttpResponse.json(items)
+  }),
+
   http.get(api('/securities/:id'), async ({ params }) => {
     await latency()
     const security = securities.get(String(params.id))
@@ -239,13 +252,6 @@ export const securityHandlers = [
         shares: Math.round((shares * holder.pct) / 100),
       })),
     })
-  }),
-
-  http.get(api('/bonds/:id'), async ({ params }) => {
-    await latency()
-    const bond = bondOf(String(params.id))
-    if (!bond) return problem(404, 'Unknown bond', `No bond ${String(params.id)}.`)
-    return HttpResponse.json<BondDto>(bond)
   }),
 
   // Computed on a longer history than asked, so the lines start at the first bar shown.

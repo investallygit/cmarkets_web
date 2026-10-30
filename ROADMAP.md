@@ -2,9 +2,9 @@
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`.
 
-MKT, DES, N, CAL and ALRT are built. The other 19 screens are placeholders: their route, menu
-entry, permission and mockup layout exist, with the API each panel will call
-(`src/pages/placeholder/config/plans.ts`). Login is not started.
+MKT, DES (with its FA tab), EQS, YCRV, YAS, N, CAL and ALRT are built. The other 16 screens are
+placeholders: their route, menu entry, permission and mockup layout exist, with the API each panel
+will call (`src/pages/placeholder/config/plans.ts`). Login is not started.
 
 DATA, HIST and EODH are planned with IMP, and ANLY and MOD with USER: in the mockups they are
 panels of the same screen. Sizes are relative: S < M < L < XL.
@@ -16,7 +16,7 @@ panels of the same screen. Sizes are relative: S < M < L < XL.
 | 1    | Shared groundwork, batch 1: form kit, `PriceChart`, XLSX export | Done   |
 | 2    | DES                                                             | Done   |
 | 3    | Watchlist editing (MKT), N, CAL, ALRT                           | Done   |
-| 4    | EQS / FA, then YCRV / YAS                                       | To do  |
+| 4    | EQS / FA, then YCRV / YAS                                       | Done   |
 | 5    | PORT                                                            | To do  |
 | 6    | PUB, then PUB NEW                                               | To do  |
 | 7    | CFG, login and OTP (needed before connecting the real back end) | To do  |
@@ -55,12 +55,21 @@ Done in step 3, with the monitoring screens:
   its upper-case text or sits inside its drag handle.
 - **`PanelSelect`** for choices in a panel title bar ("ALL COUNTRIES"), **`useSearchParamsUpdate`**
   for filters kept in the URL, the CEMAC country list with the short names of the mockups.
-- **BEAC auctions panel** (`widgets/auctions-panel`), shown by CAL now and by YCRV in step 4.
+- **BEAC auctions panel** (`widgets/auctions-panel`), shown by CAL and YCRV.
+
+Done in step 4, with the analysis screens:
+
+- **Recharts** for the EQS comparison bars and the yield curves (log maturity axis), with
+  `useChartTheme` giving it the section 8 colours. Allocation and performance (PORT) come next.
+- **Export links in a title bar** ("EXPORT XLSX · CSV" of the screen 3 mockup): `DataTable` hands
+  its export through `exportRef`, so the rows go out as sorted.
+- **`GET /securities`** (`useSecurities`): the equities of a market, for a peer group or the
+  choices of a filter. `useDebouncedValue`, `addMonths`, and a unit after a change (`+0.3 pt`).
 
 Still to do, with the first screen that needs it:
 
-- **Recharts**, named by the spec for allocation and performance; it also draws the yield curves
-  (log maturity axis) and the EQS comparison bars. PNG and PDF export of charts (spec section 3).
+- **PNG and PDF export of charts** (spec section 3), for the price chart, the comparison bars and
+  the curves alike.
 - **Pagination**: the `{ items, page, pageSize, totalCount }` convention and a pager (PUB, USER,
   HIST, AUDT).
 - **Subscription gating** (Monitoring, Analysis, Portfolio, free trial): `/me` does not return the
@@ -95,8 +104,9 @@ Still to do, with the first screen that needs it:
   and MACD panes, comparison with securities and indices rebased to 100, and trend lines and
   levels saved per user. A bond gets its terms and redemption schedule instead of the key data
   and dividends, and no FA, DVD or HDS tab.
-- **Still to do**: the FA tab comes with EQS (step 4), the ANA tab with PUB (step 6). PNG and PDF
-  export of the chart stays in the shared groundwork.
+- **Built in step 4**: the FA tab, with the panels of EQS (see below).
+- **Still to do**: the ANA tab comes with PUB (step 6). PNG and PDF export of the chart stays in
+  the shared groundwork.
 
 ### N · News (no mockup): done
 
@@ -133,31 +143,47 @@ Still to do, with the first screen that needs it:
   analysts with PUB (step 6), the phone number and e-mail address for SMS and e-mail with CFG
   (step 7).
 
-### EQS / FA · Equity screener and fundamental analysis (screen 3): L
+### EQS / FA · Equity screener and fundamental analysis (screen 3): done
 
-- **UI**: criteria panel (9 criteria, active ones with an amber border, "+ Add a criterion",
-  Run / Reset, saved screens, SAVE); results (sortable, configurable columns, XLSX / CSV; click =
-  lower panels, double-click = DES); comparison (horizontal bars, the selected security in amber,
-  the sector average as a dashed line; tabs P/E, Yield, ROE, Margin); financial statements (5
-  years and CAGR; tabs Income, Balance, Cash flow).
-- **Data**: `POST /analysis/screener`, `/analysis/screens`, `/analysis/compare`, `/ratios`,
-  `/financials`. The mock needs 2021-2025 statements for the BVMAC equities.
-- **Watch for**: the page holds the selected security, like the index selection of MKT. CAGR and
-  sector averages come from the server (spec section 14). The comparison and statement panels are
-  reused by the FA tab of DES.
+- **Built**: criteria of the mockup (market, country, sector, then ranges "at least", "at most"
+  or "between" for market cap, P/E, dividend yield, ROE, net debt / equity and 1-year change),
+  amber while they filter; "+ Add a criterion" adds price-to-book, net margin, revenue growth and
+  beta. Run, Reset (and run), "Criteria changed" until the next run; saved screens (High yield,
+  Banks) load and run with a click, SAVE names the criteria, × deletes one. Results: "5 of 7
+  securities", sortable, columns chosen in COLUMNS (kept in the browser), day change in real time,
+  XLSX / CSV in the title bar and the right-click menu; a click feeds the lower panels, a
+  double-click opens DES. Comparison: P/E, yield, ROE, margin bars, the selected security in amber
+  first, its sector average dashed in yellow; a click on a bar selects it. Statements: income,
+  balance sheet, cash flow over 2021-2025 with the CAGR (or the change in points for a
+  percentage), and the balance sheet and cash flow key lines below. The criteria, the results and
+  the selection survive a visit to DES.
+- **FA tab of DES**: the same comparison against the other equities of the market, its sector
+  first, the ratios next to the sector average, the statements and the price chart. Recharts loads
+  with the tab, not with every profile.
+- **Mock**: 2021-2025 accounts of the seven BVMAC equities, built so the screen 3 mockup's ratios
+  come back at the mockup prices (SEMC grows as in the mockup); ratios follow the live price; the
+  sector averages are a table, Beverages at the mockup's 6.3%.
+- **Still to do**: the "ANNUAL" switch of the mockup: the statements file has half-years, the API
+  no period parameter.
 
-### YCRV / YAS · Yield curves and bond calculator (screen 4): L
+### YCRV / YAS · Yield curves and bond calculator (screen 4): done
 
-- **UI**: curves of the 6 CEMAC countries (log axis 3M to 10Y, dashed comparison with a past date,
-  click a legend item to hide a country); bond calculator (amber inputs: settlement date, clean
-  price or yield, face amount; results: yield to maturity, accrued interest, dirty price,
-  settlement amount, average life, durations, spread vs the curve); BEAC auctions (cover ratio
-  green above 1, red below).
-- **Data**: `/yield-curves`, `/bonds`, `/bonds/{id}`, `POST /bonds/{id}/calculate`, `/auctions`.
-- **Watch for**: recalculation under 300 ms (debounce, cancel stale requests). The mock should
-  implement the section 14.1 formulas and test them against cases A and B: the mockup values
-  differ, and the spec makes the test cases authoritative. US and European curves are in the spec
-  but not in the mockup.
+- **Built**: the curves of the six CEMAC countries in the mockup's colours on a log axis from 3M
+  to 10Y; a click on a legend item hides a country; "COMPARE TO" draws the curve of the
+  calculator's bond country 1 week to 1 year earlier, dashed; the tooltip marks auction points.
+  Calculator: settlement date (two business days after today, as in the mockup), clean price or
+  yield (the figure typed last drives, the other follows), face amount, all amber; then the
+  outstanding principal, accrued interest, dirty price, settlement amount, average life, Macaulay
+  and modified durations, convexity, DV01 and the spread over the issuer's curve. The figures come
+  back about 150 ms after typing stops (120 ms pause, a stale request is cancelled). `/ycrv` opens
+  the first bond, `ECMR 6.25 2029 YAS` that bond; picking another goes to `/yas/{id}`. The BEAC
+  auctions below.
+- **Mock**: the section 14.1 formulas, tested against cases A and B to four decimals, with
+  Newton-Raphson then bisection for the yield; curves from a weekly curve file and the auctions of
+  the last 90 days (BTA rates converted, 4.95% on 182 days giving 5.0819%); earlier dates 0.15
+  point lower a month back.
+- **Still to do**: US and European curves (in the spec, not in the mockup); bond quotes on the
+  CEMAC curves (left out by the mock).
 
 ### PORT · Portfolio (screen 5): XL
 
@@ -284,3 +310,18 @@ Still to do, with the first screen that needs it:
 - **Alerts**: does the quota count alerts that are off (the prototype counts every alert)? Does a
   price alert go off at each crossing, or once (the prototype: once a session)? The notification
   text should be written in the user's language.
+- **Screener**: the request and response bodies are not specified. The prototype sends
+  `{ criteria: [{ field, values } | { field, min, max }] }` (bounds included) and gets
+  `{ universe, items }`; saved screens are `{ name, criteria }`. No endpoint lists the sectors (the
+  prototype reads them from `/securities`); section 10 filters on sector codes (`sector=BANK`) but
+  the profile returns names, in English in both languages. The columns chosen have no endpoint.
+- **Fundamentals**: over which equities is a sector average computed (the prototype uses a fixed
+  table)? The line items of the "Financial statements" file need agreed codes (the prototype:
+  `revenue`, `ebitda`, `operatingIncome`...).
+- **Bond calculator**: the body is `{ settlementDate, faceAmount, cleanPrice | yieldPct }` in the
+  prototype, with a 400 for a date before the issue or after the last payment and a 422 when no
+  yield fits. Which settlement lag (the mockup shows two business days) and which curve date for
+  the spread (the prototype: the settlement date, today at the latest)? "No extrapolation beyond
+  the first and last points (shown dashed)": the prototype draws nothing outside the points and
+  gives no spread there. `/yield-curves` without a country returns all six. Validation messages
+  should come in the user's language.

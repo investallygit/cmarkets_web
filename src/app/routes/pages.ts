@@ -11,6 +11,12 @@ const MarketDashboardPage = lazy(() =>
 const SecurityProfilePage = lazy(() =>
   import('@/pages/security-profile').then((module) => ({ default: module.SecurityProfilePage })),
 )
+const EquityScreenerPage = lazy(() =>
+  import('@/pages/equity-screener').then((module) => ({ default: module.EquityScreenerPage })),
+)
+const YieldCurvesPage = lazy(() =>
+  import('@/pages/yield-curves').then((module) => ({ default: module.YieldCurvesPage })),
+)
 const NewsPage = lazy(() => import('@/pages/news').then((module) => ({ default: module.NewsPage })))
 const MarketCalendarPage = lazy(() =>
   import('@/pages/market-calendar').then((module) => ({ default: module.MarketCalendarPage })),
@@ -25,6 +31,9 @@ const PlaceholderPage = lazy(() =>
 const PAGES: Partial<Record<ScreenTextKey, Page>> = {
   MKT: MarketDashboardPage,
   DES: SecurityProfilePage,
+  EQS: EquityScreenerPage,
+  YCRV: YieldCurvesPage,
+  YAS: YieldCurvesPage,
   N: NewsPage,
   CAL: MarketCalendarPage,
   ALRT: AlertsPage,

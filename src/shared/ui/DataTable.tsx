@@ -2,7 +2,15 @@ import { useTable, type Row, type RowData } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { clsx } from 'clsx'
 import { ChevronDown, ChevronUp, Download, FileSpreadsheet } from 'lucide-react'
-import { useCallback, useContext, useRef, useState, type MouseEvent } from 'react'
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+  type MutableRefObject,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { downloadCsv, type CsvCell } from '@/shared/lib/csv'
 import { downloadXlsx } from '@/shared/lib/xlsx'
@@ -18,6 +26,9 @@ const ROW_HEIGHT = 22
 /** Small tables render every row; from this size rows are virtualized. */
 const VIRTUALIZE_FROM = 60
 
+/** Exports the rows as shown, sorting included. */
+export type TableExporter = (format: 'csv' | 'xlsx') => void
+
 export interface DataTableProps<TRow extends RowData> {
   data: TRow[]
   columns: DataColumns<TRow>
@@ -31,6 +42,8 @@ export interface DataTableProps<TRow extends RowData> {
   rowClassName?: (row: TRow) => string | undefined
   enableSorting?: boolean
   emptyMessage?: string
+  /** Set to the table's export, for Excel and CSV links outside the table (a panel title bar). */
+  exportRef?: MutableRefObject<TableExporter | null>
 }
 
 interface MenuState {
@@ -59,6 +72,7 @@ export function DataTable<TRow extends RowData>({
   rowClassName,
   enableSorting = true,
   emptyMessage,
+  exportRef,
 }: DataTableProps<TRow>) {
   const { t } = useTranslation()
   const canExport = useContext(TableExportContext)
@@ -85,7 +99,7 @@ export function DataTable<TRow extends RowData>({
     .join(' ')
 
   /** The rows as shown, sorting included. */
-  const exportTable = (format: 'csv' | 'xlsx') => {
+  const exportTable: TableExporter = (format) => {
     const exported = leafColumns.filter((column) => column.columnDef.meta?.exportable !== false)
     const header = exported.map((column) =>
       typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id,
@@ -98,6 +112,11 @@ export function DataTable<TRow extends RowData>({
       )
     })
   }
+
+  // After each render, so the export sees the rows and the sorting of the last one.
+  useEffect(() => {
+    if (exportRef) exportRef.current = exportTable
+  })
 
   const openMenu = (event: MouseEvent, row: TRow) => {
     const rowItems = rowMenu?.(row) ?? []
