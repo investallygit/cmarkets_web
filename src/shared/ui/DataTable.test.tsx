@@ -40,6 +40,22 @@ describe('DataTable', () => {
     expect(bodyCodes()).toEqual(['SIAT', 'SEMC', 'BANGE'])
   })
 
+  it('keeps the footer row last, whatever the sorting', async () => {
+    const user = userEvent.setup()
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        getRowId={getRowId}
+        footer={{ cells: { code: 'Cash XAF', last: '84,908,200' } }}
+      />,
+    )
+    await user.click(screen.getByRole('button', { name: 'Security' }))
+    expect(bodyCodes()).toEqual(['BANGE', 'SEMC', 'SIAT', 'Cash XAF'])
+    await user.click(screen.getByRole('button', { name: 'Security' }))
+    expect(bodyCodes()).toEqual(['SIAT', 'SEMC', 'BANGE', 'Cash XAF'])
+  })
+
   it('offers Excel and CSV export, unless the user may not export', async () => {
     const user = userEvent.setup()
     const table = <DataTable data={data} columns={columns} getRowId={getRowId} />

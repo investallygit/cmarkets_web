@@ -6,6 +6,7 @@ import {
   useUpdateAlert,
   type AlertDialogRequest,
 } from '@/entities/alert'
+import { usePortfolios } from '@/entities/portfolio'
 import { priceDecimals, useQuote } from '@/entities/quote'
 import { SecurityPicker, useSecurityProfile } from '@/entities/security'
 import { useCurrentUser } from '@/entities/session'
@@ -63,6 +64,7 @@ function AlertForm({ request, onClose }: { request: AlertDialogRequest; onClose:
   const [form, setForm] = useState(() => initialAlertForm(editing))
   const [submitted, setSubmitted] = useState(false)
   const alerts = useAlerts()
+  const portfolios = usePortfolios({ enabled: form.type === 'portfolio' })
   const create = useCreateAlert()
   const update = useUpdateAlert()
   const mutation = editing ? update : create
@@ -231,7 +233,19 @@ function AlertForm({ request, onClose }: { request: AlertDialogRequest; onClose:
         )}
 
         {form.type === 'portfolio' && (
-          <p className="font-sans text-data text-secondary">{t('alerts.portfolioHint')}</p>
+          <Field label={t('alerts.portfolio')} hint={t('alerts.portfolioHint')}>
+            <Select
+              value={form.portfolioId}
+              options={[
+                { value: '', label: t('alerts.allPortfolios') },
+                ...(portfolios.data ?? []).map((portfolio) => ({
+                  value: portfolio.id,
+                  label: portfolio.name,
+                })),
+              ]}
+              onChange={(portfolioId) => set({ portfolioId })}
+            />
+          </Field>
         )}
 
         <fieldset className="flex flex-col gap-1.5">

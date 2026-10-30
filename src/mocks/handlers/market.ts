@@ -13,18 +13,19 @@ import { toMarketDay } from '@/shared/lib/format'
 import {
   changePct,
   currentAccountType,
+  indexDailyCloses,
   indices,
   securities,
   type MockIndex,
   type MockSecurity,
 } from '../db'
+import { BOND_FIXTURES } from '../fixtures/bonds'
 import { FX_FIXTURES, POLICY_RATE_FIXTURES } from '../fixtures/market'
 import { generateHistory } from '../lib/history'
+import { indexHistoryPoints } from '../lib/indexHistory'
 import { api, latency, problem } from '../lib/http'
 
 const INTERVALS: readonly HistoryInterval[] = ['5m', '30m', '1d', '1w']
-/** BVMAC bonds trade by nominal of XAF 10,000, quoted per 100. */
-const BOND_NOMINAL = 10_000
 
 function toIndexQuote(index: MockIndex): IndexQuoteDto {
   return {
@@ -57,9 +58,11 @@ function toMover(security: MockSecurity): MoverDto {
   }
 }
 
+/** Bonds trade by number of bonds, quoted per 100 of their nominal. */
 function valueTraded(security: MockSecurity): number {
-  return security.type === 'bond'
-    ? (security.volume * BOND_NOMINAL * security.last) / 100
+  const nominal = BOND_FIXTURES[security.id]?.nominal
+  return nominal
+    ? (security.volume * nominal * security.last) / 100
     : security.volume * security.last
 }
 
@@ -141,6 +144,11 @@ export const marketHandlers = [
     const interval = INTERVALS.find((candidate) => candidate === query.get('interval')) ?? '1d'
     const to = query.get('to') ?? toMarketDay(Date.now())
     const from = query.get('from') ?? to
+    // Sessions follow the index's members, so the index and its securities move together.
+    if (interval === '1d' || interval === '1w') {
+      const closes = indexDailyCloses(index.code, from, to)
+      if (closes) return HttpResponse.json(indexHistoryPoints(closes, interval))
+    }
     return HttpResponse.json(generateHistory(index.code, index.value, from, to, interval))
   }),
 

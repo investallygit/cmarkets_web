@@ -2,9 +2,9 @@
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`.
 
-MKT, DES (with its FA tab), EQS, YCRV, YAS, N, CAL and ALRT are built. The other 16 screens are
-placeholders: their route, menu entry, permission and mockup layout exist, with the API each panel
-will call (`src/pages/placeholder/config/plans.ts`). Login is not started.
+MKT, DES (with its FA tab), EQS, YCRV, YAS, PORT, N, CAL and ALRT are built. The other 15 screens
+are placeholders: their route, menu entry, permission and mockup layout exist, with the API each
+panel will call (`src/pages/placeholder/config/plans.ts`). Login is not started.
 
 DATA, HIST and EODH are planned with IMP, and ANLY and MOD with USER: in the mockups they are
 panels of the same screen. Sizes are relative: S < M < L < XL.
@@ -17,7 +17,7 @@ panels of the same screen. Sizes are relative: S < M < L < XL.
 | 2    | DES                                                             | Done   |
 | 3    | Watchlist editing (MKT), N, CAL, ALRT                           | Done   |
 | 4    | EQS / FA, then YCRV / YAS                                       | Done   |
-| 5    | PORT                                                            | To do  |
+| 5    | PORT                                                            | Done   |
 | 6    | PUB, then PUB NEW                                               | To do  |
 | 7    | CFG, login and OTP (needed before connecting the real back end) | To do  |
 | 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS  | To do  |
@@ -60,11 +60,27 @@ Done in step 3, with the monitoring screens:
 Done in step 4, with the analysis screens:
 
 - **Recharts** for the EQS comparison bars and the yield curves (log maturity axis), with
-  `useChartTheme` giving it the section 8 colours. Allocation and performance (PORT) come next.
+  `useChartTheme` giving it the section 8 colours.
 - **Export links in a title bar** ("EXPORT XLSX · CSV" of the screen 3 mockup): `DataTable` hands
   its export through `exportRef`, so the rows go out as sorted.
 - **`GET /securities`** (`useSecurities`): the equities of a market, for a peer group or the
   choices of a filter. `useDebouncedValue`, `addMonths`, and a unit after a change (`+0.3 pt`).
+
+Done in step 5, with PORT:
+
+- **Chart palette**: section 8 has none, so `--chart-1` to `--chart-8` colour series that only
+  carry identity (allocation by sector or country), in a fixed order; they pass the lightness,
+  colour-blind separation and 3:1 contrast checks on the panel background. Ordered classes (bond
+  maturities) take a one-hue ramp, `--chart-ordinal-1` to `-5`. Both come with `useChartTheme`.
+- **Uploads and jobs**: `apiClient.postForm` sends a multipart form (an import file, a logo); a
+  job is asked for its progress until it is done (`useReportJob`), then its file is fetched with
+  the session (`useReportFile`, `saveBlob`).
+- **Live values**: `useLivePrices` follows several securities at once; `DataTable` takes a
+  `footer` row outside the sorting (the cash of a portfolio); `useMarketDay` gives today in Douala
+  without reading the clock during render.
+- **Mock**: the daily history of the BVMAC and CMarket indices is chained from their members'
+  closes, so an index and its securities move together; `read-excel-file` reads Excel uploads;
+  MSW builds into a chunk of its own.
 
 Still to do, with the first screen that needs it:
 
@@ -139,9 +155,10 @@ Still to do, with the first screen that needs it:
 - **Mock**: the fake server sets off the user's alerts as a server would: price and volume alerts
   when a trade crosses their threshold (once a session), release and auction alerts when the news
   arrives.
-- **Still to do**: choosing one portfolio for a limit alert comes with PORT (step 5), following
-  analysts with PUB (step 6), the phone number and e-mail address for SMS and e-mail with CFG
-  (step 7).
+- **Built in step 5**: a portfolio limit alert watches one portfolio or all of them, and goes off
+  when a transaction or a limit change breaches a limit.
+- **Still to do**: following analysts with PUB (step 6), the phone number and e-mail address for
+  SMS and e-mail with CFG (step 7).
 
 ### EQS / FA · Equity screener and fundamental analysis (screen 3): done
 
@@ -185,19 +202,36 @@ Still to do, with the first screen that needs it:
 - **Still to do**: US and European curves (in the spec, not in the mockup); bond quotes on the
   CEMAC curves (left out by the mock).
 
-### PORT · Portfolio (screen 5): XL
+### PORT · Portfolio (screen 5): done
 
-- **UI**: header (portfolio selector, 7 metrics, "New transaction" opens a side form); 6 tabs
-  Positions, Transactions, Performance, Risk, Income, Reports. The Positions tab has the 5 panels
-  of the mockup; a weight above its limit shows in yellow with ▲, a breached risk limit in red
-  with the limit below.
-- **Functions**: create, edit and delete portfolios (currency, benchmark, limits); 9 transaction
-  types; Excel / CSV import from a template; PDF report as an async job (`POST .../reports`, then
-  poll `/reports/{jobId}`); model portfolios (the only type for Students, 3 at most).
-- **Data**: the whole `/portfolios/*` group.
-- **Watch for**: TWR and risk metrics (spec sections 14.2 and 14.3) come from the server, with
-  "insufficient data" below 60 observations. To decide: when prices tick in real time, do Value
-  and Unrealized follow? If so, the front end multiplies.
+- **Built**: header with the portfolio selector (new, settings, delete) and the 7 metrics of the
+  mockup. Six tabs, one route each (`/port/{id}`, `/port/{id}/risk`...), each with its saved
+  layout. Positions has the 5 panels of the mockup: the lines (a weight above the limit on one
+  issuer in yellow with ▲, cash last, Excel / CSV export, IMPORT CSV), performance against the
+  benchmark, allocation by sector, country or asset class, risk metrics (a breached limit in red
+  with the limit below) and upcoming income with "Generate portfolio PDF report". Transactions:
+  the history with the gain each sale realized; a right-click corrects or deletes one. Performance:
+  portfolio in amber, benchmark in grey, base 100, YTD to inception, with TWR, annualized return,
+  IRR and the returns by period. Risk: every metric of spec section 14.3 ("insufficient data"
+  below 60 returns), the limits and their status, issuer concentration, the bonds by maturity.
+  Income: upcoming and received. Reports: period, sections, comments and logo; the job is followed
+  until the PDF shows. "New transaction" opens the side form for the 9 types, with the cash a share
+  trade takes; "Buy" and "Sell" on a line fill it in. Import from the CSV or Excel template: all
+  rows or none, errors listed by line. Model portfolios simulate an allocation (amount, start
+  date, weights): the only kind a Student holds. The quota of the account type (3, 5, unlimited)
+  comes from `/me`; PDF reports need the Portfolio manager account.
+- **Real time**: value, unrealized gain, weights, day change and the year-to-date returns follow
+  live prices: each line comes with its value per point of price and its accrued interest, and
+  today's live return is chained onto the server's year to date.
+- **Mock**: replays the transactions at each session's closing price, bonds on their principal
+  outstanding with accrued interest (spec section 14.2); average cost, realized gains, TWR and the
+  risk metrics follow sections 14.2 and 14.3 and are tested against their cases. The sample fund
+  ends with the mockup's lines, bought in two tranches, with deposits, a withdrawal, custody fees
+  and the dividends, coupons and redemption it received. A breach after a transaction or a limit
+  change sets off the portfolio alerts.
+- **Still to do**: sharing a portfolio with colleagues (spec section 6) has no endpoint; the mock
+  leaves the logo out of the PDF; a portfolio in EUR holds XAF securities at the peg, no floating
+  currency.
 
 ### PUB · Research library (screen 8): L
 
@@ -318,6 +352,20 @@ Still to do, with the first screen that needs it:
 - **Fundamentals**: over which equities is a sector average computed (the prototype uses a fixed
   table)? The line items of the "Financial statements" file need agreed codes (the prototype:
   `revenue`, `ebitda`, `operatingIncome`...).
+- **Portfolios**: the bodies are not specified. The prototype sends a transaction as
+  `{ type, date, securityId, quantity, price, fees, amount, note }`, prices and fees in the
+  security's currency, amounts in the portfolio's; the server adds a bond's accrued interest.
+  Portfolios and transactions carry a `version` (409 when someone else saved meanwhile). Model
+  portfolios have no endpoint: their `{ notional, startDate, lines }` go in the portfolio's
+  settings. Which limits can a user set (the prototype: weight of one issuer, which also marks the
+  lines with ▲, volatility, drawdown, beta, bond duration), and when are they checked (the
+  prototype: after a change of transactions or limits, and when the risk is read)? The import
+  template has no endpoint (the front end writes it); past reports have no list (the prototype
+  shows those of the session). BVMAC-A is a price index: is there a total return index to use?
+- **Screen 5 mockup**: its figures do not add up (lines worth XAF 1,202.7 M for a total of
+  1,248.65 M; "Upcoming income (3 months)" of 18.4 M against 63.8 M listed). The prototype computes
+  them, leaves principal out of upcoming income, and holds 15,000 and 11,000 bonds of XAF 10,000
+  for the mockup's 1,500 and 1,100.
 - **Bond calculator**: the body is `{ settlementDate, faceAmount, cleanPrice | yieldPct }` in the
   prototype, with a 400 for a date before the issue or after the last payment and a 422 when no
   yield fits. Which settlement lag (the mockup shows two business days) and which curve date for

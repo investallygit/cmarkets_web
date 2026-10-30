@@ -32,6 +32,8 @@ export interface AlertFormState {
   /** '' for any CEMAC country. */
   country: string
   about: PublicationCondition['about']
+  /** '' for all of the user's portfolios. */
+  portfolioId: string
   channels: AlertChannel[]
   enabled: boolean
 }
@@ -56,6 +58,7 @@ export function initialAlertForm(
     multiple: DEFAULT_MULTIPLE,
     country: '',
     about: 'analysts',
+    portfolioId: '',
     channels: ['push'],
     enabled: true,
   }
@@ -84,7 +87,7 @@ export function initialAlertForm(
     case 'auction':
       return { ...base, country: condition.country ?? '' }
     case 'portfolio':
-      return base
+      return { ...base, portfolioId: condition.portfolioId ?? '' }
     case 'publication':
       return {
         ...base,
@@ -143,7 +146,7 @@ export function toAlertInput(form: AlertFormState): AlertInputDto {
       case 'auction':
         return { type: 'auction', country: form.country || null }
       case 'portfolio':
-        return { type: 'portfolio', portfolioId: null }
+        return { type: 'portfolio', portfolioId: form.portfolioId || null }
       case 'publication':
         return {
           type: 'publication',

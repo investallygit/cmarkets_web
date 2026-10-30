@@ -8,15 +8,24 @@ import type {
   Paged,
 } from '@/shared/api/contracts'
 import { CEMAC_COUNTRIES } from '@/shared/config/countries'
-import { alertStore, currentUser, notifications, securities } from '../db'
+import { alertStore, currentUser, notifications, portfolioStore, securities } from '../db'
 import type { StoredAlert } from '../fixtures/alerts'
 import { api, latency, noContent, paginate, problem } from '../lib/http'
 
 const CHANNELS: readonly AlertChannel[] = ['push', 'email', 'sms']
 
 function toDto(alert: StoredAlert): AlertDto {
-  const securityId = 'securityId' in alert.condition ? alert.condition.securityId : null
-  return { ...alert, securityCode: (securityId && securities.get(securityId)?.code) ?? null }
+  const { condition } = alert
+  const securityId = 'securityId' in condition ? condition.securityId : null
+  const portfolioId = condition.type === 'portfolio' ? condition.portfolioId : null
+  return {
+    ...alert,
+    securityCode: (securityId && securities.get(securityId)?.code) ?? null,
+    portfolioName:
+      (portfolioId &&
+        portfolioStore.read().find((portfolio) => portfolio.id === portfolioId)?.name) ??
+      null,
+  }
 }
 
 type Errors = Record<string, string[]>
@@ -66,8 +75,16 @@ function readCondition(value: Partial<AlertCondition> | undefined, errors: Error
         return fail('country', 'A CEMAC country.')
       }
       return { type: 'auction', country: value.country ?? null } as const
-    case 'portfolio':
-      return { type: 'portfolio', portfolioId: value.portfolioId ?? null } as const
+    case 'portfolio': {
+      const portfolioId = value.portfolioId ?? null
+      if (
+        portfolioId !== null &&
+        !portfolioStore.read().some((portfolio) => portfolio.id === portfolioId)
+      ) {
+        return fail('portfolioId', 'One of your portfolios.')
+      }
+      return { type: 'portfolio', portfolioId } as const
+    }
     case 'publication': {
       const { about } = value
       if (about === 'security' && !isSecurity(securityId)) {

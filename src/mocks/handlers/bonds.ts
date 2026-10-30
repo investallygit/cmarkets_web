@@ -15,14 +15,7 @@ import { yieldCurve } from '../fixtures/curves'
 import { BondMathError, calculateBond, interpolateCurve } from '../lib/bondMath'
 import { api, latency, problem } from '../lib/http'
 import { businessDay } from '../lib/time'
-
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
-
-const isIsoDate = (value: unknown): value is string =>
-  typeof value === 'string' && ISO_DATE.test(value) && !Number.isNaN(Date.parse(value))
-
-const isNumber = (value: unknown): value is number =>
-  typeof value === 'number' && Number.isFinite(value)
+import { isIsoDate, isNumber } from '../lib/validation'
 
 /** The latest session on or before a date, and never after today. */
 function sessionOnOrBefore(date: string | null): string {

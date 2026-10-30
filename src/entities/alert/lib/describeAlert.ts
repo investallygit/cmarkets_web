@@ -12,12 +12,12 @@ export interface AlertDescription {
 
 /** Words for an alert in the user's language, for the tables and the form. */
 export function useDescribeAlert(): (
-  alert: Pick<AlertDto, 'condition' | 'securityCode'>,
+  alert: Pick<AlertDto, 'condition' | 'securityCode'> & Partial<Pick<AlertDto, 'portfolioName'>>,
 ) => AlertDescription {
   const { t } = useTranslation()
   const format = useFormat()
   return useCallback(
-    ({ condition, securityCode }) => {
+    ({ condition, securityCode, portfolioName }) => {
       const security =
         securityCode ?? ('securityId' in condition ? (condition.securityId ?? '') : '')
       const allCountries = t('alerts.allCountries')
@@ -48,7 +48,7 @@ export function useDescribeAlert(): (
             return { subject: country(value.country), condition: t('alerts.conditions.auction') }
           case 'portfolio':
             return {
-              subject: t('alerts.subjects.portfolios'),
+              subject: portfolioName ?? t('alerts.subjects.portfolios'),
               condition: t('alerts.conditions.portfolio'),
             }
           case 'publication':

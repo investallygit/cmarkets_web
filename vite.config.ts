@@ -15,6 +15,14 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
     },
+    build: {
+      rolldownOptions: {
+        output: {
+          // MSW apart from the handlers and sample data: both load with the prototype only.
+          codeSplitting: { groups: [{ name: 'msw', test: /node_modules[\\/](msw|@mswjs)[\\/]/ }] },
+        },
+      },
+    },
     server: proxyTarget
       ? {
           proxy: {

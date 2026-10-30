@@ -5,6 +5,7 @@ import { calendarHandlers } from './calendar'
 import { documentHandlers } from './documents'
 import { marketHandlers } from './market'
 import { newsHandlers } from './news'
+import { portfolioHandlers } from './portfolios'
 import { securityHandlers } from './securities'
 import { sessionHandlers } from './session'
 import { watchlistHandlers } from './watchlists'
@@ -20,4 +21,5 @@ export const handlers = [
   ...calendarHandlers,
   ...watchlistHandlers,
   ...alertHandlers,
+  ...portfolioHandlers,
 ]

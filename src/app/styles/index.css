@@ -25,6 +25,25 @@
   /* Logo, login screen and marketing pages only. */
   --brand-navy: #0b1f3a;
   --brand-green: #1fb57a;
+  /*
+   * Series of a chart that carry identity only (allocation by sector...), in this order and
+   * never cycled. Section 8 has no chart palette: these eight pass the lightness, chroma,
+   * colour-blind separation and 3:1 contrast checks on --bg-panel.
+   */
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-6: #008300;
+  --chart-7: #9085e9;
+  --chart-8: #e66767;
+  /* Ordered classes (bond maturities), short to long: one hue, light to dark, checked on --bg-panel. */
+  --chart-ordinal-1: #9ec5f4;
+  --chart-ordinal-2: #6da7ec;
+  --chart-ordinal-3: #3987e5;
+  --chart-ordinal-4: #256abf;
+  --chart-ordinal-5: #184f95;
 }
 
 /* Only the tokens above exist: Tailwind's default palette is removed. */

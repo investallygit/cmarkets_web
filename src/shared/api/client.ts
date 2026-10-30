@@ -35,6 +35,12 @@ async function readProblem(response: Response): Promise<ProblemDetails> {
   }
 }
 
+async function readJson<T>(response: Response): Promise<T> {
+  if (!response.ok) throw new ApiError(await readProblem(response))
+  if (response.status === 204) return undefined as T
+  return (await response.json()) as T
+}
+
 async function request<T>(method: string, path: string, options: RequestOptions = {}): Promise<T> {
   const { query, body, signal } = options
   const headers: Record<string, string> = { Accept: 'application/json' }
@@ -46,9 +52,22 @@ async function request<T>(method: string, path: string, options: RequestOptions 
     body: body === undefined ? undefined : JSON.stringify(body),
     signal,
   })
-  if (!response.ok) throw new ApiError(await readProblem(response))
-  if (response.status === 204) return undefined as T
-  return (await response.json()) as T
+  return readJson<T>(response)
+}
+
+/** A multipart form, such as a file upload; the browser writes its Content-Type. */
+async function requestForm<T>(
+  path: string,
+  form: FormData,
+  options: Omit<RequestOptions, 'body'> = {},
+): Promise<T> {
+  const response = await fetch(buildUrl(path, options.query), {
+    method: 'POST',
+    headers: { Accept: 'application/json' },
+    body: form,
+    signal: options.signal,
+  })
+  return readJson<T>(response)
 }
 
 /** A file, such as a PDF document, fetched with the same session as the JSON calls. */
@@ -68,6 +87,7 @@ export const apiClient = {
   getBlob: requestBlob,
   post: <T>(path: string, body?: unknown, options?: Omit<RequestOptions, 'body'>) =>
     request<T>('POST', path, { ...options, body }),
+  postForm: requestForm,
   put: <T>(path: string, body?: unknown, options?: Omit<RequestOptions, 'body'>) =>
     request<T>('PUT', path, { ...options, body }),
   patch: <T>(path: string, body?: unknown, options?: Omit<RequestOptions, 'body'>) =>

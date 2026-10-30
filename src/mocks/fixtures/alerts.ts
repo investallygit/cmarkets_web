@@ -2,8 +2,8 @@ import type { AlertDto } from '@/shared/api/contracts'
 import { DAY_MS, MINUTE_MS } from '../lib/time'
 import { notificationMinutesAgo } from './feeds'
 
-/** An alert as the server stores it; the security code is added when it is read. */
-export type StoredAlert = Omit<AlertDto, 'securityCode'>
+/** An alert as the server stores it; the security code and portfolio name are added when read. */
+export type StoredAlert = Omit<AlertDto, 'securityCode' | 'portfolioName'>
 
 type AlertFixture = Omit<StoredAlert, 'createdAt' | 'lastTriggeredAt'>
 

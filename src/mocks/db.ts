@@ -13,9 +13,12 @@ import {
 import { toMarketDay } from '@/shared/lib/format'
 import { createAlerts, type StoredAlert } from './fixtures/alerts'
 import { createAuctions } from './fixtures/auctions'
+import { BOND_FIXTURES, cashFlows } from './fixtures/bonds'
 import { createCalendar } from './fixtures/calendar'
 import { createNews, createNotifications, UPCOMING_NEWS } from './fixtures/feeds'
 import { INDEX_FIXTURES, type IndexFixture } from './fixtures/market'
+import { createPortfolios } from './fixtures/portfolios'
+import { PROFILE_FIXTURES } from './fixtures/profiles'
 import { SAVED_SCREEN_FIXTURES } from './fixtures/screens'
 import { SECURITY_FIXTURES, type SecurityFixture } from './fixtures/securities'
 import {
@@ -32,7 +35,11 @@ import {
   severityOf,
   type QuoteState,
 } from './lib/alerts'
+import { priceHistory, sessionStarted } from './lib/bars'
 import { generateSparkline } from './lib/history'
+import { indexCloses, indexMembers } from './lib/indexHistory'
+import type { MarketData, PortfolioBond, StoredPortfolio } from './lib/portfolioEngine'
+import { businessDays } from './lib/time'
 import { initialTrades } from './lib/trades'
 
 /**
@@ -247,6 +254,85 @@ export const savedScreenStore = userStore<SavedScreenDto[]>('screens', () =>
   SAVED_SCREEN_FIXTURES.map((screen) => ({ ...screen, criteria: [...screen.criteria] })),
 )
 
+/**
+ * Daily closes of an index, chained from its members' closes; undefined for an index without
+ * members, whose history stays a random walk.
+ */
+export function indexDailyCloses(code: string, from: string, to: string, now = Date.now()) {
+  const index = indices.get(code)
+  const members = indexMembers(code, securities.values(), ({ id, type }) =>
+    type === 'bond'
+      ? (BOND_FIXTURES[id]?.amountIssued ?? 0) / 100
+      : (PROFILE_FIXTURES[id]?.sharesOutstanding ?? undefined),
+  )
+  if (!index || members.length === 0) return undefined
+  return indexCloses(index, members, from, to, now)
+}
+
+/** EUR / XAF peg (spec section 14.2). */
+const EUR_XAF = 655.957
+/** Admin setting of spec section 14.3; the screen 5 mockup shows 5.0%. */
+const RISK_FREE_RATE_PCT = 5
+
+/** The market data of the mock, as the portfolio service reads it. */
+export function marketData(now = Date.now()): MarketData {
+  const bonds = new Map<string, PortfolioBond | undefined>()
+  const dailyBars = (id: string, from: string, to: string) => {
+    const security = securities.get(id)
+    return security ? priceHistory(security, from, to, '1d', now) : []
+  }
+  return {
+    today: toMarketDay(now),
+    security(id) {
+      const security = securities.get(id)
+      if (!security) return undefined
+      const { code, name, type, sector, country, currency } = security
+      const issuer = BOND_FIXTURES[id]?.issuer ?? PROFILE_FIXTURES[id]?.issuer ?? name
+      return { id, code, name, type, sector, country, currency, issuer }
+    },
+    quote(id) {
+      const security = securities.get(id)
+      if (!security) return undefined
+      return {
+        last: security.last,
+        previousClose: security.previousClose,
+        tradedToday: security.volume > 0,
+        isDelayed: currentAccountType() === 'student',
+      }
+    },
+    closes: (id, from, to) =>
+      new Map(dailyBars(id, from, to).map((bar) => [toMarketDay(bar.time), bar.close])),
+    quietDays: (id, from, to) => dailyBars(id, from, to).filter((bar) => bar.volume === 0).length,
+    bond(id) {
+      if (!bonds.has(id)) {
+        const terms = BOND_FIXTURES[id]
+        bonds.set(id, terms && { ...terms, schedule: cashFlows(terms) })
+      }
+      return bonds.get(id)
+    },
+    dividends: (id) => PROFILE_FIXTURES[id]?.dividends ?? [],
+    sessions: (from, to) => businessDays(from, to).filter((day) => sessionStarted(day, now)),
+    index(code) {
+      const index = indices.get(code)
+      return index && { code, name: index.name }
+    },
+    indexCloses: (code, from, to) =>
+      new Map((indexDailyCloses(code, from, to, now) ?? []).map(({ day, close }) => [day, close])),
+    fx(from, to) {
+      if (from === to) return 1
+      if (from === 'EUR' && to === 'XAF') return EUR_XAF
+      if (from === 'XAF' && to === 'EUR') return 1 / EUR_XAF
+      return 1
+    },
+    riskFreeRatePct: RISK_FREE_RATE_PCT,
+  }
+}
+
+/** Built from the price history the first time a user opens PORT, then kept like the rest. */
+export const portfolioStore = userStore<StoredPortfolio[]>('portfolios', () =>
+  createPortfolios(currentAccountType(), marketData()),
+)
+
 /** Records that an alert went off: a notification for the user and the time on the alert. */
 function triggerAlert(alert: StoredAlert, subject: string, message: string): NotificationDto {
   const triggeredAt = new Date().toISOString()
@@ -296,6 +382,30 @@ function checkQuoteAlerts(security: MockSecurity, before: QuoteState): Notificat
         : exceedsVolume(condition, before, after, security.typicalVolume)
     return crossed ? [security.code, quoteAlertMessage(condition, security)] : null
   })
+}
+
+const alertListeners = new Set<(notification: NotificationDto) => void>()
+
+/** Alerts set off by a REST call rather than by a tick, for the simulated hub to push. */
+export function onAlertTriggered(listener: (notification: NotificationDto) => void): () => void {
+  alertListeners.add(listener)
+  return () => alertListeners.delete(listener)
+}
+
+/** A portfolio limit newly breached sets off the portfolio alerts on it, or on all portfolios. */
+export function triggerPortfolioAlerts(
+  portfolioId: string,
+  subject: string,
+  message: string,
+): NotificationDto[] {
+  const triggered = triggerAll((condition) =>
+    condition.type === 'portfolio' &&
+    (condition.portfolioId === null || condition.portfolioId === portfolioId)
+      ? [subject, message]
+      : null,
+  )
+  triggered.forEach((notification) => alertListeners.forEach((listener) => listener(notification)))
+  return triggered
 }
 
 /** Release alerts follow the issuer's news, auction alerts the BEAC results. */

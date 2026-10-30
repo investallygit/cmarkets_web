@@ -2,6 +2,7 @@ import { keepPreviousData, queryOptions, useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/shared/api'
 import type {
   HistoryPointDto,
+  IndexQuoteDto,
   MarketStatusDto,
   MarketSummaryDto,
   MoverDto,
@@ -16,6 +17,7 @@ export const marketKeys = {
   summary: () => [...marketKeys.all, 'summary'] as const,
   movers: (type: MoversType) => [...marketKeys.all, 'movers', type] as const,
   ticker: () => [...marketKeys.all, 'ticker'] as const,
+  indices: () => [...marketKeys.all, 'indices'] as const,
   indexHistory: (code: string, period: ChartPeriod) =>
     [...marketKeys.all, 'indices', code, 'history', period] as const,
 }
@@ -51,6 +53,15 @@ export function useTicker() {
     queryKey: marketKeys.ticker(),
     queryFn: ({ signal }) => apiClient.get<TickerItemDto[]>('/market/ticker', { signal }),
     refetchInterval: 60_000,
+  })
+}
+
+/** GET /indices: the indices CMarket computes or receives, e.g. for a portfolio's benchmark. */
+export function useIndices() {
+  return useQuery({
+    queryKey: marketKeys.indices(),
+    queryFn: ({ signal }) => apiClient.get<IndexQuoteDto[]>('/indices', { signal }),
+    staleTime: 5 * 60_000,
   })
 }
 

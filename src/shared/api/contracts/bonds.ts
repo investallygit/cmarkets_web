@@ -27,6 +27,8 @@ export interface BondSummaryDto {
   maturityDate: IsoDate
   amortization: 'bullet' | 'straight'
   dayCount: DayCount
+  /** Face value of one bond at issue, in the bond's currency. */
+  nominal: number
   /** Amount outstanding, in the bond's currency. */
   amountOutstanding: number
 }

@@ -18,6 +18,14 @@ describe('createPdf', () => {
     })
   })
 
+  it('runs long text over several pages', () => {
+    const lines = Array.from({ length: 100 }, (_, index) => `Line ${index + 1}`)
+    const pdf = new TextDecoder('latin1').decode(createPdf('Portfolio report', lines))
+    expect(pdf).toContain('/Kids [5 0 R 7 0 R 9 0 R] /Count 3')
+    expect(pdf).toContain('(Line 100) Tj')
+    expect(pdf.match(/\(Portfolio report\) Tj/g)).toHaveLength(1)
+  })
+
   it('keeps French accents and escapes parentheses', () => {
     const pdf = new TextDecoder('latin1').decode(createPdf('Note', ['Société (SEMC)']))
     expect(pdf).toContain('(Société \\(SEMC\\)) Tj')

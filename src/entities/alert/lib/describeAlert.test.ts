@@ -47,6 +47,18 @@ describe('alert descriptions', () => {
     ).toEqual({ subject: 'Eq. Guinea', condition: 'New research on the country' })
   })
 
+  it('names the portfolio a limit alert watches, or all of them', async () => {
+    await i18n.changeLanguage('en')
+    const { result } = renderHook(() => useDescribeAlert())
+    const condition = { type: 'portfolio', portfolioId: 'portfolio-cemac' } as const
+    expect(
+      result.current({ condition, securityCode: null, portfolioName: 'CEMAC Equity Fund' }).subject,
+    ).toBe('CEMAC Equity Fund')
+    expect(describeWith({ type: 'portfolio', portfolioId: null }).subject).toBe(
+      i18n.t('alerts.subjects.portfolios'),
+    )
+  })
+
   it('follows the language and the number format of the user', async () => {
     await i18n.changeLanguage('fr')
     expect(

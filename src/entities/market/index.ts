@@ -2,6 +2,7 @@ export {
   indexHistoryQuery,
   marketKeys,
   useIndexHistory,
+  useIndices,
   useMarketMovers,
   useMarketStatus,
   useMarketSummary,

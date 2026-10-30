@@ -8,7 +8,8 @@ type BondTerms = Omit<BondDto, 'schedule' | 'amountOutstanding'> & {
 
 /**
  * ECMR follows the test case of spec section 14.1: issued 04/11/2024, maturing 04/11/2029,
- * annual coupon 6.25%, 20% of the principal repaid each year (case B).
+ * annual coupon 6.25%, 20% of the principal repaid each year (case B). BVMAC bonds have a
+ * nominal of XAF 10,000.
  */
 // prettier-ignore
 export const BOND_FIXTURES: Record<string, BondTerms> = {
@@ -16,13 +17,13 @@ export const BOND_FIXTURES: Record<string, BondTerms> = {
     id: 'ECMR-6.25-2029', code: 'ECMR 6.25% 29', name: 'Republic of Cameroon 6.25% 2025-2029',
     issuer: 'Republic of Cameroon', country: 'CM', currency: 'XAF', couponPct: 6.25, frequency: 1,
     issueDate: '2024-11-04', maturityDate: '2029-11-04', amortization: 'straight',
-    dayCount: 'ACT/ACT ICMA', amountIssued: 200_000_000_000,
+    dayCount: 'ACT/ACT ICMA', nominal: 10_000, amountIssued: 200_000_000_000,
   },
   'GAB-6.50-2028': {
     id: 'GAB-6.50-2028', code: 'GAB 6.50% 28', name: 'Gabonese Republic 6.50% 2028',
     issuer: 'Gabonese Republic', country: 'GA', currency: 'XAF', couponPct: 6.5, frequency: 1,
     issueDate: '2023-06-15', maturityDate: '2028-06-15', amortization: 'bullet',
-    dayCount: 'ACT/ACT ICMA', amountIssued: 150_000_000_000,
+    dayCount: 'ACT/ACT ICMA', nominal: 10_000, amountIssued: 150_000_000_000,
   },
 }
 

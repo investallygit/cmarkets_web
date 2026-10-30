@@ -25,18 +25,20 @@ npm run dev        # http://localhost:5173
 In the prototype, the user badge at the top right switches language (FR / EN) and account type,
 so every menu and permission of spec section 12 can be previewed. `/_kit` shows the shared UI
 components (form controls, dialogs, toasts, price chart, table export) with sample content. The
-mock back end keeps each demo user's watchlists, alerts, saved screens, layouts and chart drawings
-in localStorage, sets off their alerts when a price crosses a threshold or a release comes out, and
-runs the bond calculator with the formulas of spec section 14.1, tested against its cases A and B.
+mock back end keeps each demo user's watchlists, alerts, saved screens, portfolios, layouts and
+chart drawings in localStorage, and sets off their alerts when a price crosses a threshold, a
+release comes out or a portfolio limit is breached. It runs the bond calculator with the formulas
+of spec section 14.1 and values portfolios with those of sections 14.2 and 14.3, each tested
+against the spec's cases.
 
 ## Stack (spec section 7)
 
 React 18, strict TypeScript, Vite · TanStack Query (server data) · Zustand (layout, preferences,
 selection) · TanStack Table + Virtual · TradingView Lightweight Charts (prices) · Recharts
-(comparison bars, yield curves; allocation and performance next) · react-grid-layout ·
-`@microsoft/signalr` · Tailwind CSS with the section 8 tokens · i18next (FR / EN) · Vitest,
-Testing Library, Playwright. Supporting choices: React Router 7, lucide-react icons,
-MSW 3 for the mock back end, write-excel-file for the Excel export of tables.
+(comparison bars, yield curves, portfolio performance) · react-grid-layout · `@microsoft/signalr`
+· Tailwind CSS with the section 8 tokens · i18next (FR / EN) · Vitest, Testing Library,
+Playwright. Supporting choices: React Router 7, lucide-react icons, MSW 3 for the mock back end,
+write-excel-file for the Excel export of tables, read-excel-file for the mock's Excel imports.
 
 TipTap (publishing studio) is added with the screen that uses it.
 
@@ -51,16 +53,16 @@ src/
   main.tsx    entry point: real back end or mocks
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile, equity-screener,
-              yield-curves (YCRV and YAS), news, market-calendar, alerts, placeholder (screens
-              not built yet), status
+              yield-curves (YCRV and YAS), portfolio, news, market-calendar, alerts, placeholder
+              (screens not built yet), status
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: command-bar, security-actions, manage-watchlists, manage-alerts,
-              screen-equities, draw-on-chart, compare-securities, switch-language, switch-account,
-              workspace-layout
+              screen-equities, manage-portfolios, record-transaction, generate-portfolio-report,
+              draw-on-chart, compare-securities, switch-language, switch-account, workspace-layout
   entities/   business data: session, security, quote (live prices), market, bond, yield-curve,
-              fundamentals, screener, document, chart-drawing, watchlist, alert, auction, rate,
-              news, calendar-event, notification
+              fundamentals, screener, portfolio, document, chart-drawing, watchlist, alert,
+              auction, rate, news, calendar-event, notification
   shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
               UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
   mocks/      fake back end for the prototype (MSW handlers, sample data, simulated hub)
@@ -124,12 +126,14 @@ exist. Numbers use `shared/lib/format.ts` (`52 500,25` in French, `52,500.25` in
 
 Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of a title bar),
 `ScreenTabs`, `DataTable` (sorting, right-click menu, Excel and CSV export unless the user lacks
-`analysis:export`; `exportRef` puts the export links in a title bar), `charts/` (`PriceChart`
-with indicator panes, comparison rebased to 100 and drawings; `AreaChart`; `useChartTheme`, the
-section 8 colours for Recharts, which draws in SVG), `PdfViewer`, `form/` (buttons, fields, selects, number and date inputs in
-the user's format, checkboxes, segmented choices, file drop zone), `Dialog` (also as a side form),
-`ConfirmDialog` (with a required reason) and `toast`. Entities add small business components, such
-as the security picker of `entities/security`.
+`analysis:export`; `exportRef` puts the export links in a title bar; a `footer` row stays out of
+the sorting), `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
+drawings; `AreaChart`; `useChartTheme`, the section 8 colours for Recharts, which draws in SVG,
+and the `--chart-*` series palette checked for colour-blind separation), `PdfViewer`, `form/`
+(buttons, fields, selects, number and date inputs in the user's format, checkboxes, segmented
+choices, file drop zone), `Dialog` (also as a side form), `ConfirmDialog` (with a required
+reason) and `toast`. Entities add small business components, such as the security picker of
+`entities/security`.
 
 ## Connecting the real back end
 
@@ -149,8 +153,9 @@ The screens do not change: they only know the API contract.
 | 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS)                      | Done on mock data; ANA comes with PUB                         |
 | 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done on mock data, saved screens                              |
 | 4 · Yield curves and bond calculator (YCRV, YAS)                          | Done; the mock computes spec section 14.1                     |
+| 5 · Portfolio (PORT)                                                      | Done; the mock values portfolios with sections 14.2 and 14.3  |
 | News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done on mock data; the mock sets off the alerts               |
-| 5 to 9 and the back-office screens                                        | Placeholders with the mockup layout and the API of each panel |
+| 6 to 9 and the back-office screens                                        | Placeholders with the mockup layout and the API of each panel |
 | Login, OTP, token refresh                                                 | Not started                                                   |
 
 The plan for the remaining screens, step by step, is in [ROADMAP.md](ROADMAP.md).

@@ -17,6 +17,9 @@ const EquityScreenerPage = lazy(() =>
 const YieldCurvesPage = lazy(() =>
   import('@/pages/yield-curves').then((module) => ({ default: module.YieldCurvesPage })),
 )
+const PortfolioPage = lazy(() =>
+  import('@/pages/portfolio').then((module) => ({ default: module.PortfolioPage })),
+)
 const NewsPage = lazy(() => import('@/pages/news').then((module) => ({ default: module.NewsPage })))
 const MarketCalendarPage = lazy(() =>
   import('@/pages/market-calendar').then((module) => ({ default: module.MarketCalendarPage })),
@@ -34,6 +37,7 @@ const PAGES: Partial<Record<ScreenTextKey, Page>> = {
   EQS: EquityScreenerPage,
   YCRV: YieldCurvesPage,
   YAS: YieldCurvesPage,
+  PORT: PortfolioPage,
   N: NewsPage,
   CAL: MarketCalendarPage,
   ALRT: AlertsPage,

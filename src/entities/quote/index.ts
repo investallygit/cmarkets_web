@@ -1,6 +1,6 @@
 export { quoteKeys, useQuote } from './api/queries'
 export { useQuoteRealtimeSync } from './api/useQuoteRealtimeSync'
 export { INDEX_DECIMALS, priceDecimals } from './lib/price'
-export { useLastLiveUpdate, useLiveIndex, useLiveQuote } from './model/hooks'
+export { useLastLiveUpdate, useLiveIndex, useLivePrices, useLiveQuote } from './model/hooks'
 export { LiveIndexChange, LiveIndexChangePct, LiveIndexValue } from './ui/LiveIndex'
 export { LiveChange, LiveChangePct, LivePrice, LiveVolume } from './ui/LiveQuote'

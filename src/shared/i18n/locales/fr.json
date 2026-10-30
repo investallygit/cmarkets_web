@@ -129,7 +129,21 @@
     "alertHistory": "Alertes déclenchées",
     "auctions": "Dernières adjudications de titres publics (BEAC)",
     "yieldCurves": "Courbes des taux souverains CEMAC",
-    "bondCalculator": "Calculateur obligataire"
+    "bondCalculator": "Calculateur obligataire",
+    "positions": "Positions valorisées",
+    "performance": "Performance / indice de référence",
+    "allocation": "Répartition",
+    "maturities": "Répartition par échéance obligataire",
+    "risk": "Indicateurs de risque",
+    "limits": "Limites",
+    "issuers": "Concentration par émetteur",
+    "upcomingIncome": "Revenus à venir",
+    "receivedIncome": "Revenus perçus",
+    "transactions": "Transactions",
+    "returns": "Performances par période",
+    "newReport": "Rapport PDF",
+    "reports": "Rapports générés",
+    "reportPreview": "Aperçu du rapport"
   },
   "market": {
     "movers": {
@@ -479,7 +493,7 @@
     "country": "Pays",
     "allCountries": "Tous les pays CEMAC",
     "chooseCountry": "Choisissez un pays",
-    "portfolioHint": "Se déclenche quand une limite de l'un de vos portefeuilles est dépassée. Les limites se règlent sur l'écran PORT.",
+    "portfolioHint": "Se déclenche quand une limite du portefeuille est dépassée lors d'une valorisation : poids d'un émetteur, volatilité, perte maximale, bêta ou duration obligataire.",
     "channels": "Envoyer par",
     "channelNames": {
       "push": "Push",
@@ -520,7 +534,9 @@
     "never": "Jamais",
     "noAlerts": "Aucune alerte : créez-en une ici, ou par le clic droit sur un titre dans n'importe quel tableau.",
     "historyEmpty": "Aucune alerte déclenchée pour l'instant",
-    "unread": "Non lue"
+    "unread": "Non lue",
+    "portfolio": "Portefeuille",
+    "allPortfolios": "Tous mes portefeuilles"
   },
   "calendar": {
     "views": {
@@ -742,5 +758,335 @@
     "curveYield": "courbe {{value}}",
     "basisPoints": "{{value}} pb",
     "outsideCurve": "La durée de vie moyenne sort de la courbe, qui n'est pas extrapolée."
+  },
+  "portfolio": {
+    "tabsLabel": "Onglets du portefeuille",
+    "tabs": {
+      "positions": "Positions",
+      "transactions": "Transactions",
+      "performance": "Performance",
+      "risk": "Risque",
+      "income": "Revenus",
+      "reports": "Rapports"
+    },
+    "newTransaction": "Nouvelle transaction",
+    "editAllocation": "Modifier l'allocation",
+    "points": "pts",
+    "kinds": {
+      "real": "Réel",
+      "model": "Modèle"
+    },
+    "empty": {
+      "message": "Aucun portefeuille pour l'instant. Créez-en un par client, fonds ou stratégie, avec sa devise, son indice de référence et ses limites.",
+      "student": "Aucun portefeuille pour l'instant. Un compte Étudiant simule des allocations : créez un portefeuille modèle."
+    },
+    "selector": {
+      "label": "Portefeuille",
+      "new": "Nouveau portefeuille…",
+      "quotaReached": "Nouveau portefeuille : {{quota}} au plus",
+      "settings": "Paramètres du portefeuille…",
+      "delete": "Supprimer le portefeuille…"
+    },
+    "header": {
+      "totalValue": "Valeur totale",
+      "dayChange": "Var. jour",
+      "ytd": "Perf. depuis le 1er janv.",
+      "benchmarkYtd": "Indice depuis le 1er janv.",
+      "outperformance": "Surperformance",
+      "cash": "Liquidités",
+      "upcomingIncome": "Revenus à venir (3 mois)"
+    },
+    "positions": {
+      "averageCost": "PRU",
+      "dayChange": "Var. jour",
+      "value": "Valeur ({{currency}})",
+      "unrealized": "+/- latente",
+      "unrealizedAmount": "{{amount}} {{currency}}",
+      "weight": "Poids",
+      "aboveLimit": "Au-delà de la limite de {{limit}} par émetteur",
+      "stale": "Ancien",
+      "staleHint": "Cours ancien : pas d'échange aujourd'hui, le cours de la dernière séance est reporté",
+      "cash": "Liquidités {{currency}}",
+      "export": "Export",
+      "import": "Import CSV",
+      "buy": "Acheter {{code}}…",
+      "sell": "Vendre {{code}}…",
+      "empty": "Aucune position pour l'instant."
+    },
+    "ranges": {
+      "ytd": "1er JANV.",
+      "1y": "1A",
+      "3y": "3A",
+      "inception": "Création"
+    },
+    "periods": {
+      "day": "Jour",
+      "mtd": "Depuis le début du mois",
+      "ytd": "Depuis le 1er janvier",
+      "1y": "1 an",
+      "3y": "3 ans",
+      "inception": "Depuis la création"
+    },
+    "performance": {
+      "noHistory": "Pas encore assez de valorisations pour mesurer une performance.",
+      "portfolio": "Portefeuille",
+      "portfolioBase": "Portefeuille (base 100)",
+      "priceIndex": "{{name}} (indice de prix)",
+      "summary": "Du {{from}} au {{to}} : portefeuille {{portfolio}}, indice {{benchmark}}.",
+      "period": "Période",
+      "twr": "Performance pondérée par le temps",
+      "annualized": "Annualisée",
+      "outperformance": "Surperformance",
+      "irr": "Pondérée par les capitaux (TRI)"
+    },
+    "returns": {
+      "period": "Période",
+      "since": "Depuis la valorisation du {{date}}",
+      "portfolio": "Portefeuille",
+      "benchmark": "Indice",
+      "outperformance": "Surperf.",
+      "annualized": "Annualisée",
+      "note": "Performances pondérées par le temps, apports et retraits neutralisés ; indice {{benchmark}}, un indice de prix."
+    },
+    "allocation": {
+      "views": {
+        "sector": "Secteur",
+        "country": "Pays",
+        "asset": "Classe d'actifs",
+        "maturity": "Échéance"
+      },
+      "cash": "Liquidités",
+      "other": "Autres",
+      "assets": {
+        "equity": "Actions",
+        "bond": "Obligations"
+      },
+      "maturities": {
+        "0-1": "Obligations à moins d'un an",
+        "1-3": "Obligations, 1 à 3 ans",
+        "3-5": "Obligations, 3 à 5 ans",
+        "5-10": "Obligations, 5 à 10 ans",
+        "10+": "Obligations à plus de 10 ans"
+      },
+      "noMaturity": "Actions (sans échéance)"
+    },
+    "risk": {
+      "window": "1 an glissant",
+      "insufficient": "données insuffisantes",
+      "volatility": "Volatilité annualisée",
+      "indexVolatility": "Indice : {{value}}",
+      "drawdown": "Perte maximale",
+      "drawdownDates": "du {{peak}} au {{trough}}",
+      "beta": "Bêta / {{index}}",
+      "sharpe": "Ratio de Sharpe",
+      "riskFree": "taux sans risque {{rate}}",
+      "annualizedReturn": "Rendement annualisé",
+      "trackingError": "Tracking error",
+      "informationRatio": "Ratio d'information",
+      "var": "VaR 1 jour 95 %",
+      "varAmount": "{{amount}} de la valeur",
+      "duration": "Duration de la poche obligataire",
+      "largestIssuer": "Premier émetteur",
+      "hhi": "Concentration (HHI)",
+      "lines": "Nombre de lignes",
+      "linesValue_one": "{{count}} titre + liquidités",
+      "linesValue_other": "{{count}} titres + liquidités",
+      "limit": "limite : {{limit}}",
+      "fewObservations": "{{count}} rendements quotidiens : il en faut {{minimum}} pour les indicateurs de marché.",
+      "quietDays": "Aucune cotation sur {{share}} des jours : volatilité et bêta sont sous-estimés."
+    },
+    "limits": {
+      "issuerWeightPct": "Poids d'un émetteur",
+      "volatilityPct": "Volatilité",
+      "drawdownPct": "Perte maximale",
+      "beta": "Bêta",
+      "durationYears": "Duration obligataire",
+      "edit": "Modifier",
+      "limit": "Limite",
+      "current": "Actuel",
+      "maximum": "Maximum",
+      "status": "État",
+      "years": "{{value}} ans"
+    },
+    "limitUnits": {
+      "issuerWeightPct": "%",
+      "volatilityPct": "%",
+      "drawdownPct": "%",
+      "beta": "",
+      "durationYears": "ans"
+    },
+    "limitStatus": {
+      "none": "Aucune limite",
+      "within": "Respectée",
+      "breached": "Dépassée"
+    },
+    "issuers": {
+      "limit": "Limite par émetteur : {{limit}}"
+    },
+    "income": {
+      "amount": "Montant {{currency}}",
+      "kinds": {
+        "dividend": "Dividende",
+        "coupon": "Coupon",
+        "redemption": "Remboursement"
+      },
+      "couponAndPrincipal": "Coupon + amort.",
+      "split": "Coupon {{income}} + capital {{principal}}",
+      "noneUpcoming": "Aucun dividende ni coupon attendu dans les 12 prochains mois.",
+      "noneReceived": "Aucun revenu perçu sur les 12 derniers mois.",
+      "upcomingTotal": "Dividendes et coupons des 3 prochains mois : {{amount}} {{currency}}",
+      "receivedTotal": "Dividendes et coupons perçus cette année : {{amount}} {{currency}}"
+    },
+    "transactionTypes": {
+      "buy": "Achat",
+      "sell": "Vente",
+      "subscription": "Souscription",
+      "redemption": "Remboursement",
+      "dividend": "Dividende",
+      "coupon": "Coupon",
+      "fees": "Frais",
+      "deposit": "Apport",
+      "withdrawal": "Retrait"
+    },
+    "transactions": {
+      "fees": "Frais",
+      "amount": "Montant ({{currency}})",
+      "realized": "+/- réalisée",
+      "note": "Note",
+      "allTypes": "Tous les types",
+      "typeFilter": "Type de transaction",
+      "edit": "Corriger…",
+      "delete": "Supprimer…",
+      "empty": "Aucune transaction pour l'instant.",
+      "model": "Un portefeuille modèle n'a pas de transactions : son allocation en tient lieu."
+    },
+    "transactionForm": {
+      "newTitle": "Nouvelle transaction",
+      "editTitle": "Corriger une transaction",
+      "portfolio": "{{name}} · {{currency}}",
+      "type": "Type",
+      "date": "Date d'opération",
+      "security": "Titre",
+      "securityOptional": "Titre (facultatif)",
+      "quantity": "Quantité",
+      "bonds": "Obligations",
+      "price": "Cours",
+      "cleanPrice": "Prix pied de coupon (pour 100)",
+      "fees": "Frais",
+      "amount": "Montant ({{currency}})",
+      "note": "Note",
+      "estimate": "Liquidités : {{amount}} {{currency}}, frais compris",
+      "accruedHint": "Le coupon couru s'ajoute au prix pied de coupon.",
+      "record": "Enregistrer",
+      "recorded": "{{type}} enregistré",
+      "saved": "{{type}} corrigé",
+      "errors": {
+        "required": "Obligatoire.",
+        "positive": "Supérieur à 0.",
+        "wholeNumber": "Un nombre entier.",
+        "future": "Pas après aujourd'hui.",
+        "securityType": "Pas pour ce type de titre."
+      },
+      "deleteTitle": "Supprimer la transaction",
+      "deleteMessage": "{{type}} du {{date}} {{security}} : {{amount}}. Positions et performance sont recalculées sans elle.",
+      "delete": "Supprimer",
+      "deleted": "{{type}} supprimé",
+      "deleteFailed": "Non supprimée : {{message}}"
+    },
+    "import": {
+      "title": "Importer des transactions",
+      "intro": "Une ligne par transaction, dans les colonnes du modèle ; toutes les lignes sont importées, ou aucune.",
+      "template": "Modèle :",
+      "columns": "Colonnes {{columns}}. Types : {{types}}. Dates au format 2026-10-28 ou 28/10/2026.",
+      "file": "Fichier CSV ou Excel",
+      "submit": "Importer",
+      "done_one": "{{count}} transaction importée ({{from}} au {{to}})",
+      "done_other": "{{count}} transactions importées ({{from}} au {{to}})",
+      "rejected_one": "Rien d'importé : {{count}} erreur à corriger dans le fichier.",
+      "rejected_other": "Rien d'importé : {{count}} erreurs à corriger dans le fichier.",
+      "rowError": "Ligne {{line}} · {{column}} : {{message}}"
+    },
+    "form": {
+      "newTitle": "Nouveau portefeuille",
+      "editTitle": "{{name}} : paramètres",
+      "name": "Nom",
+      "kind": "Type",
+      "modelOnly": "Portefeuilles modèles uniquement pour un compte Étudiant.",
+      "currency": "Devise de référence",
+      "realHint": "Valorisé à partir de ses transactions, aux prix de marché.",
+      "modelHint": "Simule une allocation : achetée aux cours de clôture de la date de départ et conservée, sans transactions.",
+      "benchmark": "Indice de référence",
+      "allocation": "Allocation",
+      "notional": "Montant investi ({{currency}})",
+      "startDate": "Date de départ",
+      "lineSecurity": "Titre de la ligne {{index}}",
+      "lineWeight": "Poids de la ligne {{index}}",
+      "removeLine": "Retirer la ligne {{index}}",
+      "addLine": "Ajouter une ligne",
+      "cash": "Liquidités {{weight}}",
+      "limits": "Limites, contrôlées à chaque valorisation",
+      "noLimit": "Aucune",
+      "create": "Créer",
+      "created": "{{name}} créé",
+      "saved": "{{name}} enregistré",
+      "errors": {
+        "required": "Obligatoire.",
+        "positive": "Supérieur à 0.",
+        "percent": "100 % au plus.",
+        "future": "Pas après aujourd'hui.",
+        "duplicate": "Déjà dans l'allocation.",
+        "noLine": "Au moins une ligne.",
+        "overAllocated": "Les poids dépassent 100 %."
+      },
+      "deleteTitle": "Supprimer le portefeuille",
+      "deleteMessage": "{{name}} et toutes ses transactions sont supprimés. Ses alertes ne se déclenchent plus.",
+      "delete": "Supprimer",
+      "deleted": "{{name}} supprimé",
+      "deleteFailed": "Non supprimé : {{message}}"
+    },
+    "reports": {
+      "generateLink": "Générer le rapport PDF du portefeuille",
+      "locked": "Les rapports PDF clients sont inclus dans le compte Gérant de portefeuille.",
+      "title": "Titre",
+      "period": "Période",
+      "periods": {
+        "ytd": "1er JANV.",
+        "1y": "1A",
+        "3y": "3A",
+        "inception": "Création",
+        "custom": "Dates"
+      },
+      "from": "Du",
+      "to": "Au",
+      "sections": "Sections",
+      "sectionNames": {
+        "positions": "Positions",
+        "performance": "Performance",
+        "risk": "Risque",
+        "income": "Revenus",
+        "transactions": "Transactions"
+      },
+      "comments": "Commentaires",
+      "commentsHint": "Pour le client ou le comité d'investissement, imprimés sous le titre.",
+      "logo": "Logo de la société (PNG ou JPEG)",
+      "generate": "Générer le PDF",
+      "queued": "{{title}} : rapport en préparation",
+      "none": "Aucun rapport généré depuis l'ouverture de l'écran.",
+      "running": "Préparation… {{progress}} %",
+      "statuses": {
+        "queued": "En attente",
+        "running": "En préparation",
+        "done": "Prêt",
+        "failed": "Échec"
+      },
+      "download": "Télécharger {{title}}",
+      "select": "Générez un rapport, ou choisissez-en un dans la liste.",
+      "errors": {
+        "required": "Obligatoire.",
+        "order": "Avant la date de fin.",
+        "future": "Pas après aujourd'hui.",
+        "sections": "Au moins une section."
+      }
+    }
   }
 }

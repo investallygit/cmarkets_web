@@ -8,6 +8,8 @@ export const routes = {
   yieldCurves: '/ycrv',
   bondCalculator: '/yas/:bondId',
   portfolio: '/port',
+  /** A portfolio and one of its tabs: /port/{id} (positions), /port/{id}/risk... */
+  portfolioTabs: '/port/:portfolioId?/:tab?',
   library: '/pub',
   publishingStudio: '/pub/new',
   news: '/n',
@@ -65,4 +67,24 @@ export function newsTabPath(tab: NewsTab): string {
 
 export function bondCalculatorPath(bondId: string): string {
   return `/yas/${encodeURIComponent(bondId)}`
+}
+
+/** Tabs of the portfolio screen (spec section 9, screen 5); positions is the default. */
+export const PORTFOLIO_TABS = [
+  'positions',
+  'transactions',
+  'performance',
+  'risk',
+  'income',
+  'reports',
+] as const
+export type PortfolioTab = (typeof PORTFOLIO_TABS)[number]
+
+export function isPortfolioTab(value: string | undefined): value is PortfolioTab {
+  return PORTFOLIO_TABS.some((tab) => tab === value)
+}
+
+export function portfolioPath(portfolioId: string, tab: PortfolioTab = 'positions'): string {
+  const base = `${routes.portfolio}/${encodeURIComponent(portfolioId)}`
+  return tab === 'positions' ? base : `${base}/${tab}`
 }

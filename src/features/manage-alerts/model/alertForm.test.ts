@@ -46,6 +46,13 @@ describe('alert form', () => {
       channels: ['push', 'sms'],
       enabled: true,
     })
+    expect(toAlertInput({ ...form, type: 'portfolio' }).condition).toEqual({
+      type: 'portfolio',
+      portfolioId: null,
+    })
+    expect(
+      toAlertInput({ ...form, type: 'portfolio', portfolioId: 'portfolio-cemac' }).condition,
+    ).toEqual({ type: 'portfolio', portfolioId: 'portfolio-cemac' })
     expect(toAlertInput({ ...form, type: 'auction', country: '' }).condition).toEqual({
       type: 'auction',
       country: null,
@@ -65,6 +72,7 @@ describe('alert form', () => {
       channels: ['push', 'email'],
       enabled: false,
       securityCode: 'REGIONALE',
+      portfolioName: null,
       createdAt: '2026-10-09T08:00:00Z',
       lastTriggeredAt: null,
     }

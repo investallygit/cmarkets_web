@@ -43,6 +43,8 @@ export interface AlertDto extends AlertInputDto {
   id: string
   /** Display code of the security the condition names, e.g. "ECMR 6.25% 29". */
   securityCode: string | null
+  /** Name of the portfolio a portfolio alert watches; null for all of the user's portfolios. */
+  portfolioName: string | null
   createdAt: IsoDateTime
   lastTriggeredAt: IsoDateTime | null
 }

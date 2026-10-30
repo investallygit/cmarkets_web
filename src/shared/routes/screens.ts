@@ -92,7 +92,7 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('MKT', 'MKT', routes.market, 'client', LayoutDashboard, { permission: 'market:read', inMenu: true }),
   screen('EQS', 'EQS', routes.screener, 'client', ScanSearch, { permission: 'analysis:read', inMenu: true }),
   screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', inMenu: true }),
-  screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', inMenu: true }),
+  screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', inMenu: true, routePattern: routes.portfolioTabs }),
   screen('PUB', 'PUB', routes.library, 'client', BookOpen, { permission: 'research:read', inMenu: true }),
   screen('N', 'N', routes.news, 'client', Newspaper, { permission: 'market:read', inMenu: true, routePattern: routes.newsTabs }),
   screen('ALRT', 'ALRT', routes.alerts, 'client', Bell, { permission: 'alerts:write', inMenu: true }),

@@ -5,7 +5,14 @@ import type {
   RealtimeEventName,
 } from '@/shared/realtime'
 import type { NotificationDto } from '@/shared/api/contracts'
-import { changePct, indices, publishNextNews, tickIndex, tickSecurity } from './db'
+import {
+  changePct,
+  indices,
+  onAlertTriggered,
+  publishNextNews,
+  tickIndex,
+  tickSecurity,
+} from './db'
 
 type AnyHandler = (payload: unknown) => void
 
@@ -19,6 +26,7 @@ export function createMockRealtimeClient(): RealtimeClient {
   const stateListeners = new Set<(state: ConnectionState) => void>()
   const subscribed = new Set<string>()
   const timers: number[] = []
+  let stopAlerts: (() => void) | null = null
   let state: ConnectionState = 'disconnected'
 
   function setState(next: ConnectionState) {
@@ -100,9 +108,13 @@ export function createMockRealtimeClient(): RealtimeClient {
         window.setInterval(tickIndices, INDEX_TICK_MS),
         window.setInterval(publishNews, NEWS_EVERY_MS),
       )
+      // Portfolio limits are checked when a transaction or a limit changes.
+      stopAlerts = onAlertTriggered(emitAlert)
     },
     async stop() {
       timers.splice(0).forEach((timer) => window.clearInterval(timer))
+      stopAlerts?.()
+      stopAlerts = null
       setState('disconnected')
     },
     async subscribe(symbols) {

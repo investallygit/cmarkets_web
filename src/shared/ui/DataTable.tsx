@@ -10,6 +10,7 @@ import {
   useState,
   type MouseEvent,
   type MutableRefObject,
+  type ReactNode,
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { downloadCsv, type CsvCell } from '@/shared/lib/csv'
@@ -44,6 +45,11 @@ export interface DataTableProps<TRow extends RowData> {
   emptyMessage?: string
   /** Set to the table's export, for Excel and CSV links outside the table (a panel title bar). */
   exportRef?: MutableRefObject<TableExporter | null>
+  /**
+   * A last row that stays out of the sorting, such as the cash of a portfolio: what each column
+   * shows, by column id, and what the export writes.
+   */
+  footer?: { cells: Partial<Record<string, ReactNode>>; values?: Partial<Record<string, CsvCell>> }
 }
 
 interface MenuState {
@@ -73,6 +79,7 @@ export function DataTable<TRow extends RowData>({
   enableSorting = true,
   emptyMessage,
   exportRef,
+  footer,
 }: DataTableProps<TRow>) {
   const { t } = useTranslation()
   const canExport = useContext(TableExportContext)
@@ -105,6 +112,7 @@ export function DataTable<TRow extends RowData>({
       typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id,
     )
     const body = rows.map((row) => exported.map((column) => toCsvCell(row.getValue(column.id))))
+    if (footer?.values) body.push(exported.map((column) => footer.values?.[column.id] ?? ''))
     if (format === 'csv') return downloadCsv(exportName, [header, ...body])
     downloadXlsx(exportName, [header, ...body]).catch((error: unknown) => {
       toast.error(
@@ -240,6 +248,26 @@ export function DataTable<TRow extends RowData>({
                 .map((item) => renderRow(rows[item.index], item.index, item.start))
             : rows.map((row, index) => renderRow(row, index))}
         </tbody>
+        {footer && (
+          <tfoot className="grid">
+            <tr
+              className="grid h-row items-center border-t font-mono text-data"
+              style={{ gridTemplateColumns }}
+            >
+              {leafColumns.map((column) => (
+                <td
+                  key={column.id}
+                  className={clsx(
+                    'truncate px-2',
+                    column.columnDef.meta?.align === 'right' && 'text-right tabular-nums',
+                  )}
+                >
+                  {footer.cells[column.id]}
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        )}
       </table>
       {rows.length === 0 && <PanelEmpty message={emptyMessage} />}
       {menu && <ContextMenu x={menu.x} y={menu.y} items={menu.items} onClose={closeMenu} />}

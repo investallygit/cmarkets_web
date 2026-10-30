@@ -19,14 +19,6 @@ function fullScreen(title: string, code: string, api: string[]): PanelPlan[] {
 /** Panel layouts of the mockups in spec section 9 (screens 5 to 9), keyed by screen id. */
 // prettier-ignore
 export const SCREEN_PLANS: Partial<Record<string, PanelPlan[]>> = {
-  PORT: [
-    { id: 'header', title: 'Portfolio', code: 'PORT', api: ['GET /portfolios', 'GET /portfolios/{id}'], x: 0, y: 0, w: 12, h: 3 },
-    { id: 'positions', title: 'Valued positions', code: 'PORT', api: ['GET /portfolios/{id}/positions'], x: 0, y: 3, w: 7, h: 13 },
-    { id: 'performance', title: 'Performance vs benchmark', code: 'PORT', api: ['GET /portfolios/{id}/performance'], x: 7, y: 3, w: 5, h: 13 },
-    { id: 'allocation', title: 'Allocation', code: 'PORT', api: ['GET /portfolios/{id}/allocation?by='], x: 0, y: 16, w: 3, h: 10 },
-    { id: 'risk', title: 'Risk metrics', code: 'PORT', api: ['GET /portfolios/{id}/risk'], x: 3, y: 16, w: 4, h: 10 },
-    { id: 'income', title: 'Upcoming income', code: 'PORT', api: ['GET /portfolios/{id}/income', 'POST /portfolios/{id}/reports'], x: 7, y: 16, w: 5, h: 10 },
-  ],
   PUB: [
     { id: 'filters', title: 'Filters', code: 'PUB', api: ['GET /library?subjectType=&country=&sector=&access=&rating=&sort='], x: 0, y: 0, w: 12, h: 3 },
     { id: 'list', title: 'Publications', code: 'PUB', api: ['GET /library'], x: 0, y: 3, w: 7, h: 23 },
