@@ -6,6 +6,7 @@ import type { PortfolioLimit, RiskDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
+import { ScrollArea } from '@/shared/ui/ScrollArea'
 
 /** Shown when this share of the line-days had no quote (spec section 14.3). */
 const QUIET_DAYS_WARNING_PCT = 20
@@ -157,49 +158,51 @@ function RiskMetrics({ risk, variant }: { risk: RiskDto; variant: 'compact' | 'f
 
   return (
     <div className="flex h-full flex-col">
-      <dl className="min-h-0 flex-1 overflow-auto">
-        {metrics.map((metric, index) => {
-          const breached = metric.limit !== undefined && risk.breaches.includes(metric.limit)
-          let detail: ReactNode = metric.detail
-          if (breached && metric.limit) {
-            detail = t('portfolio.risk.limit', { limit: limitText(metric.limit) })
-          }
-          return (
-            <div
-              key={metric.key}
-              className={clsx(
-                'flex items-start justify-between gap-3 px-3 py-1.5',
-                index % 2 === 1 && 'bg-row-alt',
-              )}
-            >
-              <dt className="pt-0.5 font-sans text-label text-secondary">{metric.label}</dt>
-              <dd className="flex flex-col items-end">
-                <span
-                  className={clsx(
-                    'font-mono text-label font-semibold whitespace-nowrap',
-                    breached && 'text-down',
-                  )}
-                >
-                  {metric.value}
-                  {breached && (
-                    <span className="sr-only"> {t('portfolio.limitStatus.breached')}</span>
-                  )}
-                </span>
-                {detail && (
+      <ScrollArea className="min-h-0 flex-1">
+        <dl>
+          {metrics.map((metric, index) => {
+            const breached = metric.limit !== undefined && risk.breaches.includes(metric.limit)
+            let detail: ReactNode = metric.detail
+            if (breached && metric.limit) {
+              detail = t('portfolio.risk.limit', { limit: limitText(metric.limit) })
+            }
+            return (
+              <div
+                key={metric.key}
+                className={clsx(
+                  'flex items-start justify-between gap-3 px-3 py-1.5',
+                  index % 2 === 1 && 'bg-row-alt',
+                )}
+              >
+                <dt className="pt-0.5 font-sans text-label text-secondary">{metric.label}</dt>
+                <dd className="flex flex-col items-end">
                   <span
                     className={clsx(
-                      'font-mono text-caption whitespace-nowrap',
-                      breached ? 'text-down' : 'text-secondary',
+                      'font-mono text-label font-semibold whitespace-nowrap',
+                      breached && 'text-down',
                     )}
                   >
-                    {detail}
+                    {metric.value}
+                    {breached && (
+                      <span className="sr-only"> {t('portfolio.limitStatus.breached')}</span>
+                    )}
                   </span>
-                )}
-              </dd>
-            </div>
-          )
-        })}
-      </dl>
+                  {detail && (
+                    <span
+                      className={clsx(
+                        'font-mono text-caption whitespace-nowrap',
+                        breached ? 'text-down' : 'text-secondary',
+                      )}
+                    >
+                      {detail}
+                    </span>
+                  )}
+                </dd>
+              </div>
+            )
+          })}
+        </dl>
+      </ScrollArea>
       {(risk.observations < risk.minObservations || risk.staleDaysPct > QUIET_DAYS_WARNING_PCT) && (
         <p className="shrink-0 border-t px-3 py-1 font-sans text-title text-warning">
           {risk.observations < risk.minObservations

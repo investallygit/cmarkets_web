@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { MarketStatusBadge } from '@/entities/market'
 import { usePortfolio } from '@/entities/portfolio'
 import { useSecurityProfile } from '@/entities/security'
-import { audienceOf, canAccessScreen, useCurrentUser } from '@/entities/session'
+import { audienceOf, canAccessScreen, lockedModule, useCurrentUser } from '@/entities/session'
 import { CommandBar } from '@/features/command-bar'
 import { routes } from '@/shared/routes/paths'
 import { screenById } from '@/shared/routes/screens'
@@ -24,8 +24,11 @@ export function TopBar({ className }: { className?: string }) {
   const { screen, params } = useCurrentRoute()
   const backOffice = audienceOf(user.accountType) === 'backoffice'
   const alerts = screenById('ALRT')
-  const subject = params.securityId ?? params.bondId
-  const portfolioName = usePortfolio(params.portfolioId).data?.name
+  // A screen the user cannot open, or out of the plan, shows its lock: the title loads nothing of
+  // it either.
+  const open = screen !== null && canAccessScreen(user, screen) && !lockedModule(user, screen)
+  const subject = open ? (params.securityId ?? params.bondId) : undefined
+  const portfolioName = usePortfolio(open ? params.portfolioId : undefined).data?.name
   // The security's name once loaded, as in the screen 2 mockup; its code until then. The
   // portfolio screen names the portfolio, as in the screen 5 mockup.
   const subjectName = useSecurityProfile(subject).data?.name ?? subject ?? portfolioName

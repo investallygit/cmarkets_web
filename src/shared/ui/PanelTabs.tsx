@@ -11,10 +11,16 @@ interface PanelTabsProps<T extends string> {
   onChange: (value: T) => void
 }
 
+/**
+ * Each option is a 24 px target (WCAG 2.5.8), as tall as the title bar, its label as small as the
+ * bar's text: the padding keeps the 8 px between labels.
+ */
+const OPTION = 'inline-flex h-6 min-w-6 items-center justify-center uppercase'
+
 /** Panel options with the active one in square brackets (spec section 9). */
 export function PanelTabs<T extends string>({ value, options, onChange }: PanelTabsProps<T>) {
   return (
-    <div role="tablist" className="panel-no-drag flex items-center gap-2">
+    <div role="tablist" className="panel-no-drag flex items-center">
       {options.map((option) => {
         const active = option.value === value
         return (
@@ -25,7 +31,8 @@ export function PanelTabs<T extends string>({ value, options, onChange }: PanelT
             aria-selected={active}
             onClick={() => onChange(option.value)}
             className={clsx(
-              'uppercase',
+              OPTION,
+              'px-1',
               active ? 'text-primary' : 'text-secondary hover:text-primary',
             )}
           >
@@ -53,7 +60,8 @@ export function PanelToggle({ active, onChange, disabled = false, children }: Pa
       disabled={disabled}
       onClick={() => onChange(!active)}
       className={clsx(
-        'panel-no-drag uppercase disabled:text-secondary/50',
+        OPTION,
+        'panel-no-drag disabled:text-secondary/50',
         active ? 'text-primary' : 'text-secondary enabled:hover:text-primary',
       )}
     >

@@ -1763,6 +1763,8 @@
     "bank": "Banque",
     "reference": "Référence",
     "download": "Télécharger la facture {{number}} en PDF",
+    "pdf": "PDF",
+    "downloadHint": "Choisissez une facture pour la télécharger en PDF.",
     "none": "Aucune facture pour l'instant."
   },
   "dataImport": {
@@ -2304,6 +2306,7 @@
     "dueTotal_other": "{{amount}} XAF à verser · {{count}} versements",
     "none": "Aucun versement ne correspond.",
     "markPaid": "Marquer versé",
+    "markPaidHint": "Choisissez un versement à verser pour le marquer versé.",
     "markPaidTitle": "Marquer le versement effectué",
     "markPaidMessage": "Le virement de {{amount}} à {{name}} pour {{month}} a été fait. L'analyste voit alors le versement comme effectué.",
     "paidDone": "{{name}}, {{month}} : marqué versé."

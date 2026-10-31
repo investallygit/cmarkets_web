@@ -17,6 +17,12 @@
   --border: #2a2a2a;
   --text-primary: #e6e6e6;
   --text-secondary: #8c8c8c;
+  /*
+   * On --bg-selected, --text-secondary is 3.4:1 and --down 3.5:1: this grey and this red keep the
+   * 4.5:1 of WCAG AA (4.7:1 each).
+   */
+  --text-secondary-selected: #a6a6a6;
+  --down-selected: #ff8080;
   --accent-amber: #ff9f1a;
   --up: #19d27a;
   --down: #ff4d4d;
@@ -98,7 +104,9 @@
   --radius-*: initial;
   --radius-xs: 2px;
 
-  --spacing-row: 22px; /* table rows and panel title bars */
+  --spacing-row: 22px; /* table rows (spec section 8) */
+  /* Panel and dialog title bars, the pager: their 24 px targets (WCAG 2.5.8) and a 1 px border. */
+  --spacing-bar: 25px;
   --spacing-topbar: 40px;
   --spacing-ticker: 24px;
   --spacing-statusbar: 22px;
@@ -485,5 +493,20 @@
       opacity: 1;
       transform: none;
     }
+  }
+}
+
+@layer utilities {
+  /*
+   * Secondary and falling text on a selected row or item, or under the pointer where the row
+   * turns selected. As specific as text-secondary and text-down and after them, so it wins; a
+   * hover colour of the text still wins over it.
+   */
+  :where(.bg-selected, .hover\:bg-selected:hover) .text-secondary {
+    color: var(--text-secondary-selected);
+  }
+
+  :where(.bg-selected, .hover\:bg-selected:hover) .text-down {
+    color: var(--down-selected);
   }
 }

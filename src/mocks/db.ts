@@ -253,14 +253,30 @@ function dropOutdatedSeeds(): void {
 dropOutdatedSeeds()
 
 let sessionUserId: string | null = null
+/** A user is logged in, in this tab: a login or a refresh opens the session, a logout ends it. */
+let sessionOpen = false
+
+/** A login or a refresh: the user whose data the following requests are answered with. */
+export function setSessionUser(userId: string | null): void {
+  sessionUserId = userId
+  sessionOpen = userId !== null
+}
 
 /** The user of the request being answered: the auth gate reads it from the access token. */
-export function setSessionUser(userId: string | null): void {
+export function setRequestUser(userId: string): void {
   sessionUserId = userId
 }
 
+/**
+ * A logout: nobody's alerts are watched until the next login. A request the auth gate already let
+ * through is still answered for its user, though the logout ran while it waited for its latency.
+ */
+export function endSession(): void {
+  sessionOpen = false
+}
+
 export function hasSession(): boolean {
-  return sessionUserId !== null
+  return sessionOpen
 }
 
 /** The account of the user logged in; the auth gate lets no request through without one. */

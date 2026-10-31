@@ -71,7 +71,7 @@ export function Dialog({
     >
       {open && (
         <>
-          <header className="flex h-row shrink-0 items-center border-b bg-panel-header pr-7 pl-2">
+          <header className="flex h-bar shrink-0 items-center border-b bg-panel-header pr-8 pl-2">
             <h2
               id={titleId}
               className="truncate font-sans text-title font-semibold tracking-title text-accent-amber uppercase"
@@ -86,7 +86,7 @@ export function Dialog({
             type="button"
             aria-label={t('common.close')}
             onClick={onClose}
-            className="absolute top-1 right-2 text-secondary hover:text-primary"
+            className="absolute top-0 right-1 inline-flex size-6 items-center justify-center text-secondary hover:text-primary"
           >
             <X aria-hidden className="size-3.5" />
           </button>

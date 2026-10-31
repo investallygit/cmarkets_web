@@ -10,6 +10,7 @@ import { Button } from '@/shared/ui/form/Button'
 import { DateInput } from '@/shared/ui/form/DateInput'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
+import { ScrollArea } from '@/shared/ui/ScrollArea'
 import { TemplatesDialog } from './TemplatesDialog'
 
 interface SessionCoveragePanelProps {
@@ -122,7 +123,7 @@ export function SessionCoveragePanel({
           />
         </div>
       )}
-      <div className="min-h-0 flex-1 overflow-auto">
+      <ScrollArea className="min-h-0 flex-1">
         <QueryView query={coverage}>
           {({ date: session, items }) => (
             <ul>
@@ -164,7 +165,7 @@ export function SessionCoveragePanel({
             </ul>
           )}
         </QueryView>
-      </div>
+      </ScrollArea>
       <div className="shrink-0 p-2">
         <Button variant="info" className="w-full" onClick={() => setTemplatesOpen(true)}>
           {t('dataImport.templates.download')}

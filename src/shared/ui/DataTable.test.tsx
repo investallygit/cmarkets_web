@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { DataTable } from './DataTable'
 import { createDataColumnHelper } from './dataColumns'
@@ -98,5 +99,33 @@ describe('DataTable', () => {
 
     await user.click(screen.getByRole('cell', { name: 'BANGE' }))
     expect(onRowClick).toHaveBeenCalledWith({ code: 'BANGE', last: 26750 })
+  })
+
+  it('moves from row to row with the arrows, and opens a row with Enter', async () => {
+    const user = userEvent.setup()
+    const onRowDoubleClick = vi.fn()
+    function Selectable() {
+      const [selected, setSelected] = useState<string | null>(null)
+      return (
+        <DataTable
+          data={data}
+          columns={columns}
+          getRowId={getRowId}
+          selectedRowId={selected}
+          onRowClick={(row) => setSelected(row.code)}
+          onRowDoubleClick={onRowDoubleClick}
+          enableSorting={false}
+        />
+      )
+    }
+    render(<Selectable />)
+    // The table is the first stop of the keyboard: the headers do not sort.
+    await user.tab()
+    await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowUp}')
+    await user.keyboard('{Enter}')
+    expect(onRowDoubleClick).toHaveBeenCalledWith({ code: 'BANGE', last: 26750 })
+    // Past the last row, the selection stays there.
+    await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{Enter}')
+    expect(onRowDoubleClick).toHaveBeenLastCalledWith({ code: 'SIAT', last: 18500 })
   })
 })

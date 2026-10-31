@@ -130,7 +130,7 @@ export function SignUpForm({ accountType }: { accountType?: ClientAccountType })
           autoComplete="email"
         />
       </Field>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid gap-3 sm:grid-cols-2">
         <Field label={t('auth.password')} hint={t('auth.passwordRule')} error={errorOf('password')}>
           <PasswordInput
             value={form.password}
@@ -146,7 +146,7 @@ export function SignUpForm({ accountType }: { accountType?: ClientAccountType })
           />
         </Field>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid gap-3 sm:grid-cols-2">
         <Field
           label={t('auth.signUp.phone')}
           hint={t('auth.signUp.phoneHint')}
@@ -222,7 +222,7 @@ export function SignUpForm({ accountType }: { accountType?: ClientAccountType })
       </Button>
       <p className="text-center font-sans text-label text-secondary">
         {t('auth.signUp.haveAccount')}{' '}
-        <Link to={routes.login} className="text-info hover:underline">
+        <Link to={routes.login} className="text-info underline underline-offset-2">
           {t('auth.signUp.logIn')}
         </Link>
       </p>

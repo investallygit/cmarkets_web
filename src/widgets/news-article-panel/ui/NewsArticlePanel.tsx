@@ -39,7 +39,7 @@ export function NewsArticlePanel({ articleId }: { articleId: string | null }) {
                     <Link
                       key={securityId}
                       to={securityPath(securityId)}
-                      className="font-mono text-info hover:underline"
+                      className="font-mono text-info underline underline-offset-2"
                     >
                       {securityId}
                     </Link>

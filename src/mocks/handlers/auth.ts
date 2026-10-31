@@ -17,6 +17,7 @@ import {
   accountStore,
   closeSession,
   cookieSession,
+  endSession,
   findAccount,
   issueAccessToken,
   modulesOf,
@@ -25,6 +26,7 @@ import {
   refreshCookie,
   revokeSessions,
   saveAccounts,
+  setRequestUser,
   setSessionUser,
   subscriptionStore,
   userOfAccessToken,
@@ -116,7 +118,7 @@ const authGate = http.all(api('/*'), ({ request }) => {
   const userId = header.startsWith('Bearer ') ? userOfAccessToken(header.slice(7)) : null
   // A call without any token to an open path is a visitor's; a token no longer valid is renewed.
   if (!userId) return !header && OPEN_PATHS.includes(path) ? undefined : unauthorized()
-  setSessionUser(userId)
+  setRequestUser(userId)
   const account = findAccount(userId)
   const module = MODULE_PATHS.find(([pattern]) => pattern.test(path))?.[1]
   if (account && module && !modulesOf(account).includes(module)) {
@@ -283,7 +285,7 @@ export const authHandlers = [
   http.post(api('/auth/logout'), async () => {
     await latency()
     closeSession()
-    setSessionUser(null)
+    endSession()
     return noContent()
   }),
 

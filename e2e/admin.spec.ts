@@ -222,7 +222,10 @@ test('PAY marks a September payout paid', async ({ page }) => {
   await page.goto('/admin/payouts?month=2026-09&status=due')
   const payouts = panel(page, 'Analyst payouts')
   const ndong = payouts.getByRole('row', { name: /M\. Ndong/ })
-  await ndong.getByRole('button', { name: 'Mark paid' }).click()
+  // The title bar's button marks the payout selected.
+  await expect(payouts.getByRole('button', { name: 'Mark paid' })).toBeDisabled()
+  await ndong.click()
+  await payouts.getByRole('button', { name: 'Mark paid' }).click()
   const dialog = page.getByRole('dialog', { name: 'Mark the payout paid' })
   await expect(dialog).toContainText('The transfer of XAF 92,800 to M. Ndong for September 2026')
   await dialog.getByRole('button', { name: 'Mark paid' }).click()

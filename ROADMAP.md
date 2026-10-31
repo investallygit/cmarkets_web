@@ -187,6 +187,22 @@ Done in step 10, with the home page:
   login pages can still be translated; the picture of the terminal is `translate="no"`, and a
   text that changes stands alone in its element, which React rewrites whole. A Playwright flow
   translates the home page and waits for the command bar to type its next command.
+- **Accessibility (WCAG 2.2 AA)**: axe-core finds nothing on any screen, tab or account type.
+  - Contrast: on the selected background, secondary text and falling figures take
+    `--text-secondary-selected` and `--down-selected` (4.7:1; the section 8 colours give 3.4:1
+    and 3.5:1 there).
+  - Targets of 24 px (2.5.8): panel and dialog title bars and the pager are 25 px (`h-bar`), so
+    their buttons, the options of `PanelTabs` and the sort buttons of `DataTable` reach 24 px,
+    while table rows keep their 22 px. A row has no button of its own any more: PAY's "Mark
+    paid" and CFG's invoice PDF act on the selected row from the title bar (also by double click,
+    Enter or the right-click menu).
+  - Keyboard: a `DataTable` takes the focus, the arrows move from row to row as a click would and
+    Enter opens a row as a double click; a box that scrolls with nothing to focus in it takes the
+    focus itself (`ScrollArea`, `useKeyboardScrolling`), a panel's body included.
+  - Links inside a sentence are underlined; the sign-up form's pairs of fields stack on a phone.
+- **Mock session**: a logout no longer takes the user away from the requests already let through
+  by the auth gate (`setRequestUser`, `endSession`): they were failing with 500 while they waited
+  for their latency.
 
 Still to do, with the first screen that needs it:
 
@@ -395,7 +411,7 @@ Still to do, with the first screen that needs it:
   and the invitations; an administrator invites by e-mail and, from the right-click menu, changes
   a role or removes a member (with a confirmation); the last administrator stays. Invoices: the
   plan's, the organisation's for its administrators and the receipts of research bought, each in
-  PDF; a transfer still due shows its date. Members of an organisation read its plan without
+  PDF from the title bar once selected (or by double click); a transfer still due shows its date. Members of an organisation read its plan without
   changing it.
 - **Mock**: four plans (Monitoring, Analysis, Professional, and Student for students), prices per
   user and month excluding VAT at 19.25%, a year for ten months. K. Atangana pays Professional
@@ -550,8 +566,9 @@ Still to do, with the first screen that needs it:
 
 - **Built**: by analyst and month, the sales, revenue, commission and net payable with its status
   (in progress for the current month, due once closed, paid), the total due in the title bar,
-  filters by month, status and analyst in the URL, "Mark paid" with a confirmation (also in the
-  right-click menu). The analyst's earnings in PUB NEW show the payment.
+  filters by month, status and analyst in the URL, "Mark paid" for the selected payout in the title
+  bar, with a confirmation (also by double click, Enter or the right-click menu). The analyst's
+  earnings in PUB NEW show the payment.
 - **Mock**: the months up to August are paid, K. Atangana's September too (on 5 October), the
   other analysts' September is due.
 

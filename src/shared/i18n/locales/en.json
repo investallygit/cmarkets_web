@@ -1763,6 +1763,8 @@
     "bank": "Bank",
     "reference": "Reference",
     "download": "Download invoice {{number}} in PDF",
+    "pdf": "PDF",
+    "downloadHint": "Select an invoice to download it in PDF.",
     "none": "No invoice yet."
   },
   "dataImport": {
@@ -2304,6 +2306,7 @@
     "dueTotal_other": "XAF {{amount}} due · {{count}} payouts",
     "none": "No payout matches.",
     "markPaid": "Mark paid",
+    "markPaidHint": "Select a due payout to mark it paid.",
     "markPaidTitle": "Mark the payout paid",
     "markPaidMessage": "The transfer of {{amount}} to {{name}} for {{month}} was made. The analyst then sees the payout as paid.",
     "paidDone": "{{name}}, {{month}}: marked paid."

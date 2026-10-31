@@ -173,9 +173,11 @@ nothing moves under `prefers-reduced-motion`. The screens keep the flash alone.
 Icons come from `lucide-react`.
 
 Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of a title bar),
-`ScreenTabs`, `Pager` (pages of a server list), `DataTable` (sorting, right-click menu, Excel and CSV export unless the user lacks
+`ScreenTabs`, `Pager` (pages of a server list), `ScrollArea` (a box that scrolls and takes the
+focus when nothing in it can), `DataTable` (sorting, right-click menu, Excel and CSV export unless the user lacks
 `analysis:export`; `exportRef` puts the export links in a title bar; a `footer` row stays out of
-the sorting; `sorting` and `onSortingChange` leave the order to the server for a paged list), `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
+the sorting; `sorting` and `onSortingChange` leave the order to the server for a paged list; the
+arrows move the selection and Enter opens a row), `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
 drawings; `AreaChart`; `useChartTheme`, the section 8 colours for Recharts, which draws in SVG,
 and the `--chart-*` series palette checked for colour-blind separation), `PdfViewer`, `form/`
 (buttons, fields, selects, number and date inputs in the user's format, password inputs,

@@ -42,7 +42,7 @@ export function DemoAccounts({ onPick }: { onPick: (credentials: LoginRequestDto
             <button
               type="button"
               onClick={() => onPick({ email: account.email, password })}
-              className="grid w-full grid-cols-[7.5rem_minmax(0,1fr)] gap-2 px-1 py-0.5 text-left font-sans text-data hover:bg-panel-header"
+              className="grid min-h-6 w-full grid-cols-[7.5rem_minmax(0,1fr)] items-center gap-2 px-1 text-left font-sans text-data hover:bg-panel-header"
             >
               <span className="text-secondary">{t(`accountTypes.${account.accountType}`)}</span>
               <span className="truncate font-mono">{account.email}</span>

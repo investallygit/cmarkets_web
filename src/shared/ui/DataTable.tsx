@@ -8,6 +8,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type KeyboardEvent,
   type MouseEvent,
   type MutableRefObject,
   type ReactNode,
@@ -71,6 +72,8 @@ function toCsvCell(value: unknown): CsvCell {
 /**
  * Dense terminal table: 22 px rows, alternate row background, sorting by clicking a column
  * header, right-click menu with Excel and CSV export, virtualization for thousands of rows.
+ * The table takes the focus, so the keyboard scrolls it; where rows are clicked, the up and down
+ * arrows move from row to row as a click would, and Enter opens a row as a double click.
  */
 export function DataTable<TRow extends RowData>({
   data,
@@ -118,6 +121,8 @@ export function DataTable<TRow extends RowData>({
     estimateSize: () => ROW_HEIGHT,
     overscan: 12,
     enabled: virtualize,
+    // A row brought into view stays clear of the sticky header.
+    scrollPaddingStart: ROW_HEIGHT,
   })
 
   const leafColumns = table.getAllLeafColumns()
@@ -175,12 +180,41 @@ export function DataTable<TRow extends RowData>({
     setMenu({ x: event.clientX, y: event.clientY, items })
   }
 
+  const scrollToRow = (index: number) => {
+    if (virtualize) {
+      virtualizer.scrollToIndex(index)
+      return
+    }
+    scrollRef.current
+      ?.querySelector(`tbody > [data-index="${index}"]`)
+      ?.scrollIntoView({ block: 'nearest' })
+  }
+
+  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    // The keys of a control in a cell, or of a table without clicks, keep their own meaning.
+    if (event.target !== event.currentTarget || !onRowClick || rows.length === 0) return
+    const current = rows.findIndex((row) => row.id === selectedRowId)
+    if (event.key === 'Enter') {
+      if (current === -1 || !onRowDoubleClick) return
+      event.preventDefault()
+      onRowDoubleClick(rows[current].original)
+      return
+    }
+    const step = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0
+    if (step === 0) return
+    event.preventDefault()
+    const next = current === -1 ? 0 : Math.min(rows.length - 1, Math.max(0, current + step))
+    onRowClick(rows[next].original)
+    scrollToRow(next)
+  }
+
   const renderRow = (row: Row<DataTableFeatures, TRow>, index: number, offset?: number) => (
     <tr
       key={row.id}
       data-index={index}
       className={clsx(
-        'grid h-row items-center font-mono text-data',
+        // The sticky header does not hide a row brought into view.
+        'grid h-row scroll-mt-row items-center font-mono text-data',
         offset !== undefined && 'absolute inset-x-0 top-0',
         row.id === selectedRowId
           ? 'bg-selected'
@@ -211,7 +245,12 @@ export function DataTable<TRow extends RowData>({
   )
 
   return (
-    <div ref={scrollRef} className="relative h-full overflow-auto">
+    <div
+      ref={scrollRef}
+      tabIndex={rows.length > 0 ? 0 : undefined}
+      onKeyDown={onKeyDown}
+      className="relative h-full overflow-auto outline-none focus-visible:ring-1 focus-visible:ring-accent-amber focus-visible:ring-inset"
+    >
       <table className="grid w-full">
         <thead className="sticky top-0 z-1 grid bg-panel-header">
           {table.getHeaderGroups().map((group) => (
@@ -223,21 +262,25 @@ export function DataTable<TRow extends RowData>({
               {group.headers.map((header) => {
                 const align = header.column.columnDef.meta?.align
                 const sorted = header.column.getIsSorted()
+                const sortable = !header.isPlaceholder && header.column.getCanSort()
                 return (
                   <th
                     key={header.id}
                     scope="col"
                     className={clsx(
-                      'truncate px-2 font-sans text-data font-normal text-secondary',
+                      'px-2 font-sans text-data font-normal text-secondary',
+                      // A sort button is a 24 px target (WCAG 2.5.8) past the 22 px row, which
+                      // must not clip it: its label truncates itself.
+                      sortable ? 'min-w-0' : 'truncate',
                       align === 'right' ? 'text-right' : 'text-left',
                     )}
                   >
-                    {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                    {header.isPlaceholder ? null : sortable ? (
                       <button
                         type="button"
                         onClick={header.column.getToggleSortingHandler()}
                         className={clsx(
-                          'inline-flex max-w-full items-center gap-0.5 hover:text-primary',
+                          '-my-px inline-flex h-6 max-w-full min-w-6 items-center gap-0.5 align-middle hover:text-primary',
                           align === 'right' && 'flex-row-reverse',
                         )}
                       >

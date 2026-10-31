@@ -113,14 +113,14 @@ export function CalendarViewPanel({ state, onChange }: CalendarViewPanelProps) {
               type="button"
               aria-label={t('calendar.previous')}
               onClick={() => onChange((current) => ({ date: stepDate(current, -1) }))}
-              className="hover:text-primary"
+              className="inline-flex size-6 items-center justify-center hover:text-primary"
             >
               <ChevronLeft aria-hidden className="size-3.5" />
             </button>
             <button
               type="button"
               onClick={() => onChange({ date: today })}
-              className="uppercase hover:text-primary"
+              className="inline-flex h-6 items-center px-1 uppercase hover:text-primary"
             >
               {t('calendar.today')}
             </button>
@@ -128,7 +128,7 @@ export function CalendarViewPanel({ state, onChange }: CalendarViewPanelProps) {
               type="button"
               aria-label={t('calendar.next')}
               onClick={() => onChange((current) => ({ date: stepDate(current, 1) }))}
-              className="hover:text-primary"
+              className="inline-flex size-6 items-center justify-center hover:text-primary"
             >
               <ChevronRight aria-hidden className="size-3.5" />
             </button>

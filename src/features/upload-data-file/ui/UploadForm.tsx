@@ -101,7 +101,7 @@ export function UploadForm({ sessionDate, onUploaded, onOpenPending }: UploadFor
           {pendingId && onOpenPending && (
             <button
               type="button"
-              className="text-info hover:underline"
+              className="text-info underline underline-offset-2"
               onClick={() => onOpenPending(pendingId)}
             >
               {t('dataImport.upload.openPending')}

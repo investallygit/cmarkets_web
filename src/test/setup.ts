@@ -18,3 +18,8 @@ if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
     this.dispatchEvent(new Event('close'))
   }
 }
+
+// jsdom lays nothing out, so it has no scrolling: bringing an element into view does nothing.
+if (typeof Element.prototype.scrollIntoView !== 'function') {
+  Element.prototype.scrollIntoView = function scrollIntoView() {}
+}

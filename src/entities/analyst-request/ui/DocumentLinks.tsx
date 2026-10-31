@@ -7,7 +7,10 @@ interface DocumentLinksProps {
   onOpen: (kind: SignUpDocument) => void
 }
 
-/** "Documents: CV, ID, licence", each opening the file sent at sign-up (screen 9 mockup). */
+/**
+ * "Documents: CV, ID, licence", each opening the file sent at sign-up (screen 9 mockup). Each
+ * link is underlined, apart from the text by more than its colour, and as tall as a 24 px target.
+ */
 export function DocumentLinks({ request, onOpen }: DocumentLinksProps) {
   const { t } = useTranslation()
   if (request.documents.length === 0) {
@@ -23,7 +26,7 @@ export function DocumentLinks({ request, onOpen }: DocumentLinksProps) {
             type="button"
             title={document.fileName}
             onClick={() => onOpen(document.kind)}
-            className="text-info hover:underline"
+            className="-my-1 inline-flex min-h-6 min-w-6 items-center justify-center text-info underline underline-offset-2"
           >
             {t(`analystRequests.documents.${document.kind}`)}
           </button>

@@ -91,7 +91,7 @@ export function LoginForm() {
       </Button>
       <p className="text-center font-sans text-label text-secondary">
         {t('auth.login.noAccount')}{' '}
-        <Link to={routes.signUp} className="text-info hover:underline">
+        <Link to={routes.signUp} className="text-info underline underline-offset-2">
           {t('auth.login.signUp')}
         </Link>
       </p>

@@ -17,12 +17,13 @@ export function Pager({ page, pageSize, totalCount, onChange }: PagerProps) {
   if (pages <= 1) return null
   const first = (page - 1) * pageSize + 1
   const last = Math.min(page * pageSize, totalCount)
-  const button = 'flex size-5 items-center justify-center hover:text-primary disabled:opacity-40'
+  // 24 px targets (WCAG 2.5.8), as tall as the bar.
+  const button = 'flex size-6 items-center justify-center hover:text-primary disabled:opacity-40'
 
   return (
     <nav
       aria-label={t('pager.label')}
-      className="flex h-row shrink-0 items-center justify-end gap-2 border-t px-2 font-mono text-data text-secondary"
+      className="flex h-bar shrink-0 items-center justify-end gap-2 border-t px-2 font-mono text-data text-secondary"
     >
       <span>
         {t('pager.range', {

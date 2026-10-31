@@ -110,10 +110,11 @@ test('a bank transfer gives the invoice to pay, and the new plan at once', async
     /not in your plan/,
   )
 
+  // The title bar's PDF button downloads the invoice selected.
+  const invoices = panel(page, 'Invoices')
+  await invoices.getByRole('row', { name: /CM-2025/ }).click()
   const download = page.waitForEvent('download')
-  await panel(page, 'Invoices')
-    .getByRole('button', { name: /Download invoice CM-2025/ })
-    .click()
+  await invoices.getByRole('button', { name: /Download invoice CM-2025/ }).click()
   expect((await download).suggestedFilename()).toMatch(/^CM-2025-\d{6}\.pdf$/)
 })
 

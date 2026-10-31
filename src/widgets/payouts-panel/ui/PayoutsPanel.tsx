@@ -1,5 +1,5 @@
 import { CircleCheck } from 'lucide-react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PayoutStatusText, useAdminPayouts } from '@/entities/payout'
 import { useMarkPaid } from '@/features/mark-payout-paid'
@@ -22,6 +22,8 @@ const STATUSES: readonly PayoutStatus[] = ['due', 'accruing', 'paid']
  * PAY, analyst payouts: by analyst and month, the sales, revenue, CMarket's commission and the net
  * payable, with its status; "Mark paid" with a confirmation once the transfer is made
  * (GET /admin/payouts, POST /admin/payouts/{id}/mark-paid). The filters stay in the URL.
+ * "Mark paid" sits in the title bar for the payout selected, a 24 px target that a button in a
+ * 22 px row could not be (WCAG 2.5.8); a double click, Enter or the right-click menu also asks.
  */
 export function PayoutsPanel() {
   const { t } = useTranslation()
@@ -35,6 +37,8 @@ export function PayoutsPanel() {
   const month = params.get('month') ?? undefined
   const analystId = params.get('analyst') ?? undefined
   const payouts = useAdminPayouts({ status, month, analystId })
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const selected = payouts.data?.find((payout) => payout.id === selectedId)
   const setFilter = (values: Record<string, string>) =>
     updateParams((current) => withParams(current, values))
 
@@ -97,27 +101,8 @@ export function PayoutsPanel() {
                   .join(' · ')
               : '',
         }),
-        helper.display({
-          id: 'action',
-          header: '',
-          meta: { width: '96px', exportable: false },
-          cell: ({ row }) =>
-            row.original.status === 'due' && (
-              <Button
-                size="sm"
-                variant="success"
-                className="h-5"
-                onClick={(event) => {
-                  event.stopPropagation()
-                  ask(row.original)
-                }}
-              >
-                {t('payouts.markPaid')}
-              </Button>
-            ),
-        }),
       ]),
-    [t, format, ask],
+    [t, format],
   )
 
   const rowMenu = (payout: AdminPayoutDto): MenuItem[] =>
@@ -147,14 +132,26 @@ export function PayoutsPanel() {
       title={t('panels.payouts')}
       code="PAY"
       options={
-        all.data && (
-          <span>
-            {t('payouts.dueTotal', {
-              amount: xaf(due.reduce((sum, payout) => sum + payout.net, 0)),
-              count: due.length,
-            })}
-          </span>
-        )
+        <>
+          {all.data && (
+            <span>
+              {t('payouts.dueTotal', {
+                amount: xaf(due.reduce((sum, payout) => sum + payout.net, 0)),
+                count: due.length,
+              })}
+            </span>
+          )}
+          <Button
+            size="sm"
+            variant="success"
+            disabled={selected?.status !== 'due'}
+            title={selected?.status === 'due' ? undefined : t('payouts.markPaidHint')}
+            onClick={() => selected && ask(selected)}
+            className="panel-no-drag"
+          >
+            {t('payouts.markPaid')}
+          </Button>
+        </>
       }
       bodyClassName="flex flex-col"
     >
@@ -203,6 +200,11 @@ export function PayoutsPanel() {
               data={items}
               columns={columns}
               getRowId={getPayoutId}
+              selectedRowId={selectedId}
+              onRowClick={(payout) => setSelectedId(payout.id)}
+              onRowDoubleClick={(payout) => {
+                if (payout.status === 'due') ask(payout)
+              }}
               rowMenu={rowMenu}
               exportName="cmarket-payouts"
               emptyMessage={t('payouts.none')}

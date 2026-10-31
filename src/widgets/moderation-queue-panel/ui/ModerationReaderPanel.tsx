@@ -6,6 +6,7 @@ import type { ModerationItemDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
+import { ScrollArea } from '@/shared/ui/ScrollArea'
 import { PanelEmpty } from '@/shared/ui/StatusViews'
 import { useItemLine } from '../model/useItemLine'
 
@@ -50,11 +51,11 @@ export function ModerationReaderPanel({ item }: { item: ModerationItemDto | null
               </ul>
             )}
           </div>
-          <div className="min-h-0 flex-1 overflow-auto">
+          <ScrollArea className="min-h-0 flex-1">
             <QueryView query={publication}>
               {(view) => <PublicationReader publication={view} />}
             </QueryView>
-          </div>
+          </ScrollArea>
         </>
       )}
     </Panel>
