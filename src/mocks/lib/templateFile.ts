@@ -1,7 +1,7 @@
 import { parseDate, parseNumber } from '@/shared/lib/parse'
 
 /** Columns of the transaction import template, in this order (spec section 4). */
-export const TEMPLATE_COLUMNS = [
+export const TRANSACTION_COLUMNS = [
   'date',
   'type',
   'security',
@@ -11,14 +11,14 @@ export const TEMPLATE_COLUMNS = [
   'amount',
   'note',
 ] as const
-export type TemplateColumn = (typeof TEMPLATE_COLUMNS)[number]
+export type TransactionColumn = (typeof TRANSACTION_COLUMNS)[number]
 
-type Cell = string | number | boolean | Date | null
+export type Cell = string | number | boolean | Date | null
 
-export interface FileRow {
+export interface FileRow<C extends string> {
   /** Line in the file, the header being line 1. */
   line: number
-  cells: Record<TemplateColumn, Cell>
+  cells: Record<C, Cell>
 }
 
 /** Splits CSV text, ';' or ',' separated, with "quoted" cells; the delimiter comes from the header. */
@@ -62,10 +62,15 @@ function toCell(value: unknown): Cell {
     : null
 }
 
-/** The rows of the file, matched to the template's columns by their header. */
-export async function readTransactionFile(
+/**
+ * The rows of a CSV or Excel file of a template (spec sections 4 and 11), matched to its columns
+ * by their header; a column left out of `required` may be missing from the file.
+ */
+export async function readTemplateFile<C extends string>(
   file: File,
-): Promise<{ rows: FileRow[] } | { error: string }> {
+  columns: readonly C[],
+  required: readonly C[] = columns,
+): Promise<{ rows: FileRow<C>[] } | { error: string }> {
   let table: Cell[][]
   if (/\.xlsx$/i.test(file.name)) {
     try {
@@ -80,7 +85,7 @@ export async function readTransactionFile(
     return { error: 'A .csv or .xlsx file of the template.' }
   }
   const [header = [], ...body] = table
-  const positions = TEMPLATE_COLUMNS.map((column) =>
+  const positions = columns.map((column) =>
     header.findIndex(
       (title) =>
         String(title ?? '')
@@ -88,17 +93,29 @@ export async function readTransactionFile(
           .toLowerCase() === column,
     ),
   )
-  const missing = TEMPLATE_COLUMNS.filter((_, index) => positions[index] === -1)
+  const missing = columns.filter(
+    (column, index) => positions[index] === -1 && required.includes(column),
+  )
   if (missing.length > 0) return { error: `Missing columns: ${missing.join(', ')}.` }
   const rows = body
     .map((cells, index) => ({
       line: index + 2,
       cells: Object.fromEntries(
-        TEMPLATE_COLUMNS.map((column, position) => [column, cells[positions[position]] ?? null]),
-      ) as Record<TemplateColumn, Cell>,
+        columns.map((column, position) => [
+          column,
+          positions[position] === -1 ? null : (cells[positions[position]] ?? null),
+        ]),
+      ) as Record<C, Cell>,
     }))
-    .filter((row) => Object.values(row.cells).some((cell) => String(cell ?? '').trim() !== ''))
+    .filter((row) =>
+      Object.values<Cell>(row.cells).some((cell) => String(cell ?? '').trim() !== ''),
+    )
   return { rows }
+}
+
+/** The rows of a transaction import file. */
+export function readTransactionFile(file: File) {
+  return readTemplateFile(file, TRANSACTION_COLUMNS)
 }
 
 /** Excel stores dates as days since 30/12/1899. */

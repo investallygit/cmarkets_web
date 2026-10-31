@@ -69,12 +69,13 @@ async function request<T>(method: string, path: string, options: RequestOptions 
 
 /** A multipart form, such as a file upload; the browser writes its Content-Type. */
 async function requestForm<T>(
+  method: 'POST' | 'PUT',
   path: string,
   form: FormData,
   options: Omit<RequestOptions, 'body'> = {},
 ): Promise<T> {
   const init = {
-    method: 'POST',
+    method,
     headers: { Accept: 'application/json' },
     body: form,
     signal: options.signal,
@@ -99,7 +100,10 @@ export const apiClient = {
   getBlob: requestBlob,
   post: <T>(path: string, body?: unknown, options?: Omit<RequestOptions, 'body'>) =>
     request<T>('POST', path, { ...options, body }),
-  postForm: requestForm,
+  postForm: <T>(path: string, form: FormData, options?: Omit<RequestOptions, 'body'>) =>
+    requestForm<T>('POST', path, form, options),
+  putForm: <T>(path: string, form: FormData, options?: Omit<RequestOptions, 'body'>) =>
+    requestForm<T>('PUT', path, form, options),
   put: <T>(path: string, body?: unknown, options?: Omit<RequestOptions, 'body'>) =>
     request<T>('PUT', path, { ...options, body }),
   patch: <T>(path: string, body?: unknown, options?: Omit<RequestOptions, 'body'>) =>

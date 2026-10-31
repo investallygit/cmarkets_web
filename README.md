@@ -1,8 +1,8 @@
 # CMarket web (prototype)
 
-Front end of CMarket, built from `CMarket-developer-spec-EN.pdf`. This prototype runs without
-a back end: a mock layer answers the REST API and simulates the real-time hub with the sample
-data of the mockups.
+Front end of CMarket, built from `CMarket-developer-spec-EN.pdf`: the client terminal and the
+back-office of the Data admin. This prototype runs without a back end: a mock layer answers the
+REST API and simulates the real-time hub with the sample data of the mockups.
 
 ## Getting started
 
@@ -32,7 +32,9 @@ mock back end keeps the accounts, organisations, plans and invoices, and each us
 alerts, saved screens, portfolios, purchases, layouts and chart drawings in localStorage, with the
 research library that every account shares; it plays the browser's part for the refresh token
 cookie. It sets off the alerts when a price crosses a threshold, a release comes out or a portfolio
-limit is breached. It runs the bond calculator with the formulas of spec section 14.1 and values
+limit is breached. For the Data admin it reads the CSV and Excel templates, runs the format and
+business checks of spec section 11 and puts the published rows in place of its generated prices,
+index closes, auctions, curves and dividends, until a rollback takes them out. It runs the bond calculator with the formulas of spec section 14.1 and values
 portfolios with those of sections 14.2 and 14.3, each tested against the spec's cases; it plays
 the mobile money and card payments of research and plans and watermarks the PDFs it writes.
 
@@ -58,21 +60,23 @@ src/
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile, equity-screener,
               yield-curves (YCRV and YAS), portfolio, research-library, publishing-studio, news,
-              market-calendar, alerts, settings (CFG), placeholder (screens not built yet),
-              auth (login, sign-up, password reset), status
+              market-calendar, alerts, settings (CFG), data-import (IMP), data-session (DATA),
+              upload-history (HIST), eodhd (EODH), data-corrections (CORR), content (NEWS),
+              placeholder (screens not built yet), auth (login, sign-up, password reset), status
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
-              subscription-panel...), the security header and the shell bars (top-bar, side-menu,
-              status-bar, ticker-tape)
+              subscription-panel, current-upload-panel...), the security header and the shell bars
+              (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
               rate-publication, report-publication, follow-analyst, create-publication,
               edit-publication, draw-on-chart, compare-securities, edit-profile, change-password,
-              choose-plan, manage-members, switch-language, switch-account, workspace-layout
+              choose-plan, manage-members, upload-data-file, review-import, roll-back-import,
+              correct-price, publish-content, switch-language, switch-account, workspace-layout
   entities/   business data: session, subscription, organization, security, quote (live
               prices), market, bond, yield-curve, fundamentals, screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news,
-              calendar-event, notification
+              calendar-event, notification, data-import, data-provider (EODHD), stored-price
   shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
               UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
   mocks/      fake back end for the prototype (MSW handlers, sample data, simulated hub)
@@ -119,7 +123,9 @@ each other; the app shell mounts the form once.
   hub events it owns (`use*RealtimeSync`, mounted once by `app/layouts/AppShell.tsx`). Live
   quotes go into a Zustand store (`entities/quote/model`), so a tick re-renders one table cell,
   which flashes for 400 ms. The order book and the latest trades have no hub event: they are
-  polled every 5 seconds.
+  polled every 5 seconds. `ImportStatusChanged` moves an upload through its checks, and
+  `DataPublished` (a file published or rolled back, a price corrected) refreshes the quotes,
+  histories, indices, auctions and curves the open screens show.
 - **Layouts**: each page declares its panels and default grid (`pages/*/config`);
   `features/workspace-layout` saves the user's layout through `GET/PUT /me/layouts/{screen}`.
 - **Session** (spec section 10): `shared/api/session.ts` keeps the access token (15 minutes) in
@@ -184,6 +190,8 @@ the demo accounts of the login page go with the mock.
 | News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done on mock data; the mock sets off the alerts               |
 | Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
-| 6, 9 and the back-office screens                                          | Placeholders with the mockup layout and the API of each panel |
+| 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
+| Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
+| 9 and the other Admin screens (ANLY, MOD, PAY, CFG, AUDT)                 | Placeholders with the mockup layout and the API of each panel |
 
 The plan for the remaining screens, step by step, is in [ROADMAP.md](ROADMAP.md).

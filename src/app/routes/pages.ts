@@ -36,6 +36,25 @@ const AlertsPage = lazy(() =>
 const SettingsPage = lazy(() =>
   import('@/pages/settings').then((module) => ({ default: module.SettingsPage })),
 )
+// The back-office of the Data admin (screen 6).
+const DataImportPage = lazy(() =>
+  import('@/pages/data-import').then((module) => ({ default: module.DataImportPage })),
+)
+const DataSessionPage = lazy(() =>
+  import('@/pages/data-session').then((module) => ({ default: module.DataSessionPage })),
+)
+const UploadHistoryPage = lazy(() =>
+  import('@/pages/upload-history').then((module) => ({ default: module.UploadHistoryPage })),
+)
+const DataCorrectionsPage = lazy(() =>
+  import('@/pages/data-corrections').then((module) => ({ default: module.DataCorrectionsPage })),
+)
+const ContentPage = lazy(() =>
+  import('@/pages/content').then((module) => ({ default: module.ContentPage })),
+)
+const EodhdPage = lazy(() =>
+  import('@/pages/eodhd').then((module) => ({ default: module.EodhdPage })),
+)
 const PlaceholderPage = lazy(() =>
   import('@/pages/placeholder').then((module) => ({ default: module.PlaceholderPage })),
 )
@@ -53,6 +72,12 @@ const PAGES: Partial<Record<ScreenTextKey, Page>> = {
   CAL: MarketCalendarPage,
   ALRT: AlertsPage,
   CFG: SettingsPage,
+  IMP: DataImportPage,
+  DATA: DataSessionPage,
+  HIST: UploadHistoryPage,
+  EODH: EodhdPage,
+  CORR: DataCorrectionsPage,
+  NEWS: ContentPage,
 }
 
 // The login pages share a chunk, loaded before the session.

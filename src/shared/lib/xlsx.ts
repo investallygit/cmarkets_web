@@ -38,3 +38,10 @@ export async function downloadXlsx(
     filename.endsWith('.xlsx') ? filename : `${filename}.xlsx`,
   )
 }
+
+/** The same sheet as a file to send, e.g. an import template (spec section 11). */
+export async function xlsxBlob(rows: readonly (readonly XlsxCell[])[]): Promise<Blob> {
+  const { default: writeXlsxFile } = await import('write-excel-file/browser')
+  const { data, columns } = toXlsxSheet(rows)
+  return writeXlsxFile(data, { columns, stickyRowsCount: 1 }).toBlob()
+}

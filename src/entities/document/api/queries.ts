@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/shared/api'
-import type { DocumentDto, DocumentType, Paged } from '@/shared/api/contracts'
+import type { DocumentDto, DocumentType, DocumentWriteDto, Paged } from '@/shared/api/contracts'
 
 export interface DocumentQuery {
   securityId?: string
@@ -36,5 +36,36 @@ export function useDocumentFile(id: string | null) {
       apiClient.getBlob(`/documents/${encodeURIComponent(id ?? '')}/file`, { signal }),
     staleTime: Infinity,
     enabled: Boolean(id),
+  })
+}
+
+/**
+ * POST /data/documents, or PUT /data/documents/{id}: a multipart form with the PDF, which an edit
+ * may leave out to keep the current one.
+ */
+export function useSaveDocument() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({
+      id,
+      document,
+      file,
+    }: {
+      id: string | null
+      document: DocumentWriteDto
+      file: File | null
+    }) => {
+      const form = new FormData()
+      form.set('type', document.type)
+      form.set('title', document.title)
+      form.set('source', document.source)
+      document.securityIds.forEach((securityId) => form.append('securityIds', securityId))
+      if (file) form.set('file', file)
+      return id
+        ? apiClient.putForm<DocumentDto>(`/data/documents/${encodeURIComponent(id)}`, form)
+        : apiClient.postForm<DocumentDto>('/data/documents', form)
+    },
+    // A new file under the same id: the cached PDF goes too.
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: documentKeys.all }),
   })
 }

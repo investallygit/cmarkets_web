@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { cellDate, cellNumber, parseCsv, readTransactionFile } from './transactionFile'
+import { cellDate, cellNumber, parseCsv, readTransactionFile } from './templateFile'
 
 describe('transaction import file', () => {
   it('splits semicolon or comma CSV, with quoted cells', () => {

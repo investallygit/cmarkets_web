@@ -28,6 +28,7 @@ import {
 import { bondOf } from '../fixtures/bonds'
 import { PROFILE_FIXTURES } from '../fixtures/profiles'
 import { dayOffset, priceHistory, warmUpDays } from '../lib/bars'
+import { publishedDividends } from '../imports'
 import { api, latency, noContent, problem } from '../lib/http'
 import { bollinger, macd, rsi, sma } from '../lib/indicators'
 import { orderBook } from '../lib/orderBook'
@@ -233,7 +234,15 @@ export const securityHandlers = [
     await latency()
     const security = securities.get(String(params.id))
     if (!security) return unknownSecurity(params.id)
-    const dividends = PROFILE_FIXTURES[security.id]?.dividends ?? []
+    // A corporate actions file replaces the sample dividend of the same ex-date.
+    const published = publishedDividends(security.id)
+    const exDates = new Set(published.map((dividend) => dividend.exDate))
+    const dividends = [
+      ...published,
+      ...(PROFILE_FIXTURES[security.id]?.dividends ?? []).filter(
+        (dividend) => !exDates.has(dividend.exDate),
+      ),
+    ].sort((a, b) => b.exDate.localeCompare(a.exDate))
     return HttpResponse.json<DividendDto[]>(
       dividends.map((dividend) => ({ ...dividend, currency: security.currency })),
     )

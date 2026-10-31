@@ -2,13 +2,14 @@
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`.
 
-MKT, DES (with its FA and ANA tabs), EQS, YCRV, YAS, PORT, PUB, PUB NEW, N, CAL, ALRT and CFG
-are built, with the login, sign-up and password reset pages. The other 12 screens, all of the
-back-office, are placeholders: their route, menu entry, permission and mockup layout exist, with
-the API each panel will call (`src/pages/placeholder/config/plans.ts`).
+Every client screen is built (MKT, DES with its FA and ANA tabs, EQS, YCRV, YAS, PORT, PUB,
+PUB NEW, N, CAL, ALRT and CFG), with the login, sign-up and password reset pages, and the
+back-office of the Data admin (IMP with DATA, HIST and EODH, then CORR and NEWS). The 6 screens of
+the Admin are placeholders: their route, menu entry, permission and mockup layout exist, with the
+API each panel will call (`src/pages/placeholder/config/plans.ts`).
 
-DATA, HIST and EODH are planned with IMP, and ANLY and MOD with USER: in the mockups they are
-panels of the same screen. Sizes are relative: S < M < L < XL.
+ANLY and MOD are planned with USER: in the mockups they are panels of the same screen. Sizes are
+relative: S < M < L < XL.
 
 ## Order
 
@@ -21,10 +22,8 @@ panels of the same screen. Sizes are relative: S < M < L < XL.
 | 5    | PORT                                                            | Done   |
 | 6    | PUB, then PUB NEW                                               | Done   |
 | 7    | CFG, login and OTP (needed before connecting the real back end) | Done   |
-| 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS  | To do  |
+| 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS  | Done   |
 | 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY            | To do  |
-
-If the back end needs the import flow early, step 8 moves right after DES.
 
 ## Shared groundwork
 
@@ -119,6 +118,22 @@ Done in step 7, with CFG and the login pages:
   research also issues its receipt.
 - **Tests**: a Playwright `setup` project logs in once through the login page; the other tests
   start from that session.
+
+Done in step 8, with the back-office of the Data admin:
+
+- **Uploads**: `entities/data-import` holds the file types and their templates (CSV or Excel,
+  downloaded with the session), the coverage of a session, the uploads and their rows. An upload
+  is asked again every second while its checks run, should `ImportStatusChanged` not come; the
+  reasons of the checks come as a code and figures, and the screen words them in the user's
+  language. `DataPublished` refreshes the quotes, histories, indices, auctions and curves.
+- **Forms and API**: `apiClient.putForm` (a document replaced with its PDF); `ConfirmDialog` with a
+  required reason for the rollback; the security picker as a list of chips in the NEWS form.
+- **Mock**: `mocks/lib/dataImport.ts` reads a file against its template and runs the checks of
+  spec section 11 (tested); `mocks/imports.ts` keeps the uploads, puts the published rows and the
+  corrections in place of the generated prices (`setStoredSessions` in `lib/bars`) and index
+  closes, adds the auctions, curve points and dividends, and takes them out again on a rollback;
+  `mocks/content.ts` keeps the news and documents entered. The CSV reader of the transaction
+  import became `lib/templateFile`.
 
 Still to do, with the first screen that needs it:
 
@@ -355,26 +370,67 @@ Still to do, with the first screen that needs it:
 
 ## Back-office
 
-### IMP · Data import (screen 6): XL, with DATA, HIST, EODH (S each)
+### IMP · Data import (screen 6): done, with DATA, HIST and EODH
 
-- **UI**: session coverage, EODHD connector, current upload (Upload → Format → Business checks →
-  Preview → Publish, counters, rows with a Check column), upload history (Roll back with a
-  reason). DATA, HIST and EODH are full-screen versions of these panels, with more filters.
-- **Rules**: Publish stays disabled while an error remains or an alert is not ticked "checked".
-  The checks report progress through `ImportStatusChanged`.
-- **Mock**: a stateful pipeline that reads the `;` CSV templates and runs the business checks
-  (unknown security, duplicate, date outside a session, change above ±15%, zero volume with a
-  changed price).
+- **Built**: the four panels of the mockup. Session coverage: each file expected for the session
+  (daily prices and indices every session, auctions on an auction day, curves on Fridays) with
+  its state, published (and when), being checked, expected (and when), missing, or none
+  expected, the issuer news of the day; a click opens the latest upload; "Download file
+  templates" lists the columns and checks of each file with its CSV and Excel template. Current
+  upload: the five steps, the counters (rows read, new, changed, unchanged, alerts, errors; a
+  click shows those rows only), the rows as read with ✓, ! or ✕ and the reason in the Check
+  column (yellow for an alert, red for an error), a changed cell in amber with the stored value in
+  its tooltip. The first row to look at is selected, with what to do; "Alert checked" ticks it.
+  Publish N rows, Fix row (the cells typed again, then the whole file checked again), Replace file
+  and Discard (with a confirmation). A published file shows who published it and offers Roll back
+  (with a reason) and New upload; a rolled back one comes back to its preview with the reason.
+  Upload history: the last 7 days, the status in colour ("Rolled back, republished" in yellow),
+  a click opens the upload, the right-click menu rolls back. EODHD connector: state, the latest
+  US, Europe and fundamentals bulk loads, calls today, quota used (with its bar), 429 answers in
+  24 hours, the last error. The upload shown is in the URL (`/imp?import=`).
+- **DATA**: the coverage of any session (picker and previous / next), its uploads, and the
+  templates. **HIST**: the history over any period, by type, status and dates, 50 a page.
+  **EODH**: the connector in detail and its loads of the last 7 days, by load and result.
+- **Rules**: Publish stays disabled while an error remains or an alert is not ticked "checked";
+  one upload at a time is checked for a type and a session (a second one is refused, with a
+  link to open the first); only a file not published is replaced or discarded, only a published
+  one rolled back.
+- **Mock**: the upload is read now and its checks reported step by step (format, then business
+  rules, about 2.5 seconds): required cells, dates, figures, the high and the low, unknown
+  security, index or country, duplicates, a day without a session or of another session, a
+  change above ±15% (5% for an index, 1 point for a rate) from the stored value, a zero volume
+  with a moved close. The seeds follow the mockup: the files of the last five sessions by
+  A. Mbarga and J. Ekane, the 29/10 prices rolled back and published again, and the BEAC
+  auctions of the latest session waiting in their preview with the Gabon 13-week BTA 1.40 points
+  above its previous auction. A published file replaces the generated prices of its sessions
+  (today's last prices too), the index closes, adds the auctions to CAL and YCRV, the curve
+  points and the dividends; the EODHD loads are generated, a 429 now and then retried 15
+  minutes later.
+- **Still to do**: the securities and financial statements files are checked and kept, but the
+  security master and the statements of the screens do not read them yet; the curves of a
+  published file apply from its date, without the shift of the sample file.
 
-### CORR · Data corrections (no mockup): S
+### CORR · Data corrections (no mockup): done
 
-- Pick a security and a date, see the stored OHLCV, edit it with a required reason
-  (`PUT /data/securities/{id}/prices/{date}`).
+- **Built**: a security and a session (or a click on one of the two months of stored sessions,
+  each with its source: daily prices file, initial history or correction), the stored open,
+  high, low, close and volume typed again, a required reason; the log of corrections (when, the
+  security, the session, the close before and after, the reason, who), a click opens one. Both
+  are in the URL (`/data/corrections?security=SEMC&date=`).
+- **Mock**: a correction replaces the session for every screen, today's last price too, and
+  outlives the rollback of an earlier file.
 
-### NEWS · News and documents (no mockup): M
+### NEWS · News and documents (no mockup): done
 
-- Form to publish news or a document (headline, text, PDF, related securities), list of published
-  items, edit (`/data/news`, `/data/documents`).
+- **Built**: the news and the documents published, newest first, in two tabs; a click opens one
+  in the editor. News: headline, source, topic, country, securities and text, published at once
+  to the terminals (`NewsPublished`); documents: type, title, source, securities and the PDF
+  (20 MB), shown in the DOC tab of their securities and the N screen. An edit keeps the
+  publication date; a document keeps its file unless another is dropped.
+- **Mock**: the entries are kept with the sample news and documents; a PDF uploaded stays in the
+  tab that sent it (a generated one stands in after a reload).
+- **Still to do**: the PDF attached to a news item (spec section 11): for now the Data admin
+  publishes it as a document of the same securities.
 
 ### USER · Account administration (screen 9): L, with ANLY, MOD (S each)
 
@@ -409,8 +465,30 @@ Still to do, with the first screen that needs it:
   route or function code.
 - **Admin**: section 6 lists statistics and the management of organisations, plans, trials and
   invoices, with no API or screen.
-- **IMP**: the Discard and Replace file buttons have no endpoint; where is the "Alert checked"
-  tick stored (a PATCH of the row?).
+- **IMP**: the prototype adds `POST /data/imports/{id}/discard`, and Replace file sends the new
+  file to `POST /data/imports` with `replacesId`; "Alert checked" is
+  `PATCH /data/imports/{id}/rows/{rowId}` with `{ checked: true }`, Fix row the same PATCH with
+  `{ values }`. `/data/imports/{id}/rows?status=` takes `error`, `alert`, `new`, `changed` or
+  `unchanged` (the spec says `warning`). Each issue comes with a code, a severity, a column and
+  its figures (`params`), so the screen words it in the user's language. `GET /data/import-types`
+  lists `{ type, frequency, columns, checks, changeThreshold }`; `GET /data/coverage` answers
+  `{ date, items }`, each item `{ type, status, published, lastPublishedAt, dueOn, importId }`,
+  for the current session without a date. Which thresholds apply (the prototype: ±15% on a
+  close, 5% on an index, 1 point on a rate), and are they Admin settings? Is a second upload of
+  the same type and session refused while one is checked (the prototype: yes)? The screen 4
+  mockup shows the 28/10 auctions published while the screen 6 mockup checks them: the prototype
+  keeps the 26-week Cameroon BTA published, so the file shows it unchanged.
+- **CORR**: only `PUT /data/securities/{id}/prices/{date}` is given; the prototype adds
+  `GET /data/securities/{id}/prices?from=&to=` (the stored sessions and their source) and
+  `GET /data/corrections` (the log). May a correction change the volume (the prototype: yes)?
+- **NEWS**: the bodies are not specified. The prototype sends
+  `{ headline, source, topic, country, securityIds, body }` to `POST /data/news` and
+  `PUT /data/news/{id}`, and a multipart form (`type`, `title`, `source`, `securityIds`, `file`)
+  to `/data/documents`. Is a news item or a document withdrawn (no endpoint)?
+- **EODHD**: the status fields are not specified. The prototype answers
+  `{ status, latest, runs, callsToday, dailyQuota, rateLimited24h, lastError, checkedAt }`.
+- **Screens 6 and 9 mockups**: J. Ekane is a Data admin in both; the prototype's demo Admin is
+  L. Mvogo.
 - **USER**: no endpoint returns the counters by account type.
 - **Real time**: no event for the order book and latest trades; the prototype polls them every
   5 seconds.

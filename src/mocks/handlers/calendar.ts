@@ -2,8 +2,9 @@ import { http, HttpResponse } from 'msw'
 import type { AuctionDto, CalendarEventDto } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
 import { addDays } from '@/shared/lib/isoDate'
-import { auctions, calendar } from '../db'
+import { calendar } from '../db'
 import { holidayEvents, redemptionEvents } from '../fixtures/calendar'
+import { currentAuctions } from '../imports'
 import { api, latency } from '../lib/http'
 
 /** Calendar requests without dates cover the coming week. */
@@ -37,7 +38,7 @@ export const calendarHandlers = [
     const instrument = query.get('instrument')
     const from = query.get('from')
     const to = query.get('to')
-    const results = auctions
+    const results = currentAuctions()
       .filter(
         (auction) =>
           (!country || auction.country === country) &&

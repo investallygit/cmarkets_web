@@ -49,7 +49,8 @@ test('the back-office menu replaces the client menu for a Data admin', async ({ 
   await page.goto('/mkt')
   await page.getByRole('button', { name: /analyst/i }).click()
   await page.getByRole('menuitem', { name: 'Data admin' }).click()
-  await expect(page).toHaveURL(/\/imp$/)
+  // IMP opens the upload waiting in its preview.
+  await expect(page).toHaveURL(/\/imp(\?import=|$)/)
   await expect(page.getByText('Back-office', { exact: true })).toBeVisible()
   await expect(page.getByRole('link', { name: /IMP/ })).toBeVisible()
   await expect(page.getByRole('link', { name: /MKT/ })).toHaveCount(0)

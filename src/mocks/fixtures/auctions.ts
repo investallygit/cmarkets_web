@@ -17,8 +17,8 @@ type AuctionFixture = Omit<AuctionDto, 'id' | 'date' | 'maturityDate' | 'coverRa
 }
 
 /**
- * The auctions of the screen 4 mockup, newest first. The 26-week Cameroon BTA at 4.95% is also
- * the yield conversion example of spec section 14.
+ * The auctions of the screen 4 mockup, newest first, then an older one. The 26-week Cameroon BTA
+ * at 4.95% is also the yield conversion example of spec section 14.
  */
 // prettier-ignore
 const AUCTIONS: AuctionFixture[] = [
@@ -31,6 +31,8 @@ const AUCTIONS: AuctionFixture[] = [
   { businessDaysAgo: 10, country: 'CF', instrument: 'BTA', term: 13, amountOffered: 5_000, amountBid: 4_100, amountAllotted: 3_900, averageRate: 6.05, marginalRate: 6.2 },
   { businessDaysAgo: 14, country: 'GA', instrument: 'BTA', term: 52, amountOffered: 20_000, amountBid: 31_200, amountAllotted: 20_000, averageRate: 5.9, marginalRate: 6.0 },
   { businessDaysAgo: 15, country: 'CM', instrument: 'BTA', term: 13, amountOffered: 15_000, amountBid: 26_700, amountAllotted: 15_000, averageRate: 4.62, marginalRate: 4.7 },
+  // Older than the curves' 90 days: the reference of the 13-week Gabon BTA in the screen 6 mockup.
+  { businessDaysAgo: 66, country: 'GA', instrument: 'BTA', term: 13, amountOffered: 10_000, amountBid: 13_400, amountAllotted: 10_000, averageRate: 6.05, marginalRate: 6.2 },
 ]
 
 function maturityOf(date: string, instrument: AuctionDto['instrument'], term: number): string {

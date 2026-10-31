@@ -19,17 +19,6 @@ function fullScreen(title: string, code: string, api: string[]): PanelPlan[] {
 /** Panel layouts of the mockups in spec section 9 (screens 5 to 9), keyed by screen id. */
 // prettier-ignore
 export const SCREEN_PLANS: Partial<Record<string, PanelPlan[]>> = {
-  DATA: fullScreen('Session coverage', 'DATA', ['GET /data/coverage?date=', 'GET /data/import-types/{type}/template']),
-  IMP: [
-    { id: 'coverage', title: 'Session coverage', code: 'DATA', api: ['GET /data/coverage', 'GET /data/import-types/{type}/template'], x: 0, y: 0, w: 3, h: 12 },
-    { id: 'eodhd', title: 'EODHD connector', code: 'EODH', api: ['GET /data/providers/eodhd/status'], x: 0, y: 12, w: 3, h: 14 },
-    { id: 'upload', title: 'Current upload', code: 'IMP', api: ['POST /data/imports', 'GET /data/imports/{id}/rows', 'POST /data/imports/{id}/publish'], x: 3, y: 0, w: 9, h: 15 },
-    { id: 'history', title: 'Upload history', code: 'HIST', api: ['GET /data/imports', 'POST /data/imports/{id}/rollback'], x: 3, y: 15, w: 9, h: 11 },
-  ],
-  CORR: fullScreen('Data corrections', 'CORR', ['PUT /data/securities/{id}/prices/{date}']),
-  NEWS: fullScreen('News and documents', 'NEWS', ['POST /data/news', 'POST /data/documents']),
-  EODH: fullScreen('EODHD connector', 'EODH', ['GET /data/providers/eodhd/status']),
-  HIST: fullScreen('Upload history', 'HIST', ['GET /data/imports?status=&type=&from=&to=', 'POST /data/imports/{id}/rollback']),
   USER: [
     { id: 'counters', title: 'Active accounts', code: 'USER', api: ['GET /admin/users'], x: 0, y: 0, w: 12, h: 3 },
     { id: 'accounts', title: 'Accounts', code: 'USER', api: ['GET /admin/users?type=&status=&q=', 'POST /admin/users'], x: 0, y: 3, w: 7, h: 13 },

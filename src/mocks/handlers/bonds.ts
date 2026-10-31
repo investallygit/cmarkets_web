@@ -9,9 +9,9 @@ import type {
 import { CEMAC_COUNTRIES, isCemacCountry } from '@/shared/config/countries'
 import { toMarketDay } from '@/shared/lib/format'
 import { addDays, isWeekend } from '@/shared/lib/isoDate'
-import { auctions } from '../db'
 import { bondOf, bondSummaries } from '../fixtures/bonds'
 import { yieldCurve } from '../fixtures/curves'
+import { currentAuctions, publishedCurve } from '../imports'
 import { BondMathError, calculateBond, interpolateCurve } from '../lib/bondMath'
 import { api, latency, problem } from '../lib/http'
 import { businessDay } from '../lib/time'
@@ -97,7 +97,13 @@ export const bondHandlers = [
     }
     const date = sessionOnOrBefore(input.settlementDate)
     const curve = isCemacCountry(bond.country)
-      ? yieldCurve(bond.country, date, toMarketDay(Date.now()), auctions)
+      ? yieldCurve(
+          bond.country,
+          date,
+          toMarketDay(Date.now()),
+          currentAuctions(),
+          publishedCurve(bond.country, date),
+        )
       : undefined
     const curveYield = curve ? interpolateCurve(curve.points, result.averageLife) : null
     return HttpResponse.json<BondCalculationDto>({
@@ -126,9 +132,10 @@ export const bondHandlers = [
     }
     const date = sessionOnOrBefore(requested)
     const today = toMarketDay(Date.now())
+    const auctions = currentAuctions()
     const countries = country === null ? CEMAC_COUNTRIES : [country]
     return HttpResponse.json<YieldCurveDto[]>(
-      countries.map((code) => yieldCurve(code, date, today, auctions)),
+      countries.map((code) => yieldCurve(code, date, today, auctions, publishedCurve(code, date))),
     )
   }),
 ]

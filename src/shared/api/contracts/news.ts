@@ -19,3 +19,14 @@ export interface NewsArticleDto extends NewsItemDto {
   /** Paragraphs of plain text. */
   body: string[]
 }
+
+/** POST /data/news, PUT /data/news/{id}: news entered by the Data admin (spec section 5). */
+export interface NewsWriteDto {
+  headline: string
+  source: string
+  topic: NewsTopic
+  country: string | null
+  securityIds: string[]
+  /** Paragraphs of plain text. */
+  body: string[]
+}

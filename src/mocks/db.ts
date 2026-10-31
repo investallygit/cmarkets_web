@@ -300,7 +300,7 @@ function userStore<T extends object[]>(name: string, initial: () => T) {
 }
 
 /** Data every account sees, such as the research library. */
-function sharedStore<T extends object[]>(name: string, initial: () => T) {
+export function sharedStore<T extends object[]>(name: string, initial: () => T) {
   return storedArray(() => `cmarket.prototype.${name}`, initial)
 }
 
@@ -485,9 +485,18 @@ export const savedScreenStore = userStore<SavedScreenDto[]>('screens', () =>
   SAVED_SCREEN_FIXTURES.map((screen) => ({ ...screen, criteria: [...screen.criteria] })),
 )
 
+type StoredIndexCloses = (code: string) => ReadonlyMap<string, number> | undefined
+
+let storedIndexCloses: StoredIndexCloses = () => undefined
+
+/** Set once by the mock's import store: the closes of the indices files replace the computed ones. */
+export function setStoredIndexCloses(lookup: StoredIndexCloses): void {
+  storedIndexCloses = lookup
+}
+
 /**
- * Daily closes of an index, chained from its members' closes; undefined for an index without
- * members, whose history stays a random walk.
+ * Daily closes of an index, chained from its members' closes, or as an indices file gave them;
+ * undefined for an index without members, whose history stays a random walk.
  */
 export function indexDailyCloses(code: string, from: string, to: string, now = Date.now()) {
   const index = indices.get(code)
@@ -497,7 +506,11 @@ export function indexDailyCloses(code: string, from: string, to: string, now = D
       : (PROFILE_FIXTURES[id]?.sharesOutstanding ?? undefined),
   )
   if (!index || members.length === 0) return undefined
-  return indexCloses(index, members, from, to, now)
+  const closes = indexCloses(index, members, from, to, now)
+  const stored = storedIndexCloses(code)
+  return stored
+    ? closes.map(({ day, close }) => ({ day, close: stored.get(day) ?? close }))
+    : closes
 }
 
 /** EUR / XAF peg (spec section 14.2). */

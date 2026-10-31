@@ -83,6 +83,8 @@ const SEEDS: Seed[] = [
   { id: 'user-abena', email: 'c.abena@asset-manager.example', displayName: 'C. Abena', accountType: 'manager', organizationId: 'org-am', organizationRole: 'member', createdAt: '2026-02-09T09:00:00Z' },
   { id: 'user-ella', email: 'l.ella@bank.example', displayName: 'L. Ella', accountType: 'trader', organizationId: 'org-bank', organizationRole: 'member', createdAt: '2026-03-02T08:00:00Z' },
   { id: 'user-mba', email: 'f.mba@bank.example', displayName: 'F. Mba', accountType: 'trader', organizationId: 'org-bank', organizationRole: 'member', createdAt: '2026-04-20T08:00:00Z' },
+  // The other Data admin of the screen 6 and 9 mockups.
+  { id: 'user-ekane', email: 'j.ekane@cmarket.example', displayName: 'J. Ekane', accountType: 'dataAdmin', organizationId: 'org-cmarket', organizationRole: 'member', createdAt: '2026-01-12T08:00:00Z' },
 ]
 
 export function createAccounts(): StoredAccount[] {

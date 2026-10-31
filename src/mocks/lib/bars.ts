@@ -55,6 +55,21 @@ export function sessionStarted(day: string, now: number): boolean {
   return businessDays(day, day).length === 1 && Date.parse(atUtc(day, SESSION_OPEN_HOUR_UTC)) <= now
 }
 
+/** A session as published from a file or corrected by the Data admin (screen 6). */
+export type StoredSession = Pick<PriceBarDto, 'open' | 'high' | 'low' | 'close' | 'volume'>
+
+type StoredSessions = (securityId: string) => ReadonlyMap<string, StoredSession> | undefined
+
+let storedSessions: StoredSessions = () => undefined
+
+/** Set once by the mock's import store: stored sessions replace the generated ones. */
+export function setStoredSessions(lookup: StoredSessions): void {
+  storedSessions = lookup
+}
+
+const withStored = (bar: DailyBar, session: StoredSession | undefined): DailyBar =>
+  session ? { ...bar, ...session } : bar
+
 const toBar = ({ time, open, high, low, close, volume }: DailyBar): PriceBarDto => ({
   time,
   open,
@@ -98,14 +113,19 @@ function pastDailyBars(security: BarSecurity, today: string): DailyBar[] {
   return bars
 }
 
-/** Every session up to now; today's bar comes from the live prices. */
+/** Every session up to now; today's bar comes from the live prices, unless a file gave it. */
 function dailyBars(security: BarSecurity, now: number): DailyBar[] {
   const today = toMarketDay(now)
-  const past = pastDailyBars(security, today)
+  const stored = storedSessions(security.id)
+  const generated = pastDailyBars(security, today)
+  const past = stored ? generated.map((bar) => withStored(bar, stored.get(bar.day))) : generated
   if (!sessionStarted(today, now)) return past
   const { open, high, low, last, volume } = security
   const time = atUtc(today, SESSION_OPEN_HOUR_UTC)
-  return [...past, { day: today, time, open, high, low, close: last, volume }]
+  return [
+    ...past,
+    withStored({ day: today, time, open, high, low, close: last, volume }, stored?.get(today)),
+  ]
 }
 
 /** Monday of the week of a day. */

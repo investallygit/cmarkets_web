@@ -12,13 +12,19 @@ export const CURVE_MATURITIES = [0.25, 0.5, 1, 2, 3, 5, 7, 10] as const
  * screen 4 mockup. Congo and CAR start higher than in the mockup, to stay above their auctions.
  */
 // prettier-ignore
-const CURVE_FILE: Record<CemacCountry, readonly number[]> = {
+export const CURVE_FILE: Record<CemacCountry, readonly number[]> = {
   CM: [4.6, 4.9, 5.3, 5.8, 6.2, 6.6, 6.9, 7.2],
   GA: [5.1, 5.5, 5.9, 6.4, 6.8, 7.3, 7.6, 7.9],
   CG: [5.8, 6.5, 6.8, 7.2, 7.6, 8.1, 8.4, 8.7],
   TD: [5.6, 6.0, 6.4, 6.9, 7.3, 7.8, 8.1, 8.3],
   CF: [6.0, 6.6, 7.0, 7.45, 7.85, 8.3, 8.6, 8.9],
   GQ: [5.3, 5.6, 6.1, 6.6, 7.0, 7.5, 7.8, 8.1],
+}
+
+/** The rates of a curves file published by the Data admin, by maturity above. */
+export interface CurveFile {
+  date: string
+  rates: readonly (number | undefined)[]
 }
 
 /** Only auctions this recent make a point of the curve (spec section 14.1). */
@@ -50,9 +56,13 @@ export function yieldCurve(
   date: string,
   today: string,
   auctions: readonly AuctionDto[],
+  published?: CurveFile,
 ): YieldCurveDto {
-  const file = CURVE_FILE[country]
-  const shift = fileShift(date, today)
+  // A curves file published on or before the date replaces the sample file from its day.
+  const file = published
+    ? CURVE_FILE[country].map((rate, index) => published.rates[index] ?? rate)
+    : CURVE_FILE[country]
+  const shift = published ? 0 : fileShift(date, today)
   const windowStart = addDays(date, -AUCTION_WINDOW_DAYS)
   const recent = auctions
     .filter((auction) => auction.country === country)

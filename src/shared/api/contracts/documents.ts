@@ -22,3 +22,14 @@ export interface DocumentDto {
   pages: number
   sizeBytes: number
 }
+
+/**
+ * POST /data/documents and PUT /data/documents/{id}: a multipart form with these fields and the
+ * PDF (`file`, optional on PUT).
+ */
+export interface DocumentWriteDto {
+  type: DocumentType
+  title: string
+  source: string
+  securityIds: string[]
+}

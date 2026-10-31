@@ -67,8 +67,8 @@ test('the CAL screen shows the week and the BEAC auctions', async ({ page }) => 
   await expect(page.getByRole('region', { name: /^Sunday / })).toContainText('No session')
 
   const auctions = panel(page, 'Latest government securities auctions (BEAC)')
-  // The nine auctions of the screen 4 mockup, under the header row.
-  await expect(auctions.getByRole('row')).toHaveCount(10)
+  // The nine auctions of the screen 4 mockup and an older one, under the header row.
+  await expect(auctions.getByRole('row')).toHaveCount(11)
   await auctions.getByRole('combobox', { name: 'Country' }).selectOption('CM')
   await expect(auctions.getByRole('row')).toHaveCount(4)
 

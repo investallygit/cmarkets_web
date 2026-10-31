@@ -8,14 +8,30 @@ import type { NotificationDto } from '@/shared/api/contracts'
 import {
   changePct,
   indices,
+  securities,
+  type MockIndex,
+  type MockSecurity,
   onAlertTriggered,
   onPublicationPublished,
   publishNextNews,
   tickIndex,
   tickSecurity,
 } from './db'
+import { onNewsEntered } from './content'
+import { onImportEvent } from './imports'
 
 type AnyHandler = (payload: unknown) => void
+
+function quoteOf(security: MockSecurity): RealtimeEventMap['QuoteUpdated'] {
+  return {
+    symbol: security.id,
+    last: security.last,
+    change: security.last - security.previousClose,
+    changePct: changePct(security.last, security.previousClose),
+    volume: security.volume,
+    ts: security.updatedAt,
+  }
+}
 
 const QUOTE_TICK_MS = 1_200
 const INDEX_TICK_MS = 4_000
@@ -29,6 +45,8 @@ export function createMockRealtimeClient(): RealtimeClient {
   const timers: number[] = []
   let stopAlerts: (() => void) | null = null
   let stopPublications: (() => void) | null = null
+  let stopImports: (() => void) | null = null
+  let stopNews: (() => void) | null = null
   let state: ConnectionState = 'disconnected'
 
   function setState(next: ConnectionState) {
@@ -49,28 +67,24 @@ export function createMockRealtimeClient(): RealtimeClient {
       const result = tickSecurity(symbols[Math.floor(Math.random() * symbols.length)])
       if (!result) continue
       const { security, alerts } = result
-      emit('QuoteUpdated', {
-        symbol: security.id,
-        last: security.last,
-        change: security.last - security.previousClose,
-        changePct: changePct(security.last, security.previousClose),
-        volume: security.volume,
-        ts: security.updatedAt,
-      })
+      emit('QuoteUpdated', quoteOf(security))
       alerts.forEach(emitAlert)
     }
+  }
+
+  function emitIndex(index: MockIndex) {
+    emit('IndexUpdated', {
+      code: index.code,
+      value: index.value,
+      changePct: changePct(index.value, index.previousClose),
+      ts: index.updatedAt,
+    })
   }
 
   function tickIndices() {
     for (const code of indices.keys()) {
       const index = tickIndex(code)
-      if (!index) continue
-      emit('IndexUpdated', {
-        code,
-        value: index.value,
-        changePct: changePct(index.value, index.previousClose),
-        ts: index.updatedAt,
-      })
+      if (index) emitIndex(index)
     }
   }
 
@@ -113,6 +127,22 @@ export function createMockRealtimeClient(): RealtimeClient {
       // Portfolio limits are checked when a transaction or a limit changes.
       stopAlerts = onAlertTriggered(emitAlert)
       stopPublications = onPublicationPublished((event) => emit('PublicationPublished', event))
+      // The checks of an upload step by step, then its publication (screen 6).
+      stopImports = onImportEvent((event) => {
+        if (event.name === 'ImportStatusChanged') return emit('ImportStatusChanged', event.payload)
+        emit('DataPublished', event.payload)
+        // Today's file sets the last prices: the screens get them as ticks.
+        securities.forEach((security) => emit('QuoteUpdated', quoteOf(security)))
+        indices.forEach((index) => emitIndex(index))
+      })
+      stopNews = onNewsEntered((item) =>
+        emit('NewsPublished', {
+          id: item.id,
+          title: item.headline,
+          securityIds: item.securityIds,
+          ts: item.publishedAt,
+        }),
+      )
     },
     async stop() {
       timers.splice(0).forEach((timer) => window.clearInterval(timer))
@@ -120,6 +150,10 @@ export function createMockRealtimeClient(): RealtimeClient {
       stopAlerts = null
       stopPublications?.()
       stopPublications = null
+      stopImports?.()
+      stopImports = null
+      stopNews?.()
+      stopNews = null
       setState('disconnected')
     },
     async subscribe(symbols) {

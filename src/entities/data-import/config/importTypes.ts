@@ -1,0 +1,52 @@
+import type { ImportDto, ImportType } from '@/shared/api/contracts'
+
+/** File types in the order of the session coverage of the screen 6 mockup. */
+export const IMPORT_TYPES: readonly ImportType[] = [
+  'daily-prices',
+  'indices',
+  'corporate-actions',
+  'auctions',
+  'curves',
+  'financial-statements',
+  'securities',
+  'history',
+]
+
+export function isImportType(value: string): value is ImportType {
+  return IMPORT_TYPES.some((type) => type === value)
+}
+
+/** What the history says of an upload: a rolled back file published again says both. */
+export type ImportStatusLabel = ImportDto['status'] | 'republished'
+
+export function importStatusLabel(
+  upload: Pick<ImportDto, 'status' | 'rollback'>,
+): ImportStatusLabel {
+  return upload.status === 'published' && upload.rollback ? 'republished' : upload.status
+}
+
+/** Uploads take the CSV or Excel templates, 5 MB at most. */
+export const UPLOAD_ACCEPT = '.csv,.xlsx'
+export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024
+
+/** Columns of every template (spec section 11), as named in the files. */
+// prettier-ignore
+export const IMPORT_COLUMNS = [
+  'date', 'code', 'open', 'high', 'low', 'close', 'volume', 'value', 'index', 'type', 'ex_date',
+  'pay_date', 'amount', 'country', 'security', 'maturity', 'offered', 'bids', 'allotted',
+  'avg_rate', 'marginal_rate', 'rate', 'fiscal_year', 'line_item', 'isin', 'name', 'sector',
+  'shares', 'currency',
+] as const
+export type ImportColumnName = (typeof IMPORT_COLUMNS)[number]
+
+export function isImportColumn(name: string): name is ImportColumnName {
+  return IMPORT_COLUMNS.some((column) => column === name)
+}
+
+/** The figures whose change from the stored value raises an alert. */
+export const CHANGE_FIELDS = ['close', 'value', 'avg_rate', 'rate'] as const
+export type ChangeField = (typeof CHANGE_FIELDS)[number]
+
+export function isChangeField(name: string): name is ChangeField {
+  return CHANGE_FIELDS.some((field) => field === name)
+}

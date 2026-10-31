@@ -107,6 +107,13 @@ export function studioPath(publicationId?: string): string {
     : routes.publishingStudio
 }
 
+/** The data import screen with an upload open: /imp?import=import-1. */
+export function dataImportPath(importId?: string): string {
+  return importId
+    ? `${routes.dataImport}?import=${encodeURIComponent(importId)}`
+    : routes.dataImport
+}
+
 /** The login page, back to `next` once logged in. */
 export function loginPath(next?: string): string {
   return next && next !== '/' ? `${routes.login}?next=${encodeURIComponent(next)}` : routes.login

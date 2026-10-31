@@ -30,6 +30,7 @@ import {
   triggerPortfolioAlerts,
 } from '../db'
 import { api, latency, noContent, problem } from '../lib/http'
+import { newId } from '../lib/ids'
 import { createPdf } from '../lib/pdf'
 import {
   allocationOf,
@@ -48,7 +49,7 @@ import {
   type Valuation,
 } from '../lib/portfolioEngine'
 import { normalize } from '../lib/text'
-import { cellDate, cellNumber, cellText, readTransactionFile } from '../lib/transactionFile'
+import { cellDate, cellNumber, cellText, readTransactionFile } from '../lib/templateFile'
 import { isIsoDate, isNumber } from '../lib/validation'
 
 type Errors = Record<string, string[]>
@@ -322,9 +323,6 @@ function storeTransaction(
     amount: transactionAmount(fields, portfolio.currency, market),
   }
 }
-
-const newId = (prefix: string) =>
-  `${prefix}-${Date.now().toString(36)}${Math.floor(Math.random() * 1e4).toString(36)}`
 
 /**
  * Breaches seen at the last valuation, per user and portfolio: a limit, or for the limit on one
