@@ -4,7 +4,7 @@ import { ANALYST_SESSION } from './session.js'
 // The demo Analyst, K. Atangana, logs in with the password and the one-time code; the other tests
 // start from this session (the refresh cookie the mock keeps).
 setup('log in as the demo Analyst', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/app')
   await expect(page).toHaveURL(/\/login$/)
   await page.getByLabel('E-mail address').fill('k.atangana@analyst.example')
   await page.getByLabel('Password', { exact: true }).fill('cmarket2026')

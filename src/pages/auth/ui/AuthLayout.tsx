@@ -1,7 +1,6 @@
-import { clsx } from 'clsx'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LANGUAGES } from '@/shared/i18n'
+import { LanguageSwitch } from '@/shared/ui/LanguageSwitch'
 import { Logo } from '@/shared/ui/Logo'
 
 interface AuthLayoutProps {
@@ -17,30 +16,12 @@ interface AuthLayoutProps {
  * the language, then the form on a card. The page scrolls when the form is longer than the window.
  */
 export function AuthLayout({ title, subtitle, width = 400, children }: AuthLayoutProps) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   return (
     <div className="flex h-full flex-col overflow-y-auto bg-brand-navy">
       <header className="flex shrink-0 items-center justify-between px-6 py-4">
         <Logo />
-        <div role="group" aria-label={t('shell.language')} className="flex gap-1">
-          {LANGUAGES.map((language) => (
-            <button
-              key={language}
-              type="button"
-              lang={language}
-              aria-pressed={i18n.resolvedLanguage === language}
-              onClick={() => void i18n.changeLanguage(language)}
-              className={clsx(
-                'h-6 px-2 font-sans text-title font-semibold tracking-title uppercase',
-                i18n.resolvedLanguage === language
-                  ? 'bg-brand-green text-brand-navy'
-                  : 'text-secondary hover:text-primary',
-              )}
-            >
-              {language}
-            </button>
-          ))}
-        </div>
+        <LanguageSwitch />
       </header>
       <main className="flex flex-1 justify-center px-4 py-6">
         <section

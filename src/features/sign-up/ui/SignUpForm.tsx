@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
 import { OtpForm, useLogin, useRegister } from '@/entities/session'
 import { isApiError } from '@/shared/api'
-import { CLIENT_ACCOUNT_TYPES, type OtpChallengeDto } from '@/shared/api/contracts'
+import {
+  CLIENT_ACCOUNT_TYPES,
+  type ClientAccountType,
+  type OtpChallengeDto,
+} from '@/shared/api/contracts'
 import { useLocale } from '@/shared/i18n'
 import { routes } from '@/shared/routes/paths'
 import { Button } from '@/shared/ui/form/Button'
@@ -28,14 +32,15 @@ const DOCUMENT_MAX_SIZE = 5 * 1024 * 1024
 /**
  * Sign-up (spec section 12): the account type, the user, the documents of a Student or an
  * Analyst, the terms; then the code sent to the address confirms it and opens the free trial.
+ * `accountType` comes chosen from the home page.
  */
-export function SignUpForm() {
+export function SignUpForm({ accountType }: { accountType?: ClientAccountType }) {
   const { t } = useTranslation()
   const language = useLocale()
   const navigate = useNavigate()
   const register = useRegister()
   const login = useLogin()
-  const [form, setForm] = useState<Form>(EMPTY_SIGN_UP)
+  const [form, setForm] = useState<Form>({ ...EMPTY_SIGN_UP, accountType: accountType ?? null })
   const [submitted, setSubmitted] = useState(false)
   const [challenge, setChallenge] = useState<OtpChallengeDto | null>(null)
   const set = (patch: Partial<Form>) => setForm((current) => ({ ...current, ...patch }))

@@ -102,6 +102,11 @@ const PAGES: Record<ScreenTextKey, Page> = {
   AUDT: AuditLogPage,
 }
 
+/** The home page, open to visitors: the product, the markets, the plans. */
+export const HomePage = lazy(() =>
+  import('@/pages/home').then((module) => ({ default: module.HomePage })),
+)
+
 // The login pages share a chunk, loaded before the session.
 export const LoginPage = lazy(() =>
   import('@/pages/auth').then((module) => ({ default: module.LoginPage })),

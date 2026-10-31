@@ -5,8 +5,9 @@ Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`
 Every screen is built: the client terminal (MKT, DES with its FA and ANA tabs, EQS, YCRV, YAS,
 PORT, PUB, PUB NEW, N, CAL, ALRT and CFG) with the login, sign-up and password reset pages, the
 back-office of the Data admin (IMP with DATA, HIST and EODH, then CORR and NEWS) and that of the
-Admin (USER with ANLY and MOD, then ADMCFG, AUDT and PAY). What remains is listed under "Still to
-do" and in the open questions for the spec author.
+Admin (USER with ANLY and MOD, then ADMCFG, AUDT and PAY), and the home page that visitors see
+before login. What remains is listed under "Still to do" and in the open questions for the spec
+author.
 
 ANLY and MOD were built with USER: in the mockups they are panels of the same screen. Sizes are
 relative: S < M < L < XL.
@@ -24,6 +25,7 @@ relative: S < M < L < XL.
 | 7    | CFG, login and OTP (needed before connecting the real back end) | Done   |
 | 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS  | Done   |
 | 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY            | Done   |
+| 10   | Home page, before login: the product, markets, users, plans     | Done   |
 
 ## Shared groundwork
 
@@ -153,6 +155,19 @@ Done in step 9, with the back-office of the Admin:
   discard, correction, news, document, then the Admin's), and the seeded uploads write theirs.
   Payouts are due until marked paid; reports have a status. The data kept in localStorage is
   dropped when `SEED_VERSION` changes, which ends the prototype's session once.
+
+Done in step 10, with the home page:
+
+- **Routes**: `/` is the home page, open without a session like the login pages; `/app` sends a
+  user to the home screen of the account type (MKT, IMP or USER), and the login, the sign-up, the
+  account switch, the logo of the top bar and "Back to home" go there. `signUpPath` opens the
+  sign-up with an account type chosen (`/signup?type=analyst`).
+- **UI**: `ButtonLink` (a link drawn as a button, `brand` or `outline`) and the `xl` size of
+  `Button`; `LanguageSwitch` (FR / EN before login) for the home and login pages; `Logo` takes the
+  page it leads to; the type sizes `text-lead`, `text-headline` and `text-display`, for the home
+  page only.
+- **Plans before login**: `usePublicPlans` asks `GET /subscription/plans` without the session; the
+  mock answers every plan to a call without a token, and an account the plans of its type.
 
 Still to do, with the first screen that needs it:
 
@@ -370,6 +385,17 @@ Still to do, with the first screen that needs it:
 - **Still to do**: accepting an invitation (the e-mail link and its sign-up); the status of a
   Student's proof of enrolment.
 
+### Home page (no mockup): done
+
+- **Built**: `/`, in the brand navy and green of spec section 8, in French or English: what
+  CMarket does and a picture of the terminal drawn with sample data, four figures, the three uses
+  of spec section 1 with research and their function codes, the CEMAC and international markets,
+  the client account types (each opening the sign-up with its type), the plans by month or year as
+  the server prices them, why CMarket, then the trial. A visitor already logged in in the browser
+  (the refresh cookie) gets "Open the terminal" instead of the trial and the login, and the plans
+  lead to CFG.
+- **Still to do**: the texts are the prototype's, to be checked by the spec author.
+
 ### Login, OTP, sign-up, password reset: done
 
 - **Built**: `/login`, `/signup` and `/reset-password`, outside the app shell in the brand navy and
@@ -503,6 +529,10 @@ Still to do, with the first screen that needs it:
 
 ## Open questions for the spec author
 
+- **Home page**: the spec names "marketing pages" (section 8) but gives no mockup, route or text.
+  The prototype puts the home page at `/` and the app's home screen at `/app`, and reads the plans
+  with `GET /subscription/plans` before login: is that endpoint public (the prototype: every plan
+  without a token, those of the account type with one)?
 - **Country page**: mentioned (`/macro?country=`, research on a country) but without a mockup,
   route or function code.
 - **Admin**: section 6 lists statistics and the management of organisations, plans, trials and

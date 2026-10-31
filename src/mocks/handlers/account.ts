@@ -359,9 +359,11 @@ export const accountHandlers = [
     return noContent()
   }),
 
-  http.get(api('/subscription/plans'), async () => {
+  http.get(api('/subscription/plans'), async ({ request }) => {
     await latency()
-    return HttpResponse.json(plansFor(currentAccount()))
+    // A visitor of the home page sees every plan; an account, those of its type.
+    const visitor = !request.headers.has('Authorization')
+    return HttpResponse.json(visitor ? PLANS : plansFor(currentAccount()))
   }),
 
   http.get(api('/subscription'), async () => {

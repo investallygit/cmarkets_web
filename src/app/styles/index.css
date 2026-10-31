@@ -84,6 +84,13 @@
   --text-figure--line-height: 24px;
   --text-price: 26px; /* last price in the security header */
   --text-price--line-height: 30px;
+  /* The home page only, a marketing page (spec section 8): lead text, section and page titles. */
+  --text-lead: 16px;
+  --text-lead--line-height: 24px;
+  --text-headline: 28px;
+  --text-headline--line-height: 34px;
+  --text-display: 44px;
+  --text-display--line-height: 50px;
 
   --tracking-title: 0.5px;
 

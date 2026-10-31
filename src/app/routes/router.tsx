@@ -9,7 +9,7 @@ import { PanelLoading } from '@/shared/ui/StatusViews'
 import { AppShell } from '../layouts/AppShell'
 import { FullScreenStatus } from '../layouts/FullScreenStatus'
 import { HomeRedirect } from './HomeRedirect'
-import { LoginPage, pageOf, PasswordResetPage, SignUpPage, UiKitPage } from './pages'
+import { HomePage, LoginPage, pageOf, PasswordResetPage, SignUpPage, UiKitPage } from './pages'
 import { RequireSession } from './RequireSession'
 import { ScreenRoute } from './ScreenRoute'
 
@@ -26,8 +26,10 @@ const prototypeRoutes = env.useMocks
     ]
   : []
 
-// The login pages come before the session, outside the app shell (spec section 8).
+// The home page and the login pages need no session: they are outside the app shell, in the brand
+// colours (spec section 8).
 const publicRoutes = [
+  { path: routes.home, element: <HomePage /> },
   { path: routes.login, element: <LoginPage /> },
   { path: routes.signUp, element: <SignUpPage /> },
   { path: routes.resetPassword, element: <PasswordResetPage /> },
@@ -40,7 +42,6 @@ const publicRoutes = [
 export const router = createBrowserRouter([
   ...publicRoutes,
   {
-    path: '/',
     element: (
       <RequireSession>
         <AppShell />
@@ -48,7 +49,7 @@ export const router = createBrowserRouter([
     ),
     errorElement: <RouteErrorPage />,
     children: [
-      { index: true, element: <HomeRedirect /> },
+      { path: routes.app, element: <HomeRedirect /> },
       ...SCREENS.map((screen) => ({
         path: screen.routePattern ?? screen.path,
         element: <ScreenRoute screen={screen} page={pageOf(screen)} />,

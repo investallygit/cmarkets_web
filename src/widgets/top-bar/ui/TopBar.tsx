@@ -5,6 +5,7 @@ import { usePortfolio } from '@/entities/portfolio'
 import { useSecurityProfile } from '@/entities/security'
 import { audienceOf, canAccessScreen, useCurrentUser } from '@/entities/session'
 import { CommandBar } from '@/features/command-bar'
+import { routes } from '@/shared/routes/paths'
 import { screenById } from '@/shared/routes/screens'
 import { useCurrentRoute } from '@/shared/routes/useCurrentRoute'
 import { Logo } from '@/shared/ui/Logo'
@@ -32,7 +33,7 @@ export function TopBar({ className }: { className?: string }) {
 
   return (
     <header className={clsx('flex min-w-0 items-center gap-4 border-b bg-app px-3', className)}>
-      <Logo />
+      <Logo to={routes.app} />
       <CommandBar />
       <span className="min-w-0 truncate font-sans text-label">{title}</span>
       <div className="ml-auto flex shrink-0 items-center gap-4">

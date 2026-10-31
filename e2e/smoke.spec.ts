@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test'
 
 test('the market dashboard loads its panels and real-time data', async ({ page }) => {
-  await page.goto('/')
+  // /app opens the home screen of the account type.
+  await page.goto('/app')
   await expect(page).toHaveURL(/\/mkt$/)
   for (const title of ['Indices', 'Top movers', 'Rates and FX', 'News', 'Session summary']) {
     await expect(page.getByRole('heading', { name: title })).toBeVisible()

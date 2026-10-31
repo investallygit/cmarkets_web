@@ -68,6 +68,9 @@ const resetCodes = new Map<string, Omit<Challenge, 'channel' | 'resendAt'>>()
 /** Paths open without a session: the login pages, and the prototype's own. */
 const PUBLIC_PATHS = ['/auth/', '/_prototype/']
 
+/** Answered with or without a session: the home page shows the plans before login. */
+const OPEN_PATHS = ['/subscription/plans']
+
 /** Endpoints of the Analysis and Portfolio modules, refused without them (spec section 10). */
 const MODULE_PATHS: [RegExp, ModuleCode][] = [
   [/^\/portfolios(\/|$)/, 'portfolio'],
@@ -102,16 +105,17 @@ const apiPath = (url: string) =>
   new URL(url).pathname.slice(new URL(api(''), window.location.origin).pathname.length)
 
 /**
- * First of all handlers: every call but those of the login pages needs a valid access token,
- * which also tells the other handlers whose data to answer with. The data of the Analysis and
- * Portfolio modules needs a plan with them.
+ * First of all handlers: every call but those of the login pages and the home page needs a valid
+ * access token, which also tells the other handlers whose data to answer with. The data of the
+ * Analysis and Portfolio modules needs a plan with them.
  */
 const authGate = http.all(api('/*'), ({ request }) => {
   const path = apiPath(request.url)
   if (PUBLIC_PATHS.some((prefix) => path.startsWith(prefix))) return
   const header = request.headers.get('Authorization') ?? ''
   const userId = header.startsWith('Bearer ') ? userOfAccessToken(header.slice(7)) : null
-  if (!userId) return unauthorized()
+  // A call without any token to an open path is a visitor's; a token no longer valid is renewed.
+  if (!userId) return !header && OPEN_PATHS.includes(path) ? undefined : unauthorized()
   setSessionUser(userId)
   const account = findAccount(userId)
   const module = MODULE_PATHS.find(([pattern]) => pattern.test(path))?.[1]

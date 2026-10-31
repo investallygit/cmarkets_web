@@ -4,6 +4,7 @@ export {
   useInvoicePdf,
   useInvoices,
   usePlans,
+  usePublicPlans,
   useSubscription,
   useSubscriptionPayment,
 } from './api/queries'

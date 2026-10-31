@@ -22,9 +22,11 @@ npm run dev        # http://localhost:5173
 | `npm test` / `npm run test:run` | Vitest unit and component tests                                            |
 | `npm run e2e`                   | Playwright end-to-end tests (first run: `npx playwright install chromium`) |
 
-The app opens on the login page. In the prototype, it lists a demo account per account type (all
-with the password `cmarket2026`) and shows the one-time code the mock would have sent by e-mail or
-SMS; a sign-up gets the 14-day free trial. Once in, the user badge at the top right opens the
+The app opens on the home page: what CMarket does, its markets, its users and its plans, with the
+free trial and the login; a user already logged in opens the terminal from it (`/app`, the home
+screen of the account type). In the prototype, the login page lists a demo account per account
+type (all with the password `cmarket2026`) and shows the one-time code the mock would have sent by
+e-mail or SMS; a sign-up gets the 14-day free trial. Once in, the user badge at the top right opens the
 settings (CFG), switches language (FR / EN) and, in the prototype, account type, so every menu and
 permission of spec section 12 can be previewed, and logs out. `/_kit` shows the shared UI
 components (form controls, dialogs, toasts, price chart, table export) with sample content. The
@@ -63,8 +65,8 @@ src/
               market-calendar, alerts, settings (CFG), data-import (IMP), data-session (DATA),
               upload-history (HIST), eodhd (EODH), data-corrections (CORR), content (NEWS),
               admin-users (USER), analyst-requests (ANLY), moderation (MOD), payouts (PAY),
-              platform-settings (ADMCFG), audit-log (AUDT), auth (login, sign-up, password
-              reset), status
+              platform-settings (ADMCFG), audit-log (AUDT), home (the home page), auth (login,
+              sign-up, password reset), status
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
               subscription-panel, current-upload-panel...), the security header and the shell bars
               (top-bar, side-menu, status-bar, ticker-tape)
@@ -159,7 +161,9 @@ each other; the app shell mounts the form once.
 exist. Numbers use `shared/lib/format.ts` (`52 500,25` in French, `52,500.25` in English, dates
 `DD/MM/YYYY` in the time zone of the user's profile, Douala by default; a calendar day keeps its
 date in every zone, and the session clock stays in Douala time), and inputs read them back with
-`shared/lib/parse.ts`. The login pages use the brand navy and green, kept for them and the logo.
+`shared/lib/parse.ts`. The home page and the login pages use the brand navy and green, kept for
+them and the logo (the "marketing pages" of spec section 8); the home page alone has larger type
+(`text-lead`, `text-headline`, `text-display`).
 Icons come from `lucide-react`.
 
 Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of a title bar),
@@ -189,6 +193,7 @@ the demo accounts of the login page go with the mock.
 
 | Screen                                                                    | State                                                         |
 | ------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Home page: the product, markets, users and plans; trial and login         | Done; the plans come from the server before login             |
 | App shell: top bar, command bar, ticker, menu by account type, status bar | Done                                                          |
 | Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
 | 1 · Market dashboard (MKT)                                                | Done on mock data, real-time quotes and indices, watchlists   |

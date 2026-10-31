@@ -1,6 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
+import { routes } from '@/shared/routes/paths'
 
 interface StatusMessageProps {
   icon: LucideIcon
@@ -15,7 +16,7 @@ export function StatusMessage({ icon: Icon, message, detail }: StatusMessageProp
       <Icon aria-hidden className="size-6" />
       <p className="text-primary">{message}</p>
       {detail && <p className="max-w-xl font-mono text-data">{detail}</p>}
-      <Link to="/" className="text-info hover:underline">
+      <Link to={routes.app} className="text-info hover:underline">
         {t('status.backHome')}
       </Link>
     </div>

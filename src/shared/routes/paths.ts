@@ -1,11 +1,14 @@
-import type { SecurityType } from '@/shared/api/contracts'
+import type { ClientAccountType, SecurityType } from '@/shared/api/contracts'
 
 /** Route patterns, shared by the router (app/) and by features that link to other screens. */
 export const routes = {
-  // Outside the app shell, before the session (spec section 10).
+  // Outside the app shell, open without a session: the home page and the login pages.
+  home: '/',
   login: '/login',
   signUp: '/signup',
   resetPassword: '/reset-password',
+  /** The home screen of the user's account type: MKT, IMP or USER. */
+  app: '/app',
   market: '/mkt',
   security: '/securities/:securityId/:fn',
   screener: '/eqs',
@@ -137,14 +140,24 @@ export function auditLogPath(userId?: string): string {
   return withQuery(routes.adminAudit, 'userId', userId)
 }
 
-/** The login page, back to `next` once logged in. */
+/** The login page, back to `next` once logged in; the home screen when there is none. */
 export function loginPath(next?: string): string {
-  return next && next !== '/' ? `${routes.login}?next=${encodeURIComponent(next)}` : routes.login
+  return next && next !== routes.home && next !== routes.app
+    ? `${routes.login}?next=${encodeURIComponent(next)}`
+    : routes.login
 }
 
-/** A page of the app to go back to after login: a path of this site only, never another site. */
+/**
+ * A page of the app to go back to after login: a path of this site only, never another site;
+ * otherwise the home screen of the account.
+ */
 export function safeNextPath(next: string | null): string {
   return next && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\')
     ? next
-    : '/'
+    : routes.app
+}
+
+/** The sign-up page with an account type chosen, as the home page offers: /signup?type=analyst. */
+export function signUpPath(accountType?: ClientAccountType): string {
+  return withQuery(routes.signUp, 'type', accountType)
 }

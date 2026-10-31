@@ -13,6 +13,7 @@ export const subscriptionKeys = {
   all: ['subscription'] as const,
   current: () => [...subscriptionKeys.all, 'current'] as const,
   plans: () => [...subscriptionKeys.all, 'plans'] as const,
+  publicPlans: () => [...subscriptionKeys.all, 'plans', 'public'] as const,
   payment: (id: string) => [...subscriptionKeys.all, 'payment', id] as const,
   invoices: ['invoices'] as const,
 }
@@ -40,6 +41,19 @@ export function usePlans() {
   return useQuery({
     queryKey: subscriptionKeys.plans(),
     queryFn: ({ signal }) => apiClient.get<PlanDto[]>('/subscription/plans', { signal }),
+    staleTime: Infinity,
+  })
+}
+
+/**
+ * GET /subscription/plans before login, for the home page: every plan, whoever asks. The call
+ * goes without the session, so a logged-in visitor sees the same plans.
+ */
+export function usePublicPlans() {
+  return useQuery({
+    queryKey: subscriptionKeys.publicPlans(),
+    queryFn: ({ signal }) =>
+      apiClient.get<PlanDto[]>('/subscription/plans', { signal, anonymous: true }),
     staleTime: Infinity,
   })
 }

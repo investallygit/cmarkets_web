@@ -1,9 +1,13 @@
 import { Link } from 'react-router'
+import { routes } from '@/shared/routes/paths'
 
-/** Brand colours are reserved for the logo (spec section 8). */
-export function Logo() {
+/**
+ * Brand colours are reserved for the logo (spec section 8). It leads to the home page, or in the
+ * app to the home screen.
+ */
+export function Logo({ to = routes.home }: { to?: string }) {
   return (
-    <Link to="/" aria-label="CMarket" className="flex shrink-0 items-center gap-2">
+    <Link to={to} aria-label="CMarket" className="flex shrink-0 items-center gap-2">
       <svg aria-hidden viewBox="0 0 32 32" className="size-6">
         <rect width="32" height="32" rx="6" fill="var(--brand-navy)" />
         <path
