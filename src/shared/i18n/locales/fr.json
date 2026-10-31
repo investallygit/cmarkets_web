@@ -2495,7 +2495,9 @@
       "label": "Le terminal CMarket : indices, graphique de cours, plus fortes variations et courbe des taux, avec des données fictives.",
       "caption": "Illustration · données fictives",
       "index": "BVMAC Actions",
-      "curve": "Cameroun"
+      "curve": "Cameroun",
+      "pause": "Mettre les animations en pause",
+      "play": "Relancer les animations"
     },
     "facts": {
       "label": "CMarket en bref",
@@ -2639,7 +2641,8 @@
     },
     "footer": {
       "label": "Liens",
-      "sources": "Données : fichiers de la BVMAC et de la BEAC ; EODHD pour l'Europe et les États-Unis."
+      "sources": "Données : fichiers de la BVMAC et de la BEAC ; EODHD pour l'Europe et les États-Unis.",
+      "photos": "Photos : Pexels"
     }
   }
 }

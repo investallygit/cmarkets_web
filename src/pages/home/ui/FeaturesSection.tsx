@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { FEATURES, POINTS } from '../config/content'
+import { revealDelay } from '../lib/reveal'
 import { Point, Section } from './Section'
 
 /** Monitoring, analysis and portfolios (spec section 1), then research, with their screens. */
@@ -13,8 +14,12 @@ export function FeaturesSection() {
       lead={t('home.features.lead')}
     >
       <div className="grid gap-4 md:grid-cols-2">
-        {FEATURES.map((feature) => (
-          <article key={feature.id} className="flex flex-col gap-4 border bg-panel p-6">
+        {FEATURES.map((feature, index) => (
+          <article
+            key={feature.id}
+            style={revealDelay(index)}
+            className="reveal flex flex-col gap-4 border bg-panel p-6"
+          >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <ul aria-label={t('home.features.codes')} className="flex flex-wrap gap-1.5">
                 {feature.codes.map((code) => (

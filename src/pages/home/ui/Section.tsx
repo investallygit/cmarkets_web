@@ -1,6 +1,9 @@
 import { clsx } from 'clsx'
 import { Check } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
+import type { PhotoFiles } from '../config/photos'
+import { useReveal } from '../model/useReveal'
+import { PhotoBackdrop } from './HomeBackground'
 
 /** The width of the page's content, with a 16 px margin on a phone. */
 export function Container({ className, children }: { className?: string; children: ReactNode }) {
@@ -15,16 +18,32 @@ interface SectionProps {
   eyebrow: string
   title: string
   lead?: string
+  /** A photo across the page above the title, which then stands on its shaded lower part. */
+  photo?: PhotoFiles
   children: ReactNode
 }
 
-/** A section of the home page: a small green label, the title and its lead, then the content. */
-export function Section({ id, eyebrow, title, lead, children }: SectionProps) {
+/**
+ * A section of the home page: a small green label, the title and its lead, then the content. Its
+ * blocks marked `reveal` come in once it scrolls into view.
+ */
+export function Section({ id, eyebrow, title, lead, photo, children }: SectionProps) {
   const headingId = useId()
+  const reveal = useReveal<HTMLElement>()
   return (
-    <section id={id} aria-labelledby={headingId} className="scroll-mt-14 py-16 sm:py-20">
+    <section
+      {...reveal}
+      id={id}
+      aria-labelledby={headingId}
+      className={clsx(
+        'relative isolate scroll-mt-14 py-16 sm:py-20',
+        // The title at two thirds of the photo's height, where its shade is dark enough.
+        photo && 'pt-72 sm:pt-100',
+      )}
+    >
+      {photo && <PhotoBackdrop photo={photo} under="text" className="top-0 h-104 sm:h-152" />}
       <Container className="flex flex-col gap-10">
-        <header className="flex max-w-3xl flex-col gap-3">
+        <header className="reveal flex max-w-3xl flex-col gap-3">
           <p className="font-mono text-data tracking-title text-brand-green uppercase">{eyebrow}</p>
           <h2 id={headingId} className="font-sans text-headline font-bold">
             {title}

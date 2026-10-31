@@ -2495,7 +2495,9 @@
       "label": "The CMarket terminal: indices, a price chart, top movers and a yield curve, with sample data.",
       "caption": "Illustration · sample data",
       "index": "BVMAC Equities",
-      "curve": "Cameroon"
+      "curve": "Cameroon",
+      "pause": "Pause the animations",
+      "play": "Play the animations"
     },
     "facts": {
       "label": "CMarket at a glance",
@@ -2639,7 +2641,8 @@
     },
     "footer": {
       "label": "Links",
-      "sources": "Data: BVMAC and BEAC files; EODHD for Europe and the United States."
+      "sources": "Data: BVMAC and BEAC files; EODHD for Europe and the United States.",
+      "photos": "Photos: Pexels"
     }
   }
 }

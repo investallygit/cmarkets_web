@@ -15,6 +15,7 @@ export function HomeFooter() {
           <Logo />
           <p className="font-sans text-data text-secondary">{t('auth.footer')}</p>
           <p className="font-sans text-data text-secondary">{t('home.footer.sources')}</p>
+          <p className="font-sans text-data text-secondary">{t('home.footer.photos')}</p>
           {env.useMocks && (
             <p className="font-sans text-data text-warning">{t('shell.prototypeData')}</p>
           )}

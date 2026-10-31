@@ -14,6 +14,7 @@ import { useYieldCurveRealtimeSync } from '@/entities/yield-curve'
 import { InactivityLogout } from '@/features/log-out'
 import { AlertDialogHost } from '@/features/manage-alerts'
 import { WatchlistDialogHost } from '@/features/manage-watchlists'
+import { useNoBrowserTranslation } from '@/shared/lib/useNoBrowserTranslation'
 import { TableExportContext } from '@/shared/ui/tableExport'
 import { Toaster } from '@/shared/ui/Toaster'
 import { SideMenu } from '@/widgets/side-menu'
@@ -40,6 +41,9 @@ export function AppShell() {
   useAuctionRealtimeSync()
   useYieldCurveRealtimeSync()
   useDataImportRealtimeSync()
+  // The terminal speaks French and English itself (spec section 7), and its live figures must not
+  // freeze under a translation of the browser.
+  useNoBrowserTranslation()
 
   if (me.isPending) return <FullScreenStatus kind="loading" />
   if (me.isError) {

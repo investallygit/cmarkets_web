@@ -122,6 +122,83 @@
       background-color: color-mix(in srgb, var(--down) 25%, transparent);
     }
   }
+
+  /*
+   * The home page only: the hero rises into place, the picture of the terminal draws its lines,
+   * scrolls its ticker tape and blinks its cursor. Each runs under motion-safe:.
+   */
+  --animate-rise: rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 500ms ease-out both;
+  --animate-draw: draw 1600ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  --animate-ticker: ticker 45s linear infinite;
+  --animate-blink: blink 1.1s steps(2, jump-none) infinite;
+  /* Its backdrop: a photo closing in, the grid of a chart, price lines sliding by, two glows. */
+  --animate-drift: drift 40s ease-in-out infinite alternate;
+  --animate-grid: grid 30s linear infinite;
+  --animate-lines: ticker 80s linear infinite;
+  --animate-glow: glow 28s ease-in-out infinite alternate;
+  --animate-glow-reverse: glow 36s ease-in-out infinite alternate-reverse;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  /* On a path of pathLength 1 with stroke-dasharray 1. */
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* The tape holds its items twice: half its width brings the second copy where the first was. */
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes blink {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes drift {
+    from {
+      transform: scale(1.02);
+    }
+    to {
+      transform: scale(1.12) translate(-1.5%, -1%);
+    }
+  }
+
+  /* One square of the .home-grid: the grid then looks as it did. */
+  @keyframes grid {
+    to {
+      transform: translate(48px, 48px);
+    }
+  }
+
+  @keyframes glow {
+    from {
+      transform: translate(0, 0) scale(1);
+    }
+    to {
+      transform: translate(-10%, 12%) scale(1.15);
+    }
+  }
 }
 
 @layer base {
@@ -284,5 +361,129 @@
 
   .publication-text .ProseMirror-selectednode {
     outline: 1px solid var(--accent-amber);
+  }
+
+  /*
+   * The home page: the blocks of a section fade in and rise once it scrolls into view
+   * (data-reveal on the section, data-shown once seen), one after the other along
+   * --reveal-delay. Nothing moves for a user who asks for less motion.
+   */
+  .reveal {
+    transition:
+      opacity 700ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+  }
+
+  [data-reveal]:not([data-shown]) .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  /* The home page's backdrop (pages/home/ui/HomeBackground). */
+  .home-grid {
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--text-primary) 5%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--text-primary) 5%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 48px 48px;
+  }
+
+  .home-grid-mask {
+    mask-image: radial-gradient(ellipse 70% 80% at 70% 30%, black 10%, transparent 70%);
+  }
+
+  .home-lines-mask {
+    mask-image: radial-gradient(ellipse 65% 75% at 50% 80%, black 25%, transparent 75%);
+  }
+
+  .home-glow {
+    background: radial-gradient(
+      closest-side,
+      color-mix(in srgb, var(--brand-green) 16%, transparent),
+      transparent
+    );
+  }
+
+  .home-glow-info {
+    background: radial-gradient(
+      closest-side,
+      color-mix(in srgb, var(--info) 10%, transparent),
+      transparent
+    );
+  }
+
+  /* The hero's photo, darkest under the text and fading into the page at the bottom. */
+  .home-hero-shade {
+    background:
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--brand-navy) 50%, transparent),
+        transparent 35%,
+        transparent 65%,
+        var(--brand-navy)
+      ),
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--brand-navy) 85%, transparent),
+        color-mix(in srgb, var(--brand-navy) 55%, transparent) 50%,
+        color-mix(in srgb, var(--brand-navy) 25%, transparent)
+      );
+  }
+
+  /* The photo behind a section, faded in and out (pages/home/ui/HomeBackground). */
+  .home-photo-mask {
+    mask-image: linear-gradient(to bottom, transparent, black 20%, black 60%, transparent);
+  }
+
+  /* Text from 65% of the height down keeps its contrast, whatever part of the photo is behind. */
+  .home-photo-shade {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--brand-navy) 20%, transparent),
+      color-mix(in srgb, var(--brand-navy) 30%, transparent) 30%,
+      color-mix(in srgb, var(--brand-navy) 88%, transparent) 60%,
+      color-mix(in srgb, var(--brand-navy) 95%, transparent)
+    );
+  }
+
+  /*
+   * Moves the photo against the scroll while its section crosses the view. A scroll-driven
+   * animation: where the browser has none, the photo stays still.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .home-parallax {
+        scale: 1.2;
+        animation: parallax linear both;
+        animation-timeline: view();
+      }
+    }
+  }
+
+  @keyframes parallax {
+    from {
+      translate: 0 -8%;
+    }
+    to {
+      translate: 0 8%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      transition: none;
+    }
+
+    [data-reveal]:not([data-shown]) .reveal {
+      opacity: 1;
+      transform: none;
+    }
   }
 }

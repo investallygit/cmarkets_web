@@ -168,6 +168,25 @@ Done in step 10, with the home page:
   page only.
 - **Plans before login**: `usePublicPlans` asks `GET /subscription/plans` without the session; the
   mock answers every plan to a call without a token, and an account the plans of its type.
+- **Motion**: `useInView` (`shared/lib`); the `rise`, `fade-in`, `draw`, `ticker`, `blink`,
+  `drift`, `grid`, `lines`, `glow` and `parallax` animations, the `.reveal` class (blocks that
+  come in once their section is seen) and the backdrop's `.home-grid`, `.home-glow` and photo
+  shades in `app/styles`, all off under `prefers-reduced-motion`. `parallax` is driven by the
+  scroll (`animation-timeline: view()`); a browser without it keeps the photos still.
+  `ButtonLink` nudges its arrow on hover.
+- **Photos**: seven photos from Pexels (free to use, credit not required; "Photos: Pexels" in the
+  footer), cropped and saved as WebP at two widths in `pages/home/assets/photos`, about 790 kB in
+  all: a city at night, Douala at sunset, a coastal city at dusk, and one for each client account
+  type. `pages/home/config/photos.ts` gives the number and the photographer of each. They are
+  decoration (`alt=""`), with no identifiable person, so none suggests a user's endorsement.
+- **Translation by the browser**: Chrome's (and Cốc Cốc's) swaps text nodes for its own, so React
+  updated nodes that were no longer on screen and threw on removing one ("Failed to execute
+  'removeChild' on 'Node'") on the home page, MKT, PORT and YCRV. The terminal now turns it off
+  while it is open, dialogs included (`useNoBrowserTranslation`, `shared/lib`): its live figures
+  would otherwise freeze without a sign, and it speaks French and English itself. The home and
+  login pages can still be translated; the picture of the terminal is `translate="no"`, and a
+  text that changes stands alone in its element, which React rewrites whole. A Playwright flow
+  translates the home page and waits for the command bar to type its next command.
 
 Still to do, with the first screen that needs it:
 
@@ -393,7 +412,16 @@ Still to do, with the first screen that needs it:
   the client account types (each opening the sign-up with its type), the plans by month or year as
   the server prices them, why CMarket, then the trial. A visitor already logged in in the browser
   (the refresh cookie) gets "Open the terminal" instead of the trial and the login, and the plans
-  lead to CFG.
+  lead to CFG. Motion: the hero rises into place and each section comes in as it scrolls into
+  view; the picture types the commands of spec section 8, draws its charts, moves its sample
+  quotes with the screens' 400 ms flash and scrolls its tape, only while on screen and until its
+  Pause button (WCAG 2.2.2); a plan's price glides to the other billing cycle; the header gets a
+  shadow once the page scrolls. Behind the hero, a city at night closes in slowly, the grid of a
+  chart drifts and price lines slide by; two glows of the brand colours drift behind the whole
+  page; the same button stops them. Photos set the mood: Douala at sunset above the markets, the
+  work of each account type on its card, a coastal city at dusk behind the trial; those behind a
+  section move against the scroll. The navy shades them where text stands on them (4.5:1 at
+  least, measured behind each line of text at several scroll positions).
 - **Still to do**: the texts are the prototype's, to be checked by the spec author.
 
 ### Login, OTP, sign-up, password reset: done

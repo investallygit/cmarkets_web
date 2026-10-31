@@ -13,6 +13,15 @@ test.describe('a visitor', () => {
       page.getByRole('heading', { level: 1, name: 'The financial terminal of the CEMAC markets' }),
     ).toBeVisible()
     await expect(page.getByRole('img', { name: /^The CMarket terminal/ })).toBeVisible()
+    // The picture of the terminal and the backdrop move until the visitor pauses them.
+    await page.getByRole('button', { name: 'Pause the animations' }).click()
+    await expect(page.getByRole('button', { name: 'Play the animations' })).toBeVisible()
+
+    // A photo behind the hero sets the mood: it loads at once, and screen readers pass over it.
+    const photo = page.locator('section[aria-labelledby="home-title"] img')
+    await expect(photo).toHaveAttribute('alt', '')
+    await expect(photo).toHaveJSProperty('complete', true)
+    expect(await photo.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0)
 
     // The plans come from the server before login, per user and month, then per year.
     const plans = page.locator('#plans')
@@ -43,6 +52,29 @@ test.describe('a visitor', () => {
     await page.getByRole('banner').getByRole('link', { name: 'Se connecter' }).click()
     await expect(page).toHaveURL(/\/login$/)
     await expect(page.getByRole('heading', { name: 'Connexion à CMarket' })).toBeVisible()
+  })
+
+  test('keeps working once the browser has translated the page', async ({ page }) => {
+    await page.goto('/')
+    const preview = page.getByRole('img', { name: /^The CMarket terminal/ })
+    await expect(preview).toContainText('SEMC DES')
+    // A translation of the browser (Chrome's, Cốc Cốc's) swaps each text node for <font>
+    // elements of its own; an extension may do so even where translate="no" asks it not to.
+    await page.evaluate(() => {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+      const nodes: Text[] = []
+      while (walker.nextNode()) {
+        if (walker.currentNode.nodeValue?.trim()) nodes.push(walker.currentNode as Text)
+      }
+      for (const node of nodes) {
+        const font = document.createElement('font')
+        font.textContent = node.nodeValue
+        node.replaceWith(font)
+      }
+    })
+    // The command bar erases the first command, then types the next.
+    await expect(preview).toContainText('SAFACAM GP', { timeout: 10_000 })
+    await expect(page.getByText('Something went wrong on this screen.')).toHaveCount(0)
   })
 })
 

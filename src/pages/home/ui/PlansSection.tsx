@@ -6,9 +6,12 @@ import { BILLING_CYCLES, usePublicPlans } from '@/entities/subscription'
 import { MODULES, type BillingCycle, type PlanDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { yearlySavingPct } from '@/shared/lib/billing'
+import { useMediaQuery } from '@/shared/lib/useMediaQuery'
 import { routes, signUpPath } from '@/shared/routes/paths'
 import { ButtonLink } from '@/shared/ui/form/Button'
 import { PanelError, PanelLoading } from '@/shared/ui/StatusViews'
+import { revealDelay } from '../lib/reveal'
+import { useTweenedNumber } from '../model/useTweenedNumber'
 import { useVisitorStatus } from '../model/useVisitorStatus'
 import { Section } from './Section'
 
@@ -36,7 +39,8 @@ export function PlansSection() {
         <div
           role="group"
           aria-label={t('home.plans.cycle')}
-          className="flex self-start border p-0.5"
+          style={revealDelay(0)}
+          className="reveal flex self-start border p-0.5"
         >
           {BILLING_CYCLES.map((value) => (
             <button
@@ -45,7 +49,7 @@ export function PlansSection() {
               aria-pressed={cycle === value}
               onClick={() => setCycle(value)}
               className={clsx(
-                'h-8 px-4 font-sans text-label',
+                'h-8 px-4 font-sans text-label transition-colors duration-200',
                 cycle === value
                   ? 'bg-brand-green font-semibold text-brand-navy'
                   : 'text-primary/75 hover:text-primary',
@@ -69,15 +73,18 @@ export function PlansSection() {
           </div>
         ) : (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {plans.data.map((plan) => (
-              <li key={plan.id}>
+            {plans.data.map((plan, index) => (
+              <li key={plan.id} style={revealDelay(index + 1)} className="reveal">
                 <PlanCard plan={plan} cycle={cycle} />
               </li>
             ))}
           </ul>
         )}
         {first && (
-          <p className="font-sans text-data text-secondary">
+          <p
+            style={revealDelay((plans.data?.length ?? 0) + 1)}
+            className="reveal font-sans text-data text-secondary"
+          >
             {t('home.plans.payment', { rate: format.number(first.taxRatePct, 2) })}
           </p>
         )}
@@ -86,10 +93,16 @@ export function PlansSection() {
   )
 }
 
+/** The price glides to the other cycle's; the card's border lights up under the pointer. */
 function PlanCard({ plan, cycle }: { plan: PlanDto; cycle: BillingCycle }) {
   const { t } = useTranslation()
   const format = useFormat()
   const visitor = useVisitorStatus()
+  const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const price = useTweenedNumber(
+    cycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice,
+    !reducedMotion,
+  )
   const xaf = (amount: number) => t('subscription.xaf', { amount: format.number(amount, 0) })
   const types = new Intl.ListFormat(format.locale).format(
     plan.accountTypes.map((type) => t(`accountTypes.${type}`)),
@@ -98,7 +111,10 @@ function PlanCard({ plan, cycle }: { plan: PlanDto; cycle: BillingCycle }) {
   const signUp = signUpPath(plan.accountTypes.length === 1 ? plan.accountTypes[0] : undefined)
 
   return (
-    <article aria-label={plan.name} className="flex h-full flex-col gap-5 border bg-panel p-6">
+    <article
+      aria-label={plan.name}
+      className="flex h-full flex-col gap-5 border bg-panel p-6 transition-colors duration-200 hover:border-brand-green/50"
+    >
       <header className="flex flex-col gap-1">
         <h3 className="font-sans text-figure font-semibold">{plan.name}</h3>
         {/* Two lines kept for the account types, so the prices line up. */}
@@ -107,14 +123,14 @@ function PlanCard({ plan, cycle }: { plan: PlanDto; cycle: BillingCycle }) {
         </p>
       </header>
       <div className="flex flex-col gap-1">
-        <p className="font-mono text-headline font-semibold">
-          {xaf(cycle === 'monthly' ? plan.monthlyPrice : plan.yearlyPrice)}
+        <p className="font-mono text-headline font-semibold tabular-nums">
+          {xaf(Math.round(price))}
         </p>
         <p className="font-sans text-data text-secondary">
           {t(cycle === 'monthly' ? 'home.plans.perMonth' : 'home.plans.perYear')}
         </p>
         {cycle === 'yearly' && (
-          <p className="font-sans text-data text-brand-green">
+          <p className="font-sans text-data text-brand-green motion-safe:animate-fade-in">
             {t('home.plans.monthlyEquivalent', { amount: xaf(Math.round(plan.yearlyPrice / 12)) })}
           </p>
         )}

@@ -163,7 +163,13 @@ exist. Numbers use `shared/lib/format.ts` (`52 500,25` in French, `52,500.25` in
 date in every zone, and the session clock stays in Douala time), and inputs read them back with
 `shared/lib/parse.ts`. The home page and the login pages use the brand navy and green, kept for
 them and the logo (the "marketing pages" of spec section 8); the home page alone has larger type
-(`text-lead`, `text-headline`, `text-display`).
+(`text-lead`, `text-headline`, `text-display`), photos for its mood (from Pexels, free to use,
+listed in `pages/home/config/photos.ts`) and motion: its hero rises into place over a city at
+night closing in, the grid of a chart and price lines sliding by, two glows drift behind the page,
+the photos of its sections move against the scroll, its sections come in as they scroll into
+view, and its picture of the terminal types commands, moves its sample quotes with the 400 ms
+flash of the screens and scrolls its tape, only while on screen and until its Pause button;
+nothing moves under `prefers-reduced-motion`. The screens keep the flash alone.
 Icons come from `lucide-react`.
 
 Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of a title bar),

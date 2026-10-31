@@ -103,9 +103,17 @@ export function ButtonLink({
   ...rest
 }: ButtonLinkProps) {
   return (
-    <Link {...rest} className={clsx(BASE, LINK_VARIANTS[variant], SIZES[size], className)}>
+    <Link {...rest} className={clsx('group', BASE, LINK_VARIANTS[variant], SIZES[size], className)}>
       {children}
-      {Icon && <Icon aria-hidden className={size === 'xl' ? 'size-4' : 'size-3.5'} />}
+      {Icon && (
+        <Icon
+          aria-hidden
+          className={clsx(
+            'motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5',
+            size === 'xl' ? 'size-4' : 'size-3.5',
+          )}
+        />
+      )}
     </Link>
   )
 }

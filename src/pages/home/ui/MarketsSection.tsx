@@ -2,11 +2,16 @@ import { ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { CEMAC_COUNTRIES } from '@/shared/config/countries'
 import { POINTS } from '../config/content'
+import { PHOTOS } from '../config/photos'
+import { revealDelay } from '../lib/reveal'
 import { Point, Section } from './Section'
 
 const WORLD_ASSETS = ['equities', 'indices', 'currencies'] as const
 
-/** The CEMAC data loaded by file, and the European and US markets of EODHD (spec section 11). */
+/**
+ * The CEMAC data loaded by file, and the European and US markets of EODHD (spec section 11),
+ * under a photo of Douala, the seat of the BVMAC.
+ */
 export function MarketsSection() {
   const { t } = useTranslation()
   return (
@@ -15,9 +20,10 @@ export function MarketsSection() {
       eyebrow={t('home.markets.eyebrow')}
       title={t('home.markets.title')}
       lead={t('home.markets.lead')}
+      photo={PHOTOS.markets}
     >
       <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
-        <article className="flex flex-col gap-4 border bg-panel p-6">
+        <article style={revealDelay(0)} className="reveal flex flex-col gap-4 border bg-panel p-6">
           <h3 className="font-sans text-figure font-semibold">{t('home.markets.cemac.title')}</h3>
           <p className="font-sans text-label text-primary/75">{t('home.markets.cemac.text')}</p>
           <ul aria-label={t('home.markets.cemac.countries')} className="flex flex-wrap gap-2">
@@ -37,7 +43,7 @@ export function MarketsSection() {
             ))}
           </ul>
         </article>
-        <div className="flex flex-col gap-4">
+        <div style={revealDelay(1)} className="reveal flex flex-col gap-4">
           <article className="flex flex-col gap-4 border bg-panel p-6">
             <h3 className="font-sans text-figure font-semibold">{t('home.markets.world.title')}</h3>
             <p className="font-sans text-label text-primary/75">{t('home.markets.world.text')}</p>
