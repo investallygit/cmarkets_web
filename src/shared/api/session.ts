@@ -1,5 +1,6 @@
 import { env } from '@/shared/config/env'
 import type { AccessTokenDto } from './contracts'
+import { fetchApi } from './fetchApi'
 import { ApiError, readProblem } from './problem'
 
 /**
@@ -82,7 +83,7 @@ export function endSession(reason: SessionEndReason): void {
 }
 
 async function requestRefresh(): Promise<string | null> {
-  const response = await fetch(`${env.apiBaseUrl}/auth/refresh`, {
+  const response = await fetchApi(`${env.apiBaseUrl}/auth/refresh`, {
     method: 'POST',
     headers: { Accept: 'application/json' },
     credentials: 'include',

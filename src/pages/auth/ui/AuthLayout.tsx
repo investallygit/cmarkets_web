@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useDocumentTitle } from '@/shared/lib/useDocumentTitle'
 import { LanguageSwitch } from '@/shared/ui/LanguageSwitch'
 import { Logo } from '@/shared/ui/Logo'
 
@@ -17,6 +18,7 @@ interface AuthLayoutProps {
  */
 export function AuthLayout({ title, subtitle, width = 400, children }: AuthLayoutProps) {
   const { t } = useTranslation()
+  useDocumentTitle(title)
   return (
     <div className="flex h-full flex-col overflow-y-auto bg-brand-navy">
       <header className="flex shrink-0 items-center justify-between px-6 py-4">

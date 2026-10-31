@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
@@ -127,5 +127,72 @@ describe('DataTable', () => {
     // Past the last row, the selection stays there.
     await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{Enter}')
     expect(onRowDoubleClick).toHaveBeenLastCalledWith({ code: 'SIAT', last: 18500 })
+  })
+
+  it('marks the selected row as the current one for screen readers', () => {
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        getRowId={getRowId}
+        selectedRowId="BANGE"
+        onRowClick={() => {}}
+      />,
+    )
+    const current = screen
+      .getAllByRole('row')
+      .filter((row) => row.getAttribute('aria-current') === 'true')
+    expect(current.map((row) => within(row).getAllByRole('cell')[0].textContent)).toEqual(['BANGE'])
+  })
+
+  it('opens the menu of the selected row from the keyboard, and says which row', async () => {
+    const user = userEvent.setup()
+    const onSelect = vi.fn()
+    function Selectable() {
+      const [selected, setSelected] = useState<string | null>(null)
+      return (
+        <DataTable
+          data={data}
+          columns={columns}
+          getRowId={getRowId}
+          selectedRowId={selected}
+          onRowClick={(row) => setSelected(row.code)}
+          rowMenu={(row) => [{ id: 'open', label: `Open ${row.code}`, onSelect }]}
+          enableSorting={false}
+        />
+      )
+    }
+    render(<Selectable />)
+    await user.tab()
+    await user.keyboard('{ArrowDown}{ArrowDown}')
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('BANGE, 26750'))
+    await user.keyboard('{Shift>}{F10}{/Shift}')
+    expect(screen.getByRole('menuitem', { name: 'Open BANGE' })).toHaveFocus()
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+    // The menu key does the same; Enter picks the entry.
+    await user.keyboard('{ContextMenu}')
+    await user.keyboard('{Enter}')
+    expect(onSelect).toHaveBeenCalledOnce()
+  })
+
+  it('moves a cursor of its own where the rows are not selected', async () => {
+    const user = userEvent.setup()
+    const onRowDoubleClick = vi.fn()
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        getRowId={getRowId}
+        onRowDoubleClick={onRowDoubleClick}
+        enableSorting={false}
+      />,
+    )
+    await user.tab()
+    await user.keyboard('{ArrowDown}{ArrowDown}{Enter}')
+    expect(onRowDoubleClick).toHaveBeenCalledWith({ code: 'BANGE', last: 26750 })
+    // The export entries come from the keyboard too.
+    await user.keyboard('{ContextMenu}')
+    expect(screen.getByRole('menuitem', { name: 'Export to Excel' })).toHaveFocus()
   })
 })

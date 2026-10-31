@@ -4,6 +4,7 @@ import { useCoverage, useImports } from '@/entities/data-import'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
 import { Panel } from '@/shared/ui/Panel'
+import { QueryView } from '@/shared/ui/QueryView'
 import { PanelLoading } from '@/shared/ui/StatusViews'
 import { CurrentUploadPanel } from '@/widgets/current-upload-panel'
 import { EodhdPanel } from '@/widgets/eodhd-panel'
@@ -43,8 +44,9 @@ export function DataImportPage() {
     coverage: <SessionCoveragePanel onOpenImport={open} />,
     eodhd: <EodhdPanel />,
     upload: deciding ? (
+      // Until the uploads waiting are known; a failure to list them shows here, with Retry.
       <Panel title={t('panels.newUpload')} code="IMP">
-        <PanelLoading />
+        <QueryView query={pending}>{() => <PanelLoading />}</QueryView>
       </Panel>
     ) : (
       <CurrentUploadPanel

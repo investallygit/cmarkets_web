@@ -18,6 +18,13 @@ describe('the way in and out of the login pages', () => {
     expect(safeNextPath('https://example.com')).toBe('/app')
     expect(safeNextPath('//example.com')).toBe('/app')
     expect(safeNextPath('/\\example.com')).toBe('/app')
+    // The URL parser drops tabs and line breaks: these are "//example.com" too.
+    expect(safeNextPath('/\t/example.com')).toBe('/app')
+    expect(safeNextPath('/\n/example.com')).toBe('/app')
+    expect(safeNextPath('/\r/example.com')).toBe('/app')
+    expect(safeNextPath('/port/portfolio-cemac/risk?view=1#limits')).toBe(
+      '/port/portfolio-cemac/risk?view=1#limits',
+    )
   })
 
   it('opens the sign-up with the account type the home page offers', () => {

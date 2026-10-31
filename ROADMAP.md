@@ -199,10 +199,31 @@ Done in step 10, with the home page:
   - Keyboard: a `DataTable` takes the focus, the arrows move from row to row as a click would and
     Enter opens a row as a double click; a box that scrolls with nothing to focus in it takes the
     focus itself (`ScrollArea`, `useKeyboardScrolling`), a panel's body included.
-  - Links inside a sentence are underlined; the sign-up form's pairs of fields stack on a phone.
+  - Keyboard, second pass: Tab no longer stays in the command bar (2.1.2), which completes only a
+    word under way; the menu key or Shift + F10 opens a row's menu, where rows are not selected
+    a cursor of the table's own (2.1.1), and screen readers hear the row reached; a menu takes the
+    focus, goes through its entries with the arrows and gives the focus back (the user's menu,
+    the row menus); the selected row is `aria-current`.
+  - A panel moves and sizes without dragging, from the layout menu of its title bar's code, which
+    also brings the screen's default layout back (2.5.7).
+  - Each page names itself in the tab's title (2.4.2, `useDocumentTitle`); each chart is a figure
+    named with its period, move and range (1.1.1, `useChartLabel`).
+  - Windows contrast themes: the selection, the current page and the focus get an outline in the
+    system colours, which keep no background or box shadow.
+  - Narrow windows (a tablet, a zoomed page, down to 320 px): the top bar drops its least needed
+    items, a title bar's options go to the next line, the tabs scroll, the security header wraps;
+    no page scrolls sideways. A table's sr-only text no longer widened the page.
+  - Links inside a sentence are underlined; the sign-up form's pairs of fields stack on a phone;
+    the FR / EN buttons are named Français and English.
 - **Mock session**: a logout no longer takes the user away from the requests already let through
   by the auth gate (`setRequestUser`, `endSession`): they were failing with 500 while they waited
   for their latency.
+- **Failures**: a link to `/login?next=` with a tab or a line break (which the URL parser drops)
+  showed the error screen; a browser that blocks the service worker or the site's storage left an
+  empty page, it now says why the prototype cannot start; INDEX CHART and NEW UPLOAD waited for
+  ever on a request that had failed, they show it with Retry; a server out of reach reads in the
+  user's language. The mock's ids carry 32 random bits: those written in the same millisecond
+  could repeat, and two rows of AUDT shared a key.
 
 Still to do, with the first screen that needs it:
 

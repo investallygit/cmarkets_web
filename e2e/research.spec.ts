@@ -152,7 +152,11 @@ test('a new note is saved, checked, then submitted to the library', async ({ pag
   await expect(page).toHaveURL(/\/pub\/new\?id=pub-/)
 
   const editor = panel(page, 'Editor')
-  await editor.getByRole('textbox', { name: 'Title' }).fill('SOCAPALM: palm oil holds the margin')
+  // The URL changes before the editor does: until the new draft's empty title shows, the editor
+  // still holds the publication open before, which the title would rename.
+  const title = editor.getByRole('textbox', { name: 'Title' })
+  await expect(title).toHaveValue('')
+  await title.fill('SOCAPALM: palm oil holds the margin')
   await expect(editor.getByText('Unsaved changes')).toBeVisible()
   // The autosave runs every 10 seconds.
   await expect(editor.getByText(/^Saved at \d\d:\d\d$/)).toBeVisible({ timeout: 12_000 })

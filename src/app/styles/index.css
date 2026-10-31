@@ -510,3 +510,17 @@
     color: var(--down-selected);
   }
 }
+
+/*
+ * Windows contrast themes (forced colours) drop backgrounds and box shadows: a selection, the
+ * current page and the focus, which some show by those alone (bg-selected, the rings), get an
+ * outline in the system colours instead. Outside the layers, so it wins over outline-none.
+ */
+@media (forced-colors: active) {
+  .bg-selected,
+  [aria-current]:not([aria-current='false']),
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}

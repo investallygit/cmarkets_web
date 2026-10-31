@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useDocumentTitle } from '@/shared/lib/useDocumentTitle'
 import { FACTS } from '../config/content'
 import { PHOTOS } from '../config/photos'
 import { revealDelay, riseDelay } from '../lib/reveal'
@@ -27,9 +28,11 @@ import { TrustSection } from './TrustSection'
  * and the trial.
  */
 export function HomePage() {
+  const { t } = useTranslation()
   const visitor = useVisitorStatus()
   const [scrolled, setScrolled] = useState(false)
   const [paused, setPaused] = useState(false)
+  useDocumentTitle(`CMarket — ${t('home.hero.title')}`)
   return (
     <div
       onScroll={(event) => setScrolled(event.currentTarget.scrollTop > 8)}

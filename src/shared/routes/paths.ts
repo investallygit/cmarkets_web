@@ -147,14 +147,18 @@ export function loginPath(next?: string): string {
     : routes.login
 }
 
+/** An origin of no site, to read `next` as the browser would read it on this one. */
+const NO_SITE = 'https://cmarket.invalid'
+
 /**
  * A page of the app to go back to after login: a path of this site only, never another site;
- * otherwise the home screen of the account.
+ * otherwise the home screen of the account. The browser's URL parser decides, since it drops
+ * tabs and line breaks and reads "\" as "/": "/\t/site.example" would be "//site.example".
  */
 export function safeNextPath(next: string | null): string {
-  return next && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\')
-    ? next
-    : routes.app
+  if (!next?.startsWith('/')) return routes.app
+  const url = new URL(next, NO_SITE)
+  return url.origin === NO_SITE ? `${url.pathname}${url.search}${url.hash}` : routes.app
 }
 
 /** The sign-up page with an account type chosen, as the home page offers: /signup?type=analyst. */

@@ -157,8 +157,9 @@ export function CommandBar() {
       const suggestion = highlight >= 0 ? suggestions[highlight] : undefined
       if (suggestion) apply(suggestion)
       else void execute(text)
-    } else if (event.key === 'Tab' && count > 0) {
-      // Completes the text without running it.
+    } else if (event.key === 'Tab' && !event.shiftKey && lastWord !== '' && count > 0) {
+      // Completes the word being typed without running it. With no word under way, Tab and
+      // Shift + Tab leave the bar as from any field (WCAG 2.1.2).
       event.preventDefault()
       const suggestion = suggestions[Math.max(highlight, 0)]
       if (suggestion.kind === 'security') pickSecurity(suggestion.security)
@@ -170,7 +171,7 @@ export function CommandBar() {
   }
 
   return (
-    <div className="relative w-140 max-w-[36vw] shrink">
+    <div className="relative min-w-0 flex-1 md:w-140 md:max-w-[36vw] md:flex-initial">
       <div
         className={clsx(
           'flex h-7 items-center gap-2 border bg-app px-2',

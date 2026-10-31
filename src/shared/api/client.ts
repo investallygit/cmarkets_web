@@ -1,4 +1,5 @@
 import { env } from '@/shared/config/env'
+import { fetchApi } from './fetchApi'
 import { ApiError, readProblem } from './problem'
 import { endSession, getAccessToken, refreshAccessToken } from './session'
 
@@ -36,12 +37,12 @@ function withToken(init: RequestInit, token: string | null): RequestInit {
  * session, and the app goes back to the login page.
  */
 async function send(url: string, init: RequestInit, anonymous = false): Promise<Response> {
-  if (anonymous) return fetch(url, { ...init, credentials: 'include' })
+  if (anonymous) return fetchApi(url, { ...init, credentials: 'include' })
   const token = await getAccessToken()
-  let response = await fetch(url, withToken(init, token))
+  let response = await fetchApi(url, withToken(init, token))
   if (response.status === 401 && token) {
     const renewed = await refreshAccessToken()
-    if (renewed) response = await fetch(url, withToken(init, renewed))
+    if (renewed) response = await fetchApi(url, withToken(init, renewed))
   }
   if (response.status === 401) endSession('expired')
   return response

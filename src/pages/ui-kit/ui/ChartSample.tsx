@@ -55,6 +55,7 @@ export function ChartSample({ className }: { className?: string }) {
       >
         <PriceChart
           bars={BARS}
+          label="SEMC"
           type={type}
           intraday={false}
           decimals={0}

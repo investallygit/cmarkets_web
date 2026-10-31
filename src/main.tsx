@@ -5,9 +5,11 @@ import 'react-resizable/css/styles.css'
 import '@/app/styles/index.css'
 import '@/shared/i18n'
 
+import i18n from 'i18next'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from '@/app/App'
+import { FullScreenStatus } from '@/app/layouts/FullScreenStatus'
 import { onSessionChange } from '@/shared/api'
 import { env } from '@/shared/config/env'
 import { createSignalRRealtimeClient, type RealtimeClient } from '@/shared/realtime'
@@ -36,4 +38,15 @@ async function bootstrap() {
   )
 }
 
-void bootstrap()
+// The prototype's back end needs a service worker and the site's storage, which a private window
+// or a security setting can refuse: say so, rather than leave an empty page.
+bootstrap().catch((error: unknown) => {
+  console.error(error)
+  createRoot(document.getElementById('root')!).render(
+    <FullScreenStatus
+      kind="error"
+      message={i18n.t(env.useMocks ? 'app.mockStartError' : 'app.startError')}
+      onRetry={() => window.location.reload()}
+    />,
+  )
+})

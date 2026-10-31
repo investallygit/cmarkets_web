@@ -10,14 +10,14 @@ export function StatusBar({ className }: { className?: string }) {
   return (
     <footer
       className={clsx(
-        'flex min-w-0 items-center gap-8 border-t bg-app px-3 font-mono text-title',
+        'flex min-w-0 items-center gap-4 border-t bg-app px-3 font-mono text-title sm:gap-8',
         className,
       )}
     >
       <ConnectionStatus />
       <MarketSourceInfo />
       {env.useMocks && (
-        <span className="ml-auto shrink-0 text-accent-amber uppercase">
+        <span className="ml-auto min-w-0 truncate text-accent-amber uppercase">
           {t('shell.prototypeData')}
         </span>
       )}

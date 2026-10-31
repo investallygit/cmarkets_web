@@ -11,7 +11,9 @@ export function AlertsIndicator({ to }: { to?: string }) {
   const content = (
     <>
       <Bell aria-hidden className="size-3.5" />
-      {t('shell.alerts')} {unread}
+      {/* The word for screen readers only, on a phone. */}
+      <span className="sr-only sm:not-sr-only">{t('shell.alerts')}</span>
+      {unread}
     </>
   )
   const className =

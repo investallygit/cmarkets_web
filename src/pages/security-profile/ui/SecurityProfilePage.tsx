@@ -99,7 +99,13 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
 
   const { id, type, currency, code } = security
   const chart = (variant: 'compact' | 'full') => (
-    <PriceChartPanel securityId={id} securityType={type} currency={currency} variant={variant} />
+    <PriceChartPanel
+      securityId={id}
+      code={code}
+      securityType={type}
+      currency={currency}
+      variant={variant}
+    />
   )
   const keyData = <KeyDataPanel profile={security} />
   const panels: Record<SecurityFunction, Record<string, ReactNode>> = {

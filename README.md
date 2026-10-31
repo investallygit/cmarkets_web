@@ -136,13 +136,19 @@ each other; the app shell mounts the form once.
   histories, indices, auctions and curves the open screens show.
 - **Layouts**: each page declares its panels and default grid (`pages/*/config`);
   `features/workspace-layout` saves the user's layout through `GET/PUT /me/layouts/{screen}`.
+  Without dragging, the function code of a panel's title bar opens its layout menu: a column or
+  a panel aside, wider or narrower, taller or shorter, or the screen's default layout back
+  (`PanelLayoutMenu`, `shared/ui/workspaceLayout.ts`).
 - **Session** (spec section 10): `shared/api/session.ts` keeps the access token (15 minutes) in
   memory only; the refresh token (7 days) is an HttpOnly cookie that `POST /auth/refresh` trades
   for a new access token, at start-up and when a token runs out. A 401 renews the token once and
   sends the request again; several requests share one renewal; a refused renewal ends the session
   and the login page opens on `?next=` the page asked for. The hub connects with the session and
   takes the same token. The tabs of a browser log in and out together (`BroadcastChannel`), and
-  30 minutes without an action in any of them log the user out after a one-minute warning.
+  30 minutes without an action in any of them log the user out after a one-minute warning. A
+  server out of reach is an `ApiError` in the user's language (`fetchApi`), not the browser's
+  "Failed to fetch"; `?next=` keeps a path of this site only, as the browser's URL parser reads
+  it (`safeNextPath`).
 - **Permissions**: `/me` returns the user's permissions and the modules of their plan;
   `entities/session` decides which screens the menu, the command bar and the routes offer, and a
   screen outside the plan offers the plans instead of its content. The server stays the
@@ -177,8 +183,10 @@ Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of
 focus when nothing in it can), `DataTable` (sorting, right-click menu, Excel and CSV export unless the user lacks
 `analysis:export`; `exportRef` puts the export links in a title bar; a `footer` row stays out of
 the sorting; `sorting` and `onSortingChange` leave the order to the server for a paged list; the
-arrows move the selection and Enter opens a row), `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
-drawings; `AreaChart`; `useChartTheme`, the section 8 colours for Recharts, which draws in SVG,
+arrows move the selection, or a cursor where rows are not selected, Enter opens a row and the
+menu key or Shift + F10 its menu), `ContextMenu` (takes the focus: arrows, Home, End, Escape),
+`charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
+drawings; `AreaChart`; both named for screen readers by `useChartLabel`; `useChartTheme`, the section 8 colours for Recharts, which draws in SVG,
 and the `--chart-*` series palette checked for colour-blind separation), `PdfViewer`, `form/`
 (buttons, fields, selects, number and date inputs in the user's format, password inputs,
 checkboxes, segmented choices, file drop zone), `Dialog` (also as a side form), `ConfirmDialog`

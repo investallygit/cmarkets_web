@@ -7,6 +7,8 @@ import fr from './locales/fr.json'
 /** French and English; every UI string lives in ./locales (spec section 7). */
 export const LANGUAGES = ['fr', 'en'] as const
 export type Language = (typeof LANGUAGES)[number]
+/** Each language in its own words, as language menus name them. */
+export const LANGUAGE_NAMES: Record<Language, string> = { fr: 'Français', en: 'English' }
 export type TranslationKey = ParseKeys
 /** Screen ids that have a title and a menu label in the translation files. */
 export type ScreenTextKey = keyof typeof en.screens

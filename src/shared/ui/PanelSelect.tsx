@@ -28,7 +28,7 @@ export function PanelSelect<T extends string>({
         value={value}
         aria-label={ariaLabel}
         onChange={(event) => onChange(event.target.value as T)}
-        className="cursor-pointer appearance-none bg-transparent pr-3.5 uppercase outline-none hover:text-primary focus-visible:text-primary focus-visible:underline"
+        className="cursor-pointer appearance-none bg-transparent pr-3.5 uppercase outline-none hover:text-primary focus-visible:text-primary focus-visible:ring-1 focus-visible:ring-accent-amber"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

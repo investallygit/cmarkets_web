@@ -4,11 +4,14 @@ import { useTranslation } from 'react-i18next'
 type FullScreenStatusProps =
   { kind: 'loading' } | { kind: 'error'; message: string; onRetry: () => void }
 
-/** While the session or /me loads, before any screen: a spinner, or the error and Retry. */
+/**
+ * While the session or /me loads, before any screen: a spinner, or the error and Retry. Also the
+ * page of an app that could not start (main.tsx), whose message is longer: it wraps.
+ */
 export function FullScreenStatus(props: FullScreenStatusProps) {
   const { t } = useTranslation()
   return (
-    <div className="flex h-full items-center justify-center gap-2 font-sans text-label text-secondary">
+    <div className="flex h-full flex-wrap items-center justify-center gap-2 px-6 text-center font-sans text-label text-secondary">
       {props.kind === 'loading' ? (
         <>
           <LoaderCircle aria-hidden className="size-4 animate-spin" />
@@ -17,7 +20,7 @@ export function FullScreenStatus(props: FullScreenStatusProps) {
       ) : (
         <>
           <TriangleAlert aria-hidden className="size-4 text-down" />
-          {props.message}
+          <span className="max-w-xl">{props.message}</span>
           <button
             type="button"
             onClick={props.onRetry}

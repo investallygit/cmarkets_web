@@ -106,7 +106,7 @@ export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
           {quote.isDelayed && <Badge tone="warning">{t('security.delayed')}</Badge>}
         </div>
       )}
-      <dl className="ml-auto grid grid-flow-col gap-x-8">
+      <dl className="ml-auto flex flex-wrap gap-x-8 gap-y-1">
         {figures.map((figure) => (
           <div key={figure.label} className="flex flex-col gap-0.5">
             <dt className="font-sans text-title text-secondary">{figure.label}</dt>

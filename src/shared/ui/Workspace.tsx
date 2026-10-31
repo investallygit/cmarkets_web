@@ -2,6 +2,8 @@ import { useRef, type ReactNode } from 'react'
 import ReactGridLayout from 'react-grid-layout'
 import { useElementSize } from '@/shared/lib/useElementSize'
 import { useMediaQuery } from '@/shared/lib/useMediaQuery'
+import { hasPanelBelow, movePanel, resizePanel } from './workspaceLayout'
+import { WorkspacePanelContext, type WorkspacePanelLayout } from './workspacePanel'
 
 /** Position of a panel in grid units (12 columns x 26 rows fill the workspace). */
 export interface WorkspaceItem {
@@ -30,15 +32,42 @@ interface WorkspaceProps {
   layout: readonly WorkspaceItem[]
   panels: readonly WorkspacePanel[]
   onLayoutChange: (layout: readonly WorkspaceItem[]) => void
+  /** A step from a panel's layout menu: one change, kept at once rather than after a drag. */
+  onLayoutCommit: (layout: readonly WorkspaceItem[]) => void
+  /** Back to the screen's default layout, from a panel's layout menu. */
+  onReset: () => void
 }
 
-/** Grid of movable, resizable panels; the row height stretches so the grid fills the screen. */
-export function Workspace({ layout, panels, onLayoutChange }: WorkspaceProps) {
+/**
+ * Grid of movable, resizable panels; the row height stretches so the grid fills the screen.
+ * Each panel's title bar drags it and its corner resizes it; the layout menu of its title bar
+ * does the same one step at a time, without dragging (WorkspacePanelContext).
+ */
+export function Workspace({
+  layout,
+  panels,
+  onLayoutChange,
+  onLayoutCommit,
+  onReset,
+}: WorkspaceProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { width, height } = useElementSize(containerRef)
   // Below 1280 px wide, panels stack in a single column (spec section 9).
   const stacked = useMediaQuery('(max-width: 1279px)')
   const rowHeight = Math.max(MIN_ROW_HEIGHT, Math.floor((height - GAP * (ROWS + 1)) / ROWS))
+
+  const panelLayout = (id: string): WorkspacePanelLayout | null => {
+    const item = layout.find((candidate) => candidate.i === id)
+    if (!item) return null
+    return {
+      ...item,
+      columns: COLUMNS,
+      hasBelow: hasPanelBelow(layout, id),
+      move: (dx, dy) => onLayoutCommit(movePanel(layout, id, dx, dy, COLUMNS)),
+      resize: (dw, dh) => onLayoutCommit(resizePanel(layout, id, dw, dh, COLUMNS)),
+      reset: onReset,
+    }
+  }
 
   return (
     <div ref={containerRef} className="h-full overflow-x-hidden overflow-y-auto">
@@ -60,7 +89,11 @@ export function Workspace({ layout, panels, onLayoutChange }: WorkspaceProps) {
             onLayoutChange={onLayoutChange}
           >
             {panels.map((panel) => (
-              <div key={panel.id}>{panel.node}</div>
+              <div key={panel.id}>
+                <WorkspacePanelContext.Provider value={panelLayout(panel.id)}>
+                  {panel.node}
+                </WorkspacePanelContext.Provider>
+              </div>
             ))}
           </ReactGridLayout>
         ))}
@@ -68,7 +101,7 @@ export function Workspace({ layout, panels, onLayoutChange }: WorkspaceProps) {
   )
 }
 
-function StackedPanels({ layout, panels }: Omit<WorkspaceProps, 'onLayoutChange'>) {
+function StackedPanels({ layout, panels }: Pick<WorkspaceProps, 'layout' | 'panels'>) {
   const nodes = new Map(panels.map((panel) => [panel.id, panel.node]))
   const ordered = [...layout].sort((a, b) => a.y - b.y || a.x - b.x)
   return (

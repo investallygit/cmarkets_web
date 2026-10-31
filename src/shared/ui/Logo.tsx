@@ -1,11 +1,18 @@
+import { clsx } from 'clsx'
 import { Link } from 'react-router'
 import { routes } from '@/shared/routes/paths'
+
+interface LogoProps {
+  to?: string
+  /** The mark alone below 640 px wide, as in the app's top bar on a phone. */
+  compact?: boolean
+}
 
 /**
  * Brand colours are reserved for the logo (spec section 8). It leads to the home page, or in the
  * app to the home screen.
  */
-export function Logo({ to = routes.home }: { to?: string }) {
+export function Logo({ to = routes.home, compact = false }: LogoProps) {
   return (
     <Link to={to} aria-label="CMarket" className="flex shrink-0 items-center gap-2">
       <svg aria-hidden viewBox="0 0 32 32" className="size-6">
@@ -26,7 +33,7 @@ export function Logo({ to = routes.home }: { to?: string }) {
           strokeLinejoin="round"
         />
       </svg>
-      <span className="font-sans text-[18px] font-bold">
+      <span className={clsx('font-sans text-[18px] font-bold', compact && 'hidden sm:inline')}>
         <span className="text-primary">C</span>
         <span className="text-brand-green">Market</span>
       </span>

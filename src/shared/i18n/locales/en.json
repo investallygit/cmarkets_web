@@ -2,7 +2,9 @@
   "app": {
     "connecting": "Connecting to CMarket",
     "sessionError": "Your session could not be loaded.",
-    "retry": "Retry"
+    "retry": "Retry",
+    "startError": "CMarket could not start.",
+    "mockStartError": "The prototype could not start: its simulated back end needs the browser to allow service workers and site data for this site, which a private window or a security setting can block. Allow them, then retry."
   },
   "common": {
     "loading": "Loading",
@@ -12,7 +14,8 @@
     "close": "Close",
     "cancel": "Cancel",
     "save": "Save",
-    "done": "Done"
+    "done": "Done",
+    "networkError": "CMarket cannot be reached: check your connection, then retry."
   },
   "shell": {
     "commandLabel": "Command bar",
@@ -99,7 +102,8 @@
     "notFound": "This screen does not exist.",
     "forbidden": "This screen is not available for your account type.",
     "unexpected": "Something went wrong on this screen.",
-    "backHome": "Back to home"
+    "backHome": "Back to home",
+    "notFoundTitle": "Screen not found"
   },
   "panels": {
     "indices": "Indices",
@@ -307,6 +311,21 @@
       "horizontalHint": "Click a price on the chart",
       "unavailable": "Drawings show on daily and weekly bars, without comparison",
       "saveFailed": "Drawings not saved: {{message}}"
+    },
+    "priceOf": "{{code}} price",
+    "label": {
+      "period": "{{subject}}, {{period}}",
+      "summary": "{{what}}: from {{first}} to {{last}} ({{change}}), high {{high}}, low {{low}}"
+    },
+    "periods": {
+      "1D": "1 day",
+      "5D": "5 days",
+      "1M": "1 month",
+      "3M": "3 months",
+      "6M": "6 months",
+      "1Y": "1 year",
+      "5Y": "5 years",
+      "10Y": "10 years"
     }
   },
   "security": {
@@ -2647,5 +2666,20 @@
       "sources": "Data: BVMAC and BEAC files; EODHD for Europe and the United States.",
       "photos": "Photos: Pexels"
     }
+  },
+  "workspace": {
+    "panelMenu": "Move or resize the panel",
+    "panelMenuOf": "{{code}}: move or resize the panel",
+    "hint": "Move, resize, or go back to the default layout",
+    "layout": "Layout",
+    "moveLeft": "Move left",
+    "moveRight": "Move right",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "wider": "Wider",
+    "narrower": "Narrower",
+    "taller": "Taller",
+    "shorter": "Shorter",
+    "reset": "Default layout of the screen"
   }
 }

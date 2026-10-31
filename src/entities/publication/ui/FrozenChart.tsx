@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { FrozenChartDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { AreaChart } from '@/shared/ui/charts/AreaChart'
+import { useChartLabel } from '@/shared/ui/charts/useChartLabel'
 import { PanelLoading } from '@/shared/ui/StatusViews'
 
 // Candles need the full price chart; a line is enough for most notes.
@@ -22,6 +23,12 @@ export function FrozenChart({ chart }: { chart: FrozenChartDto }) {
     [chart.bars],
   )
   const decimals = chart.bars.every((bar) => Number.isInteger(bar.close)) ? 0 : 2
+  const label = useChartLabel(
+    t('chart.priceOf', { code: chart.code }),
+    chart.period,
+    chart.bars,
+    decimals,
+  )
 
   return (
     <figure className="border border-accent-amber/60" contentEditable={false}>
@@ -35,6 +42,7 @@ export function FrozenChart({ chart }: { chart: FrozenChartDto }) {
         {chart.type === 'line' ? (
           <AreaChart
             points={points}
+            label={label}
             intraday={false}
             decimals={decimals}
             color="--accent-amber"
@@ -42,7 +50,13 @@ export function FrozenChart({ chart }: { chart: FrozenChartDto }) {
           />
         ) : (
           <Suspense fallback={<PanelLoading />}>
-            <PriceChart bars={chart.bars} type="candles" intraday={false} decimals={decimals} />
+            <PriceChart
+              bars={chart.bars}
+              label={label}
+              type="candles"
+              intraday={false}
+              decimals={decimals}
+            />
           </Suspense>
         )}
       </div>

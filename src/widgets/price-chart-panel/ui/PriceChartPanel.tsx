@@ -5,7 +5,7 @@ import { useIndicator, useSecurityHistory } from '@/entities/security'
 import { useHasPermission } from '@/entities/session'
 import { CompareBar, useComparisonLines, type ComparedItem } from '@/features/compare-securities'
 import { DrawingTools, useDrawings } from '@/features/draw-on-chart'
-import type { CurrencyCode, SecurityType } from '@/shared/api/contracts'
+import type { CurrencyCode, PriceBarDto, SecurityType } from '@/shared/api/contracts'
 import { isIntraday, type ChartPeriod } from '@/shared/lib/chartPeriods'
 import {
   PriceChart,
@@ -14,6 +14,7 @@ import {
   type PriceChartPane,
   type PriceChartType,
 } from '@/shared/ui/charts/PriceChart'
+import { useChartLabel } from '@/shared/ui/charts/useChartLabel'
 import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs, PanelToggle } from '@/shared/ui/PanelTabs'
 import { QueryView } from '@/shared/ui/QueryView'
@@ -26,9 +27,12 @@ const CHART_TYPES: readonly PriceChartType[] = ['candles', 'bars', 'line']
 const COMPACT_INDICATORS: readonly Indicator[] = ['ma20', 'ma50']
 const FULL_INDICATORS: readonly Indicator[] = ['ma20', 'ma50', 'bollinger', 'rsi', 'macd']
 const NOTHING_COMPARED: readonly ComparedItem[] = []
+const NO_BARS: readonly PriceBarDto[] = []
 
 interface PriceChartPanelProps {
   securityId: string
+  /** The security's code, which names the chart for screen readers. */
+  code: string
   securityType: SecurityType
   currency: CurrencyCode
   /** full: the GP tab, with intraday periods, more indicators, comparison and drawing tools. */
@@ -45,6 +49,7 @@ function Separator() {
  */
 export function PriceChartPanel({
   securityId,
+  code,
   securityType,
   currency,
   variant = 'compact',
@@ -87,6 +92,14 @@ export function PriceChartPanel({
   const { drawings, add, undo, clear } = useDrawings(securityId)
   const livePrice = useLiveQuote(securityId)?.last
   const drawingTool = full && daily && !comparing ? tool : null
+  const decimals = priceDecimals(securityType, currency)
+  const label = useChartLabel(
+    t('chart.priceOf', { code }),
+    period,
+    history.data?.bars ?? NO_BARS,
+    decimals,
+    livePrice,
+  )
 
   const overlays = useMemo<PriceChartLine[]>(() => {
     const lines: PriceChartLine[] = []
@@ -252,9 +265,10 @@ export function PriceChartPanel({
             {(data) => (
               <PriceChart
                 bars={data.bars}
+                label={label}
                 type={chartType}
                 intraday={isIntraday(data.period)}
-                decimals={priceDecimals(securityType, currency)}
+                decimals={decimals}
                 overlays={overlays}
                 comparisons={comparisons}
                 panes={panes}

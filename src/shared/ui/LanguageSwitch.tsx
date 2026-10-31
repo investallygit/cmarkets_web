@@ -1,6 +1,6 @@
 import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
-import { LANGUAGES } from '@/shared/i18n'
+import { LANGUAGE_NAMES, LANGUAGES } from '@/shared/i18n'
 
 /**
  * FR / EN before login, on the brand navy: the login pages and the home page. Once logged in, the
@@ -15,6 +15,8 @@ export function LanguageSwitch() {
           key={language}
           type="button"
           lang={language}
+          // "fr" and "en" are spelt out; the language's own name is read instead.
+          aria-label={LANGUAGE_NAMES[language]}
           aria-pressed={i18n.resolvedLanguage === language}
           onClick={() => void i18n.changeLanguage(language)}
           className={clsx(

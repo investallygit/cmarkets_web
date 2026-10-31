@@ -2,7 +2,9 @@
   "app": {
     "connecting": "Connexion à CMarket",
     "sessionError": "Impossible de charger votre session.",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "startError": "CMarket n'a pas pu démarrer.",
+    "mockStartError": "Le prototype n'a pas pu démarrer : son back-end simulé a besoin que le navigateur autorise les service workers et les données de site pour ce site, ce qu'une fenêtre privée ou un réglage de sécurité peut bloquer. Autorisez-les, puis réessayez."
   },
   "common": {
     "loading": "Chargement",
@@ -12,7 +14,8 @@
     "close": "Fermer",
     "cancel": "Annuler",
     "save": "Enregistrer",
-    "done": "Terminé"
+    "done": "Terminé",
+    "networkError": "CMarket est injoignable : vérifiez votre connexion, puis réessayez."
   },
   "shell": {
     "commandLabel": "Barre de commande",
@@ -99,7 +102,8 @@
     "notFound": "Cet écran n'existe pas.",
     "forbidden": "Cet écran n'est pas disponible pour votre type de compte.",
     "unexpected": "Une erreur est survenue sur cet écran.",
-    "backHome": "Retour à l'accueil"
+    "backHome": "Retour à l'accueil",
+    "notFoundTitle": "Écran introuvable"
   },
   "panels": {
     "indices": "Indices",
@@ -307,6 +311,21 @@
       "horizontalHint": "Cliquez un cours du graphique",
       "unavailable": "Les tracés s'affichent en barres journalières et hebdomadaires, sans comparaison",
       "saveFailed": "Tracés non enregistrés : {{message}}"
+    },
+    "priceOf": "Cours de {{code}}",
+    "label": {
+      "period": "{{subject}}, {{period}}",
+      "summary": "{{what}} : de {{first}} à {{last}} ({{change}}), plus haut {{high}}, plus bas {{low}}"
+    },
+    "periods": {
+      "1D": "1 jour",
+      "5D": "5 jours",
+      "1M": "1 mois",
+      "3M": "3 mois",
+      "6M": "6 mois",
+      "1Y": "1 an",
+      "5Y": "5 ans",
+      "10Y": "10 ans"
     }
   },
   "security": {
@@ -2647,5 +2666,20 @@
       "sources": "Données : fichiers de la BVMAC et de la BEAC ; EODHD pour l'Europe et les États-Unis.",
       "photos": "Photos : Pexels"
     }
+  },
+  "workspace": {
+    "panelMenu": "Déplacer ou redimensionner le panneau",
+    "panelMenuOf": "{{code}} : déplacer ou redimensionner le panneau",
+    "hint": "Déplacer, redimensionner, ou revenir à la disposition par défaut",
+    "layout": "Disposition",
+    "moveLeft": "Déplacer à gauche",
+    "moveRight": "Déplacer à droite",
+    "moveUp": "Déplacer vers le haut",
+    "moveDown": "Déplacer vers le bas",
+    "wider": "Plus large",
+    "narrower": "Plus étroit",
+    "taller": "Plus haut",
+    "shorter": "Moins haut",
+    "reset": "Disposition par défaut de l'écran"
   }
 }

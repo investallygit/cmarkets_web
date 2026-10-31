@@ -7,6 +7,8 @@ import { baseChartOptions, chartLocalization, toChartTime } from './chartOptions
 
 interface AreaChartProps {
   points: readonly HistoryPointDto[]
+  /** What the chart shows, for screen readers (useChartLabel): the name of the figure. */
+  label: string
   intraday: boolean
   decimals: number
   /** Latest real-time value, applied to the last point. */
@@ -20,6 +22,7 @@ interface AreaChartProps {
 /** Price area chart (TradingView Lightweight Charts, spec section 7). */
 export function AreaChart({
   points,
+  label,
   intraday,
   decimals,
   liveValue,
@@ -77,5 +80,5 @@ export function AreaChart({
     seriesRef.current?.update({ time: toChartTime(last.time, intraday), value: liveValue })
   }, [liveValue, points, intraday])
 
-  return <div ref={containerRef} className="h-full w-full" />
+  return <div ref={containerRef} role="figure" aria-label={label} className="h-full w-full" />
 }

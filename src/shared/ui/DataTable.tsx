@@ -72,8 +72,10 @@ function toCsvCell(value: unknown): CsvCell {
 /**
  * Dense terminal table: 22 px rows, alternate row background, sorting by clicking a column
  * header, right-click menu with Excel and CSV export, virtualization for thousands of rows.
- * The table takes the focus, so the keyboard scrolls it; where rows are clicked, the up and down
- * arrows move from row to row as a click would, and Enter opens a row as a double click.
+ * The table takes the focus, so the keyboard scrolls it. Where rows do something, the up and down
+ * arrows move from row to row: the selection where rows are clicked, a cursor of the table's own
+ * otherwise. Enter opens the row as a double click, and the menu key or Shift + F10 opens its
+ * right-click menu (WCAG 2.1.1). Screen readers hear the row reached.
  */
 export function DataTable<TRow extends RowData>({
   data,
@@ -97,6 +99,9 @@ export function DataTable<TRow extends RowData>({
   const scrollRef = useRef<HTMLDivElement>(null)
   const [menu, setMenu] = useState<MenuState | null>(null)
   const closeMenu = useCallback(() => setMenu(null), [])
+  // Rows the parent does not select still need a place for the keyboard: the cursor.
+  const [cursorId, setCursorId] = useState<string | null>(null)
+  const [announcement, setAnnouncement] = useState('')
 
   const table = useTable({
     features: dataTableFeatures,
@@ -151,7 +156,7 @@ export function DataTable<TRow extends RowData>({
     if (exportRef) exportRef.current = exportTable
   })
 
-  const openMenu = (event: MouseEvent, row: TRow) => {
+  const menuItemsOf = (row: TRow): MenuItem[] => {
     const rowItems = rowMenu?.(row) ?? []
     const exportItems: MenuItem[] = canExport
       ? [
@@ -173,27 +178,68 @@ export function DataTable<TRow extends RowData>({
       rowItems.length > 0 && exportItems.length > 0
         ? [{ id: 'export-separator', label: '', kind: 'separator' }]
         : []
-    const items = [...rowItems, ...separator, ...exportItems]
-    // Nothing to offer: the browser shows its own menu.
-    if (items.length === 0) return
-    event.preventDefault()
-    setMenu({ x: event.clientX, y: event.clientY, items })
+    return [...rowItems, ...separator, ...exportItems]
   }
+
+  /** The row's menu at the given point; false when it has nothing to offer. */
+  const openMenu = (row: TRow, x: number, y: number) => {
+    const items = menuItemsOf(row)
+    if (items.length === 0) return false
+    setMenu({ x, y, items })
+    return true
+  }
+
+  const onRowContextMenu = (event: MouseEvent, row: TRow) => {
+    // Nothing to offer: the browser shows its own menu.
+    if (openMenu(row, event.clientX, event.clientY)) event.preventDefault()
+  }
+
+  const selects = onRowClick !== undefined
+  const activeId = selects ? (selectedRowId ?? null) : cursorId
+  const keyboardRows =
+    selects || onRowDoubleClick !== undefined || rowMenu !== undefined || canExport
+
+  const rowElement = (index: number) =>
+    scrollRef.current?.querySelector<HTMLElement>(`tbody > [data-index="${index}"]`)
 
   const scrollToRow = (index: number) => {
     if (virtualize) {
       virtualizer.scrollToIndex(index)
       return
     }
-    scrollRef.current
-      ?.querySelector(`tbody > [data-index="${index}"]`)
-      ?.scrollIntoView({ block: 'nearest' })
+    rowElement(index)?.scrollIntoView({ block: 'nearest' })
+  }
+
+  /** The row's cells as shown, once a virtualized row has been drawn. */
+  const announceRow = (index: number) => {
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        const cells = rowElement(index)?.querySelectorAll('td') ?? []
+        const text = [...cells]
+          .map((cell) => cell.textContent?.trim())
+          .filter(Boolean)
+          .join(', ')
+        if (text) setAnnouncement(text)
+      }),
+    )
+  }
+
+  /** From the keyboard: the menu of the row the keys are on, below it. */
+  const openActiveMenu = () => {
+    const index = rows.findIndex((row) => row.id === activeId)
+    if (index === -1) return false
+    const box = (rowElement(index) ?? scrollRef.current)?.getBoundingClientRect()
+    return openMenu(rows[index].original, (box?.left ?? 0) + 8, box?.bottom ?? 0)
   }
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    // The keys of a control in a cell, or of a table without clicks, keep their own meaning.
-    if (event.target !== event.currentTarget || !onRowClick || rows.length === 0) return
-    const current = rows.findIndex((row) => row.id === selectedRowId)
+    // The keys of a control in a cell, or of a table whose rows do nothing, keep their own meaning.
+    if (event.target !== event.currentTarget || !keyboardRows || rows.length === 0) return
+    if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) {
+      if (openActiveMenu()) event.preventDefault()
+      return
+    }
+    const current = rows.findIndex((row) => row.id === activeId)
     if (event.key === 'Enter') {
       if (current === -1 || !onRowDoubleClick) return
       event.preventDefault()
@@ -204,14 +250,17 @@ export function DataTable<TRow extends RowData>({
     if (step === 0) return
     event.preventDefault()
     const next = current === -1 ? 0 : Math.min(rows.length - 1, Math.max(0, current + step))
-    onRowClick(rows[next].original)
+    if (onRowClick) onRowClick(rows[next].original)
+    else setCursorId(rows[next].id)
     scrollToRow(next)
+    announceRow(next)
   }
 
   const renderRow = (row: Row<DataTableFeatures, TRow>, index: number, offset?: number) => (
     <tr
       key={row.id}
       data-index={index}
+      aria-current={row.id === selectedRowId ? 'true' : undefined}
       className={clsx(
         // The sticky header does not hide a row brought into view.
         'grid h-row scroll-mt-row items-center font-mono text-data',
@@ -219,6 +268,10 @@ export function DataTable<TRow extends RowData>({
         row.id === selectedRowId
           ? 'bg-selected'
           : clsx(index % 2 === 1 && 'bg-row-alt', 'hover:bg-panel-header'),
+        // The cursor shows to the keyboard only, as the focus does.
+        !selects &&
+          row.id === cursorId &&
+          'group-focus-visible:outline-1 group-focus-visible:-outline-offset-1 group-focus-visible:outline-accent-amber',
         (onRowClick || onRowDoubleClick) && 'cursor-pointer',
         rowClassName?.(row.original),
       )}
@@ -226,9 +279,15 @@ export function DataTable<TRow extends RowData>({
         gridTemplateColumns,
         transform: offset === undefined ? undefined : `translateY(${offset}px)`,
       }}
-      onClick={onRowClick && (() => onRowClick(row.original))}
+      onClick={
+        onRowClick
+          ? () => onRowClick(row.original)
+          : keyboardRows
+            ? () => setCursorId(row.id)
+            : undefined
+      }
       onDoubleClick={onRowDoubleClick && (() => onRowDoubleClick(row.original))}
-      onContextMenu={(event) => openMenu(event, row.original)}
+      onContextMenu={(event) => onRowContextMenu(event, row.original)}
     >
       {row.getAllCells().map((cell) => (
         <td
@@ -249,7 +308,11 @@ export function DataTable<TRow extends RowData>({
       ref={scrollRef}
       tabIndex={rows.length > 0 ? 0 : undefined}
       onKeyDown={onKeyDown}
-      className="relative h-full overflow-auto outline-none focus-visible:ring-1 focus-visible:ring-accent-amber focus-visible:ring-inset"
+      // The menu key of some keyboards, and screen readers, ask the focused table for a menu.
+      onContextMenu={(event) => {
+        if (event.target === event.currentTarget && openActiveMenu()) event.preventDefault()
+      }}
+      className="group relative h-full overflow-auto outline-none focus-visible:ring-1 focus-visible:ring-accent-amber focus-visible:ring-inset"
     >
       <table className="grid w-full">
         <thead className="sticky top-0 z-1 grid bg-panel-header">
@@ -333,6 +396,9 @@ export function DataTable<TRow extends RowData>({
         )}
       </table>
       {rows.length === 0 && <PanelEmpty message={emptyMessage} />}
+      <div role="status" className="sr-only">
+        {announcement}
+      </div>
       {menu && <ContextMenu x={menu.x} y={menu.y} items={menu.items} onClose={closeMenu} />}
     </div>
   )

@@ -69,6 +69,8 @@ export type DrawingTool = ChartDrawingInput['kind']
 
 interface PriceChartProps {
   bars: readonly PriceBarDto[]
+  /** What the chart shows, for screen readers (useChartLabel): the name of the figure. */
+  label: string
   type?: PriceChartType
   intraday: boolean
   decimals: number
@@ -119,6 +121,7 @@ const CLICK_TOLERANCE_PX = 4
  */
 export function PriceChart({
   bars,
+  label,
   type = 'candles',
   intraday,
   decimals,
@@ -456,7 +459,7 @@ export function PriceChart({
 
   return (
     <div className="relative h-full w-full">
-      <div ref={containerRef} className="h-full w-full" />
+      <div ref={containerRef} role="figure" aria-label={label} className="h-full w-full" />
       <div className="pointer-events-none absolute top-1 left-2 z-10 flex flex-wrap items-baseline gap-x-3 font-mono text-title">
         {legendLines.map((item, index) => (
           <span key={item.id} style={{ color: `var(${item.color})` }}>

@@ -1,10 +1,8 @@
 import { Languages } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { profileOf, useCurrentUser, useUpdateProfile } from '@/entities/session'
-import { LANGUAGES } from '@/shared/i18n'
+import { LANGUAGE_NAMES, LANGUAGES } from '@/shared/i18n'
 import type { MenuItem } from '@/shared/ui/menu'
-
-const LANGUAGE_NAMES = { fr: 'Français', en: 'English' } as const
 
 /** FR / EN entries of the user menu: the screen changes at once, and the profile keeps it. */
 export function useLanguageMenuItems(): MenuItem[] {

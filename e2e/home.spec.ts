@@ -42,7 +42,7 @@ test.describe('a visitor', () => {
 
   test('reads the page in French, then goes to the login', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('button', { name: 'fr', exact: true }).click()
+    await page.getByRole('button', { name: 'Français' }).click()
     await expect(
       page.getByRole('heading', {
         level: 1,

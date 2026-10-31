@@ -65,5 +65,24 @@ export function useWorkspaceLayout(screen: string, defaults: readonly WorkspaceI
     [flush, layout, queryClient, screen],
   )
 
-  return { layout, isReady: !query.isPending, onLayoutChange }
+  /** One step from a panel's menu: saved at once, a reload just after it keeps it. */
+  const onLayoutCommit = useCallback(
+    (next: readonly WorkspaceItem[]) => {
+      onLayoutChange(next)
+      flush()
+    },
+    [onLayoutChange, flush],
+  )
+
+  /** Back to the defaults of the screen: no position saved, so none to merge. */
+  const reset = useCallback(() => {
+    window.clearTimeout(timer.current)
+    pending.current = null
+    queryClient.setQueryData(layoutQuery(screen).queryKey, { screen, items: [] })
+    apiClient
+      .put<void>(layoutPath(screen), { items: [] })
+      .catch((error: unknown) => console.warn('[layout] could not save', error))
+  }, [queryClient, screen])
+
+  return { layout, isReady: !query.isPending, onLayoutChange, onLayoutCommit, reset }
 }

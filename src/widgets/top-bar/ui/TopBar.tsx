@@ -5,6 +5,7 @@ import { usePortfolio } from '@/entities/portfolio'
 import { useSecurityProfile } from '@/entities/security'
 import { audienceOf, canAccessScreen, lockedModule, useCurrentUser } from '@/entities/session'
 import { CommandBar } from '@/features/command-bar'
+import { useDocumentTitle } from '@/shared/lib/useDocumentTitle'
 import { routes } from '@/shared/routes/paths'
 import { screenById } from '@/shared/routes/screens'
 import { useCurrentRoute } from '@/shared/routes/useCurrentRoute'
@@ -16,7 +17,10 @@ import { UserMenu } from './UserMenu'
 
 /**
  * Top bar (40 px, spec section 8): logo, command bar, session clock, market status, alerts, user.
- * Back-office screens add a blue BACK-OFFICE badge.
+ * Back-office screens add a blue BACK-OFFICE badge. On a narrower window (a tablet, a zoomed
+ * page) the least needed go first, so that the command bar, the alerts and the user's menu stay:
+ * the title, the clock and the badges below 1024 px, the market status below 768 px, the words
+ * of the logo and of the alerts and user buttons below 640 px.
  */
 export function TopBar({ className }: { className?: string }) {
   const { t } = useTranslation()
@@ -33,21 +37,33 @@ export function TopBar({ className }: { className?: string }) {
   // portfolio screen names the portfolio, as in the screen 5 mockup.
   const subjectName = useSecurityProfile(subject).data?.name ?? subject ?? portfolioName
   const title = screen ? `${subjectName ? `${subjectName} — ` : ''}${t(screen.titleKey)}` : ''
+  // A path that is no screen names itself (NotFoundPage).
+  useDocumentTitle(screen ? title : null)
 
   return (
-    <header className={clsx('flex min-w-0 items-center gap-4 border-b bg-app px-3', className)}>
-      <Logo to={routes.app} />
+    <header
+      className={clsx('flex min-w-0 items-center gap-2 border-b bg-app px-3 sm:gap-4', className)}
+    >
+      <Logo to={routes.app} compact />
       <CommandBar />
-      <span className="min-w-0 truncate font-sans text-label">{title}</span>
-      <div className="ml-auto flex shrink-0 items-center gap-4">
+      <span className="hidden min-w-0 truncate font-sans text-label lg:block">{title}</span>
+      <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-4">
         {backOffice && (
-          <span className="inline-flex h-6 items-center border border-info px-3 font-sans text-title font-semibold tracking-title text-info uppercase">
+          <span className="hidden h-6 items-center border border-info px-3 font-sans text-title font-semibold tracking-title text-info uppercase lg:inline-flex">
             {t('shell.backOffice')}
           </span>
         )}
-        {user.trialEndsAt && <TrialBadge endsOn={user.trialEndsAt} />}
-        <MarketStatusBadge />
-        <SessionClock />
+        {user.trialEndsAt && (
+          <span className="hidden lg:contents">
+            <TrialBadge endsOn={user.trialEndsAt} />
+          </span>
+        )}
+        <span className="hidden md:contents">
+          <MarketStatusBadge />
+        </span>
+        <span className="hidden lg:contents">
+          <SessionClock />
+        </span>
         <AlertsIndicator to={canAccessScreen(user, alerts) ? alerts.path : undefined} />
         <UserMenu />
       </div>

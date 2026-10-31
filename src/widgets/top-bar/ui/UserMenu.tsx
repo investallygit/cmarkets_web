@@ -64,7 +64,8 @@ export function UserMenu() {
         className="inline-flex h-6 items-center gap-1.5 border bg-panel-header px-3 font-sans text-title tracking-title text-secondary uppercase hover:text-primary"
       >
         <UserRound aria-hidden className="size-3" />
-        {label}
+        {/* The name for screen readers only, on a phone. */}
+        <span className="sr-only sm:not-sr-only">{label}</span>
       </button>
       {position && (
         <ContextMenu

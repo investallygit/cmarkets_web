@@ -94,7 +94,10 @@ function PortfolioScreen({
           onSelect={(id) => void navigate(portfolioPath(id, tab))}
         />
         <div className="flex items-center justify-between gap-2">
-          <ScreenTabs tabs={tabs} label={t('portfolio.tabsLabel')} />
+          {/* On a narrow window the tabs scroll, the button beside them stays. */}
+          <div className="min-w-0">
+            <ScreenTabs tabs={tabs} label={t('portfolio.tabsLabel')} />
+          </div>
           {canWrite &&
             (model ? (
               <Button
