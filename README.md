@@ -1,8 +1,8 @@
 # CMarket web (prototype)
 
 Front end of CMarket, built from `CMarket-developer-spec-EN.pdf`: the client terminal and the
-back-office of the Data admin. This prototype runs without a back end: a mock layer answers the
-REST API and simulates the real-time hub with the sample data of the mockups.
+back-office of the Data admin and of the Admin. This prototype runs without a back end: a mock
+layer answers the REST API and simulates the real-time hub with the sample data of the mockups.
 
 ## Getting started
 
@@ -62,7 +62,9 @@ src/
               yield-curves (YCRV and YAS), portfolio, research-library, publishing-studio, news,
               market-calendar, alerts, settings (CFG), data-import (IMP), data-session (DATA),
               upload-history (HIST), eodhd (EODH), data-corrections (CORR), content (NEWS),
-              placeholder (screens not built yet), auth (login, sign-up, password reset), status
+              admin-users (USER), analyst-requests (ANLY), moderation (MOD), payouts (PAY),
+              platform-settings (ADMCFG), audit-log (AUDT), auth (login, sign-up, password
+              reset), status
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
               subscription-panel, current-upload-panel...), the security header and the shell bars
               (top-bar, side-menu, status-bar, ticker-tape)
@@ -72,11 +74,15 @@ src/
               rate-publication, report-publication, follow-analyst, create-publication,
               edit-publication, draw-on-chart, compare-securities, edit-profile, change-password,
               choose-plan, manage-members, upload-data-file, review-import, roll-back-import,
-              correct-price, publish-content, switch-language, switch-account, workspace-layout
+              correct-price, publish-content, create-account, manage-account,
+              review-analyst-request, moderate-publication, mark-payout-paid,
+              edit-platform-settings, edit-permissions, switch-language, switch-account,
+              workspace-layout
   entities/   business data: session, subscription, organization, security, quote (live
               prices), market, bond, yield-curve, fundamentals, screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news,
-              calendar-event, notification, data-import, data-provider (EODHD), stored-price
+              calendar-event, notification, data-import, data-provider (EODHD), stored-price,
+              account, analyst-request, moderation, payout, platform-settings, audit
   shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
               UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
   mocks/      fake back end for the prototype (MSW handlers, sample data, simulated hub)
@@ -138,7 +144,12 @@ each other; the app shell mounts the form once.
 - **Permissions**: `/me` returns the user's permissions and the modules of their plan;
   `entities/session` decides which screens the menu, the command bar and the routes offer, and a
   screen outside the plan offers the plans instead of its content. The server stays the
-  authority.
+  authority. The Admin edits the permissions of each account type and the quotas in ADMCFG; a
+  user gets them with the next `/me`.
+- **Admin's data**: the query keys of the Admin's screens start with `admin`
+  (`shared/api/adminData.ts`). An Admin's action refreshes all of them, since it often changes
+  several lists and always writes to the audit log; the mutation does not wait for the refresh,
+  so its own callbacks run before the refreshed list removes the row that started it.
 
 ### Design system
 
@@ -154,7 +165,7 @@ Icons come from `lucide-react`.
 Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of a title bar),
 `ScreenTabs`, `Pager` (pages of a server list), `DataTable` (sorting, right-click menu, Excel and CSV export unless the user lacks
 `analysis:export`; `exportRef` puts the export links in a title bar; a `footer` row stays out of
-the sorting), `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
+the sorting; `sorting` and `onSortingChange` leave the order to the server for a paged list), `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
 drawings; `AreaChart`; `useChartTheme`, the section 8 colours for Recharts, which draws in SVG,
 and the `--chart-*` series palette checked for colour-blind separation), `PdfViewer`, `form/`
 (buttons, fields, selects, number and date inputs in the user's format, password inputs,
@@ -192,6 +203,8 @@ the demo accounts of the login page go with the mock.
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
-| 9 and the other Admin screens (ANLY, MOD, PAY, CFG, AUDT)                 | Placeholders with the mockup layout and the API of each panel |
+| 9 · Account administration (USER) with ANLY and MOD                       | Done; 1,959 accounts, requests, moderation queue on mock data |
+| Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; every Data admin and Admin action is in the audit log   |
 
-The plan for the remaining screens, step by step, is in [ROADMAP.md](ROADMAP.md).
+How the screens were built, step by step, and the open questions for the spec author are in
+[ROADMAP.md](ROADMAP.md).

@@ -311,17 +311,25 @@ export function sortLibrary(items: readonly LibraryItemDto[], sort: LibrarySort)
   return [...items].sort((a, b) => SORTS[sort](a, b) || SORTS.recent(a, b))
 }
 
-/** The monthly payout is made on this day of the next month. */
+/** The monthly payout is made around this day of the next month. */
 export const PAYOUT_DAY = 5
+
+/** The day a month's payout is made: the 5th of the next month. */
+export const paydayOf = (month: string): IsoDate =>
+  `${addMonths(`${month}-01`, 1).slice(0, 7)}-0${PAYOUT_DAY}`
+
+/** The months the Admin marked paid, with the day of the payment. */
+export type PaidMonths = ReadonlyMap<string, IsoDate>
 
 /**
  * Monthly statements, newest first: revenue less CMarket's commission. The current month accrues;
- * a closed month is due until the payout day of the next month.
+ * a closed month is due until the Admin marks it paid.
  */
 export function payoutsOf(
   monthly: Record<string, MonthStats>,
   commissionPct: number,
   today: IsoDate,
+  paid: PaidMonths,
 ): PayoutDto[] {
   const current = monthOf(today)
   return Object.entries(monthly)
@@ -329,16 +337,15 @@ export function payoutsOf(
     .sort(([a], [b]) => b.localeCompare(a))
     .map(([month, stats]) => {
       const commission = Math.round((stats.revenue * commissionPct) / 100)
-      const payday = `${addMonths(`${month}-01`, 1).slice(0, 7)}-0${PAYOUT_DAY}`
-      const status = month === current ? 'accruing' : payday <= today ? 'paid' : 'due'
+      const paidAt = month === current ? null : (paid.get(month) ?? null)
       return {
         month,
         sales: stats.sales,
         revenue: stats.revenue,
         commission,
         net: stats.revenue - commission,
-        status,
-        paidAt: status === 'paid' ? payday : null,
+        status: month === current ? 'accruing' : paidAt ? 'paid' : 'due',
+        paidAt,
       }
     })
 }

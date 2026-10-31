@@ -55,11 +55,27 @@ const ContentPage = lazy(() =>
 const EodhdPage = lazy(() =>
   import('@/pages/eodhd').then((module) => ({ default: module.EodhdPage })),
 )
-const PlaceholderPage = lazy(() =>
-  import('@/pages/placeholder').then((module) => ({ default: module.PlaceholderPage })),
+// The Admin's screens (screen 9).
+const AdminUsersPage = lazy(() =>
+  import('@/pages/admin-users').then((module) => ({ default: module.AdminUsersPage })),
+)
+const AnalystRequestsPage = lazy(() =>
+  import('@/pages/analyst-requests').then((module) => ({ default: module.AnalystRequestsPage })),
+)
+const ModerationPage = lazy(() =>
+  import('@/pages/moderation').then((module) => ({ default: module.ModerationPage })),
+)
+const PayoutsPage = lazy(() =>
+  import('@/pages/payouts').then((module) => ({ default: module.PayoutsPage })),
+)
+const PlatformSettingsPage = lazy(() =>
+  import('@/pages/platform-settings').then((module) => ({ default: module.PlatformSettingsPage })),
+)
+const AuditLogPage = lazy(() =>
+  import('@/pages/audit-log').then((module) => ({ default: module.AuditLogPage })),
 )
 
-const PAGES: Partial<Record<ScreenTextKey, Page>> = {
+const PAGES: Record<ScreenTextKey, Page> = {
   MKT: MarketDashboardPage,
   DES: SecurityProfilePage,
   EQS: EquityScreenerPage,
@@ -78,6 +94,12 @@ const PAGES: Partial<Record<ScreenTextKey, Page>> = {
   EODH: EodhdPage,
   CORR: DataCorrectionsPage,
   NEWS: ContentPage,
+  USER: AdminUsersPage,
+  ANLY: AnalystRequestsPage,
+  MOD: ModerationPage,
+  PAY: PayoutsPage,
+  ADMCFG: PlatformSettingsPage,
+  AUDT: AuditLogPage,
 }
 
 // The login pages share a chunk, loaded before the session.
@@ -96,7 +118,7 @@ export const UiKitPage = lazy(() =>
   import('@/pages/ui-kit').then((module) => ({ default: module.UiKitPage })),
 )
 
-/** Page of a screen; screens not built yet show the panels planned in their mockup. */
+/** Page of a screen. */
 export function pageOf(screen: ScreenDefinition): Page {
-  return PAGES[screen.id] ?? PlaceholderPage
+  return PAGES[screen.id]
 }

@@ -257,6 +257,8 @@ export const authHandlers = [
       return wrongCode(challenge, () => challenges.delete(id))
     }
     challenges.delete(id)
+    account.lastLoginAt = new Date().toISOString()
+    saveAccounts()
     openSession(account.id)
     setSessionUser(account.id)
     return HttpResponse.json(issueAccessToken(account.id))
@@ -372,6 +374,9 @@ export const authHandlers = [
       documents: files,
       failedLogins: 0,
       lockedUntil: null,
+      lastLoginAt: null,
+      analystDecision: null,
+      suspension: null,
     }
     accountStore.write([...accountStore.read(), account])
     // The free trial of spec section 6, for the account or its new organisation.

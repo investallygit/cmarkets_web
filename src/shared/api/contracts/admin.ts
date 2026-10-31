@@ -1,0 +1,264 @@
+import type { SignUpDocument } from './auth'
+import type { IsoDate, IsoDateTime } from './common'
+import type { AccountType, AnalystStatus, OtpChannel, Permission, UserLanguage } from './me'
+import type { OrganizationRole } from './organization'
+import type {
+  ContentReportReason,
+  PayoutDto,
+  PublicationStatus,
+  PublicationSubjectDto,
+} from './research'
+import type { BillingCycle } from './subscription'
+
+// Administration, under /admin and for the Admin only (spec sections 9, screen 9, and 10).
+
+export type AccountStatus = 'active' | 'suspended'
+
+/** Filter of the accounts list: an Analyst waiting for an Admin's approval is under review. */
+export const ACCOUNT_LIST_STATUSES = ['active', 'review', 'suspended'] as const
+export type AccountListStatus = (typeof ACCOUNT_LIST_STATUSES)[number]
+
+/** ?sort= of GET /admin/users, "-" first for a descending order. */
+export const ADMIN_USER_SORTS = [
+  'name',
+  'email',
+  'type',
+  'organization',
+  'status',
+  'createdAt',
+  'lastLoginAt',
+] as const
+export type AdminUserSort = (typeof ADMIN_USER_SORTS)[number]
+
+/** GET /admin/users?type=&status=&q=&sort=: one account of the list. */
+export interface AdminUserDto {
+  id: string
+  displayName: string
+  email: string
+  accountType: AccountType
+  organization: { id: string; name: string } | null
+  status: AccountStatus
+  analystStatus: AnalystStatus | null
+  createdAt: IsoDateTime
+  lastLoginAt: IsoDateTime | null
+}
+
+/** GET /admin/users/counts: the active accounts by type, for the counters of screen 9. */
+export type AccountCountsDto = Record<AccountType, number>
+
+/** Who decided and when: an Analyst status, a suspension. */
+export interface AdminDecisionDto {
+  at: IsoDateTime
+  by: string
+  reason: string | null
+}
+
+/** The plan that covers the account, its own or its organisation's. */
+export interface AdminSubscriptionDto {
+  planName: string
+  status: 'trial' | 'active' | 'expired'
+  billingCycle: BillingCycle | null
+  /** First day after the period or the trial. */
+  periodEnd: IsoDate
+  paidBy: 'user' | 'organization'
+}
+
+/** GET /admin/users/{id}: type, subscription, logins, purchases, publications. */
+export interface AdminUserDetailsDto extends AdminUserDto {
+  phone: string | null
+  language: UserLanguage
+  timeZone: string
+  organizationRole: OrganizationRole | null
+  analystDecision: AdminDecisionDto | null
+  subscription: AdminSubscriptionDto | null
+  /** Login codes go by e-mail or SMS; mandatory for employees (spec section 12). */
+  twoFactor: { channel: OtpChannel; mandatory: boolean }
+  /** The place comes from the address the login came from. */
+  lastLogin: { at: IsoDateTime; place: string } | null
+  /** Research bought by a client. */
+  purchases: { count: number; amount: number } | null
+  /** An Analyst's publications, sales and the reports readers sent about them. */
+  publishing: {
+    publications: number
+    withdrawn: number
+    sales: number
+    revenue: number
+    reports: number
+    openReports: number
+  } | null
+  suspension: AdminDecisionDto | null
+}
+
+/**
+ * POST /admin/users. Employee accounts (Data admin, Admin) belong to CMarket and log in with a
+ * code every time; the user chooses a password from the invitation e-mail.
+ */
+export interface AdminUserCreateDto {
+  displayName: string
+  email: string
+  accountType: AccountType
+  organizationId: string | null
+  phone: string | null
+  language: UserLanguage
+}
+
+/** PUT /admin/users/{id}/type */
+export interface AccountTypeChangeDto {
+  accountType: AccountType
+}
+
+/** Suspend, reactivate, reject a request, take a publication down: the reason is logged. */
+export interface AdminReasonDto {
+  reason: string
+}
+
+/** GET /admin/analyst-requests?status=: a sign-up as Analyst and its supporting documents. */
+export interface AnalystRequestDto {
+  /** The account's id. */
+  id: string
+  displayName: string
+  email: string
+  organization: string | null
+  requestedAt: IsoDateTime
+  documents: { kind: SignUpDocument; fileName: string; size: number }[]
+  status: AnalystStatus
+  decision: AdminDecisionDto | null
+}
+
+export interface ModerationReportDto {
+  id: string
+  reason: ContentReportReason
+  comment: string
+  reportedAt: IsoDateTime
+  reportedBy: string
+}
+
+/** GET /admin/publications?status=pending|reported: the moderation queue. */
+export interface ModerationItemDto {
+  publicationId: string
+  kind: 'pending' | 'reported'
+  title: string
+  analyst: { id: string; displayName: string }
+  subject: PublicationSubjectDto | null
+  status: PublicationStatus
+  /** When it was submitted, or the latest report. */
+  since: IsoDateTime
+  /** The analyst's first publication, reviewed before it goes live whatever the mode. */
+  firstPublication: boolean
+  /** The reports not dealt with yet, newest first. */
+  reports: ModerationReportDto[]
+}
+
+export interface QuotaDto {
+  portfolios: number | null
+  alerts: number | null
+}
+
+/** GET / PUT /admin/settings: quotas, research pricing and moderation, risk-free rate. */
+export interface PlatformSettingsDto {
+  /** null means unlimited. */
+  quotas: Record<AccountType, QuotaDto>
+  /** XAF. */
+  minPrice: number
+  maxPrice: number
+  commissionPct: number
+  moderation: 'before' | 'after'
+  /** R_f of the Sharpe ratio (spec section 14.3). */
+  riskFreeRatePct: number
+  updatedAt: IsoDateTime | null
+  updatedBy: string | null
+}
+
+export type PlatformSettingsUpdateDto = Omit<PlatformSettingsDto, 'updatedAt' | 'updatedBy'>
+
+/** GET / PUT /admin/roles/{role}/permissions */
+export interface RolePermissionsDto {
+  role: AccountType
+  permissions: Permission[]
+}
+
+/** GET /admin/payouts?month=&status=&analystId=: one analyst's month. */
+export interface AdminPayoutDto extends PayoutDto {
+  /** analystId:YYYY-MM */
+  id: string
+  analyst: { id: string; displayName: string }
+  paidBy: string | null
+}
+
+/** What the audit log records (spec section 12): each action of a Data admin or an Admin. */
+export const AUDIT_ACTIONS = [
+  'user-create',
+  'user-type',
+  'user-suspend',
+  'user-reactivate',
+  'user-reset-mfa',
+  'analyst-approve',
+  'analyst-reject',
+  'publication-approve',
+  'publication-keep',
+  'publication-takedown',
+  'settings-update',
+  'permissions-update',
+  'payout-paid',
+  'import-publish',
+  'import-rollback',
+  'import-discard',
+  'price-correct',
+  'news-publish',
+  'news-edit',
+  'document-publish',
+  'document-edit',
+] as const
+export type AuditAction = (typeof AUDIT_ACTIONS)[number]
+
+export type AuditTargetType =
+  'user' | 'publication' | 'import' | 'price' | 'news' | 'document' | 'settings' | 'role' | 'payout'
+
+/** What a change is about; `scope` says which account type, permission or security. */
+export const AUDIT_FIELDS = [
+  'accountType',
+  'status',
+  'analystStatus',
+  'twoFactorChannel',
+  'organization',
+  'portfolios',
+  'alerts',
+  'minPrice',
+  'maxPrice',
+  'commissionPct',
+  'moderation',
+  'riskFreeRatePct',
+  'permission',
+  'payout',
+  'publicationStatus',
+  'importStatus',
+  'rows',
+  'open',
+  'high',
+  'low',
+  'close',
+  'volume',
+  'title',
+] as const
+export type AuditField = (typeof AUDIT_FIELDS)[number]
+
+export type AuditValue = string | number | boolean | null
+
+export interface AuditChangeDto {
+  field: AuditField
+  /** The account type of a quota, the permission of a role. */
+  scope: string | null
+  before: AuditValue
+  after: AuditValue
+}
+
+/** GET /admin/audit-log?userId=&action=&from=&to=: who, what, when, value before and after. */
+export interface AuditEntryDto {
+  id: string
+  at: IsoDateTime
+  actor: { id: string; displayName: string; accountType: AccountType }
+  action: AuditAction
+  target: { type: AuditTargetType; id: string; label: string }
+  changes: AuditChangeDto[]
+  reason: string | null
+}

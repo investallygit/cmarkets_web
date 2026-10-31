@@ -8,7 +8,7 @@ export const ROLE_PERMISSIONS: Record<AccountType, Permission[]> = {
   manager: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'portfolios:read', 'portfolios:write', 'portfolios:reports', 'alerts:write', 'research:read', 'research:buy'],
   trader: ['market:read', 'market:realtime', 'market:orderbook', 'analysis:read', 'analysis:export', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy'],
   dataAdmin: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'research:read', 'data:import', 'content:publish'],
-  admin: ['market:read', 'research:read', 'publications:earnings', 'users:manage', 'moderation:manage', 'settings:manage', 'audit:read'],
+  admin: ['market:read', 'research:read', 'publications:earnings', 'users:manage', 'moderation:manage', 'settings:manage', 'audit:read', 'payouts:manage'],
 }
 
 /** Starting quotas of spec section 12 (null = unlimited). */

@@ -19,17 +19,17 @@ import type {
   SubjectType,
 } from '@/shared/api/contracts'
 import { periodRange } from '@/shared/lib/chartPeriods'
-import { estimatePages } from '@/shared/lib/richText'
+import { paidMonths } from '../admin'
 import {
   analystStore,
-  announcePublication,
   currentUser,
+  publicationRules,
   publicationStore,
   readerContext,
   researchMarket,
   securities,
 } from '../db'
-import { COUNTRY_NAMES, PUBLICATION_RULES } from '../fixtures/research'
+import { COUNTRY_NAMES } from '../fixtures/research'
 import { api, latency, noContent, problem } from '../lib/http'
 import { createPdf } from '../lib/pdf'
 import {
@@ -47,6 +47,7 @@ import {
   type StoredPublication,
 } from '../lib/research'
 import { mergeMonths, myPublication, publicationDto } from '../lib/researchViews'
+import { isFirstPublication, publish, withReference } from '../publications'
 import { isIsoDate } from '../lib/validation'
 
 type Errors = Record<string, string[]>
@@ -114,15 +115,6 @@ function ownPublication(id: unknown) {
 const subjectKnown = (type: SubjectType, id: string) =>
   type === 'company' ? securities.get(id)?.type === 'equity' : id in COUNTRY_NAMES
 
-/** A company's latest price is the reference of its rating; set again on publication. */
-function withReference(content: StoredContent): StoredContent {
-  const security =
-    content.subjectType === 'company' && content.subjectId && securities.get(content.subjectId)
-  return security
-    ? { ...content, referenceDate: readerContext().today, referencePrice: security.last }
-    : { ...content, referenceDate: null, referencePrice: null }
-}
-
 function readContent(body: Partial<PublicationUpdateDto>): {
   content?: StoredContent
   errors: Errors
@@ -188,24 +180,6 @@ function readPricing(
     : { access, price, studentPrice, freeAfterMonths }
 }
 
-/** A new version for readers; followers of the analyst and of the subject are told. */
-function publish(publication: StoredPublication): void {
-  publication.draft = withReference(publication.draft)
-  const now = new Date().toISOString()
-  publication.versions.push({
-    number: publication.versions.length + 1,
-    publishedAt: now,
-    content: structuredClone(publication.draft),
-    pages: estimatePages(publication.draft.summary, publication.draft.body),
-  })
-  publication.status = 'published'
-  announcePublication({
-    publicationId: publication.id,
-    subjectId: publication.draft.subjectId ?? '',
-    analystId: publication.analystId,
-  })
-}
-
 function saved(publications: StoredPublication[], publication: StoredPublication) {
   publication.version += 1
   publication.savedAt = new Date().toISOString()
@@ -214,7 +188,7 @@ function saved(publications: StoredPublication[], publication: StoredPublication
 }
 
 function checksOf(publication: StoredPublication): Errors {
-  return submissionErrors(publication.draft, publication.pricing, PUBLICATION_RULES, {
+  return submissionErrors(publication.draft, publication.pricing, publicationRules(), {
     access: publication.pricing.access,
     readFree: publication.readFree,
   })
@@ -342,7 +316,7 @@ export const publicationHandlers = [
     }
     const pricing = readPricing(body)
     if (!pricing) return invalid('Invalid pricing', { access: ['Free or paid, prices in XAF.'] })
-    const errors = pricingErrors(pricing, PUBLICATION_RULES, {
+    const errors = pricingErrors(pricing, publicationRules(), {
       access: publication.pricing.access,
       readFree: publication.readFree,
     })
@@ -362,9 +336,14 @@ export const publicationHandlers = [
     if (Object.keys(errors).length > 0) {
       return problem(422, 'Publication incomplete', undefined, errors)
     }
-    // Before publication, a moderator approves it; after, it is out at once (spec section 13).
-    if (PUBLICATION_RULES.moderation === 'after') publish(publication)
-    else {
+    // Before publication, a moderator approves it; after, it is out at once (spec section 13),
+    // unless it is the analyst's first.
+    if (
+      publicationRules().moderation === 'after' &&
+      !isFirstPublication(publication.analystId, publication.id)
+    ) {
+      publish(publication)
+    } else {
       publication.draft = withReference(publication.draft)
       publication.status = 'pending'
     }
@@ -543,7 +522,8 @@ export const publicationHandlers = [
       ]
     })
     const totals = sumMonths(mergeMonths(mine), fromMonth, toMonth)
-    const commission = Math.round((totals.revenue * PUBLICATION_RULES.commissionPct) / 100)
+    const { commissionPct } = publicationRules()
+    const commission = Math.round((totals.revenue * commissionPct) / 100)
     return HttpResponse.json<PublicationStatsDto>({
       from,
       to,
@@ -553,7 +533,7 @@ export const publicationHandlers = [
       revenue: totals.revenue,
       commission,
       net: totals.revenue - commission,
-      commissionPct: PUBLICATION_RULES.commissionPct,
+      commissionPct,
       score: scoreOf(totals),
       scoreCount: totals.starCount,
       followers: analyst.followers,
@@ -568,7 +548,12 @@ export const publicationHandlers = [
       .read()
       .filter((publication) => publication.analystId === analyst.id)
     return HttpResponse.json<PayoutDto[]>(
-      payoutsOf(mergeMonths(mine), PUBLICATION_RULES.commissionPct, readerContext().today),
+      payoutsOf(
+        mergeMonths(mine),
+        publicationRules().commissionPct,
+        readerContext().today,
+        paidMonths(analyst.id),
+      ),
     )
   }),
 ]

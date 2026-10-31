@@ -40,6 +40,25 @@ describe('DataTable', () => {
     expect(bodyCodes()).toEqual(['SIAT', 'SEMC', 'BANGE'])
   })
 
+  it('leaves the order to the server when it sorts the pages', async () => {
+    const user = userEvent.setup()
+    const onSortingChange = vi.fn()
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        getRowId={getRowId}
+        sorting={[{ id: 'last', desc: true }]}
+        onSortingChange={onSortingChange}
+      />,
+    )
+    // The rows stay as they came, with the arrow of the order asked for.
+    expect(bodyCodes()).toEqual(['SEMC', 'BANGE', 'SIAT'])
+    await user.click(screen.getByRole('button', { name: 'Security' }))
+    expect(onSortingChange).toHaveBeenCalledWith([{ id: 'code', desc: false }])
+    expect(bodyCodes()).toEqual(['SEMC', 'BANGE', 'SIAT'])
+  })
+
   it('keeps the footer row last, whatever the sorting', async () => {
     const user = userEvent.setup()
     render(

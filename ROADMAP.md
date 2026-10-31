@@ -2,13 +2,13 @@
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`.
 
-Every client screen is built (MKT, DES with its FA and ANA tabs, EQS, YCRV, YAS, PORT, PUB,
-PUB NEW, N, CAL, ALRT and CFG), with the login, sign-up and password reset pages, and the
-back-office of the Data admin (IMP with DATA, HIST and EODH, then CORR and NEWS). The 6 screens of
-the Admin are placeholders: their route, menu entry, permission and mockup layout exist, with the
-API each panel will call (`src/pages/placeholder/config/plans.ts`).
+Every screen is built: the client terminal (MKT, DES with its FA and ANA tabs, EQS, YCRV, YAS,
+PORT, PUB, PUB NEW, N, CAL, ALRT and CFG) with the login, sign-up and password reset pages, the
+back-office of the Data admin (IMP with DATA, HIST and EODH, then CORR and NEWS) and that of the
+Admin (USER with ANLY and MOD, then ADMCFG, AUDT and PAY). What remains is listed under "Still to
+do" and in the open questions for the spec author.
 
-ANLY and MOD are planned with USER: in the mockups they are panels of the same screen. Sizes are
+ANLY and MOD were built with USER: in the mockups they are panels of the same screen. Sizes are
 relative: S < M < L < XL.
 
 ## Order
@@ -23,7 +23,7 @@ relative: S < M < L < XL.
 | 6    | PUB, then PUB NEW                                               | Done   |
 | 7    | CFG, login and OTP (needed before connecting the real back end) | Done   |
 | 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS  | Done   |
-| 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY            | To do  |
+| 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY            | Done   |
 
 ## Shared groundwork
 
@@ -135,6 +135,25 @@ Done in step 8, with the back-office of the Data admin:
   `mocks/content.ts` keeps the news and documents entered. The CSV reader of the transaction
   import became `lib/templateFile`.
 
+Done in step 9, with the back-office of the Admin:
+
+- **Server sorting**: `DataTable` takes `sorting` and `onSortingChange` for a list the server
+  sorts and pages (`?sort=-lastLoginAt`, spec section 10); the rows keep the order they come in.
+- **Admin's data**: the query keys of the Admin's screens start with `admin`
+  (`shared/api/adminData.ts`); an action refreshes them all, without waiting, so a toast still
+  shows when the refreshed list removes the row that asked for it. The labels of the permissions
+  are in `shared/config/permissions.ts`, for the matrix and the audit log alike.
+- **No placeholder left**: every screen has its page, so `pages/placeholder` and its plans are
+  gone and `app/routes/pages.ts` lists all of them.
+- **Mock**: `mocks/admin.ts` lists the stored accounts with the 1,937 generated ones of
+  `fixtures/population.ts`, so the counters show the screen 9 mockup (a generated account is
+  copied into the stored ones when an Admin changes it; it cannot log in). The settings and the
+  role -> permission table are stores that `/me`, `GET /publications/rules` and the portfolio
+  engine read. `recordAudit` writes every action of a Data admin or an Admin (publish, rollback,
+  discard, correction, news, document, then the Admin's), and the seeded uploads write theirs.
+  Payouts are due until marked paid; reports have a status. The data kept in localStorage is
+  dropped when `SEED_VERSION` changes, which ends the prototype's session once.
+
 Still to do, with the first screen that needs it:
 
 - **PNG and PDF export of charts** (spec section 3), for the price chart, the comparison bars and
@@ -143,7 +162,7 @@ Still to do, with the first screen that needs it:
 ## Done for every screen
 
 - DTOs in `shared/api/contracts`, mock handlers and sample data from the mockup.
-- A `pages/<screen>` slice, registered in `app/routes/pages.ts` and removed from `SCREEN_PLANS`.
+- A `pages/<screen>` slice, registered in `app/routes/pages.ts`.
 - French and English strings; actions hidden or locked by permission and quota.
 - Tables: sorting, right-click menu, export. Layout saved per user, one column below 1280 px.
 - Vitest for the logic and one Playwright flow; README status updated.
@@ -432,32 +451,55 @@ Still to do, with the first screen that needs it:
 - **Still to do**: the PDF attached to a news item (spec section 11): for now the Data admin
   publishes it as a document of the same securities.
 
-### USER · Account administration (screen 9): L, with ANLY, MOD (S each)
+### USER · Account administration (screen 9): done, with ANLY and MOD
 
-- **UI**: 6 counters by account type (each type's colour reused across the screen); accounts
-  (search, filters, server pagination, create, including Data admin and Admin with mandatory
-  two-factor, CSV export); account details (Change type, Reset two-factor, View audit log → AUDT,
-  Suspend with a reason and a confirmation); Analyst status requests (documents, Approve or Reject
-  with a reason); moderation queue (Open, Approve, Take down).
-- **Depends on**: ANLY and MOD are full-screen versions of the two lower panels; "Open" uses the
-  PUB reader.
+- **Built**: the five panels of the mockup. Counters: the active accounts by type in the type's
+  colour, reused in the list, the details and the permission matrix; a click filters the list.
+  Accounts: search by name, e-mail or organisation, type and status (active, under review,
+  suspended) filters, sorting and pages by the server, "+ Create account" (any type; Data admin
+  and Admin belong to CMarket and log in with a code every time) and "Export CSV" of every
+  account of the filters. Account details: type with the Analyst approval, organisation,
+  subscription, two-factor, publications, sales and reports of an analyst or research bought by a
+  client, last login and its place; Change type (a client among the client types, an employee
+  among the employee ones), Reset two-factor (codes by e-mail again, every session ended), View
+  audit log (AUDT on the account), Suspend or Reactivate with a reason and a confirmation. An Admin
+  neither changes nor suspends their own account. Analyst status requests: the applicant, the
+  documents sent at sign-up (in the PDF viewer), Approve or Reject with a reason. Moderation
+  queue: reports then publications waiting, Open (MOD), Approve, Take down with a reason. The
+  account shown and the filters are in the URL (`/admin/users?id=&type=&status=&sort=`).
+- **ANLY**: the requests waiting, approved or rejected, and one with its documents side by side.
+  **MOD**: the queue by kind, and the publication opened in the PUB reader with its reports;
+  approved, a publication waiting goes live and its followers are told, a reported one stays and
+  its reports close; taken down, it leaves the library and its buyers keep their version.
+- **Mock**: the counters add up to the mockup's 1,946 active accounts (1,959 with the suspended);
+  the three requests, the two reports and C. Nguema's first publication of the mockup are seeded.
+  Suspending ends the user's sessions at once; a type changed to Analyst is approved with it.
 
-### ADMCFG · Platform settings (no mockup): M
+### ADMCFG · Platform settings (no mockup): done
 
-- Quotas by account type, price range, commission, moderation mode (before or after publication),
-  risk-free rate (spec section 14.3).
-- Permission matrix: permissions as rows, account types as columns
-  (`/admin/roles/{role}/permissions`).
+- **Built**: quotas of portfolios and alerts by client type (empty for unlimited), the price
+  range, CMarket's commission and the moderation mode of research, the risk-free rate of the
+  Sharpe ratio, saved together with who changed them last. The permission matrix: the
+  permissions by area as rows, the six account types as columns, the changes counted and saved
+  role by role (`PUT /admin/roles/{role}/permissions`); the Admin keeps `settings:manage`.
+- **Mock**: users get the new permissions and quotas with their next `/me`, the studio and the
+  library the new price range, commission and moderation, PORT the new rate.
 
-### AUDT · Audit log (no mockup): S-M
+### AUDT · Audit log (no mockup): done
 
-- Paginated table (when, who, action, target, before / after), filtered by user, action and date;
-  opened from USER with the user filled in.
+- **Built**: when, who, action, target, the values before and after and the reason, newest first
+  and 50 a page, filtered by user (an account picker), action and dates, all in the URL
+  (`/admin/audit?userId=&action=&from=&to=`); a click shows the entry with each value before and
+  after. USER's "View audit log" opens it on the account: what it did and what was done to it.
 
-### PAY · Analyst payouts (no mockup): S
+### PAY · Analyst payouts (no mockup): done
 
-- Payouts by analyst and month (sales, commission, net payable, status), "Mark paid" with a
-  confirmation.
+- **Built**: by analyst and month, the sales, revenue, commission and net payable with its status
+  (in progress for the current month, due once closed, paid), the total due in the title bar,
+  filters by month, status and analyst in the URL, "Mark paid" with a confirmation (also in the
+  right-click menu). The analyst's earnings in PUB NEW show the payment.
+- **Mock**: the months up to August are paid, K. Atangana's September too (on 5 October), the
+  other analysts' September is due.
 
 ## Open questions for the spec author
 
@@ -489,7 +531,39 @@ Still to do, with the first screen that needs it:
   `{ status, latest, runs, callsToday, dailyQuota, rateLimited24h, lastError, checkedAt }`.
 - **Screens 6 and 9 mockups**: J. Ekane is a Data admin in both; the prototype's demo Admin is
   L. Mvogo.
-- **USER**: no endpoint returns the counters by account type.
+- **USER**: no endpoint returns the counters by account type: the prototype adds
+  `GET /admin/users/counts` (`{ student, analyst, ... }`, the active accounts). It also adds
+  `GET /admin/users/export` (the CSV of every account of the filters), `GET /admin/organizations`
+  (for the account form) and `?sort=` on `GET /admin/users`, whose items are
+  `{ id, displayName, email, accountType, organization, status, analystStatus, createdAt,
+lastLoginAt }`. `POST /admin/users` takes `{ displayName, email, accountType, organizationId,
+phone, language }`, `PUT /admin/users/{id}/type` `{ accountType }`, the suspension, the
+  reactivation, the rejection of a request and the takedown `{ reason }`. May a type change cross
+  from client to employee (the prototype: no)? Is an account changed to Analyst approved with it
+  (the prototype: yes)? What does "Reset two-factor" reset when the codes go by e-mail or SMS (the
+  prototype: codes by e-mail again, every session ended)? Where does the place of the last login
+  come from (the prototype: the time zone)?
+- **ANLY and MOD**: the prototype adds `?status=approved|rejected` to
+  `GET /admin/analyst-requests`, `GET /admin/analyst-requests/{id}/documents/{kind}` (the files
+  sent at sign-up) and `GET /admin/publications/{id}` (the publication as readers will see it, a
+  draft waiting included). Approve on a reported publication keeps it online and closes its
+  reports. The screen 9 mockup reviews a first publication before it goes live although the
+  moderation is after publication: the prototype does the same.
+- **ADMCFG, AUDT, PAY**: the spec gives no body. The prototype sends the settings as
+  `{ quotas, minPrice, maxPrice, commissionPct, moderation, riskFreeRatePct }`; R_f is one rate
+  set by the Admin, where section 14.3 defaults it to the 52-week BTA rate of each portfolio's
+  country. An audit entry is `{ at, actor, action, target, changes: [{ field, scope, before,
+after }], reason }`; `?userId=` matches who acted or the account acted on, and `?action=` takes
+  several actions. Which actions are logged (the prototype: publications, rollbacks, discards,
+  corrections, news and documents of the Data admin, every action of the Admin, not each row
+  fixed in an upload)? Marking a payout paid has no permission in section 12: the prototype adds
+  `payouts:manage`. A closed month stays due until marked paid.
+- **Screen 9 mockup**: T. Bekale, the demo Trader, is suspended: the prototype suspends his
+  colleague F. Mba instead. "Gabon: oil price impact on auctions" is K. Atangana's note waiting
+  in moderation on screen 7 but M. Ndong's reported note on screen 9: the prototype reports
+  M. Ndong's Gabon note and keeps K. Atangana's waiting (2 reports, 2 pending). The details give
+  K. Atangana 42 publications (3 withdrawn) and 412 sales; the prototype counts 43 (1 withdrawn)
+  and 726 in the library of screens 7 and 8.
 - **Real time**: no event for the order book and latest trades; the prototype polls them every
   5 seconds.
 - **Quote**: the security header shows the session's open, high and low, which the example of

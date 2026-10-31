@@ -114,6 +114,29 @@ export function dataImportPath(importId?: string): string {
     : routes.dataImport
 }
 
+const withQuery = (path: string, name: string, value?: string) =>
+  value ? `${path}?${name}=${encodeURIComponent(value)}` : path
+
+/** USER with an account open: /admin/users?id=user-analyst. */
+export function adminUserPath(userId?: string): string {
+  return withQuery(routes.adminUsers, 'id', userId)
+}
+
+/** ANLY with a request open: /admin/analysts?id=user-ressomba. */
+export function analystRequestPath(userId?: string): string {
+  return withQuery(routes.adminAnalysts, 'id', userId)
+}
+
+/** MOD with a publication open: /admin/moderation?id=pub-gabon-oil. */
+export function moderationPath(publicationId?: string): string {
+  return withQuery(routes.adminModeration, 'id', publicationId)
+}
+
+/** AUDT for one account, what it did and what was done to it: /admin/audit?userId=user-mba. */
+export function auditLogPath(userId?: string): string {
+  return withQuery(routes.adminAudit, 'userId', userId)
+}
+
 /** The login page, back to `next` once logged in. */
 export function loginPath(next?: string): string {
   return next && next !== '/' ? `${routes.login}?next=${encodeURIComponent(next)}` : routes.login

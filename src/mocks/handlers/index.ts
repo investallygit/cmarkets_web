@@ -1,4 +1,5 @@
 import { accountHandlers } from './account'
+import { adminHandlers } from './admin'
 import { alertHandlers } from './alerts'
 import { analysisHandlers } from './analysis'
 import { authHandlers } from './auth'
@@ -35,4 +36,5 @@ export const handlers = [
   ...publicationHandlers,
   ...paymentHandlers,
   ...dataHandlers,
+  ...adminHandlers,
 ]

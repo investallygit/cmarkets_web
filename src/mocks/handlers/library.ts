@@ -26,6 +26,7 @@ import {
   followStore,
   invoiceStore,
   myRatingStore,
+  publicationRules,
   publicationStore,
   purchaseStore,
   readerContext,
@@ -33,9 +34,9 @@ import {
   researchMarket,
 } from '../db'
 import { TAX_RATE_PCT } from '../fixtures/billing'
-import { PUBLICATION_RULES } from '../fixtures/research'
 import { invoiceNumber, publicationInvoice } from '../lib/billing'
 import { api, latency, noContent, paginate, problem } from '../lib/http'
+import { newId } from '../lib/ids'
 import { createPdf } from '../lib/pdf'
 import {
   EMPTY_MONTH,
@@ -262,7 +263,7 @@ function publicationPdf(
 export const libraryHandlers = [
   http.get(api('/publications/rules'), async () => {
     await latency()
-    return HttpResponse.json<PublicationRulesDto>(PUBLICATION_RULES)
+    return HttpResponse.json<PublicationRulesDto>(publicationRules())
   }),
 
   http.get(api('/library'), async ({ request }) => {
@@ -452,11 +453,16 @@ export const libraryHandlers = [
     contentReportStore.write([
       ...contentReportStore.read(),
       {
+        id: newId('report'),
         publicationId: publication.id,
         userId: currentUser().id,
         reason,
         comment,
         reportedAt: new Date().toISOString(),
+        status: 'open',
+        closedAt: null,
+        closedBy: null,
+        outcome: null,
       },
     ])
     return noContent()

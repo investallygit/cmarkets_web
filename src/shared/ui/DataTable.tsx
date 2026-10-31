@@ -1,4 +1,4 @@
-import { useTable, type Row, type RowData } from '@tanstack/react-table'
+import { useTable, type Row, type RowData, type SortingState } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { clsx } from 'clsx'
 import { ChevronDown, ChevronUp, Download, FileSpreadsheet } from 'lucide-react'
@@ -42,6 +42,12 @@ export interface DataTableProps<TRow extends RowData> {
   exportName?: string
   rowClassName?: (row: TRow) => string | undefined
   enableSorting?: boolean
+  /**
+   * Sorted by the server, for a list it sends page by page: the order of the rows as they come,
+   * and the order asked for when a header is clicked.
+   */
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
   emptyMessage?: string
   /** Set to the table's export, for Excel and CSV links outside the table (a panel title bar). */
   exportRef?: MutableRefObject<TableExporter | null>
@@ -77,6 +83,8 @@ export function DataTable<TRow extends RowData>({
   exportName = 'cmarket-export',
   rowClassName,
   enableSorting = true,
+  sorting,
+  onSortingChange,
   emptyMessage,
   exportRef,
   footer,
@@ -87,7 +95,19 @@ export function DataTable<TRow extends RowData>({
   const [menu, setMenu] = useState<MenuState | null>(null)
   const closeMenu = useCallback(() => setMenu(null), [])
 
-  const table = useTable({ features: dataTableFeatures, columns, data, getRowId, enableSorting })
+  const table = useTable({
+    features: dataTableFeatures,
+    columns,
+    data,
+    getRowId,
+    enableSorting,
+    ...(onSortingChange && {
+      manualSorting: true,
+      state: { sorting: sorting ?? [] },
+      onSortingChange: (updater) =>
+        onSortingChange(typeof updater === 'function' ? updater(sorting ?? []) : updater),
+    }),
+  })
   const rows = table.getRowModel().rows
   const virtualize = rows.length >= VIRTUALIZE_FROM
   // The app does not run the React Compiler; nothing here is memoized around the virtualizer.

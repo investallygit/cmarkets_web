@@ -5,7 +5,7 @@ import type {
   NewsItemDto,
   NewsWriteDto,
 } from '@/shared/api/contracts'
-import { currentAccount, news, sharedStore } from './db'
+import { currentAccount, news, recordAudit, sharedStore } from './db'
 import { DOCUMENTS } from './fixtures/documents'
 import { articleBody } from './fixtures/feeds'
 import { newId } from './lib/ids'
@@ -77,6 +77,17 @@ export function saveArticle(id: string | null, write: NewsWriteDto): NewsArticle
     updatedAt: now,
   }
   articleStore.write([article, ...articleStore.read().filter((stored) => stored.id !== article.id)])
+  recordAudit(
+    existing ? 'news-edit' : 'news-publish',
+    { type: 'news', id: article.id, label: article.headline },
+    existing && existing.headline !== article.headline
+      ? {
+          changes: [
+            { field: 'title', scope: null, before: existing.headline, after: article.headline },
+          ],
+        }
+      : {},
+  )
   if (!existing) newsListeners.forEach((listener) => listener(toItem(article)))
   return { ...toItem(article), body: article.body }
 }
@@ -123,5 +134,12 @@ export async function saveDocument(
     stored,
     ...documentStore.read().filter((document) => document.id !== documentId),
   ])
+  recordAudit(
+    existing ? 'document-edit' : 'document-publish',
+    { type: 'document', id: documentId, label: stored.title },
+    existing && existing.title !== stored.title
+      ? { changes: [{ field: 'title', scope: null, before: existing.title, after: stored.title }] }
+      : {},
+  )
   return toDocument(stored)
 }

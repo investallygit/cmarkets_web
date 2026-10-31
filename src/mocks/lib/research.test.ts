@@ -4,6 +4,7 @@ import { estimatePages, textDoc } from '@/shared/lib/richText'
 import {
   accessOn,
   matchesLibraryFilter,
+  paydayOf,
   payoutsOf,
   pricingErrors,
   ratingOutcome,
@@ -110,12 +111,13 @@ describe('research rules (spec section 13)', () => {
     expect(estimatePages('', long)).toBe(3)
   })
 
-  it('pays each closed month on the 5th of the next, less the commission', () => {
+  it('owes each closed month, less the commission, until the Admin marks it paid', () => {
     const month = { reads: 10, sales: 2, revenue: 30_000, starSum: 0, starCount: 0 }
     const payouts = payoutsOf(
       { '2026-08': month, '2026-09': month, '2026-10': month, '2026-07': { ...month, sales: 0 } },
       20,
       '2026-10-04',
+      new Map([['2026-08', paydayOf('2026-08')]]),
     )
     expect(payouts.map((payout) => [payout.month, payout.status, payout.net])).toEqual([
       ['2026-10', 'accruing', 24_000],

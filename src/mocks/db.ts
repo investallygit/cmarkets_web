@@ -1,8 +1,10 @@
 import {
+  ACCOUNT_TYPES,
   MODULES,
   type AccessTokenDto,
   type AccountType,
   type AlertCondition,
+  type AuditEntryDto,
   type ChartDrawingDto,
   type LayoutItemDto,
   type MeDto,
@@ -10,6 +12,10 @@ import {
   type NewsItemDto,
   type NotificationDto,
   type PaymentMethod,
+  type Permission,
+  type PlatformSettingsDto,
+  type PublicationRulesDto,
+  type RolePermissionsDto,
   type SavedScreenDto,
   type TradeDto,
 } from '@/shared/api/contracts'
@@ -24,6 +30,12 @@ import {
   type StoredInvitation,
   type StoredOrganization,
 } from './fixtures/accounts'
+import {
+  createAdminAudit,
+  createSettings,
+  REPORT_FIXTURES,
+  type StoredReport,
+} from './fixtures/admin'
 import { createAlerts, type StoredAlert } from './fixtures/alerts'
 import { createAuctions } from './fixtures/auctions'
 import { createInvoices, createSubscriptions, PLANS } from './fixtures/billing'
@@ -43,12 +55,7 @@ import {
 import { PROFILE_FIXTURES } from './fixtures/profiles'
 import { SAVED_SCREEN_FIXTURES } from './fixtures/screens'
 import { SECURITY_FIXTURES, type SecurityFixture } from './fixtures/securities'
-import {
-  ROLE_PERMISSIONS,
-  ROLE_QUOTAS,
-  WATCHLIST_FIXTURES,
-  type WatchlistFixture,
-} from './fixtures/users'
+import { ROLE_PERMISSIONS, WATCHLIST_FIXTURES, type WatchlistFixture } from './fixtures/users'
 import {
   crossesThreshold,
   exceedsVolume,
@@ -72,6 +79,7 @@ import type { MarketData, PortfolioBond, StoredPortfolio } from './lib/portfolio
 import type { StoredAnalyst, StoredPublication } from './lib/research'
 import type { ReaderContext } from './lib/researchViews'
 import { businessDays } from './lib/time'
+import { newId } from './lib/ids'
 import { initialTrades } from './lib/trades'
 
 /**
@@ -222,6 +230,28 @@ function removeStorage(key: string): void {
   }
 }
 
+/**
+ * Raised when the sample data changes: the browser's copy of the mock's data is dropped and
+ * seeded again, which also ends the session of the prototype.
+ */
+const SEED_VERSION = '9'
+const SEED_VERSION_KEY = 'cmarket.prototype.seedVersion'
+
+function dropOutdatedSeeds(): void {
+  try {
+    const storage = window.localStorage
+    if (storage.getItem(SEED_VERSION_KEY) === SEED_VERSION) return
+    Object.keys(storage)
+      .filter((key) => key.startsWith('cmarket.prototype.'))
+      .forEach((key) => storage.removeItem(key))
+    storage.setItem(SEED_VERSION_KEY, SEED_VERSION)
+  } catch {
+    // Storage disabled: there is no older copy.
+  }
+}
+
+dropOutdatedSeeds()
+
 let sessionUserId: string | null = null
 
 /** The user of the request being answered: the auth gate reads it from the access token. */
@@ -262,8 +292,8 @@ export function currentUser(): MeDto {
     timeZone,
     phone,
     twoFactorChannel: account.twoFactorChannel,
-    permissions: ROLE_PERMISSIONS[accountType],
-    quotas: ROLE_QUOTAS[accountType],
+    permissions: permissionsOf(accountType),
+    quotas: { ...settingsStore.read().quotas[accountType] },
     analystStatus: accountType === 'analyst' ? account.analystStatus : null,
     modules: modulesOf(account),
     trialEndsAt:
@@ -304,6 +334,20 @@ export function sharedStore<T extends object[]>(name: string, initial: () => T) 
   return storedArray(() => `cmarket.prototype.${name}`, initial)
 }
 
+/** One object every account sees, such as the platform settings. */
+function sharedValue<T extends object>(name: string, initial: () => T) {
+  const store = sharedStore<T[]>(name, () => [initial()])
+  return {
+    read: (): T => store.read()[0] ?? initial(),
+    write: (value: T) => store.write([value]),
+  }
+}
+
+/** Another user's data, read by an Admin; empty if that user never had any. */
+export function userArray<T extends object>(name: string, userId: string): T[] {
+  return parseArray<T[]>(readStorage(`cmarket.prototype.${name}.${userId}`)) ?? []
+}
+
 function parseArray<T extends object[]>(stored: string | null): T | undefined {
   if (!stored) return undefined
   try {
@@ -312,6 +356,62 @@ function parseArray<T extends object[]>(stored: string | null): T | undefined {
   } catch {
     return undefined
   }
+}
+
+/** Quotas, research pricing and moderation, risk-free rate: what the Admin sets in ADMCFG. */
+export const settingsStore = sharedValue<PlatformSettingsDto>('platformSettings', createSettings)
+
+/** The role -> permission table of spec section 12, which the Admin edits. */
+export const roleStore = sharedStore<RolePermissionsDto[]>('rolePermissions', () =>
+  ACCOUNT_TYPES.map((role) => ({ role, permissions: [...ROLE_PERMISSIONS[role]] })),
+)
+
+export function permissionsOf(accountType: AccountType): Permission[] {
+  return roleStore.read().find((entry) => entry.role === accountType)?.permissions ?? []
+}
+
+/** GET /publications/rules: the Admin's price range, commission and moderation mode. */
+export function publicationRules(): PublicationRulesDto {
+  const { minPrice, maxPrice, commissionPct, moderation } = settingsStore.read()
+  return { currency: 'XAF', minPrice, maxPrice, commissionPct, moderation }
+}
+
+/**
+ * Every action of a Data admin or an Admin, who, what, when, before and after (spec section 12),
+ * newest last.
+ */
+export const auditStore = sharedStore<AuditEntryDto[]>('auditLog', createAdminAudit)
+
+export type AuditActor = AuditEntryDto['actor']
+
+export const actorOf = ({ id, displayName, accountType }: StoredAccount): AuditActor => ({
+  id,
+  displayName,
+  accountType,
+})
+
+/** Writes an entry of the audit log, by the user of the request unless another is given. */
+export function recordAudit(
+  action: AuditEntryDto['action'],
+  target: AuditEntryDto['target'],
+  {
+    changes = [],
+    reason = null,
+    at = new Date().toISOString(),
+    actor,
+  }: Partial<Pick<AuditEntryDto, 'changes' | 'reason' | 'at' | 'actor'>> = {},
+): AuditEntryDto {
+  const entry: AuditEntryDto = {
+    id: newId('audit'),
+    at,
+    actor: actor ?? actorOf(currentAccount()),
+    action,
+    target,
+    changes,
+    reason,
+  }
+  auditStore.write([...auditStore.read(), entry])
+  return entry
 }
 
 /** Accounts of every user: the demo users, their colleagues, and whoever signs up. */
@@ -515,8 +615,6 @@ export function indexDailyCloses(code: string, from: string, to: string, now = D
 
 /** EUR / XAF peg (spec section 14.2). */
 const EUR_XAF = 655.957
-/** Admin setting of spec section 14.3; the screen 5 mockup shows 5.0%. */
-const RISK_FREE_RATE_PCT = 5
 
 /** The market data of the mock, as the portfolio service reads it. */
 export function marketData(now = Date.now()): MarketData {
@@ -568,7 +666,8 @@ export function marketData(now = Date.now()): MarketData {
       if (from === 'XAF' && to === 'EUR') return 1 / EUR_XAF
       return 1
     },
-    riskFreeRatePct: RISK_FREE_RATE_PCT,
+    // Set by the Admin (spec section 14.3).
+    riskFreeRatePct: settingsStore.read().riskFreeRatePct,
   }
 }
 
@@ -629,9 +728,9 @@ export const readStore = userStore<{ publicationId: string }[]>('reads', () =>
 )
 
 /** Reports of readers, for the moderation queue of the Admin (screen 9). */
-export const contentReportStore = sharedStore<
-  { publicationId: string; userId: string; reason: string; comment: string; reportedAt: string }[]
->('contentReports', () => [])
+export const contentReportStore = sharedStore<StoredReport[]>('contentReports', () =>
+  REPORT_FIXTURES.map((report) => ({ ...report })),
+)
 
 /** The current user as the research library sees them: what they bought, read and rated. */
 export function readerContext(now = Date.now()): ReaderContext {

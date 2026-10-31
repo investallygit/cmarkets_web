@@ -52,14 +52,16 @@ export const COUNTRY_NAMES: Record<string, string> = {
   GQ: 'Equatorial Guinea',
 }
 
-/** K. Atangana writes as the Analyst account; the other analysts are fictitious. */
+/** K. Atangana writes as the demo Analyst; the others have accounts of their own. */
 // prettier-ignore
 export const ANALYST_FIXTURES: StoredAnalyst[] = [
   { id: 'analyst-atangana', userId: 'user-analyst', displayName: 'K. Atangana', headline: 'CEMAC equity & sovereign analyst', since: '2021-03-01', followers: 412 },
-  { id: 'analyst-ndong', userId: null, displayName: 'M. Ndong', headline: 'Oil, public finances and Gabon', since: '2022-01-10', followers: 268 },
-  { id: 'analyst-fotso', userId: null, displayName: 'L. Fotso', headline: 'Agribusiness and consumer equities', since: '2022-06-01', followers: 193 },
-  { id: 'analyst-essomba', userId: null, displayName: 'C. Essomba', headline: 'Banks and insurers of Central Africa', since: '2023-02-15', followers: 121 },
-  { id: 'analyst-ondo', userId: null, displayName: 'R. Ondo', headline: 'Sovereign debt and BEAC auctions', since: '2023-09-01', followers: 87 },
+  { id: 'analyst-ndong', userId: 'user-ndong', displayName: 'M. Ndong', headline: 'Oil, public finances and Gabon', since: '2022-01-10', followers: 268 },
+  { id: 'analyst-fotso', userId: 'user-fotso', displayName: 'L. Fotso', headline: 'Agribusiness and consumer equities', since: '2022-06-01', followers: 193 },
+  { id: 'analyst-essomba', userId: 'user-cessomba', displayName: 'C. Essomba', headline: 'Banks and insurers of Central Africa', since: '2023-02-15', followers: 121 },
+  { id: 'analyst-ondo', userId: 'user-ondo', displayName: 'R. Ondo', headline: 'Sovereign debt and BEAC auctions', since: '2023-09-01', followers: 87 },
+  // Approved in October; the first publication waits for the moderators (screen 9 mockup).
+  { id: 'analyst-nguema', userId: 'user-nguema', displayName: 'C. Nguema', headline: 'Chad and the CEMAC budgets', since: '2026-10-19', followers: 0 },
 ]
 
 export const ATANGANA = 'analyst-atangana'
@@ -363,6 +365,8 @@ function mockupNotes(market: ResearchMarket): StoredPublication[] {
     // Studio only: in moderation, and withdrawn.
     { id: 'pub-gabon-auctions', analystId: ATANGANA, subjectType: 'country', subjectId: 'GA', title: 'Gabon: oil price impact on auctions', summary: 'Lower oil prices mean more BEAC auctions for Gabon in 2027, at higher rates.', day: '2026-10-16', pricing: paid(20_000), rating: 'negative', status: 'pending' },
     { id: 'pub-socapalm-half-year', analystId: ATANGANA, subjectType: 'company', subjectId: 'SOCAPALM', title: 'SOCAPALM: update on half-year results', summary: 'Half-year results in line with our forecast; palm oil prices hold up.', day: '2026-08-24', pricing: FREE, rating: 'hold', status: 'archived' },
+    // Screen 9: a first publication, reviewed before it goes live.
+    { id: 'pub-chad-budget', analystId: 'analyst-nguema', subjectType: 'country', subjectId: 'TD', title: 'Chad: 2027 budget and financing needs', summary: 'The 2027 budget counts on oil revenue holding up and on XAF 380 billion raised on the regional market, twice the 2026 amount. Stable outlook.', day: '2026-10-29', pricing: FREE, rating: 'stable', status: 'pending' },
   ]
   return notes.map((input) => {
     const publication = note(market, input)
@@ -370,7 +374,7 @@ function mockupNotes(market: ResearchMarket): StoredPublication[] {
       publication.archiveReason = 'Replaced by the full-year note.'
       publication.savedAt = '2026-10-12T08:00:00Z'
     }
-    if (input.status === 'pending') publication.savedAt = '2026-10-16T15:20:00Z'
+    if (input.status === 'pending') publication.savedAt = `${input.day}T15:20:00Z`
     return publication
   })
 }

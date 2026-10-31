@@ -22,14 +22,22 @@ import {
   currentAccount,
   indexDailyCloses,
   indices,
+  recordAudit,
   securities,
   setStoredIndexCloses,
   sharedStore,
+  type AuditActor,
 } from './db'
 import { allNews } from './content'
 import { holidayEvents } from './fixtures/calendar'
 import { CURVE_FILE, CURVE_MATURITIES, type CurveFile } from './fixtures/curves'
-import { CURVES_UPLOAD, PENDING_AUCTIONS, UPLOAD_SEEDS, type Uploader } from './fixtures/imports'
+import {
+  CURVES_UPLOAD,
+  PENDING_AUCTIONS,
+  UPLOAD_SEEDS,
+  UPLOADERS,
+  type Uploader,
+} from './fixtures/imports'
 import { PROFILE_FIXTURES } from './fixtures/profiles'
 import { priceHistory, setStoredSessions, type StoredSession } from './lib/bars'
 import { newId } from './lib/ids'
@@ -697,10 +705,42 @@ function createImports(now = Date.now()): StoredImport[] {
   return imports.sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt))
 }
 
+/** The log of the seeded uploads: published two minutes after the upload, and rolled back. */
+function auditSeeds(imports: readonly StoredImport[]): void {
+  const uploaders = Object.values(UPLOADERS)
+  for (const stored of imports) {
+    if (!stored.seed || !stored.publishedAt) continue
+    const uploader = uploaders.find((candidate) => candidate.id === stored.uploadedById)
+    if (!uploader) continue
+    const actor: AuditActor = {
+      id: uploader.id,
+      displayName: uploader.name,
+      accountType: 'dataAdmin',
+    }
+    if (stored.rollback) {
+      auditImport(stored, 'import-publish', 'ready', {
+        actor,
+        at: minutesLater(stored.uploadedAt, 2),
+      })
+      auditImport(stored, 'import-rollback', 'published', {
+        actor,
+        at: stored.rollback.at,
+        reason: stored.rollback.reason,
+      })
+    }
+    auditImport(stored, 'import-publish', stored.rollback ? 'rolledBack' : 'ready', {
+      actor,
+      at: stored.publishedAt,
+    })
+  }
+}
+
 export const importStore = sharedStore<StoredImport[]>('imports', () => {
   seeding = true
   try {
-    return createImports()
+    const imports = createImports()
+    auditSeeds(imports)
+    return imports
   } finally {
     seeding = false
   }
@@ -934,8 +974,38 @@ function announcePublished(stored: StoredImport): void {
   })
 }
 
+const importTarget = (stored: StoredImport) =>
+  ({ type: 'import', id: stored.id, label: stored.fileName }) as const
+
+/** The log of an upload's publication or rollback: its status and how many rows. */
+function auditImport(
+  stored: StoredImport,
+  action: 'import-publish' | 'import-rollback' | 'import-discard',
+  before: ImportStatus,
+  options: { reason?: string | null; at?: string; actor?: AuditActor } = {},
+): void {
+  const after =
+    action === 'import-publish'
+      ? 'published'
+      : action === 'import-rollback'
+        ? 'rolledBack'
+        : 'discarded'
+  recordAudit(action, importTarget(stored), {
+    changes: [
+      { field: 'importStatus', scope: null, before, after },
+      ...(action === 'import-discard'
+        ? []
+        : [
+            { field: 'rows', scope: stored.type, before: null, after: stored.rows.length } as const,
+          ]),
+    ],
+    ...options,
+  })
+}
+
 /** POST /data/imports/{id}/publish: the rows go into the database; screens are told to refresh. */
 export function publishImport(stored: StoredImport): void {
+  const before = statusOf(stored)
   stored.status = 'published'
   stored.publishedAt = new Date().toISOString()
   stored.publishedBy = currentAccount().displayName
@@ -943,6 +1013,7 @@ export function publishImport(stored: StoredImport): void {
   saveImports(
     importStore.read().map((candidate) => (candidate.id === stored.id ? stored : candidate)),
   )
+  auditImport(stored, 'import-publish', before)
   announcePublished(stored)
 }
 
@@ -958,14 +1029,17 @@ export function rollBackImport(stored: StoredImport, reason: string): void {
   saveImports(
     importStore.read().map((candidate) => (candidate.id === stored.id ? stored : candidate)),
   )
+  auditImport(stored, 'import-rollback', 'published', { reason })
   announcePublished(stored)
 }
 
 export function discardImport(stored: StoredImport): void {
+  const before = statusOf(stored)
   stored.status = 'discarded'
   saveImports(
     importStore.read().map((candidate) => (candidate.id === stored.id ? stored : candidate)),
   )
+  auditImport(stored, 'import-discard', before)
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1108,6 +1182,27 @@ export function correctPrice(
     correctedById: account.id,
   }
   correctionStore.write([correction, ...correctionStore.read()])
+  const fields = ['open', 'high', 'low', 'close', 'volume'] as const
+  recordAudit(
+    'price-correct',
+    {
+      type: 'price',
+      id: `${securityId}:${date}`,
+      label: `${security?.code ?? securityId} ${date}`,
+    },
+    {
+      changes: fields
+        .filter((field) => correction.before[field] !== after[field])
+        .map((field) => ({
+          field,
+          scope: null,
+          before: correction.before[field],
+          after: after[field],
+        })),
+      reason,
+      at: correction.correctedAt,
+    },
+  )
   overlay = null
   if (security && date === toMarketDay(Date.now())) {
     Object.assign(security, {

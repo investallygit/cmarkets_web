@@ -45,6 +45,7 @@ export const PERMISSIONS = [
   'moderation:manage',
   'settings:manage',
   'audit:read',
+  'payouts:manage',
 ] as const
 export type Permission = (typeof PERMISSIONS)[number]
 
