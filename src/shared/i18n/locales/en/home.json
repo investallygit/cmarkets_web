@@ -1,0 +1,175 @@
+{
+  "home": {
+    "nav": {
+      "label": "Sections of the page",
+      "features": "Features",
+      "markets": "Markets",
+      "audience": "Who it is for",
+      "plans": "Plans"
+    },
+    "cta": {
+      "trial": "Start the free trial",
+      "trialShort": "Free trial",
+      "logIn": "Log in",
+      "open": "Open the terminal"
+    },
+    "hero": {
+      "eyebrow": "BVMAC · BEAC · Europe · United States",
+      "title": "The financial terminal of the CEMAC markets",
+      "lead": "Follow BVMAC equities and the government securities of the six CEMAC countries, analyse companies and bonds, manage your portfolios and read independent research: one tool, in French and English."
+    },
+    "preview": {
+      "label": "The CMarket terminal: indices, a price chart, top movers and a yield curve, with sample data.",
+      "caption": "Illustration · sample data",
+      "index": "BVMAC Equities",
+      "curve": "Cameroon",
+      "pause": "Pause the animations",
+      "play": "Play the animations"
+    },
+    "facts": {
+      "label": "CMarket at a glance",
+      "countries": {
+        "value": "6",
+        "label": "CEMAC countries, with their government securities and yield curves"
+      },
+      "exchange": {
+        "value": "BVMAC",
+        "label": "Equities and bonds of the regional exchange, in Douala"
+      },
+      "world": {
+        "value": "EODHD",
+        "label": "European and US markets, in the same screens"
+      },
+      "languages": {
+        "value": "FR · EN",
+        "label": "The whole platform in French and English"
+      }
+    },
+    "features": {
+      "eyebrow": "Features",
+      "title": "Three uses in one tool, and a research marketplace",
+      "lead": "Monitoring, analysis and portfolios share the same data, the same alerts and the same command bar: type a security and a function code, as on a terminal.",
+      "codes": "Function codes",
+      "module": "{{module}} module",
+      "everyAccount": "Every account",
+      "monitoring": {
+        "title": "Monitor the markets",
+        "point1": "Real-time prices, order book and latest trades",
+        "point2": "News, issuers' documents and the market calendar",
+        "point3": "Alerts on a price, a volume, an auction or a publication, in the app, by e-mail or by SMS"
+      },
+      "analysis": {
+        "title": "Analyse securities",
+        "point1": "An equity screener on valuation, profitability, sector and country",
+        "point2": "Financial statements and ratios over several years, against the sector",
+        "point3": "The yield curves of the six countries and a bond calculator"
+      },
+      "portfolio": {
+        "title": "Manage portfolios",
+        "point1": "Positions valued at the day's prices, in XAF or EUR",
+        "point2": "Performance against a benchmark, risk and limits",
+        "point3": "Client reports in PDF"
+      },
+      "research": {
+        "title": "Read and publish research",
+        "point1": "Notes on a company or a country, free or paid",
+        "point2": "The analysts you follow, and the record of their ratings",
+        "point3": "Analysts publish with CMarket charts and are paid every month"
+      }
+    },
+    "markets": {
+      "eyebrow": "Markets",
+      "title": "Central Africa first, and the world's markets",
+      "lead": "CMarket brings together the CEMAC data, loaded every day by its team, and the European and US markets.",
+      "cemac": {
+        "title": "CEMAC markets",
+        "text": "The prices of the BVMAC and the government securities of the BEAC area, published every day from the official files once they are checked.",
+        "countries": "Countries",
+        "point1": "BVMAC equities and bonds: prices, dividends, shareholders and documents",
+        "point2": "Treasury bill and bond auctions (BTA, OTA) and the yield curves",
+        "point3": "BEAC policy rates and exchange rates, the euro peg included"
+      },
+      "countries": {
+        "CM": "Cameroon",
+        "GA": "Gabon",
+        "CG": "Congo",
+        "TD": "Chad",
+        "CF": "Central African Republic",
+        "GQ": "Equatorial Guinea"
+      },
+      "world": {
+        "title": "Europe and the United States",
+        "text": "Equities, indices and currencies of the European and US markets through EODHD, in the same screens as the CEMAC securities.",
+        "equities": "Equities",
+        "indices": "Indices",
+        "currencies": "Currencies"
+      },
+      "quality": "Every file goes through format and business checks before it is published; a wrong price is corrected, and the correction recorded.",
+      "qualityTitle": "Checked data"
+    },
+    "audience": {
+      "eyebrow": "Who it is for",
+      "title": "One account type for each way of working",
+      "lead": "Each account type opens the screens and the quotas it needs; it is chosen at sign-up.",
+      "student": {
+        "who": "Finance students and teachers",
+        "cta": "Sign up as a student",
+        "text": "Delayed prices, simulated portfolios and research, on the student plan."
+      },
+      "analyst": {
+        "who": "Analysts, advisers and researchers",
+        "cta": "Sign up as an analyst",
+        "text": "Historical data, ratios and exports; research to publish on a company or a country, free or paid."
+      },
+      "manager": {
+        "who": "Asset and fund managers, insurers and pension funds",
+        "cta": "Sign up as a portfolio manager",
+        "text": "Portfolios valued and tracked, performance measured, and reports for your clients."
+      },
+      "trader": {
+        "who": "Brokerage firms, banks and trading desks",
+        "cta": "Sign up as a trader",
+        "text": "Real-time prices, the order book, intraday charts and alerts, and the government securities market."
+      },
+      "organization": "An organisation account brings your colleagues together under one plan, paid by the organisation."
+    },
+    "plans": {
+      "eyebrow": "Plans",
+      "title": "A price per user, and 14 days free to start",
+      "lead": "Every account starts with 14 days of all the modules of its type. Then choose a plan, by month or by year.",
+      "cycle": "Billing",
+      "monthly": "Monthly",
+      "perMonth": "per user per month, excl. VAT",
+      "perYear": "per user per year, excl. VAT",
+      "monthlyEquivalent": "That is {{amount}} a month",
+      "for": "For {{types}}",
+      "start": "Start the trial",
+      "seeMine": "See my plan",
+      "payment": "Pay by card, mobile money or bank transfer against an invoice. Prices exclude VAT ({{rate}}%)."
+    },
+    "trust": {
+      "title": "Why CMarket",
+      "independent": {
+        "title": "Independent",
+        "text": "CMarket routes no orders and holds no client funds: it provides data, analysis tools, portfolio tracking and research."
+      },
+      "secure": {
+        "title": "Secure login",
+        "text": "A password and a one-time code by e-mail or SMS, and an automatic logout after a period of inactivity."
+      },
+      "audited": {
+        "title": "Traceable",
+        "text": "Every file is checked before it is published, and every action of the back-office is written to an audit log."
+      }
+    },
+    "closing": {
+      "title": "Try CMarket for 14 days",
+      "text": "Every module of your account type, free; then the plan of your choice."
+    },
+    "footer": {
+      "label": "Links",
+      "sources": "Data: BVMAC and BEAC files; EODHD for Europe and the United States.",
+      "photos": "Photos: Pexels"
+    }
+  }
+}

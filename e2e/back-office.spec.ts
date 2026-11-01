@@ -63,7 +63,10 @@ test('a daily prices file in error is fixed row by row, then published', async (
   await asDataAdmin(page)
   await page.goto('/imp?import=new')
   const form = panel(page, 'New upload')
-  const session = await form.getByRole('textbox', { name: 'Session' }).inputValue()
+  // The session comes with the coverage: read it once there, not while the field is still empty.
+  const sessionField = form.getByRole('textbox', { name: 'Session' })
+  await expect(sessionField).toHaveValue(/^\d{2}\/\d{2}\/\d{4}$/)
+  const session = await sessionField.inputValue()
   const [day, month, year] = session.split('/')
   const date = `${year}-${month}-${day}`
   const csv = [

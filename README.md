@@ -4,43 +4,32 @@ Front end of CMarket, built from `CMarket-developer-spec-EN.pdf`: the client ter
 back-office of the Data admin and of the Admin. This prototype runs without a back end: a mock
 layer answers the REST API and simulates the real-time hub with the sample data of the mockups.
 
-## Getting started
+- [Introduction](#introduction): what the prototype does, its stack, the status of each screen
+- [Installation](#installation): run it, log in, the scripts
+- [Structure](#structure): the folders, the rules between them, the data flow, the design system
+- [Guides](#guides): where new code goes, a new screen, translations, tests, the real back end
 
-Requires Node 22 or later.
-
-```bash
-npm install
-npm run dev        # http://localhost:5173
-```
-
-| Script                          | Purpose                                                                    |
-| ------------------------------- | -------------------------------------------------------------------------- |
-| `npm run dev`                   | Dev server with the mock back end                                          |
-| `npm run build`                 | Type check, then production build in `dist/`                               |
-| `npm run typecheck`             | TypeScript only                                                            |
-| `npm run lint`                  | ESLint, including the layer rules below                                    |
-| `npm test` / `npm run test:run` | Vitest unit and component tests                                            |
-| `npm run e2e`                   | Playwright end-to-end tests (first run: `npx playwright install chromium`) |
+## Introduction
 
 The app opens on the home page: what CMarket does, its markets, its users and its plans, with the
 free trial and the login; a user already logged in opens the terminal from it (`/app`, the home
-screen of the account type). In the prototype, the login page lists a demo account per account
-type (all with the password `cmarket2026`) and shows the one-time code the mock would have sent by
-e-mail or SMS; a sign-up gets the 14-day free trial. Once in, the user badge at the top right opens the
-settings (CFG), switches language (FR / EN) and, in the prototype, account type, so every menu and
-permission of spec section 12 can be previewed, and logs out. `/_kit` shows the shared UI
-components (form controls, dialogs, toasts, price chart, table export) with sample content. The
-mock back end keeps the accounts, organisations, plans and invoices, and each user's watchlists,
-alerts, saved screens, portfolios, purchases, layouts and chart drawings in localStorage, with the
-research library that every account shares; it plays the browser's part for the refresh token
-cookie. It sets off the alerts when a price crosses a threshold, a release comes out or a portfolio
-limit is breached. For the Data admin it reads the CSV and Excel templates, runs the format and
-business checks of spec section 11 and puts the published rows in place of its generated prices,
-index closes, auctions, curves and dividends, until a rollback takes them out. It runs the bond calculator with the formulas of spec section 14.1 and values
-portfolios with those of sections 14.2 and 14.3, each tested against the spec's cases; it plays
-the mobile money and card payments of research and plans and watermarks the PDFs it writes.
+screen of the account type). Once in, the user badge at the top right opens the settings (CFG),
+switches language (FR / EN) and, in the prototype, account type, so every menu and permission of
+spec section 12 can be previewed, and logs out. `/_kit` shows the shared UI components (form
+controls, dialogs, toasts, price chart, table export) with sample content.
 
-## Stack (spec section 7)
+The mock back end keeps the accounts, organisations, plans and invoices, and each user's
+watchlists, alerts, saved screens, portfolios, purchases, layouts and chart drawings in
+localStorage, with the research library that every account shares; it plays the browser's part
+for the refresh token cookie. It sets off the alerts when a price crosses a threshold, a release
+comes out or a portfolio limit is breached. For the Data admin it reads the CSV and Excel
+templates, runs the format and business checks of spec section 11 and puts the published rows in
+place of its generated prices, index closes, auctions, curves and dividends, until a rollback takes
+them out. It runs the bond calculator with the formulas of spec section 14.1 and values portfolios
+with those of sections 14.2 and 14.3, each tested against the spec's cases; it plays the mobile
+money and card payments of research and plans and watermarks the PDFs it writes.
+
+### Stack (spec section 7)
 
 React 18, strict TypeScript, Vite · TanStack Query (server data) · Zustand (layout, preferences,
 selection) · TanStack Table + Virtual · TradingView Lightweight Charts (prices) · Recharts
@@ -50,7 +39,59 @@ Playwright · TipTap 3 (the editor of the publishing studio, loaded with that sc
 Supporting choices: React Router 7, lucide-react icons, MSW 3 for the mock back end,
 write-excel-file for the Excel export of tables, read-excel-file for the mock's Excel imports.
 
-## Architecture
+### Status
+
+| Screen                                                                    | State                                                         |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Home page: the product, markets, users and plans; trial and login         | Done; the plans come from the server before login             |
+| App shell: top bar, command bar, ticker, menu by account type, status bar | Done                                                          |
+| Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
+| 1 · Market dashboard (MKT)                                                | Done on mock data, real-time quotes and indices, watchlists   |
+| 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done on mock data                                             |
+| 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done on mock data, saved screens                              |
+| 4 · Yield curves and bond calculator (YCRV, YAS)                          | Done; the mock computes spec section 14.1                     |
+| 5 · Portfolio (PORT)                                                      | Done; the mock values portfolios with sections 14.2 and 14.3  |
+| 7 · Publishing studio (PUB NEW)                                           | Done on mock data, autosave, versions, frozen charts          |
+| 8 · Research library (PUB)                                                | Done; the mock plays mobile money and card payments           |
+| News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done on mock data; the mock sets off the alerts               |
+| Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
+| Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
+| 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
+| Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
+| 9 · Account administration (USER) with ANLY and MOD                       | Done; 1,959 accounts, requests, moderation queue on mock data |
+| Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; every Data admin and Admin action is in the audit log   |
+
+How the screens were built, step by step, and the open questions for the spec author are in
+[ROADMAP.md](ROADMAP.md).
+
+## Installation
+
+Requires Node 22 or later.
+
+```bash
+npm install
+npm run dev        # http://localhost:5173
+```
+
+The dev server runs with the mock back end; to work against `CMarket.Api` instead, see
+[Connecting the real back end](#connecting-the-real-back-end).
+
+In the prototype, the login page lists a demo account per account type, all with the password
+`cmarket2026`, and shows the one-time code the mock would have sent by e-mail or SMS; a sign-up
+gets the 14-day free trial. The mock keeps its data in the browser's localStorage under
+`cmarket.prototype.*`: clearing the site's data starts again from the sample data.
+
+| Script                          | Purpose                                                                    |
+| ------------------------------- | -------------------------------------------------------------------------- |
+| `npm run dev`                   | Dev server with the mock back end                                          |
+| `npm run build`                 | Type check, then production build in `dist/`                               |
+| `npm run typecheck`             | TypeScript only                                                            |
+| `npm run lint`                  | ESLint, including the layer rules of [Structure](#structure)               |
+| `npm run format`                | Prettier, on every file                                                    |
+| `npm test` / `npm run test:run` | Vitest unit and component tests                                            |
+| `npm run e2e`                   | Playwright end-to-end tests (first run: `npx playwright install chromium`) |
+
+## Structure
 
 The code follows [Feature-Sliced Design](https://feature-sliced.design) (FSD): six layers, each
 split into slices by business domain, each slice into segments (`ui`, `model`, `api`, `lib`,
@@ -87,8 +128,12 @@ src/
               account, analyst-request, moderation, payout, platform-settings, audit
   shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
               UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
-  mocks/      fake back end for the prototype (MSW handlers, sample data, simulated hub)
+  mocks/      fake back end for the prototype (below)
+e2e/          Playwright flows; auth.setup.ts logs in once and the other specs reuse the session
+public/       the MSW service worker and the favicon
 ```
+
+### Layer rules
 
 ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
 
@@ -97,28 +142,49 @@ ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
 - A slice never imports another slice of its own layer: pages compose widgets, widgets compose
   features and entities.
 - Another slice is reached only through its public `index.ts` (`@/entities/market`); inside a
-  slice, imports are relative.
+  slice, imports are relative and never go up two folders (`../../`).
 - `mocks/` only sees `shared/`, like a real server only shares the API contract; only `main.tsx`
   loads it.
 
-Where new code goes:
+### The mock back end
 
-| Code                                                         | Place                                                                      |
-| ------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| A screen of the spec                                         | `SCREENS` in `shared/routes/screens.ts`, its page in `app/routes/pages.ts` |
-| The page of a screen: which panels, default layout           | `pages/<screen>`                                                           |
-| A panel, or any block shown on several screens               | `widgets/<name>`                                                           |
-| A user action (add to a list, create an alert, buy a report) | `features/<verb>-<noun>`                                                   |
-| A business object: types, API hooks, live state, small UI    | `entities/<object>`                                                        |
-| A form opened from several screens (an alert, a list)        | `features/`, opened through a store in `entities/<object>/model`           |
-| Anything without business knowledge                          | `shared/`                                                                  |
+```
+src/mocks/
+  index.ts      starts MSW and the simulated hub
+  handlers/     the REST routes, one file per part of the API; admin/ and portfolios/ hold
+                one file per screen or part
+  db.ts         the in-memory state the routes and the hub share; its parts in db/ (storage,
+                market, accounts, session, platform, live, workspace, portfolios, research)
+  imports.ts    the Data admin's uploads and what they publish; its parts in imports/ (store,
+                checks, seeds, the upload cycle, coverage, corrections)
+  fixtures/     the sample data of the mockups
+  lib/          pure logic tested against the spec: bond math (14.1), the portfolio engine
+                (14.2, 14.3, its parts in portfolioEngine/), the upload checks (11)...
+  realtime.ts   the simulated hub
+  admin.ts, content.ts, payments.ts, publications.ts
+                what several routes share: the Admin's directory and payouts, the news and
+                documents entered, the payments, the publication of research
+```
 
-When two widgets of a page must talk (the Indices panel picks the index of the chart, a screener
-row feeds the comparison and the statements), the page holds the state and passes props: see
-`pages/market-dashboard/model/indexSelection.ts` and `pages/equity-screener/model/selection.ts`. When a
-feature must open the form of another one ("Create an alert" in the right-click menu of a
-security), it asks through the entity's store (`openAlertDialog`), since features never import
-each other; the app shell mounts the form once.
+`SEED_VERSION` (`db/storage.ts`) drops the data kept in localStorage when the sample data
+changes, which also ends the prototype's session once.
+
+### File organisation
+
+- A file has at most 700 lines: source, styles, configuration and translation files alike;
+  Markdown documents, `package-lock.json`, generated files and images aside.
+- A file that grows past it is split. It stays as the parent, at the same path and with the same
+  exports, and its parts move into a folder of the same name beside it, one concern per file:
+  `src/mocks/db.ts` and `src/mocks/db/`, `src/shared/i18n/locales/en.ts` and `en/`. The code that
+  imports the parent does not change; the parts never import their parent.
+- No import cycles: when two parts would need each other, the lower one exposes a `set…`
+  registration that the higher one calls (`setStoredSessions`, `setStoredIndexCloses`,
+  `setImportSeeds`).
+- Inside an FSD slice, a file splits along the segments instead (UI in `ui/`, state in `model/`,
+  pure logic in `lib/`, constants in `config/`, requests in `api/`), and the slice's `index.ts`
+  stays its public API.
+- Files that do the same job share a folder: the routes in `mocks/handlers/`, the sample data in
+  `mocks/fixtures/`, the parts of a split file in the folder named after it.
 
 ### Data flow
 
@@ -186,22 +252,77 @@ Icons come from `lucide-react`.
 
 Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of a title bar),
 `ScreenTabs`, `Pager` (pages of a server list), `ScrollArea` (a box that scrolls and takes the
-focus when nothing in it can), `DataTable` (sorting, right-click menu, Excel and CSV export unless the user lacks
-`analysis:export`; `exportRef` puts the export links in a title bar; a `footer` row stays out of
-the sorting; `sorting` and `onSortingChange` leave the order to the server for a paged list; the
-arrows move the selection, or a cursor where rows are not selected, Enter opens a row and the
-menu key or Shift + F10 its menu), `ContextMenu` (takes the focus: arrows, Home, End, Escape;
-as wide as its longest entry, up to 400 px, then on two lines; kept inside the window; under a
-button with `align="end"`; an entry's shortcut shown and given as `aria-keyshortcuts`),
-`charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
-drawings; `AreaChart`; both named for screen readers by `useChartLabel`; `useChartTheme`, the section 8 colours for Recharts, which draws in SVG,
-and the `--chart-*` series palette checked for colour-blind separation), `PdfViewer`, `form/`
-(buttons, fields, selects, number and date inputs in the user's format, password inputs,
-checkboxes, segmented choices, file drop zone), `Dialog` (also as a side form), `ConfirmDialog`
-(with a required reason) and `toast`. Entities add small business components, such as the security picker of
-`entities/security`.
+focus when nothing in it can), `DataTable` (sorting, right-click menu, Excel and CSV export unless
+the user lacks `analysis:export`; `exportRef` puts the export links in a title bar; a `footer` row
+stays out of the sorting; `sorting` and `onSortingChange` leave the order to the server for a
+paged list; the arrows move the selection, or a cursor where rows are not selected, Enter opens a
+row and the menu key or Shift + F10 its menu), `ContextMenu` (takes the focus: arrows, Home, End,
+Escape; as wide as its longest entry, up to 400 px, then on two lines; kept inside the window;
+under a button with `align="end"`; an entry's shortcut shown and given as `aria-keyshortcuts`),
+`charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and drawings;
+`AreaChart`; both named for screen readers by `useChartLabel`; `useChartTheme`, the section 8
+colours for Recharts, which draws in SVG, and the `--chart-*` series palette checked for
+colour-blind separation), `PdfViewer`, `form/` (buttons, fields, selects, number and date inputs
+in the user's format, password inputs, checkboxes, segmented choices, file drop zone), `Dialog`
+(also as a side form), `ConfirmDialog` (with a required reason) and `toast`. Entities add small
+business components, such as the security picker of `entities/security`.
 
-## Connecting the real back end
+## Guides
+
+### Where new code goes
+
+| Code                                                         | Place                                                                      |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| A screen of the spec                                         | `SCREENS` in `shared/routes/screens.ts`, its page in `app/routes/pages.ts` |
+| The page of a screen: which panels, default layout           | `pages/<screen>`                                                           |
+| A panel, or any block shown on several screens               | `widgets/<name>`                                                           |
+| A user action (add to a list, create an alert, buy a report) | `features/<verb>-<noun>`                                                   |
+| A business object: types, API hooks, live state, small UI    | `entities/<object>`                                                        |
+| A form opened from several screens (an alert, a list)        | `features/`, opened through a store in `entities/<object>/model`           |
+| Anything without business knowledge                          | `shared/`                                                                  |
+
+When two widgets of a page must talk (the Indices panel picks the index of the chart, a screener
+row feeds the comparison and the statements), the page holds the state and passes props: see
+`pages/market-dashboard/model/indexSelection.ts` and `pages/equity-screener/model/selection.ts`.
+When a feature must open the form of another one ("Create an alert" in the right-click menu of a
+security), it asks through the entity's store (`openAlertDialog`), since features never import
+each other; the app shell mounts the form once.
+
+### A new screen
+
+1. Add it to `SCREENS` in `shared/routes/screens.ts`, and its page to `app/routes/pages.ts`.
+2. Write its DTOs in `shared/api/contracts`, its mock routes in `mocks/handlers/` and its sample
+   data in `mocks/fixtures/`, from the mockup.
+3. Build the `pages/<screen>` slice: its panels, their default grid and their names in `config`.
+4. Give every string in French and English, and hide or lock the actions by permission and quota.
+5. Tables sort, have a right-click menu and export; the layout is saved per user and stacks in one
+   column below 1280 px.
+6. Cover its logic with Vitest and its main flow with Playwright, then update its line in
+   [Status](#status) and in ROADMAP.md.
+
+### Translations
+
+Every UI string is in French and English, in `shared/i18n/locales/en/` and `fr/`: one JSON file
+per area of the app (`core` for the shell and the shared UI, `home`, `account` for the login and
+the settings, `monitoring`, `analysis`, `portfolio`, `research`, `dataAdmin`, `admin`), which
+`en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:
+`t('panels.indices')` is checked at compile time. A top-level key lives in one area file only, and
+`locales.test.ts` checks it as well as that both languages have the same keys. A new area file
+goes in both folders and is added to both `en.ts` and `fr.ts`.
+
+### Tests
+
+- Unit and component tests sit next to the code they test (`*.test.ts`, `*.test.tsx`).
+  `npm test` watches, `npm run test:run` runs them once; one file:
+  `npx vitest run src/mocks/lib/bondMath.test.ts`, one test: add `-t "<its name>"`.
+- `npm run e2e` runs the Playwright flows at 1600 × 900, the resolution of the mockups, against
+  the dev server: it starts one, or uses the one already on port 5173. `e2e/auth.setup.ts` logs
+  in once as the demo Analyst and the other specs start from that session. One spec:
+  `npx playwright test e2e/portfolio.spec.ts`, one test: add `-g "<its title>"`.
+- A change is done when `npm run typecheck`, `npm run lint` and `npm run test:run` pass, and the
+  Playwright flow of the screen it touches.
+
+### Connecting the real back end
 
 1. Set `VITE_USE_MOCKS=false` in `.env.local`.
 2. Point `DEV_PROXY_TARGET` at `CMarket.Api` for local development, or set `VITE_API_BASE_URL`
@@ -212,28 +333,3 @@ checkboxes, segmented choices, file drop zone), `Dialog` (also as a side form), 
 
 The screens do not change: they only know the API contract. The prototype's account switch and
 the demo accounts of the login page go with the mock.
-
-## Status
-
-| Screen                                                                    | State                                                         |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Home page: the product, markets, users and plans; trial and login         | Done; the plans come from the server before login             |
-| App shell: top bar, command bar, ticker, menu by account type, status bar | Done                                                          |
-| Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
-| 1 · Market dashboard (MKT)                                                | Done on mock data, real-time quotes and indices, watchlists   |
-| 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done on mock data                                             |
-| 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done on mock data, saved screens                              |
-| 4 · Yield curves and bond calculator (YCRV, YAS)                          | Done; the mock computes spec section 14.1                     |
-| 5 · Portfolio (PORT)                                                      | Done; the mock values portfolios with sections 14.2 and 14.3  |
-| 7 · Publishing studio (PUB NEW)                                           | Done on mock data, autosave, versions, frozen charts          |
-| 8 · Research library (PUB)                                                | Done; the mock plays mobile money and card payments           |
-| News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done on mock data; the mock sets off the alerts               |
-| Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
-| Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
-| 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
-| Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
-| 9 · Account administration (USER) with ANLY and MOD                       | Done; 1,959 accounts, requests, moderation queue on mock data |
-| Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; every Data admin and Admin action is in the audit log   |
-
-How the screens were built, step by step, and the open questions for the spec author are in
-[ROADMAP.md](ROADMAP.md).

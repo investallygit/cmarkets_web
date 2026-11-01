@@ -1,0 +1,314 @@
+{
+  "market": {
+    "movers": {
+      "gainers": "Hausses",
+      "losers": "Baisses",
+      "volume": "Volume"
+    },
+    "newsTopics": {
+      "all": "Tout",
+      "issuer": "Émetteurs",
+      "regulator": "Régulateur"
+    },
+    "next7Days": "7 prochains jours",
+    "eventTypes": {
+      "session": "Séance",
+      "auction": "Adjudication",
+      "dividend": "Dividende",
+      "meeting": "Assemblée",
+      "maturity": "Échéance",
+      "earnings": "Résultats"
+    },
+    "summary": {
+      "advancers": "En hausse",
+      "decliners": "En baisse",
+      "unchanged": "Inchangées",
+      "valueTraded": "Capitaux échangés"
+    },
+    "fixedPeg": "parité fixe",
+    "add": "Ajouter",
+    "noAlertsToday": "Aucune alerte déclenchée aujourd'hui"
+  },
+  "security": {
+    "types": {
+      "equity": "Action ordinaire",
+      "bond": "Obligation"
+    },
+    "tabsLabel": "Fonctions de la valeur",
+    "tabs": {
+      "des": "Fiche",
+      "gp": "Graphique",
+      "fa": "Fondamentaux",
+      "dvd": "Dividendes",
+      "n": "Actualités",
+      "doc": "Documents",
+      "hds": "Actionnaires",
+      "ana": "Recherche"
+    },
+    "figures": {
+      "open": "Ouverture",
+      "high": "Plus haut",
+      "low": "Plus bas",
+      "volume": "Volume",
+      "marketCap": "Capitalisation",
+      "pe": "PER",
+      "yield": "Rendement",
+      "coupon": "Coupon",
+      "maturity": "Échéance"
+    },
+    "delayed": "Différé",
+    "notFound": "Aucune valeur {{id}}.",
+    "notApplicable": "{{code}} ne s'applique pas à {{security}}."
+  },
+  "keyData": {
+    "isin": "Code ISIN",
+    "sector": "Secteur",
+    "shares": "Nombre d'actions",
+    "freeFloat": "Flottant",
+    "range52w": "Plus haut / bas 52 semaines",
+    "beta": "Bêta (1 an vs {{index}})",
+    "lastDividend": "Dernier dividende net",
+    "nextEvent": "Prochain événement",
+    "issuer": "Émetteur",
+    "coupon": "Coupon",
+    "issueDate": "Date d'émission",
+    "maturity": "Échéance",
+    "amortization": "Amortissement",
+    "amortizations": {
+      "bullet": "In fine",
+      "straight": "Constant, {{share}} par an"
+    },
+    "frequencies": {
+      "annual": "annuel",
+      "halfYearly": "semestriel",
+      "quarterly": "trimestriel"
+    },
+    "dayCount": "Base de calcul",
+    "outstanding": "Encours",
+    "insufficientData": "Données insuffisantes"
+  },
+  "orderBook": {
+    "bestLimits": "5 meilleures limites",
+    "bidQty": "Qté achat",
+    "bid": "Achat",
+    "ask": "Vente",
+    "askQty": "Qté vente",
+    "notIncluded": "Le carnet d'ordres et les transactions de la séance ne font pas partie d'un compte {{type}}."
+  },
+  "dividendKinds": {
+    "final": "Solde",
+    "interim": "Acompte",
+    "special": "Exceptionnel"
+  },
+  "documents": {
+    "badges": {
+      "pdf": "PDF",
+      "notice": "Avis",
+      "decision": "Décision",
+      "news": "Actu"
+    },
+    "pages_one": "{{count}} page",
+    "pages_other": "{{count}} pages",
+    "select": "Choisissez un document pour le lire ici.",
+    "search": "Rechercher dans les documents",
+    "type": "Type de document",
+    "allTypes": "Tous les types",
+    "types": {
+      "annual-report": "Rapport annuel",
+      "financial-statements": "États financiers",
+      "information-note": "Note d'information",
+      "notice": "Avis",
+      "release": "Communiqué",
+      "decision": "Décision",
+      "articles": "Statuts"
+    },
+    "noMatch": "Aucun document ne correspond à ces filtres"
+  },
+  "news": {
+    "select": "Choisissez une actualité pour la lire ici.",
+    "tabsLabel": "Fonctions d'actualité",
+    "tabs": {
+      "news": "Actualités",
+      "documents": "Documents"
+    },
+    "topics": {
+      "all": "Tous les sujets",
+      "issuer": "Émetteurs",
+      "regulator": "Régulateurs",
+      "market": "Marché"
+    },
+    "allCountries": "Tous les pays",
+    "topic": "Sujet",
+    "country": "Pays",
+    "security": "Filtrer par titre",
+    "related": "Titres concernés",
+    "empty": "Aucune actualité pour ces filtres"
+  },
+  "shareholders": {
+    "asOf": "Au {{date}}"
+  },
+  "watchlists": {
+    "actions": "Actions sur la liste",
+    "newList": "Nouvelle liste",
+    "newTitle": "Nouvelle liste de suivi",
+    "editTitle": "Liste {{code}}",
+    "settings": "Nom et colonnes",
+    "delete": "Supprimer la liste",
+    "deleteTitle": "Supprimer {{code}}",
+    "deleteMessage": "Supprimer la liste « {{name}} » ? Ses titres restent dans vos autres listes.",
+    "deleted": "{{list}} supprimée",
+    "name": "Nom",
+    "nameRequired": "Donnez un nom à la liste",
+    "columns": "Colonnes",
+    "codeAlwaysShown": "Le code du titre est toujours affiché.",
+    "columnNames": {
+      "name": "Nom du titre",
+      "last": "Dernier",
+      "change": "Variation",
+      "changePct": "Variation %",
+      "volume": "Volume",
+      "sparkline": "Graphique 5 jours"
+    },
+    "startsWith_one": "{{codes}} sera dans la nouvelle liste.",
+    "startsWith_other": "{{codes}} seront dans la nouvelle liste.",
+    "create": "Créer",
+    "created": "{{list}} créée",
+    "saved": "{{list}} enregistrée",
+    "saveFailed": "Liste non enregistrée : {{message}}",
+    "addPlaceholder": "Ajouter un titre : code ou nom",
+    "addTo": "Ajouter un titre à {{code}}",
+    "added": "{{security}} ajouté à {{list}}",
+    "removed": "{{security}} retiré de {{list}}",
+    "removeFrom": "Retirer de {{code}}",
+    "emptyList": "Aucun titre : utilisez + Ajouter, ou le clic droit sur un titre dans n'importe quel tableau.",
+    "noList": "Aucune liste de suivi"
+  },
+  "alerts": {
+    "newAlert": "Nouvelle alerte",
+    "newTitle": "Nouvelle alerte",
+    "editTitle": "Modifier l'alerte",
+    "create": "Créer",
+    "created": "Alerte créée",
+    "saved": "Alerte enregistrée",
+    "deleted": "Alerte supprimée",
+    "saveFailed": "Alerte non enregistrée : {{message}}",
+    "quotaUsed": "{{used}} alertes sur {{quota}} (compte {{type}})",
+    "quotaUnlimited": "{{used}} alertes, sans limite",
+    "quotaReached": "Votre compte permet {{quota}} alertes. Supprimez-en une pour en créer une autre.",
+    "quotaShort": "{{used}} / {{quota}}",
+    "type": "Type",
+    "types": {
+      "price": "Cours ou variation",
+      "volume": "Volume inhabituel",
+      "release": "Communiqué de l'émetteur",
+      "auction": "Résultats d'adjudication",
+      "portfolio": "Limite de portefeuille",
+      "publication": "Nouvelle recherche"
+    },
+    "publicationAbout": "Recherche",
+    "about": {
+      "analysts": "Analystes suivis",
+      "security": "Sur un titre",
+      "country": "Sur un pays"
+    },
+    "security": "Titre",
+    "metric": "Surveiller",
+    "metrics": {
+      "price": "Cours",
+      "changePct": "Variation %"
+    },
+    "direction": "Passe",
+    "directionOptions": {
+      "above": "Au-dessus",
+      "below": "En dessous"
+    },
+    "directions": {
+      "above": "au-dessus de",
+      "below": "en dessous de"
+    },
+    "threshold": "Seuil",
+    "lastQuote": "Dernier {{last}} · {{change}} aujourd'hui",
+    "multiple": "Volume supérieur à",
+    "multipleHint": "fois le volume moyen sur 20 jours",
+    "country": "Pays",
+    "allCountries": "Tous les pays CEMAC",
+    "chooseCountry": "Choisissez un pays",
+    "portfolioHint": "Se déclenche quand une limite du portefeuille est dépassée lors d'une valorisation : poids d'un émetteur, volatilité, perte maximale, bêta ou duration obligataire.",
+    "channels": "Envoyer par",
+    "channelNames": {
+      "push": "Push",
+      "email": "E-mail",
+      "sms": "SMS"
+    },
+    "enabled": "Alerte active",
+    "errors": {
+      "required": "Obligatoire",
+      "positive": "Doit être supérieur à 0",
+      "aboveOne": "Doit être supérieur à 1",
+      "channels": "Choisissez au moins un canal"
+    },
+    "conditions": {
+      "price": "Cours {{direction}} {{threshold}}",
+      "changePct": "Variation {{direction}} {{threshold}}",
+      "volume": "Volume supérieur à {{multiple}}× la moyenne sur 20 jours",
+      "release": "Nouveau communiqué de l'émetteur",
+      "auction": "Résultats d'une adjudication BEAC",
+      "portfolio": "Une limite de portefeuille est dépassée",
+      "publication": {
+        "analysts": "Nouvelle recherche d'un analyste suivi",
+        "security": "Nouvelle recherche sur le titre",
+        "country": "Nouvelle recherche sur le pays"
+      }
+    },
+    "subjects": {
+      "portfolios": "Mes portefeuilles",
+      "analysts": "Analystes suivis"
+    },
+    "edit": "Modifier",
+    "turnOn": "Activer",
+    "turnOff": "Désactiver",
+    "delete": "Supprimer",
+    "deleteTitle": "Supprimer l'alerte",
+    "deleteMessage": "Supprimer l'alerte {{alert}} ?",
+    "toggleLabel": "Alerte {{alert}} active",
+    "never": "Jamais",
+    "noAlerts": "Aucune alerte : créez-en une ici, ou par le clic droit sur un titre dans n'importe quel tableau.",
+    "historyEmpty": "Aucune alerte déclenchée pour l'instant",
+    "unread": "Non lue",
+    "portfolio": "Portefeuille",
+    "allPortfolios": "Tous mes portefeuilles",
+    "channelsTo": "E-mail à {{email}}, SMS au {{phone}}.",
+    "smsNeedsPhone": "E-mail à {{email}}. Pour les SMS, ajoutez un mobile dans les Paramètres (CFG)."
+  },
+  "calendar": {
+    "views": {
+      "day": "Jour",
+      "week": "Semaine"
+    },
+    "previous": "Précédent",
+    "next": "Suivant",
+    "today": "Aujourd'hui",
+    "types": "Types d'événement",
+    "allCountries": "Tous les pays",
+    "country": "Pays",
+    "weekOf": "Semaine du {{date}}",
+    "noEvents": "Aucun événement",
+    "noSession": "Pas de séance",
+    "openSecurity": "Double-clic ou Entrée ouvre la fiche valeur"
+  },
+  "auctions": {
+    "bta_one": "BTA {{count}} sem.",
+    "bta_other": "BTA {{count}} sem.",
+    "ota_one": "OTA {{count}} an",
+    "ota_other": "OTA {{count}} ans",
+    "allCountries": "Tous les pays",
+    "instruments": {
+      "all": "BTA + OTA",
+      "BTA": "BTA",
+      "OTA": "OTA"
+    },
+    "filters": "Filtres :",
+    "country": "Pays",
+    "instrument": "Instrument"
+  }
+}

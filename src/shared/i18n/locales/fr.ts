@@ -1,0 +1,24 @@
+import account from './fr/account.json'
+import admin from './fr/admin.json'
+import analysis from './fr/analysis.json'
+import core from './fr/core.json'
+import dataAdmin from './fr/dataAdmin.json'
+import home from './fr/home.json'
+import monitoring from './fr/monitoring.json'
+import portfolio from './fr/portfolio.json'
+import research from './fr/research.json'
+
+/** The French strings: the same area files as en.ts, in ./fr. */
+const fr = {
+  ...core,
+  ...home,
+  ...account,
+  ...monitoring,
+  ...analysis,
+  ...portfolio,
+  ...research,
+  ...dataAdmin,
+  ...admin,
+}
+
+export default fr

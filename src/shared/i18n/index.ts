@@ -1,8 +1,8 @@
 import i18n, { type ParseKeys } from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
-import en from './locales/en.json'
-import fr from './locales/fr.json'
+import en from './locales/en'
+import fr from './locales/fr'
 
 /** French and English; every UI string lives in ./locales (spec section 7). */
 export const LANGUAGES = ['fr', 'en'] as const

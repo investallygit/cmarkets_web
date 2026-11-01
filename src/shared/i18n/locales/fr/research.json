@@ -1,0 +1,382 @@
+{
+  "publication": {
+    "free": "Gratuit",
+    "priceXaf": "{{price}} XAF",
+    "target": "objectif {{price}}",
+    "ratings": {
+      "buy": "Achat",
+      "hold": "Conserver",
+      "sell": "Vente",
+      "positive": "Perspective positive",
+      "stable": "Perspective stable",
+      "negative": "Perspective négative"
+    },
+    "score": "Note des lecteurs",
+    "scoreCount_one": "{{count}} note",
+    "scoreCount_other": "{{count}} notes",
+    "subjectTypes": {
+      "company": "Société",
+      "country": "Souv."
+    },
+    "chart": {
+      "caption": "Graphique CMarket · {{title}} · figé au {{date}}"
+    },
+    "pages_one": "{{count}} page",
+    "pages_other": "{{count}} pages",
+    "updated": "Mise à jour le {{date}} · version {{version}}",
+    "reference": "Cours de référence {{price}}",
+    "upside": "potentiel {{upside}}",
+    "dataDate": "Données au {{date}}",
+    "summary": "Résumé",
+    "contents": "Sommaire",
+    "locked": "verrouillé",
+    "watermark": "{{name}} · acheté le {{date}}",
+    "disclosures": {
+      "title": "Mentions obligatoires",
+      "conflicts": "L'analyste déclare n'avoir aucun conflit d'intérêts avec le sujet.",
+      "reference": "Cours de référence : {{price}} XAF au {{date}}.",
+      "dataDate": "Données au {{date}}.",
+      "disclaimer": "Ceci n'est pas un conseil en investissement personnalisé.",
+      "sources": "Les sources et les dates des données sont citées dans le texte."
+    }
+  },
+  "analyst": {
+    "follow": "Suivre +",
+    "following": "Suivi ✓",
+    "publications": "Publications",
+    "score": "Note moyenne",
+    "scoreValue": "{{score}} / 5",
+    "followers": "Abonnés",
+    "confirmed": "Recommandations confirmées à 12 mois",
+    "history": "Recommandations face au cours 12 mois après",
+    "columns": {
+      "date": "Date",
+      "rating": "Recommandation",
+      "reference": "Cours de réf.",
+      "after": "12 mois",
+      "outcome": "Résultat"
+    },
+    "outcomes": {
+      "confirmed": "Confirmée par le cours",
+      "missed": "Non confirmée par le cours",
+      "open": "Moins de 12 mois"
+    }
+  },
+  "purchase": {
+    "price": "Prix",
+    "payment": "Paiement",
+    "methods": {
+      "mobileMoney": "Mobile money",
+      "card": "Carte"
+    },
+    "buy": "Acheter cette étude — {{price}} XAF",
+    "studentPrice": "Prix étudiant, au lieu de {{price}} XAF",
+    "clientsOnly": "Les études payantes s'achètent avec un compte client : Étudiant, Analyste, Gérant de portefeuille ou Trader.",
+    "titles": {
+      "mobileMoney": "Payer par mobile money",
+      "card": "Payer par carte"
+    },
+    "amount": "{{price}} XAF",
+    "summary": "{{title}} : {{price}}. Une fois le paiement confirmé, le contenu complet remplace l'aperçu, avec votre nom en filigrane.",
+    "phone": "Numéro mobile money",
+    "phoneHint": "MTN Mobile Money ou Orange Money. Vous validez le paiement sur votre téléphone.",
+    "phoneInvalid": "Un numéro mobile money, par exemple +237 6 70 12 34 56.",
+    "cardHint": "Votre carte est débitée sur la page sécurisée du prestataire de paiement.",
+    "pay": "Payer {{price}}",
+    "retry": "Réessayer",
+    "failed": "Le paiement a échoué.",
+    "approveOnPhone": "Validez le paiement de {{price}} sur votre téléphone. La publication s'ouvre dès que votre opérateur le confirme.",
+    "confirmingCard": "Confirmation du paiement par carte de {{price}}…",
+    "continueReading": "Fermer et patienter",
+    "confirmed": "Paiement confirmé : {{title}} est à vous, avec ses mises à jour."
+  },
+  "rating": {
+    "rate": "Noter cette publication",
+    "yours": "Votre note",
+    "stars_one": "{{count}} étoile",
+    "stars_other": "{{count}} étoiles",
+    "thanks": "Merci pour votre note."
+  },
+  "contentReport": {
+    "action": "Signaler le contenu",
+    "title": "Signaler cette publication",
+    "intro": "Les modérateurs lisent chaque signalement et peuvent retirer la publication.",
+    "reason": "Motif",
+    "chooseReason": "Choisissez un motif",
+    "reasons": {
+      "misleading": "Information trompeuse ou fausse",
+      "conflict": "Conflit d'intérêts non déclaré",
+      "copyright": "Contenu copié",
+      "other": "Autre"
+    },
+    "reasonRequired": "Choisissez un motif.",
+    "comment": "Commentaire",
+    "commentRequired": "Dites ce qui ne va pas.",
+    "commentTooLong": "{{max}} caractères au plus.",
+    "send": "Envoyer le signalement",
+    "sent": "Signalement envoyé aux modérateurs."
+  },
+  "library": {
+    "results_one": "Publications : {{count}} résultat",
+    "results_other": "Publications : {{count}} résultats",
+    "tabs": {
+      "all": "Toutes",
+      "purchased": "Achetées",
+      "followed": "Analystes suivis"
+    },
+    "empty": {
+      "all": "Aucune publication pour ces filtres.",
+      "purchased": "Aucune publication achetée pour ces filtres.",
+      "followed": "Aucune publication des analystes que vous suivez pour ces filtres."
+    },
+    "by": "par {{name}}",
+    "read": "Lue",
+    "bought": "Achetée",
+    "updated": "Mise à jour",
+    "choose": "Choisissez une publication dans la liste.",
+    "access": {
+      "locked": "Avant achat",
+      "bought": "Achetée",
+      "free": "Gratuite",
+      "own": "Votre publication"
+    },
+    "downloadPdf": "Télécharger le PDF",
+    "attachment": "{{name}} ({{size}})",
+    "filters": {
+      "all": "Tous",
+      "subject": "Sujet",
+      "subjects": {
+        "company": "Société",
+        "country": "Pays"
+      },
+      "country": "Pays",
+      "sector": "Secteur",
+      "access": "Accès",
+      "accesses": {
+        "free": "Gratuit",
+        "paid": "Payant"
+      },
+      "rating": "Recommandation",
+      "sort": "Trier par",
+      "sorts": {
+        "recent": "Plus récentes",
+        "rating": "Mieux notées",
+        "reads": "Plus lues",
+        "price": "Prix le plus bas"
+      },
+      "search": "Rechercher un titre, un pays, un analyste"
+    }
+  },
+  "studio": {
+    "new": {
+      "action": "+ Nouvelle",
+      "title": "Nouvelle publication",
+      "create": "Créer le brouillon"
+    },
+    "mine": {
+      "empty": "Aucune publication : commencez-en une avec + Nouvelle.",
+      "untitled": "Sans titre",
+      "changes": "Mise à jour en cours",
+      "paid": "Payante · {{price}} XAF",
+      "choose": "Choisissez une publication, ou commencez-en une avec + Nouvelle."
+    },
+    "statuses": {
+      "draft": "Brouillon",
+      "pending": "En modération",
+      "published": "Publiée",
+      "archived": "Archivée"
+    },
+    "editor": {
+      "subject": "Sujet",
+      "subjectType": "Société ou pays",
+      "subjects": {
+        "company": "Société",
+        "country": "Pays"
+      },
+      "company": "Société",
+      "country": "Pays",
+      "chooseCountry": "Choisissez un pays",
+      "title": "Titre",
+      "summary": "Résumé (toujours visible gratuitement)",
+      "body": "Texte de la publication",
+      "placeholder": "Rédigez la publication : sections en titres H2, tableaux, images et graphiques CMarket."
+    },
+    "toolbar": {
+      "label": "Mise en forme",
+      "bold": "Gras",
+      "italic": "Italique",
+      "heading": "Titre {{level}}",
+      "list": "Liste",
+      "table": "Tableau",
+      "tableHint": "Insérer un tableau",
+      "image": "Image",
+      "imageHint": "Insérer une image : PNG, JPEG, WebP ou GIF, 2 Mo au plus",
+      "chart": "Graphique CMarket",
+      "chartHint": "Insérer un graphique CMarket, figé à aujourd'hui",
+      "link": "Lien",
+      "addRow": "Ajouter une ligne en dessous",
+      "addColumn": "Ajouter une colonne à droite",
+      "deleteRow": "Supprimer la ligne",
+      "deleteColumn": "Supprimer la colonne",
+      "deleteTable": "Supprimer le tableau"
+    },
+    "chart": {
+      "title": "Graphique CMarket",
+      "security": "Titre",
+      "securityRequired": "Choisissez un titre.",
+      "period": "Période",
+      "type": "Type",
+      "types": {
+        "line": "Ligne",
+        "candles": "Chandeliers"
+      },
+      "caption": "Légende",
+      "defaultTitle": "{{code}} · cours {{period}}",
+      "frozen": "Les cours d'aujourd'hui sont copiés dans la publication : le graphique ne bougera plus.",
+      "insert": "Insérer le graphique",
+      "missing": "Ce graphique n'est plus disponible."
+    },
+    "link": {
+      "title": "Lien",
+      "url": "Adresse",
+      "invalid": "Une adresse commençant par https://, http:// ou mailto:.",
+      "apply": "Appliquer",
+      "remove": "Retirer le lien"
+    },
+    "image": {
+      "type": "{{name}} : une image PNG, JPEG, WebP ou GIF seulement.",
+      "size": "{{name}} dépasse {{size}}."
+    },
+    "save": {
+      "savedAt": "Enregistré à {{time}}",
+      "savedOn": "Enregistré le {{date}} à {{time}}",
+      "saving": "Enregistrement…",
+      "unsaved": "Modifications non enregistrées",
+      "failed": "Non enregistré : pas de connexion",
+      "invalid": "Non enregistré : voir les champs en rouge",
+      "conflict": "Enregistrée ailleurs entre-temps",
+      "reload": "Recharger",
+      "leftUnsaved": "{{title}} : les dernières modifications n'ont pas pu être enregistrées."
+    },
+    "preview": {
+      "open": "Aperçu lecteur",
+      "title": "Aperçu lecteur",
+      "before": "Avant achat",
+      "after": "Après achat"
+    },
+    "settings": {
+      "access": "Accès",
+      "free": "Gratuit",
+      "paid": "Payant",
+      "staysFree": "Déjà lue gratuitement : elle reste gratuite.",
+      "price": "Prix (XAF)",
+      "range": "Fourchette : {{min}} à {{max}} XAF",
+      "studentPrice": "Prix étudiant (XAF)",
+      "optional": "Facultatif",
+      "freeAfter": "Gratuite automatiquement après",
+      "months": "mois",
+      "rating": "Recommandation",
+      "outlook": "Perspective",
+      "ratings": {
+        "buy": "Achat",
+        "hold": "Conserver",
+        "sell": "Vente",
+        "positive": "Positive",
+        "stable": "Stable",
+        "negative": "Négative"
+      },
+      "target": "Objectif de cours (XAF)",
+      "horizon": "Horizon",
+      "reference": "Cours de référence",
+      "referenceHint": "Le dernier cours, fixé à nouveau à la publication.",
+      "dataDate": "Date des données utilisées",
+      "disclosures": "Mentions obligatoires",
+      "moderation": {
+        "before": "Modération : approbation avant publication",
+        "after": "Modération : revue après publication"
+      }
+    },
+    "disclosures": {
+      "conflicts_company": "Aucune action {{code}} détenue (déclaré)",
+      "conflicts_country": "Aucun conflit d'intérêts (déclaré)",
+      "disclaimer": "Avertissement : pas un conseil personnalisé",
+      "sources": "Sources et dates des données citées"
+    },
+    "attachment": {
+      "file": "Pièce jointe : {{name}} ({{size}})",
+      "add": "Joindre un PDF",
+      "remove": "Retirer {{name}}"
+    },
+    "submit": {
+      "submit": "Soumettre",
+      "update": "Publier la mise à jour",
+      "hint": "Soumission possible une fois les {{count}} mentions cochées.",
+      "updateHint": "Publication possible une fois les {{count}} mentions cochées.",
+      "noChange": "Aucun changement depuis la version {{version}}.",
+      "published": "{{title}} est publiée.",
+      "updated": "{{title}} : la nouvelle version est publiée et ses acheteurs sont prévenus.",
+      "pending": "{{title}} attend le modérateur."
+    },
+    "status": {
+      "pending": "En modération : un modérateur l'approuve avant sa publication.",
+      "archived": "Archivée : {{reason}}",
+      "published": "Publiée · version {{version}} du {{date}}. Vos modifications deviennent une nouvelle version une fois publiées."
+    },
+    "archive": {
+      "archive": "Archiver…",
+      "withdraw": "Retirer…",
+      "archiveTitle": "Archiver cette publication",
+      "withdrawTitle": "Retirer cette publication",
+      "archiveMessage": "Elle quitte vos brouillons et personne ne peut la lire.",
+      "withdrawMessage": "Elle quitte la bibliothèque ; ses acheteurs gardent la version achetée.",
+      "done": "{{title}} est archivée."
+    },
+    "errors": {
+      "subjectRequired": "Choisissez la société ou le pays.",
+      "titleRequired": "Donnez un titre.",
+      "titleLength": "{{max}} caractères au plus.",
+      "summaryRequired": "Rédigez le résumé visible avant achat.",
+      "summaryLength": "{{max}} caractères au plus.",
+      "bodyRequired": "Rédigez la publication.",
+      "ratingRequired": "Choisissez une recommandation.",
+      "outlookRequired": "Choisissez une perspective.",
+      "dataDateRequired": "Donnez la date des données utilisées.",
+      "disclosuresRequired": "Cochez toutes les mentions obligatoires.",
+      "positive": "Un cours positif.",
+      "horizonRange": "De 1 à {{horizon}} mois.",
+      "readFree": "Déjà lue gratuitement : elle reste gratuite.",
+      "priceRequired": "Fixez le prix.",
+      "priceRange": "Entre {{min}} et {{max}} XAF.",
+      "studentMin": "Au moins {{min}} XAF.",
+      "studentBelow": "Inférieur au prix.",
+      "freeAfterRange": "De 1 à {{months}} mois."
+    },
+    "earnings": {
+      "month": "Mois",
+      "reads": "Lectures",
+      "sales": "Ventes",
+      "revenue": "Chiffre d'affaires",
+      "commission": "Commission CMarket",
+      "net": "Net à payer",
+      "score": "Note moyenne",
+      "scoreValue_one": "{{score}} / 5 ({{count}} avis)",
+      "scoreValue_other": "{{score}} / 5 ({{count}} avis)",
+      "followers": "Abonnés",
+      "xaf": "{{amount}} XAF"
+    },
+    "payouts": {
+      "title": "Versements mensuels",
+      "empty": "Aucune vente pour l'instant.",
+      "accruing": "En cours",
+      "due": "À verser",
+      "paid": "Versé",
+      "paidOn": "Versé le {{date}}"
+    },
+    "approval": {
+      "title": "Statut d'analyste en attente d'approbation",
+      "waiting": "Un administrateur vérifie votre identité, votre parcours et vos éventuels agréments avant que vous publiiez des études. Vous serez prévenu dès que votre statut sera approuvé.",
+      "rejectedTitle": "Statut d'analyste refusé",
+      "rejected": "Un administrateur a refusé votre demande de statut d'analyste. Contactez CMarket pour en connaître la raison ou envoyer de nouveaux documents."
+    }
+  }
+}

@@ -1,0 +1,314 @@
+{
+  "market": {
+    "movers": {
+      "gainers": "Gainers",
+      "losers": "Losers",
+      "volume": "Volume"
+    },
+    "newsTopics": {
+      "all": "All",
+      "issuer": "Issuers",
+      "regulator": "Regulator"
+    },
+    "next7Days": "Next 7 days",
+    "eventTypes": {
+      "session": "Session",
+      "auction": "Auction",
+      "dividend": "Dividend",
+      "meeting": "Meeting",
+      "maturity": "Maturity",
+      "earnings": "Earnings"
+    },
+    "summary": {
+      "advancers": "Advancers",
+      "decliners": "Decliners",
+      "unchanged": "Unchanged",
+      "valueTraded": "Value traded"
+    },
+    "fixedPeg": "fixed peg",
+    "add": "Add",
+    "noAlertsToday": "No alert triggered today"
+  },
+  "security": {
+    "types": {
+      "equity": "Ordinary share",
+      "bond": "Bond"
+    },
+    "tabsLabel": "Security functions",
+    "tabs": {
+      "des": "Profile",
+      "gp": "Chart",
+      "fa": "Fundamentals",
+      "dvd": "Dividends",
+      "n": "News",
+      "doc": "Documents",
+      "hds": "Shareholders",
+      "ana": "Research"
+    },
+    "figures": {
+      "open": "Open",
+      "high": "High",
+      "low": "Low",
+      "volume": "Volume",
+      "marketCap": "Market cap",
+      "pe": "P/E",
+      "yield": "Yield",
+      "coupon": "Coupon",
+      "maturity": "Maturity"
+    },
+    "delayed": "Delayed",
+    "notFound": "No security {{id}}.",
+    "notApplicable": "{{code}} does not apply to {{security}}."
+  },
+  "keyData": {
+    "isin": "ISIN code",
+    "sector": "Sector",
+    "shares": "Shares outstanding",
+    "freeFloat": "Free float",
+    "range52w": "52-week high / low",
+    "beta": "Beta (1Y vs {{index}})",
+    "lastDividend": "Last net dividend",
+    "nextEvent": "Next event",
+    "issuer": "Issuer",
+    "coupon": "Coupon",
+    "issueDate": "Issue date",
+    "maturity": "Maturity",
+    "amortization": "Amortization",
+    "amortizations": {
+      "bullet": "At maturity",
+      "straight": "Straight, {{share}} a year"
+    },
+    "frequencies": {
+      "annual": "annual",
+      "halfYearly": "half-yearly",
+      "quarterly": "quarterly"
+    },
+    "dayCount": "Day count",
+    "outstanding": "Amount outstanding",
+    "insufficientData": "Insufficient data"
+  },
+  "orderBook": {
+    "bestLimits": "Best 5 limits",
+    "bidQty": "Bid qty",
+    "bid": "Bid",
+    "ask": "Ask",
+    "askQty": "Ask qty",
+    "notIncluded": "The order book and the trades of the session are not part of a {{type}} account."
+  },
+  "dividendKinds": {
+    "final": "Final",
+    "interim": "Interim",
+    "special": "Special"
+  },
+  "documents": {
+    "badges": {
+      "pdf": "PDF",
+      "notice": "Notice",
+      "decision": "Decision",
+      "news": "News"
+    },
+    "pages_one": "{{count}} page",
+    "pages_other": "{{count}} pages",
+    "select": "Select a document to read it here.",
+    "search": "Search the documents",
+    "type": "Document type",
+    "allTypes": "All types",
+    "types": {
+      "annual-report": "Annual report",
+      "financial-statements": "Financial statements",
+      "information-note": "Information note",
+      "notice": "Notice",
+      "release": "Release",
+      "decision": "Decision",
+      "articles": "Articles of association"
+    },
+    "noMatch": "No document matches these filters"
+  },
+  "news": {
+    "select": "Select a news item to read it here.",
+    "tabsLabel": "News functions",
+    "tabs": {
+      "news": "News",
+      "documents": "Documents"
+    },
+    "topics": {
+      "all": "All topics",
+      "issuer": "Issuers",
+      "regulator": "Regulators",
+      "market": "Market"
+    },
+    "allCountries": "All countries",
+    "topic": "Topic",
+    "country": "Country",
+    "security": "Filter by security",
+    "related": "Securities concerned",
+    "empty": "No news for these filters"
+  },
+  "shareholders": {
+    "asOf": "As of {{date}}"
+  },
+  "watchlists": {
+    "actions": "Watchlist actions",
+    "newList": "New list",
+    "newTitle": "New watchlist",
+    "editTitle": "Watchlist {{code}}",
+    "settings": "Name and columns",
+    "delete": "Delete the list",
+    "deleteTitle": "Delete {{code}}",
+    "deleteMessage": "Delete the list “{{name}}”? Its securities stay in your other lists.",
+    "deleted": "{{list}} deleted",
+    "name": "Name",
+    "nameRequired": "Give the list a name",
+    "columns": "Columns",
+    "codeAlwaysShown": "The security code is always shown.",
+    "columnNames": {
+      "name": "Security name",
+      "last": "Last",
+      "change": "Change",
+      "changePct": "Change %",
+      "volume": "Volume",
+      "sparkline": "5-day chart"
+    },
+    "startsWith_one": "{{codes}} will be in the new list.",
+    "startsWith_other": "{{codes}} will be in the new list.",
+    "create": "Create",
+    "created": "{{list}} created",
+    "saved": "{{list}} saved",
+    "saveFailed": "Watchlist not saved: {{message}}",
+    "addPlaceholder": "Add a security: code or name",
+    "addTo": "Add a security to {{code}}",
+    "added": "{{security}} added to {{list}}",
+    "removed": "{{security}} removed from {{list}}",
+    "removeFrom": "Remove from {{code}}",
+    "emptyList": "No security yet: use + Add, or right-click a security in any table.",
+    "noList": "No watchlist yet"
+  },
+  "alerts": {
+    "newAlert": "New alert",
+    "newTitle": "New alert",
+    "editTitle": "Edit the alert",
+    "create": "Create",
+    "created": "Alert created",
+    "saved": "Alert saved",
+    "deleted": "Alert deleted",
+    "saveFailed": "Alert not saved: {{message}}",
+    "quotaUsed": "{{used}} of {{quota}} alerts used ({{type}} account)",
+    "quotaUnlimited": "{{used}} alerts, no limit",
+    "quotaReached": "Your account allows {{quota}} alerts. Delete one to set another.",
+    "quotaShort": "{{used}} / {{quota}}",
+    "type": "Type",
+    "types": {
+      "price": "Price or change",
+      "volume": "Unusual volume",
+      "release": "Issuer release",
+      "auction": "Auction results",
+      "portfolio": "Portfolio limit",
+      "publication": "New research"
+    },
+    "publicationAbout": "Research",
+    "about": {
+      "analysts": "Followed analysts",
+      "security": "On a security",
+      "country": "On a country"
+    },
+    "security": "Security",
+    "metric": "Watch",
+    "metrics": {
+      "price": "Price",
+      "changePct": "Change %"
+    },
+    "direction": "Goes",
+    "directionOptions": {
+      "above": "Above",
+      "below": "Below"
+    },
+    "directions": {
+      "above": "above",
+      "below": "below"
+    },
+    "threshold": "Threshold",
+    "lastQuote": "Last {{last}} · {{change}} today",
+    "multiple": "Volume above",
+    "multipleHint": "times the 20-day average volume",
+    "country": "Country",
+    "allCountries": "All CEMAC countries",
+    "chooseCountry": "Choose a country",
+    "portfolioHint": "Goes off when a limit of the portfolio is breached at a valuation: weight of one issuer, volatility, drawdown, beta or bond duration.",
+    "channels": "Send by",
+    "channelNames": {
+      "push": "Push",
+      "email": "E-mail",
+      "sms": "SMS"
+    },
+    "enabled": "Alert on",
+    "errors": {
+      "required": "Required",
+      "positive": "Must be above 0",
+      "aboveOne": "Must be above 1",
+      "channels": "Choose at least one channel"
+    },
+    "conditions": {
+      "price": "Price {{direction}} {{threshold}}",
+      "changePct": "Change {{direction}} {{threshold}}",
+      "volume": "Volume above {{multiple}}× the 20-day average",
+      "release": "New release from the issuer",
+      "auction": "Results of a BEAC auction",
+      "portfolio": "A portfolio limit is breached",
+      "publication": {
+        "analysts": "New research from a followed analyst",
+        "security": "New research on the security",
+        "country": "New research on the country"
+      }
+    },
+    "subjects": {
+      "portfolios": "My portfolios",
+      "analysts": "Followed analysts"
+    },
+    "edit": "Edit",
+    "turnOn": "Turn on",
+    "turnOff": "Turn off",
+    "delete": "Delete",
+    "deleteTitle": "Delete the alert",
+    "deleteMessage": "Delete the alert {{alert}}?",
+    "toggleLabel": "Alert {{alert}} on",
+    "never": "Never",
+    "noAlerts": "No alert yet: create one here, or right-click a security in any table.",
+    "historyEmpty": "No alert has gone off yet",
+    "unread": "Unread",
+    "portfolio": "Portfolio",
+    "allPortfolios": "All my portfolios",
+    "channelsTo": "E-mail to {{email}}, SMS to {{phone}}.",
+    "smsNeedsPhone": "E-mail to {{email}}. For SMS, add a mobile phone in Settings (CFG)."
+  },
+  "calendar": {
+    "views": {
+      "day": "Day",
+      "week": "Week"
+    },
+    "previous": "Previous",
+    "next": "Next",
+    "today": "Today",
+    "types": "Event types",
+    "allCountries": "All countries",
+    "country": "Country",
+    "weekOf": "Week of {{date}}",
+    "noEvents": "No event",
+    "noSession": "No session",
+    "openSecurity": "Double-click or Enter opens the security profile"
+  },
+  "auctions": {
+    "bta_one": "BTA {{count}} wk",
+    "bta_other": "BTA {{count}} wk",
+    "ota_one": "OTA {{count}} yr",
+    "ota_other": "OTA {{count}} yr",
+    "allCountries": "All countries",
+    "instruments": {
+      "all": "BTA + OTA",
+      "BTA": "BTA",
+      "OTA": "OTA"
+    },
+    "filters": "Filters:",
+    "country": "Country",
+    "instrument": "Instrument"
+  }
+}

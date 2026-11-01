@@ -30,3 +30,9 @@ test-results
 /docs/
 # Sessions saved by the Playwright setup
 e2e/.auth/
+
+# Claude Code: settings, hooks and instructions stay on each machine
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+.mcp.json

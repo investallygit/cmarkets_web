@@ -1,0 +1,245 @@
+{
+  "auth": {
+    "email": "E-mail address",
+    "password": "Password",
+    "confirmPassword": "Confirm the password",
+    "passwordRule": "At least 8 characters, with a letter and a digit.",
+    "footer": "© CMarket · Douala · CEMAC markets",
+    "ended": {
+      "logout": "You are logged out.",
+      "expired": "Your session has expired: log in again.",
+      "inactivity": "You were logged out after 30 minutes without activity."
+    },
+    "login": {
+      "title": "Log in to CMarket",
+      "subtitle": "Prices, analysis and research on the CEMAC markets.",
+      "submit": "Log in",
+      "forgot": "Forgot your password?",
+      "noAccount": "New to CMarket?",
+      "signUp": "Create an account",
+      "wrongCredentials": "Wrong e-mail address or password.",
+      "suspended": "This account is suspended. Contact CMarket.",
+      "locked_one": "Too many wrong passwords: try again in {{count}} minute.",
+      "locked_other": "Too many wrong passwords: try again in {{count}} minutes.",
+      "tooManyAttempts": "Too many attempts: try again later."
+    },
+    "otp": {
+      "sentTo": {
+        "email": "A code was sent by e-mail to {{destination}}.",
+        "sms": "A code was sent by SMS to {{destination}}."
+      },
+      "code": "Code",
+      "validUntil": "Valid until {{time}}.",
+      "verify": "Verify",
+      "back": "Use another account",
+      "resend": "Send a new code",
+      "resendIn": "New code in {{seconds}} s",
+      "wrongCode": "Wrong code.",
+      "wrongCodeLeft_one": "Wrong code: {{count}} attempt left.",
+      "wrongCodeLeft_other": "Wrong code: {{count}} attempts left.",
+      "expired": "This code has expired: ask for a new one.",
+      "tooManyAttempts": "Too many wrong codes: ask for a new one."
+    },
+    "signUp": {
+      "title": "Create an account",
+      "subtitle": "Every module of your account type, free for 14 days.",
+      "accountType": "Account type",
+      "types": {
+        "student": "Finance students and teachers: delayed data, simulated portfolios, research.",
+        "analyst": "Publish research on a company or a country, free or paid.",
+        "manager": "Manage, value and track portfolios; client reports.",
+        "trader": "Real-time prices, order book, intraday charts and alerts."
+      },
+      "name": "Full name",
+      "phone": "Mobile phone",
+      "phoneHint": "Optional: for SMS alerts and codes.",
+      "organization": "Organisation",
+      "organizationHint": "Optional: opens an account for your colleagues too.",
+      "studentNote": "With a school e-mail address, no proof is needed; otherwise add a proof of enrolment.",
+      "analystNote": "An Admin checks these documents before your first publication; CMarket is yours meanwhile.",
+      "documents": {
+        "proofOfEnrolment": "Proof of enrolment",
+        "identityDocument": "Identity document",
+        "cv": "CV",
+        "licence": "Licence"
+      },
+      "optional": "{{label}} (optional)",
+      "terms": "I accept the terms of use and the privacy policy.",
+      "submit": "Create the account",
+      "haveAccount": "Already have an account?",
+      "logIn": "Log in",
+      "errors": {
+        "required": "Required.",
+        "email": "An e-mail address, e.g. name@company.cm.",
+        "password": "At least 8 characters, with a letter and a digit.",
+        "mismatch": "The two passwords differ.",
+        "phone": "A phone number, e.g. +237 6 70 12 34 56.",
+        "terms": "Accept the terms of use."
+      }
+    },
+    "reset": {
+      "title": "Reset the password",
+      "intro": "Give the e-mail address of your account: a code will be sent to it.",
+      "send": "Send the code",
+      "sent": "If an account uses {{email}}, a code was sent to it, valid 15 minutes.",
+      "newPassword": "New password",
+      "submit": "Set the password",
+      "again": "Send a new code",
+      "done": "Your password is changed, and your sessions on other devices are closed.",
+      "toLogin": "Back to the login"
+    },
+    "prototype": {
+      "code": "Prototype: the code sent is",
+      "fill": "Fill in",
+      "accounts": "Prototype: demo accounts, password {{password}}"
+    }
+  },
+  "settings": {
+    "saved": "Saved",
+    "profile": {
+      "email": "E-mail (login)",
+      "accountType": "Account type",
+      "organization": "Organisation",
+      "individual": "Individual account",
+      "analystStatus": {
+        "pending": "awaiting approval",
+        "approved": "approved",
+        "rejected": "not approved"
+      },
+      "name": "Name",
+      "phone": "Mobile phone",
+      "phoneHint": "For SMS alerts and, if chosen, the login codes.",
+      "language": "Language",
+      "timeZone": "Time zone",
+      "timeZoneHint": "Dates and times show in it; the session clock stays in Douala time."
+    },
+    "security": {
+      "currentPassword": "Current password",
+      "changePassword": "Change the password",
+      "passwordChanged": "Password changed",
+      "wrongPassword": "Wrong password.",
+      "twoFactor": "Login codes",
+      "channels": {
+        "email": "By e-mail",
+        "sms": "By SMS"
+      },
+      "codesByEmail": "Each login asks for a code sent to {{email}}.",
+      "codesBySms": "Each login asks for a code sent by SMS to {{phone}}.",
+      "smsNeedsPhone": "SMS needs a mobile phone in the profile.",
+      "inactivity_one": "CMarket logs you out after {{count}} minute without activity. A new password closes your sessions on other devices.",
+      "inactivity_other": "CMarket logs you out after {{count}} minutes without activity. A new password closes your sessions on other devices."
+    }
+  },
+  "subscription": {
+    "xaf": "XAF {{amount}}",
+    "current": "Current plan",
+    "currentTag": "Current",
+    "none": "No plan covers this account: choose one below.",
+    "status": {
+      "trial": "Free trial until {{date}}",
+      "active": "Paid {{cycle}}, renews on {{date}}",
+      "expired": "Ended on {{date}}"
+    },
+    "cycles": {
+      "monthly": "monthly",
+      "yearly": "yearly"
+    },
+    "yearlySaving": "Yearly −{{pct}}%",
+    "paidByUser": "Paid by you",
+    "paidByOrganization_one": "Paid by your organisation for {{count}} user",
+    "paidByOrganization_other": "Paid by your organisation for {{count}} users",
+    "noModule": "no module",
+    "invoiceDue": "An invoice is due by bank transfer: see the invoices.",
+    "managedByAdmins": "Your organisation's administrators choose its plan.",
+    "plans": "Plans",
+    "plan": "Plan",
+    "pricePer": {
+      "monthly": "Per user, month",
+      "yearly": "Per user, year"
+    },
+    "included": "Included",
+    "notIncluded": "Not included",
+    "choose": "Choose",
+    "chooseNamed": "Choose {{plan}}",
+    "trialBadge_one": "Trial · {{count}} day",
+    "trialBadge_other": "Trial · {{count}} days",
+    "locked": {
+      "title": "The {{module}} module is not in your plan.",
+      "detail": "Choose a plan with it in Settings, or ask your organisation's administrator.",
+      "seePlans": "See the plans",
+      "menuTitle": "{{screen}}: not in your plan ({{module}})"
+    },
+    "methods": {
+      "card": "Card",
+      "mobileMoney": "Mobile money",
+      "transfer": "Bank transfer"
+    },
+    "checkout": {
+      "title": "{{plan}} plan",
+      "perUser_one": "{{count}} user × {{price}}, {{cycle}}",
+      "perUser_other": "{{count}} users × {{price}}, {{cycle}}",
+      "vat": "VAT {{rate}}%",
+      "total": "Total",
+      "pay": "Pay {{amount}}",
+      "getInvoice": "Get the invoice",
+      "hints": {
+        "card": "You confirm the payment on the provider's secure page; the plan starts once it is confirmed.",
+        "mobileMoney": "MTN Mobile Money or Orange Money: approve the payment on your phone; the plan starts once the operator confirms it.",
+        "transfer": "The plan starts now; the invoice, with CMarket's bank details, is due within 15 days."
+      },
+      "approveOnPhone": "Approve the payment of {{amount}} on your phone. The plan starts as soon as your operator confirms it.",
+      "confirmingCard": "Confirming the card payment of {{amount}}…",
+      "confirmed": "Payment confirmed: your new plan is active.",
+      "closeAndWait": "Close and wait",
+      "transferIssued": "Your plan is active. Pay the invoice by transfer, with its reference:"
+    }
+  },
+  "organization": {
+    "individual": "An individual account. An organisation account groups the colleagues of a company or a school: its administrators invite them and choose the plan.",
+    "summary_one": "{{count}} member",
+    "summary_other": "{{count}} members",
+    "yourRole": {
+      "admin": "you are an administrator",
+      "member": "you are a member"
+    },
+    "you": "you",
+    "role": "Role",
+    "roles": {
+      "admin": "Administrator",
+      "member": "Member"
+    },
+    "invitedOn": "Invited {{date}}",
+    "inviteEmail": "Invite by e-mail",
+    "invitePlaceholder": "name@company.cm",
+    "invite": "Invite",
+    "alreadyMember": "{{email}} is already a member or invited.",
+    "menuHint": "Right-click a member to change the role or remove them.",
+    "adminsOnly": "The organisation's administrators invite and remove members.",
+    "makeAdmin": "Make administrator",
+    "makeMember": "Make member",
+    "remove": "Remove from the organisation",
+    "withdraw": "Withdraw the invitation",
+    "removeMessage": "{{name}} keeps the account but leaves the organisation and its plan.",
+    "withdrawMessage": "The invitation sent to {{email}} will no longer work."
+  },
+  "invoices": {
+    "number": "Number",
+    "description": "Description",
+    "total": "Total XAF",
+    "plan": "{{plan}} plan, {{cycle}}, {{from}} to {{to}}",
+    "publication": "Research: {{title}}",
+    "status": {
+      "paid": "Paid",
+      "due": "Due",
+      "void": "Cancelled"
+    },
+    "dueBy": "Due {{date}}",
+    "dueOn": "Due on",
+    "bank": "Bank",
+    "reference": "Reference",
+    "download": "Download invoice {{number}} in PDF",
+    "pdf": "PDF",
+    "downloadHint": "Select an invoice to download it in PDF.",
+    "none": "No invoice yet."
+  }
+}

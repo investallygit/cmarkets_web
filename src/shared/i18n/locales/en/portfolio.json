@@ -1,0 +1,332 @@
+{
+  "portfolio": {
+    "tabsLabel": "Portfolio tabs",
+    "tabs": {
+      "positions": "Positions",
+      "transactions": "Transactions",
+      "performance": "Performance",
+      "risk": "Risk",
+      "income": "Income",
+      "reports": "Reports"
+    },
+    "newTransaction": "New transaction",
+    "editAllocation": "Edit allocation",
+    "points": "pts",
+    "kinds": {
+      "real": "Real",
+      "model": "Model"
+    },
+    "empty": {
+      "message": "No portfolio yet. Create one per client, fund or strategy, with its currency, benchmark and limits.",
+      "student": "No portfolio yet. A Student account simulates allocations: create a model portfolio."
+    },
+    "selector": {
+      "label": "Portfolio",
+      "new": "New portfolio…",
+      "quotaReached": "New portfolio: {{quota}} at most",
+      "settings": "Portfolio settings…",
+      "delete": "Delete portfolio…"
+    },
+    "header": {
+      "totalValue": "Total value",
+      "dayChange": "Day chg.",
+      "ytd": "YTD perf.",
+      "benchmarkYtd": "Benchmark YTD",
+      "outperformance": "Outperformance",
+      "cash": "Cash",
+      "upcomingIncome": "Upcoming income (3 months)"
+    },
+    "positions": {
+      "averageCost": "Avg cost",
+      "dayChange": "Day chg.",
+      "value": "Value ({{currency}})",
+      "unrealized": "Unrealized +/-",
+      "unrealizedAmount": "{{amount}} {{currency}}",
+      "weight": "Weight",
+      "aboveLimit": "Above the {{limit}} limit on one issuer",
+      "stale": "Stale",
+      "staleHint": "Stale price: no trade today, the price of the last session is carried forward",
+      "cash": "Cash {{currency}}",
+      "export": "Export",
+      "import": "Import CSV",
+      "buy": "Buy {{code}}…",
+      "sell": "Sell {{code}}…",
+      "empty": "No position yet."
+    },
+    "ranges": {
+      "ytd": "YTD",
+      "1y": "1Y",
+      "3y": "3Y",
+      "inception": "Inception"
+    },
+    "periods": {
+      "day": "Day",
+      "mtd": "Month to date",
+      "ytd": "Year to date",
+      "1y": "1 year",
+      "3y": "3 years",
+      "inception": "Since inception"
+    },
+    "performance": {
+      "noHistory": "Not enough valuations yet to measure a performance.",
+      "portfolio": "Portfolio",
+      "portfolioBase": "Portfolio (base 100)",
+      "priceIndex": "{{name}} (price index)",
+      "summary": "From {{from}} to {{to}}: portfolio {{portfolio}}, benchmark {{benchmark}}.",
+      "period": "Period",
+      "twr": "Time-weighted return",
+      "annualized": "Annualized",
+      "outperformance": "Outperformance",
+      "irr": "Money-weighted (IRR)"
+    },
+    "returns": {
+      "period": "Period",
+      "since": "From the valuation of {{date}}",
+      "portfolio": "Portfolio",
+      "benchmark": "Benchmark",
+      "outperformance": "Outperf.",
+      "annualized": "Annualized",
+      "note": "Time-weighted returns, deposits and withdrawals neutralized; benchmark {{benchmark}}, a price index."
+    },
+    "allocation": {
+      "views": {
+        "sector": "Sector",
+        "country": "Country",
+        "asset": "Asset class",
+        "maturity": "Maturity"
+      },
+      "cash": "Cash",
+      "other": "Other",
+      "assets": {
+        "equity": "Equities",
+        "bond": "Bonds"
+      },
+      "maturities": {
+        "0-1": "Bonds under 1 year",
+        "1-3": "Bonds, 1 to 3 years",
+        "3-5": "Bonds, 3 to 5 years",
+        "5-10": "Bonds, 5 to 10 years",
+        "10+": "Bonds over 10 years"
+      },
+      "noMaturity": "Equities (no maturity)"
+    },
+    "risk": {
+      "window": "Rolling 1 year",
+      "insufficient": "insufficient data",
+      "volatility": "Annualized volatility",
+      "indexVolatility": "Index: {{value}}",
+      "drawdown": "Max drawdown",
+      "drawdownDates": "{{peak}} to {{trough}}",
+      "beta": "Beta vs {{index}}",
+      "sharpe": "Sharpe ratio",
+      "riskFree": "risk-free rate {{rate}}",
+      "annualizedReturn": "Annualized return",
+      "trackingError": "Tracking error",
+      "informationRatio": "Information ratio",
+      "var": "1-day VaR 95%",
+      "varAmount": "{{amount}} of the value",
+      "duration": "Bond sleeve duration",
+      "largestIssuer": "Largest issuer exposure",
+      "hhi": "Concentration (HHI)",
+      "lines": "Number of lines",
+      "linesValue_one": "{{count}} security + cash",
+      "linesValue_other": "{{count}} securities + cash",
+      "limit": "limit: {{limit}}",
+      "fewObservations": "{{count}} daily returns: the market metrics need {{minimum}}.",
+      "quietDays": "No quote on {{share}} of the days: volatility and beta are understated."
+    },
+    "limits": {
+      "issuerWeightPct": "Weight of one issuer",
+      "volatilityPct": "Volatility",
+      "drawdownPct": "Drawdown",
+      "beta": "Beta",
+      "durationYears": "Bond sleeve duration",
+      "edit": "Edit",
+      "limit": "Limit",
+      "current": "Current",
+      "maximum": "Maximum",
+      "status": "Status",
+      "years": "{{value}} years"
+    },
+    "limitUnits": {
+      "issuerWeightPct": "%",
+      "volatilityPct": "%",
+      "drawdownPct": "%",
+      "beta": "",
+      "durationYears": "yrs"
+    },
+    "limitStatus": {
+      "none": "No limit",
+      "within": "Within",
+      "breached": "Breached"
+    },
+    "issuers": {
+      "limit": "Limit on one issuer: {{limit}}"
+    },
+    "income": {
+      "amount": "Amount {{currency}}",
+      "kinds": {
+        "dividend": "Dividend",
+        "coupon": "Coupon",
+        "redemption": "Redemption"
+      },
+      "couponAndPrincipal": "Coupon + amort.",
+      "split": "Coupon {{income}} + principal {{principal}}",
+      "noneUpcoming": "No dividend or coupon expected in the next 12 months.",
+      "noneReceived": "No income received in the last 12 months.",
+      "upcomingTotal": "Dividends and coupons in the next 3 months: {{amount}} {{currency}}",
+      "receivedTotal": "Dividends and coupons received this year: {{amount}} {{currency}}"
+    },
+    "transactionTypes": {
+      "buy": "Buy",
+      "sell": "Sell",
+      "subscription": "Subscription",
+      "redemption": "Redemption",
+      "dividend": "Dividend",
+      "coupon": "Coupon",
+      "fees": "Fees",
+      "deposit": "Cash deposit",
+      "withdrawal": "Cash withdrawal"
+    },
+    "transactions": {
+      "fees": "Fees",
+      "amount": "Amount ({{currency}})",
+      "realized": "Realized +/-",
+      "note": "Note",
+      "allTypes": "All types",
+      "typeFilter": "Type of transaction",
+      "edit": "Correct…",
+      "delete": "Delete…",
+      "empty": "No transaction yet.",
+      "model": "A model portfolio has no transactions: its allocation stands for them."
+    },
+    "transactionForm": {
+      "newTitle": "New transaction",
+      "editTitle": "Correct a transaction",
+      "portfolio": "{{name}} · {{currency}}",
+      "type": "Type",
+      "date": "Trade date",
+      "security": "Security",
+      "securityOptional": "Security (optional)",
+      "quantity": "Quantity",
+      "bonds": "Bonds",
+      "price": "Price",
+      "cleanPrice": "Clean price (per 100)",
+      "fees": "Fees",
+      "amount": "Amount ({{currency}})",
+      "note": "Note",
+      "estimate": "Cash: {{amount}} {{currency}}, fees included",
+      "accruedHint": "The accrued interest is added to the clean price.",
+      "record": "Record",
+      "recorded": "{{type}} recorded",
+      "saved": "{{type}} corrected",
+      "errors": {
+        "required": "Required.",
+        "positive": "Above 0.",
+        "wholeNumber": "A whole number.",
+        "future": "Not after today.",
+        "securityType": "Not for this type of security."
+      },
+      "deleteTitle": "Delete the transaction",
+      "deleteMessage": "{{type}} of {{date}} {{security}}: {{amount}}. Positions and performance are computed again without it.",
+      "delete": "Delete",
+      "deleted": "{{type}} deleted",
+      "deleteFailed": "Not deleted: {{message}}"
+    },
+    "import": {
+      "title": "Import transactions",
+      "intro": "One row per transaction, in the columns of the template; all rows are imported, or none.",
+      "template": "Template:",
+      "columns": "Columns {{columns}}. Types: {{types}}. Dates as 2026-10-28 or 28/10/2026.",
+      "file": "CSV or Excel file",
+      "submit": "Import",
+      "done_one": "{{count}} transaction imported ({{from}} to {{to}})",
+      "done_other": "{{count}} transactions imported ({{from}} to {{to}})",
+      "rejected_one": "Nothing imported: {{count}} error to fix in the file.",
+      "rejected_other": "Nothing imported: {{count}} errors to fix in the file.",
+      "rowError": "Line {{line}} · {{column}}: {{message}}"
+    },
+    "form": {
+      "newTitle": "New portfolio",
+      "editTitle": "{{name}}: settings",
+      "name": "Name",
+      "kind": "Kind",
+      "modelOnly": "Model portfolios only for a Student account.",
+      "currency": "Reference currency",
+      "realHint": "Valued from its transactions at market prices.",
+      "modelHint": "Simulates an allocation: bought at the closing prices of the start date and held, without transactions.",
+      "benchmark": "Benchmark",
+      "allocation": "Allocation",
+      "notional": "Amount invested ({{currency}})",
+      "startDate": "Start date",
+      "lineSecurity": "Security of line {{index}}",
+      "lineWeight": "Weight of line {{index}}",
+      "removeLine": "Remove line {{index}}",
+      "addLine": "Add a line",
+      "cash": "Cash {{weight}}",
+      "limits": "Limits, checked at each valuation",
+      "noLimit": "None",
+      "create": "Create",
+      "created": "{{name}} created",
+      "saved": "{{name}} saved",
+      "errors": {
+        "required": "Required.",
+        "positive": "Above 0.",
+        "percent": "100% at most.",
+        "future": "Not after today.",
+        "duplicate": "Already in the allocation.",
+        "noLine": "At least one line.",
+        "overAllocated": "The weights add up to more than 100%."
+      },
+      "deleteTitle": "Delete the portfolio",
+      "deleteMessage": "{{name}} and all its transactions are deleted. Alerts on it no longer go off.",
+      "delete": "Delete",
+      "deleted": "{{name}} deleted",
+      "deleteFailed": "Not deleted: {{message}}"
+    },
+    "reports": {
+      "generateLink": "Generate portfolio PDF report",
+      "locked": "PDF client reports come with a Portfolio manager account.",
+      "title": "Title",
+      "period": "Period",
+      "periods": {
+        "ytd": "YTD",
+        "1y": "1Y",
+        "3y": "3Y",
+        "inception": "Inception",
+        "custom": "Dates"
+      },
+      "from": "From",
+      "to": "To",
+      "sections": "Sections",
+      "sectionNames": {
+        "positions": "Positions",
+        "performance": "Performance",
+        "risk": "Risk",
+        "income": "Income",
+        "transactions": "Transactions"
+      },
+      "comments": "Comments",
+      "commentsHint": "For the client or the investment committee, printed under the title.",
+      "logo": "Company logo (PNG or JPEG)",
+      "generate": "Generate the PDF",
+      "queued": "{{title}}: report on its way",
+      "none": "No report generated since the screen opened.",
+      "running": "Building… {{progress}}%",
+      "statuses": {
+        "queued": "Queued",
+        "running": "Building",
+        "done": "Ready",
+        "failed": "Failed"
+      },
+      "download": "Download {{title}}",
+      "select": "Generate a report, or pick one in the list.",
+      "errors": {
+        "required": "Required.",
+        "order": "Before the end date.",
+        "future": "Not after today.",
+        "sections": "At least one section."
+      }
+    }
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "home": {
+    "nav": {
+      "label": "Sections de la page",
+      "features": "Fonctions",
+      "markets": "Marchés",
+      "audience": "Pour qui",
+      "plans": "Offres"
+    },
+    "cta": {
+      "trial": "Commencer l'essai gratuit",
+      "trialShort": "Essai gratuit",
+      "logIn": "Se connecter",
+      "open": "Ouvrir le terminal"
+    },
+    "hero": {
+      "eyebrow": "BVMAC · BEAC · Europe · États-Unis",
+      "title": "Le terminal financier des marchés de la CEMAC",
+      "lead": "Suivez les actions de la BVMAC et les titres publics des six pays de la CEMAC, analysez sociétés et obligations, gérez vos portefeuilles et lisez des études indépendantes : un seul outil, en français et en anglais."
+    },
+    "preview": {
+      "label": "Le terminal CMarket : indices, graphique de cours, plus fortes variations et courbe des taux, avec des données fictives.",
+      "caption": "Illustration · données fictives",
+      "index": "BVMAC Actions",
+      "curve": "Cameroun",
+      "pause": "Mettre les animations en pause",
+      "play": "Relancer les animations"
+    },
+    "facts": {
+      "label": "CMarket en bref",
+      "countries": {
+        "value": "6",
+        "label": "pays de la CEMAC, avec leurs titres publics et leurs courbes des taux"
+      },
+      "exchange": {
+        "value": "BVMAC",
+        "label": "Actions et obligations de la bourse régionale, à Douala"
+      },
+      "world": {
+        "value": "EODHD",
+        "label": "Marchés européens et américains, dans les mêmes écrans"
+      },
+      "languages": {
+        "value": "FR · EN",
+        "label": "Toute la plateforme en français et en anglais"
+      }
+    },
+    "features": {
+      "eyebrow": "Fonctions",
+      "title": "Trois usages dans un seul outil, et une place de marché des études",
+      "lead": "Suivi, analyse et portefeuilles partagent les mêmes données, les mêmes alertes et la même barre de commande : tapez un titre et un code de fonction, comme sur un terminal.",
+      "codes": "Codes de fonction",
+      "module": "Module {{module}}",
+      "everyAccount": "Tous les comptes",
+      "monitoring": {
+        "title": "Suivre les marchés",
+        "point1": "Cours en temps réel, carnet d'ordres et dernières transactions",
+        "point2": "Actualités, documents des émetteurs et calendrier du marché",
+        "point3": "Alertes sur un cours, un volume, une adjudication ou une publication, dans l'application, par e-mail ou par SMS"
+      },
+      "analysis": {
+        "title": "Analyser les titres",
+        "point1": "Un filtre d'actions sur la valorisation, la rentabilité, le secteur et le pays",
+        "point2": "États financiers et ratios sur plusieurs années, face au secteur",
+        "point3": "Les courbes des taux des six pays et un calculateur obligataire"
+      },
+      "portfolio": {
+        "title": "Gérer des portefeuilles",
+        "point1": "Positions valorisées aux cours du jour, en XAF ou en EUR",
+        "point2": "Performance face à un indice de référence, risque et limites",
+        "point3": "Rapports clients en PDF"
+      },
+      "research": {
+        "title": "Lire et publier des études",
+        "point1": "Des notes sur une société ou un pays, gratuites ou payantes",
+        "point2": "Les analystes que vous suivez, et le bilan de leurs recommandations",
+        "point3": "Les analystes publient avec les graphiques CMarket et sont payés chaque mois"
+      }
+    },
+    "markets": {
+      "eyebrow": "Marchés",
+      "title": "L'Afrique centrale d'abord, et les marchés mondiaux",
+      "lead": "CMarket réunit les données de la CEMAC, chargées chaque jour par son équipe, et les marchés européens et américains.",
+      "cemac": {
+        "title": "Marchés de la CEMAC",
+        "text": "Les cours de la BVMAC et les titres publics de la zone BEAC, publiés chaque jour à partir des fichiers officiels, une fois contrôlés.",
+        "countries": "Pays",
+        "point1": "Actions et obligations de la BVMAC : cours, dividendes, actionnaires et documents",
+        "point2": "Adjudications de bons et d'obligations du Trésor (BTA, OTA) et courbes des taux",
+        "point3": "Taux directeurs de la BEAC et taux de change, parité fixe avec l'euro comprise"
+      },
+      "countries": {
+        "CM": "Cameroun",
+        "GA": "Gabon",
+        "CG": "Congo",
+        "TD": "Tchad",
+        "CF": "République centrafricaine",
+        "GQ": "Guinée équatoriale"
+      },
+      "world": {
+        "title": "Europe et États-Unis",
+        "text": "Actions, indices et devises des marchés européens et américains par EODHD, dans les mêmes écrans que les titres de la CEMAC.",
+        "equities": "Actions",
+        "indices": "Indices",
+        "currencies": "Devises"
+      },
+      "quality": "Chaque fichier passe des contrôles de format et de cohérence avant d'être publié ; un cours erroné est corrigé, et la correction tracée.",
+      "qualityTitle": "Des données contrôlées"
+    },
+    "audience": {
+      "eyebrow": "Pour qui",
+      "title": "Un type de compte pour chaque métier",
+      "lead": "Chaque type de compte ouvre les écrans et les quotas dont il a besoin ; il se choisit à l'inscription.",
+      "student": {
+        "who": "Étudiants et enseignants en finance",
+        "cta": "S'inscrire comme étudiant",
+        "text": "Cours différés, portefeuilles simulés et études, avec l'offre étudiante."
+      },
+      "analyst": {
+        "who": "Analystes, conseillers et chercheurs",
+        "cta": "S'inscrire comme analyste",
+        "text": "Données historiques, ratios et exports ; des études à publier sur une société ou un pays, gratuites ou payantes."
+      },
+      "manager": {
+        "who": "Gérants d'actifs et de fonds, assureurs et caisses de retraite",
+        "cta": "S'inscrire comme gérant",
+        "text": "Des portefeuilles valorisés et suivis, la performance mesurée, et des rapports pour vos clients."
+      },
+      "trader": {
+        "who": "Sociétés de bourse, banques et salles de marché",
+        "cta": "S'inscrire comme trader",
+        "text": "Cours en temps réel, carnet d'ordres, graphiques intraday et alertes, et le marché des titres publics."
+      },
+      "organization": "Un compte organisation réunit vos collègues sous une même offre, payée par l'organisation."
+    },
+    "plans": {
+      "eyebrow": "Offres",
+      "title": "Un prix par utilisateur, et 14 jours offerts pour commencer",
+      "lead": "Chaque compte commence par 14 jours de tous les modules de son type. Choisissez ensuite une offre, au mois ou à l'année.",
+      "cycle": "Facturation",
+      "monthly": "Au mois",
+      "perMonth": "par utilisateur et par mois, HT",
+      "perYear": "par utilisateur et par an, HT",
+      "monthlyEquivalent": "Soit {{amount}} par mois",
+      "for": "Pour {{types}}",
+      "start": "Commencer l'essai",
+      "seeMine": "Voir mon offre",
+      "payment": "Paiement par carte, mobile money ou virement sur facture. Prix hors TVA ({{rate}} %)."
+    },
+    "trust": {
+      "title": "Pourquoi CMarket",
+      "independent": {
+        "title": "Indépendant",
+        "text": "CMarket ne transmet aucun ordre et ne détient aucun fonds de clients : il fournit des données, des outils d'analyse, le suivi de portefeuilles et des études."
+      },
+      "secure": {
+        "title": "Connexion sécurisée",
+        "text": "Un mot de passe et un code à usage unique par e-mail ou SMS, puis une déconnexion automatique après une période d'inactivité."
+      },
+      "audited": {
+        "title": "Traçable",
+        "text": "Chaque fichier est contrôlé avant d'être publié, et chaque action du back-office est inscrite au journal d'audit."
+      }
+    },
+    "closing": {
+      "title": "Essayez CMarket pendant 14 jours",
+      "text": "Tous les modules de votre type de compte, gratuitement ; puis l'offre de votre choix."
+    },
+    "footer": {
+      "label": "Liens",
+      "sources": "Données : fichiers de la BVMAC et de la BEAC ; EODHD pour l'Europe et les États-Unis.",
+      "photos": "Photos : Pexels"
+    }
+  }
+}

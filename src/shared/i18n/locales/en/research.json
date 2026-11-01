@@ -1,0 +1,382 @@
+{
+  "publication": {
+    "free": "Free",
+    "priceXaf": "{{price}} XAF",
+    "target": "target {{price}}",
+    "ratings": {
+      "buy": "Buy",
+      "hold": "Hold",
+      "sell": "Sell",
+      "positive": "Positive outlook",
+      "stable": "Stable outlook",
+      "negative": "Negative outlook"
+    },
+    "score": "Readers' rating",
+    "scoreCount_one": "{{count}} rating",
+    "scoreCount_other": "{{count}} ratings",
+    "subjectTypes": {
+      "company": "Company",
+      "country": "Sov."
+    },
+    "chart": {
+      "caption": "CMarket chart · {{title}} · frozen at {{date}}"
+    },
+    "pages_one": "{{count}} page",
+    "pages_other": "{{count}} pages",
+    "updated": "Updated {{date}} · version {{version}}",
+    "reference": "Reference price {{price}}",
+    "upside": "upside {{upside}}",
+    "dataDate": "Data as of {{date}}",
+    "summary": "Summary",
+    "contents": "Contents",
+    "locked": "locked",
+    "watermark": "{{name}} · bought on {{date}}",
+    "disclosures": {
+      "title": "Disclosures",
+      "conflicts": "The analyst declares no conflict of interest with the subject.",
+      "reference": "Reference price: XAF {{price}} on {{date}}.",
+      "dataDate": "Data as of {{date}}.",
+      "disclaimer": "Not personalized investment advice.",
+      "sources": "Sources and dates of the data are cited in the text."
+    }
+  },
+  "analyst": {
+    "follow": "Follow +",
+    "following": "Following ✓",
+    "publications": "Publications",
+    "score": "Average rating",
+    "scoreValue": "{{score}} / 5",
+    "followers": "Followers",
+    "confirmed": "Ratings confirmed at 12 months",
+    "history": "Ratings against the price 12 months later",
+    "columns": {
+      "date": "Date",
+      "rating": "Rating",
+      "reference": "Ref. price",
+      "after": "12 months",
+      "outcome": "Outcome"
+    },
+    "outcomes": {
+      "confirmed": "Confirmed by the price",
+      "missed": "Not confirmed by the price",
+      "open": "Less than 12 months old"
+    }
+  },
+  "purchase": {
+    "price": "Price",
+    "payment": "Payment",
+    "methods": {
+      "mobileMoney": "Mobile money",
+      "card": "Card"
+    },
+    "buy": "Buy this report — XAF {{price}}",
+    "studentPrice": "Student price, instead of XAF {{price}}",
+    "clientsOnly": "Paid research is bought with a client account: Student, Analyst, Portfolio manager or Trader.",
+    "titles": {
+      "mobileMoney": "Pay by mobile money",
+      "card": "Pay by card"
+    },
+    "amount": "XAF {{price}}",
+    "summary": "{{title}}: {{price}}. Once the payment is confirmed, the full content replaces the preview, with your name as a watermark.",
+    "phone": "Mobile money number",
+    "phoneHint": "MTN Mobile Money or Orange Money. You approve the payment on your phone.",
+    "phoneInvalid": "A mobile money number, e.g. +237 6 70 12 34 56.",
+    "cardHint": "Your card is charged through the payment provider's secure page.",
+    "pay": "Pay {{price}}",
+    "retry": "Try again",
+    "failed": "The payment failed.",
+    "approveOnPhone": "Approve the payment of {{price}} on your phone. The publication opens as soon as your operator confirms it.",
+    "confirmingCard": "Confirming the card payment of {{price}}…",
+    "continueReading": "Close and wait",
+    "confirmed": "Payment confirmed: {{title}} is yours, with its future updates."
+  },
+  "rating": {
+    "rate": "Rate this publication",
+    "yours": "Your rating",
+    "stars_one": "{{count}} star",
+    "stars_other": "{{count}} stars",
+    "thanks": "Thank you for your rating."
+  },
+  "contentReport": {
+    "action": "Report content",
+    "title": "Report this publication",
+    "intro": "The moderators read every report and may take the publication down.",
+    "reason": "Reason",
+    "chooseReason": "Choose a reason",
+    "reasons": {
+      "misleading": "Misleading or false information",
+      "conflict": "Undisclosed conflict of interest",
+      "copyright": "Copied content",
+      "other": "Other"
+    },
+    "reasonRequired": "Choose a reason.",
+    "comment": "Comment",
+    "commentRequired": "Say what is wrong.",
+    "commentTooLong": "{{max}} characters at most.",
+    "send": "Send the report",
+    "sent": "Report sent to the moderators."
+  },
+  "library": {
+    "results_one": "Publications: {{count}} result",
+    "results_other": "Publications: {{count}} results",
+    "tabs": {
+      "all": "All",
+      "purchased": "Purchased",
+      "followed": "Followed analysts"
+    },
+    "empty": {
+      "all": "No publication for these filters.",
+      "purchased": "No publication bought for these filters.",
+      "followed": "No publication from the analysts you follow for these filters."
+    },
+    "by": "by {{name}}",
+    "read": "Read",
+    "bought": "Bought",
+    "updated": "Updated",
+    "choose": "Choose a publication in the list.",
+    "access": {
+      "locked": "Before purchase",
+      "bought": "Purchased",
+      "free": "Free",
+      "own": "Your publication"
+    },
+    "downloadPdf": "Download the PDF",
+    "attachment": "{{name}} ({{size}})",
+    "filters": {
+      "all": "All",
+      "subject": "Subject",
+      "subjects": {
+        "company": "Company",
+        "country": "Country"
+      },
+      "country": "Country",
+      "sector": "Sector",
+      "access": "Access",
+      "accesses": {
+        "free": "Free",
+        "paid": "Paid"
+      },
+      "rating": "Rating",
+      "sort": "Sort by",
+      "sorts": {
+        "recent": "Most recent",
+        "rating": "Best rated",
+        "reads": "Most read",
+        "price": "Lowest price"
+      },
+      "search": "Search a security, a country, an analyst"
+    }
+  },
+  "studio": {
+    "new": {
+      "action": "+ New",
+      "title": "New publication",
+      "create": "Create the draft"
+    },
+    "mine": {
+      "empty": "No publication yet: start one with + New.",
+      "untitled": "Untitled",
+      "changes": "Update draft",
+      "paid": "Paid · XAF {{price}}",
+      "choose": "Choose a publication, or start one with + New."
+    },
+    "statuses": {
+      "draft": "Draft",
+      "pending": "In moderation",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "editor": {
+      "subject": "Subject",
+      "subjectType": "Company or country",
+      "subjects": {
+        "company": "Company",
+        "country": "Country"
+      },
+      "company": "Company",
+      "country": "Country",
+      "chooseCountry": "Choose a country",
+      "title": "Title",
+      "summary": "Summary (always visible for free)",
+      "body": "Text of the publication",
+      "placeholder": "Write the publication: sections as H2 headings, tables, images and CMarket charts."
+    },
+    "toolbar": {
+      "label": "Formatting",
+      "bold": "Bold",
+      "italic": "Italic",
+      "heading": "Heading {{level}}",
+      "list": "List",
+      "table": "Table",
+      "tableHint": "Insert a table",
+      "image": "Image",
+      "imageHint": "Insert an image: PNG, JPEG, WebP or GIF, 2 MB at most",
+      "chart": "CMarket chart",
+      "chartHint": "Insert a CMarket chart, frozen as of today",
+      "link": "Link",
+      "addRow": "Add a row below",
+      "addColumn": "Add a column to the right",
+      "deleteRow": "Delete the row",
+      "deleteColumn": "Delete the column",
+      "deleteTable": "Delete the table"
+    },
+    "chart": {
+      "title": "CMarket chart",
+      "security": "Security",
+      "securityRequired": "Choose a security.",
+      "period": "Period",
+      "type": "Type",
+      "types": {
+        "line": "Line",
+        "candles": "Candles"
+      },
+      "caption": "Caption",
+      "defaultTitle": "{{code}} · {{period}} price",
+      "frozen": "Today's prices are copied into the publication: the chart will not move afterwards.",
+      "insert": "Insert the chart",
+      "missing": "This chart is no longer available."
+    },
+    "link": {
+      "title": "Link",
+      "url": "Address",
+      "invalid": "An address starting with https://, http:// or mailto:.",
+      "apply": "Apply",
+      "remove": "Remove the link"
+    },
+    "image": {
+      "type": "{{name}}: a PNG, JPEG, WebP or GIF image only.",
+      "size": "{{name}} is larger than {{size}}."
+    },
+    "save": {
+      "savedAt": "Saved at {{time}}",
+      "savedOn": "Saved on {{date}} at {{time}}",
+      "saving": "Saving…",
+      "unsaved": "Unsaved changes",
+      "failed": "Not saved: no connection",
+      "invalid": "Not saved: see the fields in red",
+      "conflict": "Saved elsewhere meanwhile",
+      "reload": "Reload",
+      "leftUnsaved": "{{title}}: the last changes could not be saved."
+    },
+    "preview": {
+      "open": "Reader preview",
+      "title": "Reader preview",
+      "before": "Before purchase",
+      "after": "After purchase"
+    },
+    "settings": {
+      "access": "Access",
+      "free": "Free",
+      "paid": "Paid",
+      "staysFree": "Read for free already: it stays free.",
+      "price": "Price (XAF)",
+      "range": "Range: XAF {{min}} to {{max}}",
+      "studentPrice": "Student price (XAF)",
+      "optional": "Optional",
+      "freeAfter": "Automatically free after",
+      "months": "months",
+      "rating": "Rating",
+      "outlook": "Outlook",
+      "ratings": {
+        "buy": "Buy",
+        "hold": "Hold",
+        "sell": "Sell",
+        "positive": "Positive",
+        "stable": "Stable",
+        "negative": "Negative"
+      },
+      "target": "Target price (XAF)",
+      "horizon": "Horizon",
+      "reference": "Reference price",
+      "referenceHint": "The latest price, set again when the publication goes out.",
+      "dataDate": "Date of the data used",
+      "disclosures": "Mandatory disclosures",
+      "moderation": {
+        "before": "Moderation: approval before publication",
+        "after": "Moderation: post-publication review"
+      }
+    },
+    "disclosures": {
+      "conflicts_company": "No {{code}} shares held (declared)",
+      "conflicts_country": "No conflict of interest (declared)",
+      "disclaimer": "Disclaimer: not personal advice",
+      "sources": "Sources and dates of data cited"
+    },
+    "attachment": {
+      "file": "Attachment: {{name}} ({{size}})",
+      "add": "Attach a PDF",
+      "remove": "Remove {{name}}"
+    },
+    "submit": {
+      "submit": "Submit",
+      "update": "Publish update",
+      "hint": "Submission enabled once all {{count}} disclosures are ticked.",
+      "updateHint": "Publishing enabled once all {{count}} disclosures are ticked.",
+      "noChange": "No change since version {{version}}.",
+      "published": "{{title}} is published.",
+      "updated": "{{title}}: the new version is published and its buyers are told.",
+      "pending": "{{title}} is waiting for the moderator."
+    },
+    "status": {
+      "pending": "In moderation: a moderator approves it before it is published.",
+      "archived": "Archived: {{reason}}",
+      "published": "Published · version {{version}} of {{date}}. Your changes become a new version once published."
+    },
+    "archive": {
+      "archive": "Archive…",
+      "withdraw": "Withdraw…",
+      "archiveTitle": "Archive this publication",
+      "withdrawTitle": "Withdraw this publication",
+      "archiveMessage": "It leaves your drafts and nobody can read it.",
+      "withdrawMessage": "It leaves the library; its buyers keep the version they bought.",
+      "done": "{{title}} is archived."
+    },
+    "errors": {
+      "subjectRequired": "Choose the company or the country.",
+      "titleRequired": "Give a title.",
+      "titleLength": "{{max}} characters at most.",
+      "summaryRequired": "Write the summary readers see before purchase.",
+      "summaryLength": "{{max}} characters at most.",
+      "bodyRequired": "Write the publication.",
+      "ratingRequired": "Choose a rating.",
+      "outlookRequired": "Choose an outlook.",
+      "dataDateRequired": "Give the date of the data used.",
+      "disclosuresRequired": "Tick every mandatory disclosure.",
+      "positive": "A positive price.",
+      "horizonRange": "From 1 to {{horizon}} months.",
+      "readFree": "Read for free already: it stays free.",
+      "priceRequired": "Set the price.",
+      "priceRange": "Between XAF {{min}} and {{max}}.",
+      "studentMin": "At least XAF {{min}}.",
+      "studentBelow": "Below the price.",
+      "freeAfterRange": "From 1 to {{months}} months."
+    },
+    "earnings": {
+      "month": "Month",
+      "reads": "Reads",
+      "sales": "Sales",
+      "revenue": "Revenue",
+      "commission": "CMarket commission",
+      "net": "Net payable",
+      "score": "Average rating",
+      "scoreValue_one": "{{score}} / 5 ({{count}} review)",
+      "scoreValue_other": "{{score}} / 5 ({{count}} reviews)",
+      "followers": "Followers",
+      "xaf": "{{amount}} XAF"
+    },
+    "payouts": {
+      "title": "Monthly payouts",
+      "empty": "No sale yet.",
+      "accruing": "In progress",
+      "due": "Due",
+      "paid": "Paid",
+      "paidOn": "Paid on {{date}}"
+    },
+    "approval": {
+      "title": "Analyst status awaiting approval",
+      "waiting": "An Admin checks your identity, background and any licence before you publish research. You will be told once your status is approved.",
+      "rejectedTitle": "Analyst status declined",
+      "rejected": "An Admin declined your Analyst status request. Contact CMarket to know why or to send new documents."
+    }
+  }
+}
