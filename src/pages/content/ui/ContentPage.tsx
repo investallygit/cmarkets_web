@@ -1,13 +1,12 @@
-import { ScreenWorkspace } from '@/features/workspace-layout'
+import { ScreenWorkspace, type ScreenPanel } from '@/features/workspace-layout'
 import type { NewsTab } from '@/shared/routes/paths'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
-import type { WorkspaceItem } from '@/shared/ui/Workspace'
 import { ContentEditorPanel, ContentListPanel } from '@/widgets/content-panels'
 
 /** NEWS has no mockup: what was published on the left, the editor on the right. */
-const LAYOUT: readonly WorkspaceItem[] = [
-  { i: 'list', x: 0, y: 0, w: 7, h: 26, minW: 4, minH: 8 },
-  { i: 'editor', x: 7, y: 0, w: 5, h: 26, minW: 4, minH: 12 },
+const LAYOUT: readonly ScreenPanel[] = [
+  { i: 'list', name: 'contentList', x: 0, y: 0, w: 7, h: 26, minW: 4, minH: 8 },
+  { i: 'editor', name: 'contentEditor', x: 7, y: 0, w: 5, h: 26, minW: 4, minH: 12 },
 ]
 
 /**

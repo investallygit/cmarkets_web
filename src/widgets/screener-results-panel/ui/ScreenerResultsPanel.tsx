@@ -210,8 +210,6 @@ export function ScreenerResultsPanel({
   )
 }
 
-const MENU_WIDTH = 216
-
 /** COLUMNS in the title bar: tick the columns to show. */
 function ColumnsMenu() {
   const { t } = useTranslation()
@@ -231,7 +229,7 @@ function ColumnsMenu() {
         onClick={(event) => {
           if (position) return close()
           const rect = event.currentTarget.getBoundingClientRect()
-          setPosition({ x: rect.right - MENU_WIDTH, y: rect.bottom + 4 })
+          setPosition({ x: rect.right, y: rect.bottom + 4 })
         }}
         className="panel-no-drag inline-flex items-center gap-1 uppercase hover:text-primary"
       >
@@ -240,6 +238,7 @@ function ColumnsMenu() {
       </button>
       {position && (
         <ContextMenu
+          align="end"
           x={position.x}
           y={position.y}
           items={RESULT_COLUMNS.map((column) => ({

@@ -222,12 +222,20 @@ test('PAY marks a September payout paid', async ({ page }) => {
   await page.goto('/admin/payouts?month=2026-09&status=due')
   const payouts = panel(page, 'Analyst payouts')
   const ndong = payouts.getByRole('row', { name: /M\. Ndong/ })
+  // The sample sales follow the date (a new month draws more of them), so the amount to pay is
+  // the net of the row, not a figure of a given day.
+  await expect(ndong).toBeVisible()
+  const headers = await payouts.getByRole('columnheader').allTextContents()
+  const net = (
+    await ndong.getByRole('cell').nth(headers.indexOf('Net payable')).textContent()
+  )?.trim()
+  expect(net).toMatch(/^\d{1,3}(,\d{3})*$/)
   // The title bar's button marks the payout selected.
   await expect(payouts.getByRole('button', { name: 'Mark paid' })).toBeDisabled()
   await ndong.click()
   await payouts.getByRole('button', { name: 'Mark paid' }).click()
   const dialog = page.getByRole('dialog', { name: 'Mark the payout paid' })
-  await expect(dialog).toContainText('The transfer of XAF 92,800 to M. Ndong for September 2026')
+  await expect(dialog).toContainText(`The transfer of XAF ${net} to M. Ndong for September 2026`)
   await dialog.getByRole('button', { name: 'Mark paid' }).click()
   await expect(page.getByText('M. Ndong, September 2026: marked paid.')).toBeVisible()
   await expect(ndong).toHaveCount(0)

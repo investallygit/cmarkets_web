@@ -8,5 +8,7 @@ export interface MenuItem {
   icon?: LucideIcon
   checked?: boolean
   disabled?: boolean
+  /** Keys that do the same from anywhere, as aria-keyshortcuts takes them: "Control+Z". */
+  shortcut?: string
   onSelect?: () => void
 }

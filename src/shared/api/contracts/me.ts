@@ -100,8 +100,25 @@ export interface LayoutItemDto {
   h: number
 }
 
-/** GET / PUT /me/layouts/{screen} */
-export interface ScreenLayoutDto {
-  screen: string
+/** How the panels of a screen are arranged, which a layout saved under a name keeps too. */
+export interface LayoutArrangementDto {
+  /** Hidden panels keep theirs, to come back to it. */
   items: LayoutItemDto[]
+  /** Panels the user hid, by id. */
+  hidden?: string[]
+  /** Order of the panels stacked in one column, below 1280 px wide; by default the grid's. */
+  stacked?: string[]
+}
+
+export interface NamedLayoutDto extends LayoutArrangementDto {
+  name: string
+}
+
+/** GET / PUT /me/layouts/{screen} */
+export interface ScreenLayoutDto extends LayoutArrangementDto {
+  screen: string
+  /** Nothing moves until the user unlocks it. */
+  locked?: boolean
+  /** Layouts saved under a name, up to 10, to come back to. */
+  saved?: NamedLayoutDto[]
 }

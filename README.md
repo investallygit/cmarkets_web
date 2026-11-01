@@ -134,11 +134,17 @@ each other; the app shell mounts the form once.
   polled every 5 seconds. `ImportStatusChanged` moves an upload through its checks, and
   `DataPublished` (a file published or rolled back, a price corrected) refreshes the quotes,
   histories, indices, auctions and curves the open screens show.
-- **Layouts**: each page declares its panels and default grid (`pages/*/config`);
-  `features/workspace-layout` saves the user's layout through `GET/PUT /me/layouts/{screen}`.
-  Without dragging, the function code of a panel's title bar opens its layout menu: a column or
-  a panel aside, wider or narrower, taller or shorter, or the screen's default layout back
-  (`PanelLayoutMenu`, `shared/ui/workspaceLayout.ts`).
+- **Layouts**: each page declares its panels, their default grid and their names
+  (`pages/*/config`, `ScreenPanel`); `features/workspace-layout` saves the user's layout through
+  `GET/PUT /me/layouts/{screen}`: the places in the grid, the hidden panels, their order stacked
+  below 1280 px, the lock and up to 10 layouts kept under a name (`lib/arrangement.ts`). The
+  function code of a panel's title bar opens its layout menu (`PanelLayoutMenu`): without
+  dragging, a column or a panel aside, wider or narrower, taller or shorter
+  (`shared/ui/workspaceLayout.ts`), or once stacked a place up or down; then hide the panel or
+  show a hidden one back, undo or redo (also Ctrl + Z and Ctrl + Y, ⌘Z and ⇧⌘Z, wherever no text
+  is typed), lock the layout, the saved layouts, or the screen's default back. A grip before the
+  title and the corner, drawn at rest, show that a panel moves and resizes; a locked layout shows
+  a padlock instead, and stacked panels neither.
 - **Session** (spec section 10): `shared/api/session.ts` keeps the access token (15 minutes) in
   memory only; the refresh token (7 days) is an HttpOnly cookie that `POST /auth/refresh` trades
   for a new access token, at start-up and when a token runs out. A 401 renews the token once and
@@ -184,7 +190,9 @@ focus when nothing in it can), `DataTable` (sorting, right-click menu, Excel and
 `analysis:export`; `exportRef` puts the export links in a title bar; a `footer` row stays out of
 the sorting; `sorting` and `onSortingChange` leave the order to the server for a paged list; the
 arrows move the selection, or a cursor where rows are not selected, Enter opens a row and the
-menu key or Shift + F10 its menu), `ContextMenu` (takes the focus: arrows, Home, End, Escape),
+menu key or Shift + F10 its menu), `ContextMenu` (takes the focus: arrows, Home, End, Escape;
+as wide as its longest entry, up to 400 px, then on two lines; kept inside the window; under a
+button with `align="end"`; an entry's shortcut shown and given as `aria-keyshortcuts`),
 `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and
 drawings; `AreaChart`; both named for screen readers by `useChartLabel`; `useChartTheme`, the section 8 colours for Recharts, which draws in SVG,
 and the `--chart-*` series palette checked for colour-blind separation), `PdfViewer`, `form/`

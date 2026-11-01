@@ -1,14 +1,22 @@
 import { Check } from 'lucide-react'
 import { useEffect, useLayoutEffect, useRef, type KeyboardEvent, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
+import { shortcutLabel } from '@/shared/lib/keyboard'
 import type { MenuItem } from './menu'
 
-const MENU_WIDTH = 216
-const ITEM_HEIGHT = 26
+const MIN_WIDTH = 216
+/**
+ * A long entry ("Show: Latest government securities auctions (BEAC)") widens the menu up to
+ * this, then goes on to a second line.
+ */
+const MAX_WIDTH = 400
+const MARGIN = 4
 
 interface ContextMenuProps {
+  /** Where it opens: its left edge, or its right edge with align "end", as under a button. */
   x: number
   y: number
+  align?: 'start' | 'end'
   items: readonly MenuItem[]
   onClose: () => void
   /** Clicks on this element (e.g. the button that toggles the menu) do not close it. */
@@ -21,11 +29,20 @@ function entriesOf(menu: HTMLElement): HTMLElement[] {
 }
 
 /**
- * Right-click menu of tables, also used as the dropdown of the user badge. It takes the focus on
- * opening: the arrows, Home and End go through the entries, Escape closes it and Tab leaves it;
- * the focus then goes back to where it was, the row or the button that opened it.
+ * Right-click menu of tables, also used as the dropdown of the user badge and of a panel's code.
+ * It takes the focus on opening: the arrows, Home and End go through the entries, Escape closes
+ * it and Tab leaves it; the focus then goes back to where it was, the row or the button that
+ * opened it. An entry with a shortcut shows its keys, which screen readers get as
+ * aria-keyshortcuts.
  */
-export function ContextMenu({ x, y, items, onClose, ignoreRef }: ContextMenuProps) {
+export function ContextMenu({
+  x,
+  y,
+  align = 'start',
+  items,
+  onClose,
+  ignoreRef,
+}: ContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null)
   const openerRef = useRef<HTMLElement | null>(null)
 
@@ -49,6 +66,17 @@ export function ContextMenu({ x, y, items, onClose, ignoreRef }: ContextMenuProp
       window.removeEventListener('blur', onClose)
     }
   }, [onClose, ignoreRef])
+
+  // Before the browser paints, as wide as its longest entry, it goes where it fits whole; taller
+  // than the window, it scrolls.
+  useLayoutEffect(() => {
+    const menu = menuRef.current
+    if (!menu) return
+    const { width, height } = menu.getBoundingClientRect()
+    const left = align === 'end' ? x - width : x
+    menu.style.left = `${Math.max(MARGIN, Math.min(left, window.innerWidth - width - MARGIN))}px`
+    menu.style.top = `${Math.max(MARGIN, Math.min(y, window.innerHeight - height - MARGIN))}px`
+  }, [x, y, align, items.length])
 
   // Before the browser paints: the focus moves in, and back out when the menu closes, unless the
   // user has put it somewhere else meanwhile.
@@ -85,15 +113,15 @@ export function ContextMenu({ x, y, items, onClose, ignoreRef }: ContextMenuProp
     }
   }
 
-  const left = Math.max(4, Math.min(x, window.innerWidth - MENU_WIDTH - 4))
-  const top = Math.max(4, Math.min(y, window.innerHeight - items.length * ITEM_HEIGHT - 8))
-
   return createPortal(
     <div
       ref={menuRef}
       role="menu"
-      style={{ left, top, width: MENU_WIDTH }}
-      className="fixed z-50 border bg-panel-header py-1 font-sans text-data shadow-lg"
+      style={{
+        minWidth: MIN_WIDTH,
+        maxWidth: `min(${MAX_WIDTH}px, calc(100vw - ${2 * MARGIN}px))`,
+      }}
+      className="fixed z-50 max-h-[calc(100vh-8px)] w-max overflow-y-auto border bg-panel-header py-1 font-sans text-data shadow-lg"
       onContextMenu={(event) => event.preventDefault()}
       onKeyDown={onMenuKeyDown}
     >
@@ -119,11 +147,12 @@ export function ContextMenu({ x, y, items, onClose, ignoreRef }: ContextMenuProp
             role="menuitem"
             tabIndex={-1}
             disabled={item.disabled}
+            aria-keyshortcuts={item.shortcut}
             onClick={() => {
               item.onSelect?.()
               onClose()
             }}
-            className="flex h-6.5 w-full items-center gap-2 px-3 text-left text-primary outline-none hover:bg-selected focus-visible:bg-selected disabled:text-secondary disabled:hover:bg-transparent"
+            className="flex min-h-6.5 w-full items-center gap-2 px-3 py-1 text-left text-primary outline-none hover:bg-selected focus-visible:bg-selected disabled:text-secondary disabled:hover:bg-transparent"
           >
             <span className="flex size-3.5 shrink-0 items-center justify-center">
               {item.checked ? (
@@ -132,7 +161,13 @@ export function ContextMenu({ x, y, items, onClose, ignoreRef }: ContextMenuProp
                 Icon && <Icon aria-hidden className="size-3.5 text-secondary" />
               )}
             </span>
-            <span className="truncate">{item.label}</span>
+            <span className="min-w-0 wrap-break-word">{item.label}</span>
+            {/* Screen readers have aria-keyshortcuts. */}
+            {item.shortcut && (
+              <span aria-hidden className="ml-auto pl-2 font-mono text-secondary">
+                {shortcutLabel(item.shortcut)}
+              </span>
+            )}
           </button>
         )
       })}

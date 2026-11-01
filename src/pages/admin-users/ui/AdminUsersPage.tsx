@@ -1,9 +1,8 @@
 import { useNavigate } from 'react-router'
 import { isAccountType } from '@/entities/account'
-import { ScreenWorkspace } from '@/features/workspace-layout'
+import { ScreenWorkspace, type ScreenPanel } from '@/features/workspace-layout'
 import { moderationPath } from '@/shared/routes/paths'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
-import type { WorkspaceItem } from '@/shared/ui/Workspace'
 import { AccountCounters } from '@/widgets/account-counters'
 import { AccountDetailsPanel } from '@/widgets/account-details-panel'
 import { AccountsPanel } from '@/widgets/accounts-panel'
@@ -11,11 +10,11 @@ import { PendingRequestsPanel } from '@/widgets/analyst-requests-panel'
 import { ModerationQueuePanel } from '@/widgets/moderation-queue-panel'
 
 /** Screen 9 mockup: the accounts and their details, then the requests and the moderation queue. */
-const LAYOUT: readonly WorkspaceItem[] = [
-  { i: 'accounts', x: 0, y: 0, w: 8, h: 15, minW: 5, minH: 8 },
-  { i: 'details', x: 8, y: 0, w: 4, h: 15, minW: 3, minH: 8 },
-  { i: 'requests', x: 0, y: 15, w: 6, h: 11, minW: 4, minH: 5 },
-  { i: 'moderation', x: 6, y: 15, w: 6, h: 11, minW: 4, minH: 5 },
+const LAYOUT: readonly ScreenPanel[] = [
+  { i: 'accounts', name: 'accounts', x: 0, y: 0, w: 8, h: 15, minW: 5, minH: 8 },
+  { i: 'details', name: 'accountDetails', x: 8, y: 0, w: 4, h: 15, minW: 3, minH: 8 },
+  { i: 'requests', name: 'analystRequests', x: 0, y: 15, w: 6, h: 11, minW: 4, minH: 5 },
+  { i: 'moderation', name: 'moderationQueue', x: 6, y: 15, w: 6, h: 11, minW: 4, minH: 5 },
 ]
 
 /**

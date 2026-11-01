@@ -1,4 +1,10 @@
-import { cloneLayout, getLayoutItem, moveElement, verticalCompactor } from 'react-grid-layout'
+import {
+  bottom,
+  cloneLayout,
+  getLayoutItem,
+  moveElement,
+  verticalCompactor,
+} from 'react-grid-layout'
 import type { WorkspaceItem } from './Workspace'
 
 type Box = Pick<WorkspaceItem, 'i' | 'x' | 'y' | 'w' | 'h'>
@@ -71,6 +77,35 @@ export function resizePanel(
   item.h = Math.max(item.minH ?? 1, item.h + dh)
   // The panels it now covers move down out of its way.
   return [...verticalCompactor.compact(next, columns)]
+}
+
+/**
+ * The layout packed upwards as the grid packs it, so that the grid, given it, reports no change:
+ * a layout set from the menu, an undo or a saved layout counts as one change, not two.
+ */
+export function compactLayout(layout: readonly WorkspaceItem[], columns: number): WorkspaceItem[] {
+  return [...verticalCompactor.compact(cloneLayout(layout), columns)]
+}
+
+/**
+ * The layout with a hidden panel back at its place, the others making way as for a drag. It
+ * comes from below the grid, where it overlaps nothing: the grid moves nothing for a panel
+ * already where it goes.
+ */
+export function placePanel(
+  layout: readonly WorkspaceItem[],
+  item: WorkspaceItem,
+  columns: number,
+): WorkspaceItem[] {
+  const next = cloneLayout(layout.filter((other) => other.i !== item.i))
+  const placed = { ...item, y: bottom(next) }
+  next.push(placed)
+  return [
+    ...verticalCompactor.compact(
+      moveElement(next, placed, item.x, item.y, true, false, 'vertical', columns),
+      columns,
+    ),
+  ]
 }
 
 /** Whether a panel lies below this one, in some of its columns: Move down takes its place. */

@@ -6,7 +6,6 @@ import {
   type AlertCondition,
   type AuditEntryDto,
   type ChartDrawingDto,
-  type LayoutItemDto,
   type MeDto,
   type ModuleCode,
   type NewsItemDto,
@@ -17,6 +16,7 @@ import {
   type PublicationRulesDto,
   type RolePermissionsDto,
   type SavedScreenDto,
+  type ScreenLayoutDto,
   type TradeDto,
 } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
@@ -884,18 +884,23 @@ function layoutKey(screen: string): string {
   return `cmarket.prototype.layout.${currentAccount().id}.${screen}`
 }
 
-export function readLayout(screen: string): LayoutItemDto[] | undefined {
+/** What the mock keeps of a screen's layout: all of it but the screen's id. */
+export type StoredLayout = Omit<ScreenLayoutDto, 'screen'>
+
+export function readLayout(screen: string): StoredLayout | undefined {
   const stored = readStorage(layoutKey(screen))
   if (!stored) return undefined
   try {
-    return JSON.parse(stored) as LayoutItemDto[]
+    const layout = JSON.parse(stored) as StoredLayout | StoredLayout['items']
+    // Saved before panels could be hidden or layouts named: the positions alone.
+    return Array.isArray(layout) ? { items: layout } : layout
   } catch {
     return undefined
   }
 }
 
-export function writeLayout(screen: string, items: LayoutItemDto[]): void {
-  writeStorage(layoutKey(screen), JSON.stringify(items))
+export function writeLayout(screen: string, layout: StoredLayout): void {
+  writeStorage(layoutKey(screen), JSON.stringify(layout))
 }
 
 function drawingsKey(securityId: string): string {

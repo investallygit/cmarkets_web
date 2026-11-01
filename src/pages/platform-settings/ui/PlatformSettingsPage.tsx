@@ -1,11 +1,10 @@
-import { ScreenWorkspace } from '@/features/workspace-layout'
-import type { WorkspaceItem } from '@/shared/ui/Workspace'
+import { ScreenWorkspace, type ScreenPanel } from '@/features/workspace-layout'
 import { PermissionsPanel, PlatformSettingsPanel } from '@/widgets/platform-settings-panels'
 
 /** ADMCFG has no mockup: the settings on the left, the permission matrix on the right. */
-const LAYOUT: readonly WorkspaceItem[] = [
-  { i: 'settings', x: 0, y: 0, w: 5, h: 26, minW: 4, minH: 10 },
-  { i: 'permissions', x: 5, y: 0, w: 7, h: 26, minW: 5, minH: 10 },
+const LAYOUT: readonly ScreenPanel[] = [
+  { i: 'settings', name: 'platformSettings', x: 0, y: 0, w: 5, h: 26, minW: 4, minH: 10 },
+  { i: 'permissions', name: 'permissions', x: 5, y: 0, w: 7, h: 26, minW: 5, minH: 10 },
 ]
 
 /**

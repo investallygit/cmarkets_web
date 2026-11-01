@@ -1,10 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import type {
-  LayoutItemDto,
-  MeUpdateDto,
-  PasswordChangeDto,
-  ScreenLayoutDto,
-} from '@/shared/api/contracts'
+import type { MeUpdateDto, PasswordChangeDto, ScreenLayoutDto } from '@/shared/api/contracts'
 import { isTimeZone } from '@/shared/lib/format'
 import {
   currentAccount,
@@ -13,13 +8,14 @@ import {
   revokeSessions,
   saveAccounts,
   writeLayout,
+  type StoredLayout,
 } from '../db'
 import { hashPassword, passwordErrors, randomToken } from '../lib/auth'
 import { api, latency, noContent, problem } from '../lib/http'
+import { layoutError } from '../lib/layouts'
 import { settleDue } from '../payments'
 
 const NAME_MAX = 80
-
 export const sessionHandlers = [
   http.get(api('/me'), async () => {
     await latency()
@@ -87,13 +83,26 @@ export const sessionHandlers = [
   http.get(api('/me/layouts/:screen'), async ({ params }) => {
     await latency()
     const screen = String(params.screen)
-    return HttpResponse.json<ScreenLayoutDto>({ screen, items: readLayout(screen) ?? [] })
+    return HttpResponse.json<ScreenLayoutDto>({ screen, items: [], ...readLayout(screen) })
   }),
 
   http.put(api('/me/layouts/:screen'), async ({ params, request }) => {
-    const body = (await request.json()) as { items?: LayoutItemDto[] }
-    if (!Array.isArray(body.items)) return problem(400, 'Invalid layout', 'items is required.')
-    writeLayout(String(params.screen), body.items)
+    const body = (await request.json()) as Partial<StoredLayout>
+    const error = layoutError(body)
+    if (error) return problem(400, 'Invalid layout', error)
+    const { items, hidden, stacked, locked, saved } = body as StoredLayout
+    writeLayout(String(params.screen), {
+      items,
+      hidden,
+      stacked,
+      locked,
+      saved: saved?.map((layout) => ({
+        name: layout.name.trim(),
+        items: layout.items,
+        hidden: layout.hidden,
+        stacked: layout.stacked,
+      })),
+    })
     return noContent()
   }),
 ]

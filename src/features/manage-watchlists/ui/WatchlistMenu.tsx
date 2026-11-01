@@ -9,8 +9,6 @@ import type { MenuItem } from '@/shared/ui/menu'
 import { toast } from '@/shared/ui/toast'
 import { WatchlistDialog } from './WatchlistDialog'
 
-const MENU_WIDTH = 216
-
 interface WatchlistMenuProps {
   /** The list shown in the panel; undefined when the user has none. */
   list: WatchlistDto | undefined
@@ -61,7 +59,7 @@ export function WatchlistMenu({ list, onCreated }: WatchlistMenuProps) {
         onClick={(event) => {
           if (position) return closeMenu()
           const rect = event.currentTarget.getBoundingClientRect()
-          setPosition({ x: rect.right - MENU_WIDTH, y: rect.bottom + 4 })
+          setPosition({ x: rect.right, y: rect.bottom + 4 })
         }}
         className="panel-no-drag inline-flex items-center text-secondary hover:text-primary"
       >
@@ -69,6 +67,7 @@ export function WatchlistMenu({ list, onCreated }: WatchlistMenuProps) {
       </button>
       {position && (
         <ContextMenu
+          align="end"
           x={position.x}
           y={position.y}
           items={items}

@@ -1,14 +1,13 @@
 import { useAnalystRequests } from '@/entities/analyst-request'
-import { ScreenWorkspace } from '@/features/workspace-layout'
+import { ScreenWorkspace, type ScreenPanel } from '@/features/workspace-layout'
 import type { AnalystStatus } from '@/shared/api/contracts'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
-import type { WorkspaceItem } from '@/shared/ui/Workspace'
 import { AnalystRequestPanel, AnalystRequestsPanel } from '@/widgets/analyst-requests-panel'
 
 /** ANLY is the requests panel of screen 9 in full: the list, then the request and its documents. */
-const LAYOUT: readonly WorkspaceItem[] = [
-  { i: 'requests', x: 0, y: 0, w: 5, h: 26, minW: 4, minH: 8 },
-  { i: 'request', x: 5, y: 0, w: 7, h: 26, minW: 4, minH: 8 },
+const LAYOUT: readonly ScreenPanel[] = [
+  { i: 'requests', name: 'analystRequests', x: 0, y: 0, w: 5, h: 26, minW: 4, minH: 8 },
+  { i: 'request', name: 'analystRequest', x: 5, y: 0, w: 7, h: 26, minW: 4, minH: 8 },
 ]
 
 const STATUSES: readonly AnalystStatus[] = ['pending', 'approved', 'rejected']

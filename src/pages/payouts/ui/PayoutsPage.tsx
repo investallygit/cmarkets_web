@@ -1,9 +1,8 @@
-import { ScreenWorkspace } from '@/features/workspace-layout'
-import type { WorkspaceItem } from '@/shared/ui/Workspace'
+import { ScreenWorkspace, type ScreenPanel } from '@/features/workspace-layout'
 import { PayoutsPanel } from '@/widgets/payouts-panel'
 
-const LAYOUT: readonly WorkspaceItem[] = [
-  { i: 'payouts', x: 0, y: 0, w: 12, h: 26, minW: 6, minH: 8 },
+const LAYOUT: readonly ScreenPanel[] = [
+  { i: 'payouts', name: 'payouts', x: 0, y: 0, w: 12, h: 26, minW: 6, minH: 8 },
 ]
 
 /**

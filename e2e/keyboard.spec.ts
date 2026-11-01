@@ -54,14 +54,14 @@ test('a panel moves and sizes from its menu, and the default layout comes back',
   const before = { rates: (await rates.boundingBox())?.y, chart: (await chart.boundingBox())?.y }
   expect(before.rates).toBeGreaterThan(before.chart ?? 0)
 
-  await rates.getByRole('button', { name: 'FX: move or resize the panel' }).click()
+  await rates.getByRole('button', { name: 'FX: layout menu' }).click()
   await page.getByRole('menuitem', { name: 'Move up' }).click()
   // It takes the chart's place, and keeps it on the next visit.
   await expect.poll(async () => (await rates.boundingBox())?.y).toBeLessThan(before.chart! + 1)
   await page.reload()
   await expect.poll(async () => (await rates.boundingBox())?.y).toBeLessThan(before.chart! + 1)
 
-  await rates.getByRole('button', { name: 'FX: move or resize the panel' }).click()
+  await rates.getByRole('button', { name: 'FX: layout menu' }).click()
   await page.getByRole('menuitem', { name: 'Default layout of the screen' }).click()
   await expect.poll(async () => (await rates.boundingBox())?.y).toBe(before.rates)
 })

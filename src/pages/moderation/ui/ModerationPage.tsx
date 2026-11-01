@@ -1,13 +1,12 @@
 import { useModerationQueue } from '@/entities/moderation'
-import { ScreenWorkspace } from '@/features/workspace-layout'
+import { ScreenWorkspace, type ScreenPanel } from '@/features/workspace-layout'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
-import type { WorkspaceItem } from '@/shared/ui/Workspace'
 import { ModerationQueuePanel, ModerationReaderPanel } from '@/widgets/moderation-queue-panel'
 
 /** MOD is the moderation queue of screen 9 in full, with the publication opened beside it. */
-const LAYOUT: readonly WorkspaceItem[] = [
-  { i: 'queue', x: 0, y: 0, w: 5, h: 26, minW: 4, minH: 8 },
-  { i: 'reader', x: 5, y: 0, w: 7, h: 26, minW: 4, minH: 8 },
+const LAYOUT: readonly ScreenPanel[] = [
+  { i: 'queue', name: 'moderationQueue', x: 0, y: 0, w: 5, h: 26, minW: 4, minH: 8 },
+  { i: 'reader', name: 'moderationReader', x: 5, y: 0, w: 7, h: 26, minW: 4, minH: 8 },
 ]
 
 const FILTERS = ['all', 'reported', 'pending'] as const

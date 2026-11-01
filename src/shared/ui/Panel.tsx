@@ -1,7 +1,10 @@
 import { clsx } from 'clsx'
+import { GripVertical, Lock } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PanelLayoutMenu } from './PanelLayoutMenu'
 import { ScrollArea } from './ScrollArea'
+import { useWorkspacePanel, useWorkspaceScreen } from './workspacePanel'
 
 interface PanelProps {
   title: ReactNode
@@ -17,15 +20,47 @@ interface PanelProps {
 /**
  * Panel shared by every screen (spec section 9): amber upper-case title on the left,
  * options and the function code on the right. The title bar is the drag handle in a workspace,
- * where the code opens the panel's layout menu, the same moves without dragging. On a phone the
- * options that do not fit go to the next line of the bar rather than past its edge.
+ * where a grip and the pointer say so and the code opens the panel's layout menu, the same moves
+ * without dragging. Stacked below 1280 px, only that menu moves it; a locked layout shows a
+ * padlock instead of the grip. On a phone the options that do not fit go to the next line of the
+ * bar rather than past its edge.
  * A body that scrolls with nothing to focus in it takes the focus itself (ScrollArea).
  */
 export function Panel({ title, code, options, children, className, bodyClassName }: PanelProps) {
+  const { t } = useTranslation()
   const titleId = useId()
+  const place = useWorkspacePanel()
+  const screen = useWorkspaceScreen()
+  const locked = place !== null && screen?.locked === true
+  const movable = place?.mode === 'grid' && !locked
   return (
     <section className={clsx('flex h-full min-h-0 flex-col border bg-panel', className)}>
-      <header className="panel-drag-handle flex min-h-bar shrink-0 cursor-move flex-wrap items-center gap-x-3 border-b bg-panel-header px-2 select-none md:h-bar md:flex-nowrap">
+      <header
+        className={clsx(
+          'panel-drag-handle group/bar flex min-h-bar shrink-0 flex-wrap items-center gap-x-3 border-b bg-panel-header px-2 select-none md:h-bar md:flex-nowrap',
+          movable && 'cursor-move',
+        )}
+      >
+        {/* For the mouse alone: the keyboard has the layout menu of the code. */}
+        {movable && (
+          <span
+            aria-hidden
+            title={t('workspace.dragHint')}
+            className="-mr-2.5 -ml-1 shrink-0 text-secondary group-hover/bar:text-primary"
+          >
+            <GripVertical className="size-3" />
+          </span>
+        )}
+        {/* The layout menu says so too. */}
+        {locked && (
+          <span
+            aria-hidden
+            title={t('workspace.lockedHint')}
+            className="-mr-2.5 -ml-1 shrink-0 text-secondary"
+          >
+            <Lock className="size-3" />
+          </span>
+        )}
         <h2
           id={titleId}
           className="truncate font-sans text-title font-semibold tracking-title text-accent-amber uppercase"

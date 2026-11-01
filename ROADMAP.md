@@ -224,6 +224,34 @@ Done in step 10, with the home page:
   ever on a request that had failed, they show it with Retry; a server out of reach reads in the
   user's language. The mock's ids carry 32 random bits: those written in the same millisecond
   could repeat, and two rows of AUDT shared a key.
+- **Moving the panels** (spec section 8): they moved and resized from 1280 px wide, but nothing
+  showed it before the pointer was on them. A grip now comes before a panel's title, and the
+  corner that resizes it shows at rest (the library drew it under the pointer only, which a
+  touch screen lacks); stacked panels no longer take the move pointer. Under
+  `prefers-reduced-motion`, a panel takes its place without sliding there.
+- **Arranging the panels**, beyond the spec, from the layout menu of any panel:
+  - Below 1280 px, where they stack, a panel goes a place up or down; this order is kept apart
+    from the grid's (`stacked`), which it leaves as it is.
+  - A panel hides, the others packing up, and comes back at its place from the menu of any
+    other ("Show: Rates and FX"); the last one shown stays. Each panel has a name for this
+    (`ScreenPanel.name`, `panels.*`), as its title may change ("Watchlist: My picks").
+  - Undo and redo go through the changes made since the screen opened, per tab: drags, steps,
+    hidden panels, a saved layout applied or the default one. Ctrl + Z and Ctrl + Y (⌘Z, ⇧⌘Z)
+    do the same, except in a text field, the publication editor or a dialog, which keep theirs.
+  - A locked layout neither drags nor resizes, and its menu changes nothing until unlocked; a
+    padlock replaces the grip.
+  - Up to 10 layouts per screen are kept under a name, applied (and undone) or deleted.
+  - A layout the server could not give shows the screen's default, with a message, and is never
+    saved over: a PUT from it would have deleted the saved layouts and the lock.
+  - The mock checks what `PUT /me/layouts/{screen}` receives (`mocks/lib/layouts.ts`), and
+    still reads the layouts saved before, the positions alone.
+  - Menus are as wide as their longest entry (up to 400 px, then on two lines) and stay inside
+    the window: "Disposition par défaut de l'écran" and the long names of panels were cut.
+  - Playwright flows on each: a panel dragged and resized, hidden and shown, a change undone and
+    redone, the layout locked, a layout saved then applied, the stacked order kept, a layout that
+    failed to load left as it was on the server.
+- **PAY flow**: the sample sales follow the date (a new month draws more of them), so the
+  amount to pay is read from the row instead of a figure that held in October only.
 
 Still to do, with the first screen that needs it:
 

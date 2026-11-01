@@ -12,6 +12,8 @@ export const LANGUAGE_NAMES: Record<Language, string> = { fr: 'Français', en: '
 export type TranslationKey = ParseKeys
 /** Screen ids that have a title and a menu label in the translation files. */
 export type ScreenTextKey = keyof typeof en.screens
+/** Panels named in the translation files: the layout menu shows a hidden one back by its name. */
+export type PanelNameKey = keyof typeof en.panels
 
 i18n.on('languageChanged', (language) => {
   document.documentElement.lang = language

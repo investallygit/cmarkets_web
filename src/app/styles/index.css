@@ -259,12 +259,28 @@
   opacity: 0.35;
 }
 
+/*
+ * The corner that resizes a panel shows at rest, as the grip of its title bar does: the library
+ * draws it only under the pointer, which a touch screen lacks. The pointer lights it up.
+ */
 .react-grid-item > .react-resizable-handle {
   background-image: none;
+  opacity: 1;
 }
 
 .react-grid-item > .react-resizable-handle::after {
   border-color: var(--text-secondary);
+}
+
+.react-grid-item:hover > .react-resizable-handle::after {
+  border-color: var(--text-primary);
+}
+
+/* A panel moved, shown back or undone takes its place at once, without sliding there. */
+@media (prefers-reduced-motion: reduce) {
+  .react-grid-item {
+    transition: none;
+  }
 }
 
 /*

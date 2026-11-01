@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { hasPanelBelow, movePanel, resizePanel } from './workspaceLayout'
+import { compactLayout, hasPanelBelow, movePanel, placePanel, resizePanel } from './workspaceLayout'
 import type { WorkspaceItem } from './Workspace'
 
 // The market dashboard's columns, in short: indices over watchlist, chart over rates.
@@ -48,5 +48,25 @@ describe('moving and sizing a panel without dragging', () => {
   it('knows whether a panel lies below, for Move down', () => {
     expect(hasPanelBelow(LAYOUT, 'chart')).toBe(true)
     expect(hasPanelBelow(LAYOUT, 'rates')).toBe(false)
+  })
+})
+
+describe('packing and putting back', () => {
+  it('packs panels up as the grid does, and a packed layout stays as it is', () => {
+    const withoutChart = LAYOUT.filter((item) => item.i !== 'chart')
+    expect(place(compactLayout(withoutChart, 12), 'rates')).toEqual({ x: 4, y: 0, w: 4, h: 6 })
+    const packed = compactLayout(LAYOUT, 12)
+    for (const item of LAYOUT) expect(place(packed, item.i)).toEqual(place(LAYOUT, item.i))
+  })
+
+  it('puts a hidden panel back at its place, the panel there making way below', () => {
+    const withoutChart = compactLayout(
+      LAYOUT.filter((item) => item.i !== 'chart'),
+      12,
+    )
+    const chart = LAYOUT.find((item) => item.i === 'chart')!
+    const back = placePanel(withoutChart, chart, 12)
+    expect(place(back, 'chart')).toEqual({ x: 4, y: 0, w: 4, h: 10 })
+    expect(place(back, 'rates')).toEqual({ x: 4, y: 10, w: 4, h: 6 })
   })
 })

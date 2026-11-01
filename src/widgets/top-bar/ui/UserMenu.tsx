@@ -10,8 +10,6 @@ import { screenById } from '@/shared/routes/screens'
 import { ContextMenu } from '@/shared/ui/ContextMenu'
 import type { MenuItem } from '@/shared/ui/menu'
 
-const MENU_WIDTH = 216
-
 /**
  * User badge of the top bar ("K. ANALYST"): settings, language, the prototype's account switch and
  * the logout.
@@ -59,7 +57,7 @@ export function UserMenu() {
         onClick={(event) => {
           if (position) return close()
           const rect = event.currentTarget.getBoundingClientRect()
-          setPosition({ x: rect.right - MENU_WIDTH, y: rect.bottom + 4 })
+          setPosition({ x: rect.right, y: rect.bottom + 4 })
         }}
         className="inline-flex h-6 items-center gap-1.5 border bg-panel-header px-3 font-sans text-title tracking-title text-secondary uppercase hover:text-primary"
       >
@@ -69,6 +67,7 @@ export function UserMenu() {
       </button>
       {position && (
         <ContextMenu
+          align="end"
           x={position.x}
           y={position.y}
           items={items}

@@ -1,9 +1,8 @@
 import { useStoredPrices } from '@/entities/stored-price'
-import { ScreenWorkspace } from '@/features/workspace-layout'
+import { ScreenWorkspace, type ScreenPanel } from '@/features/workspace-layout'
 import { addDays } from '@/shared/lib/isoDate'
 import { useMarketDay } from '@/shared/lib/useMarketDay'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
-import type { WorkspaceItem } from '@/shared/ui/Workspace'
 import {
   CorrectionsLogPanel,
   PriceCorrectionPanel,
@@ -11,10 +10,10 @@ import {
 } from '@/widgets/price-correction-panels'
 
 /** CORR has no mockup: the correction on the left over its log, the stored sessions on the right. */
-const LAYOUT: readonly WorkspaceItem[] = [
-  { i: 'correction', x: 0, y: 0, w: 6, h: 13, minW: 4, minH: 10 },
-  { i: 'log', x: 0, y: 13, w: 6, h: 13, minW: 4, minH: 5 },
-  { i: 'sessions', x: 6, y: 0, w: 6, h: 26, minW: 4, minH: 8 },
+const LAYOUT: readonly ScreenPanel[] = [
+  { i: 'correction', name: 'priceCorrection', x: 0, y: 0, w: 6, h: 13, minW: 4, minH: 10 },
+  { i: 'log', name: 'corrections', x: 0, y: 13, w: 6, h: 13, minW: 4, minH: 5 },
+  { i: 'sessions', name: 'storedPrices', x: 6, y: 0, w: 6, h: 26, minW: 4, minH: 8 },
 ]
 
 /**

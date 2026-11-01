@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import { ScreenWorkspace } from '@/features/workspace-layout'
+import { ScreenWorkspace, type ScreenPanel } from '@/features/workspace-layout'
 import type { AuditEntryDto } from '@/shared/api/contracts'
-import type { WorkspaceItem } from '@/shared/ui/Workspace'
 import { AuditEntryPanel, AuditLogPanel } from '@/widgets/audit-log-panel'
 
 /** AUDT has no mockup: the log, and the entry clicked with its values before and after. */
-const LAYOUT: readonly WorkspaceItem[] = [
-  { i: 'log', x: 0, y: 0, w: 8, h: 26, minW: 6, minH: 8 },
-  { i: 'entry', x: 8, y: 0, w: 4, h: 26, minW: 3, minH: 6 },
+const LAYOUT: readonly ScreenPanel[] = [
+  { i: 'log', name: 'auditLog', x: 0, y: 0, w: 8, h: 26, minW: 6, minH: 8 },
+  { i: 'entry', name: 'auditEntry', x: 8, y: 0, w: 4, h: 26, minW: 3, minH: 6 },
 ]
 
 /**
