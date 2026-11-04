@@ -1,13 +1,16 @@
 # Roadmap
 
-Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`.
+Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`, the version of
+2 November 2026; the first version, of 29 October, is kept as `CMarket-developer-spec-EN-v1.pdf`.
 
-Every screen is built: the client terminal (MKT, DES with its FA and ANA tabs, EQS, YCRV, YAS,
-PORT, PUB, PUB NEW, N, CAL, ALRT and CFG) with the login, sign-up and password reset pages, the
-back-office of the Data admin (IMP with DATA, HIST and EODH, then CORR and NEWS) and that of the
-Admin (USER with ANLY and MOD, then ADMCFG, AUDT and PAY), and the home page that visitors see
-before login. What remains is listed under "Still to do" and in the open questions for the spec
-author.
+Every screen of the first version is built: the client terminal (MKT, DES with its FA and ANA
+tabs, EQS, YCRV, YAS, PORT, PUB, PUB NEW, N, CAL, ALRT and CFG) with the login, sign-up and
+password reset pages, the back-office of the Data admin (IMP with DATA, HIST and EODH, then CORR
+and NEWS) and that of the Admin (USER with ANLY and MOD, then ADMCFG, AUDT and PAY), and the home
+page that visitors see before login. The second version adds the Journalist and CEO account types
+and the professional directory with its messaging (screens 10 to 12): steps 11 to 19, under
+[Second version of the spec](#second-version-of-the-spec). What remains is listed under "Still to
+do" and in the open questions for the spec author.
 
 ANLY and MOD were built with USER: in the mockups they are panels of the same screen. Sizes are
 relative: S < M < L < XL.
@@ -26,6 +29,151 @@ relative: S < M < L < XL.
 | 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS  | Done   |
 | 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY            | Done   |
 | 10   | Home page, before login: the product, markets, users, plans     | Done   |
+| 11   | Second version of the spec: the plan, its open questions        | Done   |
+| 12   | Journalist and CEO account types, approved by the Admin         | To do  |
+| 13   | Portfolios shared with the organisation, read by its CEO        | To do  |
+| 14   | NET ME: professional profile, visibility and contact rules      | To do  |
+| 15   | NET: professional directory, public profile page                | To do  |
+| 16   | MSG: conversations, contact requests, files, shared objects     | To do  |
+| 17   | MSG in real time: the `/hubs/chat` hub                          | To do  |
+| 18   | Admin: reported profiles and conversations, directory settings  | To do  |
+| 19   | Second version done: README, accessibility, every flow          | To do  |
+
+## Second version of the spec
+
+The version of 2 November 2026 adds the professional directory and its messaging, with two client
+account types, Journalist and CEO. Sections 1 to 5, 8, 11, 13 and 14 are unchanged, and so are the
+mockups of screens 1 to 8; the planned enhancements move from section 15 to section 16.
+
+- **Account types** (sections 6 and 12): eight. Journalist and CEO are clients and mostly read: in
+  the permission matrix, "Read" means viewing without creating or saving anything (no saved
+  screens, no saved drawings, no portfolios). A Journalist has the prices, the research and the
+  directory, reads the order book, the analysis, the curves and the calculator, exports nothing,
+  holds no portfolio and sets 20 alerts. A CEO has the same with the exports, and reads the
+  portfolios that the managers of the organisation share with it, without changing them. Analyst,
+  Journalist and CEO get their permissions and a green VERIFIED badge once an Admin approved them:
+  identity and background for an Analyst, a press card or an employer letter for a Journalist, a
+  proof of position and a link to an organisation for a CEO.
+- **Permission matrix**: three new rows. The six client types and the Admin browse the directory;
+  the six client types are listed in it; the six client types write to each other within the
+  contact rules, and the Admin reads reported conversations only. Data admins have none of them.
+- **Screens** (section 9): 10, the professional directory (NET); 11, messaging (MSG); 12, my
+  profile, visibility and contact (NET ME). The client menu becomes MKT, EQS, YCRV, PORT, PUB, NET,
+  MSG, N, ALRT, CFG, less the entries outside the account's permissions (PORT for a Journalist). A
+  type badge takes the type's colour: Student #36C5F0, Analyst #FF9F1A, Manager #19D27A, Trader
+  #B07CFF, Journalist #FF7AB6, CEO #E0C068. The screen 9 mockup is redrawn with eight counters
+  (Journalist 37, CEO 58) and E. Fouda, CEO of Bank C, in the list.
+- **API** (section 10): the directory and the profiles (`/directory` and its facets,
+  `/profiles/{userId}` and its contact permission, `/public/profiles/{slug}`, `/me/profile` with
+  its photo, experiences and privacy, reports and blocks); messaging (`/conversations` with their
+  messages, read, accept, decline, mute, members and report, `/attachments`, `/messages/search`);
+  `/admin/reports` and `/admin/conversations/{id}` for the Admin; a second hub, `/hubs/chat`.
+- **Rules** (section 15, new): the fields of a profile; three levels of visibility (hidden, CMarket
+  members, public at `/p/{handle}`); who may contact the user, by type: direct, request or no;
+  blocks; limits against abuse; groups of up to 50; messages of up to 4,000 characters; files of up
+  to 10 MB, scanned before use; securities, charts and publications shared; 24 months of retention.
+- **Back end only** (section 7): the `net` schema, with the message bodies encrypted.
+
+The prototype's answers where the spec is silent are in the open questions.
+
+### Step 11 · The plan (S): done
+
+The second version is now `CMarket-developer-spec-EN.pdf`, the first one
+`CMarket-developer-spec-EN-v1.pdf`; this section, the order above, the status of the screens to
+come in the README and the open questions of the second version.
+
+### Step 12 · Journalist and CEO (L): to do
+
+- **Types and permissions**: `journalist` and `ceo` join the account types and the client types,
+  with their permissions and quotas; a permission to save screens and chart drawings, which the
+  Journalist and the CEO lack ("Read"), the server refusing their saves too.
+- **Approval**: the Analyst status becomes the status of an Analyst, a Journalist or a CEO, with
+  the VERIFIED badge; the sign-up asks each type for its documents; ANLY reviews the three kinds
+  of request.
+- **Admin**: USER counts the eight types as on the redrawn screen 9, and creates and changes them;
+  ADMCFG gets their quotas and two more columns in the permission matrix.
+- **Colours**: the type colours of section 9 become tokens, for every place a type shows, screen 9
+  included; the Trader's purple gives 3.9:1 on the selected background, so it takes a lighter
+  shade there, as the secondary text does.
+- **Home page and login**: the six client types with their photos and sign-up; R. Tamba
+  (Journalist, screen 11) and E. Fouda (CEO of Bank C, screens 9 and 11) among the demo accounts
+  and in the account switch.
+- **Mock**: the professional plans for both types, the 37 Journalists and 58 CEOs of the counters;
+  `SEED_VERSION` raised.
+
+### Step 13 · Portfolios of the organisation (M): to do
+
+- A portfolio manager shares a portfolio with the organisation; its CEO opens the shared
+  portfolios in PORT, read only: no new portfolio, transaction, limit or report. The endpoint is
+  the prototype's (open question).
+- **Mock**: a portfolio manager of Bank C, E. Fouda's organisation, shares a portfolio. The members
+  of an organisation take its plan, and Bank C's, Analysis, lacks the Portfolio module, so that
+  manager could not open PORT: Bank C moves to Professional, which opens PORT to T. Bekale too (to
+  confirm before the step).
+
+### Step 14 · NET ME · My profile, visibility and contact (screen 12) (L): to do
+
+- The three panels of the mockup. My profile: the photo (JPEG or PNG up to 2 MB, cropped square),
+  the type and its badge, which the user does not change, the name, job title, organisation, city,
+  languages, about (600 characters), up to 8 specialties from the Admin's list, experience and
+  certifications, contact details. Visibility and contact: hidden, CMarket members or public; who
+  can contact me, direct, request or no for each of the six types; the e-mail, phone, online
+  status and publication statistics shown or not. The card as the directory shows it, seen by a
+  Student, a Manager, a Journalist...
+- An entity for the profiles, with the avatar and the type badge that NET and MSG share; the
+  directory and messaging permissions; `NET ME` in the command bar; a `network` translation file.
+- **Mock**: the profiles of the mockups; the contact rules as pure, tested logic (a block first,
+  then a hidden profile, an employee, the rule of the sender's type; a conversation already open
+  stays open; Direct by default, Request for a Student).
+
+### Step 15 · NET · Professional directory (screen 10) (L): to do
+
+- Filters (text, the six types with their counts, country, specialty, organisation, language,
+  "only profiles I can contact"), kept in the URL; the results as cards, sorted and paged; the
+  profile with Send a message, Follow, their publications (`/library?analystId=`, which the library
+  does not take yet) and Report. The contact button follows `/profiles/{id}/contact-permission`:
+  Contact, Send a request, or Contact not open, greyed.
+- The public profile at `/p/{handle}`, outside the app shell and without login: no contact
+  details, and "Log in to contact".
+- **Mock**: the search and its counts over a population that gives the mockup's figures.
+
+### Step 16 · MSG · Messaging (screen 11) (XL): to do
+
+- Conversations: search, All / Unread / Requests / Groups, unread counts, a contact request in
+  yellow. The thread: the history 50 at a time, date separators, received messages on the left,
+  sent ones on the right with their read receipts; the composer (Enter sends, Shift + Enter adds a
+  line, 4,000 characters), files (PDF, XLSX, CSV, PNG, JPEG, 10 MB, available once scanned), and a
+  security, a chart or a publication shared as a card that opens its screen (a paid publication
+  shows its preview to a reader who has not bought it). A message is edited within 15 minutes, or
+  deleted, by its author. The participant: the profile, their publications, mute, block, report,
+  the files shared.
+- Contact requests: the first message waits in Requests and the sender writes again once it is
+  accepted; a decline is not told. Groups of up to 50, of people the creator may contact; 20 new
+  conversations a day, 5 for a Student. Contact in NET opens a conversation through the entity's
+  store, as features never import each other.
+- May be split in two: conversations and messages, then files, shared objects and groups.
+
+### Step 17 · MSG in real time (M): to do
+
+- The `/hubs/chat` hub next to `/hubs/market`: JoinConversation, LeaveConversation and Typing
+  sent; new, edited and deleted messages, read receipts, typing, presence (when the user shows it)
+  and contact requests received, handled once by the app shell; the unread count on MSG in the
+  menu.
+- **Mock**: the hub simulated, K. Atangana typing then answering as on screen 11.
+
+### Step 18 · Admin: directory and messaging (M): to do
+
+- MOD: the reported profiles and conversations (`/admin/reports?type=`); reading a reported
+  conversation (`/admin/conversations/{id}`) writes to the audit log; an account past three
+  reports.
+- ADMCFG: the default contact rules, the daily limits of new conversations, the report threshold
+  and the list of specialties, which have no endpoint in the spec.
+
+### Step 19 · Second version done (S): to do
+
+- The README (status, structure, the second hub in the data flow) and this roadmap, each screen
+  with what was built; axe on the new screens for the eight account types, the keyboard, narrow
+  windows, every Playwright flow, no file over 700 lines.
 
 ## Shared groundwork
 
@@ -653,8 +801,8 @@ Still to do, with the first screen that needs it:
   to `/data/documents`. Is a news item or a document withdrawn (no endpoint)?
 - **EODHD**: the status fields are not specified. The prototype answers
   `{ status, latest, runs, callsToday, dailyQuota, rateLimited24h, lastError, checkedAt }`.
-- **Screens 6 and 9 mockups**: J. Ekane is a Data admin in both; the prototype's demo Admin is
-  L. Mvogo.
+- **Screens 6 and 9 mockups**: J. Ekane is a Data admin on screen 6, and on screen 9 in the first
+  version; the prototype's demo Admin is L. Mvogo.
 - **USER**: no endpoint returns the counters by account type: the prototype adds
   `GET /admin/users/counts` (`{ student, analyst, ... }`, the active accounts). It also adds
   `GET /admin/users/export` (the CSV of every account of the filters), `GET /admin/organizations`
@@ -778,3 +926,39 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   the first and last points (shown dashed)": the prototype draws nothing outside the points and
   gives no spread there. `/yield-curves` without a country returns all six. Validation messages
   should come in the user's language.
+- **Account types, second version**: which permission keys stand for browsing the directory,
+  being listed in it and reading a reported conversation (section 12 names `directory:list` and
+  `messages:write` only)? "Read" forbids saved screens and drawings: the prototype adds a
+  permission to save them, which the Journalist and the CEO lack, and leaves them their watchlists.
+  What may a Journalist or a CEO do while waiting for approval (the prototype: view as the type
+  does, without messaging and, for a CEO, without the organisation's portfolios; the VERIFIED badge
+  comes with the approval)? Which plans do they take (the prototype: the professional ones,
+  Monitoring, Analysis and Professional, with the trial of Professional)? Does a CEO need the
+  Portfolio module to read the organisation's portfolios? The members of an organisation share its
+  plan, so the managers who hold those portfolios have the module. Sharing a portfolio with the
+  organisation has no endpoint. The Admin browses the directory, while employees only use the
+  back-office: from which screen?
+- **Function codes** (section 8): the table lacks NET, MSG and NET ME, which the mockups of screens
+  10 to 12 type in the command bar.
+- **Screen 9 mockup, second version**: the list still counts "8 of 1,946 accounts", while the eight
+  counters add up to 2,041; its panel is still "ANALYST STATUS REQUESTS", while Journalists and
+  CEOs are approved too.
+- **Screen 10 mockup**: "Only profiles I can contact" is ticked, yet A. Tchakounté shows "Contact
+  not open"; D. Moussavou has 9 publications while his Analyst status waits on screen 9; the
+  directory counts 412 Students for 1,284 active Student accounts; "Analysts who published in last
+  90 days" has no parameter in `GET /directory`; the button is "Send a request" in section 9 and
+  "Send a contact request" on screen 12.
+- **Profiles**: the public page is `/p/{handle}` and its endpoint `/public/profiles/{slug}`: how is
+  the handle chosen? Is the display name of `PUT /me/profile` the one of `PUT /me` (CFG)? LinkedIn
+  has no display toggle on screen 12, unlike the e-mail and the phone. What does Follow do on a
+  profile that is not an analyst's? Which module of the plans holds the directory and messaging, if
+  any (research and settings are in none)?
+- **Messaging**: how is a chart frozen for a message (PUB NEW freezes one with
+  `POST /publications/{id}/charts`)? What do the other members see of an edited or deleted message?
+  Who adds members to a group, and can a member leave it? Does a message reach the notification
+  centre of the top bar, besides push and e-mail after 5 minutes? Employees cannot be messaged and
+  support goes through a help centre, which the spec does not describe. How is an account past
+  three reports referred to the Admin?
+- **Directory and messaging settings**: the default contact rules, the daily limits of new
+  conversations, the report threshold and the list of specialties are the Admin's, without an
+  endpoint.

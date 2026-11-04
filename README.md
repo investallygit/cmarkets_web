@@ -56,13 +56,18 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done on mock data; the mock sets off the alerts               |
 | Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
+| Journalist and CEO account types                                          | To do: ROADMAP steps 12 and 13                                |
+| 10 · Professional directory (NET), public profile page                    | To do: ROADMAP step 15                                        |
+| 11 · Messaging (MSG)                                                      | To do: ROADMAP steps 16 and 17                                |
+| 12 · My profile, visibility and contact (NET ME)                          | To do: ROADMAP step 14                                        |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
 | 9 · Account administration (USER) with ANLY and MOD                       | Done; 1,959 accounts, requests, moderation queue on mock data |
 | Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; every Data admin and Admin action is in the audit log   |
 
-How the screens were built, step by step, and the open questions for the spec author are in
-[ROADMAP.md](ROADMAP.md).
+How the screens were built, step by step, the plan for the second version of the spec (the
+Journalist and CEO account types, screens 10 to 12 and what they change on screen 9) and the open
+questions for the spec author are in [ROADMAP.md](ROADMAP.md).
 
 ## Installation
 
