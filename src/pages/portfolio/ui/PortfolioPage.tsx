@@ -208,7 +208,10 @@ function PortfolioTabPanels({
   )
 }
 
-/** No portfolio yet: the first one to create, within the account type's quota. */
+/**
+ * No portfolio yet: the first one to create, within the account type's quota; a CEO, who reads
+ * the organisation's, has none to create.
+ */
 function NoPortfolio() {
   const { t } = useTranslation()
   const quota = usePortfolioQuota()
@@ -216,7 +219,11 @@ function NoPortfolio() {
     <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
       <Briefcase aria-hidden className="size-6 text-secondary" />
       <p className="max-w-md font-sans text-label text-secondary">
-        {quota.modelOnly ? t('portfolio.empty.student') : t('portfolio.empty.message')}
+        {!quota.canWrite
+          ? t('portfolio.empty.readOnly')
+          : quota.modelOnly
+            ? t('portfolio.empty.student')
+            : t('portfolio.empty.message')}
       </p>
       {quota.canWrite && !quota.reached && (
         <Button

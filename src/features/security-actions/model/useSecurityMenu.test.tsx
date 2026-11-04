@@ -21,7 +21,7 @@ const analyst: MeDto = {
   twoFactorChannel: 'email',
   permissions: ['market:read', 'alerts:write'],
   quotas: { portfolios: 5, alerts: 50 },
-  analystStatus: 'approved',
+  verificationStatus: 'approved',
   modules: ['monitoring', 'analysis', 'portfolio'],
   trialEndsAt: null,
 }

@@ -48,20 +48,27 @@
         "student": "Finance students and teachers: delayed data, simulated portfolios, research.",
         "analyst": "Publish research on a company or a country, free or paid.",
         "manager": "Manage, value and track portfolios; client reports.",
-        "trader": "Real-time prices, order book, intraday charts and alerts."
+        "trader": "Real-time prices, order book, intraday charts and alerts.",
+        "journalist": "Markets, research and the directory, to contact professionals for a story.",
+        "ceo": "Markets and, read only, your organisation's portfolios; exchanges with professionals."
       },
       "name": "Full name",
       "phone": "Mobile phone",
       "phoneHint": "Optional: for SMS alerts and codes.",
       "organization": "Organisation",
       "organizationHint": "Optional: opens an account for your colleagues too.",
+      "organizationHintCeo": "The organisation you head; an account opens for your colleagues too.",
       "studentNote": "With a school e-mail address, no proof is needed; otherwise add a proof of enrolment.",
       "analystNote": "An Admin checks these documents before your first publication; CMarket is yours meanwhile.",
+      "journalistNote": "An Admin checks your press card or the letter of your employer, then gives you the VERIFIED badge; CMarket is yours meanwhile.",
+      "ceoNote": "Name the organisation you head: an Admin checks your position before the VERIFIED badge; CMarket is yours meanwhile.",
       "documents": {
         "proofOfEnrolment": "Proof of enrolment",
         "identityDocument": "Identity document",
         "cv": "CV",
-        "licence": "Licence"
+        "licence": "Licence",
+        "pressCredential": "Press card or employer letter",
+        "proofOfPosition": "Proof of position"
       },
       "optional": "{{label}} (optional)",
       "terms": "I accept the terms of use and the privacy policy.",
@@ -101,9 +108,8 @@
       "accountType": "Account type",
       "organization": "Organisation",
       "individual": "Individual account",
-      "analystStatus": {
+      "verificationStatus": {
         "pending": "awaiting approval",
-        "approved": "approved",
         "rejected": "not approved"
       },
       "name": "Name",

@@ -1,6 +1,13 @@
 import type { SignUpDocument } from './auth'
 import type { IsoDate, IsoDateTime } from './common'
-import type { AccountType, AnalystStatus, OtpChannel, Permission, UserLanguage } from './me'
+import type {
+  AccountType,
+  OtpChannel,
+  Permission,
+  UserLanguage,
+  VerificationStatus,
+  VerifiedAccountType,
+} from './me'
 import type { OrganizationRole } from './organization'
 import type {
   ContentReportReason,
@@ -14,7 +21,10 @@ import type { BillingCycle } from './subscription'
 
 export type AccountStatus = 'active' | 'suspended'
 
-/** Filter of the accounts list: an Analyst waiting for an Admin's approval is under review. */
+/**
+ * Filter of the accounts list: an Analyst, a Journalist or a CEO waiting for an Admin's approval
+ * is under review.
+ */
 export const ACCOUNT_LIST_STATUSES = ['active', 'review', 'suspended'] as const
 export type AccountListStatus = (typeof ACCOUNT_LIST_STATUSES)[number]
 
@@ -38,7 +48,7 @@ export interface AdminUserDto {
   accountType: AccountType
   organization: { id: string; name: string } | null
   status: AccountStatus
-  analystStatus: AnalystStatus | null
+  verificationStatus: VerificationStatus | null
   createdAt: IsoDateTime
   lastLoginAt: IsoDateTime | null
 }
@@ -46,7 +56,7 @@ export interface AdminUserDto {
 /** GET /admin/users/counts: the active accounts by type, for the counters of screen 9. */
 export type AccountCountsDto = Record<AccountType, number>
 
-/** Who decided and when: an Analyst status, a suspension. */
+/** Who decided and when: the status of an Analyst, a Journalist or a CEO, a suspension. */
 export interface AdminDecisionDto {
   at: IsoDateTime
   by: string
@@ -69,7 +79,7 @@ export interface AdminUserDetailsDto extends AdminUserDto {
   language: UserLanguage
   timeZone: string
   organizationRole: OrganizationRole | null
-  analystDecision: AdminDecisionDto | null
+  verificationDecision: AdminDecisionDto | null
   subscription: AdminSubscriptionDto | null
   /** Login codes go by e-mail or SMS; mandatory for employees (spec section 12). */
   twoFactor: { channel: OtpChannel; mandatory: boolean }
@@ -112,16 +122,20 @@ export interface AdminReasonDto {
   reason: string
 }
 
-/** GET /admin/analyst-requests?status=: a sign-up as Analyst and its supporting documents. */
+/**
+ * GET /admin/analyst-requests?status=: the sign-up of an Analyst, a Journalist or a CEO and its
+ * supporting documents (the spec names the endpoint after the Analysts only).
+ */
 export interface AnalystRequestDto {
   /** The account's id. */
   id: string
+  accountType: VerifiedAccountType
   displayName: string
   email: string
   organization: string | null
   requestedAt: IsoDateTime
   documents: { kind: SignUpDocument; fileName: string; size: number }[]
-  status: AnalystStatus
+  status: VerificationStatus
   decision: AdminDecisionDto | null
 }
 
@@ -192,8 +206,8 @@ export const AUDIT_ACTIONS = [
   'user-suspend',
   'user-reactivate',
   'user-reset-mfa',
-  'analyst-approve',
-  'analyst-reject',
+  'status-approve',
+  'status-reject',
   'publication-approve',
   'publication-keep',
   'publication-takedown',
@@ -218,7 +232,7 @@ export type AuditTargetType =
 export const AUDIT_FIELDS = [
   'accountType',
   'status',
-  'analystStatus',
+  'verificationStatus',
   'twoFactorChannel',
   'organization',
   'portfolios',

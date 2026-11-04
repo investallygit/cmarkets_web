@@ -9,7 +9,7 @@ import {
   type RolePermissionsDto,
 } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
-import type { StoredAccount } from '../fixtures/accounts'
+import { isVerifiedType, type StoredAccount } from '../fixtures/accounts'
 import { createAdminAudit, createSettings } from '../fixtures/admin'
 import { ROLE_PERMISSIONS } from '../fixtures/users'
 import { isExpired } from '../lib/billing'
@@ -99,7 +99,7 @@ export function currentUser(): MeDto {
     twoFactorChannel: account.twoFactorChannel,
     permissions: permissionsOf(accountType),
     quotas: { ...settingsStore.read().quotas[accountType] },
-    analystStatus: accountType === 'analyst' ? account.analystStatus : null,
+    verificationStatus: isVerifiedType(accountType) ? account.verificationStatus : null,
     modules: modulesOf(account),
     trialEndsAt:
       subscription?.status === 'trial' && !isExpired(subscription, today)

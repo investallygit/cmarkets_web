@@ -9,7 +9,7 @@ import {
   type ClientAccountType,
   type OtpChallengeDto,
 } from '@/shared/api/contracts'
-import { useLocale } from '@/shared/i18n'
+import { useLocale, type TranslationKey } from '@/shared/i18n'
 import { routes } from '@/shared/routes/paths'
 import { Button } from '@/shared/ui/form/Button'
 import { Checkbox } from '@/shared/ui/form/Checkbox'
@@ -29,10 +29,18 @@ import {
 const DOCUMENT_TYPES = '.pdf,.png,.jpg,.jpeg'
 const DOCUMENT_MAX_SIZE = 5 * 1024 * 1024
 
+/** What a type sends and who checks it, above its documents. */
+const NOTES: Partial<Record<ClientAccountType, TranslationKey>> = {
+  student: 'auth.signUp.studentNote',
+  analyst: 'auth.signUp.analystNote',
+  journalist: 'auth.signUp.journalistNote',
+  ceo: 'auth.signUp.ceoNote',
+}
+
 /**
- * Sign-up (spec section 12): the account type, the user, the documents of a Student or an
- * Analyst, the terms; then the code sent to the address confirms it and opens the free trial.
- * `accountType` comes chosen from the home page.
+ * Sign-up (spec section 12): the account type, the user, the documents of the type, the terms;
+ * then the code sent to the address confirms it and opens the free trial. `accountType` comes
+ * chosen from the home page.
  */
 export function SignUpForm({ accountType }: { accountType?: ClientAccountType }) {
   const { t } = useTranslation()
@@ -66,6 +74,7 @@ export function SignUpForm({ accountType }: { accountType?: ClientAccountType })
     return issue ? t(`auth.signUp.errors.${issue}`) : (serverErrors[field]?.[0] ?? null)
   }
   const failure = register.error && !isApiError(register.error, 400) ? register.error.message : null
+  const note = form.accountType ? NOTES[form.accountType] : undefined
 
   return (
     <form
@@ -163,7 +172,11 @@ export function SignUpForm({ accountType }: { accountType?: ClientAccountType })
         </Field>
         <Field
           label={t('auth.signUp.organization')}
-          hint={t('auth.signUp.organizationHint')}
+          hint={t(
+            form.accountType === 'ceo'
+              ? 'auth.signUp.organizationHintCeo'
+              : 'auth.signUp.organizationHint',
+          )}
           error={errorOf('organizationName')}
         >
           <TextInput
@@ -174,12 +187,7 @@ export function SignUpForm({ accountType }: { accountType?: ClientAccountType })
         </Field>
       </div>
 
-      {form.accountType === 'student' && (
-        <p className="font-sans text-data text-secondary">{t('auth.signUp.studentNote')}</p>
-      )}
-      {form.accountType === 'analyst' && (
-        <p className="font-sans text-data text-secondary">{t('auth.signUp.analystNote')}</p>
-      )}
+      {note && <p className="font-sans text-data text-secondary">{t(note)}</p>}
       {documentsFor(form.accountType).map(({ kind, required }) => (
         <Field
           key={kind}

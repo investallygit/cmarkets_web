@@ -20,6 +20,7 @@ import { toMarketDay } from '@/shared/lib/format'
 import {
   changePct,
   currentAccountType,
+  currentUser,
   readDrawings,
   securities,
   writeDrawings,
@@ -295,6 +296,14 @@ export const securityHandlers = [
   }),
 
   http.put(api('/charts/:id/drawings'), async ({ params, request }) => {
+    // "Read" in spec section 12 views the charts without saving drawings.
+    if (!currentUser().permissions.includes('analysis:save')) {
+      return problem(
+        403,
+        'Forbidden',
+        'This account type views the charts without saving drawings.',
+      )
+    }
     const body = (await request.json()) as Partial<ChartDrawingsDto>
     if (!Array.isArray(body.drawings) || !body.drawings.every(isDrawing)) {
       return problem(

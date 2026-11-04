@@ -25,6 +25,8 @@ describe('administration store', () => {
       analyst: 96,
       manager: 212,
       trader: 348,
+      journalist: 37,
+      ceo: 58,
       dataAdmin: 4,
       admin: 2,
     })
@@ -33,13 +35,17 @@ describe('administration store', () => {
     expect(suspended.map((account) => account.displayName)).toContain('F. Mba')
   })
 
-  it('lists the Analyst status requests of the mockup, newest first', () => {
-    expect(admin.analystRequests('pending').map((request) => request.displayName)).toEqual([
-      'R. Essomba',
-      'F. Biyong',
-      'D. Moussavou',
+  it('lists the status requests of the mockup, newest first, each with its type', () => {
+    const pending = admin.analystRequests('pending')
+    expect(pending.map((request) => [request.displayName, request.accountType])).toEqual([
+      ['R. Essomba', 'analyst'],
+      ['F. Biyong', 'analyst'],
+      ['D. Moussavou', 'analyst'],
     ])
     expect(admin.analystRequests('rejected')).toHaveLength(3)
+    // Journalists and CEOs are approved too (spec section 12, second version).
+    const approved = admin.analystRequests('approved').map((request) => request.accountType)
+    expect(new Set(approved)).toEqual(new Set(['analyst', 'journalist', 'ceo']))
   })
 
   it('puts the reported publications before those waiting, a first publication flagged', () => {

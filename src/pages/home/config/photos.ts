@@ -9,6 +9,10 @@ import douala960 from '../assets/photos/douala-960.webp'
 import douala1920 from '../assets/photos/douala-1920.webp'
 import library480 from '../assets/photos/library-480.webp'
 import library960 from '../assets/photos/library-960.webp'
+import newspapers480 from '../assets/photos/newspapers-480.webp'
+import newspapers960 from '../assets/photos/newspapers-960.webp'
+import officesNight480 from '../assets/photos/offices-night-480.webp'
+import officesNight960 from '../assets/photos/offices-night-960.webp'
 import research480 from '../assets/photos/research-480.webp'
 import research960 from '../assets/photos/research-960.webp'
 import trading480 from '../assets/photos/trading-480.webp'
@@ -35,6 +39,8 @@ const photo = (small: string, large: string, width: number): PhotoFiles => ({
  * - analyst: charts under a magnifying glass, 5561913, Leeloo The First
  * - manager: a boardroom over a city, 5717314, Tima Miroshnichenko
  * - trader: a trader before a chart, 7567522, Tima Miroshnichenko
+ * - journalist: a stack of newspapers, 5505718
+ * - ceo: the lit windows of an office tower at night, 18824803
  */
 export const PHOTOS = {
   hero: photo(cityNight960, cityNight1920, 960),
@@ -47,4 +53,6 @@ export const AUDIENCE_PHOTOS: Record<ClientAccountType, PhotoFiles> = {
   analyst: photo(research480, research960, 480),
   manager: photo(boardroom480, boardroom960, 480),
   trader: photo(trading480, trading960, 480),
+  journalist: photo(newspapers480, newspapers960, 480),
+  ceo: photo(officesNight480, officesNight960, 480),
 }

@@ -33,6 +33,8 @@ const HOME_SCREEN: Record<AccountType, string> = {
   analyst: 'MKT',
   manager: 'MKT',
   trader: 'MKT',
+  journalist: 'MKT',
+  ceo: 'MKT',
   dataAdmin: 'IMP',
   admin: 'USER',
 }

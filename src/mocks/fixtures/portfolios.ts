@@ -158,9 +158,12 @@ const STUDENT_MODEL: ModelAllocationDto = {
   ],
 }
 
-/** The portfolios a demo user starts with; Students only simulate, employees hold none. */
+/**
+ * The portfolios a demo user starts with; Students only simulate; Journalists, CEOs and employees
+ * hold none.
+ */
 export function createPortfolios(accountType: AccountType, market: MarketData): StoredPortfolio[] {
-  if (accountType === 'dataAdmin' || accountType === 'admin') return []
+  if (['journalist', 'ceo', 'dataAdmin', 'admin'].includes(accountType)) return []
   const banks: StoredPortfolio = {
     id: 'portfolio-banks',
     name: 'Banks and insurers',

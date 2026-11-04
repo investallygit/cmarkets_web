@@ -30,7 +30,7 @@ const plan = (
   accountTypes,
 })
 
-const PROFESSIONALS: ClientAccountType[] = ['analyst', 'manager', 'trader']
+const PROFESSIONALS: ClientAccountType[] = ['analyst', 'manager', 'trader', 'journalist', 'ceo']
 
 /** The plans of spec section 6, prices per user and month excluding VAT; the spec gives none. */
 export const PLANS: PlanDto[] = [
@@ -57,9 +57,9 @@ function lastAnniversary(today: IsoDate, monthDay: string): IsoDate {
 }
 
 /**
- * The demo plans, dated from today: K. Atangana pays Professional yearly by card; Asset manager A
- * pays Professional monthly and Bank C Analysis (no Portfolio module) yearly, both by transfer;
- * University B has the student plan for its students.
+ * The demo plans, dated from today: K. Atangana pays Professional yearly by card and R. Tamba
+ * Analysis monthly by card; Asset manager A pays Professional monthly and Bank C Analysis (no
+ * Portfolio module) yearly, both by transfer; University B has the student plan for its students.
  */
 export function createSubscriptions(today: IsoDate): StoredSubscription[] {
   const subscription = (
@@ -87,6 +87,14 @@ export function createSubscriptions(today: IsoDate): StoredSubscription[] {
       'professional',
       lastAnniversary(today, '01-15'),
       'yearly',
+      'card',
+    ),
+    subscription(
+      'subscription-journalist',
+      { type: 'user', id: 'user-journalist' },
+      'analysis',
+      `${today.slice(0, 7)}-01`,
+      'monthly',
       'card',
     ),
     subscription(
@@ -129,6 +137,7 @@ export function createInvoices(
   // The demo plans only, with the periods invoiced before the current one.
   const earlier: Record<string, number> = {
     'subscription-analyst': 1,
+    'subscription-journalist': 1,
     'subscription-am': 2,
     'subscription-bank': 0,
     'subscription-university': 0,

@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { ADMIN_QUERY_ROOT, apiClient, useRefreshAdminData } from '@/shared/api'
-import type { AnalystRequestDto, AnalystStatus, SignUpDocument } from '@/shared/api/contracts'
+import type { AnalystRequestDto, SignUpDocument, VerificationStatus } from '@/shared/api/contracts'
 
 export const analystRequestKeys = {
   all: [...ADMIN_QUERY_ROOT, 'analyst-requests'] as const,
-  list: (status: AnalystStatus) => [...analystRequestKeys.all, 'list', status] as const,
+  list: (status: VerificationStatus) => [...analystRequestKeys.all, 'list', status] as const,
   document: (id: string, kind: SignUpDocument) =>
     [...analystRequestKeys.all, 'document', id, kind] as const,
 }
@@ -12,8 +12,11 @@ export const analystRequestKeys = {
 const requestPath = (id: string, action: string) =>
   `/admin/analyst-requests/${encodeURIComponent(id)}/${action}`
 
-/** GET /admin/analyst-requests?status=: waiting by default, newest first. */
-export function useAnalystRequests(status: AnalystStatus = 'pending') {
+/**
+ * GET /admin/analyst-requests?status=: the requests of Analysts, Journalists and CEOs, waiting by
+ * default, newest first.
+ */
+export function useAnalystRequests(status: VerificationStatus = 'pending') {
   return useQuery({
     queryKey: analystRequestKeys.list(status),
     queryFn: ({ signal }) =>

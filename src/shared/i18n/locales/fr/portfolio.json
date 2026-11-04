@@ -18,7 +18,8 @@
     },
     "empty": {
       "message": "Aucun portefeuille pour l'instant. Créez-en un par client, fonds ou stratégie, avec sa devise, son indice de référence et ses limites.",
-      "student": "Aucun portefeuille pour l'instant. Un compte Étudiant simule des allocations : créez un portefeuille modèle."
+      "student": "Aucun portefeuille pour l'instant. Un compte Étudiant simule des allocations : créez un portefeuille modèle.",
+      "readOnly": "Aucun portefeuille à consulter pour l'instant : les gérants de votre organisation partagent les leurs avec elle."
     },
     "selector": {
       "label": "Portefeuille",

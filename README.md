@@ -56,13 +56,13 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done on mock data; the mock sets off the alerts               |
 | Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
-| Journalist and CEO account types                                          | To do: ROADMAP steps 12 and 13                                |
+| Journalist and CEO account types                                          | Done; the portfolios a CEO reads come with ROADMAP step 13    |
 | 10 · Professional directory (NET), public profile page                    | To do: ROADMAP step 15                                        |
 | 11 · Messaging (MSG)                                                      | To do: ROADMAP steps 16 and 17                                |
 | 12 · My profile, visibility and contact (NET ME)                          | To do: ROADMAP step 14                                        |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
-| 9 · Account administration (USER) with ANLY and MOD                       | Done; 1,959 accounts, requests, moderation queue on mock data |
+| 9 · Account administration (USER) with ANLY and MOD                       | Done; 2,054 accounts, requests, moderation queue on mock data |
 | Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; every Data admin and Admin action is in the audit log   |
 
 How the screens were built, step by step, the plan for the second version of the spec (the
@@ -240,8 +240,9 @@ changes, which also ends the prototype's session once.
 
 `app/styles/index.css` holds the colour tokens of spec section 8 under their spec names
 (`--bg-panel`, `--accent-amber`...) and maps them to Tailwind utilities (`bg-panel`,
-`text-accent-amber`, `text-up`...). Tailwind's default palette is removed, so only these colours
-exist. Numbers use `shared/lib/format.ts` (`52 500,25` in French, `52,500.25` in English, dates
+`text-accent-amber`, `text-up`...), with the badge colour of each account type of section 9
+(`--type-student`...), which `ACCOUNT_TYPE_COLORS` gives wherever a type shows. Tailwind's default
+palette is removed, so only these colours exist. Numbers use `shared/lib/format.ts` (`52 500,25` in French, `52,500.25` in English, dates
 `DD/MM/YYYY` in the time zone of the user's profile, Douala by default; a calendar day keeps its
 date in every zone, and the session clock stays in Douala time), and inputs read them back with
 `shared/lib/parse.ts`. The home page and the login pages use the brand navy and green, kept for

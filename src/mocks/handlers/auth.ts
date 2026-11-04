@@ -31,7 +31,7 @@ import {
   subscriptionStore,
   userOfAccessToken,
 } from '../db'
-import { DEMO_PASSWORD, type StoredAccount } from '../fixtures/accounts'
+import { DEMO_PASSWORD, isVerifiedType, type StoredAccount } from '../fixtures/accounts'
 import { trialPlanOf } from '../fixtures/billing'
 import { DEMO_USERS } from '../fixtures/users'
 import {
@@ -88,6 +88,8 @@ const SIGN_UP_DOCUMENTS: readonly SignUpDocument[] = [
   'identityDocument',
   'cv',
   'licence',
+  'pressCredential',
+  'proofOfPosition',
 ]
 
 function unauthorized() {
@@ -189,7 +191,7 @@ function signUpErrors(form: FormData, documents: Set<SignUpDocument>): Record<st
   const email = text(form, 'email')
   const phone = text(form, 'phone')
   if (!CLIENT_ACCOUNT_TYPES.some((type) => type === accountType)) {
-    errors.accountType = ['Student, Analyst, Portfolio manager or Trader.']
+    errors.accountType = ['Student, Analyst, Portfolio manager, Trader, Journalist or CEO.']
   }
   if (!text(form, 'displayName')) errors.displayName = ['Give your name.']
   if (!isEmail(email)) errors.email = ['An e-mail address.']
@@ -204,6 +206,15 @@ function signUpErrors(form: FormData, documents: Set<SignUpDocument>): Record<st
   if (accountType === 'analyst') {
     if (!documents.has('identityDocument')) errors.identityDocument = ['An identity document.']
     if (!documents.has('cv')) errors.cv = ['Your CV.']
+  }
+  if (accountType === 'journalist' && !documents.has('pressCredential')) {
+    errors.pressCredential = ['Your press card or a letter from your employer.']
+  }
+  if (accountType === 'ceo') {
+    if (!documents.has('proofOfPosition')) errors.proofOfPosition = ['A proof of your position.']
+    if (!text(form, 'organizationName')) {
+      errors.organizationName = ['The organisation you head.']
+    }
   }
   return errors
 }
@@ -373,15 +384,15 @@ export const authHandlers = [
       timeZone: 'Africa/Douala',
       phone: text(form, 'phone') || null,
       twoFactorChannel: 'email',
-      // An Admin approves the status before the first publication (spec section 12).
-      analystStatus: accountType === 'analyst' ? 'pending' : null,
+      // An Admin approves the status of an Analyst, a Journalist or a CEO (spec section 12).
+      verificationStatus: isVerifiedType(accountType) ? 'pending' : null,
       status: 'active',
       createdAt: now.toISOString(),
       documents: files,
       failedLogins: 0,
       lockedUntil: null,
       lastLoginAt: null,
-      analystDecision: null,
+      verificationDecision: null,
       suspension: null,
     }
     accountStore.write([...accountStore.read(), account])

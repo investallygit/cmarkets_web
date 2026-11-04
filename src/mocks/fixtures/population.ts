@@ -1,19 +1,22 @@
-import type { AccountType, SignUpDocument } from '@/shared/api/contracts'
+import type { AccountType, ClientAccountType, SignUpDocument } from '@/shared/api/contracts'
 import { addDays } from '@/shared/lib/isoDate'
 import { createRandom, hashString } from '../lib/random'
 import {
   DEMO_PASSWORD_HASH,
   DEMO_SALT,
+  isVerifiedType,
   type StoredAccount,
   type StoredOrganization,
 } from './accounts'
 
-/** Active accounts by type on the screen 9 mockup: 1,946 in all. */
+/** Active accounts by type on the screen 9 mockup: 2,041 in all, where its list says 1,946. */
 export const ACTIVE_ACCOUNTS: Record<AccountType, number> = {
   student: 1_284,
   analyst: 96,
   manager: 212,
   trader: 348,
+  journalist: 37,
+  ceo: 58,
   dataAdmin: 4,
   admin: 2,
 }
@@ -48,7 +51,7 @@ export interface PopulationOrganization extends StoredOrganization {
 
 /** Organisations of the generated accounts, named like those of the mockups. */
 // prettier-ignore
-const ORGANIZATIONS: Record<'student' | 'analyst' | 'manager' | 'trader', PopulationOrganization[]> = {
+const ORGANIZATIONS: Record<Exclude<ClientAccountType, 'ceo'>, PopulationOrganization[]> = {
   student: [
     { id: 'org-p-university-f', name: 'University F', domain: 'university-f.example', country: 'CM', createdAt: '2024-09-02T08:00:00Z' },
     { id: 'org-p-university-g', name: 'University G', domain: 'university-g.example', country: 'GA', createdAt: '2024-10-01T08:00:00Z' },
@@ -72,7 +75,15 @@ const ORGANIZATIONS: Record<'student' | 'analyst' | 'manager' | 'trader', Popula
     { id: 'org-p-bank-u', name: 'Bank U', domain: 'bank-u.example', country: 'GQ', createdAt: '2025-04-14T08:00:00Z' },
     { id: 'org-p-bank-v', name: 'Bank V', domain: 'bank-v.example', country: 'TD', createdAt: '2025-11-03T08:00:00Z' },
   ],
+  journalist: [
+    { id: 'org-p-daily-w', name: 'Business daily W', domain: 'daily-w.example', country: 'CM', createdAt: '2024-10-14T08:00:00Z' },
+    { id: 'org-p-radio-x', name: 'Radio X', domain: 'radio-x.example', country: 'GA', createdAt: '2025-03-03T08:00:00Z' },
+    { id: 'org-p-agency-y', name: 'News agency Y', domain: 'agency-y.example', country: 'CG', createdAt: '2025-07-07T08:00:00Z' },
+  ],
 }
+
+/** A CEO heads one of the asset managers, pension funds, banks or brokerage firms. */
+const CEO_ORGANIZATIONS = [...ORGANIZATIONS.manager, ...ORGANIZATIONS.trader]
 
 export const POPULATION_ORGANIZATIONS: PopulationOrganization[] =
   Object.values(ORGANIZATIONS).flat()
@@ -139,9 +150,15 @@ function generatedAccount(
   const employee = accountType === 'dataAdmin' || accountType === 'admin'
   const surname = pick(random, SURNAMES)
   const initial = pick(random, [...INITIALS])
-  const organizations = employee ? [] : ORGANIZATIONS[accountType]
+  const organizations = employee
+    ? []
+    : accountType === 'ceo'
+      ? CEO_ORGANIZATIONS
+      : ORGANIZATIONS[accountType]
   const inOrganization =
-    !employee && random() < { student: 0.85, analyst: 0.25, manager: 1, trader: 1 }[accountType]
+    !employee &&
+    random() <
+      { student: 0.85, analyst: 0.25, manager: 1, trader: 1, journalist: 0.7, ceo: 1 }[accountType]
   const organization = inOrganization ? pick(random, organizations) : undefined
   const country = organization?.country ?? (employee ? 'CM' : pick(random, COUNTRIES))
   const domain = employee ? 'cmarket.example' : (organization?.domain ?? 'mail.example')
@@ -165,20 +182,24 @@ function generatedAccount(
   const rejected = accountType === 'analyst' && index < REJECTED_ANALYSTS
   const decidedAt = new Date(Date.parse(createdAt) + 2 * 24 * HOUR).toISOString()
   const documents: { kind: SignUpDocument; fileName: string; size: number }[] =
-    accountType === 'analyst'
-      ? [
-          {
-            kind: 'cv',
-            fileName: `CV_${surname}.pdf`,
-            size: 120_000 + Math.floor(random() * 90_000),
-          },
-          {
-            kind: 'identityDocument',
-            fileName: `ID_${surname}.pdf`,
-            size: 300_000 + Math.floor(random() * 300_000),
-          },
-        ]
-      : []
+    accountType === 'journalist'
+      ? [{ kind: 'pressCredential', fileName: `Press_card_${surname}.pdf`, size: 180_000 }]
+      : accountType === 'ceo'
+        ? [{ kind: 'proofOfPosition', fileName: `Appointment_${surname}.pdf`, size: 140_000 }]
+        : accountType === 'analyst'
+          ? [
+              {
+                kind: 'cv',
+                fileName: `CV_${surname}.pdf`,
+                size: 120_000 + Math.floor(random() * 90_000),
+              },
+              {
+                kind: 'identityDocument',
+                fileName: `ID_${surname}.pdf`,
+                size: 300_000 + Math.floor(random() * 300_000),
+              },
+            ]
+          : []
   return {
     id: `user-p${String(number).padStart(4, '0')}`,
     email: `${initial.toLowerCase()}.${slug(surname)}${number}@${domain}`,
@@ -192,23 +213,20 @@ function generatedAccount(
     timeZone: TIME_ZONES[country],
     phone,
     twoFactorChannel: phone && !employee && random() < 0.3 ? 'sms' : 'email',
-    analystStatus: accountType === 'analyst' ? (rejected ? 'rejected' : 'approved') : null,
+    verificationStatus: isVerifiedType(accountType) ? (rejected ? 'rejected' : 'approved') : null,
     status: suspended ? 'suspended' : 'active',
     createdAt,
     documents,
     failedLogins: 0,
     lockedUntil: null,
     lastLoginAt,
-    analystDecision:
-      accountType === 'analyst'
-        ? {
-            at: decidedAt,
-            by: 'L. Mvogo',
-            reason: rejected
-              ? 'No licence and no published research to judge the background.'
-              : null,
-          }
-        : null,
+    verificationDecision: isVerifiedType(accountType)
+      ? {
+          at: decidedAt,
+          by: 'L. Mvogo',
+          reason: rejected ? 'No licence and no published research to judge the background.' : null,
+        }
+      : null,
     suspension: suspended
       ? {
           at: new Date(

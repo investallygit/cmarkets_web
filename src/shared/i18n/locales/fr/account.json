@@ -48,20 +48,27 @@
         "student": "Étudiants et enseignants en finance : données différées, portefeuilles simulés, études.",
         "analyst": "Publiez des études sur une société ou un pays, gratuites ou payantes.",
         "manager": "Gérez, valorisez et suivez des portefeuilles ; rapports clients.",
-        "trader": "Cours en temps réel, carnet d'ordres, intraday et alertes."
+        "trader": "Cours en temps réel, carnet d'ordres, intraday et alertes.",
+        "journalist": "Les marchés, la recherche et l'annuaire, pour contacter des professionnels pour un article.",
+        "ceo": "Les marchés et, en lecture, les portefeuilles de votre organisation ; des échanges avec les professionnels."
       },
       "name": "Nom complet",
       "phone": "Téléphone mobile",
       "phoneHint": "Facultatif : pour les alertes et les codes par SMS.",
       "organization": "Organisation",
       "organizationHint": "Facultatif : ouvre aussi un compte pour vos collègues.",
+      "organizationHintCeo": "L'organisation que vous dirigez ; un compte s'ouvre aussi pour vos collègues.",
       "studentNote": "Avec une adresse e-mail d'établissement, aucun justificatif n'est demandé ; sinon, joignez un certificat de scolarité.",
       "analystNote": "Un Admin vérifie ces documents avant votre première publication ; CMarket vous est ouvert en attendant.",
+      "journalistNote": "Un Admin vérifie votre carte de presse ou la lettre de votre employeur, puis vous donne le badge VÉRIFIÉ ; CMarket est à vous en attendant.",
+      "ceoNote": "Indiquez l'organisation que vous dirigez : un Admin vérifie votre fonction avant le badge VÉRIFIÉ ; CMarket est à vous en attendant.",
       "documents": {
         "proofOfEnrolment": "Certificat de scolarité",
         "identityDocument": "Pièce d'identité",
         "cv": "CV",
-        "licence": "Agrément"
+        "licence": "Agrément",
+        "pressCredential": "Carte de presse ou lettre de l'employeur",
+        "proofOfPosition": "Justificatif de fonction"
       },
       "optional": "{{label}} (facultatif)",
       "terms": "J'accepte les conditions d'utilisation et la politique de confidentialité.",
@@ -101,9 +108,8 @@
       "accountType": "Type de compte",
       "organization": "Organisation",
       "individual": "Compte individuel",
-      "analystStatus": {
+      "verificationStatus": {
         "pending": "en attente d'approbation",
-        "approved": "approuvé",
         "rejected": "non approuvé"
       },
       "name": "Nom",

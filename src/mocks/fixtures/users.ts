@@ -1,33 +1,49 @@
 import type { AccountType, MeDto, Permission, WatchlistColumn } from '@/shared/api/contracts'
 
-/** Default role -> permission table of spec section 12; the Admin edits it in the real product. */
+/**
+ * Default role -> permission table of spec section 12; the Admin edits it in the real product.
+ * "Read" in the matrix is viewing without saving: the Journalist and the CEO lack analysis:save.
+ */
 // prettier-ignore
 export const ROLE_PERMISSIONS: Record<AccountType, Permission[]> = {
-  student: ['market:read', 'analysis:read', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy'],
-  analyst: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy', 'publications:write', 'publications:earnings'],
-  manager: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'portfolios:read', 'portfolios:write', 'portfolios:reports', 'alerts:write', 'research:read', 'research:buy'],
-  trader: ['market:read', 'market:realtime', 'market:orderbook', 'analysis:read', 'analysis:export', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy'],
+  student: ['market:read', 'analysis:read', 'analysis:save', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy'],
+  analyst: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'analysis:save', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy', 'publications:write', 'publications:earnings'],
+  manager: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'analysis:save', 'portfolios:read', 'portfolios:write', 'portfolios:reports', 'alerts:write', 'research:read', 'research:buy'],
+  trader: ['market:read', 'market:realtime', 'market:orderbook', 'analysis:read', 'analysis:export', 'analysis:save', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy'],
+  journalist: ['market:read', 'market:orderbook', 'analysis:read', 'alerts:write', 'research:read', 'research:buy'],
+  ceo: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'portfolios:read', 'alerts:write', 'research:read', 'research:buy'],
   dataAdmin: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'research:read', 'data:import', 'content:publish'],
   admin: ['market:read', 'research:read', 'publications:earnings', 'users:manage', 'moderation:manage', 'settings:manage', 'audit:read', 'payouts:manage'],
 }
 
-/** Starting quotas of spec section 12 (null = unlimited). */
+/**
+ * Starting quotas of spec section 12 (null = unlimited). A CEO holds no portfolio but reads those
+ * of the organisation.
+ */
 export const ROLE_QUOTAS: Record<AccountType, MeDto['quotas']> = {
   student: { portfolios: 3, alerts: 10 },
   analyst: { portfolios: 5, alerts: 50 },
   manager: { portfolios: null, alerts: 100 },
   trader: { portfolios: 5, alerts: null },
+  journalist: { portfolios: 0, alerts: 20 },
+  ceo: { portfolios: 0, alerts: 20 },
   dataAdmin: { portfolios: 0, alerts: 0 },
   admin: { portfolios: 0, alerts: 0 },
 }
 
-/** One fictitious user per account type, names taken from the screen 9 mockup (the Admin is not in it). */
+/**
+ * One fictitious user per account type, names taken from the screen 9 and 11 mockups (the Admin
+ * is in none). E. Fouda, CEO of Bank C there, heads Asset manager A here: Bank C's plan has no
+ * Portfolio module, which the portfolios a CEO reads need.
+ */
 // prettier-ignore
 export const DEMO_USERS: Record<AccountType, Pick<MeDto, 'id' | 'displayName' | 'email' | 'organization'>> = {
   student: { id: 'user-student', displayName: 'S. Mvondo', email: 's.mvondo@university.example', organization: { id: 'org-university', name: 'University B' } },
   analyst: { id: 'user-analyst', displayName: 'K. Atangana', email: 'k.atangana@analyst.example', organization: null },
   manager: { id: 'user-manager', displayName: 'P. Owona', email: 'p.owona@asset-manager.example', organization: { id: 'org-am', name: 'Asset manager A' } },
   trader: { id: 'user-trader', displayName: 'T. Bekale', email: 't.bekale@bank.example', organization: { id: 'org-bank', name: 'Bank C' } },
+  journalist: { id: 'user-journalist', displayName: 'R. Tamba', email: 'r.tamba@press.example', organization: null },
+  ceo: { id: 'user-ceo', displayName: 'E. Fouda', email: 'e.fouda@asset-manager.example', organization: { id: 'org-am', name: 'Asset manager A' } },
   dataAdmin: { id: 'user-data-admin', displayName: 'A. Mbarga', email: 'a.mbarga@cmarket.example', organization: { id: 'org-cmarket', name: 'CMarket' } },
   admin: { id: 'user-admin', displayName: 'L. Mvogo', email: 'l.mvogo@cmarket.example', organization: { id: 'org-cmarket', name: 'CMarket' } },
 }

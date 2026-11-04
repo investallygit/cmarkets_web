@@ -15,7 +15,7 @@ export const PERMISSION_GROUPS: readonly {
   {
     id: 'analysis',
     label: 'permissions.groups.analysis',
-    permissions: ['analysis:read', 'analysis:export'],
+    permissions: ['analysis:read', 'analysis:export', 'analysis:save'],
   },
   {
     id: 'portfolios',
@@ -47,6 +47,7 @@ export const PERMISSION_LABELS: Record<Permission, TranslationKey> = {
   'market:orderbook': 'permissions.labels.marketOrderbook',
   'analysis:read': 'permissions.labels.analysisRead',
   'analysis:export': 'permissions.labels.analysisExport',
+  'analysis:save': 'permissions.labels.analysisSave',
   'portfolios:read': 'permissions.labels.portfoliosRead',
   'portfolios:write': 'permissions.labels.portfoliosWrite',
   'portfolios:reports': 'permissions.labels.portfoliosReports',

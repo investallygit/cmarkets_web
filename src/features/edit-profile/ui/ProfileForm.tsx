@@ -1,6 +1,7 @@
 import { CircleCheck } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { VerifiedBadge } from '@/entities/account'
 import { profileOf, useCurrentUser, useUpdateProfile } from '@/entities/session'
 import { isApiError } from '@/shared/api'
 import type { MeUpdateDto, UserLanguage } from '@/shared/api/contracts'
@@ -62,7 +63,14 @@ export function ProfileForm() {
         <dt className="text-secondary">{t('settings.profile.accountType')}</dt>
         <dd>
           {t(`accountTypes.${user.accountType}`)}
-          {user.analystStatus && ` · ${t(`settings.profile.analystStatus.${user.analystStatus}`)}`}
+          {user.verificationStatus === 'approved' && (
+            <>
+              {' '}
+              <VerifiedBadge />
+            </>
+          )}
+          {(user.verificationStatus === 'pending' || user.verificationStatus === 'rejected') &&
+            ` · ${t(`settings.profile.verificationStatus.${user.verificationStatus}`)}`}
         </dd>
         <dt className="text-secondary">{t('settings.profile.organization')}</dt>
         <dd className="truncate">{user.organization?.name ?? t('settings.profile.individual')}</dd>

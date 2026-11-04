@@ -31,6 +31,15 @@
   /* Logo, login screen and marketing pages only. */
   --brand-navy: #0b1f3a;
   --brand-green: #1fb57a;
+  /* The badge of each client account type (spec section 9, screen 10); employees stay grey. */
+  --type-student: #36c5f0;
+  --type-analyst: #ff9f1a;
+  --type-manager: #19d27a;
+  --type-trader: #b07cff;
+  --type-journalist: #ff7ab6;
+  --type-ceo: #e0c068;
+  /* On --bg-selected, the Trader's purple is 3.9:1: this lighter one keeps 4.5:1 (5.0:1). */
+  --type-trader-selected: #bf98ff;
   /*
    * Series of a chart that carry identity only (allocation by sector...), in this order and
    * never cycled. Section 8 has no chart palette: these eight pass the lightness, chroma,
@@ -524,6 +533,11 @@
 
   :where(.bg-selected, .hover\:bg-selected:hover) .text-down {
     color: var(--down-selected);
+  }
+
+  /* The type colours are set inline from their properties, which the selection changes. */
+  :where(.bg-selected, .hover\:bg-selected:hover) {
+    --type-trader: var(--type-trader-selected);
   }
 }
 

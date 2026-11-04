@@ -92,7 +92,7 @@ function studioAnalyst(permission: Permission = 'publications:write') {
   if (!user.permissions.includes(permission)) {
     return { error: forbidden('Only an Analyst account publishes research.') }
   }
-  if (user.analystStatus !== 'approved') {
+  if (user.verificationStatus !== 'approved') {
     return { error: forbidden('Your Analyst status is waiting for the approval of an Admin.') }
   }
   const analyst = analystStore.read().find((candidate) => candidate.userId === user.id)

@@ -2,6 +2,7 @@ import { Plus } from 'lucide-react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSecurities } from '@/entities/security'
+import { useHasPermission } from '@/entities/session'
 import { ContextMenu } from '@/shared/ui/ContextMenu'
 import { Button } from '@/shared/ui/form/Button'
 import { Panel } from '@/shared/ui/Panel'
@@ -29,6 +30,8 @@ export function CriteriaPanel() {
   const applied = useScreenerStore((state) => state.applied)
   const screenId = useScreenerStore((state) => state.screenId)
   const { setDraft, run, reset, load } = useScreenerStore.getState()
+  // "Read" accounts (Journalist, CEO) screen without saving (spec section 12).
+  const canSave = useHasPermission('analysis:save')
   const [saving, setSaving] = useState(false)
   const addRef = useRef<HTMLButtonElement>(null)
   const [addMenu, setAddMenu] = useState<{ x: number; y: number } | null>(null)
@@ -57,13 +60,15 @@ export function CriteriaPanel() {
       title={t('screener.criteria')}
       code="EQS"
       options={
-        <button
-          type="button"
-          onClick={() => setSaving(true)}
-          className="panel-no-drag uppercase hover:text-primary"
-        >
-          {t('screener.save')}
-        </button>
+        canSave && (
+          <button
+            type="button"
+            onClick={() => setSaving(true)}
+            className="panel-no-drag uppercase hover:text-primary"
+          >
+            {t('screener.save')}
+          </button>
+        )
       }
       bodyClassName="flex flex-col"
     >
@@ -117,7 +122,7 @@ export function CriteriaPanel() {
           {changed && !inverted && (
             <p className="font-sans text-title text-warning">{t('screener.notRun')}</p>
           )}
-          <SavedScreens loadedId={screenId} onLoad={load} />
+          {canSave && <SavedScreens loadedId={screenId} onLoad={load} />}
         </div>
       </form>
       {addMenu && (
@@ -134,7 +139,7 @@ export function CriteriaPanel() {
         />
       )}
       <SaveScreenDialog
-        open={saving}
+        open={canSave && saving}
         onClose={() => setSaving(false)}
         criteria={requestCriteria}
         onSaved={(screen) => useScreenerStore.setState({ screenId: screen.id })}

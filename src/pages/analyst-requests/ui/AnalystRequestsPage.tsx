@@ -1,6 +1,6 @@
 import { useAnalystRequests } from '@/entities/analyst-request'
 import { ScreenWorkspace, type ScreenPanel } from '@/features/workspace-layout'
-import type { AnalystStatus } from '@/shared/api/contracts'
+import type { VerificationStatus } from '@/shared/api/contracts'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
 import { AnalystRequestPanel, AnalystRequestsPanel } from '@/widgets/analyst-requests-panel'
 
@@ -10,11 +10,12 @@ const LAYOUT: readonly ScreenPanel[] = [
   { i: 'request', name: 'analystRequest', x: 5, y: 0, w: 7, h: 26, minW: 4, minH: 8 },
 ]
 
-const STATUSES: readonly AnalystStatus[] = ['pending', 'approved', 'rejected']
+const STATUSES: readonly VerificationStatus[] = ['pending', 'approved', 'rejected']
 
 /**
- * ANLY: the Analyst status requests waiting, approved or rejected; a click shows the applicant
- * and the supporting documents, with Approve or Reject. In the URL: /admin/analysts?status=&id=.
+ * ANLY: the status requests of Analysts, Journalists and CEOs, waiting, approved or rejected; a
+ * click shows the applicant and the supporting documents, with Approve or Reject. In the URL:
+ * /admin/analysts?status=&id=.
  */
 export function AnalystRequestsPage() {
   const [params, updateParams] = useSearchParamsUpdate()

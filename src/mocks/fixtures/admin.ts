@@ -79,8 +79,8 @@ export function createAdminAudit(): AuditEntryDto[] {
     entry('mba', '2026-10-12T10:20:00Z', 'user-suspend', user('user-mba', 'F. Mba'), [
       { field: 'status', scope: null, before: 'active', after: 'suspended' },
     ], 'Login shared outside Bank C, reported by its administrator.'),
-    entry('nguema', '2026-10-19T10:00:00Z', 'analyst-approve', user('user-nguema', 'C. Nguema'), [
-      { field: 'analystStatus', scope: null, before: 'pending', after: 'approved' },
+    entry('nguema', '2026-10-19T10:00:00Z', 'status-approve', user('user-nguema', 'C. Nguema'), [
+      { field: 'verificationStatus', scope: 'analyst', before: 'pending', after: 'approved' },
     ]),
     entry('bange', '2026-10-21T08:30:00Z', 'publication-keep', { type: 'publication', id: 'pub-bange-margins', label: 'BANGE: margins under pressure, attractive valuation' }, [],
       'A rating is the analyst\'s opinion; the figures are sourced.'),

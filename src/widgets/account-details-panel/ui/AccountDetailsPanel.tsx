@@ -48,16 +48,16 @@ function AccountDetails({ account }: { account: AdminUserDetailsDto }) {
     amount >= 1_000_000
       ? t('accounts.xafCompact', { amount: format.compact(amount) })
       : t('subscription.xaf', { amount: format.number(amount, 0) })
-  const { subscription, publishing, purchases, analystDecision, suspension, lastLogin } = account
+  const { subscription, publishing, purchases, verificationDecision, suspension, lastLogin } =
+    account
 
-  const typeDetail =
-    account.accountType !== 'analyst' || !account.analystStatus
-      ? null
-      : account.analystStatus === 'pending'
-        ? t('accounts.analystPending', { date: format.date(account.createdAt) })
-        : t(`accounts.analyst.${account.analystStatus}`, {
-            date: analystDecision ? format.date(analystDecision.at) : '',
-          })
+  const typeDetail = !account.verificationStatus
+    ? null
+    : account.verificationStatus === 'pending'
+      ? t('accounts.verificationPending', { date: format.date(account.createdAt) })
+      : t(`accounts.verification.${account.verificationStatus}`, {
+          date: verificationDecision ? format.date(verificationDecision.at) : '',
+        })
 
   return (
     <div className="flex flex-col gap-2 p-2">
@@ -145,9 +145,12 @@ function AccountDetails({ account }: { account: AdminUserDetailsDto }) {
           })}
         </p>
       )}
-      {account.analystStatus === 'rejected' && analystDecision?.reason && (
+      {account.verificationStatus === 'rejected' && verificationDecision?.reason && (
         <p role="note" className="border p-2 font-sans text-data text-secondary">
-          {t('accounts.rejectedBecause', { reason: analystDecision.reason })}
+          {t('accounts.rejectedBecause', {
+            type: t(`accountTypes.${account.accountType}`),
+            reason: verificationDecision.reason,
+          })}
         </p>
       )}
       <AccountActions account={account} />

@@ -38,6 +38,8 @@ test('USER counts the accounts by type, filters them and opens the audit log of 
     ['Analyst', '96'],
     ['Portfolio manager', '212'],
     ['Trader', '348'],
+    ['Journalist', '37'],
+    ['CEO', '58'],
     ['Data admin', '4'],
     ['Admin', '2'],
   ]) {
@@ -108,11 +110,11 @@ test('an Admin creates a Data admin, then suspends a trader, who can no longer l
   await expect(page.getByText('This account is suspended. Contact CMarket.')).toBeVisible()
 })
 
-test('Analyst status requests are approved or rejected with a reason, ANLY keeps them', async ({
+test('status requests are approved or rejected with a reason, ANLY keeps them', async ({
   page,
 }) => {
   await asAdmin(page)
-  const requests = panel(page, 'Analyst status requests')
+  const requests = panel(page, 'Status requests')
   await expect(requests).toContainText('3 pending')
   const essomba = requests.getByRole('listitem').filter({ hasText: 'R. Essomba' })
   await expect(essomba).toContainText('Documents: CV, ID, licence')
@@ -136,7 +138,7 @@ test('Analyst status requests are approved or rejected with a reason, ANLY keeps
   await expect(page.getByText('F. Biyong: request rejected.')).toBeVisible()
 
   await page.getByRole('link', { name: /ANLY/ }).click()
-  const list = panel(page, 'Analyst status requests')
+  const list = panel(page, 'Status requests')
   await list.getByRole('tab', { name: 'Rejected' }).click()
   await list.getByRole('row', { name: /F\. Biyong/ }).click()
   await expect(panel(page, 'Request')).toContainText(

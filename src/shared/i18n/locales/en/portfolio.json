@@ -18,7 +18,8 @@
     },
     "empty": {
       "message": "No portfolio yet. Create one per client, fund or strategy, with its currency, benchmark and limits.",
-      "student": "No portfolio yet. A Student account simulates allocations: create a model portfolio."
+      "student": "No portfolio yet. A Student account simulates allocations: create a model portfolio.",
+      "readOnly": "No portfolio to read yet: the portfolio managers of your organisation share theirs with it."
     },
     "selector": {
       "label": "Portfolio",

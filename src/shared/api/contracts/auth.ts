@@ -51,13 +51,19 @@ export interface PasswordResetConfirmDto {
   newPassword: string
 }
 
-/** Documents of a sign-up: proof of enrolment for a Student, identity, CV, licence for an Analyst. */
-export type SignUpDocument = 'proofOfEnrolment' | 'identityDocument' | 'cv' | 'licence'
+/**
+ * Documents of a sign-up: proof of enrolment for a Student; identity, CV, licence for an Analyst;
+ * a press card or an employer letter for a Journalist; a proof of position for a CEO.
+ */
+export type SignUpDocument =
+  'proofOfEnrolment' | 'identityDocument' | 'cv' | 'licence' | 'pressCredential' | 'proofOfPosition'
 
 /**
  * POST /auth/register, sent as a multipart form: these fields, then the documents. A Student
  * without a school e-mail address adds a proof of enrolment; an Analyst adds an identity document
- * and a CV, and a licence if any, for the Admin who approves the status (spec section 12).
+ * and a CV, and a licence if any; a Journalist a press card or a letter from the employer; a CEO a
+ * proof of position and the organisation they head. An Admin approves the status of the last
+ * three (spec section 12).
  */
 export interface RegisterRequestDto {
   accountType: ClientAccountType
@@ -65,7 +71,7 @@ export interface RegisterRequestDto {
   email: string
   password: string
   phone: string | null
-  /** Opens an organisation account with the user as its administrator. */
+  /** Opens an organisation account with the user as its administrator; a CEO names theirs. */
   organizationName: string | null
   language: UserLanguage
   acceptTerms: boolean

@@ -2,6 +2,7 @@ import { clsx } from 'clsx'
 import { FileText } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { AccountTypeText } from '@/entities/account'
 import { useAnalystDocument } from '@/entities/analyst-request'
 import { AnalystDecision } from '@/features/review-analyst-request'
 import type { AnalystRequestDto, SignUpDocument } from '@/shared/api/contracts'
@@ -47,6 +48,9 @@ function RequestDetails({ request }: { request: AnalystRequestDto }) {
         <div className="flex min-w-0 flex-1 flex-col gap-1 font-sans text-data">
           <p>
             <span className="text-label font-semibold">{request.displayName}</span>
+            <span className="ml-2">
+              <AccountTypeText type={request.accountType} />
+            </span>
             <span className="ml-2 text-secondary">
               {request.organization ?? t('accounts.independent')}
             </span>

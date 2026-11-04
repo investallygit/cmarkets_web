@@ -15,7 +15,7 @@ const oneOf = <T extends string>(values: readonly T[], value: AuditValue): T | u
 
 const QUOTAS = ['portfolios', 'alerts'] as const
 const ACCOUNT_STATUSES = ['active', 'suspended'] as const
-const ANALYST_STATUSES = ['pending', 'approved', 'rejected'] as const
+const VERIFICATION_STATUSES = ['pending', 'approved', 'rejected'] as const
 const CHANNELS = ['email', 'sms'] as const
 const MODERATION_MODES = ['before', 'after'] as const
 const PAYOUT_STATUSES = ['accruing', 'due', 'paid'] as const
@@ -42,6 +42,9 @@ export function useAuditText() {
         quota: t(`audit.fields.${quota}`),
         type: t(`accountTypes.${type}`),
       })
+    }
+    if (change.field === 'verificationStatus' && type) {
+      return t('audit.statusOf', { type: t(`accountTypes.${type}`) })
     }
     const permission = oneOf(PERMISSIONS, change.scope)
     if (change.field === 'permission' && permission) return t(PERMISSION_LABELS[permission])
@@ -79,8 +82,10 @@ export function useAuditText() {
         return label(ACCOUNT_TYPES, raw, (type) => t(`accountTypes.${type}`))
       case 'status':
         return label(ACCOUNT_STATUSES, raw, (status) => t(`accounts.statuses.${status}`))
-      case 'analystStatus':
-        return label(ANALYST_STATUSES, raw, (status) => t(`analystRequests.statuses.${status}`))
+      case 'verificationStatus':
+        return label(VERIFICATION_STATUSES, raw, (status) =>
+          t(`analystRequests.statuses.${status}`),
+        )
       case 'twoFactorChannel':
         return label(CHANNELS, raw, (channel) => t(`accounts.channels.${channel}`))
       case 'moderation':

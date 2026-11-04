@@ -6,7 +6,7 @@ import { env } from '@/shared/config/env'
 import type { MenuItem } from '@/shared/ui/menu'
 import { useSwitchPrototypeAccount } from '../api/useSwitchPrototypeAccount'
 
-/** User menu entries of the six account types; only with the mock back end. */
+/** User menu entries of the eight account types; only with the mock back end. */
 export function useAccountMenuItems(): MenuItem[] {
   const { t } = useTranslation()
   const user = useCurrentUser()

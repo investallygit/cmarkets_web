@@ -19,11 +19,11 @@ import { STUDIO_LAYOUT } from '../config/layout'
  * URL (?id=); the latest one opens otherwise. An Analyst not approved yet only sees why.
  */
 export function PublishingStudioPage() {
-  const { analystStatus } = useCurrentUser()
-  return analystStatus === 'approved' ? (
+  const { verificationStatus } = useCurrentUser()
+  return verificationStatus === 'approved' ? (
     <Studio />
   ) : (
-    <AwaitingApproval rejected={analystStatus === 'rejected'} />
+    <AwaitingApproval rejected={verificationStatus === 'rejected'} />
   )
 }
 

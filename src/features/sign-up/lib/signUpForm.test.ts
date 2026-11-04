@@ -42,6 +42,26 @@ describe('sign-up form', () => {
     ).toEqual({})
   })
 
+  it('asks a Journalist for a press card or an employer letter', () => {
+    const journalist = { ...filled, accountType: 'journalist' as const }
+    expect(signUpIssues(journalist)).toEqual({ pressCredential: 'required' })
+    expect(
+      signUpIssues({ ...journalist, documents: { pressCredential: pdf('press-card.pdf') } }),
+    ).toEqual({})
+  })
+
+  it('asks a CEO for a proof of position and the organisation they head', () => {
+    const ceo = { ...filled, accountType: 'ceo' as const }
+    expect(signUpIssues(ceo)).toEqual({ proofOfPosition: 'required', organizationName: 'required' })
+    expect(
+      signUpIssues({
+        ...ceo,
+        organizationName: 'Pension fund G',
+        documents: { proofOfPosition: pdf('appointment.pdf') },
+      }),
+    ).toEqual({})
+  })
+
   it('sends the documents of the account type only', () => {
     const data = toFormData(
       {

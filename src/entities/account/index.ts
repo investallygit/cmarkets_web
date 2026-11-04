@@ -17,6 +17,7 @@ export {
   EMPLOYEE_TYPES,
   isAccountType,
   isEmployeeType,
+  isVerifiedType,
   typesFor,
 } from './config/accountTypes'
 export { accountListStatus } from './lib/accountStatus'
@@ -24,3 +25,4 @@ export { useLoginText } from './lib/useLoginText'
 export { AccountPicker } from './ui/AccountPicker'
 export { AccountStatusText } from './ui/AccountStatusText'
 export { AccountTypeText } from './ui/AccountTypeText'
+export { VerifiedBadge } from './ui/VerifiedBadge'

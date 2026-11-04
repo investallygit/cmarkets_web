@@ -1,19 +1,36 @@
 import type { IsoDate } from './common'
 
-/** Spec section 12. The first four are clients; Data admin and Admin are CMarket employees. */
+/** Spec section 12. The first six are clients; Data admin and Admin are CMarket employees. */
 export const ACCOUNT_TYPES = [
   'student',
   'analyst',
   'manager',
   'trader',
+  'journalist',
+  'ceo',
   'dataAdmin',
   'admin',
 ] as const
 export type AccountType = (typeof ACCOUNT_TYPES)[number]
 
 /** Types a client chooses at sign-up; an Admin creates the employee accounts (spec section 12). */
-export const CLIENT_ACCOUNT_TYPES = ['student', 'analyst', 'manager', 'trader'] as const
+export const CLIENT_ACCOUNT_TYPES = [
+  'student',
+  'analyst',
+  'manager',
+  'trader',
+  'journalist',
+  'ceo',
+] as const
 export type ClientAccountType = (typeof CLIENT_ACCOUNT_TYPES)[number]
+
+/**
+ * Types whose status an Admin approves after the sign-up, which brings the VERIFIED badge:
+ * identity and background for an Analyst, a press card or an employer letter for a Journalist,
+ * a proof of position for a CEO (spec section 12).
+ */
+export const VERIFIED_ACCOUNT_TYPES = ['analyst', 'journalist', 'ceo'] as const
+export type VerifiedAccountType = (typeof VERIFIED_ACCOUNT_TYPES)[number]
 
 /** Modules of the subscription plans (spec section 6). */
 export const MODULES = ['monitoring', 'analysis', 'portfolio'] as const
@@ -31,6 +48,7 @@ export const PERMISSIONS = [
   'market:orderbook',
   'analysis:read',
   'analysis:export',
+  'analysis:save',
   'portfolios:read',
   'portfolios:write',
   'portfolios:reports',
@@ -66,15 +84,18 @@ export interface MeDto {
   permissions: Permission[]
   /** null means unlimited. */
   quotas: { portfolios: number | null; alerts: number | null }
-  /** An Analyst publishes once an Admin approved the status (spec section 12); null for others. */
-  analystStatus: AnalystStatus | null
+  /**
+   * An Analyst, a Journalist or a CEO is verified once an Admin approved the status, which
+   * brings the VERIFIED badge; an Analyst then publishes (spec section 12). Null for the others.
+   */
+  verificationStatus: VerificationStatus | null
   /** Modules of the plan or the free trial that covers the user; all of them for employees. */
   modules: ModuleCode[]
   /** First day after the free trial, while it runs. */
   trialEndsAt: IsoDate | null
 }
 
-export type AnalystStatus = 'pending' | 'approved' | 'rejected'
+export type VerificationStatus = 'pending' | 'approved' | 'rejected'
 
 /** PUT /me: the profile edited in CFG. */
 export interface MeUpdateDto {

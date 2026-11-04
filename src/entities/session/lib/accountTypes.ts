@@ -6,6 +6,8 @@ const AUDIENCE: Record<AccountType, Audience> = {
   analyst: 'client',
   manager: 'client',
   trader: 'client',
+  journalist: 'client',
+  ceo: 'client',
   dataAdmin: 'backoffice',
   admin: 'backoffice',
 }

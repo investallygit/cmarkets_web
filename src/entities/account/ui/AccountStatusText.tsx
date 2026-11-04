@@ -8,7 +8,7 @@ const TONES = { active: 'text-up', review: 'text-warning', suspended: 'text-down
 export function AccountStatusText({
   account,
 }: {
-  account: Pick<AdminUserDto, 'status' | 'analystStatus'>
+  account: Pick<AdminUserDto, 'status' | 'verificationStatus'>
 }) {
   const { t } = useTranslation()
   const status = accountListStatus(account)

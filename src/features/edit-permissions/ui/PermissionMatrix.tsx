@@ -81,7 +81,7 @@ export function PermissionMatrix({ permissions }: { permissions: Matrix }) {
                 <th
                   key={role}
                   scope="col"
-                  className="w-24 px-1 text-center font-semibold"
+                  className="w-20 px-1 text-center font-semibold"
                   style={{ color: ACCOUNT_TYPE_COLORS[role] }}
                 >
                   {t(`accountBadge.${role}`)}

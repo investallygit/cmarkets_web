@@ -1,14 +1,21 @@
-import { ACCOUNT_TYPES, type AccountType } from '@/shared/api/contracts'
+import {
+  ACCOUNT_TYPES,
+  VERIFIED_ACCOUNT_TYPES,
+  type AccountType,
+  type VerifiedAccountType,
+} from '@/shared/api/contracts'
 
 /**
- * Each type's colour, reused across screen 9 (spec section 9): it carries identity only, from the
- * chart palette in its fixed order; the employees stay grey.
+ * Each type's colour, that of its badge in the directory (spec section 9, screen 10), reused
+ * wherever a type shows, screen 9 included; the employees stay grey.
  */
 export const ACCOUNT_TYPE_COLORS: Record<AccountType, string> = {
-  student: 'var(--chart-1)',
-  analyst: 'var(--chart-4)',
-  manager: 'var(--chart-3)',
-  trader: 'var(--chart-7)',
+  student: 'var(--type-student)',
+  analyst: 'var(--type-analyst)',
+  manager: 'var(--type-manager)',
+  trader: 'var(--type-trader)',
+  journalist: 'var(--type-journalist)',
+  ceo: 'var(--type-ceo)',
   dataAdmin: 'var(--text-secondary)',
   admin: 'var(--text-secondary)',
 }
@@ -20,6 +27,10 @@ export const isEmployeeType = (type: AccountType) => EMPLOYEE_TYPES.includes(typ
 
 export const isAccountType = (value: unknown): value is AccountType =>
   ACCOUNT_TYPES.some((type) => type === value)
+
+/** Analyst, Journalist and CEO: an Admin approves the status, which brings the VERIFIED badge. */
+export const isVerifiedType = (type: AccountType): type is VerifiedAccountType =>
+  VERIFIED_ACCOUNT_TYPES.some((candidate) => candidate === type)
 
 /** The types an account can change to: a client stays a client, an employee an employee. */
 export function typesFor(type: AccountType): readonly AccountType[] {

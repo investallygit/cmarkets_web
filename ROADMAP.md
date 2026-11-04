@@ -30,7 +30,7 @@ relative: S < M < L < XL.
 | 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY            | Done   |
 | 10   | Home page, before login: the product, markets, users, plans     | Done   |
 | 11   | Second version of the spec: the plan, its open questions        | Done   |
-| 12   | Journalist and CEO account types, approved by the Admin         | To do  |
+| 12   | Journalist and CEO account types, approved by the Admin         | Done   |
 | 13   | Portfolios shared with the organisation, read by its CEO        | To do  |
 | 14   | NET ME: professional profile, visibility and contact rules      | To do  |
 | 15   | NET: professional directory, public profile page                | To do  |
@@ -82,34 +82,45 @@ The second version is now `CMarket-developer-spec-EN.pdf`, the first one
 `CMarket-developer-spec-EN-v1.pdf`; this section, the order above, the status of the screens to
 come in the README and the open questions of the second version.
 
-### Step 12 · Journalist and CEO (L): to do
+### Step 12 · Journalist and CEO (L): done
 
-- **Types and permissions**: `journalist` and `ceo` join the account types and the client types,
-  with their permissions and quotas; a permission to save screens and chart drawings, which the
-  Journalist and the CEO lack ("Read"), the server refusing their saves too.
-- **Approval**: the Analyst status becomes the status of an Analyst, a Journalist or a CEO, with
-  the VERIFIED badge; the sign-up asks each type for its documents; ANLY reviews the three kinds
-  of request.
-- **Admin**: USER counts the eight types as on the redrawn screen 9, and creates and changes them;
-  ADMCFG gets their quotas and two more columns in the permission matrix.
-- **Colours**: the type colours of section 9 become tokens, for every place a type shows, screen 9
-  included; the Trader's purple gives 3.9:1 on the selected background, so it takes a lighter
-  shade there, as the secondary text does.
-- **Home page and login**: the six client types with their photos and sign-up; R. Tamba
-  (Journalist, screen 11) and E. Fouda (CEO of Bank C, screens 9 and 11) among the demo accounts
-  and in the account switch.
-- **Mock**: the professional plans for both types, the 37 Journalists and 58 CEOs of the counters;
-  `SEED_VERSION` raised.
+- **Types and permissions**: `journalist` and `ceo` are account types and client types, with the
+  permissions and quotas of the matrix (20 alerts each; a CEO exports, a Journalist does not;
+  `portfolios:read` for a CEO only). "Read" is the new `analysis:save`: without it, EQS has no
+  SAVE and no saved screens, GP no drawing tools, and the server refuses both saves (403); the
+  Journalist and the CEO lack it, the other clients have it. Watchlists and alerts stay. PORT is
+  out of a Journalist's menu; a CEO's says that the organisation's portfolios come from its
+  managers (step 13).
+- **Approval**: `analystStatus` and `analystDecision` became `verificationStatus` and
+  `verificationDecision`, in `/me` and the Admin's account DTOs, for an Analyst, a Journalist or
+  a CEO; an approved one shows the green VERIFIED badge in CFG (`VerifiedBadge`). The sign-up asks
+  a Journalist for a press card or an employer letter, a CEO for a proof of position and the
+  organisation they head. ANLY and the panel of screen 9 list the three kinds as "Status
+  requests", each with its type; the audit log records `status-approve` and `status-reject`, with
+  the type as the scope of the change. An Admin who creates an account of one of the three types,
+  or changes an account to one, approves its status with it.
+- **Admin**: USER counts the eight types in one row as on the redrawn screen 9; ADMCFG has the
+  quotas of the six client types and the eight columns of the permission matrix.
+- **Colours**: `--type-student` to `--type-ceo`, the badge colours of section 9, for every place a
+  type shows, screen 9 included; on the selected background the Trader's purple becomes
+  `--type-trader-selected` (5.0:1). axe finds nothing on the screens changed, for each new type.
+- **Home page and login**: the six client types in two rows of three, with two more photos from
+  Pexels (their numbers in `photos.ts`; the photographers' names could not be read, Pexels
+  refusing automated access, and the licence does not require them); R. Tamba (Journalist,
+  screen 11) and E. Fouda (CEO, screens 9 and 11) are demo accounts and in the account switch.
+- **Mock**: R. Tamba, an individual account, pays Analysis monthly by card; E. Fouda heads
+  Asset manager A, not Bank C as on screens 9 and 11, since Bank C's plan lacks the Portfolio
+  module that the organisation's portfolios need; 37 Journalists of three media and 58 CEOs of
+  the generated banks and asset managers fill the counters; `SEED_VERSION` raised.
+- **CMarket.Api**: its `/me` still answers `analystStatus`, which the front end now reads as
+  `verificationStatus`: the API has to follow, with the two new types and `analysis:save`.
 
 ### Step 13 · Portfolios of the organisation (M): to do
 
 - A portfolio manager shares a portfolio with the organisation; its CEO opens the shared
   portfolios in PORT, read only: no new portfolio, transaction, limit or report. The endpoint is
   the prototype's (open question).
-- **Mock**: a portfolio manager of Bank C, E. Fouda's organisation, shares a portfolio. The members
-  of an organisation take its plan, and Bank C's, Analysis, lacks the Portfolio module, so that
-  manager could not open PORT: Bank C moves to Professional, which opens PORT to T. Bekale too (to
-  confirm before the step).
+- **Mock**: P. Owona shares the sample fund with Asset manager A, which E. Fouda heads (step 12).
 
 ### Step 14 · NET ME · My profile, visibility and contact (screen 12) (L): to do
 
@@ -649,7 +660,7 @@ Still to do, with the first screen that needs it:
   14-day trial of the account type's plan starts. Password reset: a code sent to the address, then
   the new password; the answer is the same whether an account uses the address or not. Logout from
   the user menu, in every tab; automatic logout after 30 minutes without activity.
-- **Mock**: the accounts of the six demo users and of their colleagues (password `cmarket2026`),
+- **Mock**: the accounts of the eight demo users and of their colleagues (password `cmarket2026`),
   salted SHA-256 hashes, access tokens of 15 minutes, refresh tokens of 7 days in the cookie the
   mock keeps for the browser, codes shown by the prototype (`GET /_prototype/codes`). The account
   switch of the user menu opens a session for a demo user.
@@ -738,16 +749,17 @@ Still to do, with the first screen that needs it:
   **MOD**: the queue by kind, and the publication opened in the PUB reader with its reports;
   approved, a publication waiting goes live and its followers are told, a reported one stays and
   its reports close; taken down, it leaves the library and its buyers keep their version.
-- **Mock**: the counters add up to the mockup's 1,946 active accounts (1,959 with the suspended);
-  the three requests, the two reports and C. Nguema's first publication of the mockup are seeded.
-  Suspending ends the user's sessions at once; a type changed to Analyst is approved with it.
+- **Mock**: the counters add up to 2,041 active accounts (2,054 with the suspended; 1,946 before
+  the second version); the three requests, the two reports and C. Nguema's first publication of
+  the mockup are seeded. Suspending ends the user's sessions at once; a type changed to Analyst,
+  Journalist or CEO is approved with it.
 
 ### ADMCFG · Platform settings (no mockup): done
 
 - **Built**: quotas of portfolios and alerts by client type (empty for unlimited), the price
   range, CMarket's commission and the moderation mode of research, the risk-free rate of the
   Sharpe ratio, saved together with who changed them last. The permission matrix: the
-  permissions by area as rows, the six account types as columns, the changes counted and saved
+  permissions by area as rows, the eight account types as columns, the changes counted and saved
   role by role (`PUT /admin/roles/{role}/permissions`); the Admin keeps `settings:manage`.
 - **Mock**: users get the new permissions and quotas with their next `/me`, the studio and the
   library the new price range, commission and moderation, PORT the new rate.
@@ -928,26 +940,34 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   should come in the user's language.
 - **Account types, second version**: which permission keys stand for browsing the directory,
   being listed in it and reading a reported conversation (section 12 names `directory:list` and
-  `messages:write` only)? "Read" forbids saved screens and drawings: the prototype adds a
-  permission to save them, which the Journalist and the CEO lack, and leaves them their watchlists.
-  What may a Journalist or a CEO do while waiting for approval (the prototype: view as the type
-  does, without messaging and, for a CEO, without the organisation's portfolios; the VERIFIED badge
-  comes with the approval)? Which plans do they take (the prototype: the professional ones,
-  Monitoring, Analysis and Professional, with the trial of Professional)? Does a CEO need the
-  Portfolio module to read the organisation's portfolios? The members of an organisation share its
-  plan, so the managers who hold those portfolios have the module. Sharing a portfolio with the
-  organisation has no endpoint. The Admin browses the directory, while employees only use the
-  back-office: from which screen?
+  `messages:write` only)? "Read" forbids saved screens and drawings: the prototype adds
+  `analysis:save`, which the Journalist and the CEO lack, and leaves them their watchlists and
+  alerts. Which plans do they take (the prototype: the professional ones, Monitoring, Analysis and
+  Professional, with the trial of Professional)? Does a CEO need the Portfolio module to read the
+  organisation's portfolios? The members of an organisation share its plan, so the managers who
+  hold those portfolios have the module. Sharing a portfolio with the organisation has no
+  endpoint. The Admin browses the directory, while employees only use the back-office: from which
+  screen?
 - **Function codes** (section 8): the table lacks NET, MSG and NET ME, which the mockups of screens
   10 to 12 type in the command bar.
 - **Screen 9 mockup, second version**: the list still counts "8 of 1,946 accounts", while the eight
-  counters add up to 2,041; its panel is still "ANALYST STATUS REQUESTS", while Journalists and
-  CEOs are approved too.
+  counters add up to 2,041 (the prototype counts 2,041, and 2,054 with the suspended); its panel
+  is still "ANALYST STATUS REQUESTS", while Journalists and CEOs are approved too (the prototype:
+  "Status requests", each with its type). E. Fouda is the CEO of Bank C on screens 9 and 11, whose
+  plan has no Portfolio module: the prototype makes E. Fouda the CEO of Asset manager A, whose
+  managers have portfolios to share.
+- **Status requests, second version**: `GET /admin/analyst-requests` keeps its name and lists the
+  requests of the three types, each with its `accountType`; `/me` and the Admin's accounts call
+  the status `verificationStatus`. What may a Journalist or a CEO do while waiting (the
+  prototype, to come: view as the type does, without messaging and, for a CEO, without the
+  organisation's portfolios)? A Journalist sends one document, a press card or an employer
+  letter; a CEO a proof of position and the name of the organisation they head, which the sign-up
+  opens: how does a CEO join an organisation already on CMarket?
 - **Screen 10 mockup**: "Only profiles I can contact" is ticked, yet A. Tchakounté shows "Contact
-  not open"; D. Moussavou has 9 publications while his Analyst status waits on screen 9; the
-  directory counts 412 Students for 1,284 active Student accounts; "Analysts who published in last
-  90 days" has no parameter in `GET /directory`; the button is "Send a request" in section 9 and
-  "Send a contact request" on screen 12.
+  not open"; D. Moussavou has 9 publications, yet the Analyst status of D. Moussavou waits on
+  screen 9; the directory counts 412 Students for 1,284 active Student accounts; "Analysts who
+  published in last 90 days" has no parameter in `GET /directory`; the button is "Send a request"
+  in section 9 and "Send a contact request" on screen 12.
 - **Profiles**: the public page is `/p/{handle}` and its endpoint `/public/profiles/{slug}`: how is
   the handle chosen? Is the display name of `PUT /me/profile` the one of `PUT /me` (CFG)? LinkedIn
   has no display toggle on screen 12, unlike the e-mail and the phone. What does Follow do on a

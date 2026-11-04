@@ -131,6 +131,16 @@
         "cta": "S'inscrire comme trader",
         "text": "Cours en temps réel, carnet d'ordres, graphiques intraday et alertes, et le marché des titres publics."
       },
+      "journalist": {
+        "who": "Journalistes économiques et financiers",
+        "cta": "S'inscrire comme journaliste",
+        "text": "Les marchés, la recherche et l'annuaire des professionnels, pour vérifier un chiffre ou trouver une voix pour un article."
+      },
+      "ceo": {
+        "who": "Dirigeants de banques, de sociétés de bourse, de sociétés de gestion, d'assureurs et de caisses de retraite",
+        "cta": "S'inscrire comme dirigeant",
+        "text": "Les marchés et, en lecture, les portefeuilles que vos gérants partagent avec votre organisation ; des échanges avec les professionnels."
+      },
       "organization": "Un compte organisation réunit vos collègues sous une même offre, payée par l'organisation."
     },
     "plans": {

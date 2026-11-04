@@ -23,7 +23,7 @@ export function AudienceSection() {
       title={t('home.audience.title')}
       lead={t('home.audience.lead')}
     >
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {CLIENT_ACCOUNT_TYPES.map((accountType, index) => (
           <li
             key={accountType}
@@ -33,7 +33,7 @@ export function AudienceSection() {
             <div className="aspect-3/2 overflow-hidden border-b">
               <Photo
                 photo={AUDIENCE_PHOTOS[accountType]}
-                sizes="(min-width: 1024px) 290px, (min-width: 640px) 50vw, 100vw"
+                sizes="(min-width: 1024px) 390px, (min-width: 640px) 50vw, 100vw"
                 className="size-full brightness-75 saturate-50 transition duration-700 group-hover:brightness-90 group-hover:saturate-100 motion-safe:group-hover:scale-105 motion-reduce:transition-none"
               />
             </div>

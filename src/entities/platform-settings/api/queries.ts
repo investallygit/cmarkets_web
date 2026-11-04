@@ -35,7 +35,7 @@ export function useSavePlatformSettings() {
   })
 }
 
-/** GET /admin/roles/{role}/permissions for the six account types: the permission matrix. */
+/** GET /admin/roles/{role}/permissions for the eight account types: the permission matrix. */
 export function useRolePermissions() {
   return useQueries({
     queries: ACCOUNT_TYPES.map((role) => ({

@@ -1,13 +1,14 @@
 import { clsx } from 'clsx'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { AccountTypeText } from '@/entities/account'
 import { DocumentLinks, useAnalystRequests } from '@/entities/analyst-request'
 import {
   AnalystDecision,
   AnalystDocumentDialog,
   type OpenDocument,
 } from '@/features/review-analyst-request'
-import type { AnalystRequestDto, AnalystStatus } from '@/shared/api/contracts'
+import type { AnalystRequestDto, VerificationStatus } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { DataTable } from '@/shared/ui/DataTable'
@@ -15,14 +16,15 @@ import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs } from '@/shared/ui/PanelTabs'
 import { QueryView } from '@/shared/ui/QueryView'
 
-const STATUSES: readonly AnalystStatus[] = ['pending', 'approved', 'rejected']
+const STATUSES: readonly VerificationStatus[] = ['pending', 'approved', 'rejected']
 
 const helper = createDataColumnHelper<AnalystRequestDto>()
 const getRequestId = (request: AnalystRequestDto) => request.id
 
 /**
- * Screen 9, Analyst status requests waiting for an Admin: the applicant, the supporting documents
- * and Approve or Reject (GET /admin/analyst-requests). USER shows them as in the mockup.
+ * Screen 9, the status requests of Analysts, Journalists and CEOs waiting for an Admin: the
+ * applicant and the type, the supporting documents and Approve or Reject
+ * (GET /admin/analyst-requests). USER shows them as in the mockup.
  */
 export function PendingRequestsPanel() {
   const { t } = useTranslation()
@@ -58,6 +60,9 @@ export function PendingRequestsPanel() {
                 <div className="flex min-w-0 flex-1 flex-col gap-1 font-sans text-data">
                   <p className="truncate">
                     <span className="text-label font-semibold">{request.displayName}</span>
+                    <span className="ml-2">
+                      <AccountTypeText type={request.accountType} short />
+                    </span>
                     <span className="ml-2 text-secondary">
                       {request.organization ?? t('accounts.independent')}
                     </span>
@@ -90,13 +95,13 @@ export function PendingRequestsPanel() {
 }
 
 interface AnalystRequestsPanelProps {
-  status: AnalystStatus
-  onStatusChange: (status: AnalystStatus) => void
+  status: VerificationStatus
+  onStatusChange: (status: VerificationStatus) => void
   selectedId: string | null
   onSelect: (request: AnalystRequestDto) => void
 }
 
-/** ANLY: the requests waiting, approved or rejected, newest first. */
+/** ANLY: the requests waiting, approved or rejected, newest first, each with its type. */
 export function AnalystRequestsPanel({
   status,
   onStatusChange,
@@ -113,6 +118,12 @@ export function AnalystRequestsPanel({
         helper.accessor('displayName', {
           header: t('settings.profile.name'),
           meta: { width: '1fr' },
+        }),
+        helper.accessor((request) => t(`accountBadge.${request.accountType}`), {
+          id: 'type',
+          header: t('analystRequests.typeColumn'),
+          meta: { width: '88px' },
+          cell: ({ row }) => <AccountTypeText type={row.original.accountType} short />,
         }),
         helper.accessor((request) => request.organization ?? t('accounts.independent'), {
           id: 'organization',
@@ -171,7 +182,7 @@ export function AnalystRequestsPanel({
             getRowId={getRequestId}
             selectedRowId={selectedId}
             onRowClick={onSelect}
-            exportName={`cmarket-analyst-requests-${status}`}
+            exportName={`cmarket-status-requests-${status}`}
             emptyMessage={t(`analystRequests.empty.${status}`)}
           />
         )}

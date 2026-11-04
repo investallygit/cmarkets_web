@@ -31,8 +31,8 @@
     "exportCsv": "Export CSV",
     "choose": "Click an account to see its details.",
     "xafCompact": "XAF {{amount}}",
-    "analystPending": "under review since {{date}}",
-    "analyst": {
+    "verificationPending": "under review since {{date}}",
+    "verification": {
       "approved": "approved {{date}}",
       "rejected": "not approved, {{date}}"
     },
@@ -52,14 +52,14 @@
     "reportsClosed": "{{count}} (closed)",
     "purchases": "Research bought",
     "suspendedBy": "Suspended on {{date}} by {{name}}: {{reason}}",
-    "rejectedBecause": "Analyst status not approved: {{reason}}",
+    "rejectedBecause": "{{type}} status not approved: {{reason}}",
     "create": {
       "action": "Create account",
       "title": "Create an account",
       "submit": "Create the account",
       "done": "{{name}}: account created, an invitation was sent by e-mail.",
       "employeeNote": "Data admin and Admin accounts belong to CMarket and log in with a code sent by e-mail every time.",
-      "analystNote": "Created by an Admin, the Analyst status needs no other approval.",
+      "verifiedNote": "Created by an Admin, the {{type}} status needs no other approval.",
       "invitationNote": "An e-mail invites the user to choose a password. In the prototype, the demo password works.",
       "errors": {
         "name": "2 to 80 characters."
@@ -69,7 +69,7 @@
       "changeType": "Change type",
       "changeTypeTitle": "Change the account type",
       "changeTypeMessage": "{{name}} gets the permissions and quotas of the new type at the next page load. A client stays a client, an employee an employee.",
-      "toAnalystNote": "The Analyst status is approved with the change: the analyst may publish.",
+      "toVerifiedNote": "The {{type}} status is approved with the change, with the VERIFIED badge.",
       "typeChanged": "{{name}} is now {{type}}.",
       "resetMfa": "Reset two-factor authentication",
       "resetMfaTitle": "Reset two-factor authentication",
@@ -103,7 +103,9 @@
       "cv": "CV",
       "identityDocument": "ID",
       "licence": "licence",
-      "proofOfEnrolment": "proof of enrolment"
+      "proofOfEnrolment": "proof of enrolment",
+      "pressCredential": "press card or employer letter",
+      "proofOfPosition": "proof of position"
     },
     "statuses": {
       "pending": "Pending",
@@ -122,6 +124,7 @@
     },
     "requested": "Requested {{date}}",
     "documentsColumn": "Documents",
+    "typeColumn": "Type",
     "requestedColumn": "Requested",
     "decidedColumn": "Decided",
     "byColumn": "By",
@@ -132,11 +135,19 @@
     },
     "approve": "Approve",
     "approveTitle": "Approve {{name}}",
-    "approveMessage": "{{name}} becomes an approved Analyst and may publish research.",
-    "approved": "{{name}}: Analyst status approved.",
+    "approveMessages": {
+      "analyst": "{{name}} becomes an approved Analyst, with the VERIFIED badge, and may publish research.",
+      "journalist": "{{name}} becomes a verified Journalist, with the VERIFIED badge.",
+      "ceo": "{{name}} becomes a verified CEO, with the VERIFIED badge."
+    },
+    "approved": "{{name}}: {{type}} status approved.",
     "reject": "Reject",
     "rejectTitle": "Reject {{name}}",
-    "rejectMessage": "The user reads the reason; the account stays, without publishing.",
+    "rejectMessages": {
+      "analyst": "The user reads the reason; the account stays, without publishing.",
+      "journalist": "The user reads the reason; the account stays, without the VERIFIED badge.",
+      "ceo": "The user reads the reason; the account stays, without the VERIFIED badge."
+    },
     "rejected": "{{name}}: request rejected."
   },
   "moderation": {
@@ -253,6 +264,7 @@
       "marketOrderbook": "Order book, intraday",
       "analysisRead": "Technical and fundamental analysis, curves",
       "analysisExport": "XLSX / CSV exports",
+      "analysisSave": "Save screens and chart drawings",
       "portfoliosRead": "See portfolios",
       "portfoliosWrite": "Manage portfolios",
       "portfoliosReports": "Client reports",
@@ -264,7 +276,7 @@
       "dataImport": "Upload data files, correct data",
       "contentPublish": "Publish news and issuer documents",
       "usersManage": "Create, suspend, change an account's type",
-      "moderationManage": "Approve Analyst status, moderate publications",
+      "moderationManage": "Approve statuses (Analyst, Journalist, CEO), moderate",
       "settingsManage": "Settings and permissions",
       "auditRead": "Audit log",
       "payoutsManage": "Analyst payouts"
@@ -280,7 +292,7 @@
   "audit": {
     "groups": {
       "accounts": "Accounts",
-      "analysts": "Analysts",
+      "statuses": "Statuses",
       "moderation": "Moderation",
       "settings": "Settings and payouts",
       "data": "Data",
@@ -292,8 +304,8 @@
       "user-suspend": "Account suspended",
       "user-reactivate": "Account reactivated",
       "user-reset-mfa": "Two-factor reset",
-      "analyst-approve": "Analyst approved",
-      "analyst-reject": "Analyst rejected",
+      "status-approve": "Status approved",
+      "status-reject": "Status rejected",
       "publication-approve": "Publication approved",
       "publication-keep": "Kept online, reports closed",
       "publication-takedown": "Publication taken down",
@@ -312,7 +324,7 @@
     "fields": {
       "accountType": "Type",
       "status": "Status",
-      "analystStatus": "Analyst status",
+      "verificationStatus": "Verification status",
       "twoFactorChannel": "Login codes",
       "organization": "Organisation",
       "portfolios": "Portfolios",
@@ -346,6 +358,7 @@
       "payout": "Payout"
     },
     "quotaOf": "{{quota}}, {{type}}",
+    "statusOf": "{{type}} status",
     "roleOf": "Permissions of {{type}}",
     "platformSettings": "Platform settings",
     "unlimited": "unlimited",

@@ -24,7 +24,12 @@ import {
   sortUsers,
 } from '../../admin'
 import { accountStore, currentAccount, recordAudit, revokeSessions, saveAccounts } from '../../db'
-import { DEMO_PASSWORD_HASH, DEMO_SALT, type StoredAccount } from '../../fixtures/accounts'
+import {
+  DEMO_PASSWORD_HASH,
+  DEMO_SALT,
+  isVerifiedType,
+  type StoredAccount,
+} from '../../fixtures/accounts'
 import { isEmail } from '../../lib/auth'
 import { api, latency, paginate, problem } from '../../lib/http'
 import { newId } from '../../lib/ids'
@@ -91,7 +96,7 @@ export const userHandlers = [
         user.email,
         TYPE_NAMES[user.accountType],
         user.organization?.name ?? '',
-        user.analystStatus === 'pending' && user.status === 'active' ? 'review' : user.status,
+        user.verificationStatus === 'pending' && user.status === 'active' ? 'review' : user.status,
         user.createdAt.slice(0, 10),
         user.lastLoginAt ?? '',
       ]),
@@ -147,7 +152,7 @@ export const userHandlers = [
     if (Object.keys(errors).length > 0 || !accountType) {
       return invalid('Invalid account', errors)
     }
-    const analyst = accountType === 'analyst'
+    const verified = isVerifiedType(accountType)
     const account: StoredAccount = {
       id: newId('user'),
       email,
@@ -162,19 +167,19 @@ export const userHandlers = [
       timeZone: 'Africa/Douala',
       phone,
       twoFactorChannel: 'email',
-      // Created by an Admin: the Analyst status needs no other approval.
-      analystStatus: analyst ? 'approved' : null,
+      // Created by an Admin: the status needs no other approval.
+      verificationStatus: verified ? 'approved' : null,
       status: 'active',
       createdAt: new Date().toISOString(),
       documents: [],
       failedLogins: 0,
       lockedUntil: null,
       lastLoginAt: null,
-      analystDecision: analyst ? decision() : null,
+      verificationDecision: verified ? decision() : null,
       suspension: null,
     }
     accountStore.write([...accountStore.read(), account])
-    if (analyst) ensureAnalystProfile(account)
+    if (accountType === 'analyst') ensureAnalystProfile(account)
     recordAudit('user-create', userTarget(account), {
       changes: [
         { field: 'accountType', scope: null, before: null, after: accountType },
@@ -214,12 +219,14 @@ export const userHandlers = [
     const before = account.accountType
     if (before === accountType) return HttpResponse.json(adminUserDetails(account))
     account.accountType = accountType
-    if (accountType === 'analyst') {
-      account.analystStatus = 'approved'
-      account.analystDecision = decision()
-      ensureAnalystProfile(account)
+    if (isVerifiedType(accountType)) {
+      // Changed by an Admin: the status of the new type comes approved.
+      account.verificationStatus = 'approved'
+      account.verificationDecision = decision()
+      if (accountType === 'analyst') ensureAnalystProfile(account)
     } else {
-      account.analystStatus = null
+      account.verificationStatus = null
+      account.verificationDecision = null
     }
     saveAccounts()
     recordAudit('user-type', userTarget(account), {

@@ -14,6 +14,7 @@ import { toMarketDay } from '@/shared/lib/format'
 import {
   changePct,
   currentAccountType,
+  currentUser,
   savedScreenStore,
   securities,
   type MockSecurity,
@@ -86,6 +87,11 @@ function readName(value: unknown): string | null {
   return name === '' || name.length > MAX_NAME_LENGTH ? null : name
 }
 
+/** "Read" in spec section 12 views the analysis without saving anything: no saved screens. */
+const canSave = () => currentUser().permissions.includes('analysis:save')
+const cannotSave = () =>
+  problem(403, 'Forbidden', 'This account type views the analysis without saving screens.')
+
 const noAccounts = (id: unknown) =>
   problem(404, 'No financial statements', `No accounts are published for ${String(id)}.`)
 
@@ -116,6 +122,7 @@ export const analysisHandlers = [
 
   http.post(api('/analysis/screens'), async ({ request }) => {
     await latency()
+    if (!canSave()) return cannotSave()
     const body = (await request.json()) as Partial<SavedScreenInputDto>
     const name = readName(body.name)
     const read = readCriteria(body.criteria)
@@ -135,6 +142,7 @@ export const analysisHandlers = [
 
   http.delete(api('/analysis/screens/:id'), async ({ params }) => {
     await latency()
+    if (!canSave()) return cannotSave()
     const screens = savedScreenStore.read()
     if (!screens.some((screen) => screen.id === params.id)) {
       return problem(404, 'Screen not found', `No saved screen ${String(params.id)}.`)

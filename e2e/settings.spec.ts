@@ -17,7 +17,8 @@ test('the profile keeps the language and the time zone of the user', async ({ pa
   await page.goto('/cfg')
   const profile = panel(page, 'Profile')
   await expect(profile).toContainText('k.atangana@analyst.example')
-  await expect(profile).toContainText('Analyst · approved')
+  // An approved Analyst has the VERIFIED badge.
+  await expect(profile.getByText('Verified', { exact: true })).toBeVisible()
   await profile.getByLabel('Time zone').selectOption('Europe/Paris')
   // Segmented choices are radio buttons hidden behind their labels.
   await profile.getByText('Français', { exact: true }).click()
@@ -122,7 +123,7 @@ test('an administrator invites a colleague, then withdraws the invitation', asyn
   await switchAccount(page, 'Portfolio manager', /manager/i)
   await page.goto('/cfg')
   const organization = panel(page, 'Organisation')
-  await expect(organization).toContainText('Asset manager A · 3 members · you are an administrator')
+  await expect(organization).toContainText('Asset manager A · 4 members · you are an administrator')
   await organization.getByLabel('Invite by e-mail').fill('k.ndzi@asset-manager.example')
   await organization.getByRole('button', { name: 'Invite' }).click()
   const row = organization.getByRole('row', { name: /k\.ndzi@asset-manager\.example/ })

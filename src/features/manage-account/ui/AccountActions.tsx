@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import {
+  isVerifiedType,
   typesFor,
   useChangeAccountType,
   useResetTwoFactor,
@@ -196,9 +197,9 @@ function ChangeTypeForm({ account, onClose }: Omit<ChangeTypeDialogProps, 'open'
             highlight
           />
         </Field>
-        {accountType === 'analyst' && !unchanged && (
+        {isVerifiedType(accountType) && !unchanged && (
           <p className="font-sans text-data text-secondary">
-            {t('accounts.actions.toAnalystNote')}
+            {t('accounts.actions.toVerifiedNote', { type: t(`accountTypes.${accountType}`) })}
           </p>
         )}
         {change.error && (

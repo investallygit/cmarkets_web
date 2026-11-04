@@ -7,9 +7,10 @@ import type {
   AdminUserDto,
   AdminUserSort,
   AnalystRequestDto,
-  AnalystStatus,
   LibraryPublicationDto,
   ModerationItemDto,
+  VerificationStatus,
+  VerifiedAccountType,
 } from '@/shared/api/contracts'
 import { ACCOUNT_TYPES } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
@@ -27,7 +28,7 @@ import {
   userArray,
   type StoredPurchase,
 } from './db'
-import { createAccounts, type StoredAccount } from './fixtures/accounts'
+import { createAccounts, isVerifiedType, type StoredAccount } from './fixtures/accounts'
 import { ADMIN_ACTOR } from './fixtures/admin'
 import { PLANS } from './fixtures/billing'
 import { generatePopulation, POPULATION_ORGANIZATIONS } from './fixtures/population'
@@ -101,10 +102,10 @@ export function allOrganizations(): { id: string; name: string }[] {
 export const isEmployee = (account: Pick<StoredAccount, 'accountType'>) =>
   account.accountType === 'dataAdmin' || account.accountType === 'admin'
 
-/** Active, under review (an Analyst waiting for approval) or suspended. */
+/** Active, under review (a status waiting for an Admin's approval) or suspended. */
 export function listStatus(account: StoredAccount): AccountListStatus {
   if (account.status === 'suspended') return 'suspended'
-  return account.accountType === 'analyst' && account.analystStatus === 'pending'
+  return isVerifiedType(account.accountType) && account.verificationStatus === 'pending'
     ? 'review'
     : 'active'
 }
@@ -121,7 +122,7 @@ export function adminUserDto(account: StoredAccount): AdminUserDto {
         ? { id: account.organizationId, name: organization }
         : null,
     status: account.status,
-    analystStatus: account.accountType === 'analyst' ? account.analystStatus : null,
+    verificationStatus: isVerifiedType(account.accountType) ? account.verificationStatus : null,
     createdAt: account.createdAt,
     lastLoginAt: account.lastLoginAt,
   }
@@ -247,7 +248,7 @@ export function adminUserDetails(account: StoredAccount): AdminUserDetailsDto {
     language: account.language,
     timeZone: account.timeZone,
     organizationRole: account.organizationRole,
-    analystDecision: account.accountType === 'analyst' ? account.analystDecision : null,
+    verificationDecision: isVerifiedType(account.accountType) ? account.verificationDecision : null,
     subscription: subscriptionDto(account),
     twoFactor: { channel: account.twoFactorChannel, mandatory: isEmployee(account) },
     lastLogin: account.lastLoginAt
@@ -260,27 +261,30 @@ export function adminUserDetails(account: StoredAccount): AdminUserDetailsDto {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Analyst status requests
+// Status requests of Analysts, Journalists and CEOs
 
 export function analystRequestDto(account: StoredAccount): AnalystRequestDto {
   return {
     id: account.id,
+    accountType: account.accountType as VerifiedAccountType,
     displayName: account.displayName,
     email: account.email,
     organization: organizationName(account.organizationId),
     requestedAt: account.createdAt,
     documents: account.documents.map((document) => ({ ...document })),
-    status: account.analystStatus ?? 'pending',
-    decision: account.analystDecision,
+    status: account.verificationStatus ?? 'pending',
+    decision: account.verificationDecision,
   }
 }
 
 /** Newest first: the latest sign-ups, or the latest decisions (screen 9 mockup). */
-export function analystRequests(status: AnalystStatus): AnalystRequestDto[] {
+export function analystRequests(status: VerificationStatus): AnalystRequestDto[] {
   const dateOf = (request: AnalystRequestDto) =>
     status === 'pending' ? request.requestedAt : (request.decision?.at ?? '')
   return directory()
-    .filter((account) => account.accountType === 'analyst' && account.analystStatus === status)
+    .filter(
+      (account) => isVerifiedType(account.accountType) && account.verificationStatus === status,
+    )
     .map(analystRequestDto)
     .sort((a, b) => dateOf(b).localeCompare(dateOf(a)))
 }

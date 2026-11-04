@@ -58,6 +58,8 @@ export function PriceChartPanel({
   const full = variant === 'full'
   // Intraday data comes with the order book: not for Students (spec section 12).
   const intradayAllowed = useHasPermission('market:orderbook')
+  // "Read" accounts (Journalist, CEO) view the chart without saving drawings (spec section 12).
+  const canDraw = useHasPermission('analysis:save')
   const periods = (full ? FULL_PERIODS : COMPACT_PERIODS).filter(
     (candidate) => intradayAllowed || !isIntraday(candidate),
   )
@@ -91,7 +93,7 @@ export function PriceChartPanel({
   const comparisons = useComparisonLines(full ? compared : NOTHING_COMPARED, period)
   const { drawings, add, undo, clear } = useDrawings(securityId)
   const livePrice = useLiveQuote(securityId)?.last
-  const drawingTool = full && daily && !comparing ? tool : null
+  const drawingTool = full && canDraw && daily && !comparing ? tool : null
   const decimals = priceDecimals(securityType, currency)
   const label = useChartLabel(
     t('chart.priceOf', { code }),
@@ -240,15 +242,19 @@ export function PriceChartPanel({
           <PanelToggle active={compareOpen || comparing} onChange={setCompareOpen}>
             {t('chart.compare')}
           </PanelToggle>
-          <Separator />
-          <DrawingTools
-            tool={drawingTool}
-            onToolChange={setTool}
-            count={drawings.length}
-            onUndo={undo}
-            onClear={clear}
-            disabled={!daily || comparing}
-          />
+          {canDraw && (
+            <>
+              <Separator />
+              <DrawingTools
+                tool={drawingTool}
+                onToolChange={setTool}
+                count={drawings.length}
+                onUndo={undo}
+                onClear={clear}
+                disabled={!daily || comparing}
+              />
+            </>
+          )}
         </>
       )}
     </>

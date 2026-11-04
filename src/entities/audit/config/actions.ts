@@ -10,7 +10,7 @@ export const AUDIT_ACTION_GROUPS: readonly {
     label: 'audit.groups.accounts',
     actions: ['user-create', 'user-type', 'user-suspend', 'user-reactivate', 'user-reset-mfa'],
   },
-  { label: 'audit.groups.analysts', actions: ['analyst-approve', 'analyst-reject'] },
+  { label: 'audit.groups.statuses', actions: ['status-approve', 'status-reject'] },
   {
     label: 'audit.groups.moderation',
     actions: ['publication-approve', 'publication-keep', 'publication-takedown'],

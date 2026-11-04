@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmployeeType, useCreateAccount, useOrganizations } from '@/entities/account'
+import {
+  isEmployeeType,
+  isVerifiedType,
+  useCreateAccount,
+  useOrganizations,
+} from '@/entities/account'
 import { isEmailAddress } from '@/entities/session'
 import { isApiError } from '@/shared/api'
 import {
@@ -147,7 +152,9 @@ function CreateAccountForm({ onClose, onCreated }: Omit<CreateAccountDialogProps
         </Field>
         <ul className="flex list-disc flex-col gap-1 pl-4 font-sans text-data text-secondary">
           {employee && <li>{t('accounts.create.employeeNote')}</li>}
-          {accountType === 'analyst' && <li>{t('accounts.create.analystNote')}</li>}
+          {isVerifiedType(accountType) && (
+            <li>{t('accounts.create.verifiedNote', { type: t(`accountTypes.${accountType}`) })}</li>
+          )}
           <li>{t('accounts.create.invitationNote')}</li>
         </ul>
         {otherError && (

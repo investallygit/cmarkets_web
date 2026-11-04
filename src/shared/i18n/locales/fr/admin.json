@@ -31,8 +31,8 @@
     "exportCsv": "Exporter CSV",
     "choose": "Cliquez sur un compte pour voir son détail.",
     "xafCompact": "{{amount}} XAF",
-    "analystPending": "en examen depuis le {{date}}",
-    "analyst": {
+    "verificationPending": "en examen depuis le {{date}}",
+    "verification": {
       "approved": "approuvé le {{date}}",
       "rejected": "refusé le {{date}}"
     },
@@ -52,14 +52,14 @@
     "reportsClosed": "{{count}} (clos)",
     "purchases": "Recherche achetée",
     "suspendedBy": "Suspendu le {{date}} par {{name}} : {{reason}}",
-    "rejectedBecause": "Statut Analyste refusé : {{reason}}",
+    "rejectedBecause": "Statut {{type}} refusé : {{reason}}",
     "create": {
       "action": "Créer un compte",
       "title": "Créer un compte",
       "submit": "Créer le compte",
       "done": "{{name}} : compte créé, une invitation a été envoyée par e-mail.",
       "employeeNote": "Les comptes Admin données et Admin appartiennent à CMarket et se connectent chaque fois avec un code envoyé par e-mail.",
-      "analystNote": "Créé par un Admin, le statut Analyste n'a pas besoin d'une autre approbation.",
+      "verifiedNote": "Créé par un Admin, le statut {{type}} n'a pas besoin d'une autre approbation.",
       "invitationNote": "Un e-mail invite l'utilisateur à choisir un mot de passe. Dans le prototype, le mot de passe de démonstration fonctionne.",
       "errors": {
         "name": "De 2 à 80 caractères."
@@ -69,7 +69,7 @@
       "changeType": "Changer de type",
       "changeTypeTitle": "Changer le type de compte",
       "changeTypeMessage": "{{name}} reçoit les permissions et les quotas du nouveau type au prochain chargement de page. Un client reste client, un employé reste employé.",
-      "toAnalystNote": "Le statut Analyste est approuvé avec le changement : l'analyste peut publier.",
+      "toVerifiedNote": "Le statut {{type}} est approuvé avec le changement, avec le badge VÉRIFIÉ.",
       "typeChanged": "{{name}} : désormais {{type}}.",
       "resetMfa": "Réinitialiser la double authentification",
       "resetMfaTitle": "Réinitialiser la double authentification",
@@ -103,7 +103,9 @@
       "cv": "CV",
       "identityDocument": "pièce d'identité",
       "licence": "agrément",
-      "proofOfEnrolment": "certificat de scolarité"
+      "proofOfEnrolment": "certificat de scolarité",
+      "pressCredential": "carte de presse ou lettre de l'employeur",
+      "proofOfPosition": "justificatif de fonction"
     },
     "statuses": {
       "pending": "En attente",
@@ -122,6 +124,7 @@
     },
     "requested": "Demandé le {{date}}",
     "documentsColumn": "Pièces",
+    "typeColumn": "Type",
     "requestedColumn": "Demandé le",
     "decidedColumn": "Décidé le",
     "byColumn": "Par",
@@ -132,11 +135,19 @@
     },
     "approve": "Approuver",
     "approveTitle": "Approuver {{name}}",
-    "approveMessage": "{{name}} devient Analyste approuvé et peut publier de la recherche.",
-    "approved": "{{name}} : statut Analyste approuvé.",
+    "approveMessages": {
+      "analyst": "{{name}} devient Analyste approuvé, avec le badge VÉRIFIÉ, et peut publier de la recherche.",
+      "journalist": "{{name}} devient Journaliste vérifié, avec le badge VÉRIFIÉ.",
+      "ceo": "{{name}} devient Dirigeant vérifié, avec le badge VÉRIFIÉ."
+    },
+    "approved": "{{name}} : statut {{type}} approuvé.",
     "reject": "Refuser",
     "rejectTitle": "Refuser {{name}}",
-    "rejectMessage": "L'utilisateur lit le motif ; le compte reste, sans publication.",
+    "rejectMessages": {
+      "analyst": "L'utilisateur lit le motif ; le compte reste, sans publication.",
+      "journalist": "L'utilisateur lit le motif ; le compte reste, sans le badge VÉRIFIÉ.",
+      "ceo": "L'utilisateur lit le motif ; le compte reste, sans le badge VÉRIFIÉ."
+    },
     "rejected": "{{name}} : demande refusée."
   },
   "moderation": {
@@ -253,6 +264,7 @@
       "marketOrderbook": "Carnet d'ordres, intraday",
       "analysisRead": "Analyse technique et fondamentale, courbes",
       "analysisExport": "Exports XLSX / CSV",
+      "analysisSave": "Enregistrer des filtres et des tracés",
       "portfoliosRead": "Voir les portefeuilles",
       "portfoliosWrite": "Gérer les portefeuilles",
       "portfoliosReports": "Rapports clients",
@@ -264,7 +276,7 @@
       "dataImport": "Charger les fichiers, corriger les données",
       "contentPublish": "Publier actualités et documents d'émetteurs",
       "usersManage": "Créer, suspendre, changer le type d'un compte",
-      "moderationManage": "Approuver le statut Analyste, modérer",
+      "moderationManage": "Approuver les statuts (Analyste, Journaliste, Dirigeant), modérer",
       "settingsManage": "Paramètres et permissions",
       "auditRead": "Journal d'audit",
       "payoutsManage": "Versements aux analystes"
@@ -280,7 +292,7 @@
   "audit": {
     "groups": {
       "accounts": "Comptes",
-      "analysts": "Analystes",
+      "statuses": "Statuts",
       "moderation": "Modération",
       "settings": "Paramètres et versements",
       "data": "Données",
@@ -292,8 +304,8 @@
       "user-suspend": "Compte suspendu",
       "user-reactivate": "Compte réactivé",
       "user-reset-mfa": "Double authentification réinitialisée",
-      "analyst-approve": "Analyste approuvé",
-      "analyst-reject": "Analyste refusé",
+      "status-approve": "Statut approuvé",
+      "status-reject": "Statut refusé",
       "publication-approve": "Publication approuvée",
       "publication-keep": "Maintenue, signalements clos",
       "publication-takedown": "Publication retirée",
@@ -312,7 +324,7 @@
     "fields": {
       "accountType": "Type",
       "status": "État",
-      "analystStatus": "Statut Analyste",
+      "verificationStatus": "Statut de vérification",
       "twoFactorChannel": "Codes de connexion",
       "organization": "Organisation",
       "portfolios": "Portefeuilles",
@@ -346,6 +358,7 @@
       "payout": "Versement"
     },
     "quotaOf": "{{quota}}, {{type}}",
+    "statusOf": "Statut {{type}}",
     "roleOf": "Permissions : {{type}}",
     "platformSettings": "Paramètres de la plateforme",
     "unlimited": "illimité",

@@ -8,14 +8,15 @@ import { Button } from '@/shared/ui/form/Button'
 import { toast } from '@/shared/ui/toast'
 
 interface AnalystDecisionProps {
-  request: Pick<AnalystRequestDto, 'id' | 'displayName'>
+  request: Pick<AnalystRequestDto, 'id' | 'displayName' | 'accountType'>
   /** Wide buttons side by side, as in the screen 9 mockup, or the default size. */
   wide?: boolean
 }
 
 /**
- * Approve or Reject an Analyst status request (screen 9): approved, the analyst may publish;
- * rejected, with the reason the user is told.
+ * Approve or Reject the status request of an Analyst, a Journalist or a CEO (screen 9): approved,
+ * the account gets the VERIFIED badge and an analyst may publish; rejected, with the reason the
+ * user is told.
  */
 export function AnalystDecision({ request, wide = false }: AnalystDecisionProps) {
   const { t } = useTranslation()
@@ -23,6 +24,7 @@ export function AnalystDecision({ request, wide = false }: AnalystDecisionProps)
   const reject = useRejectAnalyst()
   const [asking, setAsking] = useState<'approve' | 'reject' | null>(null)
   const name = request.displayName
+  const type = t(`accountTypes.${request.accountType}`)
   const close = () => {
     approve.reset()
     reject.reset()
@@ -53,8 +55,8 @@ export function AnalystDecision({ request, wide = false }: AnalystDecisionProps)
         message={
           <>
             {asking === 'reject'
-              ? t('analystRequests.rejectMessage')
-              : t('analystRequests.approveMessage', { name })}
+              ? t(`analystRequests.rejectMessages.${request.accountType}`)
+              : t(`analystRequests.approveMessages.${request.accountType}`, { name })}
             {failure && (
               <span role="alert" className="mt-2 block text-down">
                 {failure}
@@ -73,7 +75,7 @@ export function AnalystDecision({ request, wide = false }: AnalystDecisionProps)
             toast.success(
               asking === 'reject'
                 ? t('analystRequests.rejected', { name })
-                : t('analystRequests.approved', { name }),
+                : t('analystRequests.approved', { name, type }),
             )
             setAsking(null)
           }

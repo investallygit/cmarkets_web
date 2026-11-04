@@ -131,6 +131,16 @@
         "cta": "Sign up as a trader",
         "text": "Real-time prices, the order book, intraday charts and alerts, and the government securities market."
       },
+      "journalist": {
+        "who": "Business and financial journalists",
+        "cta": "Sign up as a journalist",
+        "text": "The markets, the research and the directory of professionals, to check a figure or find a voice for a story."
+      },
+      "ceo": {
+        "who": "Heads of banks, brokerage firms, asset managers, insurers and pension funds",
+        "cta": "Sign up as a CEO",
+        "text": "The markets and, read only, the portfolios your managers share with your organisation; exchanges with professionals."
+      },
       "organization": "An organisation account brings your colleagues together under one plan, paid by the organisation."
     },
     "plans": {

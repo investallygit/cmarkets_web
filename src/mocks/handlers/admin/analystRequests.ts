@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import type { AnalystStatus } from '@/shared/api/contracts'
+import type { VerificationStatus } from '@/shared/api/contracts'
 import {
   analystRequestDto,
   analystRequests,
@@ -8,6 +8,7 @@ import {
   ensureAnalystProfile,
 } from '../../admin'
 import { recordAudit, saveAccounts } from '../../db'
+import { isVerifiedType } from '../../fixtures/accounts'
 import { api, latency, problem } from '../../lib/http'
 import { createPdf } from '../../lib/pdf'
 import {
@@ -18,18 +19,25 @@ import {
   notFound,
   pick,
   readReason,
+  TYPE_NAMES,
   userTarget,
 } from './common'
 
-const ANALYST_STATUSES: readonly AnalystStatus[] = ['pending', 'approved', 'rejected']
+/** The status decided, with the account type it belongs to. */
+const statusChange = (accountType: string, after: VerificationStatus) =>
+  ({ field: 'verificationStatus', scope: accountType, before: 'pending', after }) as const
 
-/** ANLY: the Analyst status asked for at sign-up, its documents, approval or rejection. */
+const STATUSES: readonly VerificationStatus[] = ['pending', 'approved', 'rejected']
+
+/**
+ * ANLY: the status of an Analyst, a Journalist or a CEO asked for at sign-up, its documents,
+ * approval or rejection. The spec names these routes after the Analysts only.
+ */
 export const analystRequestHandlers = [
   http.get(api('/admin/analyst-requests'), async ({ request }) => {
     await latency()
     if (!allowed('moderation:manage')) return forbidden()
-    const status =
-      pick(ANALYST_STATUSES, new URL(request.url).searchParams.get('status')) ?? 'pending'
+    const status = pick(STATUSES, new URL(request.url).searchParams.get('status')) ?? 'pending'
     return HttpResponse.json(analystRequests(status))
   }),
 
@@ -40,8 +48,9 @@ export const analystRequestHandlers = [
     const account = directoryAccount(String(params.id))
     const document = account?.documents.find((candidate) => candidate.kind === params.kind)
     if (!account || !document) return notFound('Document', params.kind)
+    const type = TYPE_NAMES[account.accountType]
     const pdf = createPdf(document.fileName, [
-      `Sent with the Analyst sign-up of ${account.displayName} (${account.email}),`,
+      `Sent with the ${type} sign-up of ${account.displayName} (${account.email}),`,
       `on ${account.createdAt.slice(0, 10)}, ${Math.round(document.size / 1024)} KB.`,
       '',
       'The prototype keeps the name of the files sent at sign-up, not the files:',
@@ -59,14 +68,14 @@ export const analystRequestHandlers = [
     await latency()
     if (!allowed('moderation:manage')) return forbidden()
     const account = editableAccount(String(params.id))
-    if (!account || account.accountType !== 'analyst') return notFound('Request', params.id)
-    if (account.analystStatus !== 'pending') return problem(409, 'Already decided')
-    account.analystStatus = 'approved'
-    account.analystDecision = decision()
+    if (!account || !isVerifiedType(account.accountType)) return notFound('Request', params.id)
+    if (account.verificationStatus !== 'pending') return problem(409, 'Already decided')
+    account.verificationStatus = 'approved'
+    account.verificationDecision = decision()
     saveAccounts()
-    ensureAnalystProfile(account)
-    recordAudit('analyst-approve', userTarget(account), {
-      changes: [{ field: 'analystStatus', scope: null, before: 'pending', after: 'approved' }],
+    if (account.accountType === 'analyst') ensureAnalystProfile(account)
+    recordAudit('status-approve', userTarget(account), {
+      changes: [statusChange(account.accountType, 'approved')],
     })
     return HttpResponse.json(analystRequestDto(account))
   }),
@@ -75,15 +84,15 @@ export const analystRequestHandlers = [
     await latency()
     if (!allowed('moderation:manage')) return forbidden()
     const account = editableAccount(String(params.id))
-    if (!account || account.accountType !== 'analyst') return notFound('Request', params.id)
+    if (!account || !isVerifiedType(account.accountType)) return notFound('Request', params.id)
     const reason = await readReason(request)
     if (typeof reason !== 'string') return invalid('Invalid rejection', reason)
-    if (account.analystStatus !== 'pending') return problem(409, 'Already decided')
-    account.analystStatus = 'rejected'
-    account.analystDecision = decision(reason)
+    if (account.verificationStatus !== 'pending') return problem(409, 'Already decided')
+    account.verificationStatus = 'rejected'
+    account.verificationDecision = decision(reason)
     saveAccounts()
-    recordAudit('analyst-reject', userTarget(account), {
-      changes: [{ field: 'analystStatus', scope: null, before: 'pending', after: 'rejected' }],
+    recordAudit('status-reject', userTarget(account), {
+      changes: [statusChange(account.accountType, 'rejected')],
       reason,
     })
     return HttpResponse.json(analystRequestDto(account))

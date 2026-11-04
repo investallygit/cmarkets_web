@@ -26,6 +26,8 @@ export const TYPE_NAMES: Record<AccountType, string> = {
   analyst: 'Analyst',
   manager: 'Portfolio manager',
   trader: 'Trader',
+  journalist: 'Journalist',
+  ceo: 'CEO',
   dataAdmin: 'Data admin',
   admin: 'Admin',
 }

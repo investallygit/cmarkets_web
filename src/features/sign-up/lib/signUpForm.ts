@@ -29,7 +29,8 @@ export const EMPTY_SIGN_UP: SignUpForm = {
 /**
  * Documents of spec section 12: a Student without a school address proves the enrolment (the
  * server knows the school domains); an Analyst sends an identity document and a CV, and a licence
- * if any, for the Admin who approves the status.
+ * if any; a Journalist a press card or a letter from the employer; a CEO a proof of position. An
+ * Admin checks those of the last three before approving the status.
  */
 export function documentsFor(
   accountType: ClientAccountType | null,
@@ -42,6 +43,8 @@ export function documentsFor(
       { kind: 'licence', required: false },
     ]
   }
+  if (accountType === 'journalist') return [{ kind: 'pressCredential', required: true }]
+  if (accountType === 'ceo') return [{ kind: 'proofOfPosition', required: true }]
   return []
 }
 
@@ -67,6 +70,10 @@ export function signUpIssues(form: SignUpForm): Partial<Record<SignUpField, Sign
   if (passwordIssues(form.password).length > 0) issues.password = 'password'
   if (form.confirmPassword !== form.password) issues.confirmPassword = 'mismatch'
   if (form.phone.trim() && !isPhoneNumber(form.phone)) issues.phone = 'phone'
+  // A CEO is linked to the organisation they head (spec section 12).
+  if (form.accountType === 'ceo' && !form.organizationName.trim()) {
+    issues.organizationName = 'required'
+  }
   for (const { kind, required } of documentsFor(form.accountType)) {
     if (required && !form.documents[kind]) issues[kind] = 'required'
   }
