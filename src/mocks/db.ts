@@ -77,7 +77,7 @@ export {
   type StoredLayout,
   type StoredWatchlist,
 } from './db/workspace'
-export { marketData, portfolioStore } from './db/portfolios'
+export { marketData, portfolioStore, sharedPortfolios, type SharedPortfolio } from './db/portfolios'
 export {
   analystStore,
   announcePublication,

@@ -2,8 +2,8 @@ import { clsx } from 'clsx'
 import { Download, LoaderCircle, Lock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { usePortfolio, useReportFile, useReportJob, useReportJobs } from '@/entities/portfolio'
-import { useHasPermission } from '@/entities/session'
 import { ReportForm } from '@/features/generate-portfolio-report'
+import { usePortfolioAccess } from '@/features/manage-portfolios'
 import type { ReportJobDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { saveBlob } from '@/shared/lib/download'
@@ -32,7 +32,7 @@ interface ReportFormPanelProps {
 /** Screen 5, Reports tab: the report's options. API POST /portfolios/{id}/reports. */
 export function PortfolioReportFormPanel({ portfolioId, onQueued }: ReportFormPanelProps) {
   const { t } = useTranslation()
-  const canReport = useHasPermission('portfolios:reports')
+  const { canReport } = usePortfolioAccess(portfolioId)
   const portfolio = usePortfolio(portfolioId).data
   return (
     <Panel title={t('panels.newReport')} code="PORT">

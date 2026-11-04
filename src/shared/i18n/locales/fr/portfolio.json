@@ -19,14 +19,20 @@
     "empty": {
       "message": "Aucun portefeuille pour l'instant. Créez-en un par client, fonds ou stratégie, avec sa devise, son indice de référence et ses limites.",
       "student": "Aucun portefeuille pour l'instant. Un compte Étudiant simule des allocations : créez un portefeuille modèle.",
-      "readOnly": "Aucun portefeuille à consulter pour l'instant : les gérants de votre organisation partagent les leurs avec elle."
+      "readOnly": "Aucun portefeuille à consulter pour l'instant : les gérants de votre organisation partagent les leurs avec elle.",
+      "pending": "Votre statut attend l'approbation d'un administrateur. Une fois le statut approuvé, les portefeuilles que les gérants de votre organisation partagent avec elle s'affichent ici.",
+      "rejected": "Un administrateur a refusé votre demande de statut : les portefeuilles de votre organisation ne s'affichent pas. Contactez CMarket pour en connaître la raison ou envoyer de nouveaux documents."
     },
     "selector": {
       "label": "Portefeuille",
       "new": "Nouveau portefeuille…",
       "quotaReached": "Nouveau portefeuille : {{quota}} au plus",
       "settings": "Paramètres du portefeuille…",
-      "delete": "Supprimer le portefeuille…"
+      "delete": "Supprimer le portefeuille…",
+      "shared": "Partagés avec l'organisation",
+      "sharedBy": "Partagé par {{name}}",
+      "readOnly": "Lecture seule",
+      "sharedBadge": "Partagé"
     },
     "header": {
       "totalValue": "Valeur totale",
@@ -283,7 +289,9 @@
       "deleteMessage": "{{name}} et toutes ses transactions sont supprimés. Ses alertes ne se déclenchent plus.",
       "delete": "Supprimer",
       "deleted": "{{name}} supprimé",
-      "deleteFailed": "Non supprimé : {{message}}"
+      "deleteFailed": "Non supprimé : {{message}}",
+      "share": "Partager avec {{organization}}",
+      "shareHint": "Ses membres, dont son CEO, consultent ce portefeuille sans pouvoir le modifier ni y saisir de transaction."
     },
     "reports": {
       "generateLink": "Générer le rapport PDF du portefeuille",

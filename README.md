@@ -56,7 +56,7 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done on mock data; the mock sets off the alerts               |
 | Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
-| Journalist and CEO account types                                          | Done; the portfolios a CEO reads come with ROADMAP step 13    |
+| Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
 | 10 · Professional directory (NET), public profile page                    | To do: ROADMAP step 15                                        |
 | 11 · Messaging (MSG)                                                      | To do: ROADMAP steps 16 and 17                                |
 | 12 · My profile, visibility and contact (NET ME)                          | To do: ROADMAP step 14                                        |

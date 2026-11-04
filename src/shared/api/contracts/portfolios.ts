@@ -42,7 +42,17 @@ export interface ModelAllocationDto {
   lines: ModelLineDto[]
 }
 
-/** GET /portfolios: the user's portfolios, limited in number by the account type (GET /me). */
+/** The colleague who holds a portfolio shared with the organisation. */
+export interface PortfolioOwnerDto {
+  userId: string
+  displayName: string
+}
+
+/**
+ * GET /portfolios: the user's portfolios, limited in number by the account type (GET /me), then
+ * those colleagues share with the organisation, which the user reads without changing them (spec
+ * sections 6 and 12). The spec names no endpoint for sharing: the field is the prototype's.
+ */
 export interface PortfolioSummaryDto {
   id: string
   name: string
@@ -53,6 +63,10 @@ export interface PortfolioSummaryDto {
   benchmark: string
   /** Date of the first valuation; null before the first transaction. */
   inceptionDate: IsoDate | null
+  /** The members of the owner's organisation read it, its CEO among them. */
+  sharedWithOrganization: boolean
+  /** Null for the user's own portfolio; a colleague's is read only. */
+  sharedBy: PortfolioOwnerDto | null
 }
 
 /** GET /portfolios/{id} */
@@ -72,14 +86,20 @@ export interface PortfolioCreateDto {
   benchmark: string
   limits: PortfolioLimitsDto
   model: ModelAllocationDto | null
+  /** Only for a member of an organisation. */
+  sharedWithOrganization: boolean
 }
 
-/** PUT /portfolios/{id}: the kind and the currency do not change once created. */
+/**
+ * PUT /portfolios/{id}: the kind and the currency do not change once created. Only the owner
+ * changes a portfolio; a colleague who reads it gets a 403.
+ */
 export interface PortfolioUpdateDto {
   name: string
   benchmark: string
   limits: PortfolioLimitsDto
   model: ModelAllocationDto | null
+  sharedWithOrganization: boolean
   version: string
 }
 

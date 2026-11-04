@@ -31,7 +31,7 @@ relative: S < M < L < XL.
 | 10   | Home page, before login: the product, markets, users, plans     | Done   |
 | 11   | Second version of the spec: the plan, its open questions        | Done   |
 | 12   | Journalist and CEO account types, approved by the Admin         | Done   |
-| 13   | Portfolios shared with the organisation, read by its CEO        | To do  |
+| 13   | Portfolios shared with the organisation, read by its CEO        | Done   |
 | 14   | NET ME: professional profile, visibility and contact rules      | To do  |
 | 15   | NET: professional directory, public profile page                | To do  |
 | 16   | MSG: conversations, contact requests, files, shared objects     | To do  |
@@ -115,12 +115,29 @@ come in the README and the open questions of the second version.
 - **CMarket.Api**: its `/me` still answers `analystStatus`, which the front end now reads as
   `verificationStatus`: the API has to follow, with the two new types and `analysis:save`.
 
-### Step 13 · Portfolios of the organisation (M): to do
+### Step 13 · Portfolios of the organisation (M): done
 
-- A portfolio manager shares a portfolio with the organisation; its CEO opens the shared
-  portfolios in PORT, read only: no new portfolio, transaction, limit or report. The endpoint is
-  the prototype's (open question).
-- **Mock**: P. Owona shares the sample fund with Asset manager A, which E. Fouda heads (step 12).
+- **Sharing**: the settings of a portfolio held by a member of an organisation have "Share with
+  Asset manager A", sent as `sharedWithOrganization` with `POST /portfolios` and
+  `PUT /portfolios/{id}` (the spec names no endpoint: open question). `GET /portfolios` lists the
+  user's portfolios, then those colleagues share, each with `sharedBy`, the colleague who holds
+  it: every member who reads portfolios gets them, a CEO among them, who holds none. The owner
+  sees SHARED next to the name; the others "Shared by P. Owona" and READ ONLY, and the selector
+  lists them under "Shared with the organisation".
+- **Read only**: on a colleague's portfolio, PORT has no new transaction, import, correction,
+  settings, deletion, limit change or report: no Reports tab, no report link under the income.
+  The panels ask `usePortfolioAccess` (`features/manage-portfolios`); the server answers 403 to
+  every write and to a report. The quota counts the user's own portfolios only.
+- **Approval**: a member whose status waits for an Admin, or was declined, reads none of the
+  organisation's portfolios; a CEO's PORT says why.
+- **Alerts**: a portfolio limit alert may watch a portfolio the user reads, as a CEO watches the
+  organisation's fund. An account type without portfolios (a Journalist) is offered no portfolio
+  alert, the server refuses one, and its sample alerts have none.
+- **Mock**: each user's portfolios are read for a colleague too (`usersStore`, `db/session.ts`);
+  P. Owona shares the sample fund with Asset manager A. A demo user's sample portfolios keep
+  their short ids (`/port/portfolio-cemac`); another user's carry the user's id, since a
+  colleague's are listed beside one's own. `SEED_VERSION` raised.
+- **CMarket.Api**: the two fields, the colleagues' read access and the 403 on their writes.
 
 ### Step 14 · NET ME · My profile, visibility and contact (screen 12) (L): to do
 
@@ -557,9 +574,9 @@ Still to do, with the first screen that needs it:
   ends with the mockup's lines, bought in two tranches, with deposits, a withdrawal, custody fees
   and the dividends, coupons and redemption it received. A breach after a transaction or a limit
   change sets off the portfolio alerts.
-- **Still to do**: sharing a portfolio with colleagues (spec section 6) has no endpoint; the mock
-  leaves the logo out of the PDF; a portfolio in EUR holds XAF securities at the peg, no floating
-  currency.
+- **Still to do**: the mock leaves the logo out of the PDF; a portfolio in EUR holds XAF
+  securities at the peg, no floating currency. Sharing a portfolio with the organisation came
+  with step 13.
 
 ### PUB · Research library (screen 8): done
 
@@ -945,9 +962,15 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   alerts. Which plans do they take (the prototype: the professional ones, Monitoring, Analysis and
   Professional, with the trial of Professional)? Does a CEO need the Portfolio module to read the
   organisation's portfolios? The members of an organisation share its plan, so the managers who
-  hold those portfolios have the module. Sharing a portfolio with the organisation has no
-  endpoint. The Admin browses the directory, while employees only use the back-office: from which
-  screen?
+  hold those portfolios have the module. The Admin browses the directory, while employees only
+  use the back-office: from which screen?
+- **Portfolios of the organisation**: sharing a portfolio with the organisation has no endpoint.
+  The prototype adds `sharedWithOrganization` to the settings of `POST` and
+  `PUT /portfolios/{id}`, and `sharedBy` to `GET /portfolios`, which lists the portfolios shared
+  after the user's own. Section 6 shares them "between colleagues", section 12 with the CEO: the
+  prototype lets every member who reads portfolios read them, without changing them, recording
+  transactions or generating reports. May a reader set a limit alert on them (the prototype: yes)?
+  Watchlists, which section 6 shares too, are not shared yet.
 - **Function codes** (section 8): the table lacks NET, MSG and NET ME, which the mockups of screens
   10 to 12 type in the command bar.
 - **Screen 9 mockup, second version**: the list still counts "8 of 1,946 accounts", while the eight
@@ -959,8 +982,8 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
 - **Status requests, second version**: `GET /admin/analyst-requests` keeps its name and lists the
   requests of the three types, each with its `accountType`; `/me` and the Admin's accounts call
   the status `verificationStatus`. What may a Journalist or a CEO do while waiting (the
-  prototype, to come: view as the type does, without messaging and, for a CEO, without the
-  organisation's portfolios)? A Journalist sends one document, a press card or an employer
+  prototype: view as the type does; for a CEO, without the organisation's portfolios; to come,
+  without messaging)? A Journalist sends one document, a press card or an employer
   letter; a CEO a proof of position and the name of the organisation they head, which the sign-up
   opens: how does a CEO join an organisation already on CMarket?
 - **Screen 10 mockup**: "Only profiles I can contact" is ticked, yet A. Tchakounté shows "Contact

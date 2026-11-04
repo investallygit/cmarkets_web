@@ -31,7 +31,7 @@ export function removeStorage(key: string): void {
  * Raised when the sample data changes: the browser's copy of the mock's data is dropped and
  * seeded again, which also ends the session of the prototype.
  */
-const SEED_VERSION = '10'
+const SEED_VERSION = '11'
 const SEED_VERSION_KEY = 'cmarket.prototype.seedVersion'
 
 function dropOutdatedSeeds(): void {
@@ -49,24 +49,40 @@ function dropOutdatedSeeds(): void {
 
 dropOutdatedSeeds()
 
-/** An array kept in localStorage, so that the prototype remembers it on reload. */
-export function storedArray<T extends object[]>(keyOf: () => string, initial: () => T) {
+/** Arrays kept in localStorage, one per owner, each built by `initial` the first time it is read. */
+export function storedArrays<T extends object[]>(
+  keyOf: (owner: string) => string,
+  initial: (owner: string) => T,
+) {
   const cache = new Map<string, T>()
   return {
-    read(): T {
-      const key = keyOf()
+    read(owner: string): T {
+      const key = keyOf(owner)
       let value = cache.get(key)
       if (!value) {
-        value = parseArray<T>(readStorage(key)) ?? initial()
+        value = parseArray<T>(readStorage(key)) ?? initial(owner)
         cache.set(key, value)
       }
       return value
     },
-    write(value: T): void {
-      const key = keyOf()
+    write(owner: string, value: T): void {
+      const key = keyOf(owner)
       cache.set(key, value)
       writeStorage(key, JSON.stringify(value))
     },
+  }
+}
+
+/** An array kept in localStorage, so that the prototype remembers it on reload. */
+export function storedArray<T extends object[]>(keyOf: () => string, initial: () => T) {
+  // Called without the owner: `initial` may take optional arguments, as createAccounts(now).
+  const arrays = storedArrays(
+    () => keyOf(),
+    () => initial(),
+  )
+  return {
+    read: (): T => arrays.read(''),
+    write: (value: T) => arrays.write('', value),
   }
 }
 

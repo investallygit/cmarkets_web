@@ -25,8 +25,10 @@ const ALERTS: AlertFixture[] = [
 
 const CREATED_DAYS_AGO = 21
 
-export function createAlerts(now: number): StoredAlert[] {
-  return ALERTS.map((alert, index) => {
+/** The alerts of a demo user: the portfolio one only for an account type that reads portfolios. */
+export function createAlerts(now: number, readsPortfolios: boolean): StoredAlert[] {
+  return ALERTS.flatMap((alert, index) => {
+    if (alert.condition.type === 'portfolio' && !readsPortfolios) return []
     const minutesAgo = notificationMinutesAgo(alert.id)
     return {
       ...alert,

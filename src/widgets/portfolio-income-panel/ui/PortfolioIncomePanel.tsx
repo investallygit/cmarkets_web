@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { useIncome } from '@/entities/portfolio'
-import { useHasPermission } from '@/entities/session'
+import { usePortfolioAccess } from '@/features/manage-portfolios'
 import type { IncomeDto, IncomeItemDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { securityPath } from '@/shared/routes/paths'
@@ -87,7 +87,7 @@ export function PortfolioIncomePanel({
   const { t } = useTranslation()
   const format = useFormat()
   const navigate = useNavigate()
-  const canReport = useHasPermission('portfolios:reports')
+  const { canReport } = usePortfolioAccess(portfolioId)
   const income = useIncome(portfolioId)
   const currency = income.data?.currency ?? ''
   const columns = useMemo(() => buildColumns(t, format, currency), [t, format, currency])

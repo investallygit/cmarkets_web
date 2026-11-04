@@ -50,7 +50,7 @@ describe('portfolio form', () => {
       name: ' Banks ',
       lines: [{ ...newLine({ id: 'BANGE', code: 'BANGE' }), weightPct: 40 }],
     }
-    expect(toCreateInput(form)).toEqual({
+    expect(toCreateInput(form, false)).toEqual({
       name: 'Banks',
       kind: 'model',
       currency: 'XAF',
@@ -61,8 +61,18 @@ describe('portfolio form', () => {
         startDate: TODAY,
         lines: [{ securityId: 'BANGE', weightPct: 40 }],
       },
+      sharedWithOrganization: false,
     })
-    expect(toCreateInput({ ...form, kind: 'real' }).model).toBeNull()
+    expect(toCreateInput({ ...form, kind: 'real' }, false).model).toBeNull()
+  })
+
+  it('shares a portfolio with the organisation only from a member of one', () => {
+    const form = { ...initialPortfolioForm(null, false, TODAY, codeOf), name: 'Fund' }
+    expect(form.shared).toBe(false)
+    const shared = { ...form, shared: true }
+    expect(toCreateInput(shared, true).sharedWithOrganization).toBe(true)
+    // The choice is not shown outside an organisation: nothing is shared.
+    expect(toCreateInput(shared, false).sharedWithOrganization).toBe(false)
   })
 
   it('reopens the settings with the codes of the model lines and their version', () => {
@@ -85,17 +95,20 @@ describe('portfolio form', () => {
         startDate: '2025-01-02',
         lines: [{ securityId: 'ECMR-6.25-2029', weightPct: 60 }],
       },
+      sharedWithOrganization: true,
+      sharedBy: null,
       version: '4',
     }
     const form = initialPortfolioForm(portfolio, false, TODAY, codeOf)
     expect(form.lines.map((line) => line.security)).toEqual([
       { id: 'ECMR-6.25-2029', code: 'ECMR 6.25% 29' },
     ])
-    expect(toUpdateInput(form, portfolio.version)).toMatchObject({
+    expect(toUpdateInput(form, portfolio.version, true)).toMatchObject({
       name: 'Bonds',
       benchmark: 'CMK-BOND',
       version: '4',
       model: { notional: 1_000_000, lines: [{ securityId: 'ECMR-6.25-2029', weightPct: 60 }] },
+      sharedWithOrganization: true,
     })
   })
 })

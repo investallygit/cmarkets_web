@@ -29,6 +29,8 @@ export interface PortfolioFormState {
   notional: number | null
   startDate: string | null
   lines: ModelLineState[]
+  /** Read by the members of the user's organisation. */
+  shared: boolean
 }
 
 export type PortfolioFormError =
@@ -74,6 +76,7 @@ export function initialPortfolioForm(
           ...newLine({ id: line.securityId, code: codeOf(line.securityId) }),
           weightPct: line.weightPct,
         })) ?? [],
+      shared: editing.sharedWithOrganization,
     }
   }
   return {
@@ -85,6 +88,7 @@ export function initialPortfolioForm(
     notional: DEFAULT_NOTIONAL,
     startDate: today,
     lines: [newLine()],
+    shared: false,
   }
 }
 
@@ -136,7 +140,8 @@ export function hasErrors(errors: PortfolioFormErrors): boolean {
   return Object.keys(errors).length > 0
 }
 
-function settingsOf(form: PortfolioFormState) {
+/** Shared only by a member of an organisation, who sees the choice. */
+function settingsOf(form: PortfolioFormState, inOrganization: boolean) {
   return {
     name: form.name.trim(),
     benchmark: form.benchmark,
@@ -152,15 +157,23 @@ function settingsOf(form: PortfolioFormState) {
             })),
           }
         : null,
+    sharedWithOrganization: inOrganization && form.shared,
   }
 }
 
 /** POST /portfolios; call it on a form without errors. */
-export function toCreateInput(form: PortfolioFormState): PortfolioCreateDto {
-  return { ...settingsOf(form), kind: form.kind, currency: form.currency }
+export function toCreateInput(
+  form: PortfolioFormState,
+  inOrganization: boolean,
+): PortfolioCreateDto {
+  return { ...settingsOf(form, inOrganization), kind: form.kind, currency: form.currency }
 }
 
 /** PUT /portfolios/{id}, with the version the settings were read at. */
-export function toUpdateInput(form: PortfolioFormState, version: string): PortfolioUpdateDto {
-  return { ...settingsOf(form), version }
+export function toUpdateInput(
+  form: PortfolioFormState,
+  version: string,
+  inOrganization: boolean,
+): PortfolioUpdateDto {
+  return { ...settingsOf(form, inOrganization), version }
 }

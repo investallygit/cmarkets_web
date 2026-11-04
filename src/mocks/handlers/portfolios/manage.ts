@@ -10,7 +10,15 @@ import type {
   PortfolioUpdateDto,
 } from '@/shared/api/contracts'
 import { addDays } from '@/shared/lib/isoDate'
-import { currentUser, indices, marketData, portfolioStore, securities } from '../../db'
+import {
+  currentUser,
+  indices,
+  marketData,
+  portfolioStore,
+  securities,
+  sharedPortfolios,
+} from '../../db'
+import type { StoredAccount } from '../../fixtures/accounts'
 import { api, latency, noContent, problem } from '../../lib/http'
 import { newId } from '../../lib/ids'
 import {
@@ -36,15 +44,33 @@ const LIMITS: readonly PortfolioLimit[] = [
   'durationYears',
 ]
 
-function toSummary(portfolio: StoredPortfolio, market: MarketData): PortfolioSummaryDto {
-  const { id, name, kind, currency, benchmark } = portfolio
+/** The owner is the colleague who shares the portfolio; none for the user's own. */
+function toSummary(
+  portfolio: StoredPortfolio,
+  market: MarketData,
+  owner: StoredAccount | null = null,
+): PortfolioSummaryDto {
+  const { id, name, kind, currency, benchmark, sharedWithOrganization } = portfolio
   const first = effectiveTransactions(portfolio, market).at(0)
-  return { id, name, kind, currency, benchmark, inceptionDate: first?.date ?? null }
+  return {
+    id,
+    name,
+    kind,
+    currency,
+    benchmark,
+    inceptionDate: first?.date ?? null,
+    sharedWithOrganization,
+    sharedBy: owner && { userId: owner.id, displayName: owner.displayName },
+  }
 }
 
-function toDto(portfolio: StoredPortfolio, market: MarketData): PortfolioDto {
+function toDto(
+  portfolio: StoredPortfolio,
+  market: MarketData,
+  owner: StoredAccount | null = null,
+): PortfolioDto {
   return {
-    ...toSummary(portfolio, market),
+    ...toSummary(portfolio, market, owner),
     limits: { ...portfolio.limits },
     model: portfolio.model,
     version: String(portfolio.version),
@@ -107,11 +133,15 @@ function readModel(value: unknown, errors: Errors, market: MarketData): ModelAll
   }
 }
 
-/** The settings of a portfolio, or the errors by field as FluentValidation reports them. */
+/**
+ * The settings of a portfolio, or the errors by field as FluentValidation reports them. Without
+ * the field, the sharing stays as it was.
+ */
 function readSettings(
   body: Partial<PortfolioCreateDto & PortfolioUpdateDto>,
   kind: PortfolioKind,
   market: MarketData,
+  shared = false,
 ) {
   const errors: Errors = {}
   const name = typeof body.name === 'string' ? body.name.trim() : ''
@@ -124,16 +154,28 @@ function readSettings(
     errors.benchmark = ['An index of GET /indices.']
   const limits = readLimits(body.limits, errors)
   const model = kind === 'model' ? readModel(body.model, errors, market) : null
-  return { errors, settings: { name, benchmark, limits, model } }
+  const sharing = body.sharedWithOrganization ?? shared
+  if (typeof sharing !== 'boolean') errors.sharedWithOrganization = ['true or false.']
+  else if (sharing && !currentUser().organization) {
+    errors.sharedWithOrganization = ['Your account belongs to no organisation.']
+  }
+  const sharedWithOrganization = sharing === true
+  return { errors, settings: { name, benchmark, limits, model, sharedWithOrganization } }
 }
 
-/** The portfolios of the user: list, creation within the quota, settings, deletion. */
+/**
+ * The portfolios of the user: list, creation within the quota, settings, deletion; then those
+ * colleagues share with the organisation, read only.
+ */
 export const manageHandlers = [
   http.get(api('/portfolios'), async () => {
     await latency()
     if (!allowed('portfolios:read')) return forbidden('Your account type has no portfolios.')
     const market = marketData()
-    return HttpResponse.json(portfolioStore.read().map((portfolio) => toSummary(portfolio, market)))
+    return HttpResponse.json([
+      ...portfolioStore.read().map((portfolio) => toSummary(portfolio, market)),
+      ...sharedPortfolios().map(({ portfolio, owner }) => toSummary(portfolio, market, owner)),
+    ])
   }),
 
   // The quota of the account type (spec section 12); Students only simulate.
@@ -176,7 +218,7 @@ export const manageHandlers = [
     await latency()
     const found = withPortfolio('portfolios:read', params.id)
     if ('response' in found) return found.response
-    return HttpResponse.json(toDto(found.portfolio, marketData()))
+    return HttpResponse.json(toDto(found.portfolio, marketData(), found.owner))
   }),
 
   // The kind and the currency stay; a stale version means someone else saved meanwhile.
@@ -190,7 +232,12 @@ export const manageHandlers = [
       return problem(409, 'Portfolio changed', 'Someone else changed this portfolio meanwhile.')
     }
     const market = marketData()
-    const { errors, settings } = readSettings(body, portfolio.kind, market)
+    const { errors, settings } = readSettings(
+      body,
+      portfolio.kind,
+      market,
+      portfolio.sharedWithOrganization,
+    )
     if (Object.keys(errors).length > 0) return invalid('Invalid portfolio', errors)
     noteLimits(portfolio, market)
     const updated: StoredPortfolio = { ...portfolio, ...settings, version: portfolio.version + 1 }

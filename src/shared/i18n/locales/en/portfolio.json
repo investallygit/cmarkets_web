@@ -19,14 +19,20 @@
     "empty": {
       "message": "No portfolio yet. Create one per client, fund or strategy, with its currency, benchmark and limits.",
       "student": "No portfolio yet. A Student account simulates allocations: create a model portfolio.",
-      "readOnly": "No portfolio to read yet: the portfolio managers of your organisation share theirs with it."
+      "readOnly": "No portfolio to read yet: the portfolio managers of your organisation share theirs with it.",
+      "pending": "Your status awaits an Admin's approval. Once it is approved, the portfolios that the managers of your organisation share with it show here.",
+      "rejected": "An Admin declined your status request: the portfolios of your organisation do not show. Contact CMarket to know why or to send new documents."
     },
     "selector": {
       "label": "Portfolio",
       "new": "New portfolio…",
       "quotaReached": "New portfolio: {{quota}} at most",
       "settings": "Portfolio settings…",
-      "delete": "Delete portfolio…"
+      "delete": "Delete portfolio…",
+      "shared": "Shared with the organisation",
+      "sharedBy": "Shared by {{name}}",
+      "readOnly": "Read only",
+      "sharedBadge": "Shared"
     },
     "header": {
       "totalValue": "Total value",
@@ -283,7 +289,9 @@
       "deleteMessage": "{{name}} and all its transactions are deleted. Alerts on it no longer go off.",
       "delete": "Delete",
       "deleted": "{{name}} deleted",
-      "deleteFailed": "Not deleted: {{message}}"
+      "deleteFailed": "Not deleted: {{message}}",
+      "share": "Share with {{organization}}",
+      "shareHint": "Its members, the CEO among them, read this portfolio without changing it or recording transactions."
     },
     "reports": {
       "generateLink": "Generate portfolio PDF report",

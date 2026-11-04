@@ -13,7 +13,11 @@ import {
   withLiveDay,
 } from '@/entities/portfolio'
 import { useLiveIndex, useLivePrices } from '@/entities/quote'
-import { DeletePortfolioDialog, usePortfolioQuota } from '@/features/manage-portfolios'
+import {
+  DeletePortfolioDialog,
+  usePortfolioAccess,
+  usePortfolioQuota,
+} from '@/features/manage-portfolios'
 import type { PortfolioSummaryDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { useMarketDay } from '@/shared/lib/useMarketDay'
@@ -138,7 +142,10 @@ export function PortfolioHeader({ portfolios, portfolioId, onSelect }: Portfolio
   )
 }
 
-/** The amber box of the mockup: the portfolios, then new, settings and delete. */
+/**
+ * The amber box of the mockup: the user's portfolios, those colleagues share with the
+ * organisation, then new, settings and delete; a shared one says who holds it.
+ */
 function PortfolioSelector({
   portfolios,
   current,
@@ -154,18 +161,34 @@ function PortfolioSelector({
   const [deleting, setDeleting] = useState<PortfolioSummaryDto | null>(null)
   const close = useCallback(() => setMenu(null), [])
   const quota = usePortfolioQuota()
+  const { canWrite } = usePortfolioAccess(current?.id)
   const details = usePortfolio(current?.id).data
+  const own = portfolios.filter((portfolio) => portfolio.sharedBy === null)
+  const shared = portfolios.filter((portfolio) => portfolio.sharedBy !== null)
 
+  const item = (portfolio: PortfolioSummaryDto): MenuItem => ({
+    id: portfolio.id,
+    label: [
+      portfolio.name,
+      portfolio.kind === 'model' && t('portfolio.kinds.model'),
+      portfolio.sharedBy?.displayName,
+    ]
+      .filter(Boolean)
+      .join(' · '),
+    checked: portfolio.id === current?.id,
+    onSelect: () => onSelect(portfolio.id),
+  })
   const items: MenuItem[] = [
-    ...portfolios.map((portfolio) => ({
-      id: portfolio.id,
-      label:
-        portfolio.kind === 'model'
-          ? `${portfolio.name} · ${t('portfolio.kinds.model')}`
-          : portfolio.name,
-      checked: portfolio.id === current?.id,
-      onSelect: () => onSelect(portfolio.id),
-    })),
+    ...own.map(item),
+    ...(shared.length > 0
+      ? [
+          ...(own.length > 0
+            ? [{ id: 'shared-separator', label: '', kind: 'separator' as const }]
+            : []),
+          { id: 'shared', label: t('portfolio.selector.shared'), kind: 'label' as const },
+          ...shared.map(item),
+        ]
+      : []),
     ...(quota.canWrite
       ? [
           { id: 'separator', label: '', kind: 'separator' as const },
@@ -178,6 +201,11 @@ function PortfolioSelector({
             disabled: quota.reached,
             onSelect: () => openPortfolioDialog({ mode: 'create' }),
           },
+        ]
+      : []),
+    // Only the owner changes or deletes a portfolio.
+    ...(canWrite
+      ? [
           {
             id: 'settings',
             label: t('portfolio.selector.settings'),
@@ -211,11 +239,18 @@ function PortfolioSelector({
         className="flex min-w-60 flex-col items-start border border-accent-amber px-3 py-1 text-left hover:bg-panel-header"
       >
         <span className="font-sans text-caption tracking-title text-secondary uppercase">
-          {t('portfolio.selector.label')}
+          {current?.sharedBy
+            ? t('portfolio.selector.sharedBy', { name: current.sharedBy.displayName })
+            : t('portfolio.selector.label')}
         </span>
         <span className="flex w-full items-center gap-2 font-mono text-label font-semibold text-accent-amber">
           <span className="truncate">{current?.name ?? MISSING}</span>
           {current?.kind === 'model' && <Badge tone="info">{t('portfolio.kinds.model')}</Badge>}
+          {current?.sharedBy ? (
+            <Badge>{t('portfolio.selector.readOnly')}</Badge>
+          ) : (
+            current?.sharedWithOrganization && <Badge>{t('portfolio.selector.sharedBadge')}</Badge>
+          )}
           <ChevronDown aria-hidden className="ml-auto size-3.5 shrink-0" />
         </span>
       </button>

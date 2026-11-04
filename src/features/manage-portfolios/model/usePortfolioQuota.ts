@@ -7,7 +7,8 @@ import { useCurrentUser } from '@/entities/session'
  */
 export function usePortfolioQuota() {
   const user = useCurrentUser()
-  const used = usePortfolios().data?.length ?? 0
+  // The portfolios colleagues share are read, not held.
+  const used = usePortfolios().data?.filter((portfolio) => portfolio.sharedBy === null).length ?? 0
   const quota = user.quotas.portfolios
   return {
     quota,

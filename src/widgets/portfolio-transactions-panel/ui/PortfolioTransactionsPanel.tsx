@@ -10,7 +10,7 @@ import {
   usePortfolio,
   useTransactions,
 } from '@/entities/portfolio'
-import { useHasPermission } from '@/entities/session'
+import { usePortfolioAccess } from '@/features/manage-portfolios'
 import { DeleteTransactionDialog } from '@/features/record-transaction'
 import type { TransactionDto, TransactionType } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
@@ -116,7 +116,7 @@ export function PortfolioTransactionsPanel({
   const { t } = useTranslation()
   const format = useFormat()
   const canExport = useContext(TableExportContext)
-  const canWrite = useHasPermission('portfolios:write')
+  const { canWrite } = usePortfolioAccess(portfolioId)
   const exportRef = useRef<TableExporter | null>(null)
   const [type, setType] = useState<TransactionType | typeof ALL>(ALL)
   const [deleting, setDeleting] = useState<TransactionDto | null>(null)

@@ -7,6 +7,7 @@ import {
   type StoredTransaction,
   type TransactionFields,
 } from '../lib/portfolioEngine'
+import { DEMO_USERS, isDemoUser } from './users'
 
 type Fields = Omit<StoredTransaction, 'id' | 'version'>
 
@@ -158,14 +159,24 @@ const STUDENT_MODEL: ModelAllocationDto = {
   ],
 }
 
+/** P. Owona shares the fund with Asset manager A, whose CEO, E. Fouda, reads it (spec section 12). */
+const FUND_SHARED_BY = DEMO_USERS.manager.id
+
 /**
- * The portfolios a demo user starts with; Students only simulate; Journalists, CEOs and employees
- * hold none.
+ * The portfolios a user starts with; Students only simulate; Journalists, CEOs and employees hold
+ * none. The demo users' ids are short, for readable URLs; another user's carry the user's id, as
+ * the portfolios a colleague shares are listed beside the user's own.
  */
-export function createPortfolios(accountType: AccountType, market: MarketData): StoredPortfolio[] {
+export function createPortfolios(
+  user: { id: string; accountType: AccountType },
+  market: MarketData,
+): StoredPortfolio[] {
+  const { accountType } = user
   if (['journalist', 'ceo', 'dataAdmin', 'admin'].includes(accountType)) return []
+  const idOf = (name: string) =>
+    isDemoUser(user.id) ? `portfolio-${name}` : `portfolio-${name}-${user.id}`
   const banks: StoredPortfolio = {
-    id: 'portfolio-banks',
+    id: idOf('banks'),
     name: 'Banks and insurers',
     kind: 'model',
     currency: 'XAF',
@@ -173,12 +184,13 @@ export function createPortfolios(accountType: AccountType, market: MarketData): 
     limits: { ...NO_LIMITS, volatilityPct: 20 },
     model: BANKS_MODEL,
     transactions: [],
+    sharedWithOrganization: false,
     version: 1,
   }
   const fund: StoredPortfolio =
     accountType === 'student'
       ? {
-          id: 'portfolio-cemac',
+          id: idOf('cemac'),
           name: 'CEMAC selection',
           kind: 'model',
           currency: 'XAF',
@@ -186,10 +198,11 @@ export function createPortfolios(accountType: AccountType, market: MarketData): 
           limits: { ...NO_LIMITS, issuerWeightPct: 12 },
           model: STUDENT_MODEL,
           transactions: [],
+          sharedWithOrganization: false,
           version: 1,
         }
       : {
-          id: 'portfolio-cemac',
+          id: idOf('cemac'),
           name: 'CEMAC Equity Fund',
           kind: 'real',
           currency: 'XAF',
@@ -197,6 +210,7 @@ export function createPortfolios(accountType: AccountType, market: MarketData): 
           limits: FUND_LIMITS,
           model: null,
           transactions: fundTransactions(market),
+          sharedWithOrganization: user.id === FUND_SHARED_BY,
           version: 1,
         }
   return [fund, banks]

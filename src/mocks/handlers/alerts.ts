@@ -8,11 +8,26 @@ import type {
   Paged,
 } from '@/shared/api/contracts'
 import { CEMAC_COUNTRIES } from '@/shared/config/countries'
-import { alertStore, currentUser, notifications, portfolioStore, securities } from '../db'
+import {
+  alertStore,
+  currentUser,
+  notifications,
+  portfolioStore,
+  securities,
+  sharedPortfolios,
+} from '../db'
 import type { StoredAlert } from '../fixtures/alerts'
 import { api, latency, noContent, paginate, problem } from '../lib/http'
 
 const CHANNELS: readonly AlertChannel[] = ['push', 'email', 'sms']
+
+/** One of the user's portfolios, or one a colleague shares with the organisation. */
+function readablePortfolio(id: string) {
+  return (
+    portfolioStore.read().find((portfolio) => portfolio.id === id) ??
+    sharedPortfolios().find((shared) => shared.portfolio.id === id)?.portfolio
+  )
+}
 
 function toDto(alert: StoredAlert): AlertDto {
   const { condition } = alert
@@ -21,10 +36,7 @@ function toDto(alert: StoredAlert): AlertDto {
   return {
     ...alert,
     securityCode: (securityId && securities.get(securityId)?.code) ?? null,
-    portfolioName:
-      (portfolioId &&
-        portfolioStore.read().find((portfolio) => portfolio.id === portfolioId)?.name) ??
-      null,
+    portfolioName: (portfolioId && readablePortfolio(portfolioId)?.name) ?? null,
   }
 }
 
@@ -75,13 +87,14 @@ function readCondition(value: Partial<AlertCondition> | undefined, errors: Error
         return fail('country', 'A CEMAC country.')
       }
       return { type: 'auction', country: value.country ?? null } as const
+    // A limit of a portfolio the user holds or reads, as a CEO reads the organisation's.
     case 'portfolio': {
+      if (!currentUser().permissions.includes('portfolios:read')) {
+        return fail('condition.type', 'Your account type has no portfolios.')
+      }
       const portfolioId = value.portfolioId ?? null
-      if (
-        portfolioId !== null &&
-        !portfolioStore.read().some((portfolio) => portfolio.id === portfolioId)
-      ) {
-        return fail('portfolioId', 'One of your portfolios.')
+      if (portfolioId !== null && !readablePortfolio(portfolioId)) {
+        return fail('portfolioId', 'One of the portfolios you hold or read.')
       }
       return { type: 'portfolio', portfolioId } as const
     }

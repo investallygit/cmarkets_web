@@ -33,6 +33,8 @@ export interface StoredPortfolio {
   model: ModelAllocationDto | null
   /** Empty for a model portfolio, whose transactions the server derives from its allocation. */
   transactions: StoredTransaction[]
+  /** The members of the owner's organisation read it; the valuation does not look at it. */
+  sharedWithOrganization: boolean
   version: number
 }
 

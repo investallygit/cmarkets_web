@@ -1,5 +1,5 @@
 import { Plus, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useIndices } from '@/entities/market'
 import {
@@ -10,12 +10,14 @@ import {
   type PortfolioDialogRequest,
 } from '@/entities/portfolio'
 import { SecurityPicker, useSecurities } from '@/entities/security'
+import { useCurrentUser } from '@/entities/session'
 import { isApiError } from '@/shared/api'
 import type { PortfolioDto, PortfolioLimit } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { useMarketDay } from '@/shared/lib/useMarketDay'
 import { Dialog, DialogBody, DialogFooter } from '@/shared/ui/Dialog'
 import { Button } from '@/shared/ui/form/Button'
+import { Checkbox } from '@/shared/ui/form/Checkbox'
 import { DateInput } from '@/shared/ui/form/DateInput'
 import { Field } from '@/shared/ui/form/Field'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
@@ -46,7 +48,10 @@ interface PortfolioDialogProps {
   onSaved?: (portfolio: PortfolioDto) => void
 }
 
-/** New portfolio, or its settings: currency, benchmark, limits, and a model's allocation. */
+/**
+ * New portfolio, or its settings: currency, benchmark, limits, a model's allocation, and whether
+ * the members of the organisation read it.
+ */
 export function PortfolioDialog({ request, onClose, onSaved }: PortfolioDialogProps) {
   const { t } = useTranslation()
   return (
@@ -74,6 +79,8 @@ function PortfolioForm({
   const format = useFormat()
   const today = useMarketDay()
   const { modelOnly } = usePortfolioQuota()
+  const { organization } = useCurrentUser()
+  const shareHintId = useId()
   const editing = request.mode === 'edit' ? request.portfolio : null
   const securities = useSecurities({})
   const codes = useMemo(
@@ -113,8 +120,9 @@ function PortfolioForm({
       onSaved?.(portfolio)
       onClose()
     }
-    if (editing) update.mutate(toUpdateInput(form, editing.version), { onSuccess })
-    else create.mutate(toCreateInput(form), { onSuccess })
+    const inOrganization = organization !== null
+    if (editing) update.mutate(toUpdateInput(form, editing.version, inOrganization), { onSuccess })
+    else create.mutate(toCreateInput(form, inOrganization), { onSuccess })
   }
 
   const setLimit = (key: PortfolioLimit, value: number | null) =>
@@ -297,6 +305,25 @@ function PortfolioForm({
             ))}
           </div>
         </fieldset>
+
+        {organization && (
+          <div className="flex flex-col gap-1">
+            <Checkbox
+              checked={form.shared}
+              onChange={(shared) => set({ shared })}
+              label={t('portfolio.form.share', { organization: organization.name })}
+              aria-describedby={shareHintId}
+            />
+            <p id={shareHintId} className="font-sans text-title text-secondary">
+              {t('portfolio.form.shareHint')}
+            </p>
+            {serverError('sharedWithOrganization') && (
+              <p className="font-sans text-title text-down">
+                {serverError('sharedWithOrganization')}
+              </p>
+            )}
+          </div>
+        )}
 
         {generalError && (
           <p role="alert" className="font-sans text-data text-down">

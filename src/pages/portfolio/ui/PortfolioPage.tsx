@@ -8,8 +8,12 @@ import {
   usePortfolio,
   usePortfolios,
 } from '@/entities/portfolio'
-import { useHasPermission } from '@/entities/session'
-import { PortfolioDialogHost, usePortfolioQuota } from '@/features/manage-portfolios'
+import { useCurrentUser } from '@/entities/session'
+import {
+  PortfolioDialogHost,
+  usePortfolioAccess,
+  usePortfolioQuota,
+} from '@/features/manage-portfolios'
 import { ImportTransactionsDialog, TransactionDialogHost } from '@/features/record-transaction'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import type { PortfolioSummaryDto } from '@/shared/api/contracts'
@@ -45,7 +49,8 @@ import { layoutKey, LOCKED_REPORTS_LAYOUT, PORTFOLIO_LAYOUTS } from '../config/l
 
 /**
  * Screen 5, portfolio (spec section 9): header, tabs, then the panels of the tab.
- * /port opens the first portfolio; /port/{id}/{tab} a tab of one.
+ * /port opens the first portfolio; /port/{id}/{tab} a tab of one. A portfolio a colleague shares
+ * with the organisation is read only: no transaction, setting or report.
  */
 export function PortfolioPage() {
   const { portfolioId, tab = 'positions' } = useParams()
@@ -76,14 +81,18 @@ function PortfolioScreen({
 }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const canWrite = useHasPermission('portfolios:write')
+  const { canWrite } = usePortfolioAccess(current.id)
   const details = usePortfolio(current.id).data
   const [importing, setImporting] = useState(false)
   const model = current.kind === 'model'
-  const tabs = PORTFOLIO_TABS.filter((value) => !(model && value === 'transactions')).map(
-    (value) => ({ to: portfolioPath(current.id, value), label: t(`portfolio.tabs.${value}`) }),
-  )
-  if (model && tab === 'transactions') return <Navigate to={portfolioPath(current.id)} replace />
+  // A model has no transactions; the reports of a shared portfolio are its owner's.
+  const hidden = (value: PortfolioTab) =>
+    (model && value === 'transactions') || (current.sharedBy !== null && value === 'reports')
+  const tabs = PORTFOLIO_TABS.filter((value) => !hidden(value)).map((value) => ({
+    to: portfolioPath(current.id, value),
+    label: t(`portfolio.tabs.${value}`),
+  }))
+  if (hidden(tab)) return <Navigate to={portfolioPath(current.id)} replace />
 
   return (
     <div className="flex h-full flex-col">
@@ -148,7 +157,7 @@ function PortfolioTabPanels({
   onImport: () => void
 }) {
   const navigate = useNavigate()
-  const canReport = useHasPermission('portfolios:reports')
+  const { canReport, sharedBy } = usePortfolioAccess(portfolioId)
   // The Reports tab: the list says which report the preview shows.
   const [reportId, setReportId] = useState<string | null>(null)
 
@@ -161,7 +170,9 @@ function PortfolioTabPanels({
       income: (
         <PortfolioIncomePanel
           portfolioId={portfolioId}
-          onGenerateReport={() => void navigate(portfolioPath(portfolioId, 'reports'))}
+          onGenerateReport={
+            sharedBy ? undefined : () => void navigate(portfolioPath(portfolioId, 'reports'))
+          }
         />
       ),
     },
@@ -210,21 +221,23 @@ function PortfolioTabPanels({
 
 /**
  * No portfolio yet: the first one to create, within the account type's quota; a CEO, who reads
- * the organisation's, has none to create.
+ * the organisation's, has none to create, nor any to read before an Admin approved the status.
  */
 function NoPortfolio() {
   const { t } = useTranslation()
   const quota = usePortfolioQuota()
+  const { verificationStatus } = useCurrentUser()
+  const message = quota.canWrite
+    ? quota.modelOnly
+      ? t('portfolio.empty.student')
+      : t('portfolio.empty.message')
+    : verificationStatus === 'pending' || verificationStatus === 'rejected'
+      ? t(`portfolio.empty.${verificationStatus}`)
+      : t('portfolio.empty.readOnly')
   return (
     <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
       <Briefcase aria-hidden className="size-6 text-secondary" />
-      <p className="max-w-md font-sans text-label text-secondary">
-        {!quota.canWrite
-          ? t('portfolio.empty.readOnly')
-          : quota.modelOnly
-            ? t('portfolio.empty.student')
-            : t('portfolio.empty.message')}
-      </p>
+      <p className="max-w-md font-sans text-label text-secondary">{message}</p>
       {quota.canWrite && !quota.reached && (
         <Button
           variant="primary"

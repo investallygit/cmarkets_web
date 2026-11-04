@@ -64,7 +64,10 @@ function AlertForm({ request, onClose }: { request: AlertDialogRequest; onClose:
   const [form, setForm] = useState(() => initialAlertForm(editing))
   const [submitted, setSubmitted] = useState(false)
   const alerts = useAlerts()
-  const portfolios = usePortfolios({ enabled: form.type === 'portfolio' })
+  // Portfolio limits are set on the portfolios held or read: none for a Journalist.
+  const readsPortfolios = user.permissions.includes('portfolios:read')
+  const types = ALERT_TYPES.filter((type) => type !== 'portfolio' || readsPortfolios)
+  const portfolios = usePortfolios({ enabled: form.type === 'portfolio' && readsPortfolios })
   const create = useCreateAlert()
   const update = useUpdateAlert()
   const mutation = editing ? update : create
@@ -128,7 +131,7 @@ function AlertForm({ request, onClose }: { request: AlertDialogRequest; onClose:
         <Field label={t('alerts.type')}>
           <Select
             value={form.type}
-            options={ALERT_TYPES.map((type) => ({ value: type, label: t(`alerts.types.${type}`) }))}
+            options={types.map((type) => ({ value: type, label: t(`alerts.types.${type}`) }))}
             onChange={(type) => set({ type })}
           />
         </Field>
@@ -240,7 +243,9 @@ function AlertForm({ request, onClose }: { request: AlertDialogRequest; onClose:
                 { value: '', label: t('alerts.allPortfolios') },
                 ...(portfolios.data ?? []).map((portfolio) => ({
                   value: portfolio.id,
-                  label: portfolio.name,
+                  label: portfolio.sharedBy
+                    ? `${portfolio.name} · ${portfolio.sharedBy.displayName}`
+                    : portfolio.name,
                 })),
               ]}
               onChange={(portfolioId) => set({ portfolioId })}

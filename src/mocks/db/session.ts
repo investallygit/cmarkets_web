@@ -2,7 +2,14 @@ import type { AccessTokenDto, AccountType } from '@/shared/api/contracts'
 import type { StoredAccount } from '../fixtures/accounts'
 import { ACCESS_TOKEN_SECONDS, randomToken, REFRESH_TOKEN_MS } from '../lib/auth'
 import { findAccount } from './accounts'
-import { readStorage, removeStorage, sharedStore, storedArray, writeStorage } from './storage'
+import {
+  readStorage,
+  removeStorage,
+  sharedStore,
+  storedArray,
+  storedArrays,
+  writeStorage,
+} from './storage'
 
 /**
  * Who the requests are answered for: the session of this tab, the refresh tokens behind the
@@ -50,6 +57,15 @@ export function currentAccountType(): AccountType {
 /** Data of the current user. */
 export function userStore<T extends object[]>(name: string, initial: () => T) {
   return storedArray(() => `cmarket.prototype.${name}.${currentAccount().id}`, initial)
+}
+
+/** Data of each user: the current user's, or a colleague's, such as a portfolio shared. */
+export function usersStore<T extends object[]>(name: string, initial: (userId: string) => T) {
+  const arrays = storedArrays((userId) => `cmarket.prototype.${name}.${userId}`, initial)
+  return {
+    read: (userId = currentAccount().id): T => arrays.read(userId),
+    write: (value: T, userId = currentAccount().id) => arrays.write(userId, value),
+  }
 }
 
 /** A refresh token: 7 days, unless a logout or a new password revokes it first. */

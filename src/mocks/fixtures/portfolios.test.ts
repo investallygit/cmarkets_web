@@ -9,7 +9,7 @@ describe('sample portfolios', () => {
   const market = marketData()
 
   it('end with the lines of the screen 5 mockup, the bonds in BVMAC nominals of 10,000', () => {
-    const [fund] = createPortfolios('analyst', market)
+    const [fund] = createPortfolios({ id: 'user-analyst', accountType: 'analyst' }, market)
     const valuation = portfolioValuation(fund, market)
     const positions = positionsOf(fund, valuation, market, new Date().toISOString())
     expect(
@@ -32,7 +32,7 @@ describe('sample portfolios', () => {
   })
 
   it('never hold less than no cash', () => {
-    const [fund] = createPortfolios('manager', market)
+    const [fund] = createPortfolios({ id: 'user-manager', accountType: 'manager' }, market)
     let cash = 0
     for (const transaction of fund.transactions) {
       cash += transaction.amount
@@ -41,10 +41,25 @@ describe('sample portfolios', () => {
   })
 
   it('only simulate for a Student and are none for employees', () => {
-    expect(createPortfolios('student', market).map((portfolio) => portfolio.kind)).toEqual([
-      'model',
-      'model',
+    const student = createPortfolios({ id: 'user-student', accountType: 'student' }, market)
+    expect(student.map((portfolio) => portfolio.kind)).toEqual(['model', 'model'])
+    expect(createPortfolios({ id: 'user-admin', accountType: 'admin' }, market)).toEqual([])
+  })
+
+  it('share the fund of P. Owona with the organisation, and no other', () => {
+    const shared = (id: string) =>
+      createPortfolios({ id, accountType: 'manager' }, market).map((portfolio) => [
+        portfolio.id,
+        portfolio.sharedWithOrganization,
+      ])
+    expect(shared('user-manager')).toEqual([
+      ['portfolio-cemac', true],
+      ['portfolio-banks', false],
     ])
-    expect(createPortfolios('admin', market)).toEqual([])
+    // Another manager's carry the user's id: a colleague lists them beside the user's own.
+    expect(shared('user-x')).toEqual([
+      ['portfolio-cemac-user-x', false],
+      ['portfolio-banks-user-x', false],
+    ])
   })
 })

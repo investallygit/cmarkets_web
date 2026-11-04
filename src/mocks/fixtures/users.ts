@@ -48,6 +48,11 @@ export const DEMO_USERS: Record<AccountType, Pick<MeDto, 'id' | 'displayName' | 
   admin: { id: 'user-admin', displayName: 'L. Mvogo', email: 'l.mvogo@cmarket.example', organization: { id: 'org-cmarket', name: 'CMarket' } },
 }
 
+const DEMO_USER_IDS = new Set(Object.values(DEMO_USERS).map((user) => user.id))
+
+/** One of the demo users above, rather than a colleague generated around them. */
+export const isDemoUser = (userId: string) => DEMO_USER_IDS.has(userId)
+
 export interface WatchlistFixture {
   id: string
   code: string

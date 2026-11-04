@@ -10,7 +10,7 @@ import {
   valueAtPrices,
 } from '@/entities/portfolio'
 import { LiveChangePct, LivePrice, priceDecimals, useLivePrices } from '@/entities/quote'
-import { useHasPermission } from '@/entities/session'
+import { usePortfolioAccess } from '@/features/manage-portfolios'
 import { useSecurityMenu } from '@/features/security-actions'
 import type { PositionDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
@@ -139,7 +139,7 @@ export function PortfolioPositionsPanel({ portfolioId, onImport }: PortfolioPosi
   const navigate = useNavigate()
   const securityMenu = useSecurityMenu()
   const canExport = useContext(TableExportContext)
-  const canWrite = useHasPermission('portfolios:write')
+  const { canWrite } = usePortfolioAccess(portfolioId)
   const exportRef = useRef<TableExporter | null>(null)
   const portfolio = usePortfolio(portfolioId).data
   const positions = usePositions(portfolioId)

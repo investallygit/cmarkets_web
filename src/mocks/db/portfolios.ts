@@ -1,15 +1,19 @@
 import { toMarketDay } from '@/shared/lib/format'
+import { isVerifiedType, type StoredAccount } from '../fixtures/accounts'
 import { BOND_FIXTURES, cashFlows } from '../fixtures/bonds'
 import { createPortfolios } from '../fixtures/portfolios'
 import { PROFILE_FIXTURES } from '../fixtures/profiles'
+import { isDemoUser } from '../fixtures/users'
 import { priceHistory, sessionStarted } from '../lib/bars'
 import type { MarketData, PortfolioBond, StoredPortfolio } from '../lib/portfolioEngine'
 import { businessDays } from '../lib/time'
+import { accountStore, findAccount } from './accounts'
 import { indexDailyCloses, indices, securities } from './market'
 import { settingsStore } from './platform'
-import { currentAccountType, userStore } from './session'
+import { currentAccount, currentAccountType, usersStore } from './session'
+import { userArray } from './storage'
 
-/** The market data the portfolio service reads, and each user's portfolios. */
+/** The market data the portfolio service reads, each user's portfolios, and those shared. */
 
 /** EUR / XAF peg (spec section 14.2). */
 const EUR_XAF = 655.957
@@ -69,7 +73,46 @@ export function marketData(now = Date.now()): MarketData {
   }
 }
 
-/** Built from the price history the first time a user opens PORT, then kept like the rest. */
-export const portfolioStore = userStore<StoredPortfolio[]>('portfolios', () =>
-  createPortfolios(currentAccountType(), marketData()),
-)
+/**
+ * The portfolios of the current user, or of the user named. Built from the price history the
+ * first time they are read, then kept like the rest.
+ */
+export const portfolioStore = usersStore<StoredPortfolio[]>('portfolios', (userId) => {
+  const account = findAccount(userId)
+  return account ? createPortfolios(account, marketData()) : []
+})
+
+/** A portfolio a colleague shares with the organisation, and that colleague. */
+export interface SharedPortfolio {
+  portfolio: StoredPortfolio
+  owner: StoredAccount
+}
+
+/**
+ * A colleague's portfolios. A demo user starts with the sample ones; the others have those they
+ * saved, as their sample ones share nothing.
+ */
+function portfoliosOf(account: StoredAccount): StoredPortfolio[] {
+  return isDemoUser(account.id)
+    ? portfolioStore.read(account.id)
+    : userArray<StoredPortfolio>('portfolios', account.id)
+}
+
+/**
+ * The portfolios colleagues share with the user's organisation, which the user reads without
+ * changing them (spec sections 6 and 12): none while the user's status waits for an Admin's
+ * approval, nor once it was rejected.
+ */
+export function sharedPortfolios(): SharedPortfolio[] {
+  const user = currentAccount()
+  if (!user.organizationId) return []
+  if (isVerifiedType(user.accountType) && user.verificationStatus !== 'approved') return []
+  return accountStore
+    .read()
+    .filter((account) => account.organizationId === user.organizationId && account.id !== user.id)
+    .flatMap((owner) =>
+      portfoliosOf(owner)
+        .filter((portfolio) => portfolio.sharedWithOrganization)
+        .map((portfolio) => ({ portfolio, owner })),
+    )
+}

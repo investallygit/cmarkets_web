@@ -18,7 +18,8 @@ import {
   type MockIndex,
   type MockSecurity,
 } from './market'
-import { hasSession, userStore } from './session'
+import { permissionsOf } from './platform'
+import { currentAccountType, hasSession, userStore } from './session'
 
 /**
  * The live market: trades and index moves, news as it comes out, and the user's alerts they set
@@ -91,7 +92,9 @@ export function publishNextNews(): { item: NewsItemDto; alerts: NotificationDto[
   return { item, alerts: checkNewsAlerts(item, auctionResults) }
 }
 
-export const alertStore = userStore<StoredAlert[]>('alerts', () => createAlerts(startedAt))
+export const alertStore = userStore<StoredAlert[]>('alerts', () =>
+  createAlerts(startedAt, permissionsOf(currentAccountType()).includes('portfolios:read')),
+)
 
 /** Records that an alert went off: a notification for the user and the time on the alert. */
 function triggerAlert(alert: StoredAlert, subject: string, message: string): NotificationDto {

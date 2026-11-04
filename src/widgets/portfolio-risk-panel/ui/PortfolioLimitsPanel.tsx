@@ -2,7 +2,7 @@ import { clsx } from 'clsx'
 import { Check, Minus, TriangleAlert } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { openPortfolioDialog, PORTFOLIO_LIMITS, usePortfolio, useRisk } from '@/entities/portfolio'
-import { useHasPermission } from '@/entities/session'
+import { usePortfolioAccess } from '@/features/manage-portfolios'
 import type { PortfolioLimit, RiskDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { Panel } from '@/shared/ui/Panel'
@@ -33,7 +33,7 @@ export function PortfolioLimitsPanel({ portfolioId }: { portfolioId: string }) {
   const format = useFormat()
   const risk = useRisk(portfolioId)
   const portfolio = usePortfolio(portfolioId).data
-  const canWrite = useHasPermission('portfolios:write')
+  const { canWrite } = usePortfolioAccess(portfolioId)
 
   const show = (limit: PortfolioLimit, value: number | null) => {
     if (value === null) return '—'

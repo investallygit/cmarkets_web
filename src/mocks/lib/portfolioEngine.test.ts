@@ -100,6 +100,7 @@ function portfolio(transactions: StoredTransaction[], currency = 'XAF'): StoredP
     },
     model: null,
     transactions,
+    sharedWithOrganization: false,
     version: 1,
   }
 }
