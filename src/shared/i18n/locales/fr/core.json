@@ -80,6 +80,7 @@
     "ALRT": { "title": "Alertes", "menu": "Alertes" },
     "CFG": { "title": "Paramètres", "menu": "Réglages" },
     "NET": { "title": "Annuaire professionnel", "menu": "Annuaire" },
+    "MSG": { "title": "Messagerie", "menu": "Messages" },
     "NETME": { "title": "Mon profil professionnel", "menu": "Mon profil" },
     "DATA": { "title": "Couverture de la séance", "menu": "Séance" },
     "IMP": { "title": "Import de données", "menu": "Imports" },
@@ -203,7 +204,10 @@
     "visibility": "Visibilité et contact",
     "cardPreview": "Aperçu de ma fiche",
     "filters": "Filtres",
-    "professionals": "Professionnels"
+    "professionals": "Professionnels",
+    "conversations": "Conversations",
+    "thread": "Conversation",
+    "participant": "Participant"
   },
   "columns": {
     "index": "Indice",
@@ -402,5 +406,14 @@
     "savedAs": "Disposition enregistrée sous « {{name}} ».",
     "applied": "Disposition « {{name}} » appliquée.",
     "deleted": "Disposition « {{name}} » supprimée."
+  },
+  "reportForm": {
+    "reason": "Motif",
+    "chooseReason": "Choisissez un motif",
+    "comment": "Commentaire",
+    "reasonRequired": "Choisissez un motif.",
+    "commentRequired": "Dites ce qui ne va pas.",
+    "commentTooLong": "{{max}} caractères au plus.",
+    "send": "Envoyer le signalement"
   }
 }

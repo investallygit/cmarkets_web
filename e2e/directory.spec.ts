@@ -100,16 +100,15 @@ test('each card follows the rules of its profile: a request, a closed door, an a
   await tick(panel(page, 'Filters'), 'Only profiles I can contact')
   await expect(page.getByText('No profile matches these filters.')).toBeVisible()
 
-  // The conversation itself comes with MSG.
+  // Contact opens the conversation in MSG.
   await page.goto('/net?q=fotso')
   await page
     .getByRole('listitem')
     .filter({ hasText: 'L. Fotso' })
     .getByRole('button', { name: 'Contact', exact: true })
     .click()
-  await expect(
-    page.getByText('Messaging opens with MSG, the next screen of the prototype.'),
-  ).toBeVisible()
+  await expect(page).toHaveURL(/\/msg\?to=user-fotso$/)
+  await expect(page.getByRole('heading', { name: 'New conversation with L. Fotso' })).toBeVisible()
 })
 
 test('a profile is reported once', async ({ page }) => {

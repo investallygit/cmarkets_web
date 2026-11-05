@@ -163,8 +163,7 @@
       "you": "You",
       "editMine": "Edit my profile",
       "empty": "No profile matches these filters.",
-      "awaitingApproval": "Messaging opens once an Admin approves your status.",
-      "contactSoon": "Messaging opens with MSG, the next screen of the prototype."
+      "awaitingApproval": "Messaging opens once an Admin approves your status."
     },
     "view": {
       "select": "Choose a profile among the results.",
@@ -193,8 +192,6 @@
     "report": {
       "title": "Report a profile",
       "intro": "The CMarket team reviews every report; {{name}} is not told who sent it.",
-      "reason": "Reason",
-      "chooseReason": "Choose a reason",
       "reasons": {
         "fake": "Fake profile or identity",
         "spam": "Spam or solicitation",
@@ -202,11 +199,6 @@
         "harassment": "Harassment",
         "other": "Other"
       },
-      "comment": "Comment",
-      "reasonRequired": "Choose a reason.",
-      "commentRequired": "Say what is wrong.",
-      "commentTooLong": "{{max}} characters at most.",
-      "send": "Send the report",
       "sent": "Report sent: the CMarket team will review it.",
       "already": "You already reported this profile."
     },

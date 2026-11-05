@@ -15,6 +15,7 @@ export const profileKeys = {
   mine: () => [...profileKeys.all, 'me'] as const,
   privacy: () => [...profileKeys.all, 'me', 'privacy'] as const,
   specialties: () => [...profileKeys.all, 'specialties'] as const,
+  blocks: () => [...profileKeys.all, 'me', 'blocks'] as const,
   /** What the directory shows, the user's own card included: refreshed when it changes. */
   listed: () => [...profileKeys.all, 'listed'] as const,
   directory: (query: DirectoryQuery) => [...profileKeys.listed(), 'search', query] as const,

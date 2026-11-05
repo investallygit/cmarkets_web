@@ -84,6 +84,9 @@ export {
 } from './db/workspace'
 export { marketData, portfolioStore, sharedPortfolios, type SharedPortfolio } from './db/portfolios'
 export {
+  blockBetween,
+  blockStore,
+  canSeeProfile,
   contactModeFor,
   directoryEntryDto,
   directoryProfiles,
@@ -102,8 +105,29 @@ export {
   statsOf,
   type ClientAccount,
   type DirectoryProfile,
+  type StoredBlock,
   type StoredProfileReport,
 } from './db/network'
+export {
+  attachmentDto,
+  attachmentStore,
+  conversationDto,
+  conversationReportStore,
+  conversationStore,
+  conversationSummary,
+  directConversation,
+  fileContent,
+  isVisibleTo,
+  keepFileContent,
+  memberDto,
+  messageDto,
+  messageStore,
+  messagesOf,
+  sharedChart,
+  sharedPublication,
+  sharedSecurity,
+  type StoredConversationReport,
+} from './db/messaging'
 export {
   analystStore,
   announcePublication,

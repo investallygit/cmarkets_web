@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw'
 import {
   CLIENT_ACCOUNT_TYPES,
+  type BlockedUserDto,
   type ClientAccountType,
   type ContactPermissionDto,
   type DirectoryEntryDto,
@@ -12,6 +13,8 @@ import {
 } from '@/shared/api/contracts'
 import {
   anyAccount,
+  blockStore,
+  canSeeProfile,
   contactModeFor,
   currentAccount,
   currentUser,
@@ -72,12 +75,12 @@ function readFilter(query: URLSearchParams): DirectoryFilter {
   }
 }
 
-/** A profile the user may open: one of the directory, or their own. Blocks come with MSG. */
+/** A profile the user may open: theirs, one of the directory, or one they talk with. */
 function visibleProfile(userId: unknown) {
   const account = anyAccount(String(userId))
   if (!account || !isClientAccount(account)) return null
   const profile = profileOf(account)
-  if (account.id !== currentAccount().id && !isListed(account, profile)) return null
+  if (!canSeeProfile(currentAccount(), account, profile)) return null
   return { account, profile }
 }
 
@@ -173,6 +176,58 @@ export const directoryHandlers = [
         at: new Date().toISOString(),
       },
     ])
+    return noContent()
+  }),
+
+  // The people the user blocked (spec sections 10 and 15): NET ME lists them, MSG blocks.
+  http.get(api('/me/blocks'), async () => {
+    await latency()
+    if (!currentUser().permissions.includes('directory:profile')) return forbidden()
+    const userId = currentAccount().id
+    const blocked = blockStore
+      .read()
+      .filter((block) => block.blockerId === userId)
+      .flatMap((block): BlockedUserDto[] => {
+        const account = anyAccount(block.blockedId)
+        return account
+          ? [
+              {
+                userId: account.id,
+                displayName: account.displayName,
+                accountType: account.accountType,
+                blockedAt: block.at,
+              },
+            ]
+          : []
+      })
+    return HttpResponse.json(blocked)
+  }),
+
+  http.post(api('/blocks/:userId'), async ({ params }) => {
+    await latency()
+    if (!currentUser().permissions.includes('directory:profile')) return forbidden()
+    const userId = currentAccount().id
+    const account = anyAccount(String(params.userId))
+    if (!account || !isClientAccount(account) || account.id === userId) return notFound()
+    const blocks = blockStore.read()
+    if (!blocks.some((block) => block.blockerId === userId && block.blockedId === account.id)) {
+      blockStore.write([
+        ...blocks,
+        { blockerId: userId, blockedId: account.id, at: new Date().toISOString() },
+      ])
+    }
+    return noContent()
+  }),
+
+  http.delete(api('/blocks/:userId'), async ({ params }) => {
+    await latency()
+    if (!currentUser().permissions.includes('directory:profile')) return forbidden()
+    const userId = currentAccount().id
+    blockStore.write(
+      blockStore
+        .read()
+        .filter((block) => !(block.blockerId === userId && block.blockedId === params.userId)),
+    )
     return noContent()
   }),
 

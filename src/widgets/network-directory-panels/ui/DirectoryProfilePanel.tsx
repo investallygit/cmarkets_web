@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { useAnalyst } from '@/entities/analyst'
 import { ContactButton, typesByMode, useContactPermission, useProfile } from '@/entities/profile'
 import { useLibrary } from '@/entities/publication'
@@ -9,12 +9,11 @@ import { ReportProfile } from '@/features/report-profile'
 import { isApiError } from '@/shared/api'
 import type { ClientAccountType, ProfileDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
-import { analystPublicationsPath, libraryPath, routes } from '@/shared/routes/paths'
+import { analystPublicationsPath, libraryPath, messagesPath, routes } from '@/shared/routes/paths'
 import { Button, ButtonLink } from '@/shared/ui/form/Button'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { PanelEmpty } from '@/shared/ui/StatusViews'
-import { toast } from '@/shared/ui/toast'
 import { ProfileDetails } from './ProfileDetails'
 
 const SECTION_TITLE =
@@ -114,6 +113,7 @@ function ProfileContact({ profile }: { profile: ProfileDto }) {
 /** The buttons of a profile: write, follow an analyst, read their publications, report. */
 function ProfileActions({ profile }: { profile: ProfileDto }) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const permission = useContactPermission(profile.userId)
   const analyst = useAnalyst(profile.analystId)
   return (
@@ -126,8 +126,8 @@ function ProfileActions({ profile }: { profile: ProfileDto }) {
         <ContactButton
           mode={permission.data?.mode ?? 'none'}
           variant="profile"
-          // MSG opens the conversation with the next step of the roadmap.
-          onContact={() => toast.info(t('network.directory.contactSoon'))}
+          // MSG opens the conversation with the person, or the one already open.
+          onContact={() => void navigate(messagesPath({ to: profile.userId }))}
           className="w-full"
         />
       )}

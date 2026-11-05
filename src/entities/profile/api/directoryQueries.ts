@@ -1,6 +1,7 @@
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/shared/api'
 import type {
+  BlockedUserDto,
   ContactPermissionDto,
   DirectoryEntryDto,
   DirectoryFacetsDto,
@@ -78,5 +79,28 @@ export function useReportProfile(userId: string) {
   return useMutation({
     mutationFn: (report: ProfileReportDto) =>
       apiClient.post<void>(`${profilePath(userId)}/report`, report),
+  })
+}
+
+/** GET /me/blocks: the people the user blocked. */
+export function useBlocks() {
+  return useQuery({
+    queryKey: profileKeys.blocks(),
+    queryFn: ({ signal }) => apiClient.get<BlockedUserDto[]>('/me/blocks', { signal }),
+  })
+}
+
+/** POST / DELETE /blocks/{userId}: the directory and the profiles change with it. */
+export function useBlockUser() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ userId, block }: { userId: string; block: boolean }) => {
+      const blockPath = `/blocks/${encodeURIComponent(userId)}`
+      return block ? apiClient.post<void>(blockPath) : apiClient.delete<void>(blockPath)
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: profileKeys.blocks() })
+      void queryClient.invalidateQueries({ queryKey: profileKeys.listed() })
+    },
   })
 }

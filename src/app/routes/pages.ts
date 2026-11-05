@@ -39,6 +39,9 @@ const SettingsPage = lazy(() =>
 const NetworkDirectoryPage = lazy(() =>
   import('@/pages/network-directory').then((module) => ({ default: module.NetworkDirectoryPage })),
 )
+const MessagesPage = lazy(() =>
+  import('@/pages/messages').then((module) => ({ default: module.MessagesPage })),
+)
 const NetworkProfilePage = lazy(() =>
   import('@/pages/network-profile').then((module) => ({ default: module.NetworkProfilePage })),
 )
@@ -95,6 +98,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   ALRT: AlertsPage,
   CFG: SettingsPage,
   NET: NetworkDirectoryPage,
+  MSG: MessagesPage,
   NETME: NetworkProfilePage,
   IMP: DataImportPage,
   DATA: DataSessionPage,

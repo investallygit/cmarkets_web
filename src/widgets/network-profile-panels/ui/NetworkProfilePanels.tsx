@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BlockedList } from '@/features/block-user'
 import {
   CardPreview,
   PrivacyFields,
@@ -25,12 +26,18 @@ export function MyProfilePanel({ editor }: PanelProps) {
   )
 }
 
-/** NET ME, centre: who sees the profile and who may write (GET / PUT /me/profile/privacy). */
+/**
+ * NET ME, centre: who sees the profile and who may write (GET / PUT /me/profile/privacy), and the
+ * people blocked (GET /me/blocks).
+ */
 export function VisibilityPanel({ editor }: PanelProps) {
   const { t } = useTranslation()
   return (
     <Panel title={t('panels.visibility')} code="NET ME">
       <PrivacyFields editor={editor} />
+      <div className="px-3 pb-3">
+        <BlockedList />
+      </div>
     </Panel>
   )
 }

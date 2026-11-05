@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 import { ContactButton, ProfileCard } from '@/entities/profile'
 import type { DirectoryEntryDto } from '@/shared/api/contracts'
-import { routes } from '@/shared/routes/paths'
+import { messagesPath, routes } from '@/shared/routes/paths'
 import { Button, ButtonLink } from '@/shared/ui/form/Button'
-import { toast } from '@/shared/ui/toast'
 
 interface DirectoryCardProps {
   entry: DirectoryEntryDto
@@ -21,6 +21,7 @@ interface DirectoryCardProps {
  */
 export function DirectoryCard({ entry, specialties, selected, own, onSelect }: DirectoryCardProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   return (
     <ProfileCard
       selected={selected}
@@ -35,8 +36,8 @@ export function DirectoryCard({ entry, specialties, selected, own, onSelect }: D
           ) : (
             <ContactButton
               mode={entry.contactMode}
-              // MSG opens the conversation with the next step of the roadmap.
-              onContact={() => toast.info(t('network.directory.contactSoon'))}
+              // MSG opens the conversation with the person, or the one already open.
+              onContact={() => void navigate(messagesPath({ to: entry.userId }))}
               className="w-full"
             />
           )}

@@ -80,6 +80,7 @@
     "ALRT": { "title": "Alerts", "menu": "Alerts" },
     "CFG": { "title": "Settings", "menu": "Settings" },
     "NET": { "title": "Professional directory", "menu": "Directory" },
+    "MSG": { "title": "Messaging", "menu": "Messages" },
     "NETME": { "title": "My professional profile", "menu": "My profile" },
     "DATA": { "title": "Session coverage", "menu": "Session" },
     "IMP": { "title": "Data import", "menu": "Imports" },
@@ -203,7 +204,10 @@
     "visibility": "Visibility and contact",
     "cardPreview": "My card preview",
     "filters": "Filters",
-    "professionals": "Professionals"
+    "professionals": "Professionals",
+    "conversations": "Conversations",
+    "thread": "Conversation",
+    "participant": "Participant"
   },
   "columns": {
     "index": "Index",
@@ -402,5 +406,14 @@
     "savedAs": "Layout saved as “{{name}}”.",
     "applied": "Layout “{{name}}” applied.",
     "deleted": "Layout “{{name}}” deleted."
+  },
+  "reportForm": {
+    "reason": "Reason",
+    "chooseReason": "Choose a reason",
+    "comment": "Comment",
+    "reasonRequired": "Choose a reason.",
+    "commentRequired": "Say what is wrong.",
+    "commentTooLong": "{{max}} characters at most.",
+    "send": "Send the report"
   }
 }

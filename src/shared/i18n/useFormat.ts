@@ -8,14 +8,15 @@ import {
   formatDate,
   formatDayMonth,
   formatFileSize,
-  formatLanguage,
   formatIsoDate,
+  formatLanguage,
   formatMonth,
   formatNumber,
   formatPercent,
   formatSigned,
   formatTime,
   formatWeekday,
+  toMarketDay,
   type Locale,
 } from '@/shared/lib/format'
 
@@ -54,6 +55,8 @@ export function useFormat() {
       dayMonth: (value: Date | string | number) => formatDayMonth(value, timeZone),
       time: (value: Date | string | number, withSeconds = false) =>
         formatTime(value, timeZone, withSeconds),
+      /** The calendar day of a time in the user's time zone, "2026-11-05". */
+      day: (value: Date | string | number) => toMarketDay(value, timeZone),
     }),
     [locale, t, timeZone],
   )

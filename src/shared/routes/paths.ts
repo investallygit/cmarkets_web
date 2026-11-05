@@ -31,6 +31,8 @@ export const routes = {
   directory: '/net',
   /** NET ME (screen 12): the user's professional profile. */
   networkProfile: '/net/me',
+  /** MSG (screen 11): the messaging. */
+  messages: '/msg',
   dataSession: '/data/session',
   dataImport: '/imp',
   dataCorrections: '/data/corrections',
@@ -134,6 +136,23 @@ const withQuery = (path: string, name: string, value?: string) =>
 /** NET with a profile open: /net?profile=user-analyst. */
 export function directoryPath(userId?: string): string {
   return withQuery(routes.directory, 'profile', userId)
+}
+
+/**
+ * MSG with a conversation open, /msg?c=conversation-atangana, a message of it shown (&m=), or a
+ * new one with someone of the directory, /msg?to=user-analyst.
+ */
+export function messagesPath({
+  conversationId,
+  messageId,
+  to,
+}: { conversationId?: string; messageId?: string; to?: string } = {}): string {
+  const params = new URLSearchParams()
+  if (conversationId) params.set('c', conversationId)
+  if (messageId) params.set('m', messageId)
+  if (to) params.set('to', to)
+  const query = params.toString()
+  return query ? `${routes.messages}?${query}` : routes.messages
 }
 
 /** The public page of a profile, open without login: /p/k-atangana. */

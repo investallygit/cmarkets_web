@@ -165,9 +165,40 @@ export function isListed(account: StoredAccount, profile = profileOf(account)): 
   )
 }
 
+/** Who blocked whom: a block overrides every rule (spec section 15). */
+export interface StoredBlock {
+  blockerId: string
+  blockedId: string
+  at: string
+}
+
+export const blockStore = sharedStore<StoredBlock[]>('blocks', () => [])
+
+/** A block between two users, as the first one sees it. */
+export function blockBetween(userId: string, otherId: string): 'byMe' | 'byThem' | null {
+  const blocks = blockStore.read()
+  if (blocks.some((block) => block.blockerId === userId && block.blockedId === otherId)) {
+    return 'byMe'
+  }
+  if (blocks.some((block) => block.blockerId === otherId && block.blockedId === userId)) {
+    return 'byThem'
+  }
+  return null
+}
+
+/** A conversation of two users: open, or a contact request not answered yet. */
+type ConversationLookup = (userId: string, otherId: string) => 'open' | 'request' | null
+
+let conversationBetween: ConversationLookup = () => null
+
+/** The messaging tells how to find a conversation of two users (db/messaging.ts). */
+export function setConversationLookup(lookup: ConversationLookup): void {
+  conversationBetween = lookup
+}
+
 /**
- * GET /profiles/{id}/contact-permission: the rule of the profile for the viewer's type. Blocks
- * and conversations come with the messaging.
+ * GET /profiles/{id}/contact-permission: a block first, a conversation already open, then the
+ * rule of the profile for the viewer's type.
  */
 export function contactModeFor(
   viewer: StoredAccount,
@@ -183,9 +214,24 @@ export function contactModeFor(
       visibility: profile.privacy.visibility,
       contactRules: profile.privacy.contactRules,
     },
-    blocked: false,
-    conversationOpen: false,
+    blocked: blockBetween(viewer.id, account.id) !== null,
+    conversationOpen: conversationBetween(viewer.id, account.id) === 'open',
   })
+}
+
+/**
+ * The viewer may open the profile: their own; one of the directory, unless its owner blocked
+ * them; a hidden one, if the two already have a conversation.
+ */
+export function canSeeProfile(
+  viewer: StoredAccount,
+  account: ClientAccount,
+  profile = profileOf(account),
+): boolean {
+  if (viewer.id === account.id) return true
+  if (blockBetween(account.id, viewer.id) === 'byMe') return false
+  if (isListed(account, profile)) return true
+  return account.status === 'active' && conversationBetween(viewer.id, account.id) !== null
 }
 
 const DAY_MS = 86_400_000
@@ -230,9 +276,18 @@ export function directoryProfiles(viewer: StoredAccount, now = Date.now()): Dire
   const followers = new Map(
     analystStore.read().map((analyst) => [analyst.userId ?? '', analyst.followers]),
   )
+  // The blocked person no longer sees the profile (spec section 15).
+  const blockers = new Set(
+    blockStore
+      .read()
+      .filter((block) => block.blockedId === viewer.id)
+      .map((block) => block.blockerId),
+  )
   return allAccounts().flatMap((account) => {
     const profile = profileOf(account)
-    if (!isClientAccount(account) || !isListed(account, profile)) return []
+    if (!isClientAccount(account) || !isListed(account, profile) || blockers.has(account.id)) {
+      return []
+    }
     const candidate: DirectoryCandidate = {
       userId: account.id,
       displayName: account.displayName,

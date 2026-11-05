@@ -52,6 +52,3 @@ export const PROFILE_REPORT_REASONS: readonly ProfileReportReason[] = [
   'harassment',
   'other',
 ]
-
-/** The comment of a report, as POST /profiles/{userId}/report takes it. */
-export const REPORT_COMMENT_MAX_LENGTH = 1000

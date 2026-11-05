@@ -10,6 +10,8 @@ export {
   useUploadProfilePhoto,
 } from './api/queries'
 export {
+  useBlocks,
+  useBlockUser,
   useContactPermission,
   useDirectory,
   useDirectoryFacets,
@@ -29,7 +31,6 @@ export {
   PROFILE_LANGUAGES,
   PROFILE_REPORT_REASONS,
   PROFILE_VISIBILITIES,
-  REPORT_COMMENT_MAX_LENGTH,
 } from './config/profiles'
 export { experiencesInOrder, initialsOf, previewContactMode, typesByMode } from './lib/profile'
 export { AccountTypeBadge } from './ui/AccountTypeBadge'

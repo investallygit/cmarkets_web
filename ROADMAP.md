@@ -34,7 +34,7 @@ relative: S < M < L < XL.
 | 13   | Portfolios shared with the organisation, read by its CEO        | Done   |
 | 14   | NET ME: professional profile, visibility and contact rules      | Done   |
 | 15   | NET: professional directory, public profile page                | Done   |
-| 16   | MSG: conversations, contact requests, files, shared objects     | To do  |
+| 16   | MSG: conversations, contact requests, files, shared objects     | Done   |
 | 17   | MSG in real time: the `/hubs/chat` hub                          | To do  |
 | 18   | Admin: reported profiles and conversations, directory settings  | To do  |
 | 19   | Second version done: README, accessibility, every flow          | To do  |
@@ -212,21 +212,45 @@ come in the README and the open questions of the second version.
 - **Still to do**: the conversation that Contact opens, the blocks and a hidden profile open to
   its conversations (step 16); online status (step 17); the reported profiles in MOD (step 18).
 
-### Step 16 · MSG · Messaging (screen 11) (XL): to do
+### Step 16 · MSG · Messaging (screen 11) (XL): done
 
-- Conversations: search, All / Unread / Requests / Groups, unread counts, a contact request in
-  yellow. The thread: the history 50 at a time, date separators, received messages on the left,
-  sent ones on the right with their read receipts; the composer (Enter sends, Shift + Enter adds a
-  line, 4,000 characters), files (PDF, XLSX, CSV, PNG, JPEG, 10 MB, available once scanned), and a
-  security, a chart or a publication shared as a card that opens its screen (a paid publication
-  shows its preview to a reader who has not bought it). A message is edited within 15 minutes, or
-  deleted, by its author. The participant: the profile, their publications, mute, block, report,
-  the files shared.
-- Contact requests: the first message waits in Requests and the sender writes again once it is
-  accepted; a decline is not told. Groups of up to 50, of people the creator may contact; 20 new
-  conversations a day, 5 for a Student. Contact in NET opens a conversation through the entity's
-  store, as features never import each other.
-- May be split in two: conversations and messages, then files, shared objects and groups.
+- **Built**: the three panels of the mockup. Conversations: the search of the messages (the
+  messages found, each opening its conversation at it), the tabs All, Unread (3), Requests (1) and
+  Groups, the rows with the type badge or GROUP, the time, "You: …" or the author of a group, the
+  unread count, a request in yellow, a muted bell; "+ NEW" opens a conversation with one person,
+  or a named group with several. The thread: "K. ATANGANA · ANALYST", the history 50 at a time
+  ("Load earlier messages"), the days Today, Yesterday or their date, received messages on the left
+  on #1A1A1A, sent ones on the right on #1E3A5F with ✓ or ✓✓; the author edits a message within
+  15 minutes, or deletes it for everyone ("This message was deleted."). The composer: Enter sends,
+  Shift + Enter adds a line, the count near 4,000 characters, files (PDF, XLSX, CSV, PNG, JPEG,
+  10 MB, five at most) and a security, a chart (1M to 5Y) or a publication of the library, shared
+  as a card in amber that opens YAS, DES, GP or PUB, as it was when shared. The participant: the
+  profile, View profile, Their publications, Mute, Block, Report conversation, the files shared;
+  a group's members instead, which its creator adds or takes out, and Leave the group.
+- **Requests**: the first message of a request waits, Accept or Decline above it; the sender reads
+  that the request waits and writes again once it is accepted; a decline is not told, the
+  conversation leaves the recipient's list. Contact and Send a contact request in NET open
+  `/msg?to={userId}`: the conversation already open with the person, or a new one whose first
+  message the person's rule turns into a request.
+- **Blocks**: Block in MSG, after a confirmation; NET ME lists the people blocked, to unblock. A
+  block closes the conversation both ways, hides the profile from the blocked person and leaves
+  them "Contact not open"; a hidden profile stays open to the people it already talks with.
+- **Shared**: `entities/conversation` (queries, limits, the days of a thread, the read receipt);
+  `ReportForm` (`shared/ui`), which the reports of profiles and conversations share;
+  `format.day`, the calendar day in the user's time zone.
+- **Access**: MSG in the left menu after NET and in the command bar, with `messages:write`; a
+  client whose status waits for an Admin reads that messaging opens once approved.
+- **Mock**: the conversations of the mockup as P. Owona sees them, and K. Atangana's (a request
+  from B. Eyinga, R. Tamba unread), counted back from a time kept on the first load so that the
+  conversations and their messages agree after a reload. The rules are pure and tested
+  (`lib/messaging.ts`: the state of a conversation for each member, the unread messages, the read
+  receipts, the pages of 50, the 15 minutes, the search, the new conversations of the day: 20, 5
+  for a Student); the routes are tested through MSW (`messaging.test.ts`). A file is scanned in
+  2 seconds, one named "eicar" holds a virus; the bytes stay in the tab until a reload, the files
+  of the mockup are made when downloaded. The reports of conversations are kept for MOD.
+  `SEED_VERSION` raised.
+- **Still to do**: the hub (step 17): new messages of others, typing, presence and the unread count
+  on MSG without a reload; the reported conversations in MOD (step 18).
 
 ### Step 17 · MSG in real time (M): to do
 
@@ -1068,12 +1092,23 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   list (the prototype: nine, by ISO code)? What does Follow do on a profile that is not an
   analyst's (the prototype shows it on an analyst's only)? Which module of the plans holds the
   directory and messaging, if any (research and settings are in none)?
-- **Messaging**: how is a chart frozen for a message (PUB NEW freezes one with
-  `POST /publications/{id}/charts`)? What do the other members see of an edited or deleted message?
-  Who adds members to a group, and can a member leave it? Does a message reach the notification
-  centre of the top bar, besides push and e-mail after 5 minutes? Employees cannot be messaged and
-  support goes through a help centre, which the spec does not describe. How is an account past
-  three reports referred to the Admin?
+- **Messaging**: how is a chart frozen for a message (the prototype: a line chart of 1M to 5Y,
+  frozen when sent, as PUB NEW freezes one with `POST /publications/{id}/charts`)? A security is
+  shared with its price, and a bond with its yield and duration, as they were. What do the other
+  members see of an edited or deleted message (the prototype: "edited", and "This message was
+  deleted.")? Who adds members to a group (the prototype: its creator, among the people they may
+  write to at once; a member leaves, the creator takes one out)? Does a message reach the
+  notification centre of the top bar, besides push and e-mail after 5 minutes? Employees cannot be
+  messaged and support goes through a help centre, which the spec does not describe. How is an
+  account past three reports referred to the Admin? The prototype's answers where the API is
+  silent: the Unread tab counts the messages unread, not the requests, which have their tab; the
+  conversations panel searches with `GET /messages/search` (the thread's SEARCH and "⋯" of the
+  mockup are not built); `q` of `GET /conversations` matches the names and the text; the request
+  declined stays "sent" for its sender, who cannot write again; the files are uploaded first
+  (`POST /attachments`) then sent with `attachmentIds`, and may be sent while scanned; the reasons
+  of a conversation report are spam, harassment, scam or market manipulation, inappropriate
+  content and other. The mockup's conversation with D. Moussavou is left out: the status of
+  D. Moussavou waits for an Admin (screen 9), and a client waiting has no messaging.
 - **Directory and messaging settings**: the default contact rules, the daily limits of new
   conversations, the report threshold and the list of specialties are the Admin's, without an
   endpoint.

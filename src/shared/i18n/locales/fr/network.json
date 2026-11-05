@@ -163,8 +163,7 @@
       "you": "Vous",
       "editMine": "Modifier mon profil",
       "empty": "Aucun profil ne correspond à ces filtres.",
-      "awaitingApproval": "La messagerie s'ouvre quand un administrateur a approuvé votre statut.",
-      "contactSoon": "La messagerie arrive avec MSG, le prochain écran du prototype."
+      "awaitingApproval": "La messagerie s'ouvre quand un administrateur a approuvé votre statut."
     },
     "view": {
       "select": "Choisissez un profil parmi les résultats.",
@@ -193,8 +192,6 @@
     "report": {
       "title": "Signaler un profil",
       "intro": "L'équipe CMarket examine chaque signalement ; {{name}} ne saura pas qui l'a envoyé.",
-      "reason": "Motif",
-      "chooseReason": "Choisissez un motif",
       "reasons": {
         "fake": "Faux profil ou usurpation d'identité",
         "spam": "Spam ou démarchage",
@@ -202,11 +199,6 @@
         "harassment": "Harcèlement",
         "other": "Autre"
       },
-      "comment": "Commentaire",
-      "reasonRequired": "Choisissez un motif.",
-      "commentRequired": "Dites ce qui ne va pas.",
-      "commentTooLong": "{{max}} caractères au plus.",
-      "send": "Envoyer le signalement",
       "sent": "Signalement envoyé : l'équipe CMarket va l'examiner.",
       "already": "Vous avez déjà signalé ce profil."
     },

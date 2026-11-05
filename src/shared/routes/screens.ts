@@ -11,6 +11,7 @@ import {
   History,
   IdCard,
   LayoutDashboard,
+  MessagesSquare,
   Newspaper,
   PenLine,
   ScanSearch,
@@ -94,14 +95,15 @@ function screen(
  */
 // prettier-ignore
 export const SCREENS: readonly ScreenDefinition[] = [
-  // Client menu, in the order of screens 10 to 12: MKT, EQS, YCRV, PORT, PUB, NET, N, ALRT, CFG;
-  // MSG comes with the messaging.
+  // Client menu, in the order of screens 10 to 12: MKT, EQS, YCRV, PORT, PUB, NET, MSG, N, ALRT,
+  // CFG.
   screen('MKT', 'MKT', routes.market, 'client', LayoutDashboard, { permission: 'market:read', module: 'monitoring', inMenu: true }),
   screen('EQS', 'EQS', routes.screener, 'client', ScanSearch, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
   screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
   screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', module: 'portfolio', inMenu: true, routePattern: routes.portfolioTabs }),
   screen('PUB', 'PUB', routes.library, 'client', BookOpen, { permission: 'research:read', inMenu: true }),
   screen('NET', 'NET', routes.directory, 'client', BookUser, { permission: 'directory:list', inMenu: true }),
+  screen('MSG', 'MSG', routes.messages, 'client', MessagesSquare, { permission: 'messages:write', inMenu: true }),
   screen('N', 'N', routes.news, 'client', Newspaper, { permission: 'market:read', module: 'monitoring', inMenu: true, routePattern: routes.newsTabs }),
   screen('ALRT', 'ALRT', routes.alerts, 'client', Bell, { permission: 'alerts:write', module: 'monitoring', inMenu: true }),
   screen('CFG', 'CFG', routes.settings, 'client', Settings, { inMenu: true }),

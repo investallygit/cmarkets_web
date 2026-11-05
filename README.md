@@ -58,7 +58,7 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
 | Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
 | 10 · Professional directory (NET), public profile page                    | Done; 1,163 profiles listed, the mockup's search finds 64     |
-| 11 · Messaging (MSG)                                                      | To do: ROADMAP steps 16 and 17                                |
+| 11 · Messaging (MSG)                                                      | Done over REST; the hub `/hubs/chat` is ROADMAP step 17       |
 | 12 · My profile, visibility and contact (NET ME)                          | Done; the mock applies the contact rules of section 15        |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
@@ -108,8 +108,9 @@ src/
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile, equity-screener,
               yield-curves (YCRV and YAS), portfolio, research-library, publishing-studio, news,
-              market-calendar, alerts, settings (CFG), network-directory (NET), network-profile
-              (NET ME), public-profile (/p/{handle}), data-import (IMP), data-session (DATA),
+              market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
+              network-profile (NET ME), public-profile (/p/{handle}), data-import (IMP),
+              data-session (DATA),
               upload-history (HIST), eodhd (EODH), data-corrections (CORR), content (NEWS),
               admin-users (USER), analyst-requests (ANLY), moderation (MOD), payouts (PAY),
               platform-settings (ADMCFG), audit-log (AUDT), home (the home page), auth (login,
@@ -121,6 +122,7 @@ src/
               security-actions, manage-watchlists, manage-alerts, screen-equities,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
               rate-publication, report-publication, follow-analyst, report-profile,
+              start-conversation, send-message, report-conversation, block-user,
               create-publication, edit-publication, draw-on-chart, compare-securities,
               edit-profile, edit-network-profile, change-password, choose-plan, manage-members,
               upload-data-file, review-import, roll-back-import, correct-price, publish-content,
@@ -132,7 +134,7 @@ src/
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news,
               calendar-event, notification, data-import, data-provider (EODHD), stored-price,
               account, analyst-request, moderation, payout, platform-settings, audit, profile
-              (the professional profiles of the directory)
+              (the professional profiles of the directory), conversation (the messaging)
   shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
               UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
   mocks/      fake back end for the prototype (below)
@@ -162,7 +164,7 @@ src/mocks/
                 one file per screen or part
   db.ts         the in-memory state the routes and the hub share; its parts in db/ (storage,
                 market, accounts, session, platform, live, workspace, portfolios, research,
-                network)
+                network, messaging)
   imports.ts    the Data admin's uploads and what they publish; its parts in imports/ (store,
                 checks, seeds, the upload cycle, coverage, corrections)
   fixtures/     the sample data of the mockups
