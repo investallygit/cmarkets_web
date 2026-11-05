@@ -83,6 +83,24 @@ export function formatCountry(code: string, locale: Locale): string {
   }
 }
 
+const languageNames = new Map<Locale, Intl.DisplayNames>()
+
+/** "fr" -> "French" in English, "Français" in French: a name that starts a label or a tag. */
+export function formatLanguage(code: string, locale: Locale): string {
+  let names = languageNames.get(locale)
+  if (!names) {
+    names = new Intl.DisplayNames([INTL_LOCALE[locale]], { type: 'language' })
+    languageNames.set(locale, names)
+  }
+  let name = code
+  try {
+    name = names.of(code) ?? code
+  } catch {
+    // An unknown code shows as it is.
+  }
+  return name.charAt(0).toLocaleUpperCase(INTL_LOCALE[locale]) + name.slice(1)
+}
+
 const FILE_SIZE_UNITS: Record<Locale, readonly string[]> = {
   en: ['B', 'KB', 'MB', 'GB'],
   fr: ['o', 'Ko', 'Mo', 'Go'],

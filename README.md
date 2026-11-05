@@ -59,7 +59,7 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
 | 10 · Professional directory (NET), public profile page                    | To do: ROADMAP step 15                                        |
 | 11 · Messaging (MSG)                                                      | To do: ROADMAP steps 16 and 17                                |
-| 12 · My profile, visibility and contact (NET ME)                          | To do: ROADMAP step 14                                        |
+| 12 · My profile, visibility and contact (NET ME)                          | Done; the mock applies the contact rules of section 15        |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
 | 9 · Account administration (USER) with ANLY and MOD                       | Done; 2,054 accounts, requests, moderation queue on mock data |
@@ -108,7 +108,8 @@ src/
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile, equity-screener,
               yield-curves (YCRV and YAS), portfolio, research-library, publishing-studio, news,
-              market-calendar, alerts, settings (CFG), data-import (IMP), data-session (DATA),
+              market-calendar, alerts, settings (CFG), network-profile (NET ME), data-import (IMP),
+              data-session (DATA),
               upload-history (HIST), eodhd (EODH), data-corrections (CORR), content (NEWS),
               admin-users (USER), analyst-requests (ANLY), moderation (MOD), payouts (PAY),
               platform-settings (ADMCFG), audit-log (AUDT), home (the home page), auth (login,
@@ -120,7 +121,8 @@ src/
               security-actions, manage-watchlists, manage-alerts, screen-equities,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
               rate-publication, report-publication, follow-analyst, create-publication,
-              edit-publication, draw-on-chart, compare-securities, edit-profile, change-password,
+              edit-publication, draw-on-chart, compare-securities, edit-profile,
+              edit-network-profile, change-password,
               choose-plan, manage-members, upload-data-file, review-import, roll-back-import,
               correct-price, publish-content, create-account, manage-account,
               review-analyst-request, moderate-publication, mark-payout-paid,
@@ -130,7 +132,8 @@ src/
               prices), market, bond, yield-curve, fundamentals, screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news,
               calendar-event, notification, data-import, data-provider (EODHD), stored-price,
-              account, analyst-request, moderation, payout, platform-settings, audit
+              account, analyst-request, moderation, payout, platform-settings, audit, profile
+              (the professional profiles of the directory)
   shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
               UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
   mocks/      fake back end for the prototype (below)

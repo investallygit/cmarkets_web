@@ -25,6 +25,8 @@ export const routes = {
   calendar: '/cal',
   alerts: '/alrt',
   settings: '/cfg',
+  /** NET ME (screen 12): the user's professional profile; NET, the directory, comes next. */
+  networkProfile: '/net/me',
   dataSession: '/data/session',
   dataImport: '/imp',
   dataCorrections: '/data/corrections',

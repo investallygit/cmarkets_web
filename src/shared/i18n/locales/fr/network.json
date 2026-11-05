@@ -1,0 +1,138 @@
+{
+  "network": {
+    "saved": "Profil enregistré.",
+    "savedAt": "Enregistré à {{time}}",
+    "notSaved": "Non enregistré",
+    "neverSaved": "Jamais enregistré",
+    "save": "Enregistrer",
+    "profile": {
+      "changePhoto": "Changer la photo",
+      "photoHint": "JPEG ou PNG, 2 Mo au plus ; son centre est recadré en carré.",
+      "photoSaved": "Photo changée.",
+      "photoErrors": {
+        "type": "Une image JPEG ou PNG.",
+        "size": "2 Mo au plus."
+      },
+      "accountType": "Type de compte :",
+      "typeNote": "Le type est attribué par CMarket et ne se change pas ici.",
+      "displayName": "Nom affiché",
+      "jobTitle": "Fonction",
+      "organization": "Organisation",
+      "city": "Ville",
+      "country": "Pays",
+      "languages": "Langues",
+      "about": "À propos ({{max}} caractères max.)",
+      "aboutCount": "{{count}} / {{max}}",
+      "specialties": "Spécialités",
+      "specialtiesHint": "Jusqu'à {{max}}, dans la liste tenue par CMarket.",
+      "addSpecialty": "Ajouter",
+      "removeSpecialty": "Retirer {{name}}",
+      "specialtiesFull": "{{max}} au plus",
+      "experience": "Expérience et certifications",
+      "addExperience": "Ajouter une expérience ou une certification",
+      "noExperience": "Aucune expérience ni certification pour l'instant.",
+      "now": "aujourd'hui",
+      "certification": "Certification",
+      "edit": "Modifier",
+      "editLabel": "Modifier {{title}}",
+      "delete": "Supprimer",
+      "deleteLabel": "Supprimer {{title}}",
+      "deleteTitle": "Supprimer l'entrée",
+      "deleteMessage": "Supprimer {{title}} de votre profil ?",
+      "deleted": "Entrée supprimée.",
+      "contact": "Coordonnées",
+      "contactHint": "Masquées, sauf si vous les affichez sous Informations affichées.",
+      "workEmail": "E-mail professionnel",
+      "phone": "Téléphone",
+      "linkedIn": "LinkedIn",
+      "errors": {
+        "required": "Obligatoire.",
+        "tooLong": "Trop long.",
+        "email": "Une adresse e-mail.",
+        "phone": "Un numéro de téléphone, p. ex. +237 6 70 12 34 56.",
+        "linkedIn": "L'adresse d'un profil LinkedIn : linkedin.com/in/…"
+      }
+    },
+    "experienceForm": {
+      "newTitle": "Ajouter une expérience ou une certification",
+      "editTitle": "Modifier {{title}}",
+      "kind": "Nature",
+      "kinds": {
+        "position": "Poste",
+        "certification": "Certification"
+      },
+      "title": "Intitulé",
+      "organization": "Organisation",
+      "awardedBy": "Délivrée par",
+      "from": "De (année)",
+      "to": "À (année)",
+      "year": "Année d'obtention",
+      "current": "Jusqu'à aujourd'hui",
+      "add": "Ajouter",
+      "saved": "Profil mis à jour.",
+      "errors": {
+        "required": "Obligatoire.",
+        "year": "Une année de 1950 à aujourd'hui.",
+        "order": "À partir de l'année de début."
+      }
+    },
+    "privacy": {
+      "visibility": "Visibilité du profil",
+      "visibilities": {
+        "hidden": {
+          "label": "Masqué",
+          "hint": "Absent de l'annuaire ; seuls vos contacts existants peuvent vous écrire"
+        },
+        "members": {
+          "label": "Membres CMarket",
+          "hint": "Visible par tous les utilisateurs connectés"
+        },
+        "public": {
+          "label": "Public",
+          "hint": "Visible aussi sans connexion, sur une page publique"
+        }
+      },
+      "whoCanContact": "Qui peut me contacter",
+      "modes": {
+        "direct": "Direct",
+        "request": "Demande",
+        "none": "Non"
+      },
+      "modeFor": "{{type}} : {{mode}}",
+      "requestNote": "« Demande » : le premier message arrive dans l'onglet Demandes ; la conversation ne s'ouvre que si vous l'acceptez.",
+      "displayed": "Informations affichées",
+      "show": {
+        "email": "Afficher mon e-mail professionnel",
+        "phone": "Afficher mon téléphone",
+        "onlineStatus": "Afficher mon statut en ligne",
+        "publicationStats": "Afficher les statistiques de mes publications"
+      }
+    },
+    "card": {
+      "contact": "Contacter",
+      "request": "Envoyer une demande de contact",
+      "closed": "Contact non ouvert",
+      "specialties": "Spécialités",
+      "publications_one": "{{count}} publication",
+      "publications_other": "{{count}} publications",
+      "followers_one": "{{count}} abonné",
+      "followers_other": "{{count}} abonnés",
+      "memberSince": "Membre depuis {{year}}",
+      "seenBy": {
+        "student": "Vu par un étudiant",
+        "analyst": "Vu par un analyste",
+        "manager": "Vu par un gérant",
+        "trader": "Vu par un trader",
+        "journalist": "Vu par un journaliste",
+        "ceo": "Vu par un dirigeant"
+      },
+      "viewpoint": "Changer de point de vue :",
+      "hidden": "Masqué : votre fiche n'apparaît pas dans l'annuaire, et seules les personnes avec qui vous échangez déjà peuvent vous écrire.",
+      "summary": {
+        "direct": "Contacter : {{types}}",
+        "request": "Envoyer une demande de contact : {{types}}",
+        "none": "Contact non ouvert : {{types}}"
+      }
+    }
+  }
+}

@@ -3,17 +3,19 @@ import type { AccountType, MeDto, Permission, WatchlistColumn } from '@/shared/a
 /**
  * Default role -> permission table of spec section 12; the Admin edits it in the real product.
  * "Read" in the matrix is viewing without saving: the Journalist and the CEO lack analysis:save.
+ * The six client types browse the directory, are listed in it and write to each other; the
+ * Admin browses it, and reads the reported conversations as a moderator.
  */
 // prettier-ignore
 export const ROLE_PERMISSIONS: Record<AccountType, Permission[]> = {
-  student: ['market:read', 'analysis:read', 'analysis:save', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy'],
-  analyst: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'analysis:save', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy', 'publications:write', 'publications:earnings'],
-  manager: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'analysis:save', 'portfolios:read', 'portfolios:write', 'portfolios:reports', 'alerts:write', 'research:read', 'research:buy'],
-  trader: ['market:read', 'market:realtime', 'market:orderbook', 'analysis:read', 'analysis:export', 'analysis:save', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy'],
-  journalist: ['market:read', 'market:orderbook', 'analysis:read', 'alerts:write', 'research:read', 'research:buy'],
-  ceo: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'portfolios:read', 'alerts:write', 'research:read', 'research:buy'],
+  student: ['market:read', 'analysis:read', 'analysis:save', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy', 'directory:list', 'directory:profile', 'messages:write'],
+  analyst: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'analysis:save', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy', 'publications:write', 'publications:earnings', 'directory:list', 'directory:profile', 'messages:write'],
+  manager: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'analysis:save', 'portfolios:read', 'portfolios:write', 'portfolios:reports', 'alerts:write', 'research:read', 'research:buy', 'directory:list', 'directory:profile', 'messages:write'],
+  trader: ['market:read', 'market:realtime', 'market:orderbook', 'analysis:read', 'analysis:export', 'analysis:save', 'portfolios:read', 'portfolios:write', 'alerts:write', 'research:read', 'research:buy', 'directory:list', 'directory:profile', 'messages:write'],
+  journalist: ['market:read', 'market:orderbook', 'analysis:read', 'alerts:write', 'research:read', 'research:buy', 'directory:list', 'directory:profile', 'messages:write'],
+  ceo: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'portfolios:read', 'alerts:write', 'research:read', 'research:buy', 'directory:list', 'directory:profile', 'messages:write'],
   dataAdmin: ['market:read', 'market:orderbook', 'analysis:read', 'analysis:export', 'research:read', 'data:import', 'content:publish'],
-  admin: ['market:read', 'research:read', 'publications:earnings', 'users:manage', 'moderation:manage', 'settings:manage', 'audit:read', 'payouts:manage'],
+  admin: ['market:read', 'research:read', 'publications:earnings', 'users:manage', 'moderation:manage', 'settings:manage', 'audit:read', 'payouts:manage', 'directory:list'],
 }
 
 /**

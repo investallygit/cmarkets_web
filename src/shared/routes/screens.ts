@@ -8,6 +8,7 @@ import {
   Database,
   FileText,
   History,
+  IdCard,
   LayoutDashboard,
   Newspaper,
   PenLine,
@@ -107,6 +108,7 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('YAS', 'YAS', routes.bondCalculator, 'client', Calculator, { permission: 'analysis:read', module: 'analysis' }),
   screen('PUBNEW', 'PUB NEW', routes.publishingStudio, 'client', PenLine, { permission: 'publications:write' }),
   screen('CAL', 'CAL', routes.calendar, 'client', CalendarDays, { permission: 'market:read', module: 'monitoring' }),
+  screen('NETME', 'NET ME', routes.networkProfile, 'client', IdCard, { permission: 'directory:profile' }),
 
   // Back-office, Data admin (screen 6).
   screen('DATA', 'DATA', routes.dataSession, 'backoffice', Database, { permission: 'data:import', inMenu: true }),

@@ -32,7 +32,7 @@ relative: S < M < L < XL.
 | 11   | Second version of the spec: the plan, its open questions        | Done   |
 | 12   | Journalist and CEO account types, approved by the Admin         | Done   |
 | 13   | Portfolios shared with the organisation, read by its CEO        | Done   |
-| 14   | NET ME: professional profile, visibility and contact rules      | To do  |
+| 14   | NET ME: professional profile, visibility and contact rules      | Done   |
 | 15   | NET: professional directory, public profile page                | To do  |
 | 16   | MSG: conversations, contact requests, files, shared objects     | To do  |
 | 17   | MSG in real time: the `/hubs/chat` hub                          | To do  |
@@ -139,20 +139,33 @@ come in the README and the open questions of the second version.
   colleague's are listed beside one's own. `SEED_VERSION` raised.
 - **CMarket.Api**: the two fields, the colleagues' read access and the 403 on their writes.
 
-### Step 14 · NET ME · My profile, visibility and contact (screen 12) (L): to do
+### Step 14 · NET ME · My profile, visibility and contact (screen 12) (L): done
 
-- The three panels of the mockup. My profile: the photo (JPEG or PNG up to 2 MB, cropped square),
-  the type and its badge, which the user does not change, the name, job title, organisation, city,
-  languages, about (600 characters), up to 8 specialties from the Admin's list, experience and
-  certifications, contact details. Visibility and contact: hidden, CMarket members or public; who
-  can contact me, direct, request or no for each of the six types; the e-mail, phone, online
-  status and publication statistics shown or not. The card as the directory shows it, seen by a
-  Student, a Manager, a Journalist...
-- An entity for the profiles, with the avatar and the type badge that NET and MSG share; the
-  directory and messaging permissions; `NET ME` in the command bar; a `network` translation file.
-- **Mock**: the profiles of the mockups; the contact rules as pure, tested logic (a block first,
-  then a hidden profile, an employee, the rule of the sender's type; a conversation already open
-  stays open; Direct by default, Request for a Student).
+- **Built**: the three panels of the mockup. My profile: the photo (JPEG or PNG up to 2 MB, sent
+  at once), the type and VERIFIED badges, which the user does not change, the name, job title,
+  organisation, city and country, languages, about with its count of 600, up to 8 specialties of
+  the Admin's list, experience and certifications (each saved on its own), contact details.
+  Visibility and contact: Hidden, CMarket members or Public; Direct, Request or No for each of the
+  six client types; the work e-mail, phone, online status and, for an Analyst, the publication
+  statistics shown or not. The card preview: the card as the directory will show it, changes not
+  saved included, seen by each client type, and which types see which button. One SAVE sends the
+  profile and its privacy; the title bar says when it was saved, or that changes wait.
+- **Shared**: `entities/profile` holds the avatar (photo or initials, circled in the type's
+  colour), the type badge, the directory card and its contact button, which NET and MSG will
+  reuse; the type colours moved to `shared/config/accountTypes.ts`. A `Switch` joins the form kit
+  (and `/_kit`), `format.language` names the languages.
+- **Access**: `NET ME` in the command bar and in the user menu; NET joins the left menu with the
+  directory (step 15). Three permissions in the matrix, under "Directory and messaging":
+  `directory:list`, `directory:profile` and `messages:write`; the six client types have them, the
+  Admin browses the directory, the Data admin has none.
+- **Mock**: the demo clients' profiles, K. Atangana's that of the mockup, with the 42 notes
+  published in the library, their 4.4 and 412 followers; any other client starts from the
+  account. The contact rules as pure, tested logic (`lib/contact.ts`: a block first, then the
+  employees, a conversation already open, a hidden profile, the rule of the sender's type; Direct
+  by default, Request for a Student). The checks of the profile, the privacy and the experiences
+  (`lib/profile.ts`); `SEED_VERSION` raised.
+- **Still to do**: choosing the square of the photo (the mock keeps its centre); the blocked
+  people, with the messaging (step 16); the Admin's defaults and specialties (step 18).
 
 ### Step 15 · NET · Professional directory (screen 10) (L): to do
 
@@ -957,7 +970,8 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   should come in the user's language.
 - **Account types, second version**: which permission keys stand for browsing the directory,
   being listed in it and reading a reported conversation (section 12 names `directory:list` and
-  `messages:write` only)? "Read" forbids saved screens and drawings: the prototype adds
+  `messages:write` only; the prototype adds `directory:profile` and leaves the reported
+  conversations to the Admin's `moderation:manage`)? "Read" forbids saved screens and drawings: the prototype adds
   `analysis:save`, which the Journalist and the CEO lack, and leaves them their watchlists and
   alerts. Which plans do they take (the prototype: the professional ones, Monitoring, Analysis and
   Professional, with the trial of Professional)? Does a CEO need the Portfolio module to read the
@@ -992,10 +1006,15 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   published in last 90 days" has no parameter in `GET /directory`; the button is "Send a request"
   in section 9 and "Send a contact request" on screen 12.
 - **Profiles**: the public page is `/p/{handle}` and its endpoint `/public/profiles/{slug}`: how is
-  the handle chosen? Is the display name of `PUT /me/profile` the one of `PUT /me` (CFG)? LinkedIn
-  has no display toggle on screen 12, unlike the e-mail and the phone. What does Follow do on a
-  profile that is not an analyst's? Which module of the plans holds the directory and messaging, if
-  any (research and settings are in none)?
+  the handle chosen (the prototype: the display name, "k-atangana", numbered when another account
+  had it first)? The prototype takes the display name of `PUT /me/profile` as the account's, the
+  one CFG changes too, and keeps the work e-mail and phone of the profile apart from the login and
+  the phone of the codes. LinkedIn has no display toggle on screen 12, unlike the e-mail and the
+  phone. Who crops the photo square: the prototype's server keeps its centre. The specialties
+  have no endpoint: the prototype reads them from `GET /directory/specialties`, named in French
+  and English. Which languages may a profile list (the prototype: nine, by ISO code)? What does
+  Follow do on a profile that is not an analyst's? Which module of the plans holds the directory
+  and messaging, if any (research and settings are in none)?
 - **Messaging**: how is a chart frozen for a message (PUB NEW freezes one with
   `POST /publications/{id}/charts`)? What do the other members see of an edited or deleted message?
   Who adds members to a group, and can a member leave it? Does a message reach the notification

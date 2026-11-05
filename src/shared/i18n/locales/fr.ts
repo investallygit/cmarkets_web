@@ -5,6 +5,7 @@ import core from './fr/core.json'
 import dataAdmin from './fr/dataAdmin.json'
 import home from './fr/home.json'
 import monitoring from './fr/monitoring.json'
+import network from './fr/network.json'
 import portfolio from './fr/portfolio.json'
 import research from './fr/research.json'
 
@@ -17,6 +18,7 @@ const fr = {
   ...analysis,
   ...portfolio,
   ...research,
+  ...network,
   ...dataAdmin,
   ...admin,
 }

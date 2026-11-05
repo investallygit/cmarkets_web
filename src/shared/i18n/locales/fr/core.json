@@ -79,6 +79,7 @@
     "CAL": { "title": "Calendrier du marché", "menu": "Calendrier" },
     "ALRT": { "title": "Alertes", "menu": "Alertes" },
     "CFG": { "title": "Paramètres", "menu": "Réglages" },
+    "NETME": { "title": "Mon profil professionnel", "menu": "Mon profil" },
     "DATA": { "title": "Couverture de la séance", "menu": "Séance" },
     "IMP": { "title": "Import de données", "menu": "Imports" },
     "CORR": { "title": "Corrections de données", "menu": "Correct." },
@@ -196,7 +197,10 @@
     "ratios": "Ratios",
     "statements": "États financiers",
     "financialSummary": "Bilan et flux de trésorerie",
-    "securityIncome": "Dividendes ou remboursements"
+    "securityIncome": "Dividendes ou remboursements",
+    "myProfile": "Mon profil",
+    "visibility": "Visibilité et contact",
+    "cardPreview": "Aperçu de ma fiche"
   },
   "columns": {
     "index": "Indice",

@@ -1,0 +1,138 @@
+{
+  "network": {
+    "saved": "Profile saved.",
+    "savedAt": "Saved at {{time}}",
+    "notSaved": "Not saved",
+    "neverSaved": "Not saved yet",
+    "save": "Save",
+    "profile": {
+      "changePhoto": "Change photo",
+      "photoHint": "JPEG or PNG, 2 MB at most; its centre is cropped square.",
+      "photoSaved": "Photo changed.",
+      "photoErrors": {
+        "type": "A JPEG or PNG image.",
+        "size": "2 MB at most."
+      },
+      "accountType": "Account type:",
+      "typeNote": "The type is assigned by CMarket and cannot be changed here.",
+      "displayName": "Display name",
+      "jobTitle": "Job title",
+      "organization": "Organisation",
+      "city": "City",
+      "country": "Country",
+      "languages": "Languages",
+      "about": "About ({{max}} characters max.)",
+      "aboutCount": "{{count}} / {{max}}",
+      "specialties": "Specialties",
+      "specialtiesHint": "Up to {{max}}, from the list CMarket keeps.",
+      "addSpecialty": "Add",
+      "removeSpecialty": "Remove {{name}}",
+      "specialtiesFull": "{{max}} at most",
+      "experience": "Experience and certifications",
+      "addExperience": "Add experience or a certification",
+      "noExperience": "No experience or certification yet.",
+      "now": "now",
+      "certification": "Certification",
+      "edit": "Edit",
+      "editLabel": "Edit {{title}}",
+      "delete": "Delete",
+      "deleteLabel": "Delete {{title}}",
+      "deleteTitle": "Delete the entry",
+      "deleteMessage": "Delete {{title}} from your profile?",
+      "deleted": "Entry deleted.",
+      "contact": "Contact details",
+      "contactHint": "Hidden unless you show them under Displayed information.",
+      "workEmail": "Work e-mail",
+      "phone": "Phone",
+      "linkedIn": "LinkedIn",
+      "errors": {
+        "required": "Required.",
+        "tooLong": "Too long.",
+        "email": "An e-mail address.",
+        "phone": "A phone number, e.g. +237 6 70 12 34 56.",
+        "linkedIn": "The address of a LinkedIn profile: linkedin.com/in/…"
+      }
+    },
+    "experienceForm": {
+      "newTitle": "Add experience or a certification",
+      "editTitle": "Edit {{title}}",
+      "kind": "Kind",
+      "kinds": {
+        "position": "Position",
+        "certification": "Certification"
+      },
+      "title": "Title",
+      "organization": "Organisation",
+      "awardedBy": "Awarded by",
+      "from": "From (year)",
+      "to": "To (year)",
+      "year": "Year obtained",
+      "current": "To this day",
+      "add": "Add",
+      "saved": "Profile updated.",
+      "errors": {
+        "required": "Required.",
+        "year": "A year from 1950 to now.",
+        "order": "From the start year on."
+      }
+    },
+    "privacy": {
+      "visibility": "Profile visibility",
+      "visibilities": {
+        "hidden": {
+          "label": "Hidden",
+          "hint": "Not in the directory; only existing contacts can message you"
+        },
+        "members": {
+          "label": "CMarket members",
+          "hint": "Visible to all logged-in users"
+        },
+        "public": {
+          "label": "Public",
+          "hint": "Also visible without login, on a public page"
+        }
+      },
+      "whoCanContact": "Who can contact me",
+      "modes": {
+        "direct": "Direct",
+        "request": "Request",
+        "none": "No"
+      },
+      "modeFor": "{{type}}: {{mode}}",
+      "requestNote": "“Request”: the first message lands in the Requests tab; the conversation opens only if you accept it.",
+      "displayed": "Displayed information",
+      "show": {
+        "email": "Show my work e-mail",
+        "phone": "Show my phone",
+        "onlineStatus": "Show my online status",
+        "publicationStats": "Show my publication statistics"
+      }
+    },
+    "card": {
+      "contact": "Contact",
+      "request": "Send a contact request",
+      "closed": "Contact not open",
+      "specialties": "Specialties",
+      "publications_one": "{{count}} publication",
+      "publications_other": "{{count}} publications",
+      "followers_one": "{{count}} follower",
+      "followers_other": "{{count}} followers",
+      "memberSince": "Member since {{year}}",
+      "seenBy": {
+        "student": "As seen by a student",
+        "analyst": "As seen by an analyst",
+        "manager": "As seen by a manager",
+        "trader": "As seen by a trader",
+        "journalist": "As seen by a journalist",
+        "ceo": "As seen by a CEO"
+      },
+      "viewpoint": "Change viewpoint:",
+      "hidden": "Hidden: your card does not show in the directory, and only the people you already talk with can write to you.",
+      "summary": {
+        "direct": "Contact: {{types}}",
+        "request": "Send a contact request: {{types}}",
+        "none": "Contact not open: {{types}}"
+      }
+    }
+  }
+}

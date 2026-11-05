@@ -4,6 +4,7 @@ import {
   formatDate,
   formatFileSize,
   formatIsoDate,
+  formatLanguage,
   formatMonth,
   formatNumber,
   formatPercent,
@@ -84,6 +85,14 @@ describe('dates and times', () => {
     expect(formatUtcOffset('America/New_York', '2026-12-01T12:00:00Z')).toBe('UTC\u221205:00')
     expect(isTimeZone('Europe/Paris')).toBe(true)
     expect(isTimeZone('Mars/Olympus')).toBe(false)
+  })
+})
+
+describe('language names', () => {
+  it('names a language in the user language, as a label starts', () => {
+    expect(formatLanguage('fr', 'en')).toBe('French')
+    expect(formatLanguage('en', 'fr')).toBe('Anglais')
+    expect(formatLanguage('ln', 'fr')).toBe('Lingala')
   })
 })
 

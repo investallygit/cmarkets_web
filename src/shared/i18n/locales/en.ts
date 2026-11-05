@@ -5,6 +5,7 @@ import core from './en/core.json'
 import dataAdmin from './en/dataAdmin.json'
 import home from './en/home.json'
 import monitoring from './en/monitoring.json'
+import network from './en/network.json'
 import portfolio from './en/portfolio.json'
 import research from './en/research.json'
 
@@ -21,6 +22,7 @@ const en = {
   ...analysis,
   ...portfolio,
   ...research,
+  ...network,
   ...dataAdmin,
   ...admin,
 }

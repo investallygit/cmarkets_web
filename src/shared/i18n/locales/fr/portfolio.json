@@ -291,7 +291,7 @@
       "deleted": "{{name}} supprimé",
       "deleteFailed": "Non supprimé : {{message}}",
       "share": "Partager avec {{organization}}",
-      "shareHint": "Ses membres, dont son CEO, consultent ce portefeuille sans pouvoir le modifier ni y saisir de transaction."
+      "shareHint": "Ses membres, dont son dirigeant, consultent ce portefeuille sans pouvoir le modifier ni y saisir de transaction."
     },
     "reports": {
       "generateLink": "Générer le rapport PDF du portefeuille",

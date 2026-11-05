@@ -39,4 +39,15 @@ describe('role permissions', () => {
       expect(ROLE_PERMISSIONS[role]).toContain('analysis:save')
     }
   })
+
+  it('lists the six client types in the directory and lets them write; the Admin browses it', () => {
+    const network = ['directory:list', 'directory:profile', 'messages:write'] as const
+    for (const role of ['student', 'analyst', 'manager', 'trader', 'journalist', 'ceo'] as const) {
+      expect(ROLE_PERMISSIONS[role]).toEqual(expect.arrayContaining([...network]))
+    }
+    expect(ROLE_PERMISSIONS.admin).toContain('directory:list')
+    expect(ROLE_PERMISSIONS.admin).not.toContain('directory:profile')
+    expect(ROLE_PERMISSIONS.admin).not.toContain('messages:write')
+    for (const permission of network) expect(ROLE_PERMISSIONS.dataAdmin).not.toContain(permission)
+  })
 })

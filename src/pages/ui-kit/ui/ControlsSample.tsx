@@ -4,6 +4,7 @@ import { Button } from '@/shared/ui/form/Button'
 import { Checkbox } from '@/shared/ui/form/Checkbox'
 import { Field } from '@/shared/ui/form/Field'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
+import { Switch } from '@/shared/ui/form/Switch'
 import { Panel } from '@/shared/ui/Panel'
 import { SampleRow } from './SampleRow'
 
@@ -60,6 +61,7 @@ export function ChoicesSample() {
   const [access, setAccess] = useState<'free' | 'paid'>('paid')
   const [rating, setRating] = useState<'buy' | 'hold' | 'sell' | null>('buy')
   const [ticked, setTicked] = useState([true, true, false])
+  const [online, setOnline] = useState(true)
 
   return (
     <Panel title="Choices" code="KIT">
@@ -115,6 +117,7 @@ export function ChoicesSample() {
           <Button variant="primary" disabled={!ticked.every(Boolean)} className="mt-1">
             Submit
           </Button>
+          <Switch label="Show my online status" checked={online} onChange={setOnline} />
         </div>
       </div>
     </Panel>

@@ -38,6 +38,8 @@ test("the user's menu and a row's menu open and work from the keyboard", async (
 
   await page.getByRole('button', { name: /K\. Analyst/i }).focus()
   await page.keyboard.press('Enter')
+  await expect(page.getByRole('menuitem', { name: 'My professional profile' })).toBeFocused()
+  await page.keyboard.press('ArrowDown')
   await expect(page.getByRole('menuitem', { name: 'Settings' })).toBeFocused()
   await page.keyboard.press('End')
   await expect(page.getByRole('menuitem', { name: 'Log out' })).toBeFocused()

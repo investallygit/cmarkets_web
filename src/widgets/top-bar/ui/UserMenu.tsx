@@ -1,4 +1,4 @@
-import { Settings, UserRound } from 'lucide-react'
+import { IdCard, Settings, UserRound } from 'lucide-react'
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
@@ -11,8 +11,8 @@ import { ContextMenu } from '@/shared/ui/ContextMenu'
 import type { MenuItem } from '@/shared/ui/menu'
 
 /**
- * User badge of the top bar ("K. ANALYST"): settings, language, the prototype's account switch and
- * the logout.
+ * User badge of the top bar ("K. ANALYST"): the professional profile (NET ME), settings, language,
+ * the prototype's account switch and the logout.
  */
 export function UserMenu() {
   const { t } = useTranslation()
@@ -25,6 +25,7 @@ export function UserMenu() {
   const logoutItems = useLogoutMenuItems()
   const navigate = useNavigate()
   const settings = screenById('CFG')
+  const profile = screenById('NETME')
 
   const badge = t(`accountBadge.${user.accountType}`)
   const label =
@@ -32,6 +33,16 @@ export function UserMenu() {
 
   const items: MenuItem[] = [
     { id: 'user', kind: 'label', label: user.displayName },
+    ...(canAccessScreen(user, profile)
+      ? [
+          {
+            id: 'profile',
+            label: t(profile.titleKey),
+            icon: IdCard,
+            onSelect: () => navigate(profile.path),
+          },
+        ]
+      : []),
     ...(canAccessScreen(user, settings)
       ? [
           {

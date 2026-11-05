@@ -8,6 +8,7 @@ import {
   formatDate,
   formatDayMonth,
   formatFileSize,
+  formatLanguage,
   formatIsoDate,
   formatMonth,
   formatNumber,
@@ -44,6 +45,7 @@ export function useFormat() {
       // The CEMAC countries have the short names of the mockups ("Eq. Guinea"); others come from Intl.
       country: (code: string) =>
         isCemacCountry(code) ? t(`countries.${code}`) : formatCountry(code, locale),
+      language: (code: string) => formatLanguage(code, locale),
       fileSize: (bytes: number) => formatFileSize(bytes, locale),
       isoDate: (isoDate: string) => formatIsoDate(isoDate),
       weekday: (isoDate: string, style?: 'short' | 'long') => formatWeekday(isoDate, locale, style),

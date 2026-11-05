@@ -255,6 +255,7 @@
       "analysis": "Analysis",
       "portfolios": "Portfolios and alerts",
       "research": "Research",
+      "network": "Directory and messaging",
       "data": "Data back-office",
       "admin": "Administration"
     },
@@ -273,6 +274,9 @@
       "researchBuy": "Buy paid research",
       "publicationsWrite": "Publish research",
       "publicationsEarnings": "Publication earnings",
+      "directoryList": "Browse the directory",
+      "directoryProfile": "Be listed in the directory",
+      "messagesWrite": "Messaging",
       "dataImport": "Upload data files, correct data",
       "contentPublish": "Publish news and issuer documents",
       "usersManage": "Create, suspend, change an account's type",

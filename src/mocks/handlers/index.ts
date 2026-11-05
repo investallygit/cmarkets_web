@@ -9,6 +9,7 @@ import { dataHandlers } from './data'
 import { documentHandlers } from './documents'
 import { libraryHandlers } from './library'
 import { marketHandlers } from './market'
+import { networkHandlers } from './network'
 import { newsHandlers } from './news'
 import { paymentHandlers } from './payments'
 import { portfolioHandlers } from './portfolios'
@@ -35,6 +36,7 @@ export const handlers = [
   ...libraryHandlers,
   ...publicationHandlers,
   ...paymentHandlers,
+  ...networkHandlers,
   ...dataHandlers,
   ...adminHandlers,
 ]

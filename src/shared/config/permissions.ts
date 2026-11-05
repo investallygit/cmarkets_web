@@ -27,6 +27,11 @@ export const PERMISSION_GROUPS: readonly {
     label: 'permissions.groups.research',
     permissions: ['research:read', 'research:buy', 'publications:write', 'publications:earnings'],
   },
+  {
+    id: 'network',
+    label: 'permissions.groups.network',
+    permissions: ['directory:list', 'directory:profile', 'messages:write'],
+  },
   { id: 'data', label: 'permissions.groups.data', permissions: ['data:import', 'content:publish'] },
   {
     id: 'admin',
@@ -56,6 +61,9 @@ export const PERMISSION_LABELS: Record<Permission, TranslationKey> = {
   'research:buy': 'permissions.labels.researchBuy',
   'publications:write': 'permissions.labels.publicationsWrite',
   'publications:earnings': 'permissions.labels.publicationsEarnings',
+  'directory:list': 'permissions.labels.directoryList',
+  'directory:profile': 'permissions.labels.directoryProfile',
+  'messages:write': 'permissions.labels.messagesWrite',
   'data:import': 'permissions.labels.dataImport',
   'content:publish': 'permissions.labels.contentPublish',
   'users:manage': 'permissions.labels.usersManage',

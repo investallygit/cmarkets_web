@@ -36,6 +36,9 @@ const AlertsPage = lazy(() =>
 const SettingsPage = lazy(() =>
   import('@/pages/settings').then((module) => ({ default: module.SettingsPage })),
 )
+const NetworkProfilePage = lazy(() =>
+  import('@/pages/network-profile').then((module) => ({ default: module.NetworkProfilePage })),
+)
 // The back-office of the Data admin (screen 6).
 const DataImportPage = lazy(() =>
   import('@/pages/data-import').then((module) => ({ default: module.DataImportPage })),
@@ -88,6 +91,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   CAL: MarketCalendarPage,
   ALRT: AlertsPage,
   CFG: SettingsPage,
+  NETME: NetworkProfilePage,
   IMP: DataImportPage,
   DATA: DataSessionPage,
   HIST: UploadHistoryPage,

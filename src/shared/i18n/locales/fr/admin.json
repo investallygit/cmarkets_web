@@ -255,6 +255,7 @@
       "analysis": "Analyse",
       "portfolios": "Portefeuilles et alertes",
       "research": "Recherche",
+      "network": "Annuaire et messagerie",
       "data": "Back-office données",
       "admin": "Administration"
     },
@@ -273,6 +274,9 @@
       "researchBuy": "Acheter la recherche payante",
       "publicationsWrite": "Publier de la recherche",
       "publicationsEarnings": "Revenus des publications",
+      "directoryList": "Consulter l'annuaire",
+      "directoryProfile": "Figurer dans l'annuaire",
+      "messagesWrite": "Messagerie",
       "dataImport": "Charger les fichiers, corriger les données",
       "contentPublish": "Publier actualités et documents d'émetteurs",
       "usersManage": "Créer, suspendre, changer le type d'un compte",
