@@ -1,13 +1,7 @@
 import { http, HttpResponse } from 'msw'
 import type { VerificationStatus } from '@/shared/api/contracts'
-import {
-  analystRequestDto,
-  analystRequests,
-  directoryAccount,
-  editableAccount,
-  ensureAnalystProfile,
-} from '../../admin'
-import { recordAudit, saveAccounts } from '../../db'
+import { analystRequestDto, analystRequests, ensureAnalystProfile } from '../../admin'
+import { anyAccount, editableAccount, recordAudit, saveAccounts } from '../../db'
 import { isVerifiedType } from '../../fixtures/accounts'
 import { api, latency, problem } from '../../lib/http'
 import { createPdf } from '../../lib/pdf'
@@ -45,7 +39,7 @@ export const analystRequestHandlers = [
   http.get(api('/admin/analyst-requests/:id/documents/:kind'), async ({ params }) => {
     await latency()
     if (!allowed('moderation:manage')) return forbidden()
-    const account = directoryAccount(String(params.id))
+    const account = anyAccount(String(params.id))
     const document = account?.documents.find((candidate) => candidate.kind === params.kind)
     if (!account || !document) return notFound('Document', params.kind)
     const type = TYPE_NAMES[account.accountType]

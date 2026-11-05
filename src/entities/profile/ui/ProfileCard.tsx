@@ -2,9 +2,9 @@ import { clsx } from 'clsx'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { AccountType, ProfileStatsDto } from '@/shared/api/contracts'
-import { useFormat } from '@/shared/i18n'
 import { AccountTypeBadge } from './AccountTypeBadge'
 import { ProfileAvatar } from './ProfileAvatar'
+import { ProfileStats } from './ProfileStats'
 
 /** What a card shows of a profile, as the directory lists it. */
 export interface ProfileCardData {
@@ -37,8 +37,6 @@ interface ProfileCardProps {
  */
 export function ProfileCard({ profile, actions, selected = false, className }: ProfileCardProps) {
   const { t } = useTranslation()
-  const format = useFormat()
-  const { stats } = profile
   return (
     <article
       className={clsx(
@@ -77,17 +75,7 @@ export function ProfileCard({ profile, actions, selected = false, className }: P
           ))}
         </ul>
       )}
-      <p className="font-mono text-data text-secondary">
-        {stats
-          ? [
-              t('network.card.publications', { count: stats.publications }),
-              stats.rating !== null && `★ ${format.number(stats.rating, 1)}`,
-              t('network.card.followers', { count: stats.followers }),
-            ]
-              .filter(Boolean)
-              .join(' · ')
-          : t('network.card.memberSince', { year: profile.memberSince.slice(0, 4) })}
-      </p>
+      <ProfileStats stats={profile.stats} memberSince={profile.memberSince} />
       {actions}
     </article>
   )

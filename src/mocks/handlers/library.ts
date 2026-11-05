@@ -89,6 +89,7 @@ function readFilter(query: URLSearchParams): LibraryFilter {
     access: pick(ACCESSES, query.get('access')),
     rating: pick(RATINGS, query.get('rating')),
     q: query.get('q')?.trim() || undefined,
+    analystId: query.get('analystId') || undefined,
     analystIds:
       query.get('followed') === 'true'
         ? new Set(followStore.read().map((follow) => follow.analystId))

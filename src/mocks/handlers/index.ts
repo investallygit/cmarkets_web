@@ -6,6 +6,7 @@ import { authHandlers } from './auth'
 import { bondHandlers } from './bonds'
 import { calendarHandlers } from './calendar'
 import { dataHandlers } from './data'
+import { directoryHandlers } from './directory'
 import { documentHandlers } from './documents'
 import { libraryHandlers } from './library'
 import { marketHandlers } from './market'
@@ -37,6 +38,7 @@ export const handlers = [
   ...publicationHandlers,
   ...paymentHandlers,
   ...networkHandlers,
+  ...directoryHandlers,
   ...dataHandlers,
   ...adminHandlers,
 ]

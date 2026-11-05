@@ -2,11 +2,13 @@ import type { ClientAccountType, SecurityType } from '@/shared/api/contracts'
 
 /** Route patterns, shared by the router (app/) and by features that link to other screens. */
 export const routes = {
-  // Outside the app shell, open without a session: the home page and the login pages.
+  // Outside the app shell, open without a session: the home page, the login pages, and the
+  // public page of a profile.
   home: '/',
   login: '/login',
   signUp: '/signup',
   resetPassword: '/reset-password',
+  publicProfile: '/p/:handle',
   /** The home screen of the user's account type: MKT, IMP or USER. */
   app: '/app',
   market: '/mkt',
@@ -25,7 +27,9 @@ export const routes = {
   calendar: '/cal',
   alerts: '/alrt',
   settings: '/cfg',
-  /** NET ME (screen 12): the user's professional profile; NET, the directory, comes next. */
+  /** NET (screen 10): the professional directory. */
+  directory: '/net',
+  /** NET ME (screen 12): the user's professional profile. */
   networkProfile: '/net/me',
   dataSession: '/data/session',
   dataImport: '/imp',
@@ -105,6 +109,11 @@ export function libraryPath(publicationId?: string): string {
     : routes.library
 }
 
+/** The research library with one analyst's publications: /pub?analyst=analyst-atangana. */
+export function analystPublicationsPath(analystId: string): string {
+  return `${routes.library}?analyst=${encodeURIComponent(analystId)}`
+}
+
 /** The publishing studio with a publication open: /pub/new?id=pub-semc-volumes. */
 export function studioPath(publicationId?: string): string {
   return publicationId
@@ -121,6 +130,16 @@ export function dataImportPath(importId?: string): string {
 
 const withQuery = (path: string, name: string, value?: string) =>
   value ? `${path}?${name}=${encodeURIComponent(value)}` : path
+
+/** NET with a profile open: /net?profile=user-analyst. */
+export function directoryPath(userId?: string): string {
+  return withQuery(routes.directory, 'profile', userId)
+}
+
+/** The public page of a profile, open without login: /p/k-atangana. */
+export function publicProfilePath(handle: string): string {
+  return `/p/${encodeURIComponent(handle)}`
+}
 
 /** USER with an account open: /admin/users?id=user-analyst. */
 export function adminUserPath(userId?: string): string {

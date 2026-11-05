@@ -71,6 +71,9 @@ export const ORGANIZATION_FIXTURES: StoredOrganization[] = [
   // Opened by the sign-ups of two Analysts waiting for the approval of an Admin (screen 9).
   { id: 'org-brokerage-d', name: 'Brokerage firm D', createdAt: '2026-10-26T14:10:00Z' },
   { id: 'org-bank-e', name: 'Bank E', createdAt: '2026-10-22T16:05:00Z' },
+  // The employers of two managers of the directory (screen 10).
+  { id: 'org-insurer-f', name: 'Insurer F', createdAt: '2026-02-16T08:00:00Z' },
+  { id: 'org-pension-g', name: 'Pension fund G', createdAt: '2026-04-07T08:00:00Z' },
 ]
 
 type Seed = Pick<StoredAccount, 'id' | 'email' | 'displayName' | 'accountType'> &
@@ -138,6 +141,9 @@ const SEEDS: Seed[] = [
   { id: 'user-ondo', email: 'r.ondo@sovereign-research.example', displayName: 'R. Ondo', accountType: 'analyst', timeZone: 'Africa/Malabo', ...approved('2023-09-01T09:00:00Z'), loginHoursAgo: 145 },
   // A new analyst, whose first publication waits for the moderators (screen 9 mockup).
   { id: 'user-nguema', email: 'c.nguema@chad-economics.example', displayName: 'C. Nguema', accountType: 'analyst', timeZone: 'Africa/Ndjamena', ...approved('2026-10-17T10:00:00Z'), loginHoursAgo: 40 },
+  // Two managers of the directory (screen 10 mockup).
+  { id: 'user-tchakounte', email: 'a.tchakounte@insurer-f.example', displayName: 'A. Tchakounté', accountType: 'manager', organizationId: 'org-insurer-f', organizationRole: 'admin', language: 'fr', createdAt: '2026-02-16T08:20:00Z', loginHoursAgo: 30 },
+  { id: 'user-ngoma', email: 'b.ngoma@pension-g.example', displayName: 'B. Ngoma', accountType: 'manager', organizationId: 'org-pension-g', organizationRole: 'admin', language: 'fr', timeZone: 'Africa/Brazzaville', createdAt: '2026-04-07T08:15:00Z', loginHoursAgo: 52 },
   // Analyst status requests of the screen 9 mockup, waiting for an Admin.
   { id: 'user-ressomba', email: 'r.essomba@brokerage-d.example', displayName: 'R. Essomba', accountType: 'analyst', organizationId: 'org-brokerage-d', organizationRole: 'admin', verificationStatus: 'pending', createdAt: '2026-10-26T14:10:00Z', loginHoursAgo: 115,
     documents: [document('cv', 'CV_R_Essomba.pdf', 182_400), document('identityDocument', 'ID_card_R_Essomba.pdf', 412_800), document('licence', 'COSUMAF_licence_R_Essomba.pdf', 96_300)] },

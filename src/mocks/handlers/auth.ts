@@ -67,11 +67,14 @@ interface Challenge {
 const challenges = new Map<string, Challenge>()
 const resetCodes = new Map<string, Omit<Challenge, 'channel' | 'resendAt'>>()
 
-/** Paths open without a session: the login pages, and the prototype's own. */
-const PUBLIC_PATHS = ['/auth/', '/_prototype/']
+/** Paths open without a session: the login pages, the public profiles and the prototype's own. */
+const PUBLIC_PATHS = ['/auth/', '/public/', '/_prototype/']
 
-/** Answered with or without a session: the home page shows the plans before login. */
-const OPEN_PATHS = ['/subscription/plans']
+/**
+ * Answered with or without a session: the home page shows the plans before login, a public
+ * profile its specialties.
+ */
+const OPEN_PATHS = ['/subscription/plans', '/directory/specialties']
 
 /** Endpoints of the Analysis and Portfolio modules, refused without them (spec section 10). */
 const MODULE_PATHS: [RegExp, ModuleCode][] = [

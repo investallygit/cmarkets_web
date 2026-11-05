@@ -112,3 +112,117 @@ export interface SpecialtyDto {
   id: string
   name: Record<UserLanguage, string>
 }
+
+/** Order of GET /directory: the best match first, by name, or the newest members first. */
+export type DirectorySort = 'relevance' | 'name' | 'recent'
+
+/**
+ * GET /directory?q=&types=&country=&specialty=&org=&language=&contactable=&page= (spec section
+ * 10). `recent` and `sort` are the prototype's, for the screen 10 mockup.
+ */
+export interface DirectoryQuery {
+  /** Name, organisation, job title or specialty, without accents or case. */
+  q?: string
+  /** None: the six types. */
+  types?: ClientAccountType[]
+  country?: string
+  /** An id of GET /directory/specialties. */
+  specialty?: string
+  /** The organisation as the profiles write it. */
+  org?: string
+  language?: string
+  /** Only the profiles the user may write to, at once or by a request. */
+  contactable?: boolean
+  /** Only the Analysts who published in the last 90 days. */
+  recent?: boolean
+  sort?: DirectorySort
+  page?: number
+  pageSize?: number
+}
+
+/** A card of the directory (spec section 9, screen 10). */
+export interface DirectoryEntryDto {
+  userId: string
+  handle: string
+  displayName: string
+  accountType: ClientAccountType
+  verified: boolean
+  photoUrl: string | null
+  jobTitle: string
+  organization: string
+  city: string
+  country: string
+  /** Ids of GET /directory/specialties. */
+  specialties: string[]
+  /** An Analyst's, unless they hide them. */
+  stats: ProfileStatsDto | null
+  memberSince: IsoDateTime
+  /**
+   * The button the user sees, as GET /profiles/{id}/contact-permission would answer: the
+   * prototype gives it with each card rather than one call per card.
+   */
+  contactMode: ContactMode
+}
+
+/** How many listed profiles have a value. */
+export interface FacetCountDto {
+  value: string
+  count: number
+}
+
+/** GET /directory/facets: the counts of the whole directory, whatever the filters. */
+export interface DirectoryFacetsDto {
+  total: number
+  types: Record<ClientAccountType, number>
+  /** ISO codes. */
+  countries: FacetCountDto[]
+  /** Ids of GET /directory/specialties. */
+  specialties: FacetCountDto[]
+  /** The prototype's, for the lists of the Organisation and Language filters. */
+  organizations: FacetCountDto[]
+  /** ISO 639-1 codes. */
+  languages: FacetCountDto[]
+}
+
+/** GET /public/profiles/{slug}: what anyone sees of a public profile, without login. */
+export interface PublicProfileDto {
+  userId: string
+  handle: string
+  displayName: string
+  accountType: ClientAccountType
+  verified: boolean
+  photoUrl: string | null
+  jobTitle: string
+  organization: string
+  city: string
+  country: string
+  languages: string[]
+  about: string
+  specialties: string[]
+  experiences: ExperienceDto[]
+  stats: ProfileStatsDto | null
+  memberSince: IsoDateTime
+  /** An Analyst's id in the research library (/library?analystId=); null for the others. */
+  analystId: string | null
+}
+
+/** GET /profiles/{userId}: the profile as its visibility and display settings let the user see it. */
+export interface ProfileDto extends PublicProfileDto {
+  /** Only what the user shows: hidden details are null. */
+  contact: ProfileContactDto
+  /** Who may write, by type: "Accepts messages from…". */
+  contactRules: ContactRules
+}
+
+/** GET /profiles/{userId}/contact-permission */
+export interface ContactPermissionDto {
+  mode: ContactMode
+}
+
+export type ProfileReportReason = 'fake' | 'spam' | 'inappropriate' | 'harassment' | 'other'
+
+/** POST /profiles/{userId}/report: the Admin reviews it (spec section 15). */
+export interface ProfileReportDto {
+  reason: ProfileReportReason
+  comment: string
+}

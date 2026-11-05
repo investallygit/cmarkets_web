@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/shared/api'
 import type {
+  DirectoryQuery,
   ExperienceDto,
   ExperienceInputDto,
   MyProfileDto,
@@ -14,6 +15,13 @@ export const profileKeys = {
   mine: () => [...profileKeys.all, 'me'] as const,
   privacy: () => [...profileKeys.all, 'me', 'privacy'] as const,
   specialties: () => [...profileKeys.all, 'specialties'] as const,
+  /** What the directory shows, the user's own card included: refreshed when it changes. */
+  listed: () => [...profileKeys.all, 'listed'] as const,
+  directory: (query: DirectoryQuery) => [...profileKeys.listed(), 'search', query] as const,
+  facets: () => [...profileKeys.listed(), 'facets'] as const,
+  detail: (userId: string) => [...profileKeys.listed(), 'detail', userId] as const,
+  contactPermission: (userId: string) => [...profileKeys.listed(), 'contact', userId] as const,
+  publicProfile: (handle: string) => [...profileKeys.listed(), 'public', handle] as const,
 }
 
 const experiencePath = (id: string) => `/me/profile/experiences/${encodeURIComponent(id)}`
@@ -43,10 +51,16 @@ export function useSpecialties() {
   })
 }
 
-/** Puts the profile the server returned in the cache, so every panel shows it at once. */
+/**
+ * Puts the profile the server returned in the cache, so every panel shows it at once; the
+ * directory shows it on its next visit.
+ */
 function useSetMyProfile() {
   const queryClient = useQueryClient()
-  return (profile: MyProfileDto) => queryClient.setQueryData(profileKeys.mine(), profile)
+  return (profile: MyProfileDto) => {
+    queryClient.setQueryData(profileKeys.mine(), profile)
+    void queryClient.invalidateQueries({ queryKey: profileKeys.listed() })
+  }
 }
 
 /** PUT /me/profile */
@@ -77,7 +91,10 @@ export function useUpdateMyPrivacy() {
   return useMutation({
     mutationFn: (input: ProfilePrivacyDto) =>
       apiClient.put<ProfilePrivacyDto>('/me/profile/privacy', input),
-    onSuccess: (privacy) => queryClient.setQueryData(profileKeys.privacy(), privacy),
+    onSuccess: (privacy) => {
+      queryClient.setQueryData(profileKeys.privacy(), privacy)
+      void queryClient.invalidateQueries({ queryKey: profileKeys.listed() })
+    },
   })
 }
 
@@ -90,6 +107,7 @@ function useUpdateExperiences() {
       (profile) => profile && { ...profile, experiences: update(profile.experiences) },
     )
     void queryClient.invalidateQueries({ queryKey: profileKeys.mine() })
+    void queryClient.invalidateQueries({ queryKey: profileKeys.listed() })
   }
 }
 

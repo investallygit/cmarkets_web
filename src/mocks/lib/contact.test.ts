@@ -5,12 +5,13 @@ import { contactMode, DEFAULT_CONTACT_RULES, type ContactSituation } from './con
 const recipient: ContactSituation['recipient'] = {
   userId: 'user-analyst',
   accountType: 'analyst',
+  messaging: true,
   visibility: 'members',
   contactRules: DEFAULT_CONTACT_RULES,
 }
 
 const situation = (patch: Partial<ContactSituation> = {}): ContactSituation => ({
-  sender: { userId: 'user-manager', accountType: 'manager' },
+  sender: { userId: 'user-manager', accountType: 'manager', messaging: true },
   recipient,
   blocked: false,
   conversationOpen: false,
@@ -20,7 +21,7 @@ const situation = (patch: Partial<ContactSituation> = {}): ContactSituation => (
 describe('contact rules', () => {
   it('open a conversation at once by default, and ask a Student for a request', () => {
     expect(contactMode(situation())).toBe('direct')
-    const student = { userId: 'user-student', accountType: 'student' } as const
+    const student = { userId: 'user-student', accountType: 'student', messaging: true } as const
     expect(contactMode(situation({ sender: student }))).toBe('request')
   })
 
@@ -28,7 +29,7 @@ describe('contact rules', () => {
     const contactRules = { ...DEFAULT_CONTACT_RULES, manager: 'none', trader: 'request' } as const
     const closed = { ...recipient, contactRules }
     expect(contactMode(situation({ recipient: closed }))).toBe('none')
-    const trader = { userId: 'user-trader', accountType: 'trader' } as const
+    const trader = { userId: 'user-trader', accountType: 'trader', messaging: true } as const
     expect(contactMode(situation({ recipient: closed, sender: trader }))).toBe('request')
   })
 
@@ -48,11 +49,18 @@ describe('contact rules', () => {
   })
 
   it('leave the CMarket employees out, and nobody writes to themselves', () => {
-    const admin = { userId: 'user-admin', accountType: 'admin' } as const
+    const admin = { userId: 'user-admin', accountType: 'admin', messaging: false } as const
     expect(contactMode(situation({ sender: admin }))).toBe('none')
     const dataAdmin = { ...recipient, userId: 'user-data-admin', accountType: 'dataAdmin' } as const
     expect(contactMode(situation({ recipient: dataAdmin, conversationOpen: true }))).toBe('none')
-    const self = { userId: 'user-analyst', accountType: 'analyst' } as const
+    const self = { userId: 'user-analyst', accountType: 'analyst', messaging: true } as const
     expect(contactMode(situation({ sender: self }))).toBe('none')
+  })
+
+  it('wait for the approval of a status, to write and to be written to', () => {
+    const pending = { ...recipient, userId: 'user-moussavou', messaging: false }
+    expect(contactMode(situation({ recipient: pending }))).toBe('none')
+    const sender = { userId: 'user-moussavou', accountType: 'analyst', messaging: false } as const
+    expect(contactMode(situation({ sender }))).toBe('none')
   })
 })

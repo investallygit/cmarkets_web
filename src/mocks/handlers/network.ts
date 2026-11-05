@@ -63,10 +63,10 @@ async function squarePhoto(file: File): Promise<string> {
 }
 
 export const networkHandlers = [
-  // The closed list of specialties the Admin manages; the prototype's endpoint.
+  // The closed list of specialties the Admin manages, which a public profile names too; the
+  // prototype's endpoint, answered without a session.
   http.get(api('/directory/specialties'), async () => {
     await latency()
-    if (!allowed('directory:profile') && !allowed('directory:list')) return forbidden()
     return HttpResponse.json(SPECIALTIES)
   }),
 

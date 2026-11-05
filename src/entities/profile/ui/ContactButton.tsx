@@ -21,6 +21,8 @@ interface ContactButtonProps {
   onContact?: () => void
   /** The card as others see it (NET ME): the button shows, and does nothing. */
   preview?: boolean
+  /** A card's button, or the larger one of a profile, "Send a message" (screen 10). */
+  variant?: 'card' | 'profile'
   className?: string
 }
 
@@ -28,9 +30,16 @@ interface ContactButtonProps {
  * The button of a card, by the recipient's rule for the viewer (spec section 15): amber
  * "Contact", "Send a contact request", or a greyed "Contact not open".
  */
-export function ContactButton({ mode, onContact, preview = false, className }: ContactButtonProps) {
+export function ContactButton({
+  mode,
+  onContact,
+  preview = false,
+  variant = 'card',
+  className,
+}: ContactButtonProps) {
   const { t } = useTranslation()
-  const label = t(LABELS[mode])
+  const label =
+    variant === 'profile' && mode === 'direct' ? t('network.view.sendMessage') : t(LABELS[mode])
   if (preview) {
     return (
       <span
@@ -46,7 +55,7 @@ export function ContactButton({ mode, onContact, preview = false, className }: C
   }
   return (
     <Button
-      size="lg"
+      size={variant === 'profile' ? 'xl' : 'lg'}
       variant={mode === 'direct' ? 'primary' : 'secondary'}
       disabled={mode === 'none'}
       onClick={onContact}

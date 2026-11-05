@@ -1,5 +1,6 @@
 import { Download, Plus } from 'lucide-react'
 import { useState } from 'react'
+import { ACCOUNT_TYPE_COLORS } from '@/shared/config/accountTypes'
 import { Button } from '@/shared/ui/form/Button'
 import { Checkbox } from '@/shared/ui/form/Checkbox'
 import { Field } from '@/shared/ui/form/Field'
@@ -62,6 +63,7 @@ export function ChoicesSample() {
   const [rating, setRating] = useState<'buy' | 'hold' | 'sell' | null>('buy')
   const [ticked, setTicked] = useState([true, true, false])
   const [online, setOnline] = useState(true)
+  const [types, setTypes] = useState({ analyst: true, trader: false })
 
   return (
     <Panel title="Choices" code="KIT">
@@ -118,6 +120,19 @@ export function ChoicesSample() {
             Submit
           </Button>
           <Switch label="Show my online status" checked={online} onChange={setOnline} />
+          {/* A box in a colour of its own: the account types of the directory (screen 10). */}
+          <Checkbox
+            label="Analyst"
+            color={ACCOUNT_TYPE_COLORS.analyst}
+            checked={types.analyst}
+            onChange={(analyst) => setTypes((current) => ({ ...current, analyst }))}
+          />
+          <Checkbox
+            label="Trader"
+            color={ACCOUNT_TYPE_COLORS.trader}
+            checked={types.trader}
+            onChange={(trader) => setTypes((current) => ({ ...current, trader }))}
+          />
         </div>
       </div>
     </Panel>

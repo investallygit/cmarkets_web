@@ -18,7 +18,7 @@ export function Switch({ checked, onChange, label, disabled, className }: Switch
   return (
     <label
       className={clsx(
-        'flex min-h-6 items-center justify-between gap-3 font-sans text-label',
+        'relative flex min-h-6 items-center justify-between gap-3 font-sans text-label',
         disabled ? 'opacity-50' : 'cursor-pointer',
         className,
       )}

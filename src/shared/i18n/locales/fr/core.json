@@ -79,6 +79,7 @@
     "CAL": { "title": "Calendrier du marché", "menu": "Calendrier" },
     "ALRT": { "title": "Alertes", "menu": "Alertes" },
     "CFG": { "title": "Paramètres", "menu": "Réglages" },
+    "NET": { "title": "Annuaire professionnel", "menu": "Annuaire" },
     "NETME": { "title": "Mon profil professionnel", "menu": "Mon profil" },
     "DATA": { "title": "Couverture de la séance", "menu": "Séance" },
     "IMP": { "title": "Import de données", "menu": "Imports" },
@@ -200,7 +201,9 @@
     "securityIncome": "Dividendes ou remboursements",
     "myProfile": "Mon profil",
     "visibility": "Visibilité et contact",
-    "cardPreview": "Aperçu de ma fiche"
+    "cardPreview": "Aperçu de ma fiche",
+    "filters": "Filtres",
+    "professionals": "Professionnels"
   },
   "columns": {
     "index": "Indice",

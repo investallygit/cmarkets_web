@@ -79,6 +79,7 @@
     "CAL": { "title": "Market calendar", "menu": "Calendar" },
     "ALRT": { "title": "Alerts", "menu": "Alerts" },
     "CFG": { "title": "Settings", "menu": "Settings" },
+    "NET": { "title": "Professional directory", "menu": "Directory" },
     "NETME": { "title": "My professional profile", "menu": "My profile" },
     "DATA": { "title": "Session coverage", "menu": "Session" },
     "IMP": { "title": "Data import", "menu": "Imports" },
@@ -200,7 +201,9 @@
     "securityIncome": "Dividends or redemptions",
     "myProfile": "My profile",
     "visibility": "Visibility and contact",
-    "cardPreview": "My card preview"
+    "cardPreview": "My card preview",
+    "filters": "Filters",
+    "professionals": "Professionals"
   },
   "columns": {
     "index": "Index",

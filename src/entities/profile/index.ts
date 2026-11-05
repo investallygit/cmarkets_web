@@ -10,17 +10,31 @@ export {
   useUploadProfilePhoto,
 } from './api/queries'
 export {
+  useContactPermission,
+  useDirectory,
+  useDirectoryFacets,
+  useProfile,
+  usePublicProfile,
+  useReportProfile,
+} from './api/directoryQueries'
+export {
   ABOUT_MAX_LENGTH,
   CONTACT_MODES,
+  DIRECTORY_PAGE_SIZE,
+  DIRECTORY_SORTS,
   MAX_SPECIALTIES,
   PHOTO_MAX_BYTES,
   PHOTO_TYPES,
   PROFILE_COUNTRIES,
   PROFILE_LANGUAGES,
+  PROFILE_REPORT_REASONS,
   PROFILE_VISIBILITIES,
+  REPORT_COMMENT_MAX_LENGTH,
 } from './config/profiles'
-export { initialsOf, previewContactMode, typesByMode } from './lib/profile'
+export { experiencesInOrder, initialsOf, previewContactMode, typesByMode } from './lib/profile'
 export { AccountTypeBadge } from './ui/AccountTypeBadge'
 export { ContactButton } from './ui/ContactButton'
+export { ExperiencePeriod } from './ui/ExperiencePeriod'
 export { ProfileAvatar } from './ui/ProfileAvatar'
 export { ProfileCard, type ProfileCardData } from './ui/ProfileCard'
+export { ProfileStats } from './ui/ProfileStats'

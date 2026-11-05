@@ -9,6 +9,7 @@ import {
   type StoredOrganization,
 } from '../fixtures/accounts'
 import { createInvoices, createSubscriptions, PLANS } from '../fixtures/billing'
+import { generatePopulation, POPULATION_ORGANIZATIONS } from '../fixtures/population'
 import {
   isExpired,
   renewed,
@@ -40,6 +41,54 @@ export function findAccount(id: string): StoredAccount | undefined {
 export function accountByEmail(email: string): StoredAccount | undefined {
   const address = email.trim().toLowerCase()
   return accountStore.read().find((account) => account.email.toLowerCase() === address)
+}
+
+let population: StoredAccount[] | undefined
+
+/** The generated accounts, made once per load from the seeds, not from what was stored since. */
+export function populationAccounts(): StoredAccount[] {
+  population ??= generatePopulation(createAccounts(), Date.now())
+  return population
+}
+
+/** Every account: the stored ones, then the generated ones nobody changed. */
+export function allAccounts(): StoredAccount[] {
+  const stored = accountStore.read()
+  const ids = new Set(stored.map((account) => account.id))
+  return [...stored, ...populationAccounts().filter((account) => !ids.has(account.id))]
+}
+
+/** A stored or a generated account; only the stored ones log in. */
+export function anyAccount(id: string): StoredAccount | undefined {
+  return findAccount(id) ?? populationAccounts().find((account) => account.id === id)
+}
+
+/** An account to change: a generated one is copied into the stored accounts first. */
+export function editableAccount(id: string): StoredAccount | undefined {
+  const stored = accountStore.read()
+  const found = stored.find((account) => account.id === id)
+  if (found) return found
+  const generated = populationAccounts().find((account) => account.id === id)
+  if (!generated) return undefined
+  const copy = structuredClone(generated)
+  accountStore.write([...stored, copy])
+  return copy
+}
+
+export function organizationName(id: string | null): string | null {
+  if (!id) return null
+  return (
+    organizationStore.read().find((organization) => organization.id === id)?.name ??
+    POPULATION_ORGANIZATIONS.find((organization) => organization.id === id)?.name ??
+    null
+  )
+}
+
+/** Organisations an Admin can put an account in: the stored ones, then the generated ones. */
+export function allOrganizations(): { id: string; name: string }[] {
+  return [...organizationStore.read(), ...POPULATION_ORGANIZATIONS]
+    .map(({ id, name }) => ({ id, name }))
+    .sort((a, b) => a.name.localeCompare(b.name))
 }
 
 /** Writes back an account changed in place. */

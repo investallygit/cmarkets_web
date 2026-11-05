@@ -1,3 +1,6 @@
+import { X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useAnalyst } from '@/entities/analyst'
 import {
   LIBRARY_PAGE_SIZE,
   LIBRARY_SORTS,
@@ -9,6 +12,7 @@ import {
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import type { PublicationAccess, PublicationRating, SubjectType } from '@/shared/api/contracts'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
+import { Button } from '@/shared/ui/form/Button'
 import { AnalystPanel } from '@/widgets/analyst-panel'
 import { PublicationListPanel } from '@/widgets/publication-list-panel'
 import { PublicationPreviewPanel } from '@/widgets/publication-preview-panel'
@@ -32,9 +36,11 @@ const pick = <T extends string>(values: readonly T[], value: string | null): T |
 /**
  * PUB, the research library (screen 8): filters, the list with its tabs and pages, the preview
  * or the full content once bought, and the analyst. The filters, the tab, the page and the open
- * publication live in the URL; the first publication opens when none is chosen.
+ * publication live in the URL; the first publication opens when none is chosen. A profile of the
+ * directory opens one analyst's publications: /pub?analyst=analyst-atangana.
  */
 export function ResearchLibraryPage() {
+  const { t } = useTranslation()
   const [params, update] = useSearchParamsUpdate()
   const patch = (values: Partial<Record<string, string>>) =>
     update((current) => withParams(current, values))
@@ -57,12 +63,14 @@ export function ResearchLibraryPage() {
     rating: filters.rating || undefined,
     sort: filters.sort,
     q: filters.q || undefined,
+    analystId: params.get('analyst') || undefined,
     page: Math.max(1, Number(params.get('page')) || 1),
     pageSize: LIBRARY_PAGE_SIZE,
   }
   const list = useLibrary(query)
   const selectedId = params.get('id') ?? list.data?.items.at(0)?.id ?? null
   const analystId = useLibraryPublication(selectedId).data?.analyst.id ?? null
+  const byAnalyst = useAnalyst(query.analystId).data
 
   // A new filter, tab or page starts from its first publication.
   const restart = { page: '', id: '' }
@@ -82,7 +90,17 @@ export function ResearchLibraryPage() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="shrink-0 px-2 pt-2">
+      <div className="flex shrink-0 flex-col gap-2 px-2 pt-2">
+        {query.analystId && (
+          <div className="flex items-center justify-between gap-3 border border-accent-amber/60 bg-panel px-3 py-1.5">
+            <span className="truncate font-sans text-label">
+              {t('library.byAnalyst', { name: byAnalyst?.displayName ?? '…' })}
+            </span>
+            <Button size="sm" icon={X} onClick={() => patch({ ...restart, analyst: '' })}>
+              {t('library.allAnalysts')}
+            </Button>
+          </div>
+        )}
         <LibraryFilters
           values={filters}
           onChange={(values) =>

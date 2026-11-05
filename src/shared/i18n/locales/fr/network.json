@@ -133,6 +133,89 @@
         "request": "Envoyer une demande de contact : {{types}}",
         "none": "Contact non ouvert : {{types}}"
       }
+    },
+    "directory": {
+      "reset": "Réinitialiser",
+      "search": "Nom, organisation, spécialité",
+      "types": "Type de profil",
+      "country": "Pays",
+      "specialty": "Spécialité",
+      "organization": "Organisation",
+      "language": "Langue",
+      "allCountries": "Tous",
+      "allSpecialties": "Toutes",
+      "allOrganizations": "Toutes",
+      "allLanguages": "Toutes",
+      "optionCount": "{{label}} ({{count}})",
+      "contactable": "Seulement les profils que je peux contacter",
+      "recent": "Analystes ayant publié ces 90 derniers jours",
+      "listNote": "Les profils masqués et le personnel de CMarket n'apparaissent pas dans l'annuaire.",
+      "results_one": "Professionnels : {{total}} résultat",
+      "results_other": "Professionnels : {{total}} résultats",
+      "sort": "Trier les résultats",
+      "sorts": {
+        "relevance": "Tri : pertinence",
+        "name": "Tri : nom",
+        "recent": "Tri : nouveaux membres"
+      },
+      "viewProfile": "Voir le profil",
+      "viewProfileOf": "Voir le profil : {{name}}",
+      "you": "Vous",
+      "editMine": "Modifier mon profil",
+      "empty": "Aucun profil ne correspond à ces filtres.",
+      "awaitingApproval": "La messagerie s'ouvre quand un administrateur a approuvé votre statut.",
+      "contactSoon": "La messagerie arrive avec MSG, le prochain écran du prototype."
+    },
+    "view": {
+      "select": "Choisissez un profil parmi les résultats.",
+      "notFound": "Ce profil n'est plus dans l'annuaire.",
+      "about": "À propos",
+      "specialties": "Spécialités",
+      "experience": "Expérience",
+      "latestPublications": "Dernières publications",
+      "noPublication": "Aucune publication pour le moment.",
+      "contact": "Contact",
+      "acceptsFrom": "Accepte les messages de : {{types}}",
+      "requestFrom": "{{types}} : demande de contact à approuver",
+      "closedTo": "Fermé à : {{types}}",
+      "detailsHidden": "E-mail et téléphone : masqués",
+      "email": "E-mail : {{value}}",
+      "emailHidden": "E-mail : masqué",
+      "phone": "Téléphone : {{value}}",
+      "phoneHidden": "Téléphone : masqué",
+      "sendMessage": "Envoyer un message",
+      "follow": "Suivre l'analyste",
+      "following": "Suivi",
+      "publications": "Voir ses publications (PUB)",
+      "report": "Signaler ce profil",
+      "yours": "C'est votre profil, tel que les autres le voient."
+    },
+    "report": {
+      "title": "Signaler un profil",
+      "intro": "L'équipe CMarket examine chaque signalement ; {{name}} ne saura pas qui l'a envoyé.",
+      "reason": "Motif",
+      "chooseReason": "Choisissez un motif",
+      "reasons": {
+        "fake": "Faux profil ou usurpation d'identité",
+        "spam": "Spam ou démarchage",
+        "inappropriate": "Contenu inapproprié",
+        "harassment": "Harcèlement",
+        "other": "Autre"
+      },
+      "comment": "Commentaire",
+      "reasonRequired": "Choisissez un motif.",
+      "commentRequired": "Dites ce qui ne va pas.",
+      "commentTooLong": "{{max}} caractères au plus.",
+      "send": "Envoyer le signalement",
+      "sent": "Signalement envoyé : l'équipe CMarket va l'examiner.",
+      "already": "Vous avez déjà signalé ce profil."
+    },
+    "publicPage": {
+      "kicker": "Annuaire professionnel CMarket",
+      "logInToContact": "Se connecter pour contacter",
+      "open": "Ouvrir dans CMarket",
+      "notFound": "Ce profil n'est pas public, ou n'existe plus.",
+      "home": "Aller à l'accueil de CMarket"
     }
   }
 }

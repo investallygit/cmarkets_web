@@ -270,6 +270,8 @@ export interface LibraryFilter {
   q?: string
   /** Followed analysts only. */
   analystIds?: ReadonlySet<string>
+  /** One analyst's publications, as the directory lists them. */
+  analystId?: string
 }
 
 export function matchesLibraryFilter(item: LibraryItemDto, filter: LibraryFilter): boolean {
@@ -281,6 +283,7 @@ export function matchesLibraryFilter(item: LibraryItemDto, filter: LibraryFilter
   if (filter.access && item.access !== filter.access) return false
   if (filter.rating && item.rating !== filter.rating) return false
   if (filter.analystIds && !filter.analystIds.has(item.analyst.id)) return false
+  if (filter.analystId && item.analyst.id !== filter.analystId) return false
   if (filter.q) {
     const haystack = normalize(
       [item.title, subject.code, subject.name, item.analyst.displayName].join(' '),

@@ -57,7 +57,7 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
 | Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
-| 10 · Professional directory (NET), public profile page                    | To do: ROADMAP step 15                                        |
+| 10 · Professional directory (NET), public profile page                    | Done; 1,163 profiles listed, the mockup's search finds 64     |
 | 11 · Messaging (MSG)                                                      | To do: ROADMAP steps 16 and 17                                |
 | 12 · My profile, visibility and contact (NET ME)                          | Done; the mock applies the contact rules of section 15        |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
@@ -108,8 +108,8 @@ src/
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile, equity-screener,
               yield-curves (YCRV and YAS), portfolio, research-library, publishing-studio, news,
-              market-calendar, alerts, settings (CFG), network-profile (NET ME), data-import (IMP),
-              data-session (DATA),
+              market-calendar, alerts, settings (CFG), network-directory (NET), network-profile
+              (NET ME), public-profile (/p/{handle}), data-import (IMP), data-session (DATA),
               upload-history (HIST), eodhd (EODH), data-corrections (CORR), content (NEWS),
               admin-users (USER), analyst-requests (ANLY), moderation (MOD), payouts (PAY),
               platform-settings (ADMCFG), audit-log (AUDT), home (the home page), auth (login,
@@ -120,14 +120,13 @@ src/
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
-              rate-publication, report-publication, follow-analyst, create-publication,
-              edit-publication, draw-on-chart, compare-securities, edit-profile,
-              edit-network-profile, change-password,
-              choose-plan, manage-members, upload-data-file, review-import, roll-back-import,
-              correct-price, publish-content, create-account, manage-account,
-              review-analyst-request, moderate-publication, mark-payout-paid,
-              edit-platform-settings, edit-permissions, switch-language, switch-account,
-              workspace-layout
+              rate-publication, report-publication, follow-analyst, report-profile,
+              create-publication, edit-publication, draw-on-chart, compare-securities,
+              edit-profile, edit-network-profile, change-password, choose-plan, manage-members,
+              upload-data-file, review-import, roll-back-import, correct-price, publish-content,
+              create-account, manage-account, review-analyst-request, moderate-publication,
+              mark-payout-paid, edit-platform-settings, edit-permissions, switch-language,
+              switch-account, workspace-layout
   entities/   business data: session, subscription, organization, security, quote (live
               prices), market, bond, yield-curve, fundamentals, screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news,
@@ -162,7 +161,8 @@ src/mocks/
   handlers/     the REST routes, one file per part of the API; admin/ and portfolios/ hold
                 one file per screen or part
   db.ts         the in-memory state the routes and the hub share; its parts in db/ (storage,
-                market, accounts, session, platform, live, workspace, portfolios, research)
+                market, accounts, session, platform, live, workspace, portfolios, research,
+                network)
   imports.ts    the Data admin's uploads and what they publish; its parts in imports/ (store,
                 checks, seeds, the upload cycle, coverage, corrections)
   fixtures/     the sample data of the mockups
@@ -170,7 +170,7 @@ src/mocks/
                 (14.2, 14.3, its parts in portfolioEngine/), the upload checks (11)...
   realtime.ts   the simulated hub
   admin.ts, content.ts, payments.ts, publications.ts
-                what several routes share: the Admin's directory and payouts, the news and
+                what several routes share: the Admin's accounts and payouts, the news and
                 documents entered, the payments, the publication of research
 ```
 

@@ -30,7 +30,7 @@ describe('administration store', () => {
       dataAdmin: 4,
       admin: 2,
     })
-    const suspended = admin.directory().filter((account) => account.status === 'suspended')
+    const suspended = db.allAccounts().filter((account) => account.status === 'suspended')
     expect(suspended).toHaveLength(13)
     expect(suspended.map((account) => account.displayName)).toContain('F. Mba')
   })
@@ -94,7 +94,7 @@ describe('administration store', () => {
   })
 
   it('details an analyst: publications, sales and the closed report', () => {
-    const account = admin.directoryAccount('user-analyst')
+    const account = db.anyAccount('user-analyst')
     if (!account) throw new Error('No demo analyst')
     const details = admin.adminUserDetails(account)
     expect(details.publishing).toMatchObject({ withdrawn: 1, reports: 1, openReports: 0 })
@@ -104,11 +104,11 @@ describe('administration store', () => {
   })
 
   it('copies a generated account into the stored ones before changing it', () => {
-    const generated = admin.directoryAccount('user-p0001')
+    const generated = db.anyAccount('user-p0001')
     expect(generated).toBeDefined()
     expect(stored('user-p0001')).toBe(false)
-    expect(admin.editableAccount('user-p0001')).toEqual(generated)
+    expect(db.editableAccount('user-p0001')).toEqual(generated)
     expect(stored('user-p0001')).toBe(true)
-    expect(admin.directory().filter((account) => account.id === 'user-p0001')).toHaveLength(1)
+    expect(db.allAccounts().filter((account) => account.id === 'user-p0001')).toHaveLength(1)
   })
 })

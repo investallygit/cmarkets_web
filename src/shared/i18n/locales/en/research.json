@@ -165,7 +165,9 @@
         "price": "Lowest price"
       },
       "search": "Search a security, a country, an analyst"
-    }
+    },
+    "byAnalyst": "Publications of {{name}}",
+    "allAnalysts": "All the analysts"
   },
   "studio": {
     "new": {

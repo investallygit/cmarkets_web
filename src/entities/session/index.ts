@@ -26,6 +26,7 @@ export {
 } from './lib/password'
 export { useProfilePreferences } from './model/useProfilePreferences'
 export { useSessionState } from './model/useSessionState'
+export { useVisitorStatus, type VisitorStatus } from './model/useVisitorStatus'
 export { ModuleLocked } from './ui/ModuleLocked'
 export { OtpForm } from './ui/OtpForm'
 export { PrototypeCode } from './ui/PrototypeCode'

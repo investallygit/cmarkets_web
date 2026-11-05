@@ -36,6 +36,9 @@ const AlertsPage = lazy(() =>
 const SettingsPage = lazy(() =>
   import('@/pages/settings').then((module) => ({ default: module.SettingsPage })),
 )
+const NetworkDirectoryPage = lazy(() =>
+  import('@/pages/network-directory').then((module) => ({ default: module.NetworkDirectoryPage })),
+)
 const NetworkProfilePage = lazy(() =>
   import('@/pages/network-profile').then((module) => ({ default: module.NetworkProfilePage })),
 )
@@ -91,6 +94,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   CAL: MarketCalendarPage,
   ALRT: AlertsPage,
   CFG: SettingsPage,
+  NET: NetworkDirectoryPage,
   NETME: NetworkProfilePage,
   IMP: DataImportPage,
   DATA: DataSessionPage,
@@ -109,6 +113,11 @@ const PAGES: Record<ScreenTextKey, Page> = {
 /** The home page, open to visitors: the product, the markets, the plans. */
 export const HomePage = lazy(() =>
   import('@/pages/home').then((module) => ({ default: module.HomePage })),
+)
+
+/** /p/{handle}: a public profile of the directory, open to visitors. */
+export const PublicProfilePage = lazy(() =>
+  import('@/pages/public-profile').then((module) => ({ default: module.PublicProfilePage })),
 )
 
 // The login pages share a chunk, loaded before the session.

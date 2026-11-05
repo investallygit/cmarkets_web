@@ -12,18 +12,24 @@ import {
   accountCounts,
   adminUserDetails,
   adminUserDto,
-  allOrganizations,
-  directory,
-  directoryAccount,
-  editableAccount,
   ensureAnalystProfile,
   isEmployee,
   listStatus,
   matchesSearch,
-  organizationName,
   sortUsers,
 } from '../../admin'
-import { accountStore, currentAccount, recordAudit, revokeSessions, saveAccounts } from '../../db'
+import {
+  accountStore,
+  allAccounts,
+  allOrganizations,
+  anyAccount,
+  currentAccount,
+  editableAccount,
+  organizationName,
+  recordAudit,
+  revokeSessions,
+  saveAccounts,
+} from '../../db'
 import {
   DEMO_PASSWORD_HASH,
   DEMO_SALT,
@@ -55,7 +61,7 @@ function filteredUsers(query: URLSearchParams) {
   const q = query.get('q') ?? ''
   const sortParam = query.get('sort') ?? '-lastLoginAt'
   const sort = pick(ADMIN_USER_SORTS, sortParam.replace(/^-/, '')) ?? 'lastLoginAt'
-  const users = directory()
+  const users = allAccounts()
     .filter(
       (account) =>
         (!type || account.accountType === type) && (!status || listStatus(account) === status),
@@ -119,7 +125,7 @@ export const userHandlers = [
   http.get(api('/admin/users/:id'), async ({ params }) => {
     await latency()
     if (!allowed('users:manage')) return forbidden()
-    const account = directoryAccount(String(params.id))
+    const account = anyAccount(String(params.id))
     return account ? HttpResponse.json(adminUserDetails(account)) : notFound('Account', params.id)
   }),
 
@@ -138,7 +144,7 @@ export const userHandlers = [
       errors.displayName = ['2 to 80 characters.']
     }
     if (!isEmail(email)) errors.email = ['An e-mail address.']
-    else if (directory().some((account) => account.email.toLowerCase() === email)) {
+    else if (allAccounts().some((account) => account.email.toLowerCase() === email)) {
       errors.email = ['An account uses this address already.']
     }
     if (!accountType) errors.accountType = ['Choose a type.']

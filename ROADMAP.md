@@ -33,7 +33,7 @@ relative: S < M < L < XL.
 | 12   | Journalist and CEO account types, approved by the Admin         | Done   |
 | 13   | Portfolios shared with the organisation, read by its CEO        | Done   |
 | 14   | NET ME: professional profile, visibility and contact rules      | Done   |
-| 15   | NET: professional directory, public profile page                | To do  |
+| 15   | NET: professional directory, public profile page                | Done   |
 | 16   | MSG: conversations, contact requests, files, shared objects     | To do  |
 | 17   | MSG in real time: the `/hubs/chat` hub                          | To do  |
 | 18   | Admin: reported profiles and conversations, directory settings  | To do  |
@@ -167,16 +167,50 @@ come in the README and the open questions of the second version.
 - **Still to do**: choosing the square of the photo (the mock keeps its centre); the blocked
   people, with the messaging (step 16); the Admin's defaults and specialties (step 18).
 
-### Step 15 · NET · Professional directory (screen 10) (L): to do
+### Step 15 · NET · Professional directory (screen 10) (L): done
 
-- Filters (text, the six types with their counts, country, specialty, organisation, language,
-  "only profiles I can contact"), kept in the URL; the results as cards, sorted and paged; the
-  profile with Send a message, Follow, their publications (`/library?analystId=`, which the library
-  does not take yet) and Report. The contact button follows `/profiles/{id}/contact-permission`:
-  Contact, Send a request, or Contact not open, greyed.
-- The public profile at `/p/{handle}`, outside the app shell and without login: no contact
-  details, and "Log in to contact".
-- **Mock**: the search and its counts over a population that gives the mockup's figures.
+- **Built**: the three panels of the mockup. Filters: the text (name, organisation, job, city or
+  specialty, without accents), the six types in their colours with the counts of the whole
+  directory, country, specialty, organisation and language with theirs, "Only profiles I can
+  contact", "Analysts who published in the last 90 days", RESET; the note that hidden profiles and
+  CMarket staff are not listed. Results: "PROFESSIONALS: 64 RESULTS", the cards in two columns,
+  20 a page, sorted by relevance, name or newest members; each card's button follows the
+  profile's rule for the user: amber CONTACT, "Send a contact request", or a greyed "Contact not
+  open"; the user's own card leads to NET ME. Profile: about, specialties, experience, the three
+  latest publications with their price, who may write ("Accepts messages from…", the requests in
+  amber) and the contact details shown, then Send a message, Follow analyst, View their
+  publications (PUB) and Report this profile. The search and the profile open live in the URL
+  (`/net?types=analyst,manager&specialty=sovereign-bonds&contactable=1&profile=user-ndong`); the
+  first result opens when none is chosen.
+- **Public page**: `/p/{handle}`, outside the app shell and without login, in the brand colours:
+  the profile without its contact details or rules, and "Log in to contact", which opens it in
+  NET once logged in ("Open in CMarket" for a visitor already logged in). M. Ndong's and
+  L. Fotso's profiles are public; another one says it is not.
+- **Reused**: PUB takes `?analyst=` ("Publications of M. Ndong", and back to all the analysts),
+  sent as `/library?analystId=`; Follow is the library's (`/analysts/{id}/follow`), in a button of
+  its own; the report dialog follows that of the publications, with its own reasons. Send a
+  message and Send a contact request say that the conversation comes with MSG (step 16).
+- **Shared**: `entities/profile` gains the directory's queries, the order of the experiences and
+  their period, and the statistics line, which NET ME uses too; `useVisitorStatus` moved from the
+  home page to `entities/session`; `Checkbox` takes a colour of its own (the types, shown on
+  `/_kit`); `ButtonLink` has the terminal's primary, secondary and info looks. The hidden inputs
+  of `Checkbox`, `Switch` and the NET ME radios stay inside the panel that scrolls, so that their
+  focus shows.
+- **Access**: NET in the left menu after PUB and in the command bar, with `directory:list`; the
+  Admin, who has it too, reads the profiles from MOD (step 18).
+- **Mock**: the directory lists the 2,054 accounts of screen 9 (`fixtures/directory.ts` gives the
+  generated ones their profiles, made on every load): the active clients whose profile is not
+  hidden, 412 Students of 1,284 and every other client, 1,163 in all; the search of the mockup
+  finds 64 for a Manager as for an Analyst. A. Tchakounté (closed to Managers) and B. Ngoma join
+  the accounts with their employers; M. Ndong, D. Moussavou and the library's analysts have their
+  profiles. The account lists of the Admin moved to `db/accounts.ts` (`allAccounts`,
+  `anyAccount`), which the directory reads too. The search, its orders and its counts are pure,
+  tested logic (`lib/directory.ts`); a client waiting for an Admin's approval writes to nobody and
+  nobody writes to them (`lib/contact.ts`); a handle is unique among all the accounts; the
+  reports are kept for MOD (`profileReportStore`), one per reporter and profile. `SEED_VERSION`
+  raised.
+- **Still to do**: the conversation that Contact opens, the blocks and a hidden profile open to
+  its conversations (step 16); online status (step 17); the reported profiles in MOD (step 18).
 
 ### Step 16 · MSG · Messaging (screen 11) (XL): to do
 
@@ -1001,20 +1035,39 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   letter; a CEO a proof of position and the name of the organisation they head, which the sign-up
   opens: how does a CEO join an organisation already on CMarket?
 - **Screen 10 mockup**: "Only profiles I can contact" is ticked, yet A. Tchakounté shows "Contact
-  not open"; D. Moussavou has 9 publications, yet the Analyst status of D. Moussavou waits on
-  screen 9; the directory counts 412 Students for 1,284 active Student accounts; "Analysts who
-  published in last 90 days" has no parameter in `GET /directory`; the button is "Send a request"
-  in section 9 and "Send a contact request" on screen 12.
+  not open" (the prototype leaves out, once ticked, the profiles the user cannot write to; a
+  request counts as a contact); D. Moussavou has 9 publications, yet the Analyst status of
+  D. Moussavou waits on screen 9 (the prototype lists D. Moussavou without the VERIFIED badge and
+  without contact until approved); the directory counts 412 Students for 1,284 active Student
+  accounts (the prototype: the others hide their profile); "Analysts who published in last 90
+  days" has no parameter in `GET /directory` (the prototype: `recent=true`); the button is "Send
+  a request" in section 9 and "Send a contact request" on screen 12. The viewer of the mockup,
+  "P. MANAGER", is in no list.
+- **Directory**: `GET /directory` gives each card its `contactMode`, which saves a call of
+  `/profiles/{id}/contact-permission` per card; the prototype adds `sort` (relevance, name,
+  newest members) for "SORT: RELEVANCE", `pageSize` (20) and a comma list in `types`. What is
+  relevance? The prototype ranks the text match (the name first), then how complete the profile
+  is, the VERIFIED badge and an Analyst's followers. `GET /directory/facets` takes no filter: the
+  prototype counts the whole directory and adds the organisations and languages, which the lists
+  of the filters need. Do users see their own card (the prototype: yes, with Edit my profile, and
+  not among the profiles they can contact)? Are Analysts, Journalists and CEOs waiting for an
+  Admin's approval listed (the prototype: yes, without the badge, and without messaging either
+  way)? The report reasons are the prototype's (fake profile, spam, inappropriate content,
+  harassment, other), one report per reporter and profile (409 after). The public endpoint is
+  `/public/profiles/{slug}` and the page `/p/{handle}`: the prototype takes the handle as the
+  slug, and answers `GET /directory/specialties` without login for the page. Follow is the
+  library's `/analysts/{id}/follow`: the profile gives its `analystId`.
 - **Profiles**: the public page is `/p/{handle}` and its endpoint `/public/profiles/{slug}`: how is
   the handle chosen (the prototype: the display name, "k-atangana", numbered when another account
   had it first)? The prototype takes the display name of `PUT /me/profile` as the account's, the
   one CFG changes too, and keeps the work e-mail and phone of the profile apart from the login and
   the phone of the codes. LinkedIn has no display toggle on screen 12, unlike the e-mail and the
-  phone. Who crops the photo square: the prototype's server keeps its centre. The specialties
-  have no endpoint: the prototype reads them from `GET /directory/specialties`, named in French
-  and English. Which languages may a profile list (the prototype: nine, by ISO code)? What does
-  Follow do on a profile that is not an analyst's? Which module of the plans holds the directory
-  and messaging, if any (research and settings are in none)?
+  phone: the prototype keeps it from the others, as by default. Who crops the photo square: the
+  prototype's server keeps its centre. The specialties have no endpoint: the prototype reads them
+  from `GET /directory/specialties`, named in French and English. Which languages may a profile
+  list (the prototype: nine, by ISO code)? What does Follow do on a profile that is not an
+  analyst's (the prototype shows it on an analyst's only)? Which module of the plans holds the
+  directory and messaging, if any (research and settings are in none)?
 - **Messaging**: how is a chart frozen for a message (PUB NEW freezes one with
   `POST /publications/{id}/charts`)? What do the other members see of an edited or deleted message?
   Who adds members to a group, and can a member leave it? Does a message reach the notification

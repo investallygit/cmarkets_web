@@ -16,10 +16,11 @@ import { ACCOUNT_TYPES } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
 import { addMonths } from '@/shared/lib/isoDate'
 import {
-  accountStore,
+  allAccounts,
   analystStore,
+  anyAccount,
   contentReportStore,
-  organizationStore,
+  organizationName,
   publicationRules,
   publicationStore,
   readerContext,
@@ -28,10 +29,9 @@ import {
   userArray,
   type StoredPurchase,
 } from './db'
-import { createAccounts, isVerifiedType, type StoredAccount } from './fixtures/accounts'
+import { isVerifiedType, type StoredAccount } from './fixtures/accounts'
 import { ADMIN_ACTOR } from './fixtures/admin'
 import { PLANS } from './fixtures/billing'
-import { generatePopulation, POPULATION_ORGANIZATIONS } from './fixtures/population'
 import { ATANGANA } from './fixtures/research'
 import { isExpired } from './lib/billing'
 import { createRandom, hashString } from './lib/random'
@@ -48,56 +48,6 @@ import { isFirstPublication } from './publications'
 
 // ---------------------------------------------------------------------------------------------
 // Accounts
-
-let population: StoredAccount[] | undefined
-
-/** The generated accounts, made once per load from the seeds, not from what was stored since. */
-function populationAccounts(): StoredAccount[] {
-  population ??= generatePopulation(createAccounts(), Date.now())
-  return population
-}
-
-/** Every account: the stored ones, then the generated ones nobody changed. */
-export function directory(): StoredAccount[] {
-  const stored = accountStore.read()
-  const ids = new Set(stored.map((account) => account.id))
-  return [...stored, ...populationAccounts().filter((account) => !ids.has(account.id))]
-}
-
-export function directoryAccount(id: string): StoredAccount | undefined {
-  return (
-    accountStore.read().find((account) => account.id === id) ??
-    populationAccounts().find((account) => account.id === id)
-  )
-}
-
-/** An account to change: a generated one is copied into the stored accounts first. */
-export function editableAccount(id: string): StoredAccount | undefined {
-  const stored = accountStore.read()
-  const found = stored.find((account) => account.id === id)
-  if (found) return found
-  const generated = populationAccounts().find((account) => account.id === id)
-  if (!generated) return undefined
-  const copy = structuredClone(generated)
-  accountStore.write([...stored, copy])
-  return copy
-}
-
-export function organizationName(id: string | null): string | null {
-  if (!id) return null
-  return (
-    organizationStore.read().find((organization) => organization.id === id)?.name ??
-    POPULATION_ORGANIZATIONS.find((organization) => organization.id === id)?.name ??
-    null
-  )
-}
-
-/** Organisations an Admin can put an account in: the stored ones, then the generated ones. */
-export function allOrganizations(): { id: string; name: string }[] {
-  return [...organizationStore.read(), ...POPULATION_ORGANIZATIONS]
-    .map(({ id, name }) => ({ id, name }))
-    .sort((a, b) => a.name.localeCompare(b.name))
-}
 
 export const isEmployee = (account: Pick<StoredAccount, 'accountType'>) =>
   account.accountType === 'dataAdmin' || account.accountType === 'admin'
@@ -160,7 +110,7 @@ export function sortUsers(users: AdminUserDto[], sort: AdminUserSort, descending
 /** The counters of screen 9: active accounts by type, analysts under review included. */
 export function accountCounts(): AccountCountsDto {
   const counts = Object.fromEntries(ACCOUNT_TYPES.map((type) => [type, 0])) as AccountCountsDto
-  for (const account of directory()) {
+  for (const account of allAccounts()) {
     if (account.status === 'active') counts[account.accountType] += 1
   }
   return counts
@@ -281,7 +231,7 @@ export function analystRequestDto(account: StoredAccount): AnalystRequestDto {
 export function analystRequests(status: VerificationStatus): AnalystRequestDto[] {
   const dateOf = (request: AnalystRequestDto) =>
     status === 'pending' ? request.requestedAt : (request.decision?.at ?? '')
-  return directory()
+  return allAccounts()
     .filter(
       (account) => isVerifiedType(account.accountType) && account.verificationStatus === status,
     )
@@ -314,7 +264,7 @@ const analystName = (analystId: string) =>
   analystStore.read().find((analyst) => analyst.id === analystId)?.displayName ?? analystId
 
 function reporterName(userId: string): string {
-  return directoryAccount(userId)?.displayName ?? userId
+  return anyAccount(userId)?.displayName ?? userId
 }
 
 /**

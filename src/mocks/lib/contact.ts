@@ -25,14 +25,19 @@ export const DEFAULT_CONTACT_RULES: ContactRules = {
 export const isClientType = (type: AccountType): type is ClientAccountType =>
   CLIENT_ACCOUNT_TYPES.some((client) => client === type)
 
+export interface ContactParty {
+  userId: string
+  accountType: AccountType
+  /**
+   * May use the messaging: the type has messages:write and, for an Analyst, a Journalist or a
+   * CEO, an Admin approved the status.
+   */
+  messaging: boolean
+}
+
 export interface ContactSituation {
-  sender: { userId: string; accountType: AccountType }
-  recipient: {
-    userId: string
-    accountType: AccountType
-    visibility: ProfileVisibility
-    contactRules: ContactRules
-  }
+  sender: ContactParty
+  recipient: ContactParty & { visibility: ProfileVisibility; contactRules: ContactRules }
   /** One of the two blocked the other. */
   blocked: boolean
   /** The two already have a conversation. */
@@ -41,9 +46,9 @@ export interface ContactSituation {
 
 /**
  * How the sender may reach the recipient: a block overrides every rule; CMarket employees write
- * to nobody and nobody writes to them; a conversation already open stays open whatever the rules
- * became; a hidden profile is reached through such a conversation only; otherwise the rule the
- * recipient set for the sender's type.
+ * to nobody and nobody writes to them, nor does a client still waiting for an Admin's approval;
+ * a conversation already open stays open whatever the rules became; a hidden profile is reached
+ * through such a conversation only; otherwise the rule the recipient set for the sender's type.
  */
 export function contactMode({
   sender,
@@ -53,6 +58,7 @@ export function contactMode({
 }: ContactSituation): ContactMode {
   if (sender.userId === recipient.userId || blocked) return 'none'
   if (!isClientType(sender.accountType) || !isClientType(recipient.accountType)) return 'none'
+  if (!sender.messaging || !recipient.messaging) return 'none'
   if (conversationOpen) return 'direct'
   if (recipient.visibility === 'hidden') return 'none'
   return recipient.contactRules[sender.accountType]

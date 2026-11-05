@@ -2,6 +2,7 @@ import {
   CLIENT_ACCOUNT_TYPES,
   type ClientAccountType,
   type ContactMode,
+  type ExperienceDto,
   type ProfilePrivacyDto,
 } from '@/shared/api/contracts'
 
@@ -32,4 +33,15 @@ export function typesByMode(
   const groups: Record<ContactMode, ClientAccountType[]> = { direct: [], request: [], none: [] }
   for (const type of CLIENT_ACCOUNT_TYPES) groups[previewContactMode(type, privacy)].push(type)
   return groups
+}
+
+/** Positions held to this day first, then by their end, then the certifications. */
+export function experiencesInOrder(experiences: readonly ExperienceDto[]): ExperienceDto[] {
+  const end = (experience: ExperienceDto) => experience.to ?? Number.POSITIVE_INFINITY
+  return [...experiences].sort(
+    (a, b) =>
+      Number(a.kind === 'certification') - Number(b.kind === 'certification') ||
+      end(b) - end(a) ||
+      (b.from ?? 0) - (a.from ?? 0),
+  )
 }

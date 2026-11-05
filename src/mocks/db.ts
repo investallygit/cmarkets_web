@@ -19,10 +19,15 @@ export {
 export {
   accountByEmail,
   accountStore,
+  allAccounts,
+  allOrganizations,
+  anyAccount,
+  editableAccount,
   findAccount,
   invitationStore,
   invoiceStore,
   modulesOf,
+  organizationName,
   organizationStore,
   payerOf,
   saveAccounts,
@@ -78,7 +83,27 @@ export {
   type StoredWatchlist,
 } from './db/workspace'
 export { marketData, portfolioStore, sharedPortfolios, type SharedPortfolio } from './db/portfolios'
-export { handleOf, myProfileDto, profileOf, profileStore, saveProfile, statsOf } from './db/network'
+export {
+  contactModeFor,
+  directoryEntryDto,
+  directoryProfiles,
+  handleOf,
+  handles,
+  isClientAccount,
+  isListed,
+  mayMessage,
+  myProfileDto,
+  profileDto,
+  profileOf,
+  profileReportStore,
+  profileStore,
+  publicProfileDto,
+  saveProfile,
+  statsOf,
+  type ClientAccount,
+  type DirectoryProfile,
+  type StoredProfileReport,
+} from './db/network'
 export {
   analystStore,
   announcePublication,

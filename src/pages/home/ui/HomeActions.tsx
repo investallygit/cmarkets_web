@@ -1,9 +1,9 @@
 import { clsx } from 'clsx'
 import { ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useVisitorStatus } from '@/entities/session'
 import { routes } from '@/shared/routes/paths'
 import { ButtonLink } from '@/shared/ui/form/Button'
-import { useVisitorStatus } from '../model/useVisitorStatus'
 
 /**
  * The calls to action of the hero and of the end of the page: the free trial and the login, or

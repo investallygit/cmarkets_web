@@ -57,7 +57,7 @@ export function PrivacyFields({ editor }: { editor: ProfileEditor }) {
               <label
                 key={visibility}
                 className={clsx(
-                  'flex cursor-pointer items-center gap-3 border px-3 py-2',
+                  'relative flex cursor-pointer items-center gap-3 border px-3 py-2',
                   checked ? 'border-accent-amber bg-selected' : 'hover:bg-panel-header',
                 )}
               >
@@ -123,7 +123,7 @@ export function PrivacyFields({ editor }: { editor: ProfileEditor }) {
                   return (
                     <label
                       key={mode}
-                      className="flex h-8 cursor-pointer items-center justify-center"
+                      className="relative flex h-8 cursor-pointer items-center justify-center"
                     >
                       <input
                         type="radio"

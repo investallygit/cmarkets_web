@@ -85,6 +85,11 @@ const LINK_VARIANTS = {
     'border border-brand-green bg-brand-green font-semibold tracking-title text-brand-navy uppercase hover:bg-brand-green/85',
   /** The other links of the home page, on the brand navy. */
   outline: 'border border-primary/30 text-primary hover:border-primary/60 hover:bg-primary/5',
+  /** In the terminal, as the buttons of the same names. */
+  primary:
+    'border border-accent-amber bg-accent-amber font-semibold tracking-title text-app uppercase hover:bg-accent-amber/85',
+  secondary: 'border text-primary hover:bg-panel-header',
+  info: 'border text-info hover:bg-info/10',
 }
 
 interface ButtonLinkProps extends LinkProps {

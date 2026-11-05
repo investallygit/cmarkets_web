@@ -9,7 +9,15 @@ import { PanelLoading } from '@/shared/ui/StatusViews'
 import { AppShell } from '../layouts/AppShell'
 import { FullScreenStatus } from '../layouts/FullScreenStatus'
 import { HomeRedirect } from './HomeRedirect'
-import { HomePage, LoginPage, pageOf, PasswordResetPage, SignUpPage, UiKitPage } from './pages'
+import {
+  HomePage,
+  LoginPage,
+  pageOf,
+  PasswordResetPage,
+  PublicProfilePage,
+  SignUpPage,
+  UiKitPage,
+} from './pages'
 import { RequireSession } from './RequireSession'
 import { ScreenRoute } from './ScreenRoute'
 
@@ -26,13 +34,14 @@ const prototypeRoutes = env.useMocks
     ]
   : []
 
-// The home page and the login pages need no session: they are outside the app shell, in the brand
-// colours (spec section 8).
+// The home page, the login pages and the public profiles need no session: they are outside the
+// app shell, in the brand colours (spec section 8).
 const publicRoutes = [
   { path: routes.home, element: <HomePage /> },
   { path: routes.login, element: <LoginPage /> },
   { path: routes.signUp, element: <SignUpPage /> },
   { path: routes.resetPassword, element: <PasswordResetPage /> },
+  { path: routes.publicProfile, element: <PublicProfilePage /> },
 ].map(({ path, element }) => ({
   path,
   element: <Suspense fallback={<FullScreenStatus kind="loading" />}>{element}</Suspense>,

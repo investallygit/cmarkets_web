@@ -1,11 +1,11 @@
 import { ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useVisitorStatus } from '@/entities/session'
 import { CLIENT_ACCOUNT_TYPES } from '@/shared/api/contracts'
 import { signUpPath } from '@/shared/routes/paths'
 import { ButtonLink } from '@/shared/ui/form/Button'
 import { AUDIENCE_PHOTOS } from '../config/photos'
 import { revealDelay } from '../lib/reveal'
-import { useVisitorStatus } from '../model/useVisitorStatus'
 import { Photo } from './Photo'
 import { Section } from './Section'
 

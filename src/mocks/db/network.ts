@@ -1,24 +1,53 @@
-import type { MyProfileDto, ProfileStatsDto } from '@/shared/api/contracts'
-import { isVerifiedType, type StoredAccount } from '../fixtures/accounts'
-import { createProfiles, defaultProfile, type StoredProfile } from '../fixtures/network'
+import type {
+  ClientAccountType,
+  ContactMode,
+  DirectoryEntryDto,
+  MyProfileDto,
+  ProfileDto,
+  ProfileReportReason,
+  ProfileStatsDto,
+  PublicProfileDto,
+} from '@/shared/api/contracts'
+import { createAccounts, isVerifiedType, type StoredAccount } from '../fixtures/accounts'
+import { generateProfiles } from '../fixtures/directory'
+import {
+  createProfiles,
+  defaultProfile,
+  SPECIALTIES,
+  type StoredProfile,
+} from '../fixtures/network'
+import { contactMode, isClientType } from '../lib/contact'
+import type { DirectoryCandidate } from '../lib/directory'
 import { scoreOf, sumMonths } from '../lib/research'
 import { mergeMonths } from '../lib/researchViews'
-import { accountStore, organizationStore } from './accounts'
+import { allAccounts, organizationName, populationAccounts } from './accounts'
+import { permissionsOf } from './platform'
 import { analystStore, publicationStore } from './research'
 import { sharedStore } from './storage'
 
-/** The professional profiles of the directory (spec section 15), which every account reads. */
+/**
+ * The professional profiles of the directory (spec section 15), which every account reads: who
+ * is listed, who may write to whom, and what each viewer sees of a profile.
+ */
 
 /** The profiles the users wrote; a client who never did has the one the account gives. */
 export const profileStore = sharedStore<StoredProfile[]>('profiles', createProfiles)
 
+let generated: Map<string, StoredProfile> | undefined
+
+/** The profiles of the generated accounts, made once per load as the accounts are. */
+function generatedProfiles(): Map<string, StoredProfile> {
+  generated ??= generateProfiles(populationAccounts(), createAccounts(), organizationName)
+  return generated
+}
+
 export function profileOf(account: StoredAccount): StoredProfile {
   const stored = profileStore.read().find((profile) => profile.userId === account.id)
   if (stored) return stored
-  const organization = organizationStore
-    .read()
-    .find((candidate) => candidate.id === account.organizationId)
-  return defaultProfile(account, organization?.name ?? null)
+  return (
+    generatedProfiles().get(account.id) ??
+    defaultProfile(account, organizationName(account.organizationId))
+  )
 }
 
 /** Writes a profile back, the first time as one of the stored ones. */
@@ -35,21 +64,35 @@ const slugOf = (name: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
 
-/** "K. Atangana" gives "k-atangana"; a name another account took first gets a number. */
-export function handleOf(account: StoredAccount): string {
-  const slug = slugOf(account.displayName) || 'member'
-  const rank = accountStore
-    .read()
-    .filter((other) => slugOf(other.displayName) === slug)
-    .sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id))
-    .findIndex((other) => other.id === account.id)
-  return rank <= 0 ? slug : `${slug}-${rank + 1}`
+/**
+ * The handle of every account: "K. Atangana" gives "k-atangana"; a name another account took
+ * first gets a number, "k-atangana-2".
+ */
+export function handles(): Map<string, string> {
+  const bySlug = new Map<string, StoredAccount[]>()
+  for (const account of allAccounts()) {
+    const slug = slugOf(account.displayName) || 'member'
+    bySlug.set(slug, [...(bySlug.get(slug) ?? []), account])
+  }
+  const result = new Map<string, string>()
+  for (const [slug, accounts] of bySlug) {
+    accounts
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id))
+      .forEach((account, rank) => result.set(account.id, rank === 0 ? slug : `${slug}-${rank + 1}`))
+  }
+  return result
 }
+
+export const handleOf = (account: StoredAccount): string =>
+  handles().get(account.id) ?? slugOf(account.displayName)
+
+const analystOf = (account: StoredAccount) =>
+  analystStore.read().find((candidate) => candidate.userId === account.id)
 
 /** An Analyst's publications, readers' average score and followers; null for the other types. */
 export function statsOf(account: StoredAccount): ProfileStatsDto | null {
   if (account.accountType !== 'analyst') return null
-  const analyst = analystStore.read().find((candidate) => candidate.userId === account.id)
+  const analyst = analystOf(account)
   if (!analyst) return { publications: 0, rating: null, followers: 0 }
   const published = publicationStore
     .read()
@@ -63,6 +106,15 @@ export function statsOf(account: StoredAccount): ProfileStatsDto | null {
   }
 }
 
+/** An account of one of the six client types, the only ones with a profile. */
+export type ClientAccount = StoredAccount & { accountType: ClientAccountType }
+
+export const isClientAccount = (account: StoredAccount): account is ClientAccount =>
+  isClientType(account.accountType)
+
+const isVerified = (account: StoredAccount) =>
+  isVerifiedType(account.accountType) && account.verificationStatus === 'approved'
+
 /** GET /me/profile */
 export function myProfileDto(account: StoredAccount): MyProfileDto {
   const profile = profileOf(account)
@@ -71,7 +123,7 @@ export function myProfileDto(account: StoredAccount): MyProfileDto {
     handle: handleOf(account),
     displayName: account.displayName,
     accountType: account.accountType,
-    verified: isVerifiedType(account.accountType) && account.verificationStatus === 'approved',
+    verified: isVerified(account),
     photoUrl: profile.photo,
     jobTitle: profile.jobTitle,
     organization: profile.organization,
@@ -87,3 +139,199 @@ export function myProfileDto(account: StoredAccount): MyProfileDto {
     updatedAt: profile.updatedAt,
   }
 }
+
+// ---------------------------------------------------------------------------------------------
+// The directory
+
+/**
+ * Writes and is written to (spec section 15): a client whose type has messages:write and, for
+ * an Analyst, a Journalist or a CEO, whose status an Admin approved.
+ */
+export function mayMessage(account: StoredAccount): boolean {
+  return (
+    account.status === 'active' &&
+    permissionsOf(account.accountType).includes('messages:write') &&
+    (!isVerifiedType(account.accountType) || account.verificationStatus === 'approved')
+  )
+}
+
+/** In the directory: an active client of a type listed there, who does not hide the profile. */
+export function isListed(account: StoredAccount, profile = profileOf(account)): boolean {
+  return (
+    isClientAccount(account) &&
+    account.status === 'active' &&
+    permissionsOf(account.accountType).includes('directory:profile') &&
+    profile.privacy.visibility !== 'hidden'
+  )
+}
+
+/**
+ * GET /profiles/{id}/contact-permission: the rule of the profile for the viewer's type. Blocks
+ * and conversations come with the messaging.
+ */
+export function contactModeFor(
+  viewer: StoredAccount,
+  account: StoredAccount,
+  profile = profileOf(account),
+): ContactMode {
+  return contactMode({
+    sender: { userId: viewer.id, accountType: viewer.accountType, messaging: mayMessage(viewer) },
+    recipient: {
+      userId: account.id,
+      accountType: account.accountType,
+      messaging: mayMessage(account),
+      visibility: profile.privacy.visibility,
+      contactRules: profile.privacy.contactRules,
+    },
+    blocked: false,
+    conversationOpen: false,
+  })
+}
+
+const DAY_MS = 86_400_000
+
+/** The users of the Analysts who published in the last 90 days. */
+function recentAuthors(now: number): Set<string> {
+  const since = new Date(now - 90 * DAY_MS).toISOString()
+  const analystIds = new Set(
+    publicationStore
+      .read()
+      .filter(
+        (publication) =>
+          publication.status === 'published' &&
+          (publication.versions[0]?.publishedAt ?? '') >= since,
+      )
+      .map((publication) => publication.analystId),
+  )
+  return new Set(
+    analystStore
+      .read()
+      .filter((analyst) => analystIds.has(analyst.id) && analyst.userId)
+      .map((analyst) => analyst.userId ?? ''),
+  )
+}
+
+const specialtyNames = (ids: readonly string[]) =>
+  SPECIALTIES.filter((specialty) => ids.includes(specialty.id)).flatMap((specialty) => [
+    specialty.name.en,
+    specialty.name.fr,
+  ])
+
+/** A listed profile, with what the search reads and what its card shows. */
+export interface DirectoryProfile {
+  account: StoredAccount
+  profile: StoredProfile
+  candidate: DirectoryCandidate
+}
+
+/** The profiles of the directory as the viewer finds them, with the button each card shows. */
+export function directoryProfiles(viewer: StoredAccount, now = Date.now()): DirectoryProfile[] {
+  const recent = recentAuthors(now)
+  const followers = new Map(
+    analystStore.read().map((analyst) => [analyst.userId ?? '', analyst.followers]),
+  )
+  return allAccounts().flatMap((account) => {
+    const profile = profileOf(account)
+    if (!isClientAccount(account) || !isListed(account, profile)) return []
+    const candidate: DirectoryCandidate = {
+      userId: account.id,
+      displayName: account.displayName,
+      accountType: account.accountType,
+      verified: isVerified(account),
+      jobTitle: profile.jobTitle,
+      organization: profile.organization,
+      city: profile.city,
+      country: profile.country,
+      languages: profile.languages,
+      specialties: profile.specialties,
+      specialtyNames: specialtyNames(profile.specialties),
+      about: profile.about,
+      experiences: profile.experiences.length,
+      hasPhoto: profile.photo !== null,
+      followers: followers.get(account.id) ?? 0,
+      memberSince: account.createdAt,
+      contactMode: contactModeFor(viewer, account, profile),
+      recentlyPublished: recent.has(account.id),
+    }
+    return [{ account, profile, candidate }]
+  })
+}
+
+/** A card of GET /directory. */
+export function directoryEntryDto(
+  { account, profile, candidate }: DirectoryProfile,
+  handle: string,
+): DirectoryEntryDto {
+  return {
+    userId: account.id,
+    handle,
+    displayName: account.displayName,
+    accountType: candidate.accountType,
+    verified: candidate.verified,
+    photoUrl: profile.photo,
+    jobTitle: profile.jobTitle,
+    organization: profile.organization,
+    city: profile.city,
+    country: profile.country,
+    specialties: [...profile.specialties],
+    stats: profile.privacy.show.publicationStats ? statsOf(account) : null,
+    memberSince: account.createdAt,
+    contactMode: candidate.contactMode,
+  }
+}
+
+/** GET /public/profiles/{slug}: no contact details, no rules. */
+export function publicProfileDto(
+  account: ClientAccount,
+  profile = profileOf(account),
+): PublicProfileDto {
+  return {
+    userId: account.id,
+    handle: handleOf(account),
+    displayName: account.displayName,
+    accountType: account.accountType,
+    verified: isVerified(account),
+    photoUrl: profile.photo,
+    jobTitle: profile.jobTitle,
+    organization: profile.organization,
+    city: profile.city,
+    country: profile.country,
+    languages: [...profile.languages],
+    about: profile.about,
+    specialties: [...profile.specialties],
+    experiences: profile.experiences.map((experience) => ({ ...experience })),
+    stats: profile.privacy.show.publicationStats ? statsOf(account) : null,
+    memberSince: account.createdAt,
+    analystId: analystOf(account)?.id ?? null,
+  }
+}
+
+/**
+ * GET /profiles/{userId}: the contact details the user shows and the rules of the profile.
+ * LinkedIn has no display setting on screen 12: it stays hidden, as by default.
+ */
+export function profileDto(account: ClientAccount, profile = profileOf(account)): ProfileDto {
+  const { show, contactRules } = profile.privacy
+  return {
+    ...publicProfileDto(account, profile),
+    contact: {
+      workEmail: show.email ? profile.contact.workEmail : null,
+      phone: show.phone ? profile.contact.phone : null,
+      linkedIn: null,
+    },
+    contactRules: { ...contactRules },
+  }
+}
+
+/** A report of a profile, which the Admin reviews in MOD (step 18 of the roadmap). */
+export interface StoredProfileReport {
+  id: string
+  /** The profile reported. */
+  userId: string
+  reporterId: string
+  reason: ProfileReportReason
+  comment: string
+  at: string
+}
+
+export const profileReportStore = sharedStore<StoredProfileReport[]>('profileReports', () => [])

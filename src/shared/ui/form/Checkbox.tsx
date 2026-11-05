@@ -12,22 +12,28 @@ interface CheckboxProps extends Omit<
   label?: ReactNode
   /** Amber box while unchecked: a tick still expected, e.g. a mandatory disclosure. */
   highlight?: boolean
+  /** A colour of its own, such as an account type's: its frame, and its fill once checked. */
+  color?: string
   className?: string
 }
 
-/** Checked boxes are green, as the ticked disclosures of the publishing studio (screen 7). */
+/**
+ * Checked boxes are green, as the ticked disclosures of the publishing studio (screen 7), unless
+ * they have a colour of their own, as the account types of the directory (screen 10).
+ */
 export function Checkbox({
   checked,
   onChange,
   label,
   highlight,
+  color,
   className,
   ...rest
 }: CheckboxProps) {
   return (
     <label
       className={clsx(
-        'inline-flex items-center gap-2 font-sans text-data',
+        'relative inline-flex items-center gap-2 font-sans text-data',
         rest.disabled ? 'opacity-50' : 'cursor-pointer',
         className,
       )}
@@ -45,11 +51,14 @@ export function Checkbox({
           'flex size-3.5 shrink-0 items-center justify-center border',
           'peer-focus-visible:ring-1 peer-focus-visible:ring-accent-amber peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-app',
           checked
-            ? 'border-up bg-up text-app'
+            ? clsx('text-app', !color && 'border-up bg-up')
             : highlight
               ? 'border-accent-amber'
-              : 'border-secondary',
+              : !color && 'border-secondary',
         )}
+        style={
+          color ? { borderColor: color, backgroundColor: checked ? color : undefined } : undefined
+        }
       >
         {checked && <Check className="size-3" strokeWidth={3} />}
       </span>

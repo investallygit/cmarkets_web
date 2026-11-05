@@ -165,7 +165,9 @@
         "price": "Prix le plus bas"
       },
       "search": "Rechercher un titre, un pays, un analyste"
-    }
+    },
+    "byAnalyst": "Publications de {{name}}",
+    "allAnalysts": "Tous les analystes"
   },
   "studio": {
     "new": {

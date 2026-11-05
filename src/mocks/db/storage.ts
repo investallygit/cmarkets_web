@@ -31,7 +31,7 @@ export function removeStorage(key: string): void {
  * Raised when the sample data changes: the browser's copy of the mock's data is dropped and
  * seeded again, which also ends the session of the prototype.
  */
-const SEED_VERSION = '12'
+const SEED_VERSION = '13'
 const SEED_VERSION_KEY = 'cmarket.prototype.seedVersion'
 
 function dropOutdatedSeeds(): void {

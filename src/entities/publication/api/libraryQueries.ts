@@ -27,6 +27,8 @@ export interface LibraryQuery {
   rating?: PublicationRating
   sort?: LibrarySort
   q?: string
+  /** One analyst's publications: their profile in NET, "View their publications". */
+  analystId?: string
   page: number
   pageSize: number
 }
