@@ -8,6 +8,8 @@ import {
   useConversation,
   useMarkRead,
   useMessages,
+  useOnline,
+  useTypingUsers,
 } from '@/entities/conversation'
 import { useContactPermission, useProfile } from '@/entities/profile'
 import { useCurrentUser } from '@/entities/session'
@@ -16,6 +18,7 @@ import { isApiError } from '@/shared/api'
 import type { ConversationDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { useNow } from '@/shared/lib/useNow'
+import { useJoinConversation } from '@/shared/realtime'
 import { Button } from '@/shared/ui/form/Button'
 import { Panel } from '@/shared/ui/Panel'
 import { PanelEmpty, PanelError, PanelLoading } from '@/shared/ui/StatusViews'
@@ -92,7 +95,34 @@ function ThreadNotice({
   return message ? <p className={`${NOTE} text-secondary`}>{message}</p> : null
 }
 
-/** The messages of a conversation under the separators of their days, then the composer. */
+/** "K. Atangana is typing…" under the last message, as the hub tells it (TypingIndicator). */
+function Typing({ conversation }: { conversation: ConversationDto }) {
+  const { t } = useTranslation()
+  const names = useTypingUsers(conversation.id).flatMap((userId) => {
+    const member = conversation.members.find((person) => person.userId === userId)
+    return member ? [member.displayName] : []
+  })
+  const [first, second] = names
+  return (
+    <p role="status" className="min-h-4 font-sans text-data text-secondary">
+      {names.length === 0
+        ? null
+        : names.length === 1
+          ? t('messaging.thread.typingOne', { name: first })
+          : names.length === 2
+            ? t('messaging.thread.typingTwo', { first, second })
+            : t('messaging.thread.typingMany')}
+    </p>
+  )
+}
+
+/** Close enough to the end of the thread to follow the new messages. */
+const END_MARGIN_PX = 48
+
+/**
+ * The messages of a conversation under the separators of their days, then the composer. The
+ * thread joins the conversation on the hub while it shows: new messages, "typing…", ✓✓.
+ */
 function Conversation({
   conversationId,
   highlightId,
@@ -108,27 +138,47 @@ function Conversation({
   const messages = messagesOf(history.data)
   const last = messages.at(-1)
   const lastId = last?.id
+  const lastOwn = last?.author.userId === user.id
   const conversation = details.data
+  /** The last message drawn at the end, and whether the user reads the end. */
+  const shown = useRef<string | null>(null)
+  const atEnd = useRef(true)
+  /** The last message when the thread showed, and the last one marked read. */
+  const opened = useRef<string | null>(null)
   const marked = useRef<string | null>(null)
   const today = format.day(useNow(60_000))
+  useJoinConversation(conversationId)
 
   const ready = Boolean(conversation) && !history.isPending
 
-  // The newest message shows, or the one a search found, once the thread is drawn.
+  // The message a search found, framed in the middle.
   useEffect(() => {
-    if (!lastId || !ready) return
-    const found = highlightId ? document.getElementById(`message-${highlightId}`) : null
-    if (found) found.scrollIntoView({ block: 'center' })
-    else if (scroller.current) scroller.current.scrollTop = scroller.current.scrollHeight
-  }, [lastId, highlightId, ready])
+    if (!ready || !highlightId) return
+    document.getElementById(`message-${highlightId}`)?.scrollIntoView({ block: 'center' })
+  }, [highlightId, ready])
 
-  // Read up to the last message once it shows.
+  // The newest message shows once the thread is drawn, then each new one while the user reads the
+  // end, or sent it; someone reading older messages stays where they are.
   useEffect(() => {
-    if (!last || !conversation || conversation.unreadCount === 0) return
-    if (marked.current === last.id) return
+    if (!lastId || !ready || shown.current === lastId) return
+    const first = shown.current === null
+    shown.current = lastId
+    if (first && highlightId) return
+    if ((first || atEnd.current || lastOwn) && scroller.current) {
+      scroller.current.scrollTop = scroller.current.scrollHeight
+    }
+  }, [lastId, lastOwn, highlightId, ready])
+
+  // Read up to the last message: what was unread when the thread opened, then each message of
+  // another that the hub brings while it shows.
+  useEffect(() => {
+    if (!last || !conversation) return
+    opened.current ??= last.id
+    const arrived = last.id !== opened.current && !lastOwn
+    if ((!arrived && conversation.unreadCount === 0) || marked.current === last.id) return
     marked.current = last.id
     markRead.mutate(last.id)
-  }, [last, conversation, markRead])
+  }, [last, lastOwn, conversation, markRead])
 
   if (details.isError) {
     return isApiError(details.error, 404) ? (
@@ -142,7 +192,15 @@ function Conversation({
   return (
     <>
       <ThreadNotice conversation={conversation} onClosed={onClosed} />
-      <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
+      <div
+        ref={scroller}
+        onScroll={(event) => {
+          const element = event.currentTarget
+          atEnd.current =
+            element.scrollHeight - element.scrollTop - element.clientHeight < END_MARGIN_PX
+        }}
+        className="min-h-0 flex-1 overflow-y-auto px-3 py-3"
+      >
         {history.hasNextPage && (
           <div className="mb-3 flex justify-center">
             <Button
@@ -175,6 +233,7 @@ function Conversation({
             </section>
           )
         })}
+        <Typing conversation={conversation} />
       </div>
       <Composer conversationId={conversation.id} disabled={!conversation.canWrite} />
     </>
@@ -220,10 +279,16 @@ export function ThreadPanel({
   const details = useConversation(conversationId)
   const target = useProfile(conversationId ? null : to)
   const conversation = details.data
+  const counterpart = conversation?.counterpart
+  const online = useOnline(counterpart?.userId, counterpart?.online)
   const title = conversation
     ? conversation.kind === 'group'
       ? `${conversation.title} · ${t('messaging.thread.members', { count: conversation.memberCount })}`
-      : `${conversation.title} · ${t(`accountBadge.${conversation.counterpart?.accountType ?? 'student'}`)}`
+      : [
+          conversation.title,
+          t(`accountBadge.${counterpart?.accountType ?? 'student'}`),
+          ...(online ? [t('messaging.thread.online')] : []),
+        ].join(' · ')
     : target.data
       ? t('messaging.thread.newTo', { name: target.data.displayName })
       : t('panels.thread')

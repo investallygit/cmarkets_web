@@ -2,7 +2,7 @@
 
 Front end of CMarket, built from `CMarket-developer-spec-EN.pdf`: the client terminal and the
 back-office of the Data admin and of the Admin. This prototype runs without a back end: a mock
-layer answers the REST API and simulates the real-time hub with the sample data of the mockups.
+layer answers the REST API and simulates the real-time hubs with the sample data of the mockups.
 
 - [Introduction](#introduction): what the prototype does, its stack, the status of each screen
 - [Installation](#installation): run it, log in, the scripts
@@ -58,7 +58,7 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
 | Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
 | 10 · Professional directory (NET), public profile page                    | Done; 1,163 profiles listed, the mockup's search finds 64     |
-| 11 · Messaging (MSG)                                                      | Done over REST; the hub `/hubs/chat` is ROADMAP step 17       |
+| 11 · Messaging (MSG)                                                      | Done; the mock's people read, type and answer in real time    |
 | 12 · My profile, visibility and contact (NET ME)                          | Done; the mock applies the contact rules of section 15        |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
@@ -159,18 +159,19 @@ ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
 
 ```
 src/mocks/
-  index.ts      starts MSW and the simulated hub
+  index.ts      starts MSW and the simulated hubs
   handlers/     the REST routes, one file per part of the API; admin/ and portfolios/ hold
                 one file per screen or part
-  db.ts         the in-memory state the routes and the hub share; its parts in db/ (storage,
+  db.ts         the in-memory state the routes and the hubs share; its parts in db/ (storage,
                 market, accounts, session, platform, live, workspace, portfolios, research,
-                network, messaging)
+                network, messaging, chat)
   imports.ts    the Data admin's uploads and what they publish; its parts in imports/ (store,
                 checks, seeds, the upload cycle, coverage, corrections)
   fixtures/     the sample data of the mockups
   lib/          pure logic tested against the spec: bond math (14.1), the portfolio engine
                 (14.2, 14.3, its parts in portfolioEngine/), the upload checks (11)...
-  realtime.ts   the simulated hub
+  realtime.ts   the simulated market hub
+  chat.ts       the simulated chat hub: who is online, who reads, types and answers
   admin.ts, content.ts, payments.ts, publications.ts
                 what several routes share: the Admin's accounts and payouts, the news and
                 documents entered, the payments, the publication of research
@@ -202,14 +203,18 @@ changes, which also ends the prototype's session once.
   Each entity wraps its endpoints in TanStack Query hooks (`entities/*/api/queries.ts`).
   DTOs live in `shared/api/contracts`; they mirror spec section 10 and will be replaced by the
   client generated from the OpenAPI contract (Orval) once `CMarket.Api` exists.
-- **Real time**: `shared/realtime` defines a `RealtimeClient` interface with a SignalR
-  implementation (`/hubs/market`) and ref-counted symbol subscriptions. Each entity handles the
-  hub events it owns (`use*RealtimeSync`, mounted once by `app/layouts/AppShell.tsx`). Live
+- **Real time**: `shared/realtime` defines two hub clients with their SignalR implementations:
+  `RealtimeClient` for `/hubs/market`, with ref-counted symbol subscriptions, and `ChatClient`
+  for `/hubs/chat`, with the conversations joined while their thread shows. Each entity handles
+  the hub events it owns (`use*RealtimeSync`, mounted once by `app/layouts/AppShell.tsx`). Live
   quotes go into a Zustand store (`entities/quote/model`), so a tick re-renders one table cell,
   which flashes for 400 ms. The order book and the latest trades have no hub event: they are
   polled every 5 seconds. `ImportStatusChanged` moves an upload through its checks, and
   `DataPublished` (a file published or rolled back, a price corrected) refreshes the quotes,
-  histories, indices, auctions and curves the open screens show.
+  histories, indices, auctions and curves the open screens show. The chat hub connects for the
+  users who write to others: a new message joins its thread and the count on MSG in the menu,
+  "typing…" and the online status go to a store of `entities/conversation`, and a new
+  connection reads the conversations again.
 - **Layouts**: each page declares its panels, their default grid and their names
   (`pages/*/config`, `ScreenPanel`); `features/workspace-layout` saves the user's layout through
   `GET/PUT /me/layouts/{screen}`: the places in the grid, the hidden panels, their order stacked
@@ -225,8 +230,8 @@ changes, which also ends the prototype's session once.
   memory only; the refresh token (7 days) is an HttpOnly cookie that `POST /auth/refresh` trades
   for a new access token, at start-up and when a token runs out. A 401 renews the token once and
   sends the request again; several requests share one renewal; a refused renewal ends the session
-  and the login page opens on `?next=` the page asked for. The hub connects with the session and
-  takes the same token. The tabs of a browser log in and out together (`BroadcastChannel`), and
+  and the login page opens on `?next=` the page asked for. The hubs connect with the session and
+  take the same token. The tabs of a browser log in and out together (`BroadcastChannel`), and
   30 minutes without an action in any of them log the user out after a one-minute warning. A
   server out of reach is an `ApiError` in the user's language (`fetchApi`), not the browser's
   "Failed to fetch"; `?next=` keeps a path of this site only, as the browser's URL parser reads
@@ -336,8 +341,8 @@ goes in both folders and is added to both `en.ts` and `fr.ts`.
 ### Connecting the real back end
 
 1. Set `VITE_USE_MOCKS=false` in `.env.local`.
-2. Point `DEV_PROXY_TARGET` at `CMarket.Api` for local development, or set `VITE_API_BASE_URL`
-   and `VITE_REALTIME_HUB_URL` for a deployed API.
+2. Point `DEV_PROXY_TARGET` at `CMarket.Api` for local development, or set `VITE_API_BASE_URL`,
+   `VITE_REALTIME_HUB_URL` and `VITE_CHAT_HUB_URL` for a deployed API.
 3. Have `POST /auth/otp/verify` and `/auth/refresh` set the refresh token as an `HttpOnly`,
    `Secure` cookie on the `/auth` path. The login calls are sent with credentials; an API on
    another origin needs CORS with credentials for this site, and `SameSite=None` on the cookie.

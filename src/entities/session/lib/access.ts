@@ -28,6 +28,18 @@ export function lockedModule(
   return screen.module && !user.modules.includes(screen.module) ? screen.module : null
 }
 
+/**
+ * The user writes to others and others to them: messaging, with a status an Admin approved when
+ * the type needs one (spec section 12). Waiting, MSG says it opens once approved.
+ */
+export function mayWriteMessages(user: Pick<MeDto, 'permissions' | 'verificationStatus'>): boolean {
+  return (
+    user.permissions.includes('messages:write') &&
+    user.verificationStatus !== 'pending' &&
+    user.verificationStatus !== 'rejected'
+  )
+}
+
 const HOME_SCREEN: Record<AccountType, string> = {
   student: 'MKT',
   analyst: 'MKT',

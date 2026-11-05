@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CONVERSATION_FILTERS, useConversations } from '@/entities/conversation'
-import { useCurrentUser } from '@/entities/session'
+import { mayWriteMessages, useCurrentUser } from '@/entities/session'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
 import { PanelEmpty } from '@/shared/ui/StatusViews'
@@ -19,7 +19,8 @@ export function MessagesPage() {
   const user = useCurrentUser()
   const [params, update] = useSearchParamsUpdate()
   const patch = (values: Record<string, string>) => update((current) => withParams(current, values))
-  const all = useConversations('all')
+  const writes = mayWriteMessages(user)
+  const all = useConversations('all', { enabled: writes })
   const filter = CONVERSATION_FILTERS.find((value) => value === params.get('filter')) ?? 'all'
   const to = params.get('to')
   const existing = to
@@ -33,9 +34,8 @@ export function MessagesPage() {
     }
   }, [existingId, update])
 
-  if (user.verificationStatus === 'pending' || user.verificationStatus === 'rejected') {
-    return <PanelEmpty message={t('messaging.awaitingApproval')} />
-  }
+  // The route asks for messaging: what remains is a status waiting for an Admin.
+  if (!writes) return <PanelEmpty message={t('messaging.awaitingApproval')} />
 
   const newTo = to && all.data && !existing ? to : null
   const conversationId = params.get('c') ?? (to ? null : (all.data?.at(0)?.id ?? null))

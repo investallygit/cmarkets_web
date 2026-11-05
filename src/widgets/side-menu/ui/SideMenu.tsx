@@ -2,13 +2,15 @@ import { clsx } from 'clsx'
 import { Lock, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router'
-import { canAccessScreen, lockedModule, useCurrentUser } from '@/entities/session'
+import { UnreadBadge } from '@/entities/conversation'
+import { canAccessScreen, lockedModule, mayWriteMessages, useCurrentUser } from '@/entities/session'
 import { SCREENS } from '@/shared/routes/screens'
 import { useUiPreferences } from '../model/uiPreferences'
 
 /**
  * Left menu (56 px collapsed, 200 px expanded); its items depend on the account type. A screen
- * outside the user's plan shows a lock and opens on the plans.
+ * outside the user's plan shows a lock and opens on the plans. MSG counts the unread messages and
+ * the requests, except on MSG itself, whose tabs count them.
  */
 export function SideMenu() {
   const { t } = useTranslation()
@@ -42,7 +44,7 @@ export function SideMenu() {
                 }
                 className={({ isActive }) =>
                   clsx(
-                    'flex border-l-[3px]',
+                    'relative flex border-l-[3px]',
                     isActive
                       ? 'border-accent-amber bg-selected'
                       : 'border-transparent hover:bg-panel-header',
@@ -74,6 +76,12 @@ export function SideMenu() {
                     >
                       {t(screen.menuKey)}
                     </span>
+                    {screen.id === 'MSG' && !isActive && (
+                      <UnreadBadge
+                        enabled={mayWriteMessages(user)}
+                        className={expanded ? 'ml-auto' : 'absolute top-0.5 right-0.5'}
+                      />
+                    )}
                   </>
                 )}
               </NavLink>

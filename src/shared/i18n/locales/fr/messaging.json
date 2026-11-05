@@ -1,6 +1,8 @@
 {
   "messaging": {
     "awaitingApproval": "La messagerie s'ouvre quand un administrateur a approuvé votre statut.",
+    "unreadTotal_one": "{{count}} message ou demande non lu",
+    "unreadTotal_other": "{{count}} messages ou demandes non lus",
     "conversations": {
       "search": "Rechercher dans les messages",
       "new": "Nouveau",
@@ -27,6 +29,7 @@
       "deleted": "message supprimé",
       "group": "Groupe",
       "muted": "Notifications coupées",
+      "online": "en ligne",
       "unread_one": "{{count}} message non lu",
       "unread_other": "{{count}} messages non lus",
       "found_one": "{{count}} message trouvé",
@@ -37,6 +40,7 @@
       "select": "Choisissez une conversation.",
       "members_one": "{{count}} membre",
       "members_other": "{{count}} membres",
+      "online": "En ligne",
       "today": "Aujourd'hui",
       "yesterday": "Hier",
       "earlier": "Charger les messages précédents",
@@ -64,7 +68,10 @@
       "newRequest": "Votre premier message est une demande de contact : {{name}} y répond avant que vous puissiez écrire à nouveau.",
       "newClosed": "{{name}} n'accepte pas les messages de votre type de compte.",
       "notFound": "Cette conversation n'existe plus, ou vous l'avez quittée.",
-      "editLabel": "Modifier le message"
+      "editLabel": "Modifier le message",
+      "typingOne": "{{name}} écrit…",
+      "typingTwo": "{{first}} et {{second}} écrivent…",
+      "typingMany": "Plusieurs personnes écrivent…"
     },
     "composer": {
       "label": "Message",
@@ -170,6 +177,9 @@
       "hint": "Elles ne voient plus votre profil et ne peuvent plus vous écrire.",
       "none": "Vous n'avez bloqué personne.",
       "since": "depuis le {{date}}"
+    },
+    "realtime": {
+      "request": "Nouvelle demande de contact ({{type}}) : voir Demandes dans MSG."
     }
   }
 }

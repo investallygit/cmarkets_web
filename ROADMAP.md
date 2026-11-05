@@ -35,7 +35,7 @@ relative: S < M < L < XL.
 | 14   | NET ME: professional profile, visibility and contact rules      | Done   |
 | 15   | NET: professional directory, public profile page                | Done   |
 | 16   | MSG: conversations, contact requests, files, shared objects     | Done   |
-| 17   | MSG in real time: the `/hubs/chat` hub                          | To do  |
+| 17   | MSG in real time: the `/hubs/chat` hub                          | Done   |
 | 18   | Admin: reported profiles and conversations, directory settings  | To do  |
 | 19   | Second version done: README, accessibility, every flow          | To do  |
 
@@ -209,8 +209,10 @@ come in the README and the open questions of the second version.
   nobody writes to them (`lib/contact.ts`); a handle is unique among all the accounts; the
   reports are kept for MOD (`profileReportStore`), one per reporter and profile. `SEED_VERSION`
   raised.
-- **Still to do**: the conversation that Contact opens, the blocks and a hidden profile open to
-  its conversations (step 16); online status (step 17); the reported profiles in MOD (step 18).
+- **Since**: Contact opens the conversation, the blocks, a hidden profile open to its
+  conversations (step 16); the online status, shown in MSG as the mockups draw it, and not on
+  the cards (step 17).
+- **Still to do**: the reported profiles in MOD (step 18).
 
 ### Step 16 · MSG · Messaging (screen 11) (XL): done
 
@@ -249,16 +251,37 @@ come in the README and the open questions of the second version.
   2 seconds, one named "eicar" holds a virus; the bytes stay in the tab until a reload, the files
   of the mockup are made when downloaded. The reports of conversations are kept for MOD.
   `SEED_VERSION` raised.
-- **Still to do**: the hub (step 17): new messages of others, typing, presence and the unread count
-  on MSG without a reload; the reported conversations in MOD (step 18).
+- **Since**: the hub (step 17).
+- **Still to do**: the reported conversations in MOD (step 18).
 
-### Step 17 · MSG in real time (M): to do
+### Step 17 · MSG in real time (M): done
 
-- The `/hubs/chat` hub next to `/hubs/market`: JoinConversation, LeaveConversation and Typing
-  sent; new, edited and deleted messages, read receipts, typing, presence (when the user shows it)
-  and contact requests received, handled once by the app shell; the unread count on MSG in the
-  menu.
-- **Mock**: the hub simulated, K. Atangana typing then answering as on screen 11.
+- **Built**: the `/hubs/chat` hub beside `/hubs/market` (`shared/realtime`): `ChatClient` and its
+  SignalR implementation, which shares the connection code of the market's. A thread joins its
+  conversation while it shows (JoinConversation and LeaveConversation, counted like the
+  securities subscribed and sent again after a reconnection); the composer sends Typing every 2.5
+  seconds at most while the user writes. `useChatRealtimeSync` (`entities/conversation`),
+  mounted once by the app shell, connects the hub for the users who may write. MessageReceived
+  adds the message to its thread and refreshes the rows; an open thread reads it first.
+  MessageUpdated, MessageDeleted and ReadReceipt refresh the thread and its ✓✓.
+  TypingIndicator shows "K. Atangana is typing…" under the last message, until 4 seconds after
+  the last one or their message. PresenceChanged keeps the green dots of the rows and "· ONLINE"
+  in the thread's title. ContactRequestReceived shows a toast. A new connection reads the
+  conversations again, as it may have missed events.
+- **Thread**: a new message scrolls into view when the user reads the end of the thread, or sent
+  it; someone reading older messages stays where they are. "typing…" is a polite live region;
+  screen readers hear "online" in the row, where the dot shows.
+- **Menu**: MSG counts the unread messages and the requests waiting, muted conversations aside,
+  on every screen but MSG, whose tabs count them (`UnreadBadge`).
+- **Contract**: `online` on the members of a conversation, since PresenceChanged only tells the
+  changes; null when the member hides it, or across a block.
+- **Mock** (`src/mocks/chat.ts`): K. Atangana and M. Ndong online, the green dots of the mockup.
+  As on screen 11, K. Atangana types then answers when P. Owona opens the thread; M. Ndong reads
+  P. Owona's message (✓✓), types and answers; R. Tamba comes online to answer the Analyst, and
+  leaves a minute later. Someone online without an answer scripted only reads; each answer comes
+  once, and a block stops it. Half a minute after login, S. Mvondo's contact request reaches the
+  Analyst. Who is online is kept by the tab: each load starts from the mockup. Tested with fake
+  timers (`chat.test.ts`); the client side with a fake hub (`useChatRealtimeSync.test.tsx`).
 
 ### Step 18 · Admin: directory and messaging (M): to do
 
@@ -1109,6 +1132,17 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   of a conversation report are spam, harassment, scam or market manipulation, inappropriate
   content and other. The mockup's conversation with D. Moussavou is left out: the status of
   D. Moussavou waits for an Admin (screen 9), and a client waiting has no messaging.
+- **Messaging in real time**: what does JoinConversation change? The prototype sends "typing…"
+  to the connections that joined the conversation only, and the other events to every member.
+  MessageUpdated and MessageDeleted carry no message: the client reads the thread again after an
+  edit and marks a deletion in place. The online status needs a first value besides
+  PresenceChanged: the prototype adds `online` to the members of `GET /conversations` and
+  `/conversations/{id}`. Who receives PresenceChanged (the prototype: the people the user has a
+  conversation with), and does someone who hides their status still see the others' (the
+  prototype: yes)? Does the hub send the user's own messages and reads to their other tabs (the
+  client takes them)? ContactRequestReceived has no name: the toast gives the sender's account
+  type. The count on MSG in the menu is the prototype's (the mockups draw none) and has no
+  endpoint: it reads `GET /conversations`.
 - **Directory and messaging settings**: the default contact rules, the daily limits of new
   conversations, the report threshold and the list of specialties are the Admin's, without an
   endpoint.

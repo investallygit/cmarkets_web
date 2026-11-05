@@ -1,10 +1,11 @@
 import { HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr'
 import { getAccessToken } from '@/shared/api'
-import type { ConnectionState, RealtimeClient } from './client'
+import type { ChatClient, ConnectionState, RealtimeClient } from './client'
 
 const RETRY_DELAYS_MS = [2_000, 5_000, 10_000, 30_000]
 
-export function createSignalRRealtimeClient(hubUrl: string): RealtimeClient {
+/** A SignalR connection to one hub, retried until it is stopped, with the state the UI shows. */
+function connectHub(hubUrl: string) {
   const connection = new HubConnectionBuilder()
     // The hub authenticates with the access token too, renewed when it runs out.
     .withUrl(hubUrl, { accessTokenFactory: async () => (await getAccessToken()) ?? '' })
@@ -47,12 +48,6 @@ export function createSignalRRealtimeClient(hubUrl: string): RealtimeClient {
     if (!stopped) void connect()
   })
 
-  async function invoke(method: 'Subscribe' | 'Unsubscribe', symbols: string[]) {
-    // While disconnected there is nothing to do: subscriptions are resent on connect.
-    if (symbols.length === 0 || connection.state !== HubConnectionState.Connected) return
-    await connection.invoke(method, symbols)
-  }
-
   return {
     get state() {
       return state
@@ -70,15 +65,53 @@ export function createSignalRRealtimeClient(hubUrl: string): RealtimeClient {
       })
       await stopping
     },
-    subscribe: (symbols) => invoke('Subscribe', symbols),
-    unsubscribe: (symbols) => invoke('Unsubscribe', symbols),
-    on(event, handler) {
+    /** While disconnected there is nothing to do: the callers send it again on connect. */
+    async invoke(method: string, ...args: unknown[]) {
+      if (connection.state !== HubConnectionState.Connected) return
+      await connection.invoke(method, ...args)
+    },
+    on<T>(event: string, handler: (payload: T) => void) {
       connection.on(event, handler)
       return () => connection.off(event, handler)
     },
-    onStateChange(listener) {
+    onStateChange(listener: (state: ConnectionState) => void) {
       stateListeners.add(listener)
       return () => stateListeners.delete(listener)
     },
+  }
+}
+
+export function createSignalRRealtimeClient(hubUrl: string): RealtimeClient {
+  const hub = connectHub(hubUrl)
+  return {
+    get state() {
+      return hub.state
+    },
+    start: hub.start,
+    stop: hub.stop,
+    subscribe: async (symbols) => {
+      if (symbols.length > 0) await hub.invoke('Subscribe', symbols)
+    },
+    unsubscribe: async (symbols) => {
+      if (symbols.length > 0) await hub.invoke('Unsubscribe', symbols)
+    },
+    on: (event, handler) => hub.on(event, handler),
+    onStateChange: hub.onStateChange,
+  }
+}
+
+export function createSignalRChatClient(hubUrl: string): ChatClient {
+  const hub = connectHub(hubUrl)
+  return {
+    get state() {
+      return hub.state
+    },
+    start: hub.start,
+    stop: hub.stop,
+    joinConversation: (conversationId) => hub.invoke('JoinConversation', conversationId),
+    leaveConversation: (conversationId) => hub.invoke('LeaveConversation', conversationId),
+    typing: (conversationId) => hub.invoke('Typing', conversationId),
+    on: (event, handler) => hub.on(event, handler),
+    onStateChange: hub.onStateChange,
   }
 }

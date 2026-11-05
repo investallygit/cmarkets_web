@@ -16,7 +16,7 @@ export {
   useMe,
   useUpdateProfile,
 } from './api/queries'
-export { canAccessScreen, homePathFor, lockedModule } from './lib/access'
+export { canAccessScreen, homePathFor, lockedModule, mayWriteMessages } from './lib/access'
 export { audienceOf, initialOf } from './lib/accountTypes'
 export {
   isEmailAddress,

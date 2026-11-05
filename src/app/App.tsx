@@ -2,10 +2,10 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { RouterProvider } from 'react-router/dom'
 import { createQueryClient, onSessionChange } from '@/shared/api'
-import { RealtimeProvider, type RealtimeClient } from '@/shared/realtime'
+import { RealtimeProvider, type ChatClient, type RealtimeClient } from '@/shared/realtime'
 import { router } from './routes/router'
 
-export function App({ realtime }: { realtime: RealtimeClient }) {
+export function App({ realtime, chat }: { realtime: RealtimeClient; chat: ChatClient }) {
   const [queryClient] = useState(createQueryClient)
 
   // Nothing of a user stays in memory once their session ends.
@@ -19,7 +19,7 @@ export function App({ realtime }: { realtime: RealtimeClient }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RealtimeProvider client={realtime}>
+      <RealtimeProvider client={realtime} chat={chat}>
         <RouterProvider router={router} />
       </RealtimeProvider>
     </QueryClientProvider>

@@ -1,12 +1,24 @@
 import { expect, test, type Page } from '@playwright/test'
 
 // MSG, the messaging of screen 11 (step 16 of ROADMAP.md): the conversations of the demo
-// Analyst, K. Atangana, their requests, files, shared objects, groups and blocks.
+// Analyst, K. Atangana, their requests, files, shared objects, groups and blocks. Step 17: the
+// /hubs/chat hub, whose simulated people are online, read, type and answer.
 
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title, exact: true }) })
 
 const composer = (page: Page) => page.getByRole('textbox', { name: 'Message' })
+
+const msgLink = (page: Page) =>
+  page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /MSG/ })
+
+/** The prototype's account switch, from the Analyst's badge, reloads the app. */
+async function switchAccount(page: Page, account: string, badge: RegExp) {
+  await page.goto('/mkt')
+  await page.getByRole('button', { name: /analyst/i }).click()
+  await page.getByRole('menuitem', { name: account, exact: true }).click()
+  await expect(page.getByRole('button', { name: badge })).toBeVisible()
+}
 
 test('the Analyst answers P. Owona, shares a security, edits then deletes a message', async ({
   page,
@@ -79,7 +91,7 @@ test('a contact request is accepted, then answered; unread messages are read', a
   // Opening R. Tamba's conversation reads it.
   await conversations.getByRole('button', { name: 'All', exact: true }).click()
   await conversations.getByRole('button', { name: /R\. Tamba/ }).click()
-  await expect(panel(page, 'R. Tamba · Journalist')).toContainText('five minutes on the phone')
+  await expect(panel(page, /^R\. Tamba · Journalist/)).toContainText('five minutes on the phone')
   await expect(conversations.getByRole('button', { name: 'Unread', exact: true })).toBeVisible()
 })
 
@@ -118,7 +130,7 @@ test('Contact in NET opens a request to a profile closed to direct messages', as
 
 test('a file is scanned before it can be downloaded, and a virus is blocked', async ({ page }) => {
   await page.goto('/msg?c=conversation-tamba-atangana')
-  const thread = panel(page, 'R. Tamba · Journalist')
+  const thread = panel(page, /^R\. Tamba · Journalist/)
   await page.locator('input[type=file]').setInputFiles([
     {
       name: 'cameroon-curve.csv',
@@ -169,4 +181,81 @@ test('a group is created from New, and a block closes a conversation', async ({ 
   await expect(blocked).toContainText('P. Owona')
   await blocked.getByRole('button', { name: 'Unblock' }).click()
   await expect(blocked.getByText('You blocked nobody.')).toBeVisible()
+})
+
+test('in real time, K. Atangana types then answers P. Owona, and M. Ndong reads then answers', async ({
+  page,
+}) => {
+  await switchAccount(page, 'Portfolio manager', /manager/i)
+  // Away from MSG, the menu counts the unread messages and the request: 2 + 1 + 1.
+  await expect(msgLink(page)).toContainText('4 unread messages or requests')
+  await msgLink(page).click()
+
+  // Screen 11: online, "typing…", then the answer, read in the open thread.
+  const thread = panel(page, 'K. Atangana · Analyst · Online')
+  await expect(thread.getByRole('status')).toHaveText('K. Atangana is typing…')
+  await expect(thread.getByText("It will include Wednesday's 5-year OTA auction")).toBeVisible({
+    timeout: 10_000,
+  })
+  await expect(thread.getByRole('status')).toHaveText('')
+  const conversations = panel(page, 'Conversations')
+  const atangana = conversations.getByRole('button', { name: /^K\. Atangana online/ })
+  await expect(atangana).toContainText("It will include Wednesday's")
+  await expect(atangana.getByRole('img', { name: /unread/ })).toHaveCount(0)
+
+  // M. Ndong, online too, reads the question (✓✓), types and answers.
+  await conversations.getByRole('button', { name: /^M\. Ndong online/ }).click()
+  const ndong = panel(page, 'M. Ndong · Analyst · Online')
+  await expect(ndong).toContainText("Gabon's budget assumes $70 a barrel")
+  await composer(page).fill('Does the budget include the new oil fields?')
+  await composer(page).press('Enter')
+  const question = ndong.getByRole('listitem').filter({ hasText: 'the new oil fields' })
+  await expect(question.getByRole('img', { name: 'Read' })).toBeVisible({ timeout: 10_000 })
+  await expect(ndong.getByRole('status')).toHaveText('M. Ndong is typing…')
+  await expect(ndong.getByText('after the budget debate in parliament')).toBeVisible({
+    timeout: 10_000,
+  })
+})
+
+test('away from MSG, the menu counts the answer of R. Tamba, who came online for it', async ({
+  page,
+}) => {
+  await page.goto('/msg?c=conversation-tamba-atangana')
+  const conversations = panel(page, 'Conversations')
+  // Opening the thread reads it: B. Eyinga's request is all that waits.
+  await expect(conversations.getByRole('button', { name: 'Unread', exact: true })).toBeVisible()
+  await composer(page).fill('Yes, tomorrow at 10 suits me.')
+  await composer(page).press('Enter')
+  await expect(panel(page, /^R\. Tamba · Journalist/)).toContainText('tomorrow at 10 suits me')
+
+  await page
+    .getByRole('navigation', { name: 'Main menu' })
+    .getByRole('link', { name: /MKT/ })
+    .click()
+  await expect(msgLink(page)).toContainText('1 unread message or request')
+  await expect(msgLink(page)).toContainText('2 unread messages or requests', { timeout: 10_000 })
+  await msgLink(page).click()
+  await expect(conversations.getByRole('button', { name: /^R\. Tamba online/ })).toContainText(
+    "Perfect, thank you. I'll call you tomorrow at 10.",
+  )
+})
+
+test('a contact request reaches the Analyst half a minute after login, wherever they are', async ({
+  page,
+}) => {
+  await page.clock.install()
+  await page.goto('/mkt')
+  // R. Tamba's unread message and B. Eyinga's request.
+  await expect(msgLink(page)).toContainText('2 unread messages or requests')
+  // The hub connects first, then the half minute passes.
+  await page.clock.fastForward('00:01')
+  await page.clock.fastForward('00:31')
+  await expect(page.getByText('New contact request (Student): see Requests in MSG.')).toBeVisible()
+  await expect(msgLink(page)).toContainText('3 unread messages or requests')
+  await msgLink(page).click()
+  const conversations = panel(page, 'Conversations')
+  await conversations.getByRole('button', { name: 'Requests (2)' }).click()
+  await expect(conversations.getByRole('button', { name: /^S\. Mvondo/ })).toContainText(
+    "Contact request: “Hello, I'm writing my master's thesis on the BVMAC.",
+  )
 })

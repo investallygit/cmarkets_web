@@ -35,6 +35,44 @@ const EYINGA = 'user-eyinga'
 const MINUTE = 60_000
 const DAY = 24 * 60 * MINUTE
 
+/** Online when the prototype loads: the green dots of the screen 11 mockup. */
+export const ONLINE_AT_START = [ATANGANA, NDONG]
+
+/**
+ * What the people of the mockup answer through the simulated hub, once each: when the other
+ * member opens the thread, as K. Atangana types then answers on screen 11, or after a message of
+ * theirs. Someone offline comes online to answer.
+ */
+export interface ScriptedReply {
+  /** The id of the message sent, which also marks the reply as done. */
+  id: string
+  conversationId: string
+  authorId: string
+  on: 'open' | 'answer'
+  text: string
+}
+
+// prettier-ignore
+export const SCRIPTED_REPLIES: ScriptedReply[] = [
+  { id: 'conversation-atangana-reply', conversationId: 'conversation-atangana', authorId: ATANGANA, on: 'open', text: "It will include Wednesday's 5-year OTA auction, which should confirm the steepening you expect." },
+  { id: 'conversation-tamba-atangana-reply', conversationId: 'conversation-tamba-atangana', authorId: TAMBA, on: 'answer', text: "Perfect, thank you. I'll call you tomorrow at 10." },
+  { id: 'conversation-ndong-reply', conversationId: 'conversation-ndong', authorId: NDONG, on: 'answer', text: "I'll come back to you on this after the budget debate in parliament next week." },
+]
+
+/** A contact request that reaches the user some time after login, once: ContactRequestReceived. */
+export interface ScriptedRequest {
+  /** The id of the conversation it opens. */
+  id: string
+  from: string
+  to: string
+  text: string
+}
+
+// prettier-ignore
+export const SCRIPTED_REQUESTS: ScriptedRequest[] = [
+  { id: 'conversation-mvondo-atangana', from: MVONDO, to: ATANGANA, text: "Hello, I'm writing my master's thesis on the BVMAC. Could I ask you two questions on the listed agribusiness stocks?" },
+]
+
 export const SEEDED_FILES = {
   note: 'attachment-note-dette-cmr',
   curve: 'attachment-courbe-cmr',

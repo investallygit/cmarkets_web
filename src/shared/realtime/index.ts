@@ -1,5 +1,19 @@
-export type { ConnectionState, RealtimeClient } from './client'
-export type { RealtimeEventMap, RealtimeEventName, RealtimeHandler } from './events'
+export type { ChatClient, ConnectionState, RealtimeClient } from './client'
+export type {
+  ChatEventMap,
+  ChatEventName,
+  ChatHandler,
+  RealtimeEventMap,
+  RealtimeEventName,
+  RealtimeHandler,
+} from './events'
+export {
+  useChatClient,
+  useChatConnection,
+  useChatEvent,
+  useIsJoined,
+  useJoinConversation,
+} from './chatHooks'
 export {
   useConnectionState,
   useRealtimeClient,
@@ -7,4 +21,4 @@ export {
   useSymbolSubscription,
 } from './hooks'
 export { RealtimeProvider } from './RealtimeProvider'
-export { createSignalRRealtimeClient } from './signalr'
+export { createSignalRChatClient, createSignalRRealtimeClient } from './signalr'

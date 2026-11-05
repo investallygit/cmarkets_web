@@ -37,6 +37,7 @@ import {
 import { createPdf } from '../lib/pdf'
 import { latestVersion } from '../lib/research'
 import { anyAccount } from './accounts'
+import { isOnline } from './chat'
 import { startedAt, securities } from './market'
 import { blockBetween, isClientAccount, profileOf, setConversationLookup } from './network'
 import { analystStore, publicationStore, researchMarket } from './research'
@@ -269,7 +270,8 @@ export function directConversation(userId: string, otherId: string) {
     )
 }
 
-export function memberDto(account: StoredAccount): ConversationMemberDto {
+/** A member; `presence` false when a block hides it, as it hides the profile (spec section 15). */
+export function memberDto(account: StoredAccount, presence = true): ConversationMemberDto {
   const profile = isClientAccount(account) ? profileOf(account) : null
   return {
     userId: account.id,
@@ -282,6 +284,7 @@ export function memberDto(account: StoredAccount): ConversationMemberDto {
     city: profile?.city ?? '',
     country: profile?.country ?? '',
     analystId: analystStore.read().find((analyst) => analyst.userId === account.id)?.id ?? null,
+    online: presence && profile?.privacy.show.onlineStatus ? isOnline(account.id) : null,
   }
 }
 
@@ -336,7 +339,7 @@ export function conversationSummary(
     id: conversation.id,
     kind: conversation.kind,
     title: conversation.title ?? other?.displayName ?? '',
-    counterpart: other ? memberDto(other) : null,
+    counterpart: other ? memberDto(other, blocked === null) : null,
     memberCount: activeMembers(conversation).length,
     lastMessage: last ? excerptOf(last) : null,
     // A request has a tab of its own: it does not count among the unread.
@@ -350,6 +353,7 @@ export function conversationSummary(
 export function conversationDto(conversation: StoredConversation, userId: string): ConversationDto {
   const summary = conversationSummary(conversation, userId)
   const otherId = counterpartOf(conversation, userId)
+  const blocked = otherId ? blockBetween(userId, otherId) : null
   const attachmentIds = new Set(
     messagesOf(conversation.id)
       .filter((message) => message.deletedAt === null)
@@ -367,7 +371,7 @@ export function conversationDto(conversation: StoredConversation, userId: string
     )
     .flatMap((member) => {
       const account = anyAccount(member.userId)
-      return account ? [memberDto(account)] : []
+      return account ? [memberDto(account, blocked === null)] : []
     })
   const sentByUser = messagesOf(conversation.id).some((message) => message.authorId === userId)
   return {
@@ -375,7 +379,7 @@ export function conversationDto(conversation: StoredConversation, userId: string
     createdBy: conversation.createdBy,
     createdAt: conversation.createdAt,
     members,
-    blocked: otherId ? blockBetween(userId, otherId) : null,
+    blocked,
     // The sender of a request waits for the answer once the first message is sent.
     canWrite: summary.state === 'open' || (summary.state === 'requestSent' && !sentByUser),
     files,

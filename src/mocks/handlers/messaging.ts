@@ -10,6 +10,7 @@ import type {
 } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
 import {
+  announceUserMessage,
   anyAccount,
   attachmentDto,
   attachmentStore,
@@ -61,7 +62,8 @@ import { normalize } from '../lib/text'
 
 /**
  * MSG (screen 11): conversations, their messages, contact requests, groups, files and reports
- * (spec sections 10 and 15). The hub /hubs/chat comes with step 17 of the roadmap.
+ * (spec sections 10 and 15). The user's messages go to the simulated hub /hubs/chat (../chat.ts),
+ * whose people read and answer them.
  */
 
 const FILTERS: readonly ConversationFilter[] = ['all', 'unread', 'requests', 'groups']
@@ -198,6 +200,7 @@ function startConversation(body: Record<string, unknown>) {
       const added = addMessage(existing, sender.id, message)
       if ('error' in added) return added.error
       conversationStore.write(conversations)
+      announceUserMessage({ conversationId: existing.id, messageId: added.message.id })
       return HttpResponse.json(conversationDto(existing, sender.id), { status: 200 })
     }
     if (modes[0] === 'none') {
@@ -241,6 +244,7 @@ function startConversation(body: Record<string, unknown>) {
   const added = addMessage(conversation, sender.id, message)
   if ('error' in added) return added.error
   conversationStore.write([...conversations, conversation])
+  announceUserMessage({ conversationId: conversation.id, messageId: added.message.id })
   return HttpResponse.json(conversationDto(conversation, sender.id), { status: 201 })
 }
 
@@ -321,6 +325,7 @@ export const messagingHandlers = [
     const added = addMessage(conversation, userId, message)
     if ('error' in added) return added.error
     conversationStore.write(conversations)
+    announceUserMessage({ conversationId: conversation.id, messageId: added.message.id })
     return HttpResponse.json(messageDto(added.message, conversation, userId), { status: 201 })
   }),
 

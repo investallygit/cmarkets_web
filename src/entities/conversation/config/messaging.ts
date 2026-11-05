@@ -31,3 +31,10 @@ export const CONVERSATION_REPORT_REASONS: readonly ConversationReportReason[] = 
   'inappropriate',
   'other',
 ]
+
+/**
+ * The user's Typing is sent at most this often while they write; the others' "typing…" shows
+ * until this long after their last one, or their message.
+ */
+export const TYPING_NOTIFY_MS = 2_500
+export const TYPING_SHOWN_MS = 4_000

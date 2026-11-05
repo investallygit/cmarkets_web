@@ -1,4 +1,10 @@
-import type { IsoDate, IsoDateTime, MarketSessionStatus } from '@/shared/api/contracts'
+import type {
+  AccountType,
+  IsoDate,
+  IsoDateTime,
+  MarketSessionStatus,
+  MessageDto,
+} from '@/shared/api/contracts'
 
 /** Server → client messages of the /hubs/market SignalR hub (spec section 10). */
 export interface RealtimeEventMap {
@@ -22,3 +28,20 @@ export interface RealtimeEventMap {
 
 export type RealtimeEventName = keyof RealtimeEventMap
 export type RealtimeHandler<E extends RealtimeEventName> = (payload: RealtimeEventMap[E]) => void
+
+/** Server → client messages of the /hubs/chat SignalR hub of the messaging (spec section 10). */
+export interface ChatEventMap {
+  MessageReceived: { conversationId: string; message: MessageDto }
+  /** The message is read again: the payload does not carry it. */
+  MessageUpdated: { conversationId: string; messageId: string }
+  MessageDeleted: { conversationId: string; messageId: string }
+  ReadReceipt: { conversationId: string; userId: string; lastReadMessageId: string }
+  /** Sent again while the person types: the "typing…" ends a few seconds after the last one. */
+  TypingIndicator: { conversationId: string; userId: string }
+  /** Only for the people who show their online status (spec section 15). */
+  PresenceChanged: { userId: string; online: boolean }
+  ContactRequestReceived: { conversationId: string; fromUserId: string; fromType: AccountType }
+}
+
+export type ChatEventName = keyof ChatEventMap
+export type ChatHandler<E extends ChatEventName> = (payload: ChatEventMap[E]) => void

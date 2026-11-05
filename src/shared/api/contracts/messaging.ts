@@ -29,6 +29,11 @@ export interface ConversationMemberDto {
   country: string
   /** An Analyst's id in the research library, for "Their publications"; null otherwise. */
   analystId: string | null
+  /**
+   * Online now, which the hub keeps current (PresenceChanged); null when the member does not show
+   * their online status (spec section 15).
+   */
+  online: boolean | null
 }
 
 /** What the list says of the last message: "T. Bekale: the Cameroon 5-yr OTA is very...". */

@@ -109,6 +109,13 @@ export {
   type StoredProfileReport,
 } from './db/network'
 export {
+  announceUserMessage,
+  isOnline,
+  onUserMessage,
+  setOnline,
+  type UserMessageEvent,
+} from './db/chat'
+export {
   attachmentDto,
   attachmentStore,
   conversationDto,

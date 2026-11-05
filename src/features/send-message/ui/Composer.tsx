@@ -9,6 +9,7 @@ import {
   MESSAGE_MAX_LENGTH,
   useSendMessage,
   useStartConversation,
+  useTypingNotifier,
   useUploadAttachment,
 } from '@/entities/conversation'
 import { isApiError } from '@/shared/api'
@@ -60,6 +61,7 @@ export function Composer({
   const send = useSendMessage(conversationId ?? '')
   const start = useStartConversation()
   const upload = useUploadAttachment()
+  const notifyTyping = useTypingNotifier(conversationId)
   const sending = send.isPending || start.isPending
   const error = send.error ?? start.error
   const uploading = files.some((file) => !file.attachment && !file.error)
@@ -195,7 +197,11 @@ export function Composer({
         placeholder={t('messaging.composer.placeholder')}
         aria-describedby={`${inputId}-hint`}
         aria-invalid={tooLong || undefined}
-        onChange={(event) => setText(event.target.value)}
+        onChange={(event) => {
+          setText(event.target.value)
+          // The others read "typing…" (Typing on the hub).
+          if (event.target.value.trim()) notifyTyping()
+        }}
         onKeyDown={(event) => {
           if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
             event.preventDefault()

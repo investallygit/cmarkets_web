@@ -1,3 +1,4 @@
+export { useTypingNotifier, useUnreadTotal } from './api/chat'
 export {
   conversationKeys,
   messagesOf,
@@ -17,6 +18,7 @@ export {
   useStartConversation,
   useUploadAttachment,
 } from './api/queries'
+export { useChatRealtimeSync } from './api/useChatRealtimeSync'
 export {
   ATTACHMENT_EXTENSIONS,
   ATTACHMENT_MAX_BYTES,
@@ -29,4 +31,6 @@ export {
   SHARED_CHART_PERIODS,
 } from './config/messaging'
 export { byDay, relativeDay, type MessageDay } from './lib/thread'
+export { useOnline, useTypingUsers } from './model/chatState'
 export { ReadReceipt } from './ui/ReadReceipt'
+export { UnreadBadge } from './ui/UnreadBadge'

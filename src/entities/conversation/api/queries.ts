@@ -1,10 +1,4 @@
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-  type InfiniteData,
-} from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/shared/api'
 import type {
   ConversationDto,
@@ -18,6 +12,7 @@ import type {
   NewConversationDto,
   SendMessageDto,
 } from '@/shared/api/contracts'
+import type { MessagePages } from '../lib/live'
 
 export const conversationKeys = {
   all: ['conversations'] as const,
@@ -34,11 +29,15 @@ const path = (id: string, rest = '') => `/conversations/${encodeURIComponent(id)
 const SCAN_REFRESH_MS = 1_000
 
 /** GET /conversations?filter=: the rows of a tab, the latest first. */
-export function useConversations(filter: ConversationFilter = 'all') {
+export function useConversations(
+  filter: ConversationFilter = 'all',
+  { enabled = true }: { enabled?: boolean } = {},
+) {
   return useQuery({
     queryKey: conversationKeys.list(filter),
     queryFn: ({ signal }) =>
       apiClient.get<ConversationSummaryDto[]>('/conversations', { query: { filter }, signal }),
+    enabled,
   })
 }
 
@@ -52,8 +51,6 @@ export function useConversation(id: string | null) {
       query.state.data?.files.some((file) => file.status === 'scanning') ? SCAN_REFRESH_MS : false,
   })
 }
-
-type MessagePages = InfiniteData<MessagePageDto, unknown>
 
 /** GET /conversations/{id}/messages?before=&limit=50: the newest page first, then older ones. */
 export function useMessages(id: string | null) {

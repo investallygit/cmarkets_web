@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { MeDto } from '@/shared/api/contracts'
 import { SCREENS, screenById } from '@/shared/routes/screens'
-import { canAccessScreen, homePathFor, lockedModule } from './access'
+import { canAccessScreen, homePathFor, lockedModule, mayWriteMessages } from './access'
 
 type Access = Pick<MeDto, 'accountType' | 'permissions'>
 
@@ -69,5 +69,19 @@ describe('subscription modules (spec section 6)', () => {
     expect(lockedModule(user, screenById('PUB'))).toBeNull()
     expect(lockedModule(user, screenById('CFG'))).toBeNull()
     expect(lockedModule(user, screenById('MKT'))).toBe('monitoring')
+  })
+})
+
+describe('messaging (spec sections 12 and 15)', () => {
+  const writer = { permissions: ['messages:write' as const], verificationStatus: null }
+
+  it('opens to the clients who write, once an Admin approved their status if they need one', () => {
+    expect(mayWriteMessages(writer)).toBe(true)
+    expect(mayWriteMessages({ ...writer, verificationStatus: 'approved' })).toBe(true)
+    expect(mayWriteMessages({ ...writer, verificationStatus: 'pending' })).toBe(false)
+    expect(mayWriteMessages({ ...writer, verificationStatus: 'rejected' })).toBe(false)
+    expect(mayWriteMessages({ permissions: ['users:manage'], verificationStatus: null })).toBe(
+      false,
+    )
   })
 })

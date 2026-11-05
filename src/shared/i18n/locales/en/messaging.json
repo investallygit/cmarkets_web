@@ -1,6 +1,8 @@
 {
   "messaging": {
     "awaitingApproval": "Messaging opens once an Admin approves your status.",
+    "unreadTotal_one": "{{count}} unread message or request",
+    "unreadTotal_other": "{{count}} unread messages or requests",
     "conversations": {
       "search": "Search messages",
       "new": "New",
@@ -27,6 +29,7 @@
       "deleted": "message deleted",
       "group": "Group",
       "muted": "Notifications muted",
+      "online": "online",
       "unread_one": "{{count}} unread message",
       "unread_other": "{{count}} unread messages",
       "found_one": "{{count}} message found",
@@ -37,6 +40,7 @@
       "select": "Choose a conversation.",
       "members_one": "{{count}} member",
       "members_other": "{{count}} members",
+      "online": "Online",
       "today": "Today",
       "yesterday": "Yesterday",
       "earlier": "Load earlier messages",
@@ -64,7 +68,10 @@
       "newRequest": "Your first message is a contact request: {{name}} answers it before you can write again.",
       "newClosed": "{{name}} does not take messages from your account type.",
       "notFound": "This conversation no longer exists, or you left it.",
-      "editLabel": "Edit the message"
+      "editLabel": "Edit the message",
+      "typingOne": "{{name}} is typing…",
+      "typingTwo": "{{first}} and {{second}} are typing…",
+      "typingMany": "Several people are typing…"
     },
     "composer": {
       "label": "Message",
@@ -170,6 +177,9 @@
       "hint": "They no longer see your profile and cannot write to you.",
       "none": "You blocked nobody.",
       "since": "since {{date}}"
+    },
+    "realtime": {
+      "request": "New contact request ({{type}}): see Requests in MSG."
     }
   }
 }

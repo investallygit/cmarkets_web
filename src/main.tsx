@@ -12,28 +12,37 @@ import { App } from '@/app/App'
 import { FullScreenStatus } from '@/app/layouts/FullScreenStatus'
 import { onSessionChange } from '@/shared/api'
 import { env } from '@/shared/config/env'
-import { createSignalRRealtimeClient, type RealtimeClient } from '@/shared/realtime'
+import {
+  createSignalRChatClient,
+  createSignalRRealtimeClient,
+  type ChatClient,
+  type RealtimeClient,
+} from '@/shared/realtime'
 
 // Composition root: the only place that knows whether the back end is real or mocked.
-async function createRealtimeClient(): Promise<RealtimeClient> {
+async function createHubs(): Promise<{ market: RealtimeClient; chat: ChatClient }> {
   if (env.useMocks) {
     const { startMockBackend } = await import('@/mocks')
     return startMockBackend()
   }
-  return createSignalRRealtimeClient(env.realtimeHubUrl)
+  return {
+    market: createSignalRRealtimeClient(env.realtimeHubUrl),
+    chat: createSignalRChatClient(env.chatHubUrl),
+  }
 }
 
 async function bootstrap() {
-  const realtime = await createRealtimeClient()
-  // The hub serves logged-in users only: it connects with the session and closes with it.
+  const { market, chat } = await createHubs()
+  // The hubs serve logged-in users only: the market's connects with the session and closes with
+  // it; the app shell opens the chat's for the users who write to others.
   onSessionChange(({ status }) => {
-    if (status === 'authenticated') void realtime.start()
-    else void realtime.stop()
+    if (status === 'authenticated') void market.start()
+    else void market.stop()
   })
 
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
-      <App realtime={realtime} />
+      <App realtime={market} chat={chat} />
     </StrictMode>,
   )
 }

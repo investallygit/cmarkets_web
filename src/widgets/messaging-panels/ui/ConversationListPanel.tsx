@@ -7,6 +7,7 @@ import {
   relativeDay,
   useConversations,
   useMessageSearch,
+  useOnline,
 } from '@/entities/conversation'
 import { AccountTypeBadge, initialsOf, ProfileAvatar } from '@/entities/profile'
 import { useCurrentUser } from '@/entities/session'
@@ -90,6 +91,7 @@ function Row({
   const { t } = useTranslation()
   const when = useWhen()
   const unread = row.unreadCount > 0
+  const online = useOnline(row.counterpart?.userId, row.counterpart?.online)
   return (
     <li>
       <button
@@ -107,6 +109,7 @@ function Row({
             type={row.counterpart.accountType}
             photoUrl={row.counterpart.photoUrl}
             size="sm"
+            online={online}
           />
         ) : (
           <span
@@ -121,6 +124,7 @@ function Row({
             <span className={clsx('truncate font-sans text-label', unread && 'font-semibold')}>
               {row.title}
             </span>
+            {online && <span className="sr-only">{t('messaging.conversations.online')}</span>}
             {row.counterpart ? (
               <AccountTypeBadge type={row.counterpart.accountType} />
             ) : (
