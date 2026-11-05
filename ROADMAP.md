@@ -36,7 +36,7 @@ relative: S < M < L < XL.
 | 15   | NET: professional directory, public profile page                | Done   |
 | 16   | MSG: conversations, contact requests, files, shared objects     | Done   |
 | 17   | MSG in real time: the `/hubs/chat` hub                          | Done   |
-| 18   | Admin: reported profiles and conversations, directory settings  | To do  |
+| 18   | Admin: reported profiles and conversations, directory settings  | Done   |
 | 19   | Second version done: README, accessibility, every flow          | To do  |
 
 ## Second version of the spec
@@ -211,8 +211,7 @@ come in the README and the open questions of the second version.
   raised.
 - **Since**: Contact opens the conversation, the blocks, a hidden profile open to its
   conversations (step 16); the online status, shown in MSG as the mockups draw it, and not on
-  the cards (step 17).
-- **Still to do**: the reported profiles in MOD (step 18).
+  the cards (step 17); the reported profiles in MOD, the specialties in ADMCFG (step 18).
 
 ### Step 16 · MSG · Messaging (screen 11) (XL): done
 
@@ -251,8 +250,8 @@ come in the README and the open questions of the second version.
   2 seconds, one named "eicar" holds a virus; the bytes stay in the tab until a reload, the files
   of the mockup are made when downloaded. The reports of conversations are kept for MOD.
   `SEED_VERSION` raised.
-- **Since**: the hub (step 17).
-- **Still to do**: the reported conversations in MOD (step 18).
+- **Since**: the hub (step 17); the reported conversations in MOD, the defaults and daily
+  limits in ADMCFG (step 18).
 
 ### Step 17 · MSG in real time (M): done
 
@@ -283,13 +282,38 @@ come in the README and the open questions of the second version.
   Analyst. Who is online is kept by the tab: each load starts from the mockup. Tested with fake
   timers (`chat.test.ts`); the client side with a fake hub (`useChatRealtimeSync.test.tsx`).
 
-### Step 18 · Admin: directory and messaging (M): to do
+### Step 18 · Admin: directory and messaging (M): done
 
-- MOD: the reported profiles and conversations (`/admin/reports?type=`); reading a reported
-  conversation (`/admin/conversations/{id}`) writes to the audit log; an account past three
-  reports.
-- ADMCFG: the default contact rules, the daily limits of new conversations, the report threshold
-  and the list of specialties, which have no endpoint in the spec.
+- **MOD**: below the moderation queue of screen 9, which keeps its publications as the mockup
+  draws them, "Reported profiles and conversations" (`GET /admin/reports`): a tag Profile or
+  Conversation, Referred in red past the Admin's threshold, the latest reason; the accounts
+  referred first. Opened beside them: the reports with their reasons, comments and senders,
+  "Referred to the Admin: 4 open reports about Y. Abessolo", Dismiss the reports; the profile
+  as the directory shows it, with its About; for a conversation, Read the conversation, which
+  says that the reading is written to the audit log, then its members and messages
+  (`GET /admin/conversations/{id}`), a deleted one deleted. The account follows with the actions
+  of USER: Change type, Reset two-factor authentication, View audit log, Suspend, and Open in
+  USER. In the URL: `/admin/moderation?report=profile:user-abessolo`.
+- **Rules**: an account is referred beyond the threshold of open reports (3 by default: the
+  fourth refers it), counting the reports of its profile, of its direct conversations and of its
+  notes. Dismissing closes the reports of a profile or a conversation, without telling their
+  senders; suspending the account closes those of its profile and its direct conversations. The
+  Admin reads any client's profile, and a conversation once reported only, whatever became of
+  the report; each reading is a line of AUDT. USER: "Reports received" for every client, its
+  notes', profile's and conversations' together, in red once referred.
+- **ADMCFG**: two panels below the permissions. Directory and messaging: the default contact
+  rules (the grid of NET ME, now `ContactRulesGrid` in `entities/profile`), the new conversations
+  a day for each client type, the report threshold, saved together. Specialties: their names in
+  English and French and the profiles listing each; add, rename, or remove one that no profile
+  lists. NET and NET ME read the list again.
+- **Audit log**: Reports dismissed, Reported conversation read (Moderation); Specialty added,
+  renamed, removed (Settings); "Default contact rule, Student: Request → Direct".
+- **Mock**: Y. Abessolo, a trader who promises 30% a month, reported by M. Ndong, L. Fotso and
+  B. Ngoma, and by T. Bekale for their conversation: referred. R. Ondo, reported once. The
+  defaults and limits apply at once: a profile never saved takes the new rules, the limit of the
+  day counts. The pure rules in `lib/reports.ts`, the Admin's views in `reports.ts`, the routes
+  in `handlers/admin/{reports,directory}.ts`, tested through MSW (`reports.test.ts`).
+  `SEED_VERSION` raised.
 
 ### Step 19 · Second version done (S): to do
 
@@ -1145,4 +1169,18 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   endpoint: it reads `GET /conversations`.
 - **Directory and messaging settings**: the default contact rules, the daily limits of new
   conversations, the report threshold and the list of specialties are the Admin's, without an
-  endpoint.
+  endpoint: the prototype's are `GET / PUT /admin/settings/directory` and `/admin/specialties`
+  (GET, POST, PUT and DELETE). Do new defaults reach the profiles never saved (the prototype:
+  yes, the others keep theirs)? Is the limit a day set per type (the prototype: yes, 20 and 5
+  for a Student by default)? What becomes of the profiles listing a specialty the Admin removes
+  (the prototype keeps such a specialty, which can be renamed)?
+- **Reports of the directory and the messaging**: `GET /admin/reports?type=` lists reports; the
+  prototype groups them by profile or conversation, the open ones only, and dismisses them with
+  `POST /admin/reports/{type}/{id}/dismiss`, an endpoint of its own. Which reports count toward
+  "beyond 3 reports" (the prototype: the open ones about the account, on its profile, its direct
+  conversations and its notes; the reports of a group are about no one)? Is the account only
+  shown as referred, or also told, limited or suspended (the prototype: shown, in MOD and USER)?
+  Does a suspension close the reports (the prototype: those of the profile and the
+  conversations)? Does the Admin read a conversation whose reports were dismissed (the
+  prototype: yes, it was reported)? The prototype reads it on request only, since each reading
+  is logged.

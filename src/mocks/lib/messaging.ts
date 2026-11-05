@@ -19,7 +19,7 @@ export const EDIT_WINDOW_MS = 15 * 60_000
 /** A group, its creator included. */
 export const GROUP_MAX_MEMBERS = 50
 export const GROUP_TITLE_MAX_LENGTH = 60
-/** New conversations a day; the Admin's to change (step 18 of the roadmap). */
+/** New conversations a day, the spec's defaults, which the Admin changes in ADMCFG. */
 export const DAILY_CONVERSATIONS = 20
 export const STUDENT_DAILY_CONVERSATIONS = 5
 export const PAGE_LIMIT = 50

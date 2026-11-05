@@ -31,6 +31,7 @@ import {
 import { directoryFacets, searchDirectory, type DirectoryFilter } from '../lib/directory'
 import { api, latency, noContent, paginate, problem } from '../lib/http'
 import { newId } from '../lib/ids'
+import { OPEN_REPORT } from '../lib/reports'
 
 /**
  * NET (screen 10): the directory, its facets, a profile with the contact permission of the user,
@@ -76,11 +77,13 @@ function readFilter(query: URLSearchParams): DirectoryFilter {
 }
 
 /** A profile the user may open: theirs, one of the directory, or one they talk with. */
+/** A profile the user may read; the Admin reads any, as MOD reviews the reported ones. */
 function visibleProfile(userId: unknown) {
   const account = anyAccount(String(userId))
   if (!account || !isClientAccount(account)) return null
   const profile = profileOf(account)
-  if (!canSeeProfile(currentAccount(), account, profile)) return null
+  const moderates = currentUser().permissions.includes('moderation:manage')
+  if (!moderates && !canSeeProfile(currentAccount(), account, profile)) return null
   return { account, profile }
 }
 
@@ -173,6 +176,7 @@ export const directoryHandlers = [
         reporterId: reporter.id,
         reason,
         comment,
+        ...OPEN_REPORT,
         at: new Date().toISOString(),
       },
     ])

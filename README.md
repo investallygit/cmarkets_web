@@ -62,8 +62,8 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | 12 · My profile, visibility and contact (NET ME)                          | Done; the mock applies the contact rules of section 15        |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
-| 9 · Account administration (USER) with ANLY and MOD                       | Done; 2,054 accounts, requests, moderation queue on mock data |
-| Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; every Data admin and Admin action is in the audit log   |
+| 9 · Account administration (USER) with ANLY and MOD                       | Done; 2,054 accounts; MOD reviews the directory reports too   |
+| Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged  |
 
 How the screens were built, step by step, the plan for the second version of the spec (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9) and the open
@@ -127,8 +127,8 @@ src/
               edit-profile, edit-network-profile, change-password, choose-plan, manage-members,
               upload-data-file, review-import, roll-back-import, correct-price, publish-content,
               create-account, manage-account, review-analyst-request, moderate-publication,
-              mark-payout-paid, edit-platform-settings, edit-permissions, switch-language,
-              switch-account, workspace-layout
+              moderate-report, mark-payout-paid, edit-platform-settings, edit-permissions,
+              switch-language, switch-account, workspace-layout
   entities/   business data: session, subscription, organization, security, quote (live
               prices), market, bond, yield-curve, fundamentals, screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news,
@@ -172,9 +172,10 @@ src/mocks/
                 (14.2, 14.3, its parts in portfolioEngine/), the upload checks (11)...
   realtime.ts   the simulated market hub
   chat.ts       the simulated chat hub: who is online, who reads, types and answers
-  admin.ts, content.ts, payments.ts, publications.ts
+  admin.ts, content.ts, payments.ts, publications.ts, reports.ts
                 what several routes share: the Admin's accounts and payouts, the news and
-                documents entered, the payments, the publication of research
+                documents entered, the payments, the publication of research, the reports of
+                the directory and the messaging
 ```
 
 `SEED_VERSION` (`db/storage.ts`) drops the data kept in localStorage when the sample data

@@ -2,15 +2,20 @@ import { expect, test, type Page } from '@playwright/test'
 import { DEMO_PASSWORD } from './session.js'
 
 // The Admin's screens, step 9 (ROADMAP.md): USER with ANLY and MOD, then ADMCFG, AUDT and PAY.
+// Step 18: the reports of the directory and the messaging in MOD, their settings in ADMCFG.
 
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title, exact: true }) })
 
-/** The prototype's account switch reloads the app: wait for the new account's badge. */
+/**
+ * The prototype's account switch reloads the app: wait for the new account's badge, in the top
+ * bar, as a button of a screen may hold the same word ("...the notes of another analyst").
+ */
 async function switchAccount(page: Page, from: RegExp, account: string, badge: RegExp) {
-  await page.getByRole('button', { name: from }).click()
+  const topBar = page.getByRole('banner')
+  await topBar.getByRole('button', { name: from }).click()
   await page.getByRole('menuitem', { name: account, exact: true }).click()
-  await expect(page.getByRole('button', { name: badge })).toBeVisible()
+  await expect(topBar.getByRole('button', { name: badge })).toBeVisible()
 }
 
 async function asAdmin(page: Page) {
@@ -217,6 +222,109 @@ test('ADMCFG changes a quota and a permission, both written to the audit log', a
   await expect(log.getByRole('row').nth(1)).toContainText('Permissions of Trader')
   await expect(log.getByRole('row').nth(1)).toContainText('Client reports: no → yes')
   await expect(log.getByRole('row').nth(2)).toContainText('Alerts, Student: 10 → 15')
+})
+
+test('MOD reads a reported conversation, logged, suspends the referred account and dismisses a report', async ({
+  page,
+}) => {
+  await asAdmin(page)
+  await page.getByRole('link', { name: /MOD/ }).click()
+  const reports = panel(page, 'Reported profiles and conversations')
+  await expect(reports).toContainText('2 profiles · 1 conversation')
+
+  // Y. Abessolo: 3 reports on the profile and 1 in a conversation, beyond the threshold of 3.
+  await reports
+    .getByRole('button', { name: /^Conversation Referred Y\. Abessolo · T\. Bekale/ })
+    .click()
+  await expect(page).toHaveURL(/report=conversation(%3A|:)conversation-abessolo/)
+  const reader = panel(page, 'Reported conversation')
+  await expect(reader).toContainText('Referred to the Admin: 4 open reports about Y. Abessolo')
+  await expect(reader).toContainText('Scam or market manipulation')
+  await reader.getByRole('button', { name: 'Read the conversation' }).click()
+  await expect(reader.getByRole('list', { name: 'Messages' })).toContainText(
+    'Send me 2,000,000 XAF by mobile money today',
+  )
+  await expect(reader).toContainText('This reading was written to the audit log.')
+  await reader.getByRole('button', { name: 'Suspend account' }).click()
+  const suspend = page.getByRole('dialog', { name: 'Suspend Y. Abessolo' })
+  await suspend
+    .getByRole('textbox', { name: 'Reason' })
+    .fill('Asks members for money and promises guaranteed returns.')
+  await suspend.getByRole('button', { name: 'Suspend account' }).click()
+  await expect(page.getByText('Y. Abessolo: account suspended.')).toBeVisible()
+  // Suspended, the account's reports are dealt with.
+  await expect(reports).toContainText('1 profile · 0 conversations')
+
+  await reports.getByRole('button', { name: /R\. Ondo/ }).click()
+  const profile = panel(page, 'Reported profile')
+  await expect(profile).toContainText('Presents the notes of another analyst as his own.')
+  await profile.getByRole('button', { name: 'Dismiss the reports' }).click()
+  await page
+    .getByRole('dialog', { name: 'Dismiss the reports about R. Ondo' })
+    .getByRole('button', { name: 'Dismiss the reports' })
+    .click()
+  await expect(page.getByText('Reports dismissed; written to the audit log.')).toBeVisible()
+  await expect(reports).toContainText('No profile or conversation is reported.')
+
+  await page.getByRole('link', { name: /AUDT/ }).click()
+  const log = panel(page, 'Audit log')
+  await expect(log.getByRole('row').nth(1)).toContainText('Reports dismissed')
+  await expect(log.getByRole('row').nth(2)).toContainText('Account suspended')
+  await expect(log.getByRole('row').nth(3)).toContainText('Reported conversation read')
+})
+
+test('ADMCFG sets the defaults and limits of the directory and edits its specialties', async ({
+  page,
+}) => {
+  await asAdmin(page)
+  await page.goto('/admin/settings')
+  const directory = panel(page, 'Directory and messaging')
+  await directory.getByRole('radio', { name: 'Student: Direct' }).check({ force: true })
+  await directory.getByRole('textbox', { name: 'Student, new conversations a day' }).fill('8')
+  await directory.getByRole('textbox', { name: 'Report threshold' }).fill('5')
+  await directory.getByRole('button', { name: 'Save the directory settings' }).click()
+  await expect(
+    page.getByText('Directory settings saved; each change is written to the audit log.'),
+  ).toBeVisible()
+
+  const specialties = panel(page, 'Specialties')
+  // Listed by profiles: renamed, not removed.
+  await expect(specialties.getByRole('button', { name: 'Remove Sovereign bonds' })).toBeDisabled()
+  await specialties
+    .getByRole('textbox', { name: 'A new specialty, Name in English' })
+    .fill('Islamic finance')
+  await specialties
+    .getByRole('textbox', { name: 'A new specialty, Name in French' })
+    .fill('Finance islamique')
+  await specialties.getByRole('button', { name: 'Add' }).click()
+  await expect(page.getByText('Specialty added.')).toBeVisible()
+  await expect(specialties.getByRole('row', { name: /Islamic finance/ })).toContainText(
+    'No profile',
+  )
+  await specialties.getByRole('button', { name: 'Rename Islamic finance' }).click()
+  await specialties
+    .getByRole('textbox', { name: 'Rename Islamic finance, Name in English' })
+    .fill('Islamic finance and sukuk')
+  await specialties.getByRole('button', { name: 'Save', exact: true }).click()
+  await expect(page.getByText('Specialty renamed.')).toBeVisible()
+  await specialties.getByRole('button', { name: 'Remove Islamic finance and sukuk' }).click()
+  await page
+    .getByRole('dialog', { name: 'Remove the specialty Islamic finance and sukuk' })
+    .getByRole('button', { name: 'Remove Islamic finance and sukuk' })
+    .click()
+  await expect(page.getByText('Specialty removed.')).toBeVisible()
+  await expect(specialties).not.toContainText('Islamic finance')
+
+  await page.getByRole('link', { name: /AUDT/ }).click()
+  const log = panel(page, 'Audit log')
+  await expect(log.getByRole('row').nth(1)).toContainText('Specialty removed')
+  await expect(log.getByRole('row').nth(2)).toContainText('Specialty renamed')
+  await expect(log.getByRole('row').nth(3)).toContainText('Specialty added')
+  const settings = log.getByRole('row').nth(4)
+  await expect(settings).toContainText('Directory and messaging settings')
+  await expect(settings).toContainText('Default contact rule, Student: Request → Direct')
+  await expect(settings).toContainText('New conversations a day, Student: 5 → 8')
+  await expect(settings).toContainText('Report threshold: 3 → 5')
 })
 
 test('PAY marks a September payout paid', async ({ page }) => {

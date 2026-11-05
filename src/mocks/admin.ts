@@ -1,6 +1,5 @@
 import type {
   AccountCountsDto,
-  AccountListStatus,
   AdminPayoutDto,
   AdminSubscriptionDto,
   AdminUserDetailsDto,
@@ -45,20 +44,13 @@ import {
 import { libraryPublication, mergeMonths, subjectOf } from './lib/researchViews'
 import { normalize } from './lib/text'
 import { isFirstPublication } from './publications'
+import { reportsReceived } from './reports'
 
 // ---------------------------------------------------------------------------------------------
 // Accounts
 
 export const isEmployee = (account: Pick<StoredAccount, 'accountType'>) =>
   account.accountType === 'dataAdmin' || account.accountType === 'admin'
-
-/** Active, under review (a status waiting for an Admin's approval) or suspended. */
-export function listStatus(account: StoredAccount): AccountListStatus {
-  if (account.status === 'suspended') return 'suspended'
-  return isVerifiedType(account.accountType) && account.verificationStatus === 'pending'
-    ? 'review'
-    : 'active'
-}
 
 export function adminUserDto(account: StoredAccount): AdminUserDto {
   const organization = organizationName(account.organizationId)
@@ -178,16 +170,12 @@ function publishingOf(account: StoredAccount): AdminUserDetailsDto['publishing']
   const publications = analyst
     ? publicationsOf(analyst.id).filter((publication) => publication.versions.length > 0)
     : []
-  const ids = new Set(publications.map((publication) => publication.id))
-  const reports = contentReportStore.read().filter((report) => ids.has(report.publicationId))
   const totals = sumMonths(mergeMonths(publications))
   return {
     publications: publications.length,
     withdrawn: publications.filter((publication) => publication.status === 'archived').length,
     sales: totals.sales,
     revenue: totals.revenue,
-    reports: reports.length,
-    openReports: reports.filter((report) => report.status === 'open').length,
   }
 }
 
@@ -206,6 +194,7 @@ export function adminUserDetails(account: StoredAccount): AdminUserDetailsDto {
       : null,
     purchases: purchasesOf(account),
     publishing: publishingOf(account),
+    reportsReceived: reportsReceived(account),
     suspension: account.status === 'suspended' ? account.suspension : null,
   }
 }

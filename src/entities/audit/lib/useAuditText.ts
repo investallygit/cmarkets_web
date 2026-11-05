@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import {
   ACCOUNT_TYPES,
+  CLIENT_ACCOUNT_TYPES,
   PERMISSIONS,
   type AuditAction,
   type AuditChangeDto,
@@ -19,6 +20,8 @@ const VERIFICATION_STATUSES = ['pending', 'approved', 'rejected'] as const
 const CHANNELS = ['email', 'sms'] as const
 const MODERATION_MODES = ['before', 'after'] as const
 const PAYOUT_STATUSES = ['accruing', 'due', 'paid'] as const
+const CONTACT_MODES = ['direct', 'request', 'none'] as const
+const LANGUAGES = ['fr', 'en'] as const
 const PUBLICATION_STATUSES = ['draft', 'pending', 'published', 'archived'] as const
 const IMPORT_STATUSES = [
   'format',
@@ -45,6 +48,17 @@ export function useAuditText() {
     }
     if (change.field === 'verificationStatus' && type) {
       return t('audit.statusOf', { type: t(`accountTypes.${type}`) })
+    }
+    const client = oneOf(CLIENT_ACCOUNT_TYPES, change.scope)
+    if ((change.field === 'contactRule' || change.field === 'newConversations') && client) {
+      return t('audit.fieldOf', {
+        field: t(`audit.fields.${change.field}`),
+        type: t(`accountTypes.${client}`),
+      })
+    }
+    const language = oneOf(LANGUAGES, change.scope)
+    if (change.field === 'name' && language) {
+      return t('audit.nameIn', { language: t(`specialties.${language}`) })
     }
     const permission = oneOf(PERMISSIONS, change.scope)
     if (change.field === 'permission' && permission) return t(PERMISSION_LABELS[permission])
@@ -90,6 +104,8 @@ export function useAuditText() {
         return label(CHANNELS, raw, (channel) => t(`accounts.channels.${channel}`))
       case 'moderation':
         return label(MODERATION_MODES, raw, (mode) => t(`platformSettings.moderation.${mode}`))
+      case 'contactRule':
+        return label(CONTACT_MODES, raw, (mode) => t(`network.privacy.modes.${mode}`))
       case 'payout':
         return label(PAYOUT_STATUSES, raw, (status) => t(`payouts.statuses.${status}`))
       case 'publicationStatus':
@@ -108,7 +124,8 @@ export function useAuditText() {
         const type = oneOf(ACCOUNT_TYPES, target.id)
         return type ? t('audit.roleOf', { type: t(`accountTypes.${type}`) }) : target.label
       }
-      return target.type === 'settings' ? t('audit.platformSettings') : target.label
+      if (target.type !== 'settings') return target.label
+      return target.id === 'directory' ? t('audit.directorySettings') : t('audit.platformSettings')
     },
     /** "Type: Trader → Analyst"; only the new value when there was none. */
     change: (change: AuditChangeDto) =>

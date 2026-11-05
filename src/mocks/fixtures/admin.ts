@@ -1,8 +1,12 @@
-import type {
-  AuditEntryDto,
-  ContentReportReason,
-  PlatformSettingsDto,
+import {
+  CLIENT_ACCOUNT_TYPES,
+  type AuditEntryDto,
+  type ContentReportReason,
+  type DirectorySettingsDto,
+  type PlatformSettingsDto,
 } from '@/shared/api/contracts'
+import { DEFAULT_CONTACT_RULES } from '../lib/contact'
+import { dailyConversations } from '../lib/messaging'
 import { PUBLICATION_RULES } from './research'
 import { DEMO_USERS, ROLE_QUOTAS } from './users'
 
@@ -26,6 +30,22 @@ export function createSettings(): PlatformSettingsDto {
     riskFreeRatePct: 5,
     updatedAt: '2026-10-06T08:12:00Z',
     updatedBy: ADMIN_ACTOR.displayName,
+  }
+}
+
+/**
+ * The directory and the messaging of spec section 15: Direct for the professionals and Request for
+ * the Students, 20 new conversations a day and 5 for a Student, referred beyond 3 reports.
+ */
+export function createDirectorySettings(): DirectorySettingsDto {
+  return {
+    defaultContactRules: { ...DEFAULT_CONTACT_RULES },
+    newConversationsPerDay: Object.fromEntries(
+      CLIENT_ACCOUNT_TYPES.map((type) => [type, dailyConversations(type)]),
+    ) as DirectorySettingsDto['newConversationsPerDay'],
+    reportThreshold: 3,
+    updatedAt: null,
+    updatedBy: null,
   }
 }
 

@@ -48,8 +48,15 @@ function AccountDetails({ account }: { account: AdminUserDetailsDto }) {
     amount >= 1_000_000
       ? t('accounts.xafCompact', { amount: format.compact(amount) })
       : t('subscription.xaf', { amount: format.number(amount, 0) })
-  const { subscription, publishing, purchases, verificationDecision, suspension, lastLogin } =
-    account
+  const {
+    subscription,
+    publishing,
+    reportsReceived,
+    purchases,
+    verificationDecision,
+    suspension,
+    lastLogin,
+  } = account
 
   const typeDetail = !account.verificationStatus
     ? null
@@ -112,17 +119,28 @@ function AccountDetails({ account }: { account: AdminUserDetailsDto }) {
             <Row label={t('accounts.sales')}>
               {format.number(publishing.sales, 0)} · {xaf(publishing.revenue)}
             </Row>
-            <Row label={t('accounts.reports')}>
-              {publishing.reports === 0
-                ? '0'
-                : publishing.openReports > 0
-                  ? t('accounts.reportsOpen', {
-                      count: publishing.openReports,
-                      total: publishing.reports,
-                    })
-                  : t('accounts.reportsClosed', { count: publishing.reports })}
-            </Row>
           </>
+        )}
+        {reportsReceived && (
+          <Row label={t('accounts.reports')}>
+            {reportsReceived.total === 0 ? (
+              '0'
+            ) : reportsReceived.referred ? (
+              <span className="text-down">
+                {t('accounts.reportsReferred', {
+                  open: reportsReceived.open,
+                  total: reportsReceived.total,
+                })}
+              </span>
+            ) : reportsReceived.open > 0 ? (
+              t('accounts.reportsOpen', {
+                count: reportsReceived.open,
+                total: reportsReceived.total,
+              })
+            ) : (
+              t('accounts.reportsClosed', { count: reportsReceived.total })
+            )}
+          </Row>
         )}
         {purchases && account.accountType !== 'analyst' && (
           <Row label={t('accounts.purchases')}>

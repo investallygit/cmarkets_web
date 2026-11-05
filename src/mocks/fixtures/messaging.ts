@@ -1,11 +1,12 @@
-import type { SharedSecurityDto } from '@/shared/api/contracts'
+import type { ConversationReportReason, SharedSecurityDto } from '@/shared/api/contracts'
 import type { StoredConversation, StoredMember, StoredMessage } from '../lib/messaging'
+import { OPEN_REPORT, type ReportState } from '../lib/reports'
 import { DEMO_USERS } from './users'
 
 /**
  * The conversations of the screen 11 mockup, as P. Owona sees them: K. Atangana's thread with
  * its bond, the rates desk of the traders, M. Ndong, S. Mvondo's request, R. Tamba, E. Fouda;
- * and those of K. Atangana, whose session the end-to-end tests use.
+ * those of K. Atangana, whose session the end-to-end tests use; and the one T. Bekale reported.
  */
 
 /** A file sent in a conversation; its content is made when downloaded. */
@@ -31,6 +32,7 @@ const NDONG = 'user-ndong'
 const NGONO = 'user-ngono'
 const ELLA = 'user-ella'
 const EYINGA = 'user-eyinga'
+const ABESSOLO = 'user-abessolo'
 
 const MINUTE = 60_000
 const DAY = 24 * 60 * MINUTE
@@ -116,6 +118,16 @@ export function createAttachments(): StoredAttachment[] {
   ]
 }
 
+/** A report of a conversation, which lets the Admin read it in MOD. */
+export interface StoredConversationReport extends ReportState {
+  id: string
+  conversationId: string
+  reporterId: string
+  reason: ConversationReportReason
+  comment: string
+  at: string
+}
+
 interface Seed {
   id: string
   kind: 'direct' | 'group'
@@ -128,11 +140,18 @@ interface Seed {
   messages: [author: string, text: string, at: number | string, extra?: Partial<StoredMessage>][]
 }
 
-/** The conversations and their messages, the times of today counted back from `now`. */
+/**
+ * The conversations, their messages and the report of T. Bekale, the times of today counted back
+ * from `now`.
+ */
 export function createConversations(
   now: number,
   bond: (securityId: string, at: string) => SharedSecurityDto | null,
-): { conversations: StoredConversation[]; messages: StoredMessage[] } {
+): {
+  conversations: StoredConversation[]
+  messages: StoredMessage[]
+  reports: StoredConversationReport[]
+} {
   const at = (when: number | string) =>
     typeof when === 'string' ? when : new Date(now - when * MINUTE).toISOString()
   const today = (minutes: number) => minutes
@@ -205,6 +224,14 @@ export function createConversations(
         [TAMBA, 'Would you have five minutes on the phone tomorrow, on the debt of Cameroon?', today(25)],
       ],
     },
+    {
+      id: 'conversation-abessolo', kind: 'direct', createdBy: ABESSOLO, read: { [ABESSOLO]: 2, [BEKALE]: 2 },
+      messages: [
+        [ABESSOLO, 'Hello, I trade BVMAC stocks for my clients: 30% a month, guaranteed.', daysAgo(2, 300)],
+        [ABESSOLO, 'Send me 2,000,000 XAF by mobile money today and I start tomorrow.', daysAgo(2, 290)],
+        [BEKALE, 'Nobody can guarantee 30% a month, and CMarket routes no orders. I am reporting this conversation.', daysAgo(2, 240)],
+      ],
+    },
   ]
 
   const conversations: StoredConversation[] = []
@@ -241,5 +268,16 @@ export function createConversations(
     })
     messages.push(...sent)
   }
-  return { conversations, messages }
+  const reports: StoredConversationReport[] = [
+    {
+      id: 'conversation-report-abessolo-bekale',
+      conversationId: 'conversation-abessolo',
+      reporterId: BEKALE,
+      reason: 'scam',
+      comment: 'Asks for money by mobile money and promises 30% a month.',
+      at: at(daysAgo(2, 235)),
+      ...OPEN_REPORT,
+    },
+  ]
+  return { conversations, messages, reports }
 }

@@ -141,6 +141,8 @@ const SEEDS: Seed[] = [
   { id: 'user-ondo', email: 'r.ondo@sovereign-research.example', displayName: 'R. Ondo', accountType: 'analyst', timeZone: 'Africa/Malabo', ...approved('2023-09-01T09:00:00Z'), loginHoursAgo: 145 },
   // A new analyst, whose first publication waits for the moderators (screen 9 mockup).
   { id: 'user-nguema', email: 'c.nguema@chad-economics.example', displayName: 'C. Nguema', accountType: 'analyst', timeZone: 'Africa/Ndjamena', ...approved('2026-10-17T10:00:00Z'), loginHoursAgo: 40 },
+  // A trader of the directory reported beyond the Admin's threshold, with his conversation (MOD).
+  { id: 'user-abessolo', email: 'y.abessolo@mail.example', displayName: 'Y. Abessolo', accountType: 'trader', timeZone: 'Africa/Libreville', createdAt: '2026-10-29T18:40:00Z', loginHoursAgo: 20 },
   // Two managers of the directory (screen 10 mockup).
   { id: 'user-tchakounte', email: 'a.tchakounte@insurer-f.example', displayName: 'A. Tchakounté', accountType: 'manager', organizationId: 'org-insurer-f', organizationRole: 'admin', language: 'fr', createdAt: '2026-02-16T08:20:00Z', loginHoursAgo: 30 },
   { id: 'user-ngoma', email: 'b.ngoma@pension-g.example', displayName: 'B. Ngoma', accountType: 'manager', organizationId: 'org-pension-g', organizationRole: 'admin', language: 'fr', timeZone: 'Africa/Brazzaville', createdAt: '2026-04-07T08:15:00Z', loginHoursAgo: 52 },

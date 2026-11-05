@@ -1,8 +1,9 @@
-import { MODULES, type ModuleCode } from '@/shared/api/contracts'
+import { MODULES, type AccountListStatus, type ModuleCode } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
 import {
   createAccounts,
   INVITATION_FIXTURES,
+  isVerifiedType,
   ORGANIZATION_FIXTURES,
   type StoredAccount,
   type StoredInvitation,
@@ -41,6 +42,14 @@ export function findAccount(id: string): StoredAccount | undefined {
 export function accountByEmail(email: string): StoredAccount | undefined {
   const address = email.trim().toLowerCase()
   return accountStore.read().find((account) => account.email.toLowerCase() === address)
+}
+
+/** Active, under review (a status waiting for an Admin's approval) or suspended. */
+export function listStatus(account: StoredAccount): AccountListStatus {
+  if (account.status === 'suspended') return 'suspended'
+  return isVerifiedType(account.accountType) && account.verificationStatus === 'pending'
+    ? 'review'
+    : 'active'
 }
 
 let population: StoredAccount[] | undefined

@@ -14,7 +14,6 @@ import {
   adminUserDto,
   ensureAnalystProfile,
   isEmployee,
-  listStatus,
   matchesSearch,
   sortUsers,
 } from '../../admin'
@@ -25,6 +24,7 @@ import {
   anyAccount,
   currentAccount,
   editableAccount,
+  listStatus,
   organizationName,
   recordAudit,
   revokeSessions,
@@ -39,6 +39,7 @@ import {
 import { isEmail } from '../../lib/auth'
 import { api, latency, paginate, problem } from '../../lib/http'
 import { newId } from '../../lib/ids'
+import { closeReportsAbout } from '../../reports'
 import {
   allowed,
   decision,
@@ -255,8 +256,9 @@ export const userHandlers = [
     account.status = 'suspended'
     account.suspension = decision(reason)
     saveAccounts()
-    // Logged out at once, everywhere.
+    // Logged out at once, everywhere; the reports of the directory and the messaging are dealt with.
     revokeSessions(account.id, { keepCurrent: false })
+    closeReportsAbout(account.id, 'suspended', currentAccount().displayName)
     recordAudit('user-suspend', userTarget(account), {
       changes: [{ field: 'status', scope: null, before: 'active', after: 'suspended' }],
       reason,

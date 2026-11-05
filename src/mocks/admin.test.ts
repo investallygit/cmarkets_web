@@ -97,7 +97,9 @@ describe('administration store', () => {
     const account = db.anyAccount('user-analyst')
     if (!account) throw new Error('No demo analyst')
     const details = admin.adminUserDetails(account)
-    expect(details.publishing).toMatchObject({ withdrawn: 1, reports: 1, openReports: 0 })
+    expect(details.publishing).toMatchObject({ withdrawn: 1 })
+    // "Reports received: 1 (closed)", as screen 9 shows it.
+    expect(details.reportsReceived).toEqual({ total: 1, open: 0, referred: false })
     expect(details.publishing?.publications).toBeGreaterThan(40)
     expect(details.subscription).toMatchObject({ planName: 'Professional', paidBy: 'user' })
     expect(details.twoFactor).toEqual({ channel: 'email', mandatory: false })

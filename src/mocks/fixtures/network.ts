@@ -4,10 +4,12 @@ import type {
   ExperienceDto,
   ProfileContactDto,
   ProfilePrivacyDto,
+  ProfileReportReason,
   ProfileVisibility,
   SpecialtyDto,
 } from '@/shared/api/contracts'
 import { DEFAULT_CONTACT_RULES } from '../lib/contact'
+import { OPEN_REPORT, type ReportState } from '../lib/reports'
 import type { StoredAccount } from './accounts'
 
 /**
@@ -199,12 +201,39 @@ const PROFILE_SEEDS: ProfileSeed[] = [
     contact: { workEmail: null, phone: null, linkedIn: null },
   },
   {
+    userId: 'user-abessolo', jobTitle: 'Independent trader', organization: 'Independent', city: 'Libreville', country: 'GA', languages: ['fr'],
+    about: 'Guaranteed returns on the equities of the BVMAC. Write to me to grow your savings fast.',
+    specialties: ['trading', 'cemac-equities'],
+    experiences: [],
+    contact: { workEmail: null, phone: null, linkedIn: null },
+  },
+  {
     userId: 'user-nguema', jobTitle: 'Economist, Chad', organization: 'Independent', city: "N'Djamena", country: 'TD', languages: ['fr', 'ar'],
     about: 'The budgets of Chad and of the CEMAC states, and the oil revenue that funds them.',
     specialties: ['public-finance', 'macro', 'energy'],
     experiences: [],
     contact: { workEmail: null, phone: null, linkedIn: null },
   },
+]
+
+/** A report of a profile, which the Admin reviews in MOD. */
+export interface StoredProfileReport extends ReportState {
+  id: string
+  /** The profile reported. */
+  userId: string
+  reporterId: string
+  reason: ProfileReportReason
+  comment: string
+  at: string
+}
+
+/** Y. Abessolo's profile, reported three times, and R. Ondo's once. */
+// prettier-ignore
+export const PROFILE_REPORT_FIXTURES: StoredProfileReport[] = [
+  { id: 'profile-report-abessolo-ndong', userId: 'user-abessolo', reporterId: 'user-ndong', reason: 'spam', comment: 'Sends the same investment offer to every analyst of the directory.', at: '2026-11-03T09:15:00Z', ...OPEN_REPORT },
+  { id: 'profile-report-abessolo-fotso', userId: 'user-abessolo', reporterId: 'user-fotso', reason: 'fake', comment: 'Claims a COSUMAF licence that the regulator does not list.', at: '2026-11-04T14:40:00Z', ...OPEN_REPORT },
+  { id: 'profile-report-abessolo-ngoma', userId: 'user-abessolo', reporterId: 'user-ngoma', reason: 'spam', comment: '', at: '2026-11-05T08:05:00Z', ...OPEN_REPORT },
+  { id: 'profile-report-ondo-essomba', userId: 'user-ondo', reporterId: 'user-cessomba', reason: 'other', comment: 'Presents the notes of another analyst as his own.', at: '2026-11-02T16:20:00Z', ...OPEN_REPORT },
 ]
 
 /** The demo users saved their profile a little before the prototype started. */
@@ -243,8 +272,15 @@ export const PLACES: Record<string, [city: string, country: string]> = {
   'Africa/Malabo': ['Malabo', 'GQ'],
 }
 
-/** The profile of a client who never wrote theirs: their account says what it can. */
-export function defaultProfile(account: StoredAccount, organization: string | null): StoredProfile {
+/**
+ * The profile of a client who never wrote theirs: their account says what it can, with the
+ * contact rules the Admin set by default.
+ */
+export function defaultProfile(
+  account: StoredAccount,
+  organization: string | null,
+  contactRules: ContactRules = DEFAULT_CONTACT_RULES,
+): StoredProfile {
   const [city, country] = PLACES[account.timeZone] ?? PLACES['Africa/Douala']
   return {
     userId: account.id,
@@ -258,7 +294,7 @@ export function defaultProfile(account: StoredAccount, organization: string | nu
     specialties: [],
     experiences: [],
     contact: { workEmail: null, phone: null, linkedIn: null },
-    privacy: privacy(),
+    privacy: privacy('members', contactRules),
     updatedAt: null,
   }
 }

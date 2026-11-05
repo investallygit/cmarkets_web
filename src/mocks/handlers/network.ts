@@ -13,8 +13,8 @@ import {
   profileOf,
   saveAccounts,
   saveProfile,
+  specialtyStore,
 } from '../db'
-import { SPECIALTIES } from '../fixtures/network'
 import { api, latency, noContent, problem } from '../lib/http'
 import { newId } from '../lib/ids'
 import { EXPERIENCES_MAX, readExperience, readPrivacy, readProfile } from '../lib/profile'
@@ -67,7 +67,7 @@ export const networkHandlers = [
   // prototype's endpoint, answered without a session.
   http.get(api('/directory/specialties'), async () => {
     await latency()
-    return HttpResponse.json(SPECIALTIES)
+    return HttpResponse.json(specialtyStore.read())
   }),
 
   http.get(api('/me/profile'), async () => {
@@ -82,7 +82,7 @@ export const networkHandlers = [
     const profile = editableProfile()
     if (!profile) return forbidden()
     const body = (await request.json()) as Partial<MyProfileUpdateDto>
-    const ids = new Set(SPECIALTIES.map((specialty) => specialty.id))
+    const ids = new Set(specialtyStore.read().map((specialty) => specialty.id))
     const { errors, profile: input } = readProfile(body, ids)
     if (Object.keys(errors).length > 0) return invalid('Invalid profile', errors)
     const { displayName, ...fields } = input

@@ -30,6 +30,7 @@ import {
   messageDto,
   messageStore,
   messagesOf,
+  newConversationsPerDay,
   sharedChart,
   sharedPublication,
   sharedSecurity,
@@ -40,7 +41,6 @@ import {
   activeMembers,
   ATTACHMENT_MAX_BYTES,
   ATTACHMENT_TYPES,
-  dailyConversations,
   extensionOf,
   GROUP_MAX_MEMBERS,
   GROUP_TITLE_MAX_LENGTH,
@@ -58,6 +58,7 @@ import {
   type StoredConversation,
   type StoredMessage,
 } from '../lib/messaging'
+import { OPEN_REPORT } from '../lib/reports'
 import { normalize } from '../lib/text'
 
 /**
@@ -221,7 +222,7 @@ function startConversation(body: Record<string, unknown>) {
   }
 
   const now = new Date().toISOString()
-  const limit = dailyConversations(sender.accountType)
+  const limit = newConversationsPerDay(sender.accountType)
   if (openedToday(conversations, sender.id, dayOf(now), dayOf) >= limit) {
     return problem(429, 'Daily limit', `${limit} new conversations a day at most.`)
   }
@@ -527,6 +528,7 @@ export const messagingHandlers = [
         reason,
         comment,
         at: new Date().toISOString(),
+        ...OPEN_REPORT,
       },
     ])
     return noContent()

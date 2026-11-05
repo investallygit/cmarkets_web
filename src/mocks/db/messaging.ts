@@ -1,7 +1,6 @@
 import type {
   ConversationDto,
   ConversationMemberDto,
-  ConversationReportReason,
   ConversationSummaryDto,
   FrozenChartPeriod,
   MessageAttachmentDto,
@@ -22,6 +21,7 @@ import {
   createConversations,
   SEEDED_FILES,
   type StoredAttachment,
+  type StoredConversationReport,
 } from '../fixtures/messaging'
 import { calculateBond } from '../lib/bondMath'
 import {
@@ -159,19 +159,12 @@ export const messageStore = sharedStore<StoredMessage[]>('messages', () => seeds
 
 export const attachmentStore = sharedStore<StoredAttachment[]>('attachments', createAttachments)
 
-/** A report of a conversation, which lets the Admin read it (MOD, step 18 of the roadmap). */
-export interface StoredConversationReport {
-  id: string
-  conversationId: string
-  reporterId: string
-  reason: ConversationReportReason
-  comment: string
-  at: string
-}
+export type { StoredConversationReport }
 
+/** The reports of conversations, which let the Admin read them in MOD. */
 export const conversationReportStore = sharedStore<StoredConversationReport[]>(
   'conversationReports',
-  () => [],
+  () => seeds().reports,
 )
 
 /**

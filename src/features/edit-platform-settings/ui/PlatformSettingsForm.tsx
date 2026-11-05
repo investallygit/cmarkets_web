@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSavePlatformSettings } from '@/entities/platform-settings'
 import { isApiError } from '@/shared/api'
@@ -14,6 +14,7 @@ import { Field } from '@/shared/ui/form/Field'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
 import { toast } from '@/shared/ui/toast'
+import { Section } from './Section'
 
 const MAX_QUOTA = 10_000
 
@@ -23,17 +24,6 @@ const clientQuotas = (settings: PlatformSettingsDto): Quotas =>
   Object.fromEntries(
     CLIENT_ACCOUNT_TYPES.map((type) => [type, { ...settings.quotas[type] }]),
   ) as Quotas
-
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section className="flex flex-col gap-2 border-b p-3 last:border-b-0">
-      <h3 className="font-sans text-title font-semibold tracking-title text-accent-amber uppercase">
-        {title}
-      </h3>
-      {children}
-    </section>
-  )
-}
 
 /**
  * The Admin's settings (spec sections 12 to 14): the quotas of each client type, the price range,

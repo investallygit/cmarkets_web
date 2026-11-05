@@ -8,6 +8,7 @@ export const moderationKeys = {
   all: [...ADMIN_QUERY_ROOT, 'moderation'] as const,
   queue: (kind: ModerationKind | null) => [...moderationKeys.all, 'queue', kind] as const,
   publication: (id: string) => [...moderationKeys.all, 'publication', id] as const,
+  reports: () => [...moderationKeys.all, 'reports'] as const,
 }
 
 const publicationPath = (id: string, action = '') =>

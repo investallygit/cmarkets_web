@@ -13,11 +13,24 @@ export const AUDIT_ACTION_GROUPS: readonly {
   { label: 'audit.groups.statuses', actions: ['status-approve', 'status-reject'] },
   {
     label: 'audit.groups.moderation',
-    actions: ['publication-approve', 'publication-keep', 'publication-takedown'],
+    actions: [
+      'publication-approve',
+      'publication-keep',
+      'publication-takedown',
+      'report-dismiss',
+      'conversation-read',
+    ],
   },
   {
     label: 'audit.groups.settings',
-    actions: ['settings-update', 'permissions-update', 'payout-paid'],
+    actions: [
+      'settings-update',
+      'permissions-update',
+      'specialty-add',
+      'specialty-rename',
+      'specialty-remove',
+      'payout-paid',
+    ],
   },
   {
     label: 'audit.groups.data',

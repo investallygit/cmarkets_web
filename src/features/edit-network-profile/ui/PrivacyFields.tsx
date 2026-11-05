@@ -1,28 +1,11 @@
 import { clsx } from 'clsx'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { CONTACT_MODES, PROFILE_VISIBILITIES } from '@/entities/profile'
-import { CLIENT_ACCOUNT_TYPES, type ProfileDisplayDto } from '@/shared/api/contracts'
-import { ACCOUNT_TYPE_COLORS } from '@/shared/config/accountTypes'
+import { ContactRulesGrid, PROFILE_VISIBILITIES, RadioMark } from '@/entities/profile'
+import type { ProfileDisplayDto } from '@/shared/api/contracts'
 import { Switch } from '@/shared/ui/form/Switch'
 import type { ProfileEditor } from '../model/useProfileEditor'
 import { SectionTitle } from './SectionTitle'
-
-/** The round mark of a radio button, amber once chosen; the native input stays for the keyboard. */
-function RadioMark({ checked }: { checked: boolean }) {
-  return (
-    <span
-      aria-hidden
-      className={clsx(
-        'flex size-4 shrink-0 items-center justify-center rounded-full border',
-        'peer-focus-visible:ring-1 peer-focus-visible:ring-accent-amber peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-app',
-        checked ? 'border-accent-amber' : 'border-secondary',
-      )}
-    >
-      {checked && <span className="size-2 rounded-full bg-accent-amber" />}
-    </span>
-  )
-}
 
 const SHOWN: readonly (keyof ProfileDisplayDto)[] = [
   'email',
@@ -85,68 +68,11 @@ export function PrivacyFields({ editor }: { editor: ProfileEditor }) {
       </section>
 
       <section className="flex flex-col gap-1">
-        <div className="grid grid-cols-[minmax(0,1fr)_repeat(3,48px)] items-center">
-          <SectionTitle>{t('network.privacy.whoCanContact')}</SectionTitle>
-          {CONTACT_MODES.map((mode) => (
-            <span
-              key={mode}
-              aria-hidden
-              className="text-center font-sans text-title text-secondary"
-            >
-              {t(`network.privacy.modes.${mode}`)}
-            </span>
-          ))}
-        </div>
-        <div className="flex flex-col">
-          {CLIENT_ACCOUNT_TYPES.map((type, index) => {
-            const typeName = t(`accountBadge.${type}`)
-            return (
-              <div
-                key={type}
-                role="radiogroup"
-                aria-label={typeName}
-                className={clsx(
-                  'grid h-8 grid-cols-[minmax(0,1fr)_repeat(3,48px)] items-center px-0.5',
-                  index % 2 === 1 && 'bg-row-alt',
-                )}
-              >
-                <span className="flex items-center gap-2 font-sans text-label">
-                  <span
-                    aria-hidden
-                    className="size-2.5 shrink-0"
-                    style={{ backgroundColor: ACCOUNT_TYPE_COLORS[type] }}
-                  />
-                  {typeName}
-                </span>
-                {CONTACT_MODES.map((mode) => {
-                  const checked = form.contactRules[type] === mode
-                  return (
-                    <label
-                      key={mode}
-                      className="relative flex h-8 cursor-pointer items-center justify-center"
-                    >
-                      <input
-                        type="radio"
-                        name={`${name}-${type}`}
-                        value={mode}
-                        checked={checked}
-                        aria-label={t('network.privacy.modeFor', {
-                          type: typeName,
-                          mode: t(`network.privacy.modes.${mode}`),
-                        })}
-                        onChange={() =>
-                          set({ contactRules: { ...form.contactRules, [type]: mode } })
-                        }
-                        className="peer sr-only"
-                      />
-                      <RadioMark checked={checked} />
-                    </label>
-                  )
-                })}
-              </div>
-            )
-          })}
-        </div>
+        <ContactRulesGrid
+          title={<SectionTitle>{t('network.privacy.whoCanContact')}</SectionTitle>}
+          rules={form.contactRules}
+          onChange={(contactRules) => set({ contactRules })}
+        />
         <p className="font-sans text-title text-secondary">{t('network.privacy.requestNote')}</p>
       </section>
 

@@ -2,13 +2,16 @@ import type { SignUpDocument } from './auth'
 import type { IsoDate, IsoDateTime } from './common'
 import type {
   AccountType,
+  ClientAccountType,
   OtpChannel,
   Permission,
   UserLanguage,
   VerificationStatus,
   VerifiedAccountType,
 } from './me'
+import type { ConversationKind, ConversationReportReason, MessageDto } from './messaging'
 import type { OrganizationRole } from './organization'
+import type { ContactRules, ProfileReportReason, SpecialtyDto } from './profiles'
 import type {
   ContentReportReason,
   PayoutDto,
@@ -87,15 +90,18 @@ export interface AdminUserDetailsDto extends AdminUserDto {
   lastLogin: { at: IsoDateTime; place: string } | null
   /** Research bought by a client. */
   purchases: { count: number; amount: number } | null
-  /** An Analyst's publications, sales and the reports readers sent about them. */
+  /** An Analyst's publications and sales. */
   publishing: {
     publications: number
     withdrawn: number
     sales: number
     revenue: number
-    reports: number
-    openReports: number
   } | null
+  /**
+   * A client's reports: on their publications, their profile and their direct conversations;
+   * referred to the Admin past the threshold of open ones (spec section 15).
+   */
+  reportsReceived: { total: number; open: number; referred: boolean } | null
   suspension: AdminDecisionDto | null
 }
 
@@ -163,6 +169,58 @@ export interface ModerationItemDto {
   reports: ModerationReportDto[]
 }
 
+/** What the reports of the directory and the messaging are about (spec section 15). */
+export type ReportedItemType = 'profile' | 'conversation'
+
+export interface AdminReportDto {
+  id: string
+  reason: ProfileReportReason | ConversationReportReason
+  comment: string
+  reportedAt: IsoDateTime
+  reportedBy: { userId: string; displayName: string; accountType: AccountType }
+}
+
+/** The account reports are about: a profile's, or the other member of a direct conversation. */
+export interface ReportedAccountDto {
+  userId: string
+  displayName: string
+  accountType: AccountType
+  status: AccountListStatus
+  /** The open reports on its profile and its direct conversations. */
+  openReports: number
+  /** Past the Admin's threshold of open reports: referred to the Admin. */
+  referred: boolean
+}
+
+/**
+ * GET /admin/reports?type=profile|conversation: a profile or a conversation with the reports not
+ * dealt with yet, the newest first; the prototype groups the reports by what they are about.
+ */
+export interface ReportedItemDto {
+  type: ReportedItemType
+  /** The profile's user id, or the conversation's id. */
+  id: string
+  /** The profile's name, the group's, or the members of a direct conversation. */
+  title: string
+  /** Null for a group, whose reports are about no one in particular. */
+  account: ReportedAccountDto | null
+  conversation: { kind: ConversationKind; memberCount: number } | null
+  /** The latest report. */
+  since: IsoDateTime
+  reports: AdminReportDto[]
+}
+
+/** GET /admin/conversations/{id}: a reported conversation only, each reading logged. */
+export interface AdminConversationDto {
+  id: string
+  kind: ConversationKind
+  title: string
+  createdAt: IsoDateTime
+  members: { userId: string; displayName: string; accountType: AccountType; left: boolean }[]
+  /** The oldest first, as their members see them; a deleted message stays deleted. */
+  messages: MessageDto[]
+}
+
 export interface QuotaDto {
   portfolios: number | null
   alerts: number | null
@@ -184,6 +242,33 @@ export interface PlatformSettingsDto {
 }
 
 export type PlatformSettingsUpdateDto = Omit<PlatformSettingsDto, 'updatedAt' | 'updatedBy'>
+
+/**
+ * GET / PUT /admin/settings/directory, the prototype's: what spec section 15 lets the Admin set,
+ * without an endpoint in the spec.
+ */
+export interface DirectorySettingsDto {
+  /** The rules of a profile whose owner never chose theirs. */
+  defaultContactRules: ContactRules
+  /** New conversations a client may open a day. */
+  newConversationsPerDay: Record<ClientAccountType, number>
+  /** An account is referred to the Admin beyond this many open reports. */
+  reportThreshold: number
+  updatedAt: IsoDateTime | null
+  updatedBy: string | null
+}
+
+export type DirectorySettingsUpdateDto = Omit<DirectorySettingsDto, 'updatedAt' | 'updatedBy'>
+
+/** GET /admin/specialties, the prototype's: the closed list, with the profiles listing each. */
+export interface AdminSpecialtyDto extends SpecialtyDto {
+  profiles: number
+}
+
+/** POST /admin/specialties · PUT /admin/specialties/{id}: the name in French and English. */
+export interface SpecialtyInputDto {
+  name: SpecialtyDto['name']
+}
 
 /** GET / PUT /admin/roles/{role}/permissions */
 export interface RolePermissionsDto {
@@ -214,6 +299,11 @@ export const AUDIT_ACTIONS = [
   'settings-update',
   'permissions-update',
   'payout-paid',
+  'report-dismiss',
+  'conversation-read',
+  'specialty-add',
+  'specialty-rename',
+  'specialty-remove',
   'import-publish',
   'import-rollback',
   'import-discard',
@@ -226,7 +316,18 @@ export const AUDIT_ACTIONS = [
 export type AuditAction = (typeof AUDIT_ACTIONS)[number]
 
 export type AuditTargetType =
-  'user' | 'publication' | 'import' | 'price' | 'news' | 'document' | 'settings' | 'role' | 'payout'
+  | 'user'
+  | 'publication'
+  | 'import'
+  | 'price'
+  | 'news'
+  | 'document'
+  | 'settings'
+  | 'role'
+  | 'payout'
+  | 'profile'
+  | 'conversation'
+  | 'specialty'
 
 /** What a change is about; `scope` says which account type, permission or security. */
 export const AUDIT_FIELDS = [
@@ -242,6 +343,10 @@ export const AUDIT_FIELDS = [
   'commissionPct',
   'moderation',
   'riskFreeRatePct',
+  'contactRule',
+  'newConversations',
+  'reportThreshold',
+  'reports',
   'permission',
   'payout',
   'publicationStatus',
@@ -253,6 +358,7 @@ export const AUDIT_FIELDS = [
   'close',
   'volume',
   'title',
+  'name',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

@@ -4,24 +4,26 @@ import type {
   DirectoryEntryDto,
   MyProfileDto,
   ProfileDto,
-  ProfileReportReason,
   ProfileStatsDto,
   PublicProfileDto,
+  SpecialtyDto,
 } from '@/shared/api/contracts'
 import { createAccounts, isVerifiedType, type StoredAccount } from '../fixtures/accounts'
 import { generateProfiles } from '../fixtures/directory'
 import {
   createProfiles,
   defaultProfile,
+  PROFILE_REPORT_FIXTURES,
   SPECIALTIES,
   type StoredProfile,
+  type StoredProfileReport,
 } from '../fixtures/network'
 import { contactMode, isClientType } from '../lib/contact'
 import type { DirectoryCandidate } from '../lib/directory'
 import { scoreOf, sumMonths } from '../lib/research'
 import { mergeMonths } from '../lib/researchViews'
 import { allAccounts, organizationName, populationAccounts } from './accounts'
-import { permissionsOf } from './platform'
+import { directorySettingsStore, permissionsOf } from './platform'
 import { analystStore, publicationStore } from './research'
 import { sharedStore } from './storage'
 
@@ -41,12 +43,17 @@ function generatedProfiles(): Map<string, StoredProfile> {
   return generated
 }
 
+/** A client's profile: the one they wrote, or one with the Admin's default contact rules. */
 export function profileOf(account: StoredAccount): StoredProfile {
   const stored = profileStore.read().find((profile) => profile.userId === account.id)
   if (stored) return stored
   return (
     generatedProfiles().get(account.id) ??
-    defaultProfile(account, organizationName(account.organizationId))
+    defaultProfile(
+      account,
+      organizationName(account.organizationId),
+      directorySettingsStore.read().defaultContactRules,
+    )
   )
 }
 
@@ -257,11 +264,31 @@ function recentAuthors(now: number): Set<string> {
   )
 }
 
+/** The closed list of specialties (spec section 15), which the Admin manages in ADMCFG. */
+export const specialtyStore = sharedStore<SpecialtyDto[]>('specialties', () =>
+  SPECIALTIES.map((specialty) => ({ id: specialty.id, name: { ...specialty.name } })),
+)
+
+/** Every profile, listed or not, by the ids of its specialties: what a removal would empty. */
+export function specialtyUses(): Map<string, number> {
+  const stored = profileStore.read()
+  const ids = new Set(stored.map((profile) => profile.userId))
+  const profiles = [
+    ...stored,
+    ...[...generatedProfiles().values()].filter((profile) => !ids.has(profile.userId)),
+  ]
+  const uses = new Map<string, number>()
+  for (const id of profiles.flatMap((profile) => profile.specialties)) {
+    uses.set(id, (uses.get(id) ?? 0) + 1)
+  }
+  return uses
+}
+
 const specialtyNames = (ids: readonly string[]) =>
-  SPECIALTIES.filter((specialty) => ids.includes(specialty.id)).flatMap((specialty) => [
-    specialty.name.en,
-    specialty.name.fr,
-  ])
+  specialtyStore
+    .read()
+    .filter((specialty) => ids.includes(specialty.id))
+    .flatMap((specialty) => [specialty.name.en, specialty.name.fr])
 
 /** A listed profile, with what the search reads and what its card shows. */
 export interface DirectoryProfile {
@@ -378,15 +405,9 @@ export function profileDto(account: ClientAccount, profile = profileOf(account))
   }
 }
 
-/** A report of a profile, which the Admin reviews in MOD (step 18 of the roadmap). */
-export interface StoredProfileReport {
-  id: string
-  /** The profile reported. */
-  userId: string
-  reporterId: string
-  reason: ProfileReportReason
-  comment: string
-  at: string
-}
+export type { StoredProfileReport }
 
-export const profileReportStore = sharedStore<StoredProfileReport[]>('profileReports', () => [])
+/** The reports of profiles, which the Admin reviews in MOD. */
+export const profileReportStore = sharedStore<StoredProfileReport[]>('profileReports', () =>
+  PROFILE_REPORT_FIXTURES.map((report) => ({ ...report })),
+)

@@ -2,6 +2,7 @@ import {
   ACCOUNT_TYPES,
   type AccountType,
   type AuditEntryDto,
+  type DirectorySettingsDto,
   type MeDto,
   type Permission,
   type PlatformSettingsDto,
@@ -10,9 +11,10 @@ import {
 } from '@/shared/api/contracts'
 import { toMarketDay } from '@/shared/lib/format'
 import { isVerifiedType, type StoredAccount } from '../fixtures/accounts'
-import { createAdminAudit, createSettings } from '../fixtures/admin'
+import { createAdminAudit, createDirectorySettings, createSettings } from '../fixtures/admin'
 import { ROLE_PERMISSIONS } from '../fixtures/users'
 import { isExpired } from '../lib/billing'
+import { isClientType } from '../lib/contact'
 import { newId } from '../lib/ids'
 import { modulesOf, organizationStore, subscriptionOf } from './accounts'
 import { currentAccount } from './session'
@@ -25,6 +27,16 @@ import { sharedStore, sharedValue } from './storage'
 
 /** Quotas, research pricing and moderation, risk-free rate: what the Admin sets in ADMCFG. */
 export const settingsStore = sharedValue<PlatformSettingsDto>('platformSettings', createSettings)
+
+/** The defaults and limits of the directory and the messaging (spec section 15), set in ADMCFG. */
+export const directorySettingsStore = sharedValue<DirectorySettingsDto>(
+  'directorySettings',
+  createDirectorySettings,
+)
+
+/** The new conversations a client may open a day; an employee, none (spec section 15). */
+export const newConversationsPerDay = (accountType: AccountType) =>
+  isClientType(accountType) ? directorySettingsStore.read().newConversationsPerDay[accountType] : 0
 
 /** The role -> permission table of spec section 12, which the Admin edits. */
 export const roleStore = sharedStore<RolePermissionsDto[]>('rolePermissions', () =>
