@@ -17,7 +17,12 @@ import { useTranslation } from 'react-i18next'
 import { downloadCsv, type CsvCell } from '@/shared/lib/csv'
 import { downloadXlsx } from '@/shared/lib/xlsx'
 import { ContextMenu } from './ContextMenu'
-import { dataTableFeatures, type DataColumns, type DataTableFeatures } from './dataColumns'
+import {
+  columnTrack,
+  dataTableFeatures,
+  type DataColumns,
+  type DataTableFeatures,
+} from './dataColumns'
 import type { MenuItem } from './menu'
 import { PanelEmpty } from './StatusViews'
 import { TableExportContext } from './tableExport'
@@ -132,7 +137,7 @@ export function DataTable<TRow extends RowData>({
 
   const leafColumns = table.getAllLeafColumns()
   const gridTemplateColumns = leafColumns
-    .map((column) => column.columnDef.meta?.width ?? '1fr')
+    .map((column) => columnTrack(column.columnDef.meta?.width))
     .join(' ')
 
   /** The rows as shown, sorting included. */

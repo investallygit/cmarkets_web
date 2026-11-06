@@ -36,7 +36,7 @@ function LatestPublications({ analystId }: { analystId: string }) {
             <li key={item.id} className="flex items-baseline justify-between gap-3">
               <Link
                 to={libraryPath(item.id)}
-                className="truncate font-sans text-label hover:underline"
+                className="truncate font-sans text-label leading-6 hover:underline"
               >
                 {item.title}
               </Link>

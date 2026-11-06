@@ -32,7 +32,7 @@ export function StatementTable({ fiscalYears, currency, lines, exportName }: Sta
       helper.accessor((line) => t(`financials.lines.${line.key}`, { currency }), {
         id: 'line',
         header: t('financials.lineItem'),
-        meta: { width: 'minmax(0,1.8fr)' },
+        meta: { width: 'minmax(104px, 1.8fr)' },
         cell: ({ getValue }) => (
           <span title={getValue()} className="font-sans">
             {getValue()}

@@ -83,34 +83,35 @@ export function AccountsPanel({ selectedId, onSelect }: AccountsPanelProps) {
   const setFilter = (values: Record<string, string>) =>
     updateParams((current) => withParams(current, values))
 
+  // Below about 730 px the list scrolls sideways in its panel, its columns still readable.
   const columns = useMemo(
     () =>
       helper.columns([
         helper.accessor('displayName', {
           id: 'name',
           header: t('settings.profile.name'),
-          meta: { width: '1.1fr' },
+          meta: { width: 'minmax(96px, 1.1fr)' },
         }),
         helper.accessor('email', {
           header: t('accounts.email'),
-          meta: { width: '1.7fr' },
+          meta: { width: 'minmax(144px, 1.7fr)' },
           cell: ({ getValue }) => <span className="text-secondary">{getValue()}</span>,
         }),
         helper.accessor((account) => t(`accountBadge.${account.accountType}`), {
           id: 'type',
           header: t('columns.type'),
-          meta: { width: '0.9fr' },
+          meta: { width: 'minmax(80px, 0.9fr)' },
           cell: ({ row }) => <AccountTypeText type={row.original.accountType} short />,
         }),
         helper.accessor((account) => account.organization?.name ?? t('accounts.independent'), {
           id: 'organization',
           header: t('settings.profile.organization'),
-          meta: { width: '1.2fr' },
+          meta: { width: 'minmax(112px, 1.2fr)' },
         }),
         helper.accessor((account) => t(`accounts.statuses.${accountListStatus(account)}`), {
           id: 'status',
           header: t('columns.status'),
-          meta: { width: '0.9fr' },
+          meta: { width: 'minmax(80px, 0.9fr)' },
           cell: ({ row }) => <AccountStatusText account={row.original} />,
         }),
         helper.accessor('createdAt', {

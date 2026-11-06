@@ -44,7 +44,7 @@ export function RatiosPanel({ securityId, code }: RatiosPanelProps) {
         helper.accessor((row) => t(`comparison.metrics.${row.key}`), {
           id: 'ratio',
           header: t('ratios.ratio'),
-          meta: { width: 'minmax(0,1.6fr)' },
+          meta: { width: 'minmax(96px, 1.6fr)' },
           cell: ({ getValue }) => <span className="font-sans">{getValue()}</span>,
         }),
         helper.accessor((row) => row.value ?? undefined, {

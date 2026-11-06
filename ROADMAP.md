@@ -3,14 +3,14 @@
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`, the version of
 2 November 2026; the first version, of 29 October, is kept as `CMarket-developer-spec-EN-v1.pdf`.
 
-Every screen of the first version is built: the client terminal (MKT, DES with its FA and ANA
-tabs, EQS, YCRV, YAS, PORT, PUB, PUB NEW, N, CAL, ALRT and CFG) with the login, sign-up and
-password reset pages, the back-office of the Data admin (IMP with DATA, HIST and EODH, then CORR
-and NEWS) and that of the Admin (USER with ANLY and MOD, then ADMCFG, AUDT and PAY), and the home
-page that visitors see before login. The second version adds the Journalist and CEO account types
-and the professional directory with its messaging (screens 10 to 12): steps 11 to 19, under
-[Second version of the spec](#second-version-of-the-spec). What remains is listed under "Still to
-do" and in the open questions for the spec author.
+Every screen of both versions is built: the client terminal (MKT, DES with its FA and ANA tabs,
+EQS, YCRV, YAS, PORT, PUB, PUB NEW, NET, MSG, NET ME, N, CAL, ALRT and CFG) with the public
+profile page and the login, sign-up and password reset pages, the back-office of the Data admin
+(IMP with DATA, HIST and EODH, then CORR and NEWS) and that of the Admin (USER with ANLY and MOD,
+then ADMCFG, AUDT and PAY), and the home page that visitors see before login. The second version
+added the Journalist and CEO account types and the professional directory with its messaging
+(screens 10 to 12): steps 11 to 19, under [Second version of the spec](#second-version-of-the-spec).
+What remains is listed under "Still to do" and in the open questions for the spec author.
 
 ANLY and MOD were built with USER: in the mockups they are panels of the same screen. Sizes are
 relative: S < M < L < XL.
@@ -37,7 +37,7 @@ relative: S < M < L < XL.
 | 16   | MSG: conversations, contact requests, files, shared objects     | Done   |
 | 17   | MSG in real time: the `/hubs/chat` hub                          | Done   |
 | 18   | Admin: reported profiles and conversations, directory settings  | Done   |
-| 19   | Second version done: README, accessibility, every flow          | To do  |
+| 19   | Second version done: README, accessibility, every flow          | Done   |
 
 ## Second version of the spec
 
@@ -164,8 +164,9 @@ come in the README and the open questions of the second version.
   employees, a conversation already open, a hidden profile, the rule of the sender's type; Direct
   by default, Request for a Student). The checks of the profile, the privacy and the experiences
   (`lib/profile.ts`); `SEED_VERSION` raised.
-- **Still to do**: choosing the square of the photo (the mock keeps its centre); the blocked
-  people, with the messaging (step 16); the Admin's defaults and specialties (step 18).
+- **Since**: the people blocked, with the messaging (step 16); the Admin's default contact rules
+  and specialties (step 18).
+- **Still to do**: choosing the square of the photo (the mock keeps its centre).
 
 ### Step 15 · NET · Professional directory (screen 10) (L): done
 
@@ -315,11 +316,34 @@ come in the README and the open questions of the second version.
   in `handlers/admin/{reports,directory}.ts`, tested through MSW (`reports.test.ts`).
   `SEED_VERSION` raised.
 
-### Step 19 · Second version done (S): to do
+### Step 19 · Second version done (S): done
 
-- The README (status, structure, the second hub in the data flow) and this roadmap, each screen
-  with what was built; axe on the new screens for the eight account types, the keyboard, narrow
-  windows, every Playwright flow, no file over 700 lines.
+- **Checked**: axe-core (WCAG 2.2 AA) on NET, a profile in NET, NET ME and MSG, with their
+  dialogs, for each of the six client types, a client waiting for approval and the French texts;
+  the screens a Data admin or an Admin may not open; MOD, ADMCFG, USER and AUDT; the public
+  profile page. axe finds nothing at 1600, 390 and 320 px, and no page scrolls sideways. From the
+  keyboard: Tab reaches every control of the new screens, the focus always shows and never sticks,
+  and each dialog keeps it, closes on Escape and gives it back. Every Playwright flow passes; no
+  file is over 700 lines.
+- **Fixed**:
+  - A profile's latest publications in NET were links 18 px high, too close for 24 px targets
+    (WCAG 2.5.8): 24 px now.
+  - A dialog shown while some state holds (Leave the group, Delete a message, Remove a specialty)
+    left the focus on the page once Escape closed it: `Dialog` now gives the focus back to the
+    control that opened it, unless the action moved it or took the control away.
+  - In a narrow window the columns given as a share of the width shrank to a few pixels (USER,
+    whose sort buttons then overlapped, EQS, PORT, ALRT, CAL, CFG, IMP, HIST, CORR, NEWS, EODH,
+    ANLY, PAY, AUDT): such a column now keeps 56 px (`columnTrack`), more for the columns of USER
+    and the line items of the statements and ratios, and the table scrolls sideways in its panel
+    instead. On a desktop only the invoices of CFG, cramped at 1280 px, scroll.
+  - MSG cut the names of the conversations at 320 px ("R. …"): the badge and the time go below
+    the name.
+- **Added**: a Playwright flow from the keyboard alone (NET from the command bar, a profile found,
+  Send a message, two lines sent with Enter, a dialog closed with Escape) and the titles of NET,
+  MSG, NET ME and the public page.
+- **Documentation**: the README (the directory and the messaging in the introduction and the mock,
+  `ui-kit` among the pages, the shared components added) and this roadmap, each screen with the
+  steps that built it.
 
 ## Shared groundwork
 
@@ -583,6 +607,7 @@ Still to do, with the first screen that needs it:
   and dividends, and no FA, DVD or HDS tab.
 - **Built in step 4**: the FA tab, with the panels of EQS (see below).
 - **Built in step 6**: the ANA tab, with the list, the preview and the analyst of PUB.
+- **Built in step 12**: GP has no drawing tools without `analysis:save` (the Journalist, the CEO).
 - **Still to do**: PNG and PDF export of the chart stays in the shared groundwork.
 
 ### N · News (no mockup): done
@@ -620,6 +645,8 @@ Still to do, with the first screen that needs it:
   when a transaction or a limit change breaches a limit.
 - **Built in step 7**: SMS go to the mobile phone of the profile (CFG): without one, the SMS
   channel is off and the form says where to add it; e-mail goes to the login address.
+- **Built in step 13**: a portfolio limit alert on a portfolio the user reads, as a CEO watches the
+  organisation's fund; none for an account type without portfolios (the Journalist).
 - **Still to do**: setting off the publication alerts (a followed analyst, a security or a country)
   when a publication goes out: the analysts are followed from PUB since step 6.
 
@@ -643,6 +670,8 @@ Still to do, with the first screen that needs it:
 - **Mock**: 2021-2025 accounts of the seven BVMAC equities, built so the screen 3 mockup's ratios
   come back at the mockup prices (SEMC grows as in the mockup); ratios follow the live price; the
   sector averages are a table, Beverages at the mockup's 6.3%.
+- **Built in step 12**: without `analysis:save` (the Journalist, the CEO), no SAVE and no saved
+  screens; the server refuses them too.
 - **Still to do**: the "ANNUAL" switch of the mockup: the statements file has half-years, the API
   no period parameter.
 
@@ -692,9 +721,11 @@ Still to do, with the first screen that needs it:
   ends with the mockup's lines, bought in two tranches, with deposits, a withdrawal, custody fees
   and the dividends, coupons and redemption it received. A breach after a transaction or a limit
   change sets off the portfolio alerts.
+- **Built in step 13**: a portfolio shared with the organisation from its settings: SHARED for
+  its owner, "Shared by P. Owona" and READ ONLY for the colleagues and the CEO, who change nothing
+  and generate no report.
 - **Still to do**: the mock leaves the logo out of the PDF; a portfolio in EUR holds XAF
-  securities at the peg, no floating currency. Sharing a portfolio with the organisation came
-  with step 13.
+  securities at the peg, no floating currency.
 
 ### PUB · Research library (screen 8): done
 
@@ -715,6 +746,7 @@ Still to do, with the first screen that needs it:
   profile gives the mockup's 42 publications, 4.4 / 5, 412 followers and 68% of ratings
   confirmed, worked out from the price history. Mobile money confirms after about 3 seconds; a
   number ending in 0000 is declined. Reads, sales and ratings are counted by month for screen 7.
+- **Built in step 15**: "Publications of M. Ndong" (`?analyst=`), opened from a profile in NET.
 - **Still to do**: the country page (open question); notifying the followers of an analyst or a
   subject (the hub sends `PublicationPublished`, alerts of type "publication" are not set off
   yet); card payment through the provider's page (3-D Secure) and its return. Employees read free
@@ -741,6 +773,30 @@ Still to do, with the first screen that needs it:
 - **Still to do**: ratio and yield curve charts in a publication (price charts only); a version
   history readers can open (the library shows the latest version and its date).
 
+### NET · Professional directory (screen 10): done
+
+- **Built in step 15**: the filters, the results and the profile of the mockup, the search and the
+  profile open in the URL, and the public page `/p/{handle}`. Since: Contact and Send a message
+  open MSG, blocks (step 16); the reported profiles reviewed in MOD, the specialties of ADMCFG
+  (step 18). See step 15.
+
+### MSG · Messaging (screen 11): done
+
+- **Built in steps 16 and 17**: the conversations, the thread and the participant of the mockup,
+  contact requests, blocks, groups, files scanned before use, securities, charts and publications
+  shared; then the `/hubs/chat` hub: new messages, read receipts, "typing…", online status and the
+  count on MSG in the menu. See steps 16 and 17.
+- **Still to do**: the thread's SEARCH and "⋯" of the mockup; the push and e-mail notifications
+  of a message unread after 5 minutes, with the back end, which also encrypts the messages and
+  keeps them 24 months.
+
+### NET ME · My profile, visibility and contact (screen 12): done
+
+- **Built in step 14**: the profile, its visibility and contact rules and the card preview of the
+  mockup. Since: the people blocked (step 16); the Admin's default rules and specialties (step 18).
+  See step 14.
+- **Still to do**: choosing the square of the photo (the mock keeps its centre).
+
 ### CFG · Settings (no mockup): done
 
 - **Built**: five panels. Profile: the login address, the account type (an Analyst's status), the
@@ -754,12 +810,14 @@ Still to do, with the first screen that needs it:
   and the invitations; an administrator invites by e-mail and, from the right-click menu, changes
   a role or removes a member (with a confirmation); the last administrator stays. Invoices: the
   plan's, the organisation's for its administrators and the receipts of research bought, each in
-  PDF from the title bar once selected (or by double click); a transfer still due shows its date. Members of an organisation read its plan without
-  changing it.
+  PDF from the title bar once selected (or by double click); a transfer still due shows its date.
+  Members of an organisation read its plan without changing it.
 - **Mock**: four plans (Monitoring, Analysis, Professional, and Student for students), prices per
   user and month excluding VAT at 19.25%, a year for ten months. K. Atangana pays Professional
   yearly by card; Asset manager A pays Professional monthly and Bank C Analysis yearly (no
   Portfolio: PORT is locked for T. Bekale), both by transfer; University B has the student plan.
+- **Built in step 12**: the green VERIFIED badge of an approved Analyst, Journalist or CEO; the
+  user menu opens NET ME since step 14.
 - **Still to do**: accepting an invitation (the e-mail link and its sign-up); the status of a
   Student's proof of enrolment.
 
@@ -781,6 +839,7 @@ Still to do, with the first screen that needs it:
   work of each account type on its card, a coastal city at dusk behind the trial; those behind a
   section move against the scroll. The navy shades them where text stands on them (4.5:1 at
   least, measured behind each line of text at several scroll positions).
+- **Built in step 12**: the six client account types, in two rows of three, with two more photos.
 - **Still to do**: the texts are the prototype's, to be checked by the spec author.
 
 ### Login, OTP, sign-up, password reset: done
@@ -799,6 +858,9 @@ Still to do, with the first screen that needs it:
   salted SHA-256 hashes, access tokens of 15 minutes, refresh tokens of 7 days in the cookie the
   mock keeps for the browser, codes shown by the prototype (`GET /_prototype/codes`). The account
   switch of the user menu opens a session for a demo user.
+- **Built in step 12**: the sign-up asks a Journalist for a press card or an employer letter, a
+  CEO for a proof of position and the organisation they head; their status then waits for an
+  Admin. R. Tamba (Journalist) and E. Fouda (CEO) are demo accounts.
 
 ## Back-office
 
@@ -884,6 +946,10 @@ Still to do, with the first screen that needs it:
   **MOD**: the queue by kind, and the publication opened in the PUB reader with its reports;
   approved, a publication waiting goes live and its followers are told, a reported one stays and
   its reports close; taken down, it leaves the library and its buyers keep their version.
+- **Built in step 12**: the eight account types in the counters, as on the redrawn screen 9;
+  "Status requests" of the Analysts, Journalists and CEOs, each with its type and documents.
+- **Built in step 18**: "Reports received" in the details of every client, in red once referred;
+  MOD reviews the reported profiles and conversations below its publications (see step 18).
 - **Mock**: the counters add up to 2,041 active accounts (2,054 with the suspended; 1,946 before
   the second version); the three requests, the two reports and C. Nguema's first publication of
   the mockup are seeded. Suspending ends the user's sessions at once; a type changed to Analyst,
@@ -896,6 +962,9 @@ Still to do, with the first screen that needs it:
   Sharpe ratio, saved together with who changed them last. The permission matrix: the
   permissions by area as rows, the eight account types as columns, the changes counted and saved
   role by role (`PUT /admin/roles/{role}/permissions`); the Admin keeps `settings:manage`.
+- **Built in steps 12, 14 and 18**: the quotas of the six client types and the eight columns of
+  the matrix, with the rows of the directory and messaging (step 14); the panels Directory and
+  messaging (default contact rules, new conversations a day, report threshold) and Specialties.
 - **Mock**: users get the new permissions and quotas with their next `/me`, the studio and the
   library the new price range, commission and moderation, PORT the new rate.
 
@@ -905,6 +974,8 @@ Still to do, with the first screen that needs it:
   and 50 a page, filtered by user (an account picker), action and dates, all in the URL
   (`/admin/audit?userId=&action=&from=&to=`); a click shows the entry with each value before and
   after. USER's "View audit log" opens it on the account: what it did and what was done to it.
+- **Built in steps 12 and 18**: a status approved or rejected, with the account type; the reports
+  dismissed, the reported conversations read, the specialties and the directory settings changed.
 
 ### PAY · Analyst payouts (no mockup): done
 
@@ -954,7 +1025,7 @@ Still to do, with the first screen that needs it:
   `GET /admin/users/counts` (`{ student, analyst, ... }`, the active accounts). It also adds
   `GET /admin/users/export` (the CSV of every account of the filters), `GET /admin/organizations`
   (for the account form) and `?sort=` on `GET /admin/users`, whose items are
-  `{ id, displayName, email, accountType, organization, status, analystStatus, createdAt,
+  `{ id, displayName, email, accountType, organization, status, verificationStatus, createdAt,
 lastLoginAt }`. `POST /admin/users` takes `{ displayName, email, accountType, organizationId,
 phone, language }`, `PUT /admin/users/{id}/type` `{ accountType }`, the suspension, the
   reactivation, the rejection of a request and the takedown `{ reason }`. May a type change cross
@@ -1052,9 +1123,10 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   "CMarket chart" node holds the id of a chart frozen by `POST /publications/{id}/charts`
   (`{ securityId, period, type, title }`, answered with the bars as of today). The price range,
   commission and moderation mode come from `GET /publications/rules`, which the spec lacks (the
-  Admin's settings are under /admin), and `/me` gets `analystStatus`. `/library` takes
-  `followed=true` for the Followed analysts tab and `q` for the search; `/me/purchases` takes the
-  same filters; `GET /library/{id}/attachment` serves the attachment to readers.
+  Admin's settings are under /admin), and `/me` gets `verificationStatus` (`analystStatus` in the
+  first version). `/library` takes `followed=true` for the Followed analysts tab and `q` for the
+  search; `/me/purchases` takes the same filters; `GET /library/{id}/attachment` serves the
+  attachment to readers.
   `POST /library/{id}/purchase` takes `{ method, phone }` and answers 202 with the payment. When
   is a rating "confirmed at 12 months" (the prototype: a Buy by a rise, a Sell by a fall, a Hold by
   a move within ±10%)? Is a read counted once per reader (the prototype) or at each opening? Does
@@ -1076,13 +1148,14 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
 - **Account types, second version**: which permission keys stand for browsing the directory,
   being listed in it and reading a reported conversation (section 12 names `directory:list` and
   `messages:write` only; the prototype adds `directory:profile` and leaves the reported
-  conversations to the Admin's `moderation:manage`)? "Read" forbids saved screens and drawings: the prototype adds
-  `analysis:save`, which the Journalist and the CEO lack, and leaves them their watchlists and
-  alerts. Which plans do they take (the prototype: the professional ones, Monitoring, Analysis and
-  Professional, with the trial of Professional)? Does a CEO need the Portfolio module to read the
-  organisation's portfolios? The members of an organisation share its plan, so the managers who
-  hold those portfolios have the module. The Admin browses the directory, while employees only
-  use the back-office: from which screen?
+  conversations to the Admin's `moderation:manage`)? "Read" forbids saved screens and drawings:
+  the prototype adds `analysis:save`, which the Journalist and the CEO lack, and leaves them their
+  watchlists and alerts. Which plans do they take (the prototype: the professional ones,
+  Monitoring, Analysis and Professional, with the trial of Professional)? Does a CEO need the
+  Portfolio module to read the organisation's portfolios? The members of an organisation share its
+  plan, so the managers who hold those portfolios have the module. The Admin browses the
+  directory, while employees only use the back-office: from which screen (the prototype: MOD,
+  which shows the profiles reported; NET stays a client screen)?
 - **Portfolios of the organisation**: sharing a portfolio with the organisation has no endpoint.
   The prototype adds `sharedWithOrganization` to the settings of `POST` and
   `PUT /portfolios/{id}`, and `sharedBy` to `GET /portfolios`, which lists the portfolios shared
@@ -1101,10 +1174,10 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
 - **Status requests, second version**: `GET /admin/analyst-requests` keeps its name and lists the
   requests of the three types, each with its `accountType`; `/me` and the Admin's accounts call
   the status `verificationStatus`. What may a Journalist or a CEO do while waiting (the
-  prototype: view as the type does; for a CEO, without the organisation's portfolios; to come,
-  without messaging)? A Journalist sends one document, a press card or an employer
-  letter; a CEO a proof of position and the name of the organisation they head, which the sign-up
-  opens: how does a CEO join an organisation already on CMarket?
+  prototype: view as the type does; for a CEO, without the organisation's portfolios; without
+  messaging)? A Journalist sends one document, a press card or an employer letter; a CEO a proof
+  of position and the name of the organisation they head, which the sign-up opens: how does a CEO
+  join an organisation already on CMarket?
 - **Screen 10 mockup**: "Only profiles I can contact" is ticked, yet A. Tchakounté shows "Contact
   not open" (the prototype leaves out, once ticked, the profiles the user cannot write to; a
   request counts as a contact); D. Moussavou has 9 publications, yet the Analyst status of
@@ -1146,9 +1219,9 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   deleted.")? Who adds members to a group (the prototype: its creator, among the people they may
   write to at once; a member leaves, the creator takes one out)? Does a message reach the
   notification centre of the top bar, besides push and e-mail after 5 minutes? Employees cannot be
-  messaged and support goes through a help centre, which the spec does not describe. How is an
-  account past three reports referred to the Admin? The prototype's answers where the API is
-  silent: the Unread tab counts the messages unread, not the requests, which have their tab; the
+  messaged and support goes through a help centre, which the spec does not describe. The
+  prototype's answers where the API is silent: the Unread tab counts the messages unread, not the
+  requests, which have their tab; the
   conversations panel searches with `GET /messages/search` (the thread's SEARCH and "⋯" of the
   mockup are not built); `q` of `GET /conversations` matches the names and the text; the request
   declined stays "sent" for its sender, who cannot write again; the files are uploaded first

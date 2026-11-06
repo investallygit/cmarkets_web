@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Locator, type Page } from '@playwright/test'
 
 // What the keyboard alone reaches (WCAG 2.1.1, 2.1.2), the panels moved without dragging
 // (WCAG 2.5.7) and the title of each page (WCAG 2.4.2).
@@ -75,8 +75,68 @@ test('each page names itself in the title of the tab', async ({ page }) => {
   await expect(page).toHaveTitle(
     'Société des Eaux Minérales du Cameroun — Security profile · CMarket',
   )
+  await page.goto('/net')
+  await expect(page).toHaveTitle('Professional directory · CMarket')
+  await page.goto('/msg')
+  await expect(page).toHaveTitle('Messaging · CMarket')
+  await page.goto('/net/me')
+  await expect(page).toHaveTitle('My professional profile · CMarket')
+  await page.goto('/p/m-ndong')
+  await expect(page).toHaveTitle('M. Ndong · CMarket')
   await page.goto('/no-such-screen')
   await expect(page).toHaveTitle('Screen not found · CMarket')
+})
+
+/** Tab until the control has the focus: the keyboard reaches it in fewer than `limit` steps. */
+async function tabTo(page: Page, control: Locator, limit = 80) {
+  for (let step = 0; step < limit; step += 1) {
+    if (await control.evaluate((element) => element === document.activeElement)) return
+    await page.keyboard.press('Tab')
+  }
+  await expect(control).toBeFocused()
+}
+
+test('NET and MSG from the keyboard: a profile found, a message sent, a dialog closed', async ({
+  page,
+}) => {
+  await page.goto('/mkt')
+  await expect(page.getByRole('heading', { name: 'Indices' })).toBeVisible()
+  await page.keyboard.press('Control+K')
+  await page.keyboard.type('NET')
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/\/net$/)
+
+  await tabTo(page, page.getByRole('searchbox', { name: 'Name, organisation, specialty' }))
+  await page.keyboard.type('fotso')
+  await expect(panel(page, 'Professionals: 1 result')).toBeVisible()
+  await tabTo(page, page.getByRole('button', { name: 'View profile: L. Fotso' }))
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/profile=user-fotso/)
+  await tabTo(page, panel(page, 'Profile').getByRole('button', { name: 'Send a message' }))
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/\/msg\?to=user-fotso$/)
+
+  const composer = page.getByRole('textbox', { name: 'Message' })
+  await tabTo(page, composer)
+  await page.keyboard.type('Hello, a question on the BVMAC agribusiness stocks.')
+  await page.keyboard.press('Shift+Enter')
+  await page.keyboard.type('Do you cover SAFACAM too?')
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/\/msg\?c=/)
+  const thread = panel(page, /^L\. Fotso · Analyst/)
+  await expect(thread.getByRole('listitem').last()).toContainText(
+    'Hello, a question on the BVMAC agribusiness stocks.\nDo you cover SAFACAM too?',
+  )
+
+  // A dialog keeps the focus while open and gives it back on Escape.
+  const report = page.getByRole('button', { name: 'Report conversation' })
+  await tabTo(page, report)
+  await page.keyboard.press('Enter')
+  const dialog = page.getByRole('dialog', { name: 'Report a conversation' })
+  await expect(dialog.getByLabel('Reason')).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(dialog).toHaveCount(0)
+  await expect(report).toBeFocused()
 })
 
 test.describe('without the service worker of the prototype', () => {

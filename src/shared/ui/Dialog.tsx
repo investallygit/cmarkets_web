@@ -38,18 +38,32 @@ export function Dialog({
   const { t } = useTranslation()
   const dialogRef = useRef<HTMLDialogElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const openerRef = useRef<HTMLElement | null>(null)
   const titleId = useId()
 
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
     if (open && !dialog.open) {
+      openerRef.current =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null
       dialog.showModal()
       contentRef.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus()
     } else if (!open && dialog.open) {
       dialog.close()
     }
   }, [open])
+
+  // The browser gives the focus back to the opener on close() only. A dialog shown while some
+  // state holds ({deleting && <ConfirmDialog open />}) leaves the page open, the focus with it:
+  // give the focus back, unless the action moved it or took the opener away.
+  useEffect(
+    () => () => {
+      const opener = openerRef.current
+      if (opener?.isConnected && document.activeElement === document.body) opener.focus()
+    },
+    [],
+  )
 
   return createPortal(
     <dialog

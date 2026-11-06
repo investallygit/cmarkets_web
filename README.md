@@ -1,8 +1,9 @@
 # CMarket web (prototype)
 
-Front end of CMarket, built from `CMarket-developer-spec-EN.pdf`: the client terminal and the
-back-office of the Data admin and of the Admin. This prototype runs without a back end: a mock
-layer answers the REST API and simulates the real-time hubs with the sample data of the mockups.
+Front end of CMarket, built from `CMarket-developer-spec-EN.pdf` (second version, 2 November
+2026): the client terminal with its professional directory and messaging, and the back-office of
+the Data admin and of the Admin. This prototype runs without a back end: a mock layer answers the
+REST API and simulates the real-time hubs with the sample data of the mockups.
 
 - [Introduction](#introduction): what the prototype does, its stack, the status of each screen
 - [Installation](#installation): run it, log in, the scripts
@@ -20,14 +21,18 @@ controls, dialogs, toasts, price chart, table export) with sample content.
 
 The mock back end keeps the accounts, organisations, plans and invoices, and each user's
 watchlists, alerts, saved screens, portfolios, purchases, layouts and chart drawings in
-localStorage, with the research library that every account shares; it plays the browser's part
-for the refresh token cookie. It sets off the alerts when a price crosses a threshold, a release
-comes out or a portfolio limit is breached. For the Data admin it reads the CSV and Excel
-templates, runs the format and business checks of spec section 11 and puts the published rows in
-place of its generated prices, index closes, auctions, curves and dividends, until a rollback takes
-them out. It runs the bond calculator with the formulas of spec section 14.1 and values portfolios
-with those of sections 14.2 and 14.3, each tested against the spec's cases; it plays the mobile
-money and card payments of research and plans and watermarks the PDFs it writes.
+localStorage, with what the accounts share: the research library, the professional profiles and
+the conversations; it plays the browser's part for the refresh token cookie. It sets off the
+alerts when a price crosses a threshold, a release comes out or a portfolio limit is breached. In
+the directory and the messaging it applies the visibility, contact rules, blocks and limits of
+spec section 15, its people read, type and answer through the simulated chat hub as on screen 11,
+and an account reported past the Admin's threshold is referred to MOD. For the Data admin it
+reads the CSV and Excel templates, runs the format and business checks of spec section 11 and puts
+the published rows in place of its generated prices, index closes, auctions, curves and dividends,
+until a rollback takes them out. It runs the bond calculator with the formulas of spec section
+14.1 and values portfolios with those of sections 14.2 and 14.3, each tested against the spec's
+cases; it plays the mobile money and card payments of research and plans and watermarks the PDFs
+it writes.
 
 ### Stack (spec section 7)
 
@@ -44,7 +49,7 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | Screen                                                                    | State                                                         |
 | ------------------------------------------------------------------------- | ------------------------------------------------------------- |
 | Home page: the product, markets, users and plans; trial and login         | Done; the plans come from the server before login             |
-| App shell: top bar, command bar, ticker, menu by account type, status bar | Done                                                          |
+| App shell: top bar, command bar, ticker, menu by account type, status bar | Done; MSG in the menu counts the unread messages              |
 | Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
 | 1 · Market dashboard (MKT)                                                | Done on mock data, real-time quotes and indices, watchlists   |
 | 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done on mock data                                             |
@@ -65,9 +70,11 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | 9 · Account administration (USER) with ANLY and MOD                       | Done; 2,054 accounts; MOD reviews the directory reports too   |
 | Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged  |
 
-How the screens were built, step by step, the plan for the second version of the spec (the
+How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9) and the open
-questions for the spec author are in [ROADMAP.md](ROADMAP.md).
+questions for the spec author are in [ROADMAP.md](ROADMAP.md). The screens follow WCAG 2.2 AA:
+axe finds nothing on any of them for any account type, and each works from the keyboard and in a
+window down to 320 px wide.
 
 ## Installation
 
@@ -110,14 +117,13 @@ src/
               yield-curves (YCRV and YAS), portfolio, research-library, publishing-studio, news,
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
               network-profile (NET ME), public-profile (/p/{handle}), data-import (IMP),
-              data-session (DATA),
-              upload-history (HIST), eodhd (EODH), data-corrections (CORR), content (NEWS),
-              admin-users (USER), analyst-requests (ANLY), moderation (MOD), payouts (PAY),
-              platform-settings (ADMCFG), audit-log (AUDT), home (the home page), auth (login,
-              sign-up, password reset), status
+              data-session (DATA), upload-history (HIST), eodhd (EODH), data-corrections (CORR),
+              content (NEWS), admin-users (USER), analyst-requests (ANLY), moderation (MOD),
+              payouts (PAY), platform-settings (ADMCFG), audit-log (AUDT), home (the home page),
+              auth (login, sign-up, password reset), status, ui-kit (/_kit)
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
-              subscription-panel, current-upload-panel...), the security header and the shell bars
-              (top-bar, side-menu, status-bar, ticker-tape)
+              subscription-panel, current-upload-panel, messaging-panels...), the security header
+              and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
@@ -169,7 +175,8 @@ src/mocks/
                 checks, seeds, the upload cycle, coverage, corrections)
   fixtures/     the sample data of the mockups
   lib/          pure logic tested against the spec: bond math (14.1), the portfolio engine
-                (14.2, 14.3, its parts in portfolioEngine/), the upload checks (11)...
+                (14.2, 14.3, its parts in portfolioEngine/), the upload checks (11), the contact
+                rules, the directory, the messaging and the reports (15)...
   realtime.ts   the simulated market hub
   chat.ts       the simulated chat hub: who is online, who reads, types and answers
   admin.ts, content.ts, payments.ts, publications.ts, reports.ts
@@ -253,11 +260,12 @@ changes, which also ends the prototype's session once.
 (`--bg-panel`, `--accent-amber`...) and maps them to Tailwind utilities (`bg-panel`,
 `text-accent-amber`, `text-up`...), with the badge colour of each account type of section 9
 (`--type-student`...), which `ACCOUNT_TYPE_COLORS` gives wherever a type shows. Tailwind's default
-palette is removed, so only these colours exist. Numbers use `shared/lib/format.ts` (`52 500,25` in French, `52,500.25` in English, dates
-`DD/MM/YYYY` in the time zone of the user's profile, Douala by default; a calendar day keeps its
-date in every zone, and the session clock stays in Douala time), and inputs read them back with
-`shared/lib/parse.ts`. The home page and the login pages use the brand navy and green, kept for
-them and the logo (the "marketing pages" of spec section 8); the home page alone has larger type
+palette is removed, so only these colours exist. Numbers use `shared/lib/format.ts` (`52 500,25`
+in French, `52,500.25` in English, dates `DD/MM/YYYY` in the time zone of the user's profile,
+Douala by default; a calendar day keeps its date in every zone, and the session clock stays in
+Douala time), and inputs read them back with `shared/lib/parse.ts`. The home page and the login
+pages use the brand navy and green, kept for them, the public profile page and the logo (the
+"marketing pages" of spec section 8); the home page alone has larger type
 (`text-lead`, `text-headline`, `text-display`), photos for its mood (from Pexels, free to use,
 listed in `pages/home/config/photos.ts`) and motion: its hero rises into place over a city at
 night closing in, the grid of a chart and price lines sliding by, two glows drift behind the page,
@@ -273,16 +281,20 @@ focus when nothing in it can), `DataTable` (sorting, right-click menu, Excel and
 the user lacks `analysis:export`; `exportRef` puts the export links in a title bar; a `footer` row
 stays out of the sorting; `sorting` and `onSortingChange` leave the order to the server for a
 paged list; the arrows move the selection, or a cursor where rows are not selected, Enter opens a
-row and the menu key or Shift + F10 its menu), `ContextMenu` (takes the focus: arrows, Home, End,
-Escape; as wide as its longest entry, up to 400 px, then on two lines; kept inside the window;
-under a button with `align="end"`; an entry's shortcut shown and given as `aria-keyshortcuts`),
+row and the menu key or Shift + F10 its menu; a column given as a share of the width keeps 56 px
+at least, so that a table narrower than its columns scrolls sideways in its panel), `ContextMenu`
+(takes the focus: arrows, Home, End, Escape; as wide as its longest entry, up to 400 px, then on
+two lines; kept inside the window; under a button with `align="end"`; an entry's shortcut shown
+and given as `aria-keyshortcuts`),
 `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and drawings;
 `AreaChart`; both named for screen readers by `useChartLabel`; `useChartTheme`, the section 8
 colours for Recharts, which draws in SVG, and the `--chart-*` series palette checked for
 colour-blind separation), `PdfViewer`, `form/` (buttons, fields, selects, number and date inputs
-in the user's format, password inputs, checkboxes, segmented choices, file drop zone), `Dialog`
-(also as a side form), `ConfirmDialog` (with a required reason) and `toast`. Entities add small
-business components, such as the security picker of `entities/security`.
+in the user's format, password inputs, checkboxes, switches, segmented choices, file drop zone),
+`Dialog` (also as a side form; on closing it gives the focus back to the control that opened it),
+`ConfirmDialog` (with a required reason), `ReportForm` (the reason and comment of a report) and
+`toast`. Entities add small business components, such as the security picker of
+`entities/security` or the avatar, type badge and directory card of `entities/profile`.
 
 ## Guides
 

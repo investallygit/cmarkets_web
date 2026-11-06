@@ -120,7 +120,8 @@ function Row({
           </span>
         )}
         <span className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className="flex min-w-0 items-center gap-2">
+          {/* In a narrow window the badge and the time go below the name rather than cut it. */}
+          <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
             <span className={clsx('truncate font-sans text-label', unread && 'font-semibold')}>
               {row.title}
             </span>
