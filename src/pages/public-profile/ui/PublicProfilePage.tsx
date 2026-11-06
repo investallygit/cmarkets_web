@@ -22,8 +22,12 @@ export function PublicProfilePage() {
   const { handle = '' } = useParams()
   const profile = usePublicProfile(handle)
   const visitor = useVisitorStatus()
-  useDocumentTitle(profile.data?.displayName ?? t('screens.NET.title'))
   const missing = isApiError(profile.error, 404)
+  // The tab says what the page says: the name, or that the profile is not to be read.
+  useDocumentTitle(
+    profile.data?.displayName ??
+      (missing ? t('network.publicPage.notFound') : t('screens.NET.title')),
+  )
 
   return (
     <div className="flex h-full flex-col overflow-y-auto bg-brand-navy">

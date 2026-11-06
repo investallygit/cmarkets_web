@@ -242,7 +242,8 @@ function CurvesChart({ curves, pastCurve, focusCountry, pastLabel }: CurvesChart
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1 px-3 py-2 font-sans text-data">
+      {/* Each country is a 24 px target (WCAG 2.5.8): the legend wraps close in a narrow window. */}
+      <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1 px-3 py-1 font-sans text-data">
         {CEMAC_COUNTRIES.map((code) => {
           const off = hidden.includes(code)
           return (
@@ -253,7 +254,7 @@ function CurvesChart({ curves, pastCurve, focusCountry, pastLabel }: CurvesChart
               title={t(off ? 'curves.show' : 'curves.hide', { country: format.country(code) })}
               onClick={() => toggleCountry(code)}
               className={clsx(
-                'inline-flex items-center gap-1.5',
+                'inline-flex min-h-6 items-center gap-1.5',
                 off ? 'text-secondary line-through' : 'text-primary hover:text-accent-amber',
               )}
             >

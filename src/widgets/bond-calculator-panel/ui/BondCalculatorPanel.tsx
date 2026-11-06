@@ -1,6 +1,6 @@
 import { clsx } from 'clsx'
 import { LoaderCircle } from 'lucide-react'
-import { useMemo, useState, type ReactNode } from 'react'
+import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBond, useBondCalculation, useBonds } from '@/entities/bond'
 import { useQuote } from '@/entities/quote'
@@ -9,6 +9,7 @@ import type { BondCalculationDto, BondDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { toMarketDay } from '@/shared/lib/format'
 import { useDebouncedValue } from '@/shared/lib/useDebouncedValue'
+import { useKeyboardScrolling } from '@/shared/lib/useKeyboardScrolling'
 import { DateInput } from '@/shared/ui/form/DateInput'
 import { Field } from '@/shared/ui/form/Field'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
@@ -82,6 +83,9 @@ function Calculator({ bond, lastPrice }: { bond: BondDto; lastPrice: number | nu
     ? (calculation.error.problem.errors ?? {})
     : {}
   const set = (patch: Partial<CalculatorForm>) => setForm((current) => ({ ...current, ...patch }))
+  // The figures scroll in a short panel (a narrow window): the keyboard scrolls them too.
+  const resultsRef = useRef<HTMLDivElement>(null)
+  useKeyboardScrolling(resultsRef)
 
   const frequency =
     bond.frequency === 2
@@ -157,10 +161,11 @@ function Calculator({ bond, lastPrice }: { bond: BondDto; lastPrice: number | nu
         </Field>
       </div>
       <div
+        ref={resultsRef}
         aria-live="polite"
         aria-busy={calculation.isFetching}
         className={clsx(
-          'min-h-0 flex-1 overflow-y-auto border-t',
+          'min-h-0 flex-1 overflow-y-auto border-t outline-none focus-visible:ring-1 focus-visible:ring-accent-amber focus-visible:ring-inset',
           calculation.isPlaceholderData && 'opacity-60',
         )}
       >

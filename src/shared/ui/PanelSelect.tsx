@@ -14,7 +14,8 @@ interface PanelSelectProps<T extends string> {
 
 /**
  * A choice among many in a panel title bar, e.g. "ALL COUNTRIES" in the auctions panel of the
- * screen 4 mockup. The native <select> keeps the keyboard and screen reader behaviour.
+ * screen 4 mockup. The native <select> keeps the keyboard and screen reader behaviour. It is a
+ * 24 px target, as tall as the bar (WCAG 2.5.8), for a narrow window where the bar is crowded.
  */
 export function PanelSelect<T extends string>({
   value,
@@ -28,7 +29,7 @@ export function PanelSelect<T extends string>({
         value={value}
         aria-label={ariaLabel}
         onChange={(event) => onChange(event.target.value as T)}
-        className="cursor-pointer appearance-none bg-transparent pr-3.5 uppercase outline-none hover:text-primary focus-visible:text-primary focus-visible:ring-1 focus-visible:ring-accent-amber"
+        className="min-h-6 cursor-pointer appearance-none bg-transparent pr-3.5 uppercase outline-none hover:text-primary focus-visible:text-primary focus-visible:ring-1 focus-visible:ring-accent-amber"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

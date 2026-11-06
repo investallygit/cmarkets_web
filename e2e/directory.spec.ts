@@ -139,6 +139,7 @@ test.describe('a visitor', () => {
   }) => {
     await page.goto('/p/k-atangana')
     await expect(page.getByText('This profile is not public, or no longer exists.')).toBeVisible()
+    await expect(page).toHaveTitle('This profile is not public, or no longer exists. · CMarket')
 
     await page.goto('/p/m-ndong')
     await expect(page.getByRole('heading', { level: 1, name: 'M. Ndong' })).toBeVisible()

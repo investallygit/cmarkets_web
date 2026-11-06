@@ -120,28 +120,30 @@ function Row({
           </span>
         )}
         <span className="flex min-w-0 flex-1 flex-col gap-1">
-          {/* In a narrow window the badge and the time go below the name rather than cut it. */}
-          <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-            <span className={clsx('truncate font-sans text-label', unread && 'font-semibold')}>
-              {row.title}
-            </span>
-            {online && <span className="sr-only">{t('messaging.conversations.online')}</span>}
-            {row.counterpart ? (
-              <AccountTypeBadge type={row.counterpart.accountType} />
-            ) : (
-              <span className="inline-block border border-info px-1 font-sans text-title font-semibold tracking-title text-info uppercase">
-                {t('messaging.conversations.group')}
+          <span className="flex min-w-0 items-baseline gap-2">
+            {/* In a narrow window the badge goes below the name rather than cut it. */}
+            <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
+              <span className={clsx('truncate font-sans text-label', unread && 'font-semibold')}>
+                {row.title}
               </span>
-            )}
-            {row.muted && (
-              <BellOff
-                role="img"
-                aria-label={t('messaging.conversations.muted')}
-                className="size-3 shrink-0 text-secondary"
-              />
-            )}
+              {online && <span className="sr-only">{t('messaging.conversations.online')}</span>}
+              {row.counterpart ? (
+                <AccountTypeBadge type={row.counterpart.accountType} />
+              ) : (
+                <span className="inline-block border border-info px-1 font-sans text-title font-semibold tracking-title text-info uppercase">
+                  {t('messaging.conversations.group')}
+                </span>
+              )}
+              {row.muted && (
+                <BellOff
+                  role="img"
+                  aria-label={t('messaging.conversations.muted')}
+                  className="size-3 shrink-0 text-secondary"
+                />
+              )}
+            </span>
             {row.lastMessage && (
-              <span className="ml-auto shrink-0 font-mono text-title text-secondary">
+              <span className="shrink-0 font-mono text-title text-secondary">
                 {when(row.lastMessage.sentAt)}
               </span>
             )}

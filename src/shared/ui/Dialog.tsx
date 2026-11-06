@@ -56,7 +56,8 @@ export function Dialog({
 
   // The browser gives the focus back to the opener on close() only. A dialog shown while some
   // state holds ({deleting && <ConfirmDialog open />}) leaves the page open, the focus with it:
-  // give the focus back, unless the action moved it or took the opener away.
+  // give the focus back, unless the action moved it or took the opener away. A dialog closed
+  // first has nothing to give back: its opener is forgotten on closing (onClose below).
   useEffect(
     () => () => {
       const opener = openerRef.current
@@ -75,6 +76,7 @@ export function Dialog({
       }}
       // The browser may close the dialog itself, e.g. on a second Escape.
       onClose={() => {
+        openerRef.current = null
         if (open) onClose()
       }}
       style={{ width: `min(${width}px, calc(100vw - 32px))` }}
