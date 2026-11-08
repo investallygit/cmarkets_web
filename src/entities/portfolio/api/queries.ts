@@ -1,22 +1,14 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient, isApiError } from '@/shared/api'
+import { isApiError } from '@/shared/api'
 import type {
   AllocationBy,
-  AllocationDto,
-  IncomeDto,
-  PerformanceDto,
-  PortfolioCreateDto,
-  PortfolioDto,
   PortfolioSummaryDto,
   PortfolioUpdateDto,
-  PositionsDto,
   ReportJobDto,
   ReportRequestDto,
-  RiskDto,
-  TransactionDto,
-  TransactionImportResultDto,
   TransactionInputDto,
 } from '@/shared/api/contracts'
+import { portfoliosApi } from '@/shared/api/endpoints'
 
 /** The period of a performance series; null from: since inception. */
 export interface PerformanceQuery {
@@ -42,8 +34,6 @@ export const portfolioKeys = {
   report: (jobId: string) => [...portfolioKeys.all, 'report', jobId] as const,
 }
 
-const portfolioPath = (id: string, suffix = '') => `/portfolios/${encodeURIComponent(id)}${suffix}`
-
 /** The server revalues the lines this often; live prices move them in between. */
 const POSITIONS_REFRESH_MS = 60_000
 /** A report job is asked for its progress this often until it is done. */
@@ -53,7 +43,7 @@ const REPORT_POLL_MS = 800
 export function usePortfolios({ enabled = true }: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: portfolioKeys.list(),
-    queryFn: ({ signal }) => apiClient.get<PortfolioSummaryDto[]>('/portfolios', { signal }),
+    queryFn: ({ signal }) => portfoliosApi.list(signal),
     enabled,
   })
 }
@@ -62,7 +52,7 @@ export function usePortfolios({ enabled = true }: { enabled?: boolean } = {}) {
 export function usePortfolio(id: string | undefined) {
   return useQuery({
     queryKey: portfolioKeys.detail(id ?? ''),
-    queryFn: ({ signal }) => apiClient.get<PortfolioDto>(portfolioPath(id ?? ''), { signal }),
+    queryFn: ({ signal }) => portfoliosApi.portfolio(id ?? '', signal),
     enabled: Boolean(id),
   })
 }
@@ -71,8 +61,7 @@ export function usePortfolio(id: string | undefined) {
 export function usePositions(id: string | undefined) {
   return useQuery({
     queryKey: portfolioKeys.positions(id ?? ''),
-    queryFn: ({ signal }) =>
-      apiClient.get<PositionsDto>(portfolioPath(id ?? '', '/positions'), { signal }),
+    queryFn: ({ signal }) => portfoliosApi.positions(id ?? '', signal),
     enabled: Boolean(id),
     refetchInterval: POSITIONS_REFRESH_MS,
   })
@@ -82,8 +71,7 @@ export function usePositions(id: string | undefined) {
 export function useTransactions(id: string | undefined) {
   return useQuery({
     queryKey: portfolioKeys.transactions(id ?? ''),
-    queryFn: ({ signal }) =>
-      apiClient.get<TransactionDto[]>(portfolioPath(id ?? '', '/transactions'), { signal }),
+    queryFn: ({ signal }) => portfoliosApi.transactions(id ?? '', signal),
     enabled: Boolean(id),
   })
 }
@@ -93,10 +81,11 @@ export function usePerformance(id: string | undefined, query: PerformanceQuery) 
   return useQuery({
     queryKey: portfolioKeys.performance(id ?? '', query),
     queryFn: ({ signal }) =>
-      apiClient.get<PerformanceDto>(portfolioPath(id ?? '', '/performance'), {
-        query: { from: query.from, to: query.to, benchmark: query.benchmark },
+      portfoliosApi.performance(
+        id ?? '',
+        { from: query.from, to: query.to, benchmark: query.benchmark },
         signal,
-      }),
+      ),
     enabled: Boolean(id),
     placeholderData: keepPreviousData,
   })
@@ -106,11 +95,7 @@ export function usePerformance(id: string | undefined, query: PerformanceQuery) 
 export function useAllocation(id: string | undefined, by: AllocationBy) {
   return useQuery({
     queryKey: portfolioKeys.allocation(id ?? '', by),
-    queryFn: ({ signal }) =>
-      apiClient.get<AllocationDto>(portfolioPath(id ?? '', '/allocation'), {
-        query: { by },
-        signal,
-      }),
+    queryFn: ({ signal }) => portfoliosApi.allocation(id ?? '', by, signal),
     enabled: Boolean(id),
     placeholderData: keepPreviousData,
   })
@@ -120,7 +105,7 @@ export function useAllocation(id: string | undefined, by: AllocationBy) {
 export function useRisk(id: string | undefined) {
   return useQuery({
     queryKey: portfolioKeys.risk(id ?? ''),
-    queryFn: ({ signal }) => apiClient.get<RiskDto>(portfolioPath(id ?? '', '/risk'), { signal }),
+    queryFn: ({ signal }) => portfoliosApi.risk(id ?? '', signal),
     enabled: Boolean(id),
   })
 }
@@ -129,8 +114,7 @@ export function useRisk(id: string | undefined) {
 export function useIncome(id: string | undefined) {
   return useQuery({
     queryKey: portfolioKeys.income(id ?? ''),
-    queryFn: ({ signal }) =>
-      apiClient.get<IncomeDto>(portfolioPath(id ?? '', '/income'), { signal }),
+    queryFn: ({ signal }) => portfoliosApi.income(id ?? '', signal),
     enabled: Boolean(id),
   })
 }
@@ -162,7 +146,7 @@ export function useCreatePortfolio() {
   const refresh = useRefresh()
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (input: PortfolioCreateDto) => apiClient.post<PortfolioDto>('/portfolios', input),
+    mutationFn: portfoliosApi.create,
     onSuccess: (created) => {
       // In the list at once, so the screen can open it before the list is fetched again.
       queryClient.setQueryData<PortfolioSummaryDto[]>(portfolioKeys.list(), (list) =>
@@ -178,8 +162,7 @@ export function useUpdatePortfolio(id: string) {
   const refresh = useRefresh()
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (input: PortfolioUpdateDto) =>
-      apiClient.put<PortfolioDto>(portfolioPath(id), input),
+    mutationFn: (input: PortfolioUpdateDto) => portfoliosApi.update(id, input),
     onSuccess: (updated) => {
       queryClient.setQueryData(portfolioKeys.detail(id), updated)
       refresh.portfolio(id)
@@ -191,7 +174,7 @@ export function useUpdatePortfolio(id: string) {
 export function useDeletePortfolio() {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (id: string) => apiClient.delete<void>(portfolioPath(id)),
+    mutationFn: portfoliosApi.remove,
     onSuccess: (_result, id) => refresh.removed(id),
   })
 }
@@ -199,8 +182,7 @@ export function useDeletePortfolio() {
 export function useRecordTransaction(portfolioId: string) {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (input: TransactionInputDto) =>
-      apiClient.post<TransactionDto>(portfolioPath(portfolioId, '/transactions'), input),
+    mutationFn: (input: TransactionInputDto) => portfoliosApi.recordTransaction(portfolioId, input),
     onSuccess: () => refresh.portfolio(portfolioId),
   })
 }
@@ -210,10 +192,7 @@ export function useUpdateTransaction(portfolioId: string) {
   const refresh = useRefresh()
   return useMutation({
     mutationFn: ({ id, ...input }: TransactionInputDto & { id: string }) =>
-      apiClient.put<TransactionDto>(
-        portfolioPath(portfolioId, `/transactions/${encodeURIComponent(id)}`),
-        input,
-      ),
+      portfoliosApi.updateTransaction(portfolioId, id, input),
     onSuccess: () => refresh.portfolio(portfolioId),
     onError: refresh.onConflict(portfolioId),
   })
@@ -222,8 +201,7 @@ export function useUpdateTransaction(portfolioId: string) {
 export function useDeleteTransaction(portfolioId: string) {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (id: string) =>
-      apiClient.delete<void>(portfolioPath(portfolioId, `/transactions/${encodeURIComponent(id)}`)),
+    mutationFn: (id: string) => portfoliosApi.deleteTransaction(portfolioId, id),
     onSuccess: () => refresh.portfolio(portfolioId),
   })
 }
@@ -232,14 +210,7 @@ export function useDeleteTransaction(portfolioId: string) {
 export function useImportTransactions(portfolioId: string) {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (file: File) => {
-      const form = new FormData()
-      form.append('file', file)
-      return apiClient.postForm<TransactionImportResultDto>(
-        portfolioPath(portfolioId, '/transactions/import'),
-        form,
-      )
-    },
+    mutationFn: (file: File) => portfoliosApi.importTransactions(portfolioId, file),
     onSuccess: () => refresh.portfolio(portfolioId),
   })
 }
@@ -247,12 +218,8 @@ export function useImportTransactions(portfolioId: string) {
 /** POST /portfolios/{id}/reports: queues the PDF report, with the company logo if any. */
 export function useRequestReport(portfolioId: string) {
   return useMutation({
-    mutationFn: ({ request, logo }: { request: ReportRequestDto; logo: File | null }) => {
-      const form = new FormData()
-      form.append('options', JSON.stringify(request))
-      if (logo) form.append('logo', logo)
-      return apiClient.postForm<ReportJobDto>(portfolioPath(portfolioId, '/reports'), form)
-    },
+    mutationFn: ({ request, logo }: { request: ReportRequestDto; logo: File | null }) =>
+      portfoliosApi.requestReport(portfolioId, request, logo),
   })
 }
 
@@ -260,8 +227,7 @@ export function useRequestReport(portfolioId: string) {
 export function useReportJob(jobId: string) {
   return useQuery({
     queryKey: portfolioKeys.report(jobId),
-    queryFn: ({ signal }) =>
-      apiClient.get<ReportJobDto>(`/reports/${encodeURIComponent(jobId)}`, { signal }),
+    queryFn: ({ signal }) => portfoliosApi.reportJob(jobId, signal),
     refetchInterval: (query) => {
       const status = query.state.data?.status
       return status === 'done' || status === 'failed' ? false : REPORT_POLL_MS
@@ -272,11 +238,11 @@ export function useReportJob(jobId: string) {
 
 /** The PDF of a finished report, fetched with the session, once. */
 export function useReportFile(job: ReportJobDto | undefined) {
-  const path = job?.downloadPath
   return useQuery({
     queryKey: [...portfolioKeys.report(job?.jobId ?? ''), 'file'],
-    queryFn: ({ signal }) => apiClient.getBlob(path ?? '', { signal }),
-    enabled: Boolean(path),
+    // GET /reports/{jobId}/file, the job's downloadPath once it is done.
+    queryFn: ({ signal }) => portfoliosApi.reportFile(job?.jobId ?? '', signal),
+    enabled: Boolean(job?.downloadPath),
     staleTime: Infinity,
   })
 }
