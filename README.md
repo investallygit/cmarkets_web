@@ -102,7 +102,7 @@ gets the 14-day free trial. The mock keeps its data in the browser's localStorag
 | `npm run lint`                  | ESLint, including the layer rules of [Structure](#structure)               |
 | `npm run format`                | Prettier, on every file                                                    |
 | `npm test` / `npm run test:run` | Vitest unit and component tests                                            |
-| `npm run test:api`              | The API module's reads against a running `CMarket.Api`, for each account  |
+| `npm run test:api`              | The API module's reads against a running `CMarket.Api`, for each account   |
 | `npm run api:routes`            | Reads the routes of a running `CMarket.Api`'s OpenAPI document again       |
 | `npm run e2e`                   | Playwright end-to-end tests (first run: `npx playwright install chromium`) |
 
