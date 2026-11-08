@@ -1,5 +1,6 @@
 import { useMemo, type ReactNode } from 'react'
 import type { FrozenChartDto, RichTextDoc, RichTextNode } from '@/shared/api/contracts'
+import { resolveApiUrl } from '@/shared/config/env'
 import { CHART_NODE } from '@/shared/lib/richText'
 import { FrozenChart } from './FrozenChart'
 
@@ -70,7 +71,9 @@ function Node({ node, charts }: { node: RichTextNode; charts: Charts }): ReactNo
     }
     case 'image': {
       const src = String(node.attrs?.src ?? '')
-      return SAFE_IMAGE.test(src) ? <img src={src} alt={String(node.attrs?.alt ?? '')} /> : null
+      return SAFE_IMAGE.test(src) ? (
+        <img src={resolveApiUrl(src)} alt={String(node.attrs?.alt ?? '')} />
+      ) : null
     }
     case CHART_NODE: {
       const chart = charts.get(String(node.attrs?.chartId))

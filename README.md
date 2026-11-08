@@ -354,11 +354,16 @@ goes in both folders and is added to both `en.ts` and `fr.ts`.
 ### Connecting the real back end
 
 1. Set `VITE_USE_MOCKS=false` in `.env.local`.
-2. Point `DEV_PROXY_TARGET` at `CMarket.Api` for local development, or set `VITE_API_BASE_URL`,
-   `VITE_REALTIME_HUB_URL` and `VITE_CHAT_HUB_URL` for a deployed API.
+2. Point `DEV_PROXY_TARGET` at `CMarket.Api` for local development, or set `VITE_API_URL` to
+   the origin of a deployed API (`https://api.cmarket.example`): the REST API and both hubs are
+   served under it, and the images the API names by its own path (`/api/v1/profile-photos/…`) are
+   shown from it. `VITE_API_BASE_URL`, `VITE_REALTIME_HUB_URL` and `VITE_CHAT_HUB_URL` replace one
+   address each. A malformed `VITE_API_URL` stops the dev server and the build.
 3. Have `POST /auth/otp/verify` and `/auth/refresh` set the refresh token as an `HttpOnly`,
    `Secure` cookie on the `/auth` path. The login calls are sent with credentials; an API on
-   another origin needs CORS with credentials for this site, and `SameSite=None` on the cookie.
+   another origin needs CORS with credentials for this site, and an API on another site
+   (another registrable domain) `SameSite=None` on the cookie, which browsers that block
+   third-party cookies refuse: keep the site and the API on one domain (`app.` and `api.`).
 
 The screens do not change: they only know the API contract. The prototype's account switch and
 the demo accounts of the login page go with the mock.

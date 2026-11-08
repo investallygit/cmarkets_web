@@ -1,8 +1,13 @@
-export const env = {
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL ?? '/api/v1',
-  realtimeHubUrl: import.meta.env.VITE_REALTIME_HUB_URL ?? '/hubs/market',
-  /** The hub of the messaging. */
-  chatHubUrl: import.meta.env.VITE_CHAT_HUB_URL ?? '/hubs/chat',
-  /** Prototype mode: src/mocks answers the API and simulates the real-time hub. */
-  useMocks: import.meta.env.VITE_USE_MOCKS === 'true',
-} as const
+import { readEnv, resolveApiPath, toApiPath } from './readEnv'
+
+/** The addresses of the back end and the prototype mode, read from .env at build time. */
+export const env = readEnv(import.meta.env)
+
+/**
+ * An image or a file the API names by its own path (a profile's photo, a publication's image),
+ * on the API's origin when the site is served from another one.
+ */
+export const resolveApiUrl = (url: string) => resolveApiPath(url, env.apiOrigin)
+
+/** The API's own path of an address resolveApiUrl gave, to send it back to the API. */
+export const unresolveApiUrl = (url: string) => toApiPath(url, env.apiOrigin)

@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import type { AccountType } from '@/shared/api/contracts'
 import { ACCOUNT_TYPE_COLORS } from '@/shared/config/accountTypes'
+import { resolveApiUrl } from '@/shared/config/env'
 import { initialsOf } from '../lib/profile'
 
 const SIZES = {
@@ -40,7 +41,7 @@ export function ProfileAvatar({
         style={{ borderColor: color, color }}
       >
         {photoUrl ? (
-          <img src={photoUrl} alt="" className="size-full object-cover" />
+          <img src={resolveApiUrl(photoUrl)} alt="" className="size-full object-cover" />
         ) : (
           initialsOf(name)
         )}
