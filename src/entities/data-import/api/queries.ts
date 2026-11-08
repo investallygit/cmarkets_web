@@ -1,27 +1,14 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
 import type {
-  CoverageDto,
   ImportDto,
-  ImportRowDto,
   ImportRowPatchDto,
   ImportRowStatus,
   ImportStatus,
   ImportType,
-  ImportTypeDto,
-  Paged,
 } from '@/shared/api/contracts'
+import { dataAdminApi, type ImportQuery, type UploadInput } from '@/shared/api/endpoints'
 
-export interface ImportQuery {
-  status?: ImportStatus[]
-  type?: ImportType
-  /** Upload days, both included. */
-  from?: string
-  to?: string
-  sessionDate?: string
-  page?: number
-  pageSize?: number
-}
+export type { ImportQuery, UploadInput }
 
 export const dataImportKeys = {
   all: ['data-imports'] as const,
@@ -35,8 +22,6 @@ export const dataImportKeys = {
     [...dataImportKeys.rows(id), status, page] as const,
 }
 
-const importPath = (id: string, rest = '') => `/data/imports/${encodeURIComponent(id)}${rest}`
-
 /** The checks are running: format, then business rules. */
 export const isChecking = (status: ImportStatus) => status === 'format' || status === 'checks'
 
@@ -44,7 +29,7 @@ export const isChecking = (status: ImportStatus) => status === 'format' || statu
 export function useImportTypes() {
   return useQuery({
     queryKey: dataImportKeys.types(),
-    queryFn: ({ signal }) => apiClient.get<ImportTypeDto[]>('/data/import-types', { signal }),
+    queryFn: ({ signal }) => dataAdminApi.importTypes(signal),
     staleTime: Infinity,
   })
 }
@@ -53,8 +38,7 @@ export function useImportTypes() {
 export function useCoverage(date: string | null = null) {
   return useQuery({
     queryKey: dataImportKeys.coverage(date),
-    queryFn: ({ signal }) =>
-      apiClient.get<CoverageDto>('/data/coverage', { query: { date }, signal }),
+    queryFn: ({ signal }) => dataAdminApi.coverage(date, signal),
     placeholderData: keepPreviousData,
   })
 }
@@ -63,11 +47,7 @@ export function useCoverage(date: string | null = null) {
 export function useImports(query: ImportQuery) {
   return useQuery({
     queryKey: dataImportKeys.list(query),
-    queryFn: ({ signal }) =>
-      apiClient.get<Paged<ImportDto>>('/data/imports', {
-        query: { ...query, status: query.status },
-        signal,
-      }),
+    queryFn: ({ signal }) => dataAdminApi.imports(query, signal),
     placeholderData: keepPreviousData,
   })
 }
@@ -79,7 +59,7 @@ export function useImports(query: ImportQuery) {
 export function useImport(id: string | null) {
   return useQuery({
     queryKey: dataImportKeys.detail(id ?? ''),
-    queryFn: ({ signal }) => apiClient.get<ImportDto>(importPath(id ?? ''), { signal }),
+    queryFn: ({ signal }) => dataAdminApi.import(id ?? '', signal),
     enabled: Boolean(id),
     refetchInterval: (query) =>
       query.state.data && isChecking(query.state.data.status) ? 1_000 : false,
@@ -95,11 +75,7 @@ export function useImportRows(
 ) {
   return useQuery({
     queryKey: dataImportKeys.rowPage(id ?? '', status, page),
-    queryFn: ({ signal }) =>
-      apiClient.get<Paged<ImportRowDto>>(importPath(id ?? '', '/rows'), {
-        query: { status, page, pageSize: 200 },
-        signal,
-      }),
+    queryFn: ({ signal }) => dataAdminApi.rows(id ?? '', { status, page, pageSize: 200 }, signal),
     enabled: Boolean(id) && enabled,
     placeholderData: keepPreviousData,
   })
@@ -114,26 +90,11 @@ function useRefresh() {
   }
 }
 
-export interface UploadInput {
-  type: ImportType
-  sessionDate: string
-  file: File
-  /** Replace file: the upload not published yet that this one replaces. */
-  replacesId?: string
-}
-
 /** POST /data/imports: the file goes up and its checks start. */
 export function useUploadImport() {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: ({ type, sessionDate, file, replacesId }: UploadInput) => {
-      const form = new FormData()
-      form.set('type', type)
-      form.set('sessionDate', sessionDate)
-      form.set('file', file)
-      if (replacesId) form.set('replacesId', replacesId)
-      return apiClient.postForm<ImportDto>('/data/imports', form)
-    },
+    mutationFn: (input: UploadInput) => dataAdminApi.upload(input),
     onSuccess: refresh,
   })
 }
@@ -143,10 +104,7 @@ export function usePatchImportRow(importId: string) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ rowId, patch }: { rowId: string; patch: ImportRowPatchDto }) =>
-      apiClient.patch<ImportRowDto>(
-        importPath(importId, `/rows/${encodeURIComponent(rowId)}`),
-        patch,
-      ),
+      dataAdminApi.patchRow(importId, rowId, patch),
     // The counters and the other rows change with a fix (a duplicate may end).
     onSuccess: () => queryClient.invalidateQueries({ queryKey: dataImportKeys.detail(importId) }),
   })
@@ -156,7 +114,7 @@ export function usePatchImportRow(importId: string) {
 export function usePublishImport() {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (id: string) => apiClient.post<ImportDto>(importPath(id, '/publish')),
+    mutationFn: dataAdminApi.publish,
     onSuccess: refresh,
   })
 }
@@ -166,7 +124,7 @@ export function useRollBackImport() {
   const refresh = useRefresh()
   return useMutation({
     mutationFn: ({ id, reason }: { id: string; reason: string }) =>
-      apiClient.post<ImportDto>(importPath(id, '/rollback'), { reason }),
+      dataAdminApi.rollBack(id, reason),
     onSuccess: refresh,
   })
 }
@@ -175,7 +133,7 @@ export function useRollBackImport() {
 export function useDiscardImport() {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (id: string) => apiClient.post<ImportDto>(importPath(id, '/discard')),
+    mutationFn: dataAdminApi.discard,
     onSuccess: refresh,
   })
 }
@@ -184,8 +142,6 @@ export function useDiscardImport() {
 export function useImportTemplate() {
   return useMutation({
     mutationFn: ({ type, format }: { type: ImportType; format: 'csv' | 'xlsx' }) =>
-      apiClient.getBlob(`/data/import-types/${encodeURIComponent(type)}/template`, {
-        query: { format },
-      }),
+      dataAdminApi.template(type, format),
   })
 }

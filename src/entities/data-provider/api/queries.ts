@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type { EodhdStatusDto } from '@/shared/api/contracts'
+import { dataAdminApi } from '@/shared/api/endpoints'
 
 export const dataProviderKeys = {
   all: ['data-provider'] as const,
@@ -11,8 +10,7 @@ export const dataProviderKeys = {
 export function useEodhdStatus() {
   return useQuery({
     queryKey: dataProviderKeys.eodhd(),
-    queryFn: ({ signal }) =>
-      apiClient.get<EodhdStatusDto>('/data/providers/eodhd/status', { signal }),
+    queryFn: ({ signal }) => dataAdminApi.eodhdStatus(signal),
     refetchInterval: 60_000,
   })
 }

@@ -35,7 +35,7 @@ export {
   type NewsFilters,
   type Page,
 } from './content'
-export { dataAdminApi, dataAdminRoutes } from './dataAdmin'
+export { dataAdminApi, dataAdminRoutes, type ImportQuery, type UploadInput } from './dataAdmin'
 export { devToolsApi, devToolsRoutes, type DemoAccountsDto, type SentCodeQuery } from './devTools'
 export { marketApi, marketRoutes, type HistoryRange } from './market'
 export { meApi, meRoutes } from './me'

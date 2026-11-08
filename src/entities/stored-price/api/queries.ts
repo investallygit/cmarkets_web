@@ -1,11 +1,6 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type {
-  Paged,
-  PriceCorrectionDto,
-  PriceCorrectionRequestDto,
-  StoredPriceDto,
-} from '@/shared/api/contracts'
+import type { PriceCorrectionRequestDto } from '@/shared/api/contracts'
+import { dataAdminApi } from '@/shared/api/endpoints'
 
 export const storedPriceKeys = {
   all: ['stored-prices'] as const,
@@ -19,11 +14,7 @@ export const storedPriceKeys = {
 export function useStoredPrices(securityId: string | null, from: string, to: string) {
   return useQuery({
     queryKey: storedPriceKeys.sessions(securityId ?? '', from, to),
-    queryFn: ({ signal }) =>
-      apiClient.get<StoredPriceDto[]>(
-        `/data/securities/${encodeURIComponent(securityId ?? '')}/prices`,
-        { query: { from, to }, signal },
-      ),
+    queryFn: ({ signal }) => dataAdminApi.storedPrices(securityId ?? '', from, to, signal),
     enabled: Boolean(securityId),
     placeholderData: keepPreviousData,
   })
@@ -33,11 +24,7 @@ export function useStoredPrices(securityId: string | null, from: string, to: str
 export function useCorrections(securityId: string | null, page = 1) {
   return useQuery({
     queryKey: storedPriceKeys.corrections(securityId, page),
-    queryFn: ({ signal }) =>
-      apiClient.get<Paged<PriceCorrectionDto>>('/data/corrections', {
-        query: { securityId, page, pageSize: 50 },
-        signal,
-      }),
+    queryFn: ({ signal }) => dataAdminApi.corrections({ securityId, page, pageSize: 50 }, signal),
     placeholderData: keepPreviousData,
   })
 }
@@ -54,11 +41,7 @@ export function useCorrectPrice() {
       securityId: string
       date: string
       correction: PriceCorrectionRequestDto
-    }) =>
-      apiClient.put<PriceCorrectionDto>(
-        `/data/securities/${encodeURIComponent(securityId)}/prices/${date}`,
-        correction,
-      ),
+    }) => dataAdminApi.correctPrice(securityId, date, correction),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: storedPriceKeys.all }),
   })
 }
