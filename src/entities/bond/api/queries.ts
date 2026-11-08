@@ -1,11 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type {
-  BondCalculationDto,
-  BondCalculationRequestDto,
-  BondDto,
-  BondSummaryDto,
-} from '@/shared/api/contracts'
+import type { BondCalculationRequestDto } from '@/shared/api/contracts'
+import { bondsApi } from '@/shared/api/endpoints'
 
 export const bondKeys = {
   all: ['bonds'] as const,
@@ -15,13 +10,11 @@ export const bondKeys = {
     ['bond-calculation', id, request] as const,
 }
 
-const bondPath = (id: string) => `/bonds/${encodeURIComponent(id)}`
-
 /** GET /bonds: listed bonds and government securities. */
 export function useBonds() {
   return useQuery({
     queryKey: bondKeys.list(),
-    queryFn: ({ signal }) => apiClient.get<BondSummaryDto[]>('/bonds', { signal }),
+    queryFn: ({ signal }) => bondsApi.list(signal),
     staleTime: 5 * 60_000,
   })
 }
@@ -30,7 +23,7 @@ export function useBonds() {
 export function useBond(id: string, enabled = true) {
   return useQuery({
     queryKey: bondKeys.bond(id),
-    queryFn: ({ signal }) => apiClient.get<BondDto>(bondPath(id), { signal }),
+    queryFn: ({ signal }) => bondsApi.bond(id, signal),
     staleTime: 5 * 60_000,
     enabled,
   })
@@ -44,8 +37,8 @@ export function useBond(id: string, enabled = true) {
 export function useBondCalculation(id: string, request: BondCalculationRequestDto | null) {
   return useQuery({
     queryKey: bondKeys.calculation(id, request),
-    queryFn: ({ signal }) =>
-      apiClient.post<BondCalculationDto>(`${bondPath(id)}/calculate`, request, { signal }),
+    // Only enabled with a request.
+    queryFn: ({ signal }) => bondsApi.calculate(id, request!, signal),
     enabled: request !== null,
     staleTime: 60_000,
     placeholderData: keepPreviousData,

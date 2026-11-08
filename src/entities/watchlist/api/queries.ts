@@ -1,18 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type { WatchlistDto, WatchlistInputDto, WatchlistItemDto } from '@/shared/api/contracts'
+import type { WatchlistDto, WatchlistInputDto } from '@/shared/api/contracts'
+import { watchlistsApi } from '@/shared/api/endpoints'
 
 export const watchlistKeys = { all: ['watchlists'] as const }
-
-const listPath = (id: string) => `/watchlists/${encodeURIComponent(id)}`
-const itemPath = (id: string, securityId: string) =>
-  `${listPath(id)}/items/${encodeURIComponent(securityId)}`
 
 /** GET /watchlists: the user's lists with the quote of each security. */
 export function useWatchlists() {
   return useQuery({
     queryKey: watchlistKeys.all,
-    queryFn: ({ signal }) => apiClient.get<WatchlistDto[]>('/watchlists', { signal }),
+    queryFn: ({ signal }) => watchlistsApi.list(signal),
   })
 }
 
@@ -33,7 +29,7 @@ function useUpdateLists() {
 export function useCreateWatchlist() {
   const updateLists = useUpdateLists()
   return useMutation({
-    mutationFn: (input: WatchlistInputDto) => apiClient.post<WatchlistDto>('/watchlists', input),
+    mutationFn: watchlistsApi.create,
     onSuccess: (created) => updateLists((lists) => [...lists, created]),
   })
 }
@@ -43,7 +39,7 @@ export function useUpdateWatchlist() {
   const updateLists = useUpdateLists()
   return useMutation({
     mutationFn: ({ id, ...input }: WatchlistInputDto & { id: string }) =>
-      apiClient.put<WatchlistDto>(listPath(id), input),
+      watchlistsApi.update(id, input),
     onSuccess: (updated) =>
       updateLists((lists) => lists.map((list) => (list.id === updated.id ? updated : list))),
   })
@@ -52,7 +48,7 @@ export function useUpdateWatchlist() {
 export function useDeleteWatchlist() {
   const updateLists = useUpdateLists()
   return useMutation({
-    mutationFn: (id: string) => apiClient.delete<void>(listPath(id)),
+    mutationFn: watchlistsApi.remove,
     onSuccess: (_result, id) => updateLists((lists) => lists.filter((list) => list.id !== id)),
   })
 }
@@ -66,7 +62,7 @@ export function useAddToWatchlist() {
   const updateLists = useUpdateLists()
   return useMutation({
     mutationFn: ({ watchlistId, securityId }: ItemChange) =>
-      apiClient.post<WatchlistItemDto>(itemPath(watchlistId, securityId)),
+      watchlistsApi.addItem(watchlistId, securityId),
     onSuccess: (item, { watchlistId }) =>
       updateLists((lists) =>
         lists.map((list) =>
@@ -82,7 +78,7 @@ export function useRemoveFromWatchlist() {
   const updateLists = useUpdateLists()
   return useMutation({
     mutationFn: ({ watchlistId, securityId }: ItemChange) =>
-      apiClient.delete<void>(itemPath(watchlistId, securityId)),
+      watchlistsApi.removeItem(watchlistId, securityId),
     onSuccess: (_result, { watchlistId, securityId }) =>
       updateLists((lists) =>
         lists.map((list) =>

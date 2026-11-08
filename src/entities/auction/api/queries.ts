@@ -1,11 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type { AuctionDto, AuctionInstrument } from '@/shared/api/contracts'
+import { bondsApi, type AuctionQuery } from '@/shared/api/endpoints'
 
-export interface AuctionQuery {
-  country?: string
-  instrument?: AuctionInstrument
-}
+export type { AuctionQuery }
 
 export const auctionKeys = {
   all: ['auctions'] as const,
@@ -16,8 +12,7 @@ export const auctionKeys = {
 export function useAuctions(query: AuctionQuery = {}) {
   return useQuery({
     queryKey: auctionKeys.list(query),
-    queryFn: ({ signal }) =>
-      apiClient.get<AuctionDto[]>('/auctions', { query: { ...query }, signal }),
+    queryFn: ({ signal }) => bondsApi.auctions(query, signal),
     staleTime: 5 * 60_000,
     placeholderData: keepPreviousData,
   })

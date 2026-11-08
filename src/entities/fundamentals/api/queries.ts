@@ -1,11 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type {
-  ComparisonItemDto,
-  FinancialStatement,
-  FinancialStatementDto,
-  RatiosDto,
-} from '@/shared/api/contracts'
+import type { FinancialStatement } from '@/shared/api/contracts'
+import { analysisApi } from '@/shared/api/endpoints'
 
 /** Fiscal years shown by the statements (spec section 9, screen 3). */
 const STATEMENT_YEARS = 5
@@ -22,15 +17,11 @@ export const fundamentalsKeys = {
     [...fundamentalsKeys.all, 'comparison', [...ids].sort().join(',')] as const,
 }
 
-const securityPath = (id: string, suffix: string) =>
-  `/securities/${encodeURIComponent(id)}${suffix}`
-
 /** GET /securities/{id}/ratios: an equity's ratios and its sector's averages. */
 export function useRatios(securityId: string | undefined) {
   return useQuery({
     queryKey: fundamentalsKeys.ratios(securityId ?? ''),
-    queryFn: ({ signal }) =>
-      apiClient.get<RatiosDto>(securityPath(securityId ?? '', '/ratios'), { signal }),
+    queryFn: ({ signal }) => analysisApi.ratios(securityId ?? '', signal),
     enabled: Boolean(securityId),
     staleTime: RATIOS_STALE_MS,
   })
@@ -41,10 +32,7 @@ export function useFinancials(securityId: string | undefined, statement: Financi
   return useQuery({
     queryKey: fundamentalsKeys.financials(securityId ?? '', statement),
     queryFn: ({ signal }) =>
-      apiClient.get<FinancialStatementDto>(securityPath(securityId ?? '', '/financials'), {
-        query: { statement, years: STATEMENT_YEARS },
-        signal,
-      }),
+      analysisApi.financials(securityId ?? '', { statement, years: STATEMENT_YEARS }, signal),
     enabled: Boolean(securityId),
     staleTime: ACCOUNTS_STALE_MS,
   })
@@ -57,11 +45,7 @@ export function useFinancials(securityId: string | undefined, statement: Financi
 export function useComparison(ids: readonly string[]) {
   return useQuery({
     queryKey: fundamentalsKeys.comparison(ids),
-    queryFn: ({ signal }) =>
-      apiClient.get<ComparisonItemDto[]>('/analysis/compare', {
-        query: { ids: [...ids].sort().join(',') },
-        signal,
-      }),
+    queryFn: ({ signal }) => analysisApi.compare([...ids].sort(), signal),
     enabled: ids.length > 0,
     staleTime: RATIOS_STALE_MS,
     placeholderData: keepPreviousData,

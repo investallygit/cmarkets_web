@@ -1,11 +1,6 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type {
-  SavedScreenDto,
-  SavedScreenInputDto,
-  ScreenerRequestDto,
-  ScreenerResultDto,
-} from '@/shared/api/contracts'
+import type { SavedScreenDto, ScreenerRequestDto } from '@/shared/api/contracts'
+import { analysisApi } from '@/shared/api/endpoints'
 
 export const screenerKeys = {
   all: ['screener'] as const,
@@ -20,8 +15,7 @@ export const screenerKeys = {
 export function useScreener(request: ScreenerRequestDto) {
   return useQuery({
     queryKey: screenerKeys.results(request),
-    queryFn: ({ signal }) =>
-      apiClient.post<ScreenerResultDto>('/analysis/screener', request, { signal }),
+    queryFn: ({ signal }) => analysisApi.screener(request, signal),
     staleTime: 60_000,
     placeholderData: keepPreviousData,
   })
@@ -31,7 +25,7 @@ export function useScreener(request: ScreenerRequestDto) {
 export function useSavedScreens() {
   return useQuery({
     queryKey: screenerKeys.screens(),
-    queryFn: ({ signal }) => apiClient.get<SavedScreenDto[]>('/analysis/screens', { signal }),
+    queryFn: ({ signal }) => analysisApi.screens(signal),
     staleTime: 5 * 60_000,
   })
 }
@@ -56,8 +50,7 @@ function useUpdateScreens() {
 export function useSaveScreen() {
   const updateScreens = useUpdateScreens()
   return useMutation({
-    mutationFn: (input: SavedScreenInputDto) =>
-      apiClient.post<SavedScreenDto>('/analysis/screens', input),
+    mutationFn: analysisApi.saveScreen,
     onSuccess: (saved) => updateScreens((screens) => [...screens, saved]),
   })
 }
@@ -65,8 +58,7 @@ export function useSaveScreen() {
 export function useDeleteScreen() {
   const updateScreens = useUpdateScreens()
   return useMutation({
-    mutationFn: (id: string) =>
-      apiClient.delete<void>(`/analysis/screens/${encodeURIComponent(id)}`),
+    mutationFn: analysisApi.deleteScreen,
     onSuccess: (_result, id) =>
       updateScreens((screens) => screens.filter((screen) => screen.id !== id)),
   })

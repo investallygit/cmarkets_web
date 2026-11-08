@@ -1,13 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type { YieldCurveDto } from '@/shared/api/contracts'
+import { bondsApi, type YieldCurveQuery } from '@/shared/api/endpoints'
 
-export interface YieldCurveQuery {
-  /** The latest session when absent. */
-  date?: string
-  /** Every CEMAC country when absent. */
-  country?: string
-}
+export type { YieldCurveQuery }
 
 export const yieldCurveKeys = {
   all: ['yield-curves'] as const,
@@ -18,8 +12,7 @@ export const yieldCurveKeys = {
 export function useYieldCurves(query: YieldCurveQuery = {}, { enabled = true } = {}) {
   return useQuery({
     queryKey: yieldCurveKeys.list(query),
-    queryFn: ({ signal }) =>
-      apiClient.get<YieldCurveDto[]>('/yield-curves', { query: { ...query }, signal }),
+    queryFn: ({ signal }) => bondsApi.yieldCurves(query, signal),
     staleTime: 5 * 60_000,
     placeholderData: keepPreviousData,
     enabled,
