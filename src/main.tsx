@@ -19,9 +19,11 @@ import {
   type RealtimeClient,
 } from '@/shared/realtime'
 
-// Composition root: the only place that knows whether the back end is real or mocked.
+// Composition root: the only place that knows whether the back end is real or mocked. It reads
+// VITE_USE_MOCKS itself, as readEnv does (env.useMocks), for Vite writes it into the code: a build
+// for CMarket.Api then leaves the mock and MSW out of the bundle.
 async function createHubs(): Promise<{ market: RealtimeClient; chat: ChatClient }> {
-  if (env.useMocks) {
+  if (import.meta.env.VITE_USE_MOCKS === 'true') {
     const { startMockBackend } = await import('@/mocks')
     return startMockBackend()
   }

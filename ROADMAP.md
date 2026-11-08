@@ -414,6 +414,9 @@ with its OpenAPI (queries, bodies, answers: they match):
   the two came first. The conversation now keeps fixed times as well.
 - A layout change in its last 800 ms was lost when the tab closed or reloaded (no React cleanup
   runs then), and a save under way was cut short. The save now goes out on `pagehide`, kept alive.
+- A build for the API (`VITE_USE_MOCKS=false`) still carried the mock and MSW, never loaded:
+  `main.tsx` now tests `VITE_USE_MOCKS` as Vite writes it into the code, and such a build leaves
+  them out (4.0 MB instead of 4.8).
 - `CMarket.Api`, to fix there: a GET of a route its output cache keeps (`/subscription/plans`,
   `/directory/specialties`, `/public/profiles/{slug}`) answers 500 when it waits on the cache's
   fill and the request filling it is cancelled by its browser: `OutputCacheMiddleware` shares the
