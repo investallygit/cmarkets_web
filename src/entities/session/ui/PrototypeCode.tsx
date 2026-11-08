@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { FlaskConical } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { apiClient } from '@/shared/api'
+import { devToolsApi, type SentCodeQuery } from '@/shared/api/endpoints'
 import { Button } from '@/shared/ui/form/Button'
 
 interface PrototypeCodeProps {
   /** The login challenge, or the e-mail address of a password reset. */
-  query: { challengeId: string } | { email: string; sentAt: number }
+  query: SentCodeQuery
   onUse: (code: string) => void
 }
 
@@ -18,8 +18,7 @@ export function PrototypeCode({ query, onUse }: PrototypeCodeProps) {
   const { t } = useTranslation()
   const sent = useQuery({
     queryKey: ['prototype', 'code', query],
-    queryFn: ({ signal }) =>
-      apiClient.get<{ code: string }>('/_prototype/codes', { query, signal, anonymous: true }),
+    queryFn: ({ signal }) => devToolsApi.sentCode(query, signal),
     staleTime: Infinity,
   })
   const code = sent.data?.code

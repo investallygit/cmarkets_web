@@ -1,6 +1,7 @@
 import { queryOptions, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { apiClient, isApiError } from '@/shared/api'
+import { isApiError } from '@/shared/api'
+import { meApi } from '@/shared/api/endpoints'
 import type { NamedLayoutDto, ScreenLayoutDto } from '@/shared/api/contracts'
 import type { WorkspaceItem } from '@/shared/ui/Workspace'
 import {
@@ -39,13 +40,9 @@ type CachedLayout = ScreenLayoutDto & { unread?: true }
 const NO_HISTORY: History = { past: [], future: [] }
 const NO_SAVED: readonly NamedLayoutDto[] = []
 
-function layoutPath(screen: string): string {
-  return `/me/layouts/${encodeURIComponent(screen)}`
-}
-
 async function fetchLayout(screen: string, signal: AbortSignal): Promise<ScreenLayoutDto> {
   try {
-    return await apiClient.get<ScreenLayoutDto>(layoutPath(screen), { signal })
+    return await meApi.layout(screen, signal)
   } catch (error) {
     // Never saved: no positions, so every panel keeps its default place.
     if (isApiError(error, 404)) return { screen, items: [] }
@@ -98,8 +95,8 @@ export function useWorkspaceLayout(screen: string, defaults: readonly ScreenPane
     // Unread, its saved layouts and lock are unknown here: a PUT would delete them.
     if (!layout || layout.unread) return
     const { screen: id, ...body } = layout
-    apiClient
-      .put<void>(layoutPath(id), body)
+    meApi
+      .saveLayout(id, body)
       .catch((error: unknown) => console.warn('[layout] could not save', error))
   }, [])
 

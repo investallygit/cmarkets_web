@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type { MeDto, MeUpdateDto, PasswordChangeDto, Permission } from '@/shared/api/contracts'
+import type { MeDto, MeUpdateDto, Permission } from '@/shared/api/contracts'
+import { meApi } from '@/shared/api/endpoints'
 
 export const sessionKeys = { me: ['me'] as const, restore: ['session', 'restore'] as const }
 
 export function useMe() {
   return useQuery({
     queryKey: sessionKeys.me,
-    queryFn: ({ signal }) => apiClient.get<MeDto>('/me', { signal }),
+    queryFn: ({ signal }) => meApi.get(signal),
     staleTime: 5 * 60_000,
   })
 }
@@ -33,7 +33,7 @@ export function profileOf(me: MeDto): MeUpdateDto {
 export function useUpdateProfile() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (update: MeUpdateDto) => apiClient.put<MeDto>('/me', update),
+    mutationFn: meApi.update,
     onSuccess: (me) => queryClient.setQueryData(sessionKeys.me, me),
   })
 }
@@ -41,6 +41,6 @@ export function useUpdateProfile() {
 /** PUT /me/password: the current password, then the new one. */
 export function useChangePassword() {
   return useMutation({
-    mutationFn: (change: PasswordChangeDto) => apiClient.put<void>('/me/password', change),
+    mutationFn: meApi.changePassword,
   })
 }

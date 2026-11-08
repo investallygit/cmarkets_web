@@ -1,17 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient, endSession, refreshAccessToken, startSession } from '@/shared/api'
-import type {
-  AccessTokenDto,
-  LoginRequestDto,
-  OtpChallengeDto,
-  OtpVerifyRequestDto,
-  PasswordResetConfirmDto,
-  PasswordResetRequestDto,
-} from '@/shared/api/contracts'
+import { endSession, refreshAccessToken, startSession } from '@/shared/api'
+import { authApi } from '@/shared/api/endpoints'
 import { sessionKeys } from './queries'
-
-/** The login pages call the API without a session; the refresh cookie goes both ways. */
-const ANONYMOUS = { anonymous: true } as const
 
 /** At start-up, POST /auth/refresh trades the cookie of the last login, if any, for a session. */
 export function useRestoreSession(enabled: boolean) {
@@ -27,8 +17,7 @@ export function useRestoreSession(enabled: boolean) {
 /** POST /auth/login: e-mail and password. The answer says where the one-time code went. */
 export function useLogin() {
   return useMutation({
-    mutationFn: (request: LoginRequestDto) =>
-      apiClient.post<OtpChallengeDto>('/auth/login', request, ANONYMOUS),
+    mutationFn: authApi.login,
   })
 }
 
@@ -36,8 +25,7 @@ export function useLogin() {
 export function useVerifyOtp() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (request: OtpVerifyRequestDto) =>
-      apiClient.post<AccessTokenDto>('/auth/otp/verify', request, ANONYMOUS),
+    mutationFn: authApi.verifyOtp,
     onSuccess: (token) => {
       queryClient.clear()
       startSession(token)
@@ -48,24 +36,21 @@ export function useVerifyOtp() {
 /** POST /auth/register, a multipart form with the documents; a code then confirms the address. */
 export function useRegister() {
   return useMutation({
-    mutationFn: (form: FormData) =>
-      apiClient.postForm<OtpChallengeDto>('/auth/register', form, ANONYMOUS),
+    mutationFn: authApi.register,
   })
 }
 
 /** POST /auth/password/reset, first step: a code goes to the address. */
 export function useRequestPasswordReset() {
   return useMutation({
-    mutationFn: (request: PasswordResetRequestDto) =>
-      apiClient.post<void>('/auth/password/reset', request, ANONYMOUS),
+    mutationFn: authApi.requestPasswordReset,
   })
 }
 
 /** POST /auth/password/reset, second step: the code and the new password. */
 export function useConfirmPasswordReset() {
   return useMutation({
-    mutationFn: (request: PasswordResetConfirmDto) =>
-      apiClient.post<void>('/auth/password/reset', request, ANONYMOUS),
+    mutationFn: authApi.confirmPasswordReset,
   })
 }
 
@@ -76,7 +61,7 @@ export function useConfirmPasswordReset() {
 export function useLogout() {
   return useMutation({
     mutationFn: async (reason: 'logout' | 'inactivity') => {
-      await apiClient.post<void>('/auth/logout', undefined, ANONYMOUS)
+      await authApi.logout()
       return reason
     },
     onSettled: (_result, _error, reason) => endSession(reason),

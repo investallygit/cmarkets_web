@@ -1,13 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { FlaskConical } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { apiClient } from '@/shared/api'
-import type { AccountType, LoginRequestDto } from '@/shared/api/contracts'
-
-interface DemoAccountsDto {
-  password: string
-  accounts: { accountType: AccountType; email: string; displayName: string }[]
-}
+import type { LoginRequestDto } from '@/shared/api/contracts'
+import { devToolsApi } from '@/shared/api/endpoints'
 
 /**
  * Prototype helper (env.devTools): the demo user of each account type (GET /_prototype/accounts,
@@ -17,8 +12,7 @@ export function DemoAccounts({ onPick }: { onPick: (credentials: LoginRequestDto
   const { t } = useTranslation()
   const demo = useQuery({
     queryKey: ['prototype', 'accounts'],
-    queryFn: ({ signal }) =>
-      apiClient.get<DemoAccountsDto>('/_prototype/accounts', { signal, anonymous: true }),
+    queryFn: ({ signal }) => devToolsApi.accounts(signal),
     staleTime: Infinity,
   })
   if (!demo.data) return null
