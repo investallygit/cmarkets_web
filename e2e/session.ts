@@ -1,7 +1,11 @@
 import { expect, type Page } from '@playwright/test'
 
-/** The demo Analyst's session, saved by auth.setup.ts for the other tests. */
-export const ANALYST_SESSION = 'e2e/.auth/analyst.json'
+/**
+ * The demo Analyst's session, saved by auth.setup.ts for the other tests: one per back end, the
+ * mock's and CMarket.Api's (npm run e2e:api), whose cookies share the host.
+ */
+export const ANALYST_SESSION =
+  process.env.E2E_BACKEND === 'api' ? 'e2e/.auth/analyst-api.json' : 'e2e/.auth/analyst.json'
 
 /** No session at all: the tests of the login pages. */
 export const NO_SESSION = { cookies: [], origins: [] }

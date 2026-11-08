@@ -5,32 +5,34 @@ import { logIn, NO_SESSION } from './session.js'
 
 test.use({ storageState: NO_SESSION })
 
-test('a login needs the password, then the code, and goes back to the page asked for', async ({
-  page,
-}) => {
-  await page.goto('/port/portfolio-cemac/risk')
-  await expect(page).toHaveURL(/\/login\?next=%2Fport%2Fportfolio-cemac%2Frisk$/)
-  await page.getByLabel('E-mail address').fill('k.atangana@analyst.example')
-  await page.getByLabel('Password', { exact: true }).fill('wrong-password-1')
-  await page.getByRole('button', { name: 'Log in' }).click()
-  await expect(page.getByRole('alert')).toHaveText('Wrong e-mail address or password.')
+test(
+  'a login needs the password, then the code, and goes back to the page asked for',
+  { tag: '@api' },
+  async ({ page }) => {
+    await page.goto('/port/portfolio-cemac/risk')
+    await expect(page).toHaveURL(/\/login\?next=%2Fport%2Fportfolio-cemac%2Frisk$/)
+    await page.getByLabel('E-mail address').fill('k.atangana@analyst.example')
+    await page.getByLabel('Password', { exact: true }).fill('wrong-password-1')
+    await page.getByRole('button', { name: 'Log in' }).click()
+    await expect(page.getByRole('alert')).toHaveText('Wrong e-mail address or password.')
 
-  await page.getByLabel('Password', { exact: true }).fill('cmarket2026')
-  await page.getByRole('button', { name: 'Log in' }).click()
-  await expect(page.getByText('A code was sent by e-mail to k•••@analyst.example.')).toBeVisible()
-  const sent = (await page.getByText(/^\d{6}$/).textContent()) ?? ''
-  const wrong = sent === '111111' ? '222222' : '111111'
-  await page.getByLabel('Code').fill(wrong)
-  await page.getByRole('button', { name: 'Verify' }).click()
-  await expect(page.getByText('Wrong code: 4 attempts left.')).toBeVisible()
-  await page.getByLabel('Code').fill(sent)
-  await page.getByRole('button', { name: 'Verify' }).click()
-  await expect(page).toHaveURL(/\/port\/portfolio-cemac\/risk$/)
+    await page.getByLabel('Password', { exact: true }).fill('cmarket2026')
+    await page.getByRole('button', { name: 'Log in' }).click()
+    await expect(page.getByText('A code was sent by e-mail to k•••@analyst.example.')).toBeVisible()
+    const sent = (await page.getByText(/^\d{6}$/).textContent()) ?? ''
+    const wrong = sent === '111111' ? '222222' : '111111'
+    await page.getByLabel('Code').fill(wrong)
+    await page.getByRole('button', { name: 'Verify' }).click()
+    await expect(page.getByText('Wrong code: 4 attempts left.')).toBeVisible()
+    await page.getByLabel('Code').fill(sent)
+    await page.getByRole('button', { name: 'Verify' }).click()
+    await expect(page).toHaveURL(/\/port\/portfolio-cemac\/risk$/)
 
-  // The refresh cookie restores the session after a reload.
-  await page.reload()
-  await expect(page.getByRole('heading', { name: 'Risk metrics' })).toBeVisible()
-})
+    // The refresh cookie restores the session after a reload.
+    await page.reload()
+    await expect(page.getByRole('heading', { name: 'Risk metrics' })).toBeVisible()
+  },
+)
 
 test('a Student signs up with a school address and starts the free trial', async ({ page }) => {
   await page.goto('/login')

@@ -58,46 +58,54 @@ test('a range criterion is run and a screen is saved under a name', async ({ pag
   )
 })
 
-test('the bond calculator gives the results of spec section 14.1, case B', async ({ page }) => {
-  await page.goto('/yas/ECMR-6.25-2029')
-  const calculator = panel(page, 'Bond calculator')
-  await expect(calculator.getByText('Dirty price')).toBeVisible()
+test(
+  'the bond calculator gives the results of spec section 14.1, case B',
+  { tag: '@api' },
+  async ({ page }) => {
+    await page.goto('/yas/ECMR-6.25-2029')
+    const calculator = panel(page, 'Bond calculator')
+    await expect(calculator.getByText('Dirty price')).toBeVisible()
 
-  const settlement = calculator.getByRole('textbox', { name: 'Settlement date' })
-  await settlement.fill('30/10/2026')
-  await settlement.blur()
-  await calculator.getByRole('textbox', { name: 'Clean price' }).fill('101.40')
-  await expect(calculator.getByText('XAF 86,051,507')).toBeVisible()
-  await expect(calculator.getByRole('textbox', { name: 'Yield to maturity' })).toHaveValue('5.24')
-  await expect(calculator.getByText('6.16% (XAF 4,931,507)')).toBeVisible()
-  await expect(calculator.getByText('XAF 11,306')).toBeVisible()
+    const settlement = calculator.getByRole('textbox', { name: 'Settlement date' })
+    await settlement.fill('30/10/2026')
+    await settlement.blur()
+    await calculator.getByRole('textbox', { name: 'Clean price' }).fill('101.40')
+    await expect(calculator.getByText('XAF 86,051,507')).toBeVisible()
+    await expect(calculator.getByRole('textbox', { name: 'Yield to maturity' })).toHaveValue('5.24')
+    await expect(calculator.getByText('6.16% (XAF 4,931,507)')).toBeVisible()
+    await expect(calculator.getByText('XAF 11,306')).toBeVisible()
 
-  // The yield drives: the price follows.
-  const yieldBox = calculator.getByRole('textbox', { name: 'Yield to maturity' })
-  await yieldBox.fill('5.50')
-  await yieldBox.blur()
-  await expect(calculator.getByRole('textbox', { name: 'Clean price' })).toHaveValue('101.04')
-})
+    // The yield drives: the price follows.
+    const yieldBox = calculator.getByRole('textbox', { name: 'Yield to maturity' })
+    await yieldBox.fill('5.50')
+    await yieldBox.blur()
+    await expect(calculator.getByRole('textbox', { name: 'Clean price' })).toHaveValue('101.04')
+  },
+)
 
-test('the yield curves hide a country and compare with a past date', async ({ page }) => {
-  await page.goto('/ycrv')
-  const curves = panel(page, 'CEMAC sovereign yield curves')
-  await expect(curves.getByText('Cameroon 1 month ago')).toBeVisible()
-  await curves.getByRole('button', { name: 'Gabon' }).click()
-  await expect(curves.getByRole('button', { name: 'Gabon' })).toHaveAttribute(
-    'aria-pressed',
-    'false',
-  )
-  await curves.getByRole('combobox', { name: 'Compare to:' }).selectOption('3m')
-  await expect(curves.getByText('Cameroon 3 months ago')).toBeVisible()
+test(
+  'the yield curves hide a country and compare with a past date',
+  { tag: '@api' },
+  async ({ page }) => {
+    await page.goto('/ycrv')
+    const curves = panel(page, 'CEMAC sovereign yield curves')
+    await expect(curves.getByText('Cameroon 1 month ago')).toBeVisible()
+    await curves.getByRole('button', { name: 'Gabon' }).click()
+    await expect(curves.getByRole('button', { name: 'Gabon' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
+    await curves.getByRole('combobox', { name: 'Compare to:' }).selectOption('3m')
+    await expect(curves.getByText('Cameroon 3 months ago')).toBeVisible()
 
-  // Another bond: YAS, and the comparison follows its country.
-  await panel(page, 'Bond calculator')
-    .getByRole('combobox', { name: 'Bond' })
-    .selectOption('GAB-6.50-2028')
-  await expect(page).toHaveURL(/\/yas\/GAB-6.50-2028$/)
-  await expect(panel(page, 'Bond calculator').getByText('Spread vs Gabon curve')).toBeVisible()
-})
+    // Another bond: YAS, and the comparison follows its country.
+    await panel(page, 'Bond calculator')
+      .getByRole('combobox', { name: 'Bond' })
+      .selectOption('GAB-6.50-2028')
+    await expect(page).toHaveURL(/\/yas\/GAB-6.50-2028$/)
+    await expect(panel(page, 'Bond calculator').getByText('Spread vs Gabon curve')).toBeVisible()
+  },
+)
 
 test('the FA tab shows the ratios and the statements of the security', async ({ page }) => {
   await page.goto('/securities/SEMC/fa')

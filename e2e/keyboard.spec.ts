@@ -6,22 +6,26 @@ import { expect, test, type Locator, type Page } from '@playwright/test'
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title }) })
 
-test('Tab leaves the command bar, which completes only a word under way', async ({ page }) => {
-  await page.goto('/mkt')
-  const bar = page.getByRole('combobox', { name: 'Command bar' })
-  await bar.focus()
-  await page.keyboard.type('SEM')
-  await expect(page.getByRole('option', { name: /^SEMC/ })).toBeVisible()
-  await page.keyboard.press('Tab')
-  await expect(bar).toHaveValue('SEMC ')
-  await expect(bar).toBeFocused()
-  // Nothing under way: Tab moves on, as from any field.
-  await page.keyboard.press('Tab')
-  await expect(bar).not.toBeFocused()
-  await bar.focus()
-  await page.keyboard.press('Shift+Tab')
-  await expect(bar).not.toBeFocused()
-})
+test(
+  'Tab leaves the command bar, which completes only a word under way',
+  { tag: '@api' },
+  async ({ page }) => {
+    await page.goto('/mkt')
+    const bar = page.getByRole('combobox', { name: 'Command bar' })
+    await bar.focus()
+    await page.keyboard.type('SEM')
+    await expect(page.getByRole('option', { name: /^SEMC/ })).toBeVisible()
+    await page.keyboard.press('Tab')
+    await expect(bar).toHaveValue('SEMC ')
+    await expect(bar).toBeFocused()
+    // Nothing under way: Tab moves on, as from any field.
+    await page.keyboard.press('Tab')
+    await expect(bar).not.toBeFocused()
+    await bar.focus()
+    await page.keyboard.press('Shift+Tab')
+    await expect(bar).not.toBeFocused()
+  },
+)
 
 test("the user's menu and a row's menu open and work from the keyboard", async ({ page }) => {
   await page.goto('/mkt')
