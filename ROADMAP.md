@@ -417,11 +417,12 @@ with its OpenAPI (queries, bodies, answers: they match):
 - A build for the API (`VITE_USE_MOCKS=false`) still carried the mock and MSW, never loaded:
   `main.tsx` now tests `VITE_USE_MOCKS` as Vite writes it into the code, and such a build leaves
   them out (4.0 MB instead of 4.8).
-- `CMarket.Api`, to fix there: a GET of a route its output cache keeps (`/subscription/plans`,
-  `/directory/specialties`, `/public/profiles/{slug}`) answers 500 when it waits on the cache's
-  fill and the request filling it is cancelled by its browser: `OutputCacheMiddleware` shares the
-  fill and its cancellation (reproduced, 2 rounds in 10). `SetLocking(false)` on the three policies,
-  or a fill that ignores the request's cancellation. The front end retries a 500 twice: users wait.
+- `CMarket.Api`, fixed there (its ADR-040): a GET of a route its output cache keeps
+  (`/subscription/plans`, `/directory/specialties`, `/public/profiles/{slug}`) answered 500 when it
+  waited on the cache's fill and the request filling it was cancelled by its browser:
+  `OutputCacheMiddleware` shared the fill and its cancellation (reproduced, 2 rounds in 10). The
+  three policies now turn the lock off (`SetLocking(false)`): each request that misses runs its
+  own query. The same script then gave no 500 in 300 rounds.
 
 Deployment (the environments' `.env` files, the site and the API on one domain, CORS) comes after.
 The API's Bicep template gives it its default `*.azurecontainerapps.io` address while the site is
