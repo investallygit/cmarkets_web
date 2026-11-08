@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type { FxRateDto, PolicyRateDto } from '@/shared/api/contracts'
+import { marketApi } from '@/shared/api/endpoints'
 
 export const ratesKeys = {
   policy: ['rates', 'policy'] as const,
@@ -10,7 +9,7 @@ export const ratesKeys = {
 export function usePolicyRates() {
   return useQuery({
     queryKey: ratesKeys.policy,
-    queryFn: ({ signal }) => apiClient.get<PolicyRateDto[]>('/rates/policy', { signal }),
+    queryFn: ({ signal }) => marketApi.policyRates(signal),
     staleTime: 60 * 60_000,
   })
 }
@@ -18,8 +17,7 @@ export function usePolicyRates() {
 export function useFxRates(pairs: readonly string[]) {
   return useQuery({
     queryKey: ratesKeys.fx(pairs),
-    queryFn: ({ signal }) =>
-      apiClient.get<FxRateDto[]>('/fx', { query: { pairs: pairs.join(',') }, signal }),
+    queryFn: ({ signal }) => marketApi.fx(pairs, signal),
     refetchInterval: 60_000,
   })
 }

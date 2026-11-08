@@ -1,19 +1,6 @@
 import { keepPreviousData, queryOptions, useQuery, type QueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type {
-  DividendDto,
-  IndicatorDto,
-  IndicatorType,
-  OrderBookDto,
-  PriceBarDto,
-  SearchResultsDto,
-  SecurityListItemDto,
-  SecurityProfileDto,
-  SecuritySearchItemDto,
-  SecurityType,
-  ShareholdersDto,
-  TradeDto,
-} from '@/shared/api/contracts'
+import type { IndicatorType, SearchResultsDto, SecuritySearchItemDto } from '@/shared/api/contracts'
+import { analysisApi, securitiesApi, type SecurityFilters } from '@/shared/api/endpoints'
 import { periodRange, type ChartPeriod } from '@/shared/lib/chartPeriods'
 
 /** The order book and the trades have no real-time event (spec section 10): they are polled. */
@@ -34,10 +21,8 @@ export const securityKeys = {
     [...securityKeys.of(id), 'indicators', type, length, period] as const,
 }
 
-const securityPath = (id: string, suffix = '') => `/securities/${encodeURIComponent(id)}${suffix}`
-
 function searchSecurities(query: string, signal?: AbortSignal): Promise<SearchResultsDto> {
-  return apiClient.get<SearchResultsDto>('/search', { query: { q: query }, signal })
+  return securitiesApi.search(query, signal)
 }
 
 /** Autocomplete of the command bar. */
@@ -70,20 +55,13 @@ export async function findSecurity(
   return exact ?? securities.at(0) ?? null
 }
 
-export interface SecurityFilters {
-  type?: SecurityType
-  sector?: string
-  country?: string
-  /** Exchange code, e.g. "BVMAC". */
-  market?: string
-}
+export type { SecurityFilters }
 
 /** GET /securities: the securities of a market, e.g. a peer group or the choices of a filter. */
 export function useSecurities(filters: SecurityFilters, { enabled = true } = {}) {
   return useQuery({
     queryKey: ['security-list', filters] as const,
-    queryFn: ({ signal }) =>
-      apiClient.get<SecurityListItemDto[]>('/securities', { query: { ...filters }, signal }),
+    queryFn: ({ signal }) => securitiesApi.list(filters, signal),
     staleTime: 60 * 60_000,
     enabled,
   })
@@ -93,7 +71,7 @@ export function useSecurities(filters: SecurityFilters, { enabled = true } = {})
 export function useSecurityProfile(id: string | undefined) {
   return useQuery({
     queryKey: securityKeys.profile(id ?? ''),
-    queryFn: ({ signal }) => apiClient.get<SecurityProfileDto>(securityPath(id ?? ''), { signal }),
+    queryFn: ({ signal }) => securitiesApi.profile(id ?? '', signal),
     staleTime: 5 * 60_000,
     enabled: Boolean(id),
   })
@@ -106,10 +84,7 @@ export function securityHistoryQuery(id: string, period: ChartPeriod) {
     // The range is computed at fetch time, so a refetch follows the clock.
     queryFn: async ({ signal }) => ({
       period,
-      bars: await apiClient.get<PriceBarDto[]>(securityPath(id, '/history'), {
-        query: periodRange(period),
-        signal,
-      }),
+      bars: await securitiesApi.history(id, periodRange(period), signal),
     }),
   })
 }
@@ -123,8 +98,7 @@ export function useSecurityHistory(id: string, period: ChartPeriod) {
 export function useOrderBook(id: string, enabled = true) {
   return useQuery({
     queryKey: securityKeys.orderBook(id),
-    queryFn: ({ signal }) =>
-      apiClient.get<OrderBookDto>(securityPath(id, '/orderbook'), { signal }),
+    queryFn: ({ signal }) => securitiesApi.orderBook(id, signal),
     refetchInterval: INTRADAY_POLL_MS,
     enabled,
   })
@@ -133,7 +107,7 @@ export function useOrderBook(id: string, enabled = true) {
 export function useTrades(id: string, enabled = true) {
   return useQuery({
     queryKey: securityKeys.trades(id),
-    queryFn: ({ signal }) => apiClient.get<TradeDto[]>(securityPath(id, '/trades'), { signal }),
+    queryFn: ({ signal }) => securitiesApi.trades(id, signal),
     refetchInterval: INTRADAY_POLL_MS,
     enabled,
   })
@@ -142,8 +116,7 @@ export function useTrades(id: string, enabled = true) {
 export function useDividends(id: string, enabled = true) {
   return useQuery({
     queryKey: securityKeys.dividends(id),
-    queryFn: ({ signal }) =>
-      apiClient.get<DividendDto[]>(securityPath(id, '/dividends'), { signal }),
+    queryFn: ({ signal }) => securitiesApi.dividends(id, signal),
     staleTime: 5 * 60_000,
     enabled,
   })
@@ -152,8 +125,7 @@ export function useDividends(id: string, enabled = true) {
 export function useShareholders(id: string) {
   return useQuery({
     queryKey: securityKeys.shareholders(id),
-    queryFn: ({ signal }) =>
-      apiClient.get<ShareholdersDto>(securityPath(id, '/shareholders'), { signal }),
+    queryFn: ({ signal }) => securitiesApi.shareholders(id, signal),
     staleTime: 5 * 60_000,
   })
 }
@@ -169,10 +141,7 @@ export function useIndicator(
   return useQuery({
     queryKey: securityKeys.indicator(id, type, length, period),
     queryFn: ({ signal }) =>
-      apiClient.get<IndicatorDto>(`/indicators/${encodeURIComponent(id)}`, {
-        query: { type, period: length, ...periodRange(period) },
-        signal,
-      }),
+      analysisApi.indicator(id, { type, period: length }, periodRange(period), signal),
     placeholderData: keepPreviousData,
     enabled,
   })

@@ -1,14 +1,6 @@
 import { keepPreviousData, queryOptions, useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type {
-  HistoryPointDto,
-  IndexQuoteDto,
-  MarketStatusDto,
-  MarketSummaryDto,
-  MoverDto,
-  MoversType,
-  TickerItemDto,
-} from '@/shared/api/contracts'
+import type { MoversType } from '@/shared/api/contracts'
+import { marketApi } from '@/shared/api/endpoints'
 import { periodRange, type ChartPeriod } from '@/shared/lib/chartPeriods'
 
 export const marketKeys = {
@@ -25,7 +17,7 @@ export const marketKeys = {
 export function useMarketStatus() {
   return useQuery({
     queryKey: marketKeys.status(),
-    queryFn: ({ signal }) => apiClient.get<MarketStatusDto>('/market/status', { signal }),
+    queryFn: ({ signal }) => marketApi.status(signal),
     refetchInterval: 60_000,
   })
 }
@@ -33,7 +25,7 @@ export function useMarketStatus() {
 export function useMarketSummary() {
   return useQuery({
     queryKey: marketKeys.summary(),
-    queryFn: ({ signal }) => apiClient.get<MarketSummaryDto>('/market/summary', { signal }),
+    queryFn: ({ signal }) => marketApi.summary(signal),
     refetchInterval: 60_000,
   })
 }
@@ -41,8 +33,7 @@ export function useMarketSummary() {
 export function useMarketMovers(type: MoversType) {
   return useQuery({
     queryKey: marketKeys.movers(type),
-    queryFn: ({ signal }) =>
-      apiClient.get<MoverDto[]>('/market/movers', { query: { type }, signal }),
+    queryFn: ({ signal }) => marketApi.movers(type, signal),
     refetchInterval: 30_000,
     placeholderData: keepPreviousData,
   })
@@ -51,7 +42,7 @@ export function useMarketMovers(type: MoversType) {
 export function useTicker() {
   return useQuery({
     queryKey: marketKeys.ticker(),
-    queryFn: ({ signal }) => apiClient.get<TickerItemDto[]>('/market/ticker', { signal }),
+    queryFn: ({ signal }) => marketApi.ticker(signal),
     refetchInterval: 60_000,
   })
 }
@@ -60,7 +51,7 @@ export function useTicker() {
 export function useIndices() {
   return useQuery({
     queryKey: marketKeys.indices(),
-    queryFn: ({ signal }) => apiClient.get<IndexQuoteDto[]>('/indices', { signal }),
+    queryFn: ({ signal }) => marketApi.indices(signal),
     staleTime: 5 * 60_000,
   })
 }
@@ -69,11 +60,7 @@ export function indexHistoryQuery(code: string, period: ChartPeriod) {
   return queryOptions({
     queryKey: marketKeys.indexHistory(code, period),
     // The range is computed at fetch time, so a refetch follows the clock.
-    queryFn: ({ signal }) =>
-      apiClient.get<HistoryPointDto[]>(`/indices/${encodeURIComponent(code)}/history`, {
-        query: periodRange(period),
-        signal,
-      }),
+    queryFn: ({ signal }) => marketApi.indexHistory(code, periodRange(period), signal),
   })
 }
 

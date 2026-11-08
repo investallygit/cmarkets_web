@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type { QuoteDto } from '@/shared/api/contracts'
+import { securitiesApi } from '@/shared/api/endpoints'
 
 export const quoteKeys = {
   all: ['quotes'] as const,
@@ -14,8 +13,7 @@ export const quoteKeys = {
 export function useQuote(securityId: string) {
   return useQuery({
     queryKey: quoteKeys.quote(securityId),
-    queryFn: ({ signal }) =>
-      apiClient.get<QuoteDto>(`/securities/${encodeURIComponent(securityId)}/quote`, { signal }),
+    queryFn: ({ signal }) => securitiesApi.quote(securityId, signal),
     refetchInterval: 30_000,
   })
 }
