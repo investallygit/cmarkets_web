@@ -38,6 +38,7 @@ relative: S < M < L < XL.
 | 17   | MSG in real time: the `/hubs/chat` hub                          | Done   |
 | 18   | Admin: reported profiles and conversations, directory settings  | Done   |
 | 19   | Second version done: README, accessibility, every flow          | Done   |
+| 20   | Connecting `CMarket.Api`: `.env`, the API module, its checks    | Doing  |
 
 ## Second version of the spec
 
@@ -112,8 +113,8 @@ come in the README and the open questions of the second version.
   Asset manager A, not Bank C as on screens 9 and 11, since Bank C's plan lacks the Portfolio
   module that the organisation's portfolios need; 37 Journalists of three media and 58 CEOs of
   the generated banks and asset managers fill the counters; `SEED_VERSION` raised.
-- **CMarket.Api**: its `/me` still answers `analystStatus`, which the front end now reads as
-  `verificationStatus`: the API has to follow, with the two new types and `analysis:save`.
+- **CMarket.Api**: `/me` answers `verificationStatus`, with the two new types and `analysis:save`
+  (its phase 13).
 
 ### Step 13 · Portfolios of the organisation (M): done
 
@@ -137,7 +138,8 @@ come in the README and the open questions of the second version.
   P. Owona shares the sample fund with Asset manager A. A demo user's sample portfolios keep
   their short ids (`/port/portfolio-cemac`); another user's carry the user's id, since a
   colleague's are listed beside one's own. `SEED_VERSION` raised.
-- **CMarket.Api**: the two fields, the colleagues' read access and the 403 on their writes.
+- **CMarket.Api**: the two fields, the colleagues' read access and the 403 on their writes (its
+  phase 13).
 
 ### Step 14 · NET ME · My profile, visibility and contact (screen 12) (L): done
 
@@ -360,6 +362,41 @@ come in the README and the open questions of the second version.
 - **Documentation**: the README (the directory and the messaging in the introduction and the mock,
   `ui-kit` among the pages, the shared components added) and this roadmap, each screen with the
   steps that built it.
+
+### Step 20 · Connecting CMarket.Api (L): doing
+
+`CMarket.Api` (the back end's repository, phases 0 to 16) serves the routes, JSON and errors of
+the mock: 202 of the mock's 203 routes are among its controllers, the last one being the
+`accept`/`decline` pair of a contact request. The front end moves onto it in ten steps; each ends
+with the type check, the lint, the unit tests and the flows of the screens it touches.
+
+1. **Addresses in `.env`: done.** `VITE_API_URL`, the API's origin, gives the REST API and both
+   hubs; a malformed one stops the dev server and the build. The images the API names by its own
+   path (profile photos, a publication's images) show from its origin, and the studio keeps the
+   path the API checks on save.
+2. **`npm run dev:api`: done.** The mode `api` turns the mock off and forwards `/api` and `/hubs`
+   to the API on port 5001: one origin, so the session cookie works as in production.
+3. **The prototype's helpers on the API: done.** The demo accounts, the code filled in and the
+   account switch follow `VITE_DEV_TOOLS`, on in the mode `api`: the API serves `/_prototype/*` in
+   development. Checked in a browser: login, MKT with prices through the hub, a reload that keeps
+   the session, the switch to the Data admin.
+4. **Every screen on the API: done.** Each of the eight demo accounts opened every screen it may
+   (the client screens with the eight tabs of a security and YAS, the Data admin's six, the
+   Admin's six) on a fresh database: no request failed, the console stayed clean and no panel
+   showed an error. The account form's `org-cmarket`, the mock's id, does no harm: the API leaves
+   CMarket's organisation out of the list and places its employees itself.
+5. **The API module** (`src/shared/api/endpoints/`): one file per controller folder of the API,
+   each with its routes and its calls; every route checked against the API's OpenAPI and the
+   mock's handlers.
+6. **The hooks onto the module**, area by area: Auth, Me and the development tools; Market and
+   Securities; Watchlists and Charts; Bonds and Analysis; Portfolios; Content and Alerts;
+   Subscriptions and Organization; Research; the Data admin; the Admin; Network and Messaging.
+7. **The module locked**: only `src/shared/api/` imports `apiClient`; README.
+8. **`npm run test:api`**: the module's reads against a running API, for each demo account.
+9. **`npm run e2e:api`**: the flows that name no id of the mock, on the API, port 5174.
+10. **Wrap-up**: what steps 8 and 9 find, the README's guide to the real back end.
+
+Deployment (the environments' `.env` files, the site and the API on one domain, CORS) comes after.
 
 ## Shared groundwork
 
