@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type { AnalystDto, FollowResultDto } from '@/shared/api/contracts'
+import type { AnalystDto } from '@/shared/api/contracts'
+import { researchApi } from '@/shared/api/endpoints'
 
 export const analystKeys = {
   all: ['analysts'] as const,
@@ -11,8 +11,7 @@ export const analystKeys = {
 export function useAnalyst(id: string | null | undefined) {
   return useQuery({
     queryKey: analystKeys.detail(id ?? ''),
-    queryFn: ({ signal }) =>
-      apiClient.get<AnalystDto>(`/analysts/${encodeURIComponent(id ?? '')}`, { signal }),
+    queryFn: ({ signal }) => researchApi.analyst(id ?? '', signal),
     enabled: Boolean(id),
   })
 }
@@ -21,12 +20,7 @@ export function useAnalyst(id: string | null | undefined) {
 export function useFollowAnalyst(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (follow: boolean) => {
-      const path = `/analysts/${encodeURIComponent(id)}/follow`
-      return follow
-        ? apiClient.post<FollowResultDto>(path)
-        : apiClient.delete<FollowResultDto>(path)
-    },
+    mutationFn: (follow: boolean) => researchApi.follow(id, follow),
     onSuccess: (result) =>
       queryClient.setQueryData<AnalystDto>(
         analystKeys.detail(id),

@@ -1,18 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
 import type {
-  AttachmentDto,
-  FrozenChartDto,
   FrozenChartRequestDto,
-  MyPublicationDto,
-  PayoutDto,
-  PublicationCreateDto,
   PublicationDto,
   PublicationPricingUpdateDto,
-  PublicationRulesDto,
-  PublicationStatsDto,
   PublicationUpdateDto,
 } from '@/shared/api/contracts'
+import { researchApi, type PublicationStep } from '@/shared/api/endpoints'
 import { libraryKeys } from './libraryQueries'
 
 export const publicationKeys = {
@@ -24,14 +17,11 @@ export const publicationKeys = {
   payouts: () => [...publicationKeys.all, 'payouts'] as const,
 }
 
-const publicationPath = (id: string, suffix = '') =>
-  `/publications/${encodeURIComponent(id)}${suffix}`
-
 /** GET /me/publications: the analyst's own, newest change first. */
 export function useMyPublications() {
   return useQuery({
     queryKey: publicationKeys.mine(),
-    queryFn: ({ signal }) => apiClient.get<MyPublicationDto[]>('/me/publications', { signal }),
+    queryFn: ({ signal }) => researchApi.myPublications(signal),
   })
 }
 
@@ -39,8 +29,7 @@ export function useMyPublications() {
 export function publicationQueryOptions(id: string) {
   return {
     queryKey: publicationKeys.detail(id),
-    queryFn: ({ signal }: { signal: AbortSignal }) =>
-      apiClient.get<PublicationDto>(publicationPath(id), { signal }),
+    queryFn: ({ signal }: { signal: AbortSignal }) => researchApi.publication(id, signal),
   }
 }
 
@@ -58,7 +47,7 @@ export function usePublication(id: string | null | undefined) {
 export function usePublicationRules() {
   return useQuery({
     queryKey: publicationKeys.rules(),
-    queryFn: ({ signal }) => apiClient.get<PublicationRulesDto>('/publications/rules', { signal }),
+    queryFn: ({ signal }) => researchApi.rules(signal),
     staleTime: Infinity,
   })
 }
@@ -67,11 +56,7 @@ export function usePublicationRules() {
 export function usePublicationStats(from: string, to: string) {
   return useQuery({
     queryKey: publicationKeys.stats(from, to),
-    queryFn: ({ signal }) =>
-      apiClient.get<PublicationStatsDto>('/me/publications/stats', {
-        query: { from, to },
-        signal,
-      }),
+    queryFn: ({ signal }) => researchApi.stats(from, to, signal),
   })
 }
 
@@ -79,7 +64,7 @@ export function usePublicationStats(from: string, to: string) {
 export function usePayouts() {
   return useQuery({
     queryKey: publicationKeys.payouts(),
-    queryFn: ({ signal }) => apiClient.get<PayoutDto[]>('/me/payouts', { signal }),
+    queryFn: ({ signal }) => researchApi.payouts(signal),
   })
 }
 
@@ -97,8 +82,7 @@ function useStore() {
 export function useCreatePublication() {
   const store = useStore()
   return useMutation({
-    mutationFn: (input: PublicationCreateDto) =>
-      apiClient.post<PublicationDto>('/publications', input),
+    mutationFn: researchApi.create,
     onSuccess: (created) => store(created),
   })
 }
@@ -108,7 +92,7 @@ export function useSavePublication() {
   const store = useStore()
   return useMutation({
     mutationFn: ({ id, input }: { id: string; input: PublicationUpdateDto }) =>
-      apiClient.put<PublicationDto>(publicationPath(id), input),
+      researchApi.save(id, input),
     onSuccess: (saved) => store(saved),
   })
 }
@@ -118,7 +102,7 @@ export function useSavePricing() {
   const store = useStore()
   return useMutation({
     mutationFn: ({ id, input }: { id: string; input: PublicationPricingUpdateDto }) =>
-      apiClient.put<PublicationDto>(publicationPath(id, '/pricing'), input),
+      researchApi.savePricing(id, input),
     onSuccess: (saved) => store(saved, { library: saved.versions.length > 0 }),
   })
 }
@@ -127,11 +111,7 @@ export function useSavePricing() {
 export function usePublicationStep(id: string) {
   const store = useStore()
   return useMutation({
-    mutationFn: (step: { kind: 'submit' | 'versions' } | { kind: 'archive'; reason: string }) =>
-      apiClient.post<PublicationDto>(
-        publicationPath(id, `/${step.kind}`),
-        step.kind === 'archive' ? { reason: step.reason } : undefined,
-      ),
+    mutationFn: (step: PublicationStep) => researchApi.step(id, step),
     onSuccess: (saved) => store(saved, { library: true }),
   })
 }
@@ -140,8 +120,7 @@ export function usePublicationStep(id: string) {
 export function useFreezeChart(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (request: FrozenChartRequestDto) =>
-      apiClient.post<FrozenChartDto>(publicationPath(id, '/charts'), request),
+    mutationFn: (request: FrozenChartRequestDto) => researchApi.freezeChart(id, request),
     onSuccess: (chart) =>
       queryClient.setQueryData<PublicationDto>(
         publicationKeys.detail(id),
@@ -154,11 +133,7 @@ export function useFreezeChart(id: string) {
 export function useUploadAttachment(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (file: File) => {
-      const form = new FormData()
-      form.append('file', file)
-      return apiClient.postForm<AttachmentDto>(publicationPath(id, '/attachments'), form)
-    },
+    mutationFn: (file: File) => researchApi.uploadAttachment(id, file),
     onSuccess: (attachment) => {
       if (attachment.contentType !== 'application/pdf') return
       queryClient.setQueryData<PublicationDto>(
@@ -172,10 +147,7 @@ export function useUploadAttachment(id: string) {
 export function useRemoveAttachment(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (attachmentId: string) =>
-      apiClient.delete<void>(
-        publicationPath(id, `/attachments/${encodeURIComponent(attachmentId)}`),
-      ),
+    mutationFn: (attachmentId: string) => researchApi.removeAttachment(id, attachmentId),
     onSuccess: () =>
       queryClient.setQueryData<PublicationDto>(
         publicationKeys.detail(id),

@@ -1,19 +1,16 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { apiClient } from '@/shared/api'
 import type {
   ContentReportDto,
-  LibraryItemDto,
   LibraryPublicationDto,
   LibrarySort,
-  Paged,
   PaymentDto,
   PublicationAccess,
   PublicationRating,
   PurchaseRequestDto,
-  RatingResultDto,
   SubjectType,
 } from '@/shared/api/contracts'
+import { researchApi, subscriptionsApi } from '@/shared/api/endpoints'
 import type { LibraryTab } from '../config/research'
 
 /** The filters of screen 8, the ANA tab of a security, and the page of the list. */
@@ -41,8 +38,6 @@ export const libraryKeys = {
   payment: (id: string) => [...libraryKeys.all, 'payment', id] as const,
 }
 
-const libraryPath = (id: string, suffix = '') => `/library/${encodeURIComponent(id)}${suffix}`
-
 /** A pending payment is asked for its status this often until the provider answers. */
 const PAYMENT_POLL_MS = 1500
 
@@ -51,11 +46,10 @@ export function useLibrary(query: LibraryQuery) {
   const { tab, ...filters } = query
   return useQuery({
     queryKey: libraryKeys.list(query),
-    queryFn: ({ signal }) =>
-      apiClient.get<Paged<LibraryItemDto>>(tab === 'purchased' ? '/me/purchases' : '/library', {
-        query: { ...filters, followed: tab === 'followed' || undefined },
-        signal,
-      }),
+    queryFn: ({ signal }) => {
+      const read = tab === 'purchased' ? researchApi.purchases : researchApi.library
+      return read({ ...filters, followed: tab === 'followed' || undefined }, signal)
+    },
     placeholderData: keepPreviousData,
   })
 }
@@ -64,8 +58,7 @@ export function useLibrary(query: LibraryQuery) {
 export function useLibraryPublication(id: string | null | undefined) {
   return useQuery({
     queryKey: libraryKeys.detail(id ?? ''),
-    queryFn: ({ signal }) =>
-      apiClient.get<LibraryPublicationDto>(libraryPath(id ?? ''), { signal }),
+    queryFn: ({ signal }) => researchApi.libraryPublication(id ?? '', signal),
     enabled: Boolean(id),
   })
 }
@@ -73,8 +66,7 @@ export function useLibraryPublication(id: string | null | undefined) {
 /** POST /library/{id}/purchase: starts a payment by mobile money or card. */
 export function usePurchase(publicationId: string) {
   return useMutation({
-    mutationFn: (request: PurchaseRequestDto) =>
-      apiClient.post<PaymentDto>(libraryPath(publicationId, '/purchase'), request),
+    mutationFn: (request: PurchaseRequestDto) => researchApi.purchase(publicationId, request),
   })
 }
 
@@ -86,8 +78,7 @@ export function usePayment(payment: PaymentDto | null) {
   const queryClient = useQueryClient()
   const query = useQuery({
     queryKey: libraryKeys.payment(payment?.id ?? ''),
-    queryFn: ({ signal }) =>
-      apiClient.get<PaymentDto>(`/payments/${encodeURIComponent(payment?.id ?? '')}`, { signal }),
+    queryFn: ({ signal }) => subscriptionsApi.payment(payment?.id ?? '', signal),
     enabled: Boolean(payment),
     initialData: payment ?? undefined,
     refetchInterval: (current) =>
@@ -108,8 +99,7 @@ export function usePayment(payment: PaymentDto | null) {
 export function useRatePublication(publicationId: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (stars: number) =>
-      apiClient.post<RatingResultDto>(libraryPath(publicationId, '/rating'), { stars }),
+    mutationFn: (stars: number) => researchApi.rate(publicationId, stars),
     onSuccess: (result) => {
       queryClient.setQueryData<LibraryPublicationDto>(
         libraryKeys.detail(publicationId),
@@ -123,22 +113,20 @@ export function useRatePublication(publicationId: string) {
 /** POST /library/{id}/report: for the moderators (screen 9). */
 export function useReportPublication(publicationId: string) {
   return useMutation({
-    mutationFn: (report: ContentReportDto) =>
-      apiClient.post<void>(libraryPath(publicationId, '/report'), report),
+    mutationFn: (report: ContentReportDto) => researchApi.report(publicationId, report),
   })
 }
 
 /** GET /library/{id}/pdf: watermarked with the buyer's name. */
 export function usePublicationPdf(publicationId: string) {
   return useMutation({
-    mutationFn: (language: string) =>
-      apiClient.getBlob(libraryPath(publicationId, '/pdf'), { query: { language } }),
+    mutationFn: (language: string) => researchApi.pdf(publicationId, language),
   })
 }
 
 /** The attachment of a publication the user may read. */
 export function usePublicationAttachment(publicationId: string) {
   return useMutation({
-    mutationFn: () => apiClient.getBlob(libraryPath(publicationId, '/attachment')),
+    mutationFn: () => researchApi.libraryAttachment(publicationId),
   })
 }

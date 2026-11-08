@@ -10,7 +10,8 @@ import {
   useRemoveAttachment,
   useUploadAttachment,
 } from '@/entities/publication'
-import { apiClient, isApiError } from '@/shared/api'
+import { isApiError } from '@/shared/api'
+import { researchApi } from '@/shared/api/endpoints'
 import type { PublicationDto, PublicationRulesDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { saveBlob } from '@/shared/lib/download'
@@ -398,8 +399,8 @@ function AttachmentRow({
             type="button"
             className="min-w-0 truncate text-left font-sans text-data text-info hover:underline"
             onClick={() =>
-              void apiClient
-                .getBlob(attachment.url)
+              void researchApi
+                .attachmentFile(publication.id, attachment.id)
                 .then((blob) => saveBlob(blob, attachment.fileName), onError)
             }
           >

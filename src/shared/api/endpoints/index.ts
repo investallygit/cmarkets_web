@@ -17,6 +17,7 @@ import { marketRoutes } from './market'
 import { meRoutes } from './me'
 import { organizationRoutes } from './organization'
 import { portfoliosRoutes } from './portfolios'
+import { researchRoutes } from './research'
 import { securitiesRoutes } from './securities'
 import { subscriptionsRoutes } from './subscriptions'
 import { watchlistsRoutes } from './watchlists'
@@ -40,6 +41,7 @@ export { marketApi, marketRoutes, type HistoryRange } from './market'
 export { meApi, meRoutes } from './me'
 export { organizationApi, organizationRoutes } from './organization'
 export { portfoliosApi, portfoliosRoutes, type PerformanceQuery } from './portfolios'
+export { researchApi, researchRoutes, type LibraryFilters, type PublicationStep } from './research'
 export { securitiesApi, securitiesRoutes, type SecurityFilters } from './securities'
 export { subscriptionsApi, subscriptionsRoutes } from './subscriptions'
 export { watchlistsApi, watchlistsRoutes } from './watchlists'
@@ -71,6 +73,7 @@ export const ROUTE_TABLES: Readonly<Record<string, RouteTable>> = {
   Me: meRoutes,
   Organization: organizationRoutes,
   Portfolios: portfoliosRoutes,
+  Research: researchRoutes,
   Securities: securitiesRoutes,
   Subscriptions: subscriptionsRoutes,
   Watchlists: watchlistsRoutes,
