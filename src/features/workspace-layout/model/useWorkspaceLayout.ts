@@ -100,8 +100,15 @@ export function useWorkspaceLayout(screen: string, defaults: readonly ScreenPane
       .catch((error: unknown) => console.warn('[layout] could not save', error))
   }, [])
 
-  // Save what is still pending when the user leaves the screen or the tab.
-  useEffect(() => flush, [flush, screen])
+  // Save what is still pending when the user leaves the screen, or the tab: a page that goes away
+  // runs no React cleanup, hence pagehide (and the save is kept alive, see meApi.saveLayout).
+  useEffect(() => {
+    window.addEventListener('pagehide', flush)
+    return () => {
+      window.removeEventListener('pagehide', flush)
+      flush()
+    }
+  }, [flush, screen])
 
   /**
    * The layout as the cache has it, with the changes not rendered yet. None when the server

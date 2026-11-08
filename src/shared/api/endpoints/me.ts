@@ -19,6 +19,7 @@ export const meApi = {
   /** 404 when the screen's layout was never saved. */
   layout: (screen: string, signal?: AbortSignal) =>
     send(meRoutes.layout, { params: { screen }, signal }),
+  /** Kept alive: a save as the user leaves the tab still reaches the server. */
   saveLayout: (screen: string, layout: Omit<ScreenLayoutDto, 'screen'>) =>
-    send(meRoutes.saveLayout, { params: { screen }, body: layout }),
+    send(meRoutes.saveLayout, { params: { screen }, body: layout, keepalive: true }),
 }

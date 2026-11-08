@@ -12,6 +12,8 @@ interface RequestOptions {
   signal?: AbortSignal
   /** Calls of the login pages: no access token, and the session cookie goes both ways. */
   anonymous?: boolean
+  /** Sent through even if the page goes away meanwhile: a save as the user leaves the tab. */
+  keepalive?: boolean
 }
 
 function buildUrl(path: string, query?: QueryParams): string {
@@ -55,7 +57,7 @@ async function readJson<T>(response: Response): Promise<T> {
 }
 
 async function request<T>(method: string, path: string, options: RequestOptions = {}): Promise<T> {
-  const { query, body, signal, anonymous } = options
+  const { query, body, signal, anonymous, keepalive } = options
   const headers: Record<string, string> = { Accept: 'application/json' }
   if (body !== undefined) headers['Content-Type'] = 'application/json'
 
@@ -64,6 +66,7 @@ async function request<T>(method: string, path: string, options: RequestOptions 
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),
     signal,
+    keepalive,
   }
   return readJson<T>(await send(buildUrl(path, query), init, anonymous))
 }

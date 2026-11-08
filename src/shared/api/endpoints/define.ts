@@ -52,6 +52,8 @@ interface CommonOptions {
   signal?: AbortSignal
   /** Calls of the login pages: no access token, and the session cookie goes both ways. */
   anonymous?: boolean
+  /** Sent through even if the page goes away meanwhile (client.ts). */
+  keepalive?: boolean
 }
 
 /** Options of a call: `params` exactly when the path has parameters. */

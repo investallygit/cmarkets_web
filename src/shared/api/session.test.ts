@@ -96,6 +96,14 @@ describe('session of the API client', () => {
     expect(fetchMock.mock.calls[0][1]?.credentials).toBe('include')
   })
 
+  it('keeps a request alive when asked: a save as the page goes away', async () => {
+    const client = await load()
+    client.startSession(token('value'))
+    fetchMock.mockResolvedValueOnce(new Response(null, { status: 204 }))
+    await client.apiClient.put('/me/layouts/MKT', { items: [] }, { keepalive: true })
+    expect(fetchMock.mock.calls[0][1]?.keepalive).toBe(true)
+  })
+
   it('says why the session ended', async () => {
     const session = await load()
     const listener = vi.fn()
