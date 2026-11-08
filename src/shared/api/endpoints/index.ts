@@ -4,10 +4,13 @@
  * call these; only src/shared/api sends requests. ROUTE_TABLES is checked against the API's
  * OpenAPI document (openapi-routes.txt) and against the mock's handlers.
  */
+import { alertsRoutes } from './alerts'
 import { analysisRoutes } from './analysis'
 import { authRoutes } from './auth'
 import { bondsRoutes } from './bonds'
 import { chartsRoutes } from './charts'
+import { contentRoutes } from './content'
+import { dataAdminRoutes } from './dataAdmin'
 import type { RouteTable } from './define'
 import { devToolsRoutes } from './devTools'
 import { marketRoutes } from './market'
@@ -16,10 +19,20 @@ import { portfoliosRoutes } from './portfolios'
 import { securitiesRoutes } from './securities'
 import { watchlistsRoutes } from './watchlists'
 
+export { alertsApi, alertsRoutes } from './alerts'
 export { analysisApi, analysisRoutes } from './analysis'
 export { authApi, authRoutes } from './auth'
 export { bondsApi, bondsRoutes, type AuctionQuery, type YieldCurveQuery } from './bonds'
 export { chartsApi, chartsRoutes } from './charts'
+export {
+  contentApi,
+  contentRoutes,
+  type CalendarRange,
+  type DocumentFilters,
+  type NewsFilters,
+  type Page,
+} from './content'
+export { dataAdminApi, dataAdminRoutes } from './dataAdmin'
 export { devToolsApi, devToolsRoutes, type DemoAccountsDto, type SentCodeQuery } from './devTools'
 export { marketApi, marketRoutes, type HistoryRange } from './market'
 export { meApi, meRoutes } from './me'
@@ -42,10 +55,13 @@ export {
 
 /** The route table of each area, by the name of its controller folder. */
 export const ROUTE_TABLES: Readonly<Record<string, RouteTable>> = {
+  Alerts: alertsRoutes,
   Analysis: analysisRoutes,
   Auth: authRoutes,
   Bonds: bondsRoutes,
   Charts: chartsRoutes,
+  Content: contentRoutes,
+  DataAdmin: dataAdminRoutes,
   DevTools: devToolsRoutes,
   Market: marketRoutes,
   Me: meRoutes,

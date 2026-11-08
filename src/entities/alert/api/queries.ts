@@ -1,16 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
 import type { AlertDto, AlertInputDto } from '@/shared/api/contracts'
+import { alertsApi } from '@/shared/api/endpoints'
 
 export const alertKeys = { all: ['alerts'] as const }
-
-const alertPath = (id: string) => `/alerts/${encodeURIComponent(id)}`
 
 /** GET /alerts: the user's alerts, on or off. Only for account types that may set alerts. */
 export function useAlerts({ enabled = true }: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: alertKeys.all,
-    queryFn: ({ signal }) => apiClient.get<AlertDto[]>('/alerts', { signal }),
+    queryFn: ({ signal }) => alertsApi.list(signal),
     enabled,
   })
 }
@@ -33,7 +31,7 @@ function useUpdateAlerts() {
 export function useCreateAlert() {
   const updateAlerts = useUpdateAlerts()
   return useMutation({
-    mutationFn: (input: AlertInputDto) => apiClient.post<AlertDto>('/alerts', input),
+    mutationFn: alertsApi.create,
     onSuccess: (created) => updateAlerts((alerts) => [...alerts, created]),
   })
 }
@@ -42,8 +40,7 @@ export function useCreateAlert() {
 export function useUpdateAlert() {
   const updateAlerts = useUpdateAlerts()
   return useMutation({
-    mutationFn: ({ id, ...input }: AlertInputDto & { id: string }) =>
-      apiClient.put<AlertDto>(alertPath(id), input),
+    mutationFn: ({ id, ...input }: AlertInputDto & { id: string }) => alertsApi.update(id, input),
     onSuccess: (updated) =>
       updateAlerts((alerts) => alerts.map((alert) => (alert.id === updated.id ? updated : alert))),
   })
@@ -52,7 +49,7 @@ export function useUpdateAlert() {
 export function useDeleteAlert() {
   const updateAlerts = useUpdateAlerts()
   return useMutation({
-    mutationFn: (id: string) => apiClient.delete<void>(alertPath(id)),
+    mutationFn: alertsApi.remove,
     onSuccess: (_result, id) => updateAlerts((alerts) => alerts.filter((alert) => alert.id !== id)),
   })
 }

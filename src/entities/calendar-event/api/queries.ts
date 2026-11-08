@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type { CalendarEventDto, CalendarEventType } from '@/shared/api/contracts'
+import type { CalendarEventType } from '@/shared/api/contracts'
+import { contentApi } from '@/shared/api/endpoints'
 import { toMarketDay } from '@/shared/lib/format'
 
 const WEEK_MS = 7 * 86_400_000
@@ -25,10 +25,7 @@ export function useUpcomingEvents() {
     queryKey: calendarKeys.nextSevenDays(),
     queryFn: ({ signal }) => {
       const now = Date.now()
-      return apiClient.get<CalendarEventDto[]>('/calendar', {
-        query: { from: toMarketDay(now), to: toMarketDay(now + WEEK_MS) },
-        signal,
-      })
+      return contentApi.calendar({ from: toMarketDay(now), to: toMarketDay(now + WEEK_MS) }, signal)
     },
     staleTime: 5 * 60_000,
   })
@@ -38,11 +35,7 @@ export function useUpcomingEvents() {
 export function useCalendarEvents(query: CalendarQuery, { enabled = true } = {}) {
   return useQuery({
     queryKey: calendarKeys.range(query),
-    queryFn: ({ signal }) =>
-      apiClient.get<CalendarEventDto[]>('/calendar', {
-        query: { from: query.from, to: query.to, type: query.types, country: query.country },
-        signal,
-      }),
+    queryFn: ({ signal }) => contentApi.calendar(query, signal),
     staleTime: 5 * 60_000,
     placeholderData: keepPreviousData,
     enabled,

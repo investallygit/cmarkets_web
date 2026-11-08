@@ -1,12 +1,6 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type {
-  NewsArticleDto,
-  NewsItemDto,
-  NewsTopic,
-  NewsWriteDto,
-  Paged,
-} from '@/shared/api/contracts'
+import type { NewsTopic, NewsWriteDto } from '@/shared/api/contracts'
+import { contentApi, dataAdminApi } from '@/shared/api/endpoints'
 
 export interface NewsQuery {
   topic?: NewsTopic
@@ -25,11 +19,7 @@ export const newsKeys = {
 export function useNews({ pageSize = 20, ...filters }: NewsQuery = {}) {
   return useQuery({
     queryKey: newsKeys.list({ pageSize, ...filters }),
-    queryFn: ({ signal }) =>
-      apiClient.get<Paged<NewsItemDto>>('/news', {
-        query: { ...filters, page: 1, pageSize },
-        signal,
-      }),
+    queryFn: ({ signal }) => contentApi.news(filters, { page: 1, pageSize }, signal),
     placeholderData: keepPreviousData,
   })
 }
@@ -38,8 +28,7 @@ export function useNews({ pageSize = 20, ...filters }: NewsQuery = {}) {
 export function useNewsArticle(id: string | null) {
   return useQuery({
     queryKey: newsKeys.article(id ?? ''),
-    queryFn: ({ signal }) =>
-      apiClient.get<NewsArticleDto>(`/news/${encodeURIComponent(id ?? '')}`, { signal }),
+    queryFn: ({ signal }) => contentApi.article(id ?? '', signal),
     staleTime: 5 * 60_000,
     enabled: Boolean(id),
   })
@@ -50,9 +39,7 @@ export function useSaveNews() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, news }: { id: string | null; news: NewsWriteDto }) =>
-      id
-        ? apiClient.put<NewsArticleDto>(`/data/news/${encodeURIComponent(id)}`, news)
-        : apiClient.post<NewsArticleDto>('/data/news', news),
+      dataAdminApi.saveNews(id, news),
     onSuccess: (article) => {
       queryClient.setQueryData(newsKeys.article(article.id), article)
       void queryClient.invalidateQueries({ queryKey: newsKeys.all })

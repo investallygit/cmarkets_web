@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
-import type { DocumentDto, DocumentType, DocumentWriteDto, Paged } from '@/shared/api/contracts'
+import type { DocumentType, DocumentWriteDto } from '@/shared/api/contracts'
+import { contentApi, dataAdminApi } from '@/shared/api/endpoints'
 
 export interface DocumentQuery {
   securityId?: string
@@ -20,11 +20,7 @@ export const documentKeys = {
 export function useDocuments({ pageSize = 50, ...filters }: DocumentQuery = {}) {
   return useQuery({
     queryKey: documentKeys.list({ pageSize, ...filters }),
-    queryFn: ({ signal }) =>
-      apiClient.get<Paged<DocumentDto>>('/documents', {
-        query: { ...filters, page: 1, pageSize },
-        signal,
-      }),
+    queryFn: ({ signal }) => contentApi.documents(filters, { page: 1, pageSize }, signal),
   })
 }
 
@@ -32,8 +28,7 @@ export function useDocuments({ pageSize = 50, ...filters }: DocumentQuery = {}) 
 export function useDocumentFile(id: string | null) {
   return useQuery({
     queryKey: documentKeys.file(id ?? ''),
-    queryFn: ({ signal }) =>
-      apiClient.getBlob(`/documents/${encodeURIComponent(id ?? '')}/file`, { signal }),
+    queryFn: ({ signal }) => contentApi.documentFile(id ?? '', signal),
     staleTime: Infinity,
     enabled: Boolean(id),
   })
@@ -54,17 +49,7 @@ export function useSaveDocument() {
       id: string | null
       document: DocumentWriteDto
       file: File | null
-    }) => {
-      const form = new FormData()
-      form.set('type', document.type)
-      form.set('title', document.title)
-      form.set('source', document.source)
-      document.securityIds.forEach((securityId) => form.append('securityIds', securityId))
-      if (file) form.set('file', file)
-      return id
-        ? apiClient.putForm<DocumentDto>(`/data/documents/${encodeURIComponent(id)}`, form)
-        : apiClient.postForm<DocumentDto>('/data/documents', form)
-    },
+    }) => dataAdminApi.saveDocument(id, document, file),
     // A new file under the same id: the cached PDF goes too.
     onSuccess: () => queryClient.invalidateQueries({ queryKey: documentKeys.all }),
   })
