@@ -1,11 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient, isApiError } from '@/shared/api'
-import type {
-  MemberInviteDto,
-  MemberUpdateDto,
-  OrganizationDto,
-  OrganizationMemberDto,
-} from '@/shared/api/contracts'
+import { isApiError } from '@/shared/api'
+import type { MemberUpdateDto } from '@/shared/api/contracts'
+import { organizationApi } from '@/shared/api/endpoints'
 
 export const organizationKeys = {
   all: ['organization'] as const,
@@ -19,7 +15,7 @@ export function useOrganization(enabled = true) {
     queryKey: organizationKeys.current(),
     queryFn: async ({ signal }) => {
       try {
-        return await apiClient.get<OrganizationDto>('/organization', { signal })
+        return await organizationApi.current(signal)
       } catch (error) {
         if (isApiError(error, 404)) return null
         throw error
@@ -33,8 +29,7 @@ export function useOrganization(enabled = true) {
 export function useMembers(enabled: boolean) {
   return useQuery({
     queryKey: organizationKeys.members(),
-    queryFn: ({ signal }) =>
-      apiClient.get<OrganizationMemberDto[]>('/organization/members', { signal }),
+    queryFn: ({ signal }) => organizationApi.members(signal),
     enabled,
   })
 }
@@ -49,8 +44,7 @@ function useRefresh() {
 export function useInviteMember() {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (invite: MemberInviteDto) =>
-      apiClient.post<OrganizationMemberDto>('/organization/members', invite),
+    mutationFn: organizationApi.invite,
     onSuccess: refresh,
   })
 }
@@ -60,10 +54,7 @@ export function useUpdateMember() {
   const refresh = useRefresh()
   return useMutation({
     mutationFn: ({ id, update }: { id: string; update: MemberUpdateDto }) =>
-      apiClient.put<OrganizationMemberDto>(
-        `/organization/members/${encodeURIComponent(id)}`,
-        update,
-      ),
+      organizationApi.updateMember(id, update),
     onSuccess: refresh,
   })
 }
@@ -72,8 +63,7 @@ export function useUpdateMember() {
 export function useRemoveMember() {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (id: string) =>
-      apiClient.delete<void>(`/organization/members/${encodeURIComponent(id)}`),
+    mutationFn: organizationApi.removeMember,
     onSuccess: refresh,
   })
 }

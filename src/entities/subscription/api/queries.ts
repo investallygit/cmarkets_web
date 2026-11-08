@@ -1,13 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient, isApiError } from '@/shared/api'
-import type {
-  CheckoutDto,
-  CheckoutRequestDto,
-  InvoiceDto,
-  PaymentDto,
-  PlanDto,
-  SubscriptionDto,
-} from '@/shared/api/contracts'
+import { isApiError } from '@/shared/api'
+import type { PaymentDto } from '@/shared/api/contracts'
+import { subscriptionsApi } from '@/shared/api/endpoints'
 
 export const subscriptionKeys = {
   all: ['subscription'] as const,
@@ -27,7 +21,7 @@ export function useSubscription() {
     queryKey: subscriptionKeys.current(),
     queryFn: async ({ signal }) => {
       try {
-        return await apiClient.get<SubscriptionDto>('/subscription', { signal })
+        return await subscriptionsApi.current(signal)
       } catch (error) {
         if (isApiError(error, 404)) return null
         throw error
@@ -40,7 +34,7 @@ export function useSubscription() {
 export function usePlans() {
   return useQuery({
     queryKey: subscriptionKeys.plans(),
-    queryFn: ({ signal }) => apiClient.get<PlanDto[]>('/subscription/plans', { signal }),
+    queryFn: ({ signal }) => subscriptionsApi.plans(signal),
     staleTime: Infinity,
   })
 }
@@ -52,8 +46,7 @@ export function usePlans() {
 export function usePublicPlans() {
   return useQuery({
     queryKey: subscriptionKeys.publicPlans(),
-    queryFn: ({ signal }) =>
-      apiClient.get<PlanDto[]>('/subscription/plans', { signal, anonymous: true }),
+    queryFn: ({ signal }) => subscriptionsApi.publicPlans(signal),
     staleTime: Infinity,
   })
 }
@@ -65,8 +58,7 @@ export function usePublicPlans() {
 export function useCheckout() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (request: CheckoutRequestDto) =>
-      apiClient.post<CheckoutDto>('/subscription/checkout', request),
+    mutationFn: subscriptionsApi.checkout,
     onSuccess: (checkout) => {
       queryClient.setQueryData(subscriptionKeys.current(), checkout.subscription)
       if (checkout.invoice)
@@ -81,10 +73,7 @@ export function useSubscriptionPayment(payment: PaymentDto | null) {
   return useQuery({
     queryKey: subscriptionKeys.payment(payment?.id ?? ''),
     queryFn: async ({ signal }) => {
-      const current = await apiClient.get<PaymentDto>(
-        `/payments/${encodeURIComponent(payment?.id ?? '')}`,
-        { signal },
-      )
+      const current = await subscriptionsApi.payment(payment?.id ?? '', signal)
       if (current.status === 'confirmed') {
         void queryClient.invalidateQueries({ queryKey: subscriptionKeys.current() })
         void queryClient.invalidateQueries({ queryKey: subscriptionKeys.invoices })
@@ -103,14 +92,13 @@ export function useSubscriptionPayment(payment: PaymentDto | null) {
 export function useInvoices() {
   return useQuery({
     queryKey: subscriptionKeys.invoices,
-    queryFn: ({ signal }) => apiClient.get<InvoiceDto[]>('/invoices', { signal }),
+    queryFn: ({ signal }) => subscriptionsApi.invoices(signal),
   })
 }
 
 /** GET /invoices/{id}/pdf */
 export function useInvoicePdf() {
   return useMutation({
-    mutationFn: (invoiceId: string) =>
-      apiClient.getBlob(`/invoices/${encodeURIComponent(invoiceId)}/pdf`),
+    mutationFn: subscriptionsApi.invoicePdf,
   })
 }

@@ -15,8 +15,10 @@ import type { RouteTable } from './define'
 import { devToolsRoutes } from './devTools'
 import { marketRoutes } from './market'
 import { meRoutes } from './me'
+import { organizationRoutes } from './organization'
 import { portfoliosRoutes } from './portfolios'
 import { securitiesRoutes } from './securities'
+import { subscriptionsRoutes } from './subscriptions'
 import { watchlistsRoutes } from './watchlists'
 
 export { alertsApi, alertsRoutes } from './alerts'
@@ -36,8 +38,10 @@ export { dataAdminApi, dataAdminRoutes } from './dataAdmin'
 export { devToolsApi, devToolsRoutes, type DemoAccountsDto, type SentCodeQuery } from './devTools'
 export { marketApi, marketRoutes, type HistoryRange } from './market'
 export { meApi, meRoutes } from './me'
+export { organizationApi, organizationRoutes } from './organization'
 export { portfoliosApi, portfoliosRoutes, type PerformanceQuery } from './portfolios'
 export { securitiesApi, securitiesRoutes, type SecurityFilters } from './securities'
+export { subscriptionsApi, subscriptionsRoutes } from './subscriptions'
 export { watchlistsApi, watchlistsRoutes } from './watchlists'
 
 export {
@@ -65,7 +69,9 @@ export const ROUTE_TABLES: Readonly<Record<string, RouteTable>> = {
   DevTools: devToolsRoutes,
   Market: marketRoutes,
   Me: meRoutes,
+  Organization: organizationRoutes,
   Portfolios: portfoliosRoutes,
   Securities: securitiesRoutes,
+  Subscriptions: subscriptionsRoutes,
   Watchlists: watchlistsRoutes,
 }
