@@ -19,14 +19,8 @@ import {
   type RealtimeClient,
 } from '@/shared/realtime'
 
-// Composition root: the only place that knows whether the back end is real or mocked. It reads
-// VITE_USE_MOCKS itself, as readEnv does (env.useMocks), for Vite writes it into the code: a build
-// for CMarket.Api then leaves the mock and MSW out of the bundle.
-async function createHubs(): Promise<{ market: RealtimeClient; chat: ChatClient }> {
-  if (import.meta.env.VITE_USE_MOCKS === 'true') {
-    const { startMockBackend } = await import('@/mocks')
-    return startMockBackend()
-  }
+// Composition root: the hubs of CMarket.Api.
+function createHubs(): { market: RealtimeClient; chat: ChatClient } {
   return {
     market: createSignalRRealtimeClient(env.realtimeHubUrl),
     chat: createSignalRChatClient(env.chatHubUrl),
@@ -34,7 +28,7 @@ async function createHubs(): Promise<{ market: RealtimeClient; chat: ChatClient 
 }
 
 async function bootstrap() {
-  const { market, chat } = await createHubs()
+  const { market, chat } = createHubs()
   // The hubs serve logged-in users only: the market's connects with the session and closes with
   // it; the app shell opens the chat's for the users who write to others.
   onSessionChange(({ status }) => {
@@ -49,14 +43,13 @@ async function bootstrap() {
   )
 }
 
-// The prototype's back end needs a service worker and the site's storage, which a private window
-// or a security setting can refuse: say so, rather than leave an empty page.
+// Say so when the app cannot start, rather than leave an empty page.
 bootstrap().catch((error: unknown) => {
   console.error(error)
   createRoot(document.getElementById('root')!).render(
     <FullScreenStatus
       kind="error"
-      message={i18n.t(env.useMocks ? 'app.mockStartError' : 'app.startError')}
+      message={i18n.t('app.startError')}
       onRetry={() => window.location.reload()}
     />,
   )

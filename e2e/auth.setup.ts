@@ -2,7 +2,7 @@ import { expect, test as setup } from '@playwright/test'
 import { ANALYST_SESSION } from './session.js'
 
 // The demo Analyst, K. Atangana, logs in with the password and the one-time code; the other tests
-// start from this session (the refresh cookie the mock keeps).
+// start from this session (the API's refresh cookie).
 setup('log in as the demo Analyst', async ({ page }) => {
   await page.goto('/app')
   await expect(page).toHaveURL(/\/login$/)

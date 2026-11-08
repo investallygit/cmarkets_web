@@ -3,8 +3,7 @@
     "connecting": "Connexion à CMarket",
     "sessionError": "Impossible de charger votre session.",
     "retry": "Réessayer",
-    "startError": "CMarket n'a pas pu démarrer.",
-    "mockStartError": "Le prototype n'a pas pu démarrer : son back-end simulé a besoin que le navigateur autorise les service workers et les données de site pour ce site, ce qu'une fenêtre privée ou un réglage de sécurité peut bloquer. Autorisez-les, puis réessayez."
+    "startError": "CMarket n'a pas pu démarrer."
   },
   "common": {
     "loading": "Chargement",
@@ -41,7 +40,6 @@
     },
     "source": "Source",
     "lastUpdate": "dernière mise à jour",
-    "prototypeData": "Prototype — données fictives",
     "language": "Langue",
     "prototypeAccount": "Prototype : type de compte"
   },

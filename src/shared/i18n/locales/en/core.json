@@ -3,8 +3,7 @@
     "connecting": "Connecting to CMarket",
     "sessionError": "Your session could not be loaded.",
     "retry": "Retry",
-    "startError": "CMarket could not start.",
-    "mockStartError": "The prototype could not start: its simulated back end needs the browser to allow service workers and site data for this site, which a private window or a security setting can block. Allow them, then retry."
+    "startError": "CMarket could not start."
   },
   "common": {
     "loading": "Loading",
@@ -41,7 +40,6 @@
     },
     "source": "Source",
     "lastUpdate": "last update",
-    "prototypeData": "Prototype — sample data",
     "language": "Language",
     "prototypeAccount": "Prototype: account type"
   },

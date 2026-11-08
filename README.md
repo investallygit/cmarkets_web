@@ -1,38 +1,31 @@
-# CMarket web (prototype)
+# CMarket web
 
 Front end of CMarket, built from `CMarket-developer-spec-EN.pdf` (second version, 2 November
 2026): the client terminal with its professional directory and messaging, and the back-office of
-the Data admin and of the Admin. This prototype runs without a back end: a mock layer answers the
-REST API and simulates the real-time hubs with the sample data of the mockups.
+the Data admin and of the Admin. It takes all its data from `CMarket.Api`: the REST API and the
+SignalR hubs.
 
-- [Introduction](#introduction): what the prototype does, its stack, the status of each screen
+- [Introduction](#introduction): what the app does, its stack, the status of each screen
 - [Installation](#installation): run it, log in, the scripts
 - [Structure](#structure): the folders, the rules between them, the data flow, the design system
-- [Guides](#guides): where new code goes, a new screen, translations, tests, the real back end
+- [Guides](#guides): where new code goes, a new screen, translations, tests, the back end
 
 ## Introduction
 
 The app opens on the home page: what CMarket does, its markets, its users and its plans, with the
 free trial and the login; a user already logged in opens the terminal from it (`/app`, the home
 screen of the account type). Once in, the user badge at the top right opens the settings (CFG),
-switches language (FR / EN) and, in the prototype, account type, so every menu and permission of
-spec section 12 can be previewed, and logs out. `/_kit` shows the shared UI components (form
-controls, dialogs, toasts, price chart, table export) with sample content.
+switches language (FR / EN) and, with the API's development tools, account type, so every menu and permission of
+spec section 12 can be previewed, and logs out. With the development tools, `/_kit` shows the
+shared UI components (form controls, dialogs, toasts, price chart, table export) with sample
+content.
 
-The mock back end keeps the accounts, organisations, plans and invoices, and each user's
-watchlists, alerts, saved screens, portfolios, purchases, layouts and chart drawings in
-localStorage, with what the accounts share: the research library, the professional profiles and
-the conversations; it plays the browser's part for the refresh token cookie. It sets off the
-alerts when a price crosses a threshold, a release comes out or a portfolio limit is breached. In
-the directory and the messaging it applies the visibility, contact rules, blocks and limits of
-spec section 15, its people read, type and answer through the simulated chat hub as on screen 11,
-and an account reported past the Admin's threshold is referred to MOD. For the Data admin it
-reads the CSV and Excel templates, runs the format and business checks of spec section 11 and puts
-the published rows in place of its generated prices, index closes, auctions, curves and dividends,
-until a rollback takes them out. It runs the bond calculator with the formulas of spec section
-14.1 and values portfolios with those of sections 14.2 and 14.3, each tested against the spec's
-cases; it plays the mobile money and card payments of research and plans and watermarks the PDFs
-it writes.
+`CMarket.Api` keeps the accounts, organisations, plans and invoices, each user's watchlists,
+alerts, saved screens, portfolios, purchases, layouts and chart drawings, and what the accounts
+share: the research library, the professional profiles and the conversations. It sets off the
+alerts, applies the visibility and contact rules of spec section 15, runs the upload checks of
+spec section 11, the bond calculator of section 14.1 and the portfolio valuation of sections 14.2
+and 14.3, and takes the payments. The front end only knows the API contract.
 
 ### Stack (spec section 7)
 
@@ -41,8 +34,8 @@ selection) · TanStack Table + Virtual · TradingView Lightweight Charts (prices
 (comparison bars, yield curves, portfolio performance) · react-grid-layout · `@microsoft/signalr`
 · Tailwind CSS with the section 8 tokens · i18next (FR / EN) · Vitest, Testing Library,
 Playwright · TipTap 3 (the editor of the publishing studio, loaded with that screen only).
-Supporting choices: React Router 7, lucide-react icons, MSW 3 for the mock back end,
-write-excel-file for the Excel export of tables, read-excel-file for the mock's Excel imports.
+Supporting choices: React Router 7, lucide-react icons, write-excel-file for the Excel export of
+tables, read-excel-file to read the Excel templates before upload.
 
 ### Status
 
@@ -51,23 +44,23 @@ write-excel-file for the Excel export of tables, read-excel-file for the mock's 
 | Home page: the product, markets, users and plans; trial and login         | Done; the plans come from the server before login             |
 | App shell: top bar, command bar, ticker, menu by account type, status bar | Done; MSG in the menu counts the unread messages              |
 | Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
-| 1 · Market dashboard (MKT)                                                | Done on mock data, real-time quotes and indices, watchlists   |
-| 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done on mock data                                             |
-| 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done on mock data, saved screens                              |
-| 4 · Yield curves and bond calculator (YCRV, YAS)                          | Done; the mock computes spec section 14.1                     |
-| 5 · Portfolio (PORT)                                                      | Done; the mock values portfolios with sections 14.2 and 14.3  |
-| 7 · Publishing studio (PUB NEW)                                           | Done on mock data, autosave, versions, frozen charts          |
-| 8 · Research library (PUB)                                                | Done; the mock plays mobile money and card payments           |
-| News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done on mock data; the mock sets off the alerts               |
+| 1 · Market dashboard (MKT)                                                | Done, real-time quotes and indices, watchlists                |
+| 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done                                                          |
+| 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done, saved screens                                           |
+| 4 · Yield curves and bond calculator (YCRV, YAS)                          | Done; the API computes spec section 14.1                      |
+| 5 · Portfolio (PORT)                                                      | Done; the API values portfolios with sections 14.2 and 14.3   |
+| 7 · Publishing studio (PUB NEW)                                           | Done, autosave, versions, frozen charts                       |
+| 8 · Research library (PUB)                                                | Done; mobile money and card payments                          |
+| News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done; the API sets off the alerts                             |
 | Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
 | Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
-| 10 · Professional directory (NET), public profile page                    | Done; 1,163 profiles listed, the mockup's search finds 64     |
-| 11 · Messaging (MSG)                                                      | Done; the mock's people read, type and answer in real time    |
-| 12 · My profile, visibility and contact (NET ME)                          | Done; the mock applies the contact rules of section 15        |
-| 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the mock checks, publishes and rolls back the files     |
-| Data corrections (CORR), news and documents (NEWS): no mockup             | Done on mock data; corrections logged with their reason       |
-| 9 · Account administration (USER) with ANLY and MOD                       | Done; 2,054 accounts; MOD reviews the directory reports too   |
+| 10 · Professional directory (NET), public profile page                    | Done; the demo data lists 1,163 profiles                      |
+| 11 · Messaging (MSG)                                                      | Done; read, typing and presence in real time                  |
+| 12 · My profile, visibility and contact (NET ME)                          | Done; the API applies the contact rules of section 15         |
+| 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the API checks, publishes and rolls back the files      |
+| Data corrections (CORR), news and documents (NEWS): no mockup             | Done; corrections logged with their reason                    |
+| 9 · Account administration (USER) with ANLY and MOD                       | Done; MOD reviews the directory reports too                   |
 | Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged  |
 
 How the screens were built, step by step, what the second version of the spec added (the
@@ -85,27 +78,25 @@ npm install
 npm run dev        # http://localhost:5173
 ```
 
-The dev server runs with the mock back end; to work against `CMarket.Api` instead, see
-[Connecting the real back end](#connecting-the-real-back-end).
+The dev server needs `CMarket.Api` running on port 5001 (`dotnet run --project src/CMarket.Api
+--launch-profile http` in its repository): it forwards `/api` and `/hubs` to it
+(`.env.development`). Without the API, the login fails and no screen has data; see
+[Connecting the back end](#connecting-the-back-end).
 
-In the prototype, the login page lists a demo account per account type, all with the password
-`cmarket2026`, and shows the one-time code the mock would have sent by e-mail or SMS; a sign-up
-gets the 14-day free trial. The mock keeps its data in the browser's localStorage under
-`cmarket.prototype.*`: clearing the site's data starts again from the sample data.
+With the API's development tools, the login page lists a demo account per account type, all with
+the password `cmarket2026`, and fills in the one-time code; a sign-up gets the 14-day free trial.
 
-| Script                          | Purpose                                                                    |
-| ------------------------------- | -------------------------------------------------------------------------- |
-| `npm run dev`                   | Dev server with the mock back end                                          |
-| `npm run dev:api`               | Dev server on a `CMarket.Api` running on port 5001 (`.env.api`)            |
-| `npm run build`                 | Type check, then production build in `dist/`                               |
-| `npm run typecheck`             | TypeScript only                                                            |
-| `npm run lint`                  | ESLint, including the layer rules of [Structure](#structure)               |
-| `npm run format`                | Prettier, on every file                                                    |
-| `npm test` / `npm run test:run` | Vitest unit and component tests                                            |
-| `npm run test:api`              | The API module's reads against a running `CMarket.Api`, for each account   |
-| `npm run api:routes`            | Reads the routes of a running `CMarket.Api`'s OpenAPI document again       |
-| `npm run e2e`                   | Playwright end-to-end tests (first run: `npx playwright install chromium`) |
-| `npm run e2e:api`               | The flows but those tagged `@mock`, on a running `CMarket.Api` (port 5174) |
+| Script                          | Purpose                                                                                    |
+| ------------------------------- | ------------------------------------------------------------------------------------------ |
+| `npm run dev`                   | Dev server on a `CMarket.Api` running on port 5001 (`.env.development`)                    |
+| `npm run build`                 | Type check, then production build in `dist/`                                               |
+| `npm run typecheck`             | TypeScript only                                                                            |
+| `npm run lint`                  | ESLint, including the layer rules of [Structure](#structure)                               |
+| `npm run format`                | Prettier, on every file                                                                    |
+| `npm test` / `npm run test:run` | Vitest unit and component tests                                                            |
+| `npm run test:api`              | The API module's reads against a running `CMarket.Api`, for each account                   |
+| `npm run api:routes`            | Reads the routes of a running `CMarket.Api`'s OpenAPI document again                       |
+| `npm run e2e`                   | Playwright flows on a running `CMarket.Api` (first run: `npx playwright install chromium`) |
 
 ## Structure
 
@@ -115,7 +106,7 @@ split into slices by business domain, each slice into segments (`ui`, `model`, `
 
 ```
 src/
-  main.tsx    entry point: real back end or mocks
+  main.tsx    entry point: the hubs of CMarket.Api, then the app
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile, equity-screener,
               yield-curves (YCRV and YAS), portfolio, research-library, publishing-studio, news,
@@ -148,9 +139,8 @@ src/
   shared/     no business knowledge: the API (client, contracts and the module of its endpoints,
               api/endpoints), real-time, config (.env), routes and screen list, UI kit (panels,
               tables, charts, form controls, dialogs, toasts), i18n, formatting
-  mocks/      fake back end for the prototype (below)
 e2e/          Playwright flows; auth.setup.ts logs in once and the other specs reuse the session
-public/       the MSW service worker and the favicon
+public/       the favicon and the photos of the home page
 ```
 
 ### Layer rules
@@ -163,35 +153,6 @@ ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
   features and entities.
 - Another slice is reached only through its public `index.ts` (`@/entities/market`); inside a
   slice, imports are relative and never go up two folders (`../../`).
-- `mocks/` only sees `shared/`, like a real server only shares the API contract; only `main.tsx`
-  loads it.
-
-### The mock back end
-
-```
-src/mocks/
-  index.ts      starts MSW and the simulated hubs
-  handlers/     the REST routes, one file per part of the API; admin/ and portfolios/ hold
-                one file per screen or part
-  db.ts         the in-memory state the routes and the hubs share; its parts in db/ (storage,
-                market, accounts, session, platform, live, workspace, portfolios, research,
-                network, messaging, chat)
-  imports.ts    the Data admin's uploads and what they publish; its parts in imports/ (store,
-                checks, seeds, the upload cycle, coverage, corrections)
-  fixtures/     the sample data of the mockups
-  lib/          pure logic tested against the spec: bond math (14.1), the portfolio engine
-                (14.2, 14.3, its parts in portfolioEngine/), the upload checks (11), the contact
-                rules, the directory, the messaging and the reports (15)...
-  realtime.ts   the simulated market hub
-  chat.ts       the simulated chat hub: who is online, who reads, types and answers
-  admin.ts, content.ts, payments.ts, publications.ts, reports.ts
-                what several routes share: the Admin's accounts and payouts, the news and
-                documents entered, the payments, the publication of research, the reports of
-                the directory and the messaging
-```
-
-`SEED_VERSION` (`db/storage.ts`) drops the data kept in localStorage when the sample data
-changes, which also ends the prototype's session once.
 
 ### File organisation
 
@@ -199,16 +160,16 @@ changes, which also ends the prototype's session once.
   Markdown documents, `package-lock.json`, generated files and images aside.
 - A file that grows past it is split. It stays as the parent, at the same path and with the same
   exports, and its parts move into a folder of the same name beside it, one concern per file:
-  `src/mocks/db.ts` and `src/mocks/db/`, `src/shared/i18n/locales/en.ts` and `en/`. The code that
+  `src/shared/i18n/locales/en.ts` and `en/`. The code that
   imports the parent does not change; the parts never import their parent.
 - No import cycles: when two parts would need each other, the lower one exposes a `set…`
-  registration that the higher one calls (`setStoredSessions`, `setStoredIndexCloses`,
-  `setImportSeeds`).
+  registration that the higher one calls.
 - Inside an FSD slice, a file splits along the segments instead (UI in `ui/`, state in `model/`,
   pure logic in `lib/`, constants in `config/`, requests in `api/`), and the slice's `index.ts`
   stays its public API.
-- Files that do the same job share a folder: the routes in `mocks/handlers/`, the sample data in
-  `mocks/fixtures/`, the parts of a split file in the folder named after it.
+- Files that do the same job share a folder: the endpoints in `shared/api/endpoints/`, the
+  translations of each area in `locales/en/` and `fr/`, the parts of a split file in the folder
+  named after it.
 
 ### Data flow
 
@@ -219,12 +180,12 @@ changes, which also ends the prototype's session once.
   the session, renews it on a 401 and turns errors into RFC 7807 `ApiError`s; ESLint lets no other
   code reach the client. Each entity wraps the calls in TanStack Query hooks
   (`entities/*/api/queries.ts`), which keep the query keys and the cache. DTOs live in
-  `shared/api/contracts`: they mirror spec section 10 and `CMarket.Api` follows them. Two tests
-  check every route of the module against the API's OpenAPI document (`openapi-routes.txt`,
-  written by `npm run api:routes` from a running API) and against the mock's handlers.
+  `shared/api/contracts`: they mirror spec section 10 and `CMarket.Api` follows them. A test
+  checks every route of the module against the API's OpenAPI document (`openapi-routes.txt`,
+  written by `npm run api:routes` from a running API).
 - **Addresses**: `.env` gives the API's origin (`VITE_API_URL`; empty, the site's own), from
   which `shared/config/env.ts` derives the REST API and both hubs; see
-  [Connecting the real back end](#connecting-the-real-back-end).
+  [Connecting the back end](#connecting-the-back-end).
 - **Real time**: `shared/realtime` defines two hub clients with their SignalR implementations:
   `RealtimeClient` for `/hubs/market`, with ref-counted symbol subscriptions, and `ChatClient`
   for `/hubs/chat`, with the conversations joined while their thread shows. Each entity handles
@@ -336,8 +297,7 @@ each other; the app shell mounts the form once.
 
 1. Add it to `SCREENS` in `shared/routes/screens.ts`, and its page to `app/routes/pages.ts`.
 2. Write its DTOs in `shared/api/contracts`, its routes and calls in `shared/api/endpoints` (the
-   file of the API's controller folder), its mock routes in `mocks/handlers/` and its sample data
-   in `mocks/fixtures/`, from the mockup. A route the API does not serve yet fails the OpenAPI
+   file of the API's controller folder). A route the API does not serve yet fails the OpenAPI
    test until `CMarket.Api` has it and `npm run api:routes` reads it again.
 3. Build the `pages/<screen>` slice: its panels, their default grid and their names in `config`.
 4. Give every string in French and English, and hide or lock the actions by permission and quota.
@@ -360,51 +320,47 @@ goes in both folders and is added to both `en.ts` and `fr.ts`.
 
 - Unit and component tests sit next to the code they test (`*.test.ts`, `*.test.tsx`).
   `npm test` watches, `npm run test:run` runs them once; one file:
-  `npx vitest run src/mocks/lib/bondMath.test.ts`, one test: add `-t "<its name>"`.
+  `npx vitest run src/shared/lib/format.test.ts`, one test: add `-t "<its name>"`.
 - `npm run test:api` calls the reads of the API module (`shared/api/endpoints`) on a running
   `CMarket.Api` with its development tools and demo data (`CMARKET_API_URL`, port 5001 by
   default): each demo account logs in as the front end does and makes every read its permissions
   and plan allow, which must answer without an error and in the shape of its contract. It is
   apart from `npm run test:run`, which needs no back end.
-- `npm run e2e` runs the Playwright flows at 1600 × 900, the resolution of the mockups, against
-  the dev server: it starts one, or uses the one already on port 5173. `e2e/auth.setup.ts` logs
-  in once as the demo Analyst and the other specs start from that session. One spec:
+- `npm run e2e` runs the Playwright flows at 1600 × 900, the resolution of the mockups, on a
+  running `CMarket.Api` with its development tools, started on a fresh database, through the dev
+  server: it starts one, or uses the one already on port 5173. `e2e/auth.setup.ts` logs in once
+  as the demo Analyst and the other specs start from that session. One spec:
   `npx playwright test e2e/portfolio.spec.ts`, one test: add `-g "<its title>"`.
-- `npm run e2e:api` runs the same flows on a running `CMarket.Api` with its development tools,
-  started on a fresh database, through a dev server in the mode `api` on port 5174 (beside the
-  mock's on 5173). A flow names a demo record with `demoId()` (`e2e/demoIds.ts`): the mock's id,
-  or the GUID the API's seed derives from it. On the API the flows share one database and the
-  stored session: a flow that logs out takes a session of its own (`ownSession`), one that
-  arranges a screen starts from its default layout (`defaultLayout`), one that changes the profile
-  puts it back. The flows tagged `@mock` stay on the mock: they need its simulated people or its
-  service worker, its sample figures, or its data as seeded, which the other flows change on the
-  shared database. `E2E_API_ALL=1 npm run e2e:api -- e2e/<spec>.spec.ts` runs a spec's `@mock`
-  flows too, on a fresh database.
+- A flow names a demo record with `demoId()` (`e2e/demoIds.ts`): the GUID the API's seed derives
+  from its key. The flows share one database and the stored session, so they run one at a time: a
+  flow that logs out takes a session of its own (`ownSession`), one that arranges a screen starts
+  from its default layout (`defaultLayout`), one that changes the profile puts it back. The flows
+  tagged `@fresh-db` need the demo data as seeded, which the other flows change:
+  `E2E_FRESH_DB=1 npx playwright test e2e/<spec>.spec.ts` runs a spec's, on a fresh database.
 - A change is done when `npm run typecheck`, `npm run lint` and `npm run test:run` pass, and the
   Playwright flow of the screen it touches.
 
-### Connecting the real back end
+### Connecting the back end
 
 On this machine: start `CMarket.Api` (`dotnet run --project src/CMarket.Api --launch-profile http`
-in its repository, port 5001), then `npm run dev:api`. The mode `api` (`.env.api`) turns the mock
-off and has the dev server forward `/api` and `/hubs` to the API, so the site and the API share
-one origin as in production; the demo accounts and the code come from the API's development tools.
-Another address: `DEV_PROXY_TARGET` in `.env.api.local`. In general:
+in its repository, port 5001), then `npm run dev`. `.env.development` has the dev server forward
+`/api` and `/hubs` to the API, so the site and the API share one origin as in production; the demo
+accounts and the code come from the API's development tools. Another address: `DEV_PROXY_TARGET`
+in `.env.development.local`. In general:
 
-1. Set `VITE_USE_MOCKS=false`.
-2. Point `DEV_PROXY_TARGET` at `CMarket.Api` for local development, or set `VITE_API_URL` to
+1. Point `DEV_PROXY_TARGET` at `CMarket.Api` for local development, or set `VITE_API_URL` to
    the origin of a deployed API (`https://api.cmarket.example`): the REST API and both hubs are
    served under it, and the images the API names by its own path (`/api/v1/profile-photos/…`) are
    shown from it. `VITE_API_BASE_URL`, `VITE_REALTIME_HUB_URL` and `VITE_CHAT_HUB_URL` replace one
    address each. A malformed `VITE_API_URL` stops the dev server and the build.
-3. Have `POST /auth/otp/verify` and `/auth/refresh` set the refresh token as an `HttpOnly`,
+2. Have `POST /auth/otp/verify` and `/auth/refresh` set the refresh token as an `HttpOnly`,
    `Secure` cookie on the `/auth` path. The login calls are sent with credentials; an API on
    another origin needs CORS with credentials for this site, and an API on another site
    (another registrable domain) `SameSite=None` on the cookie, which browsers that block
    third-party cookies refuse: keep the site and the API on one domain (`app.` and `api.`).
 
-The screens do not change: they only know the API contract. The prototype's helpers (the demo
-accounts of the login page, the code filled in, the account switch) follow `VITE_DEV_TOOLS`, which
-follows `VITE_USE_MOCKS` unless set: `CMarket.Api` serves the same `/_prototype/*` routes in
-development. To check the front end against it: `npm run test:api`, then `npm run e2e:api` (see
+The development helpers (the demo accounts of the login page, the code filled in, the account
+switch, `/_kit`) follow `VITE_DEV_TOOLS`, true in `.env.development` only: `CMarket.Api` serves
+their `/_prototype/*` routes in development. To check the front end against it:
+`npm run test:api`, then `npm run e2e` (see
 [Tests](#tests)); after a change to the API's routes, `npm run api:routes` and `npm run test:run`.

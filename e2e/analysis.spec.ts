@@ -5,10 +5,10 @@ import { expect, test, type Page } from '@playwright/test'
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title }) })
 
-// @mock: the sector averages of the mock's sample data: CMarket.Api computes its own.
+// @fresh-db: the sector averages of the demo data as seeded.
 test(
   'a saved screen filters the equities and the lower panels follow the selected row',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await page.goto('/eqs')
     const results = panel(page, /^Results/)
@@ -102,10 +102,10 @@ test('the yield curves hide a country and compare with a past date', async ({ pa
   await expect(panel(page, 'Bond calculator').getByText('Spread vs Gabon curve')).toBeVisible()
 })
 
-// @mock: the sector averages of the mock's sample data: CMarket.Api computes its own.
+// @fresh-db: the sector averages of the demo data as seeded.
 test(
   'the FA tab shows the ratios and the statements of the security',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await page.goto('/securities/SEMC/fa')
     // The P/E moves with the price; the sector average does not.

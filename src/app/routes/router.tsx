@@ -21,7 +21,7 @@ import {
 import { RequireSession } from './RequireSession'
 import { ScreenRoute } from './ScreenRoute'
 
-const prototypeRoutes = env.useMocks
+const prototypeRoutes = env.devTools
   ? [
       {
         path: '/_kit',

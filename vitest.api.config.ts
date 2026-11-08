@@ -14,7 +14,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.live.ts'],
-    env: { VITE_API_URL: apiUrl, VITE_USE_MOCKS: 'false' },
+    env: { VITE_API_URL: apiUrl },
     // One session at a time: the accounts follow each other.
     fileParallelism: false,
     testTimeout: 30_000,

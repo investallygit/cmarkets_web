@@ -8,7 +8,7 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 // Feature-Sliced Design (https://feature-sliced.design), layers from top to bottom.
 // A layer may only import the layers below it. On the sliced layers, a slice never imports another
 // slice of its own layer, and other slices are reached only through their public index.
-// main.tsx is the entry point; mocks/ is a fake back end that only sees shared/.
+// main.tsx is the entry point.
 const LAYERS = ['app', 'pages', 'widgets', 'features', 'entities', 'shared']
 const SLICED_LAYERS = ['pages', 'widgets', 'features', 'entities']
 
@@ -20,7 +20,7 @@ const publicApiOnly = {
 }
 
 // Requests go through the API module only (src/shared/api/endpoints), whose route tables are
-// checked against CMarket.Api's OpenAPI document and the mock: nothing else sends them.
+// checked against CMarket.Api's OpenAPI document: nothing else sends them.
 const apiModuleOnly = {
   group: ['@/shared/api/client', '**/api/client'],
   message: 'Call the API through its module: @/shared/api/endpoints (xxxApi), not the client.',
@@ -33,15 +33,18 @@ function importRules(...patterns) {
 }
 
 const layerRules = LAYERS.map((layer, index) => {
-  const patterns = [
-    {
-      group: modules([...LAYERS.slice(0, index), 'mocks']),
-      message:
-        layer === 'shared'
-          ? 'shared/ is the bottom layer: it must not import any other layer.'
-          : `${layer}/ may only import the layers below it; only src/main.tsx loads mocks/.`,
-    },
-  ]
+  // app/ is the top layer: nothing sits above it.
+  const patterns = index
+    ? [
+        {
+          group: modules(LAYERS.slice(0, index)),
+          message:
+            layer === 'shared'
+              ? 'shared/ is the bottom layer: it must not import any other layer.'
+              : `${layer}/ may only import the layers below it.`,
+        },
+      ]
+    : []
   if (SLICED_LAYERS.includes(layer)) {
     patterns.push(
       {
@@ -58,13 +61,7 @@ const layerRules = LAYERS.map((layer, index) => {
 })
 
 export default defineConfig([
-  globalIgnores([
-    'dist',
-    'coverage',
-    'playwright-report',
-    'test-results',
-    'public/mockServiceWorker.js',
-  ]),
+  globalIgnores(['dist', 'coverage', 'playwright-report', 'test-results']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -79,11 +76,4 @@ export default defineConfig([
   },
   { files: ['src/**'], rules: importRules() },
   ...layerRules,
-  {
-    files: ['src/mocks/**'],
-    rules: importRules({
-      group: modules(['app', 'pages', 'widgets', 'features', 'entities']),
-      message: 'mocks/ is a fake back end: it may only use shared/ (API contracts, config).',
-    }),
-  },
 ])

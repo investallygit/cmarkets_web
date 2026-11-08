@@ -4,7 +4,6 @@ export interface EnvVariables {
   VITE_API_BASE_URL?: string
   VITE_REALTIME_HUB_URL?: string
   VITE_CHAT_HUB_URL?: string
-  VITE_USE_MOCKS?: string
   VITE_DEV_TOOLS?: string
 }
 
@@ -17,11 +16,9 @@ export interface AppEnv {
   realtimeHubUrl: string
   /** The hub of the messaging. */
   chatHubUrl: string
-  /** Prototype mode: src/mocks answers the API and simulates the real-time hubs. */
-  useMocks: boolean
   /**
-   * The prototype's helpers: the demo accounts of the login page, the code filled in, the account
-   * switch. Served by the mock, and by CMarket.Api in development (/_prototype/*, DevTools).
+   * The development helpers: the demo accounts of the login page, the code filled in, the account
+   * switch, /_kit. Served by CMarket.Api in development (/_prototype/*, DevTools).
    */
   devTools: boolean
 }
@@ -52,19 +49,17 @@ const override = (value: string | undefined) => value?.trim() || undefined
 /**
  * The addresses of the back end, from VITE_API_URL: the REST API and the two hubs sit under the
  * same origin, as CMarket.Api serves them. VITE_API_BASE_URL and the two hub variables replace
- * one address each. VITE_DEV_TOOLS follows VITE_USE_MOCKS unless set. Throws on a malformed VITE_API_URL, so that a build fails rather than a page.
+ * one address each. Throws on a malformed VITE_API_URL, so that a build fails rather than a
+ * page.
  */
 export function readEnv(variables: EnvVariables): AppEnv {
   const apiOrigin = readOrigin(variables.VITE_API_URL)
-  const useMocks = variables.VITE_USE_MOCKS === 'true'
-  const devTools = variables.VITE_DEV_TOOLS?.trim()
   return {
     apiOrigin,
     apiBaseUrl: override(variables.VITE_API_BASE_URL) ?? `${apiOrigin}${API_PREFIX}`,
     realtimeHubUrl: override(variables.VITE_REALTIME_HUB_URL) ?? `${apiOrigin}/hubs/market`,
     chatHubUrl: override(variables.VITE_CHAT_HUB_URL) ?? `${apiOrigin}/hubs/chat`,
-    useMocks,
-    devTools: devTools ? devTools === 'true' : useMocks,
+    devTools: variables.VITE_DEV_TOOLS?.trim() === 'true',
   }
 }
 

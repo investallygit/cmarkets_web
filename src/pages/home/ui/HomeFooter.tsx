@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
-import { env } from '@/shared/config/env'
 import { routes } from '@/shared/routes/paths'
 import { Logo } from '@/shared/ui/Logo'
 import { Container } from './Section'
@@ -16,9 +15,6 @@ export function HomeFooter() {
           <p className="font-sans text-data text-secondary">{t('auth.footer')}</p>
           <p className="font-sans text-data text-secondary">{t('home.footer.sources')}</p>
           <p className="font-sans text-data text-secondary">{t('home.footer.photos')}</p>
-          {env.useMocks && (
-            <p className="font-sans text-data text-warning">{t('shell.prototypeData')}</p>
-          )}
         </div>
         <nav aria-label={t('home.footer.label')} className="flex flex-wrap gap-x-6 gap-y-2">
           <a href="#plans" className={link}>

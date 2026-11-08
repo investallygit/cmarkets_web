@@ -21,10 +21,10 @@ async function switchAccount(page: Page, account: string, badge: RegExp) {
   await expect(page.getByRole('button', { name: badge })).toBeVisible()
 }
 
-// @mock: the conversations as seeded, P. Owona's first: other flows start newer ones on CMarket.Api.
+// @fresh-db: the conversations as seeded, P. Owona's first: other flows start newer ones.
 test(
   'the Analyst answers P. Owona, shares a security, edits then deletes a message',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await page.goto('/mkt')
     await page
@@ -143,7 +143,7 @@ test('a file is scanned before it can be downloaded, and a virus is blocked', as
       mimeType: 'text/csv',
       buffer: Buffer.from('tenor,yield\n5Y,5.85'),
     },
-    // Infected by its name for the mock, by the EICAR marker it holds for CMarket.Api's scanner.
+    // Infected by the EICAR marker it holds, for CMarket.Api's scanner.
     {
       name: 'eicar-test.pdf',
       mimeType: 'application/pdf',
@@ -194,10 +194,11 @@ test('a group is created from New, and a block closes a conversation', async ({ 
   await expect(blocked.getByText('You blocked nobody.')).toBeVisible()
 })
 
-// @mock: the mock's simulated people (fixtures/messaging.ts).
+// @fresh-db. Written for the prototype's scripted people, who typed and answered on their own: on
+// CMarket.Api, a second session must play the other person, which this flow does not do yet.
 test(
   'in real time, K. Atangana types then answers P. Owona, and M. Ndong reads then answers',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await switchAccount(page, 'Portfolio manager', /manager/i)
     // Away from MSG, the menu counts the unread messages and the request: 2 + 1 + 1.
@@ -231,10 +232,11 @@ test(
   },
 )
 
-// @mock: the mock's simulated people (fixtures/messaging.ts).
+// @fresh-db. Written for the prototype's scripted people, who typed and answered on their own: on
+// CMarket.Api, a second session must play the other person, which this flow does not do yet.
 test(
   'away from MSG, the menu counts the answer of R. Tamba, who came online for it',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await page.goto(`/msg?c=${demoId('conversation-tamba-atangana')}`)
     const conversations = panel(page, 'Conversations')
@@ -257,10 +259,11 @@ test(
   },
 )
 
-// @mock: the mock's simulated people (fixtures/messaging.ts).
+// @fresh-db. Written for the prototype's scripted people, who typed and answered on their own: on
+// CMarket.Api, a second session must play the other person, which this flow does not do yet.
 test(
   'a contact request reaches the Analyst half a minute after login, wherever they are',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await page.clock.install()
     await page.goto('/mkt')

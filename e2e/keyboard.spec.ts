@@ -141,14 +141,3 @@ test('NET and MSG from the keyboard: a profile found, a message sent, a dialog c
   await expect(dialog).toHaveCount(0)
   await expect(report).toBeFocused()
 })
-
-test.describe('without the service worker of the prototype', () => {
-  test.use({ serviceWorkers: 'block' })
-
-  // @mock: the mock's service worker.
-  test('the page says why the prototype cannot start', { tag: '@mock' }, async ({ page }) => {
-    await page.goto('/')
-    await expect(page.getByText(/^The prototype could not start/)).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Retry' })).toBeVisible()
-  })
-})

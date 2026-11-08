@@ -10,21 +10,13 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   // A malformed address stops the dev server and the build here, rather than a blank page later.
   readEnv(env)
-  // e.g. https://localhost:7001 for a local CMarket.Api; see .env
+  // The local CMarket.Api in development: see .env.development
   const proxyTarget = env.DEV_PROXY_TARGET
 
   return {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
-    },
-    build: {
-      rolldownOptions: {
-        output: {
-          // MSW apart from the handlers and sample data: both load with the prototype only.
-          codeSplitting: { groups: [{ name: 'msw', test: /node_modules[\\/](msw|@mswjs)[\\/]/ }] },
-        },
-      },
     },
     server: proxyTarget
       ? {

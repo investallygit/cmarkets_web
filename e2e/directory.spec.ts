@@ -14,10 +14,10 @@ async function tick(filters: Locator, name: string) {
   await expect(box).toBeChecked()
 }
 
-// @mock: the directory's counts as seeded, which other flows change on CMarket.Api's database.
+// @fresh-db: the directory's counts as seeded, which other flows change.
 test(
   'the Analyst finds the search of the mockup from the menu, and keeps it in the URL',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await page.goto('/mkt')
     await page
@@ -63,10 +63,10 @@ test(
   },
 )
 
-// @mock: the contact rules as seeded, whose defaults the Admin's flow changes on CMarket.Api.
+// @fresh-db: the contact rules as seeded, whose defaults the Admin's flow changes.
 test(
   'a profile shows its publications, is followed, and opens them in PUB',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await page.goto('/net?q=ndong')
     await page.getByRole('button', { name: 'View profile: M. Ndong' }).click()
@@ -145,10 +145,10 @@ test('a profile is reported once', async ({ page }) => {
 test.describe('a visitor', () => {
   test.use({ storageState: NO_SESSION })
 
-  // @mock: P. Owona's password as seeded, which the reset flow of auth.spec.ts changes on CMarket.Api.
+  // @fresh-db: P. Owona's password as seeded, which the reset flow of auth.spec.ts changes.
   test(
     'reads a public profile without its contact details, then logs in to contact',
-    { tag: '@mock' },
+    { tag: '@fresh-db' },
     async ({ page }) => {
       await page.goto('/p/k-atangana')
       await expect(page.getByText('This profile is not public, or no longer exists.')).toBeVisible()

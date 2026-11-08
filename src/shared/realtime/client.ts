@@ -3,8 +3,8 @@ import type { ChatEventName, ChatHandler, RealtimeEventName, RealtimeHandler } f
 export type ConnectionState = 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
 
 /**
- * Transport-agnostic access to the real-time hub. The app uses the SignalR implementation;
- * the prototype uses a simulated one from src/mocks.
+ * Transport-agnostic access to the real-time hub: the SignalR implementation, or a fake one in
+ * tests.
  */
 export interface RealtimeClient {
   readonly state: ConnectionState

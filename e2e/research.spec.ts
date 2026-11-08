@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { demoId, ON_API } from './demoIds.js'
+import { demoId } from './demoIds.js'
 
 // Research library and publishing studio of step 6 (ROADMAP.md): PUB and PUB NEW.
 
@@ -20,10 +20,10 @@ async function switchAccount(page: Page, account: string, badge: RegExp) {
   await expect(page.getByRole('button', { name: badge })).toBeVisible()
 }
 
-// @mock: the library as seeded, newest first: the moderation flow publishes another on CMarket.Api.
+// @fresh-db: the library as seeded, newest first: the moderation flow publishes another.
 test(
   'the library lists the publications of the screen 8 mockup',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await switchAccount(page, 'Portfolio manager', /manager/i)
     await page.goto('/pub')
@@ -50,10 +50,10 @@ test(
   },
 )
 
-// @mock: the library as seeded, newest first: the moderation flow publishes another on CMarket.Api.
+// @fresh-db: the library as seeded, newest first: the moderation flow publishes another.
 test(
   'a manager buys a note by mobile money and reads it watermarked',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await switchAccount(page, 'Portfolio manager', /manager/i)
     await page.goto('/pub')
@@ -88,8 +88,8 @@ test(
   },
 )
 
-// @mock: the library as seeded, newest first: the moderation flow publishes another on CMarket.Api.
-test('a Student pays the student price', { tag: '@mock' }, async ({ page }) => {
+// @fresh-db: the library as seeded, newest first: the moderation flow publishes another.
+test('a Student pays the student price', { tag: '@fresh-db' }, async ({ page }) => {
   await switchAccount(page, 'Student', /student/i)
   await page.goto('/pub')
   const preview = panel(page, 'Preview')
@@ -97,10 +97,10 @@ test('a Student pays the student price', { tag: '@mock' }, async ({ page }) => {
   await expect(preview.getByRole('button', { name: 'Buy this report — XAF 5,000' })).toBeVisible()
 })
 
-// @mock: the library as seeded, newest first: the moderation flow publishes another on CMarket.Api.
+// @fresh-db: the library as seeded, newest first: the moderation flow publishes another.
 test(
   'a reader rates a free note, reports it and follows its analyst',
-  { tag: '@mock' },
+  { tag: '@fresh-db' },
   async ({ page }) => {
     await switchAccount(page, 'Portfolio manager', /manager/i)
     await page.goto('/pub?access=free')
@@ -166,7 +166,7 @@ test('a new note is saved, checked, then submitted to the library', async ({ pag
     .first()
     .click()
   await dialog.getByRole('button', { name: 'Create the draft' }).click()
-  await expect(page).toHaveURL(new RegExp(`/pub/new\\?id=${ON_API ? '[0-9a-f-]{36}$' : 'pub-'}`))
+  await expect(page).toHaveURL(/\/pub\/new\?id=[0-9a-f-]{36}$/)
 
   const editor = panel(page, 'Editor')
   // The URL changes before the editor does: until the new draft's empty title shows, the editor
