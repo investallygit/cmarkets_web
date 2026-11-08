@@ -19,8 +19,17 @@ const publicApiOnly = {
   message: 'Import a slice through its public index: @/<layer>/<slice>.',
 }
 
+// Requests go through the API module only (src/shared/api/endpoints), whose route tables are
+// checked against CMarket.Api's OpenAPI document and the mock: nothing else sends them.
+const apiModuleOnly = {
+  group: ['@/shared/api/client', '**/api/client'],
+  message: 'Call the API through its module: @/shared/api/endpoints (xxxApi), not the client.',
+}
+
 function importRules(...patterns) {
-  return { 'no-restricted-imports': ['error', { patterns: [...patterns, publicApiOnly] }] }
+  return {
+    'no-restricted-imports': ['error', { patterns: [...patterns, publicApiOnly, apiModuleOnly] }],
+  }
 }
 
 const layerRules = LAYERS.map((layer, index) => {

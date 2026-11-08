@@ -142,8 +142,9 @@ src/
               calendar-event, notification, data-import, data-provider (EODHD), stored-price,
               account, analyst-request, moderation, payout, platform-settings, audit, profile
               (the professional profiles of the directory), conversation (the messaging)
-  shared/     no business knowledge: API client and contracts, real-time, routes and screen list,
-              UI kit (panels, tables, charts, form controls, dialogs, toasts), i18n, formatting
+  shared/     no business knowledge: the API (client, contracts and the module of its endpoints,
+              api/endpoints), real-time, config (.env), routes and screen list, UI kit (panels,
+              tables, charts, form controls, dialogs, toasts), i18n, formatting
   mocks/      fake back end for the prototype (below)
 e2e/          Playwright flows; auth.setup.ts logs in once and the other specs reuse the session
 public/       the MSW service worker and the favicon
@@ -208,10 +209,19 @@ changes, which also ends the prototype's session once.
 
 ### Data flow
 
-- **REST**: `shared/api/client.ts` calls `/api/v1`, with errors as RFC 7807 `ApiError`.
-  Each entity wraps its endpoints in TanStack Query hooks (`entities/*/api/queries.ts`).
-  DTOs live in `shared/api/contracts`; they mirror spec section 10 and will be replaced by the
-  client generated from the OpenAPI contract (Orval) once `CMarket.Api` exists.
+- **REST**: every endpoint the front end calls is declared in `shared/api/endpoints`, one file
+  per controller folder of `CMarket.Api` (`auth.ts`, `market.ts`, `portfolios.ts`...): a route
+  table (method, path as the OpenAPI document writes it, type of the answer) and its calls
+  (`portfoliosApi.positions(id, signal)`). The calls go through `shared/api/client.ts`, which adds
+  the session, renews it on a 401 and turns errors into RFC 7807 `ApiError`s; ESLint lets no other
+  code reach the client. Each entity wraps the calls in TanStack Query hooks
+  (`entities/*/api/queries.ts`), which keep the query keys and the cache. DTOs live in
+  `shared/api/contracts`: they mirror spec section 10 and `CMarket.Api` follows them. Two tests
+  check every route of the module against the API's OpenAPI document (`openapi-routes.txt`,
+  written by `npm run api:routes` from a running API) and against the mock's handlers.
+- **Addresses**: `.env` gives the API's origin (`VITE_API_URL`; empty, the site's own), from
+  which `shared/config/env.ts` derives the REST API and both hubs; see
+  [Connecting the real back end](#connecting-the-real-back-end).
 - **Real time**: `shared/realtime` defines two hub clients with their SignalR implementations:
   `RealtimeClient` for `/hubs/market`, with ref-counted symbol subscriptions, and `ChatClient`
   for `/hubs/chat`, with the conversations joined while their thread shows. Each entity handles
@@ -308,6 +318,7 @@ in the user's format, password inputs, checkboxes, switches, segmented choices, 
 | A panel, or any block shown on several screens               | `widgets/<name>`                                                           |
 | A user action (add to a list, create an alert, buy a report) | `features/<verb>-<noun>`                                                   |
 | A business object: types, API hooks, live state, small UI    | `entities/<object>`                                                        |
+| A call to the API (its route, its answer's type)             | `shared/api/endpoints/<API controller folder>.ts`                          |
 | A form opened from several screens (an alert, a list)        | `features/`, opened through a store in `entities/<object>/model`           |
 | Anything without business knowledge                          | `shared/`                                                                  |
 
@@ -321,8 +332,10 @@ each other; the app shell mounts the form once.
 ### A new screen
 
 1. Add it to `SCREENS` in `shared/routes/screens.ts`, and its page to `app/routes/pages.ts`.
-2. Write its DTOs in `shared/api/contracts`, its mock routes in `mocks/handlers/` and its sample
-   data in `mocks/fixtures/`, from the mockup.
+2. Write its DTOs in `shared/api/contracts`, its routes and calls in `shared/api/endpoints` (the
+   file of the API's controller folder), its mock routes in `mocks/handlers/` and its sample data
+   in `mocks/fixtures/`, from the mockup. A route the API does not serve yet fails the OpenAPI
+   test until `CMarket.Api` has it and `npm run api:routes` reads it again.
 3. Build the `pages/<screen>` slice: its panels, their default grid and their names in `config`.
 4. Give every string in French and English, and hide or lock the actions by permission and quota.
 5. Tables sort, have a right-click menu and export; the layout is saved per user and stacks in one

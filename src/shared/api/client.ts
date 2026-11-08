@@ -92,8 +92,9 @@ async function requestBlob(path: string, options: Omit<RequestOptions, 'body'> =
 }
 
 /**
- * Hand-written client for the prototype. Once CMarket.Api publishes its OpenAPI contract,
- * the generated client (Orval) replaces these calls behind the same feature hooks.
+ * The transport of the API module (./endpoints): the session, the renewal on a 401 and the
+ * errors. Only the module calls it, which ESLint enforces; the contracts stay hand-written, as
+ * CMarket.Api follows them, and the module's routes are checked against the API's OpenAPI.
  */
 export const apiClient = {
   get: <T>(path: string, options?: Omit<RequestOptions, 'body'>) =>

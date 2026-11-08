@@ -1,5 +1,5 @@
 export { ADMIN_QUERY_ROOT, useRefreshAdminData } from './adminData'
-export { apiClient, type QueryParams } from './client'
+export type { QueryParams } from './client'
 export { ApiError, isApiError, type ProblemDetails } from './problem'
 export { createQueryClient } from './queryClient'
 export {
