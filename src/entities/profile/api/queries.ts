@@ -1,14 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
 import type {
   DirectoryQuery,
   ExperienceDto,
   ExperienceInputDto,
   MyProfileDto,
-  MyProfileUpdateDto,
-  ProfilePrivacyDto,
-  SpecialtyDto,
 } from '@/shared/api/contracts'
+import { networkApi } from '@/shared/api/endpoints'
 
 export const profileKeys = {
   all: ['profiles'] as const,
@@ -25,13 +22,11 @@ export const profileKeys = {
   publicProfile: (handle: string) => [...profileKeys.listed(), 'public', handle] as const,
 }
 
-const experiencePath = (id: string) => `/me/profile/experiences/${encodeURIComponent(id)}`
-
 /** GET /me/profile: the user's professional profile (screen 12). */
 export function useMyProfile() {
   return useQuery({
     queryKey: profileKeys.mine(),
-    queryFn: ({ signal }) => apiClient.get<MyProfileDto>('/me/profile', { signal }),
+    queryFn: ({ signal }) => networkApi.myProfile(signal),
   })
 }
 
@@ -39,7 +34,7 @@ export function useMyProfile() {
 export function useMyPrivacy() {
   return useQuery({
     queryKey: profileKeys.privacy(),
-    queryFn: ({ signal }) => apiClient.get<ProfilePrivacyDto>('/me/profile/privacy', { signal }),
+    queryFn: ({ signal }) => networkApi.privacy(signal),
   })
 }
 
@@ -47,7 +42,7 @@ export function useMyPrivacy() {
 export function useSpecialties() {
   return useQuery({
     queryKey: profileKeys.specialties(),
-    queryFn: ({ signal }) => apiClient.get<SpecialtyDto[]>('/directory/specialties', { signal }),
+    queryFn: ({ signal }) => networkApi.specialties(signal),
     staleTime: Infinity,
   })
 }
@@ -68,7 +63,7 @@ function useSetMyProfile() {
 export function useUpdateMyProfile() {
   const setProfile = useSetMyProfile()
   return useMutation({
-    mutationFn: (input: MyProfileUpdateDto) => apiClient.put<MyProfileDto>('/me/profile', input),
+    mutationFn: networkApi.updateMyProfile,
     onSuccess: setProfile,
   })
 }
@@ -77,11 +72,7 @@ export function useUpdateMyProfile() {
 export function useUploadProfilePhoto() {
   const setProfile = useSetMyProfile()
   return useMutation({
-    mutationFn: (photo: File) => {
-      const form = new FormData()
-      form.append('photo', photo)
-      return apiClient.postForm<MyProfileDto>('/me/profile/photo', form)
-    },
+    mutationFn: networkApi.uploadPhoto,
     onSuccess: setProfile,
   })
 }
@@ -90,8 +81,7 @@ export function useUploadProfilePhoto() {
 export function useUpdateMyPrivacy() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (input: ProfilePrivacyDto) =>
-      apiClient.put<ProfilePrivacyDto>('/me/profile/privacy', input),
+    mutationFn: networkApi.updatePrivacy,
     onSuccess: (privacy) => {
       queryClient.setQueryData(profileKeys.privacy(), privacy)
       void queryClient.invalidateQueries({ queryKey: profileKeys.listed() })
@@ -117,9 +107,7 @@ export function useSaveExperience() {
   const updateExperiences = useUpdateExperiences()
   return useMutation({
     mutationFn: ({ id, ...input }: ExperienceInputDto & { id?: string }) =>
-      id
-        ? apiClient.put<ExperienceDto>(experiencePath(id), input)
-        : apiClient.post<ExperienceDto>('/me/profile/experiences', input),
+      networkApi.saveExperience(id, input),
     onSuccess: (saved) =>
       updateExperiences((experiences) =>
         experiences.some((experience) => experience.id === saved.id)
@@ -132,7 +120,7 @@ export function useSaveExperience() {
 export function useDeleteExperience() {
   const updateExperiences = useUpdateExperiences()
   return useMutation({
-    mutationFn: (id: string) => apiClient.delete<void>(experiencePath(id)),
+    mutationFn: networkApi.deleteExperience,
     onSuccess: (_result, id) =>
       updateExperiences((experiences) => experiences.filter((experience) => experience.id !== id)),
   })

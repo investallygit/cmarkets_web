@@ -1,17 +1,12 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/shared/api'
 import type {
-  ConversationDto,
   ConversationFilter,
   ConversationReportDto,
-  ConversationSummaryDto,
   MessageAttachmentDto,
   MessageDto,
-  MessagePageDto,
-  MessageSearchHitDto,
-  NewConversationDto,
   SendMessageDto,
 } from '@/shared/api/contracts'
+import { messagingApi } from '@/shared/api/endpoints'
 import type { MessagePages } from '../lib/live'
 
 export const conversationKeys = {
@@ -23,8 +18,6 @@ export const conversationKeys = {
   search: (q: string) => [...conversationKeys.all, 'search', q] as const,
 }
 
-const path = (id: string, rest = '') => `/conversations/${encodeURIComponent(id)}${rest}`
-
 /** While a file is scanned, the thread asks again until it is available or blocked. */
 const SCAN_REFRESH_MS = 1_000
 
@@ -35,8 +28,7 @@ export function useConversations(
 ) {
   return useQuery({
     queryKey: conversationKeys.list(filter),
-    queryFn: ({ signal }) =>
-      apiClient.get<ConversationSummaryDto[]>('/conversations', { query: { filter }, signal }),
+    queryFn: ({ signal }) => messagingApi.conversations(filter, signal),
     enabled,
   })
 }
@@ -45,7 +37,7 @@ export function useConversations(
 export function useConversation(id: string | null) {
   return useQuery({
     queryKey: conversationKeys.detail(id ?? ''),
-    queryFn: ({ signal }) => apiClient.get<ConversationDto>(path(id ?? ''), { signal }),
+    queryFn: ({ signal }) => messagingApi.conversation(id ?? '', signal),
     enabled: Boolean(id),
     refetchInterval: (query) =>
       query.state.data?.files.some((file) => file.status === 'scanning') ? SCAN_REFRESH_MS : false,
@@ -57,10 +49,7 @@ export function useMessages(id: string | null) {
   return useInfiniteQuery({
     queryKey: conversationKeys.messages(id ?? ''),
     queryFn: ({ pageParam, signal }) =>
-      apiClient.get<MessagePageDto>(path(id ?? '', '/messages'), {
-        query: { before: pageParam, limit: 50 },
-        signal,
-      }),
+      messagingApi.messages(id ?? '', { before: pageParam, limit: 50 }, signal),
     initialPageParam: null as string | null,
     getNextPageParam: (page) => (page.hasMore ? (page.items.at(0)?.id ?? null) : null),
     enabled: Boolean(id),
@@ -85,8 +74,7 @@ export function useMessageSearch(q: string) {
   const text = q.trim()
   return useQuery({
     queryKey: conversationKeys.search(text),
-    queryFn: ({ signal }) =>
-      apiClient.get<MessageSearchHitDto[]>('/messages/search', { query: { q: text }, signal }),
+    queryFn: ({ signal }) => messagingApi.search(text, signal),
     enabled: text.length >= 2,
   })
 }
@@ -107,8 +95,7 @@ function useRefresh() {
 export function useStartConversation() {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (input: NewConversationDto) =>
-      apiClient.post<ConversationDto>('/conversations', input),
+    mutationFn: messagingApi.start,
     onSuccess: (conversation) => refresh(conversation.id),
   })
 }
@@ -117,7 +104,7 @@ export function useStartConversation() {
 export function useSendMessage(id: string) {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (input: SendMessageDto) => apiClient.post<MessageDto>(path(id, '/messages'), input),
+    mutationFn: (input: SendMessageDto) => messagingApi.send(id, input),
     onSuccess: () => refresh(id),
   })
 }
@@ -127,7 +114,7 @@ export function useEditMessage(id: string) {
   const refresh = useRefresh()
   return useMutation({
     mutationFn: ({ messageId, text }: { messageId: string; text: string }) =>
-      apiClient.put<MessageDto>(path(id, `/messages/${encodeURIComponent(messageId)}`), { text }),
+      messagingApi.edit(id, messageId, text),
     onSuccess: () => refresh(id),
   })
 }
@@ -136,8 +123,7 @@ export function useEditMessage(id: string) {
 export function useDeleteMessage(id: string) {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (messageId: string) =>
-      apiClient.delete<void>(path(id, `/messages/${encodeURIComponent(messageId)}`)),
+    mutationFn: (messageId: string) => messagingApi.delete(id, messageId),
     onSuccess: () => refresh(id),
   })
 }
@@ -146,7 +132,7 @@ export function useDeleteMessage(id: string) {
 export function useMarkRead(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (messageId: string) => apiClient.post<void>(path(id, '/read'), { messageId }),
+    mutationFn: (messageId: string) => messagingApi.markRead(id, messageId),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: conversationKeys.lists() })
       void queryClient.invalidateQueries({ queryKey: conversationKeys.detail(id) })
@@ -158,7 +144,7 @@ export function useMarkRead(id: string) {
 export function useAnswerRequest(id: string) {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (answer: 'accept' | 'decline') => apiClient.post<unknown>(path(id, `/${answer}`)),
+    mutationFn: (answer: 'accept' | 'decline') => messagingApi.answerRequest(id, answer),
     onSuccess: () => refresh(id),
   })
 }
@@ -167,8 +153,7 @@ export function useAnswerRequest(id: string) {
 export function useMuteConversation(id: string) {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: (muted: boolean) =>
-      apiClient.post<ConversationSummaryDto>(path(id, '/mute'), { muted }),
+    mutationFn: (muted: boolean) => messagingApi.mute(id, muted),
     onSuccess: () => refresh(id),
   })
 }
@@ -177,10 +162,8 @@ export function useMuteConversation(id: string) {
 export function useGroupMember(id: string) {
   const refresh = useRefresh()
   return useMutation({
-    mutationFn: ({ userId, add }: { userId: string; add: boolean }) => {
-      const member = path(id, `/members/${encodeURIComponent(userId)}`)
-      return add ? apiClient.post<unknown>(member) : apiClient.delete<unknown>(member)
-    },
+    mutationFn: ({ userId, add }: { userId: string; add: boolean }) =>
+      messagingApi.groupMember(id, userId, add),
     onSuccess: () => refresh(id),
   })
 }
@@ -188,26 +171,20 @@ export function useGroupMember(id: string) {
 /** POST /conversations/{id}/report */
 export function useReportConversation(id: string) {
   return useMutation({
-    mutationFn: (report: ConversationReportDto) =>
-      apiClient.post<void>(path(id, '/report'), report),
+    mutationFn: (report: ConversationReportDto) => messagingApi.report(id, report),
   })
 }
 
 /** POST /attachments: the file is scanned before it becomes available. */
 export function useUploadAttachment() {
   return useMutation({
-    mutationFn: (file: File) => {
-      const form = new FormData()
-      form.append('file', file)
-      return apiClient.postForm<MessageAttachmentDto>('/attachments', form)
-    },
+    mutationFn: messagingApi.upload,
   })
 }
 
 /** GET /attachments/{id}: members of the conversation only. */
 export function useDownloadAttachment() {
   return useMutation({
-    mutationFn: (attachment: MessageAttachmentDto) =>
-      apiClient.getBlob(`/attachments/${encodeURIComponent(attachment.id)}`),
+    mutationFn: (attachment: MessageAttachmentDto) => messagingApi.attachment(attachment.id),
   })
 }

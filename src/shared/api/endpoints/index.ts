@@ -16,6 +16,8 @@ import type { RouteTable } from './define'
 import { devToolsRoutes } from './devTools'
 import { marketRoutes } from './market'
 import { meRoutes } from './me'
+import { messagingRoutes } from './messaging'
+import { networkRoutes } from './network'
 import { organizationRoutes } from './organization'
 import { portfoliosRoutes } from './portfolios'
 import { researchRoutes } from './research'
@@ -47,6 +49,8 @@ export { dataAdminApi, dataAdminRoutes, type ImportQuery, type UploadInput } fro
 export { devToolsApi, devToolsRoutes, type DemoAccountsDto, type SentCodeQuery } from './devTools'
 export { marketApi, marketRoutes, type HistoryRange } from './market'
 export { meApi, meRoutes } from './me'
+export { messagingApi, messagingRoutes } from './messaging'
+export { networkApi, networkRoutes } from './network'
 export { organizationApi, organizationRoutes } from './organization'
 export { portfoliosApi, portfoliosRoutes, type PerformanceQuery } from './portfolios'
 export { researchApi, researchRoutes, type LibraryFilters, type PublicationStep } from './research'
@@ -80,6 +84,8 @@ export const ROUTE_TABLES: Readonly<Record<string, RouteTable>> = {
   DevTools: devToolsRoutes,
   Market: marketRoutes,
   Me: meRoutes,
+  Messaging: messagingRoutes,
+  Network: networkRoutes,
   Organization: organizationRoutes,
   Portfolios: portfoliosRoutes,
   Research: researchRoutes,
