@@ -102,6 +102,8 @@ gets the 14-day free trial. The mock keeps its data in the browser's localStorag
 | `npm run lint`                  | ESLint, including the layer rules of [Structure](#structure)               |
 | `npm run format`                | Prettier, on every file                                                    |
 | `npm test` / `npm run test:run` | Vitest unit and component tests                                            |
+| `npm run test:api`              | The API module's reads against a running `CMarket.Api`, for each account  |
+| `npm run api:routes`            | Reads the routes of a running `CMarket.Api`'s OpenAPI document again       |
 | `npm run e2e`                   | Playwright end-to-end tests (first run: `npx playwright install chromium`) |
 
 ## Structure
@@ -358,6 +360,11 @@ goes in both folders and is added to both `en.ts` and `fr.ts`.
 - Unit and component tests sit next to the code they test (`*.test.ts`, `*.test.tsx`).
   `npm test` watches, `npm run test:run` runs them once; one file:
   `npx vitest run src/mocks/lib/bondMath.test.ts`, one test: add `-t "<its name>"`.
+- `npm run test:api` calls the reads of the API module (`shared/api/endpoints`) on a running
+  `CMarket.Api` with its development tools and demo data (`CMARKET_API_URL`, port 5001 by
+  default): each demo account logs in as the front end does and makes every read its permissions
+  and plan allow, which must answer without an error and in the shape of its contract. It is
+  apart from `npm run test:run`, which needs no back end.
 - `npm run e2e` runs the Playwright flows at 1600 × 900, the resolution of the mockups, against
   the dev server: it starts one, or uses the one already on port 5173. `e2e/auth.setup.ts` logs
   in once as the demo Analyst and the other specs start from that session. One spec:
