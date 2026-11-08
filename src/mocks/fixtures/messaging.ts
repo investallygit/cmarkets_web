@@ -142,7 +142,9 @@ interface Seed {
 
 /**
  * The conversations, their messages and the report of T. Bekale, the times of today counted back
- * from `now`.
+ * from `now`. The reported conversation keeps fixed times, as the reports of the profiles do
+ * (fixtures/network.ts): MOD lists Y. Abessolo's profile, reported last, before it, whatever the
+ * day.
  */
 export function createConversations(
   now: number,
@@ -227,9 +229,9 @@ export function createConversations(
     {
       id: 'conversation-abessolo', kind: 'direct', createdBy: ABESSOLO, read: { [ABESSOLO]: 2, [BEKALE]: 2 },
       messages: [
-        [ABESSOLO, 'Hello, I trade BVMAC stocks for my clients: 30% a month, guaranteed.', daysAgo(2, 300)],
-        [ABESSOLO, 'Send me 2,000,000 XAF by mobile money today and I start tomorrow.', daysAgo(2, 290)],
-        [BEKALE, 'Nobody can guarantee 30% a month, and CMarket routes no orders. I am reporting this conversation.', daysAgo(2, 240)],
+        [ABESSOLO, 'Hello, I trade BVMAC stocks for my clients: 30% a month, guaranteed.', '2026-11-03T17:30:00Z'],
+        [ABESSOLO, 'Send me 2,000,000 XAF by mobile money today and I start tomorrow.', '2026-11-03T17:40:00Z'],
+        [BEKALE, 'Nobody can guarantee 30% a month, and CMarket routes no orders. I am reporting this conversation.', '2026-11-03T18:30:00Z'],
       ],
     },
   ]
@@ -275,7 +277,7 @@ export function createConversations(
       reporterId: BEKALE,
       reason: 'scam',
       comment: 'Asks for money by mobile money and promises 30% a month.',
-      at: at(daysAgo(2, 235)),
+      at: '2026-11-03T18:35:00Z',
       ...OPEN_REPORT,
     },
   ]

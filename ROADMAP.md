@@ -402,9 +402,9 @@ with the type check, the lint, the unit tests and the flows of the screens it to
    mock's ids. `E2E_API_ALL=1` runs them all.
 10. **Wrap-up: done.** README: the scripts, the tests, the guide to the real back end.
 
-Left open: `src/mocks/reports.test.ts` ("lists the reported profiles and conversations, the
-referred account first") fails on the commit before step 20 as well; it seems to depend on the
-date.
+`src/mocks/reports.test.ts` ("the referred account first") failed from 7 November: the reported
+conversation's times counted back from today, the profile reports' were fixed, and the newer of
+the two comes first. The conversation now keeps fixed times as well.
 
 Deployment (the environments' `.env` files, the site and the API on one domain, CORS) comes after.
 The API's Bicep template gives it its default `*.azurecontainerapps.io` address while the site is
