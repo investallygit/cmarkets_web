@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { cemacPortfolioId } from './demoIds.js'
 
 // Portfolio screen of step 5 (ROADMAP.md): PORT and its tabs.
 
@@ -19,9 +20,13 @@ async function switchAccount(page: Page, account: string, badge: RegExp) {
   await expect(page.getByRole('button', { name: badge })).toBeVisible()
 }
 
+/** The demo Analyst's fund, and P. Owona's, the Portfolio manager. */
+const FUND = cemacPortfolioId('user-analyst')
+const MANAGER_FUND = cemacPortfolioId('user-manager')
+
 test('the sample fund shows the lines of the screen 5 mockup', async ({ page }) => {
   await page.goto('/port')
-  await expect(page).toHaveURL(/\/port\/portfolio-cemac$/)
+  await expect(page).toHaveURL(new RegExp(`/port/${FUND}$`))
   const positions = panel(page, 'Valued positions')
   // The quantities of the mockup; REGIONALE weighs more than the 12% limit on one issuer.
   await expect(positions.getByRole('row', { name: /^REGIONALE/ })).toContainText('9,500')
@@ -62,7 +67,7 @@ test('a purchase is recorded and a sale of more than held is refused', async ({ 
 })
 
 test('transactions are imported from the template, all rows or none', async ({ page }) => {
-  await page.goto('/port/portfolio-cemac/transactions')
+  await page.goto(`/port/${FUND}/transactions`)
   const history = panel(page, 'Transactions')
   await history.getByRole('button', { name: 'Import CSV' }).click()
   const dialog = page.getByRole('dialog')
@@ -81,7 +86,7 @@ test('transactions are imported from the template, all rows or none', async ({ p
 })
 
 test('performance is time-weighted and the risk checked against the limits', async ({ page }) => {
-  await page.goto('/port/portfolio-cemac/performance')
+  await page.goto(`/port/${FUND}/performance`)
   const returns = panel(page, 'Returns by period')
   for (const period of ['Year to date', '1 year', '3 years', 'Since inception']) {
     await expect(returns.getByRole('row', { name: new RegExp(`^${period}`) })).toBeVisible()
@@ -97,7 +102,7 @@ test('performance is time-weighted and the risk checked against the limits', asy
 
 test('a Portfolio manager generates the PDF report', async ({ page }) => {
   await switchAccount(page, 'Portfolio manager', /manager/i)
-  await page.goto('/port/portfolio-cemac/reports')
+  await page.goto(`/port/${MANAGER_FUND}/reports`)
   const form = panel(page, 'PDF report')
   await form.getByRole('textbox', { name: 'Comments' }).fill('Third quarter review.')
   await form.getByRole('button', { name: 'Generate the PDF' }).click()

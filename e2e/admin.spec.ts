@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { demoId } from './demoIds.js'
 import { DEMO_PASSWORD } from './session.js'
 
 // The Admin's screens, step 9 (ROADMAP.md): USER with ANLY and MOD, then ADMCFG, AUDT and PAY.
@@ -63,7 +64,7 @@ test('USER counts the accounts by type, filters them and opens the audit log of 
   await expect(details).toContainText('Suspended on 12/10/2026 by L. Mvogo')
   await expect(details.getByRole('button', { name: 'Reactivate account' })).toBeVisible()
   await details.getByRole('button', { name: 'View audit log' }).click()
-  await expect(page).toHaveURL(/\/admin\/audit\?userId=user-mba$/)
+  await expect(page).toHaveURL(new RegExp(`/admin/audit\\?userId=${demoId('user-mba')}$`))
   const log = panel(page, 'Audit log')
   await expect(log.getByRole('combobox', { name: 'User' })).toHaveValue('F. Mba')
   await expect(log.getByRole('row')).toHaveCount(2)
@@ -164,7 +165,7 @@ test('MOD approves a first publication, which readers then find, and takes a rep
     .filter({ hasText: 'Chad: 2027 budget and financing needs' })
     .getByRole('button', { name: 'Open' })
     .click()
-  await expect(page).toHaveURL(/\/admin\/moderation\?id=pub-chad-budget$/)
+  await expect(page).toHaveURL(new RegExp(`/admin/moderation\\?id=${demoId('pub-chad-budget')}$`))
   const reader = panel(page, 'Publication')
   await expect(reader).toContainText('First publication: review before going live')
   await expect(
@@ -236,7 +237,9 @@ test('MOD reads a reported conversation, logged, suspends the referred account a
   await reports
     .getByRole('button', { name: /^Conversation Referred Y\. Abessolo · T\. Bekale/ })
     .click()
-  await expect(page).toHaveURL(/report=conversation(%3A|:)conversation-abessolo/)
+  await expect(page).toHaveURL(
+    new RegExp(`report=conversation(%3A|:)${demoId('conversation-abessolo')}`),
+  )
   const reader = panel(page, 'Reported conversation')
   await expect(reader).toContainText('Referred to the Admin: 4 open reports about Y. Abessolo')
   await expect(reader).toContainText('Scam or market manipulation')

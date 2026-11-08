@@ -105,7 +105,7 @@ gets the 14-day free trial. The mock keeps its data in the browser's localStorag
 | `npm run test:api`              | The API module's reads against a running `CMarket.Api`, for each account   |
 | `npm run api:routes`            | Reads the routes of a running `CMarket.Api`'s OpenAPI document again       |
 | `npm run e2e`                   | Playwright end-to-end tests (first run: `npx playwright install chromium`) |
-| `npm run e2e:api`               | The flows tagged `@api` on a running `CMarket.Api`, port 5174              |
+| `npm run e2e:api`               | The flows but those tagged `@mock`, on a running `CMarket.Api` (port 5174) |
 
 ## Structure
 
@@ -370,12 +370,16 @@ goes in both folders and is added to both `en.ts` and `fr.ts`.
   the dev server: it starts one, or uses the one already on port 5173. `e2e/auth.setup.ts` logs
   in once as the demo Analyst and the other specs start from that session. One spec:
   `npx playwright test e2e/portfolio.spec.ts`, one test: add `-g "<its title>"`.
-- `npm run e2e:api` runs the flows tagged `@api` on a running `CMarket.Api`, through a dev server
-  in the mode `api` on port 5174 (beside the mock's on 5173), with a session of their own. They
-  read and change nothing the other flows count, and name no id of the mock: tag a flow only when
-  it holds on both back ends. The other flows write to one shared database and session, and some
-  name the mock's ids; `E2E_API_ALL=1 npm run e2e:api` runs them all, to see which pass. Start the
-  API on a fresh database.
+- `npm run e2e:api` runs the same flows on a running `CMarket.Api` with its development tools,
+  started on a fresh database, through a dev server in the mode `api` on port 5174 (beside the
+  mock's on 5173). A flow names a demo record with `demoId()` (`e2e/demoIds.ts`): the mock's id,
+  or the GUID the API's seed derives from it. On the API the flows share one database and the
+  stored session: a flow that logs out takes a session of its own (`ownSession`), one that
+  arranges a screen starts from its default layout (`defaultLayout`), one that changes the profile
+  puts it back. The flows tagged `@mock` stay on the mock: they need its simulated people or its
+  service worker, its sample figures, or its data as seeded, which the other flows change on the
+  shared database. `E2E_API_ALL=1 npm run e2e:api -- e2e/<spec>.spec.ts` runs a spec's `@mock`
+  flows too, on a fresh database.
 - A change is done when `npm run typecheck`, `npm run lint` and `npm run test:run` pass, and the
   Playwright flow of the screen it touches.
 

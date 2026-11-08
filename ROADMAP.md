@@ -396,15 +396,29 @@ with the type check, the lint, the unit tests and the flows of the screens it to
 8. **`npm run test:api`: done.** About seventy reads, each made by every demo account its
    permissions and plan allow: 391 pass, 169 skipped as not allowed. It found one probe of ours
    wrong (the Admin may not read `/me/blocks`), nothing in the API.
-9. **`npm run e2e:api`: done.** Thirteen flows tagged `@api` pass on the API. The others are not
-   run there: those that write share one database and the stored Analyst session, which a flow
-   that ends sessions revokes (the run broke from about the fortieth flow), and some name the
-   mock's ids. `E2E_API_ALL=1` runs them all.
+9. **`npm run e2e:api`: done.** 77 of the 92 flows pass on the API, twice in a row from a fresh
+   database, its rate limits on. They name demo records with `demoId()` (the API's GUIDs derive
+   from the mock's ids); a flow that logs out takes a session of its own, one that arranges MKT
+   starts from the default layout, one that changes the profile puts it back. The 15 tagged
+   `@mock` stay on the mock: its simulated people (3) and service worker (1), its sample sector
+   averages (2), and the data as seeded, which the other flows change on the one database (9:
+   counts, the newest note first, P. Owona's password reset, the latest conversation). Each spec
+   run alone on a fresh database passes on the API but for the first six.
 10. **Wrap-up: done.** README: the scripts, the tests, the guide to the real back end.
 
-`src/mocks/reports.test.ts` ("the referred account first") failed from 7 November: the reported
-conversation's times counted back from today, the profile reports' were fixed, and the newer of
-the two comes first. The conversation now keeps fixed times as well.
+What the check of 8 November found, all flows run on the API and each call of the module compared
+with its OpenAPI (queries, bodies, answers: they match):
+
+- `src/mocks/reports.test.ts` ("the referred account first") failed from 7 November: the reported
+  conversation's times counted back from today, the profile reports' were fixed, and the newer of
+  the two came first. The conversation now keeps fixed times as well.
+- A layout change in its last 800 ms was lost when the tab closed or reloaded (no React cleanup
+  runs then), and a save under way was cut short. The save now goes out on `pagehide`, kept alive.
+- `CMarket.Api`, to fix there: a GET of a route its output cache keeps (`/subscription/plans`,
+  `/directory/specialties`, `/public/profiles/{slug}`) answers 500 when it waits on the cache's
+  fill and the request filling it is cancelled by its browser: `OutputCacheMiddleware` shares the
+  fill and its cancellation (reproduced, 2 rounds in 10). `SetLocking(false)` on the three policies,
+  or a fill that ignores the request's cancellation. The front end retries a 500 twice: users wait.
 
 Deployment (the environments' `.env` files, the site and the API on one domain, CORS) comes after.
 The API's Bicep template gives it its default `*.azurecontainerapps.io` address while the site is

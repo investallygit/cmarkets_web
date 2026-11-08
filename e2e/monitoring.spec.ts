@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { ON_API } from './demoIds.js'
 
 // Monitoring screens of step 3 (ROADMAP.md): watchlists, alerts, news and calendar.
 
@@ -49,7 +50,10 @@ test('the N screen filters the news and searches the documents', async ({ page }
   await news.getByRole('combobox', { name: 'Topic' }).selectOption('regulator')
   await expect(news.getByRole('button', { name: /Annual results: revenue up/ })).toHaveCount(0)
   await news.getByRole('button', { name: /Approval granted for a bond issue/ }).click()
-  await expect(page).toHaveURL(/topic=regulator&article=news-3$/)
+  // CMarket.Api keys its news by their source and age: any id there.
+  await expect(page).toHaveURL(
+    new RegExp(`topic=regulator&article=${ON_API ? '[\\w-]+' : 'news-3'}$`),
+  )
   await expect(
     panel(page, 'Article').getByRole('heading', { name: 'Approval granted for a bond issue' }),
   ).toBeVisible()
@@ -61,7 +65,8 @@ test('the N screen filters the news and searches the documents', async ({ page }
   await expect(page).toHaveURL(/\/n\/documents\?q=annual\+report$/)
 })
 
-test('the CAL screen shows the week and the BEAC auctions', async ({ page }) => {
+// @mock: the auctions as seeded, to which the Data admin's flows add on CMarket.Api.
+test('the CAL screen shows the week and the BEAC auctions', { tag: '@mock' }, async ({ page }) => {
   await page.goto('/cal')
   await expect(page.getByRole('region', { name: /^Monday / })).toBeVisible()
   await expect(page.getByRole('region', { name: /^Sunday / })).toContainText('No session')

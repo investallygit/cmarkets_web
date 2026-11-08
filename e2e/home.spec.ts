@@ -40,7 +40,7 @@ test.describe('a visitor', () => {
     await expect(page.getByRole('radio', { name: /^Student/ })).toBeChecked()
   })
 
-  test('reads the page in French, then goes to the login', { tag: '@api' }, async ({ page }) => {
+  test('reads the page in French, then goes to the login', async ({ page }) => {
     await page.goto('/')
     await page.getByRole('button', { name: 'Français' }).click()
     await expect(
@@ -54,53 +54,47 @@ test.describe('a visitor', () => {
     await expect(page.getByRole('heading', { name: 'Connexion à CMarket' })).toBeVisible()
   })
 
-  test(
-    'keeps working once the browser has translated the page',
-    { tag: '@api' },
-    async ({ page }) => {
-      await page.goto('/')
-      const preview = page.getByRole('img', { name: /^The CMarket terminal/ })
-      await expect(preview).toContainText('SEMC DES')
-      // A translation of the browser (Chrome's, Cốc Cốc's) swaps each text node for <font>
-      // elements of its own; an extension may do so even where translate="no" asks it not to.
-      await page.evaluate(() => {
-        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
-        const nodes: Text[] = []
-        while (walker.nextNode()) {
-          if (walker.currentNode.nodeValue?.trim()) nodes.push(walker.currentNode as Text)
-        }
-        for (const node of nodes) {
-          const font = document.createElement('font')
-          font.textContent = node.nodeValue
-          node.replaceWith(font)
-        }
-      })
-      // The command bar erases the first command, then types the next.
-      await expect(preview).toContainText('SAFACAM GP', { timeout: 10_000 })
-      await expect(page.getByText('Something went wrong on this screen.')).toHaveCount(0)
-    },
-  )
+  test('keeps working once the browser has translated the page', async ({ page }) => {
+    await page.goto('/')
+    const preview = page.getByRole('img', { name: /^The CMarket terminal/ })
+    await expect(preview).toContainText('SEMC DES')
+    // A translation of the browser (Chrome's, Cốc Cốc's) swaps each text node for <font>
+    // elements of its own; an extension may do so even where translate="no" asks it not to.
+    await page.evaluate(() => {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+      const nodes: Text[] = []
+      while (walker.nextNode()) {
+        if (walker.currentNode.nodeValue?.trim()) nodes.push(walker.currentNode as Text)
+      }
+      for (const node of nodes) {
+        const font = document.createElement('font')
+        font.textContent = node.nodeValue
+        node.replaceWith(font)
+      }
+    })
+    // The command bar erases the first command, then types the next.
+    await expect(preview).toContainText('SAFACAM GP', { timeout: 10_000 })
+    await expect(page.getByText('Something went wrong on this screen.')).toHaveCount(0)
+  })
 })
 
-test(
-  'a user already logged in opens the terminal, whose logo leads to the home screen',
-  { tag: '@api' },
-  async ({ page }) => {
-    await page.goto('/')
-    const header = page.getByRole('banner')
-    await expect(header.getByRole('link', { name: 'Open the terminal' })).toBeVisible()
-    await expect(header.getByRole('link', { name: 'Log in' })).toHaveCount(0)
-    await expect(
-      page
-        .locator('#plans')
-        .getByRole('article', { name: 'Professional' })
-        .getByRole('link', { name: 'See my plan' }),
-    ).toHaveAttribute('href', '/cfg')
+test('a user already logged in opens the terminal, whose logo leads to the home screen', async ({
+  page,
+}) => {
+  await page.goto('/')
+  const header = page.getByRole('banner')
+  await expect(header.getByRole('link', { name: 'Open the terminal' })).toBeVisible()
+  await expect(header.getByRole('link', { name: 'Log in' })).toHaveCount(0)
+  await expect(
+    page
+      .locator('#plans')
+      .getByRole('article', { name: 'Professional' })
+      .getByRole('link', { name: 'See my plan' }),
+  ).toHaveAttribute('href', '/cfg')
 
-    await header.getByRole('link', { name: 'Open the terminal' }).click()
-    await expect(page).toHaveURL(/\/mkt$/)
-    await page.goto('/cfg')
-    await page.getByRole('link', { name: 'CMarket', exact: true }).click()
-    await expect(page).toHaveURL(/\/mkt$/)
-  },
-)
+  await header.getByRole('link', { name: 'Open the terminal' }).click()
+  await expect(page).toHaveURL(/\/mkt$/)
+  await page.goto('/cfg')
+  await page.getByRole('link', { name: 'CMarket', exact: true }).click()
+  await expect(page).toHaveURL(/\/mkt$/)
+})

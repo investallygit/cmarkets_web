@@ -135,27 +135,23 @@ test('a publication is rolled back from the history, with a reason', async ({ pa
   )
 })
 
-test(
-  'DATA shows any session, HIST filters, EODH follows the connector',
-  { tag: '@api' },
-  async ({ page }) => {
-    await asDataAdmin(page)
-    await page.goto('/data/session')
-    const coverage = panel(page, 'Session coverage')
-    await expect(coverage).toContainText('BVMAC daily prices')
-    const templates = panel(page, 'File templates')
-    await expect(templates).toContainText('date ; code ; open ; high ; low ; close ; volume')
-    const download = page.waitForEvent('download')
-    await templates.getByRole('button', { name: 'BVMAC daily prices template, CSV' }).click()
-    expect((await download).suggestedFilename()).toBe('cmarket_template_daily_prices.csv')
+test('DATA shows any session, HIST filters, EODH follows the connector', async ({ page }) => {
+  await asDataAdmin(page)
+  await page.goto('/data/session')
+  const coverage = panel(page, 'Session coverage')
+  await expect(coverage).toContainText('BVMAC daily prices')
+  const templates = panel(page, 'File templates')
+  await expect(templates).toContainText('date ; code ; open ; high ; low ; close ; volume')
+  const download = page.waitForEvent('download')
+  await templates.getByRole('button', { name: 'BVMAC daily prices template, CSV' }).click()
+  expect((await download).suggestedFilename()).toBe('cmarket_template_daily_prices.csv')
 
-    await page.getByRole('link', { name: /EODH/ }).click()
-    await expect(panel(page, 'EODHD connector')).toContainText('Daily quota used')
-    const loads = panel(page, 'Bulk loads')
-    await loads.getByRole('combobox', { name: 'Load' }).selectOption('fundamentals')
-    await expect(loads.getByRole('row').nth(1)).toContainText('Fundamentals (bulk)')
-  },
-)
+  await page.getByRole('link', { name: /EODH/ }).click()
+  await expect(panel(page, 'EODHD connector')).toContainText('Daily quota used')
+  const loads = panel(page, 'Bulk loads')
+  await loads.getByRole('combobox', { name: 'Load' }).selectOption('fundamentals')
+  await expect(loads.getByRole('row').nth(1)).toContainText('Fundamentals (bulk)')
+})
 
 test('CORR corrects a stored session with a reason, kept in the log', async ({ page }) => {
   await asDataAdmin(page)

@@ -1,4 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
+import { defaultLayout } from './session.js'
 
 // The panels of a screen move by their title bar and resize by their corner, with the mouse, and
 // the layout is saved per user (spec section 8). Below 1280 px wide they stack in one column
@@ -65,6 +66,11 @@ async function fromMenu(target: Locator, entry: string) {
 /** The titles of the panels, top to bottom. */
 const stackedTitles = (page: Page) =>
   page.locator('[data-panel] section > header h2').allTextContents()
+
+// Each flow starts from the default layout of MKT, which CMarket.Api keeps from the flow before.
+test.beforeEach(async ({ page }) => {
+  await defaultLayout(page, 'MKT')
+})
 
 test('a panel moves by its title bar and resizes by its corner, and keeps both', async ({
   page,

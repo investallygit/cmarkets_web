@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { ownSession } from './session.js'
 
 // CFG of step 7 (ROADMAP.md): profile, security, subscription, organisation and invoices.
 
@@ -30,9 +31,17 @@ test('the profile keeps the language and the time zone of the user', async ({ pa
   await page.reload()
   await expect(panel(page, 'Profil').getByLabel('Fuseau horaire')).toHaveValue('Europe/Paris')
   await expect(page.getByRole('banner')).toContainText(/Douala \d{2}:\d{2}:\d{2}/)
+
+  // Back to English and Douala: CMarket.Api keeps the profile for the flows that follow.
+  const profil = panel(page, 'Profil')
+  await profil.getByLabel('Fuseau horaire').selectOption('Africa/Douala')
+  await profil.getByText('English', { exact: true }).click()
+  await profil.getByRole('button', { name: 'Enregistrer' }).click()
+  await expect(page.getByRole('heading', { name: 'Profile', exact: true })).toBeVisible()
 })
 
 test('codes by SMS go to the phone of the profile', async ({ page }) => {
+  await ownSession(page, 'k.atangana@analyst.example')
   await page.goto('/cfg')
   const security = panel(page, 'Security')
   await security.getByText('By SMS', { exact: true }).click()
@@ -151,6 +160,7 @@ test('a member of an organisation reads its plan without changing it', async ({ 
 
 test('a new Analyst gets the trial and waits for the approval to publish', async ({ page }) => {
   // Logged out first: the sign-up page sends a logged-in user home.
+  await ownSession(page, 'k.atangana@analyst.example')
   await page.goto('/mkt')
   await page.getByRole('button', { name: /K\. Analyst/i }).click()
   await page.getByRole('menuitem', { name: 'Log out' }).click()

@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { cemacPortfolioId } from './demoIds.js'
 
 // The Journalist and CEO account types of step 12 (ROADMAP.md): "Read" in the permission matrix
 // of spec section 12 views the analysis without saving anything. Step 13: a CEO reads the
@@ -11,6 +12,9 @@ const panel = (page: Page, title: string | RegExp) =>
  * The prototype's account switch, from the badge of the account logged in (the Analyst's at
  * first), reloads the app: wait for the new account's badge.
  */
+/** The fund P. Owona, the Portfolio manager, shares with Asset manager A. */
+const OWONA_FUND = cemacPortfolioId('user-manager')
+
 async function switchAccount(page: Page, account: string, badge: RegExp, from = /analyst/i) {
   await page.goto('/mkt')
   await page.getByRole('button', { name: from }).click()
@@ -47,7 +51,7 @@ test('a CEO exports, and reads the fund P. Owona shares without changing it', as
   await expect(panel(page, /^Results/).getByRole('button', { name: 'XLSX' })).toBeVisible()
 
   await page.goto('/port')
-  await expect(page).toHaveURL(/\/port\/portfolio-cemac$/)
+  await expect(page).toHaveURL(new RegExp(`/port/${OWONA_FUND}$`))
   const selector = page.getByRole('button', { name: /Shared by P\. Owona/i })
   await expect(selector).toContainText('CEMAC Equity Fund')
   await expect(selector).toContainText('Read only')
@@ -75,7 +79,7 @@ test('a CEO exports, and reads the fund P. Owona shares without changing it', as
 
 test('P. Owona stops sharing the fund, and the CEO has nothing left to read', async ({ page }) => {
   await switchAccount(page, 'Portfolio manager', /manager/i)
-  await page.goto('/port/portfolio-cemac')
+  await page.goto(`/port/${OWONA_FUND}`)
   const selector = page.getByRole('button', { name: /CEMAC Equity Fund/ })
   await expect(selector).toContainText('Shared')
   await selector.click()

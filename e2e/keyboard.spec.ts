@@ -1,4 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
+import { demoId } from './demoIds.js'
+import { ownSession } from './session.js'
 
 // What the keyboard alone reaches (WCAG 2.1.1, 2.1.2), the panels moved without dragging
 // (WCAG 2.5.7) and the title of each page (WCAG 2.4.2).
@@ -6,28 +8,25 @@ import { expect, test, type Locator, type Page } from '@playwright/test'
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title }) })
 
-test(
-  'Tab leaves the command bar, which completes only a word under way',
-  { tag: '@api' },
-  async ({ page }) => {
-    await page.goto('/mkt')
-    const bar = page.getByRole('combobox', { name: 'Command bar' })
-    await bar.focus()
-    await page.keyboard.type('SEM')
-    await expect(page.getByRole('option', { name: /^SEMC/ })).toBeVisible()
-    await page.keyboard.press('Tab')
-    await expect(bar).toHaveValue('SEMC ')
-    await expect(bar).toBeFocused()
-    // Nothing under way: Tab moves on, as from any field.
-    await page.keyboard.press('Tab')
-    await expect(bar).not.toBeFocused()
-    await bar.focus()
-    await page.keyboard.press('Shift+Tab')
-    await expect(bar).not.toBeFocused()
-  },
-)
+test('Tab leaves the command bar, which completes only a word under way', async ({ page }) => {
+  await page.goto('/mkt')
+  const bar = page.getByRole('combobox', { name: 'Command bar' })
+  await bar.focus()
+  await page.keyboard.type('SEM')
+  await expect(page.getByRole('option', { name: /^SEMC/ })).toBeVisible()
+  await page.keyboard.press('Tab')
+  await expect(bar).toHaveValue('SEMC ')
+  await expect(bar).toBeFocused()
+  // Nothing under way: Tab moves on, as from any field.
+  await page.keyboard.press('Tab')
+  await expect(bar).not.toBeFocused()
+  await bar.focus()
+  await page.keyboard.press('Shift+Tab')
+  await expect(bar).not.toBeFocused()
+})
 
 test("the user's menu and a row's menu open and work from the keyboard", async ({ page }) => {
+  await ownSession(page, 'k.atangana@analyst.example')
   await page.goto('/mkt')
   const watchlist = panel(page, /^Watchlist/)
   await expect(watchlist.getByRole('row', { name: /SAFACAM/ })).toBeVisible()
@@ -115,10 +114,10 @@ test('NET and MSG from the keyboard: a profile found, a message sent, a dialog c
   await expect(panel(page, 'Professionals: 1 result')).toBeVisible()
   await tabTo(page, page.getByRole('button', { name: 'View profile: L. Fotso' }))
   await page.keyboard.press('Enter')
-  await expect(page).toHaveURL(/profile=user-fotso/)
+  await expect(page).toHaveURL(new RegExp(`profile=${demoId('user-fotso')}`))
   await tabTo(page, panel(page, 'Profile').getByRole('button', { name: 'Send a message' }))
   await page.keyboard.press('Enter')
-  await expect(page).toHaveURL(/\/msg\?to=user-fotso$/)
+  await expect(page).toHaveURL(new RegExp(`/msg\\?to=${demoId('user-fotso')}$`))
 
   const composer = page.getByRole('textbox', { name: 'Message' })
   await tabTo(page, composer)
@@ -146,7 +145,8 @@ test('NET and MSG from the keyboard: a profile found, a message sent, a dialog c
 test.describe('without the service worker of the prototype', () => {
   test.use({ serviceWorkers: 'block' })
 
-  test('the page says why the prototype cannot start', async ({ page }) => {
+  // @mock: the mock's service worker.
+  test('the page says why the prototype cannot start', { tag: '@mock' }, async ({ page }) => {
     await page.goto('/')
     await expect(page.getByText(/^The prototype could not start/)).toBeVisible()
     await expect(page.getByRole('button', { name: 'Retry' })).toBeVisible()
