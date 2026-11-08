@@ -97,7 +97,7 @@ export function OtpForm({ challenge, onResend, resending, onBack }: OtpFormProps
           {resendIn > 0 ? t('auth.otp.resendIn', { seconds: resendIn }) : t('auth.otp.resend')}
         </Button>
       </div>
-      {env.useMocks && (
+      {env.devTools && (
         <PrototypeCode query={{ challengeId: challenge.challengeId }} onUse={setCode} />
       )}
     </form>

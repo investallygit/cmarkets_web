@@ -96,6 +96,7 @@ gets the 14-day free trial. The mock keeps its data in the browser's localStorag
 | Script                          | Purpose                                                                    |
 | ------------------------------- | -------------------------------------------------------------------------- |
 | `npm run dev`                   | Dev server with the mock back end                                          |
+| `npm run dev:api`               | Dev server on a `CMarket.Api` running on port 5001 (`.env.api`)            |
 | `npm run build`                 | Type check, then production build in `dist/`                               |
 | `npm run typecheck`             | TypeScript only                                                            |
 | `npm run lint`                  | ESLint, including the layer rules of [Structure](#structure)               |
@@ -353,7 +354,13 @@ goes in both folders and is added to both `en.ts` and `fr.ts`.
 
 ### Connecting the real back end
 
-1. Set `VITE_USE_MOCKS=false` in `.env.local`.
+On this machine: start `CMarket.Api` (`dotnet run --project src/CMarket.Api --launch-profile http`
+in its repository, port 5001), then `npm run dev:api`. The mode `api` (`.env.api`) turns the mock
+off and has the dev server forward `/api` and `/hubs` to the API, so the site and the API share
+one origin as in production; the demo accounts and the code come from the API's development tools.
+Another address: `DEV_PROXY_TARGET` in `.env.api.local`. In general:
+
+1. Set `VITE_USE_MOCKS=false`.
 2. Point `DEV_PROXY_TARGET` at `CMarket.Api` for local development, or set `VITE_API_URL` to
    the origin of a deployed API (`https://api.cmarket.example`): the REST API and both hubs are
    served under it, and the images the API names by its own path (`/api/v1/profile-photos/…`) are
@@ -365,5 +372,7 @@ goes in both folders and is added to both `en.ts` and `fr.ts`.
    (another registrable domain) `SameSite=None` on the cookie, which browsers that block
    third-party cookies refuse: keep the site and the API on one domain (`app.` and `api.`).
 
-The screens do not change: they only know the API contract. The prototype's account switch and
-the demo accounts of the login page go with the mock.
+The screens do not change: they only know the API contract. The prototype's helpers (the demo
+accounts of the login page, the code filled in, the account switch) follow `VITE_DEV_TOOLS`, which
+follows `VITE_USE_MOCKS` unless set: `CMarket.Api` serves the same `/_prototype/*` routes in
+development.

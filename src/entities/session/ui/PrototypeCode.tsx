@@ -11,8 +11,8 @@ interface PrototypeCodeProps {
 }
 
 /**
- * Prototype only: the mock back end sends no e-mail or SMS, so the code it would have sent shows
- * here (GET /_prototype/codes, not part of CMarket.Api).
+ * Prototype helper (env.devTools): the code the back end would have sent by e-mail or SMS shows
+ * here (GET /_prototype/codes, from the mock or from CMarket.Api's development tools).
  */
 export function PrototypeCode({ query, onUse }: PrototypeCodeProps) {
   const { t } = useTranslation()

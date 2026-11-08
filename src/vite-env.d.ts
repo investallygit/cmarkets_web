@@ -4,4 +4,5 @@ interface ImportMetaEnv {
   readonly VITE_REALTIME_HUB_URL?: string
   readonly VITE_CHAT_HUB_URL?: string
   readonly VITE_USE_MOCKS?: string
+  readonly VITE_DEV_TOOLS?: string
 }

@@ -158,7 +158,7 @@ export function PasswordResetForm() {
       >
         {t('auth.reset.again')}
       </Button>
-      {env.useMocks && <PrototypeCode query={{ email: email.trim(), sentAt }} onUse={setCode} />}
+      {env.devTools && <PrototypeCode query={{ email: email.trim(), sentAt }} onUse={setCode} />}
     </form>
   )
 }

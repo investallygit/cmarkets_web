@@ -95,7 +95,7 @@ export function LoginForm() {
           {t('auth.login.signUp')}
         </Link>
       </p>
-      {env.useMocks && <DemoAccounts onPick={setCredentials} />}
+      {env.devTools && <DemoAccounts onPick={setCredentials} />}
     </form>
   )
 }

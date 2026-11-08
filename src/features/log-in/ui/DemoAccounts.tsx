@@ -10,8 +10,8 @@ interface DemoAccountsDto {
 }
 
 /**
- * Prototype only: the demo user of each account type (GET /_prototype/accounts, not part of
- * CMarket.Api). A click fills in the form.
+ * Prototype helper (env.devTools): the demo user of each account type (GET /_prototype/accounts,
+ * from the mock or from CMarket.Api's development tools). A click fills in the form.
  */
 export function DemoAccounts({ onPick }: { onPick: (credentials: LoginRequestDto) => void }) {
   const { t } = useTranslation()

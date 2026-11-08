@@ -9,6 +9,7 @@ describe('readEnv', () => {
       realtimeHubUrl: '/hubs/market',
       chatHubUrl: '/hubs/chat',
       useMocks: false,
+      devTools: false,
     })
   })
 
@@ -20,7 +21,14 @@ describe('readEnv', () => {
       realtimeHubUrl: 'https://api.cmarket.example/hubs/market',
       chatHubUrl: 'https://api.cmarket.example/hubs/chat',
       useMocks: true,
+      devTools: true,
     })
+  })
+
+  it("shows the prototype's helpers with the mock, or when VITE_DEV_TOOLS says so", () => {
+    expect(readEnv({ VITE_USE_MOCKS: 'false', VITE_DEV_TOOLS: 'true' }).devTools).toBe(true)
+    expect(readEnv({ VITE_USE_MOCKS: 'true', VITE_DEV_TOOLS: 'false' }).devTools).toBe(false)
+    expect(readEnv({ VITE_USE_MOCKS: 'true', VITE_DEV_TOOLS: '' }).devTools).toBe(true)
   })
 
   it('lets each address be replaced on its own', () => {
