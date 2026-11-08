@@ -38,7 +38,7 @@ relative: S < M < L < XL.
 | 17   | MSG in real time: the `/hubs/chat` hub                          | Done   |
 | 18   | Admin: reported profiles and conversations, directory settings  | Done   |
 | 19   | Second version done: README, accessibility, every flow          | Done   |
-| 20   | Connecting `CMarket.Api`: `.env`, the API module, its checks    | Doing  |
+| 20   | Connecting `CMarket.Api`: `.env`, the API module, its checks    | Done   |
 
 ## Second version of the spec
 
@@ -363,7 +363,7 @@ come in the README and the open questions of the second version.
   `ui-kit` among the pages, the shared components added) and this roadmap, each screen with the
   steps that built it.
 
-### Step 20 · Connecting CMarket.Api (L): doing
+### Step 20 · Connecting CMarket.Api (L): done
 
 `CMarket.Api` (the back end's repository, phases 0 to 16) serves the routes, JSON and errors of
 the mock: 202 of the mock's 203 routes are among its controllers, the last one being the
@@ -385,18 +385,32 @@ with the type check, the lint, the unit tests and the flows of the screens it to
    Admin's six) on a fresh database: no request failed, the console stayed clean and no panel
    showed an error. The account form's `org-cmarket`, the mock's id, does no harm: the API leaves
    CMarket's organisation out of the list and places its employees itself.
-5. **The API module** (`src/shared/api/endpoints/`): one file per controller folder of the API,
-   each with its routes and its calls; every route checked against the API's OpenAPI and the
-   mock's handlers.
-6. **The hooks onto the module**, area by area: Auth, Me and the development tools; Market and
-   Securities; Watchlists and Charts; Bonds and Analysis; Portfolios; Content and Alerts;
+5. **The API module: done** (`src/shared/api/endpoints/`): one file per controller folder of
+   the API, each a route table and its calls; `routes.test.ts` checks every route against the
+   API's OpenAPI (`openapi-routes.txt`, from `npm run api:routes`), and the mock's
+   `routes.test.ts` that each has a handler.
+6. **The hooks onto the module: done**, area by area: Auth, Me and the development tools; Market
+   and Securities; Watchlists and Charts; Bonds and Analysis; Portfolios; Content and Alerts;
    Subscriptions and Organization; Research; the Data admin; the Admin; Network and Messaging.
-7. **The module locked**: only `src/shared/api/` imports `apiClient`; README.
-8. **`npm run test:api`**: the module's reads against a running API, for each demo account.
-9. **`npm run e2e:api`**: the flows that name no id of the mock, on the API, port 5174.
-10. **Wrap-up**: what steps 8 and 9 find, the README's guide to the real back end.
+7. **The module locked: done.** Only `src/shared/api/` imports the client (ESLint).
+8. **`npm run test:api`: done.** About seventy reads, each made by every demo account its
+   permissions and plan allow: 391 pass, 169 skipped as not allowed. It found one probe of ours
+   wrong (the Admin may not read `/me/blocks`), nothing in the API.
+9. **`npm run e2e:api`: done.** Thirteen flows tagged `@api` pass on the API. The others are not
+   run there: those that write share one database and the stored Analyst session, which a flow
+   that ends sessions revokes (the run broke from about the fortieth flow), and some name the
+   mock's ids. `E2E_API_ALL=1` runs them all.
+10. **Wrap-up: done.** README: the scripts, the tests, the guide to the real back end.
+
+Left open: `src/mocks/reports.test.ts` ("lists the reported profiles and conversations, the
+referred account first") fails on the commit before step 20 as well; it seems to depend on the
+date.
 
 Deployment (the environments' `.env` files, the site and the API on one domain, CORS) comes after.
+The API's Bicep template gives it its default `*.azurecontainerapps.io` address while the site is
+`staging.cmarket.example`: two sites, so the `SameSite=Strict` refresh cookie would not be kept.
+The API needs a custom domain on the site's (`api.cmarket.example`), or a proxy on the site's
+origin.
 
 ## Shared groundwork
 

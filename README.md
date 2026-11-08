@@ -105,6 +105,7 @@ gets the 14-day free trial. The mock keeps its data in the browser's localStorag
 | `npm run test:api`              | The API module's reads against a running `CMarket.Api`, for each account   |
 | `npm run api:routes`            | Reads the routes of a running `CMarket.Api`'s OpenAPI document again       |
 | `npm run e2e`                   | Playwright end-to-end tests (first run: `npx playwright install chromium`) |
+| `npm run e2e:api`               | The flows tagged `@api` on a running `CMarket.Api`, port 5174              |
 
 ## Structure
 
@@ -369,6 +370,12 @@ goes in both folders and is added to both `en.ts` and `fr.ts`.
   the dev server: it starts one, or uses the one already on port 5173. `e2e/auth.setup.ts` logs
   in once as the demo Analyst and the other specs start from that session. One spec:
   `npx playwright test e2e/portfolio.spec.ts`, one test: add `-g "<its title>"`.
+- `npm run e2e:api` runs the flows tagged `@api` on a running `CMarket.Api`, through a dev server
+  in the mode `api` on port 5174 (beside the mock's on 5173), with a session of their own. They
+  read and change nothing the other flows count, and name no id of the mock: tag a flow only when
+  it holds on both back ends. The other flows write to one shared database and session, and some
+  name the mock's ids; `E2E_API_ALL=1 npm run e2e:api` runs them all, to see which pass. Start the
+  API on a fresh database.
 - A change is done when `npm run typecheck`, `npm run lint` and `npm run test:run` pass, and the
   Playwright flow of the screen it touches.
 
@@ -395,4 +402,5 @@ Another address: `DEV_PROXY_TARGET` in `.env.api.local`. In general:
 The screens do not change: they only know the API contract. The prototype's helpers (the demo
 accounts of the login page, the code filled in, the account switch) follow `VITE_DEV_TOOLS`, which
 follows `VITE_USE_MOCKS` unless set: `CMarket.Api` serves the same `/_prototype/*` routes in
-development.
+development. To check the front end against it: `npm run test:api`, then `npm run e2e:api` (see
+[Tests](#tests)); after a change to the API's routes, `npm run api:routes` and `npm run test:run`.
