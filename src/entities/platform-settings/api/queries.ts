@@ -1,17 +1,12 @@
 import { useMutation, useQueries, useQuery } from '@tanstack/react-query'
-import { ADMIN_QUERY_ROOT, apiClient, useRefreshAdminData } from '@/shared/api'
+import { ADMIN_QUERY_ROOT, useRefreshAdminData } from '@/shared/api'
 import {
   ACCOUNT_TYPES,
   type AccountType,
-  type AdminSpecialtyDto,
-  type DirectorySettingsDto,
-  type DirectorySettingsUpdateDto,
   type Permission,
-  type PlatformSettingsDto,
-  type PlatformSettingsUpdateDto,
-  type RolePermissionsDto,
   type SpecialtyInputDto,
 } from '@/shared/api/contracts'
+import { adminApi } from '@/shared/api/endpoints'
 
 export const settingsKeys = {
   all: [...ADMIN_QUERY_ROOT, 'settings'] as const,
@@ -21,13 +16,11 @@ export const settingsKeys = {
   specialties: () => [...settingsKeys.all, 'specialties'] as const,
 }
 
-const rolePath = (role: AccountType) => `/admin/roles/${role}/permissions`
-
 /** GET /admin/settings: quotas, research pricing and moderation, risk-free rate. */
 export function usePlatformSettings() {
   return useQuery({
     queryKey: settingsKeys.platform(),
-    queryFn: ({ signal }) => apiClient.get<PlatformSettingsDto>('/admin/settings', { signal }),
+    queryFn: ({ signal }) => adminApi.settings(signal),
   })
 }
 
@@ -35,8 +28,7 @@ export function usePlatformSettings() {
 export function useSavePlatformSettings() {
   const refresh = useRefreshAdminData()
   return useMutation({
-    mutationFn: (settings: PlatformSettingsUpdateDto) =>
-      apiClient.put<PlatformSettingsDto>('/admin/settings', settings),
+    mutationFn: adminApi.saveSettings,
     onSuccess: refresh,
   })
 }
@@ -46,8 +38,7 @@ export function useRolePermissions() {
   return useQueries({
     queries: ACCOUNT_TYPES.map((role) => ({
       queryKey: settingsKeys.role(role),
-      queryFn: ({ signal }: { signal: AbortSignal }) =>
-        apiClient.get<RolePermissionsDto>(rolePath(role), { signal }),
+      queryFn: ({ signal }: { signal: AbortSignal }) => adminApi.rolePermissions(role, signal),
     })),
     combine: (results) => ({
       data: results.every((result) => result.data)
@@ -66,8 +57,7 @@ export function useRolePermissions() {
 export function useSaveRolePermissions() {
   const refresh = useRefreshAdminData()
   return useMutation({
-    mutationFn: ({ role, permissions }: RolePermissionsDto) =>
-      apiClient.put<RolePermissionsDto>(rolePath(role), { role, permissions }),
+    mutationFn: adminApi.saveRolePermissions,
     onSuccess: refresh,
   })
 }
@@ -76,8 +66,7 @@ export function useSaveRolePermissions() {
 export function useDirectorySettings() {
   return useQuery({
     queryKey: settingsKeys.directory(),
-    queryFn: ({ signal }) =>
-      apiClient.get<DirectorySettingsDto>('/admin/settings/directory', { signal }),
+    queryFn: ({ signal }) => adminApi.directorySettings(signal),
   })
 }
 
@@ -85,19 +74,16 @@ export function useDirectorySettings() {
 export function useSaveDirectorySettings() {
   const refresh = useRefreshAdminData()
   return useMutation({
-    mutationFn: (settings: DirectorySettingsUpdateDto) =>
-      apiClient.put<DirectorySettingsDto>('/admin/settings/directory', settings),
+    mutationFn: adminApi.saveDirectorySettings,
     onSuccess: refresh,
   })
 }
-
-const specialtyPath = (id: string) => `/admin/specialties/${encodeURIComponent(id)}`
 
 /** GET /admin/specialties, the prototype's: the closed list and the profiles listing each. */
 export function useAdminSpecialties() {
   return useQuery({
     queryKey: settingsKeys.specialties(),
-    queryFn: ({ signal }) => apiClient.get<AdminSpecialtyDto[]>('/admin/specialties', { signal }),
+    queryFn: ({ signal }) => adminApi.specialties(signal),
   })
 }
 
@@ -105,8 +91,7 @@ export function useAdminSpecialties() {
 export function useAddSpecialty() {
   const refresh = useRefreshAdminData()
   return useMutation({
-    mutationFn: (input: SpecialtyInputDto) =>
-      apiClient.post<AdminSpecialtyDto>('/admin/specialties', input),
+    mutationFn: adminApi.addSpecialty,
     onSuccess: refresh,
   })
 }
@@ -116,7 +101,7 @@ export function useRenameSpecialty() {
   const refresh = useRefreshAdminData()
   return useMutation({
     mutationFn: ({ id, name }: { id: string } & SpecialtyInputDto) =>
-      apiClient.put<AdminSpecialtyDto>(specialtyPath(id), { name }),
+      adminApi.renameSpecialty(id, { name }),
     onSuccess: refresh,
   })
 }
@@ -125,7 +110,7 @@ export function useRenameSpecialty() {
 export function useRemoveSpecialty() {
   const refresh = useRefreshAdminData()
   return useMutation({
-    mutationFn: (id: string) => apiClient.delete<void>(specialtyPath(id)),
+    mutationFn: adminApi.removeSpecialty,
     onSuccess: refresh,
   })
 }

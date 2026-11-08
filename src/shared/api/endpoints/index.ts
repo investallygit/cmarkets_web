@@ -4,6 +4,7 @@
  * call these; only src/shared/api sends requests. ROUTE_TABLES is checked against the API's
  * OpenAPI document (openapi-routes.txt) and against the mock's handlers.
  */
+import { adminRoutes } from './admin'
 import { alertsRoutes } from './alerts'
 import { analysisRoutes } from './analysis'
 import { authRoutes } from './auth'
@@ -22,6 +23,13 @@ import { securitiesRoutes } from './securities'
 import { subscriptionsRoutes } from './subscriptions'
 import { watchlistsRoutes } from './watchlists'
 
+export {
+  adminApi,
+  adminRoutes,
+  type AccountQuery,
+  type AuditQuery,
+  type PayoutQuery,
+} from './admin'
 export { alertsApi, alertsRoutes } from './alerts'
 export { analysisApi, analysisRoutes } from './analysis'
 export { authApi, authRoutes } from './auth'
@@ -61,6 +69,7 @@ export {
 
 /** The route table of each area, by the name of its controller folder. */
 export const ROUTE_TABLES: Readonly<Record<string, RouteTable>> = {
+  Admin: adminRoutes,
   Alerts: alertsRoutes,
   Analysis: analysisRoutes,
   Auth: authRoutes,

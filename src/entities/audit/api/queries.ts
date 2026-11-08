@@ -1,18 +1,8 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { ADMIN_QUERY_ROOT, apiClient } from '@/shared/api'
-import type { AuditAction, AuditEntryDto, Paged } from '@/shared/api/contracts'
+import { ADMIN_QUERY_ROOT } from '@/shared/api'
+import { adminApi, type AuditQuery } from '@/shared/api/endpoints'
 
-/** GET /admin/audit-log?userId=&action=&from=&to= */
-export interface AuditQuery {
-  /** Who acted, or the account acted on. */
-  userId?: string
-  /** One action, or several. */
-  action?: AuditAction | readonly AuditAction[]
-  from?: string
-  to?: string
-  page?: number
-  pageSize?: number
-}
+export type { AuditQuery }
 
 export const AUDIT_PAGE_SIZE = 50
 
@@ -25,15 +15,7 @@ export const auditKeys = {
 export function useAuditLog(query: AuditQuery) {
   return useQuery({
     queryKey: auditKeys.list(query),
-    queryFn: ({ signal }) =>
-      apiClient.get<Paged<AuditEntryDto>>('/admin/audit-log', {
-        query: {
-          pageSize: AUDIT_PAGE_SIZE,
-          ...query,
-          action: typeof query.action === 'string' ? query.action : query.action?.join(','),
-        },
-        signal,
-      }),
+    queryFn: ({ signal }) => adminApi.auditLog({ pageSize: AUDIT_PAGE_SIZE, ...query }, signal),
     placeholderData: keepPreviousData,
   })
 }

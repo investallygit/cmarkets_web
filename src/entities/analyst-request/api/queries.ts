@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { ADMIN_QUERY_ROOT, apiClient, useRefreshAdminData } from '@/shared/api'
-import type { AnalystRequestDto, SignUpDocument, VerificationStatus } from '@/shared/api/contracts'
+import { ADMIN_QUERY_ROOT, useRefreshAdminData } from '@/shared/api'
+import type { SignUpDocument, VerificationStatus } from '@/shared/api/contracts'
+import { adminApi } from '@/shared/api/endpoints'
 
 export const analystRequestKeys = {
   all: [...ADMIN_QUERY_ROOT, 'analyst-requests'] as const,
@@ -9,9 +10,6 @@ export const analystRequestKeys = {
     [...analystRequestKeys.all, 'document', id, kind] as const,
 }
 
-const requestPath = (id: string, action: string) =>
-  `/admin/analyst-requests/${encodeURIComponent(id)}/${action}`
-
 /**
  * GET /admin/analyst-requests?status=: the requests of Analysts, Journalists and CEOs, waiting by
  * default, newest first.
@@ -19,8 +17,7 @@ const requestPath = (id: string, action: string) =>
 export function useAnalystRequests(status: VerificationStatus = 'pending') {
   return useQuery({
     queryKey: analystRequestKeys.list(status),
-    queryFn: ({ signal }) =>
-      apiClient.get<AnalystRequestDto[]>('/admin/analyst-requests', { query: { status }, signal }),
+    queryFn: ({ signal }) => adminApi.analystRequests(status, signal),
   })
 }
 
@@ -28,8 +25,7 @@ export function useAnalystRequests(status: VerificationStatus = 'pending') {
 export function useAnalystDocument(id: string | null, kind: SignUpDocument | null) {
   return useQuery({
     queryKey: analystRequestKeys.document(id ?? '', kind ?? 'cv'),
-    queryFn: ({ signal }) =>
-      apiClient.getBlob(requestPath(id ?? '', `documents/${kind ?? ''}`), { signal }),
+    queryFn: ({ signal }) => adminApi.analystDocument(id ?? '', kind ?? 'cv', signal),
     staleTime: Infinity,
     enabled: id !== null && kind !== null,
   })
@@ -39,7 +35,7 @@ export function useAnalystDocument(id: string | null, kind: SignUpDocument | nul
 export function useApproveAnalyst() {
   const refresh = useRefreshAdminData()
   return useMutation({
-    mutationFn: (id: string) => apiClient.post<AnalystRequestDto>(requestPath(id, 'approve')),
+    mutationFn: adminApi.approveAnalyst,
     onSuccess: refresh,
   })
 }
@@ -49,7 +45,7 @@ export function useRejectAnalyst() {
   const refresh = useRefreshAdminData()
   return useMutation({
     mutationFn: ({ id, reason }: { id: string; reason: string }) =>
-      apiClient.post<AnalystRequestDto>(requestPath(id, 'reject'), { reason }),
+      adminApi.rejectAnalyst(id, reason),
     onSuccess: refresh,
   })
 }

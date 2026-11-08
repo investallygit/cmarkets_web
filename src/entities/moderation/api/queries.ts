@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { ADMIN_QUERY_ROOT, apiClient, useRefreshAdminData } from '@/shared/api'
-import type { LibraryPublicationDto, ModerationItemDto } from '@/shared/api/contracts'
+import { ADMIN_QUERY_ROOT, useRefreshAdminData } from '@/shared/api'
+import type { ModerationItemDto } from '@/shared/api/contracts'
+import { adminApi } from '@/shared/api/endpoints'
 
 export type ModerationKind = ModerationItemDto['kind']
 
@@ -11,18 +12,11 @@ export const moderationKeys = {
   reports: () => [...moderationKeys.all, 'reports'] as const,
 }
 
-const publicationPath = (id: string, action = '') =>
-  `/admin/publications/${encodeURIComponent(id)}${action && `/${action}`}`
-
 /** GET /admin/publications?status=pending|reported: the reports first, then those waiting. */
 export function useModerationQueue(kind: ModerationKind | null = null) {
   return useQuery({
     queryKey: moderationKeys.queue(kind),
-    queryFn: ({ signal }) =>
-      apiClient.get<ModerationItemDto[]>('/admin/publications', {
-        query: { status: kind },
-        signal,
-      }),
+    queryFn: ({ signal }) => adminApi.moderationQueue(kind, signal),
   })
 }
 
@@ -30,8 +24,7 @@ export function useModerationQueue(kind: ModerationKind | null = null) {
 export function useModeratedPublication(id: string | null) {
   return useQuery({
     queryKey: moderationKeys.publication(id ?? ''),
-    queryFn: ({ signal }) =>
-      apiClient.get<LibraryPublicationDto>(publicationPath(id ?? ''), { signal }),
+    queryFn: ({ signal }) => adminApi.moderatedPublication(id ?? '', signal),
     enabled: id !== null,
   })
 }
@@ -40,7 +33,7 @@ export function useModeratedPublication(id: string | null) {
 export function useApprovePublication() {
   const refresh = useRefreshAdminData()
   return useMutation({
-    mutationFn: (id: string) => apiClient.post<void>(publicationPath(id, 'approve')),
+    mutationFn: adminApi.approvePublication,
     onSuccess: refresh,
   })
 }
@@ -50,7 +43,7 @@ export function useTakeDownPublication() {
   const refresh = useRefreshAdminData()
   return useMutation({
     mutationFn: ({ id, reason }: { id: string; reason: string }) =>
-      apiClient.post<void>(publicationPath(id, 'takedown'), { reason }),
+      adminApi.takeDownPublication(id, reason),
     onSuccess: refresh,
   })
 }

@@ -1,17 +1,14 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { apiClient, useRefreshAdminData } from '@/shared/api'
-import type {
-  AdminConversationDto,
-  ReportedItemDto,
-  ReportedItemType,
-} from '@/shared/api/contracts'
+import { useRefreshAdminData } from '@/shared/api'
+import type { ReportedItemType } from '@/shared/api/contracts'
+import { adminApi } from '@/shared/api/endpoints'
 import { moderationKeys } from './queries'
 
 /** GET /admin/reports: the profiles and conversations reported, the referred accounts first. */
 export function useDirectoryReports() {
   return useQuery({
     queryKey: moderationKeys.reports(),
-    queryFn: ({ signal }) => apiClient.get<ReportedItemDto[]>('/admin/reports', { signal }),
+    queryFn: ({ signal }) => adminApi.reports(signal),
   })
 }
 
@@ -20,7 +17,7 @@ export function useDismissReports() {
   const refresh = useRefreshAdminData()
   return useMutation({
     mutationFn: ({ type, id }: { type: ReportedItemType; id: string }) =>
-      apiClient.post<void>(`/admin/reports/${type}/${encodeURIComponent(id)}/dismiss`),
+      adminApi.dismissReports(type, id),
     onSuccess: refresh,
   })
 }
@@ -33,10 +30,7 @@ export function useDismissReports() {
 export function useReportedConversation(id: string | null) {
   return useQuery({
     queryKey: ['reportedConversation', id ?? ''] as const,
-    queryFn: ({ signal }) =>
-      apiClient.get<AdminConversationDto>(`/admin/conversations/${encodeURIComponent(id ?? '')}`, {
-        signal,
-      }),
+    queryFn: ({ signal }) => adminApi.reportedConversation(id ?? '', signal),
     enabled: id !== null,
     staleTime: Infinity,
     gcTime: 0,
