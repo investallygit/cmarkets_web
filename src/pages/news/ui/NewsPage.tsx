@@ -22,7 +22,8 @@ const isNewsTab = (value: string): value is NewsTab => NEWS_TABS.some((tab) => t
 /**
  * N screen (spec section 5): the news feed filtered by issuer, country and topic with the article
  * next to it, and the document library with its full-text search and PDF viewer. /n and
- * /n/documents; the filters and the open item live in the URL.
+ * /n/documents; the filters and the open item live in the URL, /n?article={id} being the address
+ * of a news item that members share.
  */
 export function NewsPage() {
   const { t } = useTranslation()
@@ -76,7 +77,7 @@ function NewsTabPanels() {
       <NewsListPanel
         query={query}
         selectedId={articleId}
-        onSelect={(article) => patch({ article })}
+        itemLink={(article) => ({ search: `?${withParams(params, { article }).toString()}` })}
         filters={<NewsFilters values={filters} onChange={patch} />}
         emptyMessage={t('news.empty')}
       />

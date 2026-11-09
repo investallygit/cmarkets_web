@@ -47,8 +47,8 @@ test('the N screen filters the news and searches the documents', async ({ page }
   await page.goto('/n')
   const news = panel(page, 'News')
   await news.getByRole('combobox', { name: 'Topic' }).selectOption('regulator')
-  await expect(news.getByRole('button', { name: /Annual results: revenue up/ })).toHaveCount(0)
-  await news.getByRole('button', { name: /Approval granted for a bond issue/ }).click()
+  await expect(news.getByRole('link', { name: /Annual results: revenue up/ })).toHaveCount(0)
+  await news.getByRole('link', { name: /Approval granted for a bond issue/ }).click()
   // CMarket.Api keys its news by their source and age: any id there.
   await expect(page).toHaveURL(/topic=regulator&article=[\w-]+$/)
   await expect(
@@ -61,6 +61,52 @@ test('the N screen filters the news and searches the documents', async ({ page }
   await expect(documents.getByRole('listitem')).toHaveCount(3)
   await expect(page).toHaveURL(/\/n\/documents\?q=annual\+report$/)
 })
+
+// @fresh-db: a message to P. Owona, whose conversation MSG's flows find as seeded.
+test(
+  'a news item has its own address, which a member copies, opens and shares in MSG',
+  { tag: '@fresh-db' },
+  async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+    const headline = 'Approval granted for a bond issue'
+    await page.goto('/mkt')
+    await panel(page, 'News')
+      .getByRole('link', { name: new RegExp(headline) })
+      .click()
+    await expect(page).toHaveURL(/\/n\?article=[\w-]+$/)
+    const address = page.url()
+    const article = panel(page, 'Article')
+    await expect(article.getByRole('heading', { name: headline })).toBeVisible()
+
+    await article.getByRole('button', { name: 'Copy link' }).click()
+    await expect(page.getByText(/^Link copied/)).toBeVisible()
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(address)
+
+    // The address alone opens the article, as in a colleague's browser.
+    const colleague = await context.newPage()
+    await colleague.goto(address)
+    await expect(panel(colleague, 'Article').getByRole('heading', { name: headline })).toBeVisible()
+    await colleague.close()
+
+    await article.getByRole('button', { name: 'Share' }).click()
+    const dialog = page.getByRole('dialog')
+    await dialog.getByRole('button', { name: /P\. Owona/ }).click()
+    await dialog.getByRole('textbox', { name: 'Message (optional)' }).fill('COSUMAF approves it.')
+    await dialog.getByRole('button', { name: 'Send' }).click()
+    await expect(dialog).toBeHidden()
+    await expect(page.getByText('Shared with P. Owona.')).toBeVisible()
+
+    // In MSG the article comes as a card, which opens it at its address.
+    await page.goto('/msg')
+    const sent = panel(page, 'P. Owona · Manager')
+      .getByRole('listitem')
+      .filter({ hasText: 'COSUMAF approves it.' })
+    await expect(sent).toContainText(headline)
+    await sent.getByRole('link', { name: 'Read the article' }).click()
+    await expect(page).toHaveURL(address)
+    await expect(panel(page, 'Article').getByRole('heading', { name: headline })).toBeVisible()
+  },
+)
 
 // @fresh-db: the auctions as seeded, to which the Data admin's flows add.
 test(

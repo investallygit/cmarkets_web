@@ -12,7 +12,8 @@ import { Field } from '@/shared/ui/form/Field'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
 import { TextInput } from '@/shared/ui/form/TextInput'
 
-export type ShareKind = SharedObjectInputDto['type']
+/** What the composer's buttons share; a news item is shared from its article (features/share-news). */
+export type ShareKind = Exclude<SharedObjectInputDto['type'], 'news'>
 
 /** What the composer shows of the object chosen, before the server freezes it. */
 export interface PendingShare {

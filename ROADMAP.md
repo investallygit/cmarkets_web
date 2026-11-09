@@ -752,6 +752,14 @@ Still to do, with the first screen that needs it:
   securities concerned; new items arrive through `NewsPublished`. Documents: full-text search
   (`/documents?q=`), type filter and the embedded PDF viewer. Filters and the open item are in
   the URL, so `/n?article=news-1` opens an article.
+- **Shared by link (2026-11-10)**: every news item has its address, `/n?article={id}`, which a
+  member opens after logging in if need be (`?next=`). The items of N, of the MKT News panel and
+  of a profile's N tab are links (a new tab, "Copy link address"); the article's title bar copies
+  the address ("Copy link") or sends the article as a card to an open conversation ("Share",
+  `features/share-news`, for whoever writes messages). CMarket.Api takes a news item as a shared
+  object (`{ type: 'news', newsId }`, kept with its source, time and headline); the card opens
+  the article. In MSG, an address of the site pasted in a message is a link. A removed article
+  says so instead of an error.
 - **Still to do**: the list shows the 50 newest items; "load more" comes with the pagination of
   the shared groundwork.
 
@@ -918,8 +926,8 @@ Still to do, with the first screen that needs it:
 ### MSG · Messaging (screen 11): done
 
 - **Built in steps 16 and 17**: the conversations, the thread and the participant of the mockup,
-  contact requests, blocks, groups, files scanned before use, securities, charts and publications
-  shared; then the `/hubs/chat` hub: new messages, read receipts, "typing…", online status and the
+  contact requests, blocks, groups, files scanned before use, securities, charts, publications and
+  news items (from N) shared; then the `/hubs/chat` hub: new messages, read receipts, "typing…", online status and the
   count on MSG in the menu. See steps 16 and 17.
 - **Still to do**: the thread's SEARCH and "⋯" of the mockup; the push and e-mail notifications
   of a message unread after 5 minutes, with the back end, which also encrypts the messages and

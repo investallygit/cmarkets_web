@@ -51,7 +51,7 @@ tables, read-excel-file to read the Excel templates before upload.
 | 5 · Portfolio (PORT)                                                      | Done; the API values portfolios with sections 14.2 and 14.3   |
 | 7 · Publishing studio (PUB NEW)                                           | Done, autosave, versions, frozen charts                       |
 | 8 · Research library (PUB)                                                | Done; mobile money and card payments                          |
-| News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done; the API sets off the alerts                             |
+| News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done; each news item has a link to share                      |
 | Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
 | Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
@@ -123,7 +123,7 @@ src/
               security-actions, manage-watchlists, manage-alerts, screen-equities,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
               rate-publication, report-publication, follow-analyst, report-profile,
-              start-conversation, send-message, report-conversation, block-user,
+              start-conversation, send-message, share-news, report-conversation, block-user,
               create-publication, edit-publication, draw-on-chart, compare-securities,
               edit-profile, edit-network-profile, change-password, choose-plan, manage-members,
               upload-data-file, review-import, roll-back-import, correct-price, publish-content,

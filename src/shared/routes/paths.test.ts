@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { loginPath, safeNextPath, signUpPath } from './paths'
+import { loginPath, newsPath, safeNextPath, shareableUrl, signUpPath } from './paths'
 
 describe('the way in and out of the login pages', () => {
   it('brings the user back to the page asked for, and to the home screen otherwise', () => {
@@ -30,5 +30,21 @@ describe('the way in and out of the login pages', () => {
   it('opens the sign-up with the account type the home page offers', () => {
     expect(signUpPath('analyst')).toBe('/signup?type=analyst')
     expect(signUpPath()).toBe('/signup')
+  })
+})
+
+describe('the address of a news item', () => {
+  const id = '0f8fad5b-d9cb-469f-a165-70867728950e'
+
+  it('opens the article, through the login when the member has no session', () => {
+    expect(newsPath(id)).toBe(`/n?article=${id}`)
+    const next = new URL(loginPath(newsPath(id)), 'https://cmarket.invalid').searchParams.get(
+      'next',
+    )
+    expect(safeNextPath(next)).toBe(newsPath(id))
+  })
+
+  it('is shared in full, on this site', () => {
+    expect(shareableUrl(newsPath(id))).toBe(`${window.location.origin}/n?article=${id}`)
   })
 })

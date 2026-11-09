@@ -37,13 +37,15 @@ export function ReportedProfile({ userId }: { userId: string }) {
   )
 }
 
-/** "ECMR 6.25% 29", a chart's title or a publication's: what a message shared. */
+/** "ECMR 6.25% 29", a chart's title, a publication's or a news headline: what a message shared. */
 const sharedLabel = (shared: SharedObjectDto) =>
   shared.type === 'security'
     ? shared.code
     : shared.type === 'chart'
       ? shared.chart.title
-      : shared.title
+      : shared.type === 'news'
+        ? shared.headline
+        : shared.title
 
 /**
  * A reported conversation, read when the Admin asks only (spec section 15): each reading is

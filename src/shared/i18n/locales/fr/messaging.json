@@ -116,7 +116,8 @@
       "yield": "Rendement {{value}}",
       "duration": "Dur. mod. {{value}}",
       "by": "par {{name}}",
-      "preview": "Aperçu : qui n'a pas acheté la note n'en lit que ce résumé."
+      "preview": "Aperçu : qui n'a pas acheté la note n'en lit que ce résumé.",
+      "openNews": "Lire l'article"
     },
     "participant": {
       "viewProfile": "Voir le profil",

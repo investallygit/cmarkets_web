@@ -116,7 +116,8 @@
       "yield": "Yield {{value}}",
       "duration": "Mod. dur. {{value}}",
       "by": "by {{name}}",
-      "preview": "Preview: whoever has not bought the note reads this summary only."
+      "preview": "Preview: whoever has not bought the note reads this summary only.",
+      "openNews": "Read the article"
     },
     "participant": {
       "viewProfile": "View profile",

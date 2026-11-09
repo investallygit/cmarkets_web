@@ -200,7 +200,7 @@ test('NEWS publishes the news of an issuer, which the terminals show', async ({ 
   await switchAccount(page, /data admin/i, 'Analyst', /analyst/i)
   await page.goto('/n')
   await panel(page, 'News')
-    .getByRole('button', { name: /Interim dividend announced/ })
+    .getByRole('link', { name: /Interim dividend announced/ })
     .click()
   await expect(panel(page, 'Article')).toContainText('Payment on 15 December.')
 })

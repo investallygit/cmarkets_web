@@ -1,21 +1,36 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { useNewsArticle } from '@/entities/news'
+import { ShareNewsActions } from '@/features/share-news'
+import { isApiError } from '@/shared/api'
 import { useFormat } from '@/shared/i18n'
 import { securityPath } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { PanelEmpty } from '@/shared/ui/StatusViews'
 
-/** The full text of a news item, with links to the securities it concerns. API /news/{id}. */
+/**
+ * The full text of a news item, with links to the securities it concerns. API /news/{id}. Its
+ * title bar copies the article's address (/n?article={id}) or sends it to a conversation, so
+ * members share it.
+ */
 export function NewsArticlePanel({ articleId }: { articleId: string | null }) {
   const { t } = useTranslation()
   const format = useFormat()
   const article = useNewsArticle(articleId)
 
   return (
-    <Panel title={t('panels.article')} code="N">
-      {articleId ? (
+    <Panel
+      title={t('panels.article')}
+      code="N"
+      options={article.data && <ShareNewsActions article={article.data} />}
+    >
+      {!articleId ? (
+        <PanelEmpty message={t('news.select')} />
+      ) : isApiError(article.error, 404) ? (
+        // A shared address whose article is gone, or was never there.
+        <PanelEmpty message={t('news.notFound')} />
+      ) : (
         <QueryView query={article}>
           {(item) => (
             <article className="flex max-w-3xl flex-col gap-3 p-3">
@@ -49,8 +64,6 @@ export function NewsArticlePanel({ articleId }: { articleId: string | null }) {
             </article>
           )}
         </QueryView>
-      ) : (
-        <PanelEmpty message={t('news.select')} />
       )}
     </Panel>
   )

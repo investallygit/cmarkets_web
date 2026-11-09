@@ -71,9 +71,17 @@ export function securityPath(securityId: string, fn: SecurityFunction = 'des'): 
 export const NEWS_TABS = ['news', 'documents'] as const
 export type NewsTab = (typeof NEWS_TABS)[number]
 
-/** The N screen, with an article open: "/n?article=news-1". */
+/**
+ * The N screen, with an article open: "/n?article=news-1". It is the address of a news item,
+ * which members share: whoever opens it reads the article, after logging in if need be.
+ */
 export function newsPath(articleId?: string): string {
   return articleId ? `${routes.news}?article=${encodeURIComponent(articleId)}` : routes.news
+}
+
+/** The full address of a page of the app, to share: "https://…/n?article=news-1". */
+export function shareableUrl(path: string): string {
+  return new URL(path, window.location.origin).href
 }
 
 export function newsTabPath(tab: NewsTab): string {

@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link, type To } from 'react-router'
 import { NewsTime, useNews, type NewsQuery } from '@/entities/news'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
@@ -8,7 +9,12 @@ import { QueryView } from '@/shared/ui/QueryView'
 interface NewsListPanelProps {
   query: NewsQuery
   selectedId: string | null
-  onSelect: (newsId: string) => void
+  /**
+   * The address of an item, the screen with its article open: a link, so that a news item opens
+   * in a new tab and its address is copied as any other. It replaces the current entry of the
+   * history, as the filters do.
+   */
+  itemLink: (newsId: string) => To
   /** Shown above the list, e.g. the filters of the N screen. */
   filters?: ReactNode
   emptyMessage?: string
@@ -21,7 +27,7 @@ interface NewsListPanelProps {
 export function NewsListPanel({
   query,
   selectedId,
-  onSelect,
+  itemLink,
   filters,
   emptyMessage,
 }: NewsListPanelProps) {
@@ -41,10 +47,10 @@ export function NewsListPanel({
             <ul className="divide-y">
               {page.items.map((item) => (
                 <li key={item.id}>
-                  <button
-                    type="button"
+                  <Link
+                    to={itemLink(item.id)}
+                    replace
                     aria-current={item.id === selectedId || undefined}
-                    onClick={() => onSelect(item.id)}
                     className={clsx(
                       'grid w-full grid-cols-[48px_minmax(0,1fr)] gap-x-2 px-2 py-1.5 text-left',
                       item.id === selectedId ? 'bg-selected' : 'hover:bg-panel-header',
@@ -59,7 +65,7 @@ export function NewsListPanel({
                       </span>
                       <span className="block truncate font-sans text-label">{item.headline}</span>
                     </span>
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

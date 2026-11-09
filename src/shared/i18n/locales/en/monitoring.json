@@ -142,7 +142,24 @@
     "country": "Country",
     "security": "Filter by security",
     "related": "Securities concerned",
-    "empty": "No news for these filters"
+    "empty": "No news for these filters",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied: a member who opens it reads this article.",
+    "copyFailed": "The link could not be copied. Here it is: {{url}}",
+    "notFound": "This news item does not exist or is no longer available.",
+    "share": {
+      "open": "Share",
+      "title": "Share this news item",
+      "conversations": "Conversations",
+      "search": "Search a conversation",
+      "none": "No open conversation yet: start one in MSG.",
+      "noMatch": "No conversation matches.",
+      "note": "Message (optional)",
+      "send": "Send",
+      "sent": "Shared with {{name}}.",
+      "closed": "This conversation no longer takes messages.",
+      "openMsg": "Open MSG"
+    }
   },
   "shareholders": {
     "asOf": "As of {{date}}"

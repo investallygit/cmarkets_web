@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router'
+import { Link } from 'react-router'
 import { NewsTime, useNews } from '@/entities/news'
 import type { NewsTopic } from '@/shared/api/contracts'
 import { newsPath } from '@/shared/routes/paths'
@@ -12,10 +12,9 @@ type NewsFilter = 'all' | Extract<NewsTopic, 'issuer' | 'regulator'>
 
 const FILTERS: readonly NewsFilter[] = ['all', 'issuer', 'regulator']
 
-/** Screen 1, News: time, source in amber, headline; click = article. API /news. */
+/** Screen 1, News: time, source in amber, headline; each a link to its article. API /news. */
 export function NewsPanel() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [filter, setFilter] = useState<NewsFilter>('all')
   const news = useNews({ topic: filter === 'all' ? undefined : filter })
 
@@ -35,9 +34,8 @@ export function NewsPanel() {
           <ul className="divide-y">
             {page.items.map((item) => (
               <li key={item.id}>
-                <button
-                  type="button"
-                  onClick={() => void navigate(newsPath(item.id))}
+                <Link
+                  to={newsPath(item.id)}
                   className="grid w-full grid-cols-[48px_minmax(0,1fr)] gap-x-2 px-2 py-1.5 text-left hover:bg-panel-header"
                 >
                   <span className="font-mono text-data text-secondary">
@@ -49,7 +47,7 @@ export function NewsPanel() {
                     </span>
                     <span className="block truncate font-sans text-label">{item.headline}</span>
                   </span>
-                </button>
+                </Link>
               </li>
             ))}
           </ul>

@@ -84,7 +84,7 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
   const { t } = useTranslation()
   const user = useCurrentUser()
   const [searchParams, setSearchParams] = useSearchParams()
-  const select = (param: 'doc' | 'article') => (id: string) =>
+  const select = (param: 'doc') => (id: string) =>
     setSearchParams({ [param]: id }, { replace: true })
 
   if (!(securityFunctionTypes(fn)?.includes(security.type) ?? true)) {
@@ -144,7 +144,7 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
         <NewsListPanel
           query={{ securityId: id, pageSize: 50 }}
           selectedId={searchParams.get('article')}
-          onSelect={select('article')}
+          itemLink={(article) => ({ search: `?${new URLSearchParams({ article }).toString()}` })}
         />
       ),
       article: <NewsArticlePanel articleId={searchParams.get('article')} />,

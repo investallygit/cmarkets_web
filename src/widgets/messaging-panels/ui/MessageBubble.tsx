@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import {
   MESSAGE_MAX_LENGTH,
   ReadReceipt,
@@ -9,6 +10,7 @@ import {
 } from '@/entities/conversation'
 import type { MessageDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
+import { splitSiteLinks } from '@/shared/lib/siteLinks'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
 import { Button } from '@/shared/ui/form/Button'
 import { Textarea } from '@/shared/ui/form/Textarea'
@@ -94,7 +96,9 @@ export function MessageBubble({ message, own, showAuthor, highlighted }: Message
         ) : (
           <>
             {message.text && (
-              <p className="font-sans text-label break-words whitespace-pre-wrap">{message.text}</p>
+              <p className="font-sans text-label break-words whitespace-pre-wrap">
+                <MessageText text={message.text} />
+              </p>
             )}
             {message.shared && <SharedCard shared={message.shared} />}
             {message.attachments.length > 0 && (
@@ -156,5 +160,18 @@ export function MessageBubble({ message, own, showAuthor, highlighted }: Message
         />
       )}
     </li>
+  )
+}
+
+/** The text of a message, the addresses of CMarket in it opening in the app (a news item's). */
+function MessageText({ text }: { text: string }) {
+  return splitSiteLinks(text, window.location.origin).map((part, index) =>
+    part.path ? (
+      <Link key={index} to={part.path} className="text-info underline underline-offset-2">
+        {part.text}
+      </Link>
+    ) : (
+      part.text
+    ),
   )
 }

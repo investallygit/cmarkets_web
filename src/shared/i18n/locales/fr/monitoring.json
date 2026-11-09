@@ -142,7 +142,24 @@
     "country": "Pays",
     "security": "Filtrer par titre",
     "related": "Titres concernés",
-    "empty": "Aucune actualité pour ces filtres"
+    "empty": "Aucune actualité pour ces filtres",
+    "copyLink": "Copier le lien",
+    "linkCopied": "Lien copié : un membre qui l'ouvre lit cet article.",
+    "copyFailed": "Le lien n'a pas pu être copié. Le voici : {{url}}",
+    "notFound": "Cette actualité n'existe pas ou n'est plus disponible.",
+    "share": {
+      "open": "Partager",
+      "title": "Partager cette actualité",
+      "conversations": "Conversations",
+      "search": "Chercher une conversation",
+      "none": "Aucune conversation ouverte : commencez-en une dans MSG.",
+      "noMatch": "Aucune conversation ne correspond.",
+      "note": "Message (facultatif)",
+      "send": "Envoyer",
+      "sent": "Partagée avec {{name}}.",
+      "closed": "Cette conversation ne reçoit plus de messages.",
+      "openMsg": "Ouvrir MSG"
+    }
   },
   "shareholders": {
     "asOf": "Au {{date}}"

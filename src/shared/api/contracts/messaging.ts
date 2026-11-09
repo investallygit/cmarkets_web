@@ -1,5 +1,6 @@
 import type { CurrencyCode, IsoDateTime } from './common'
 import type { AccountType } from './me'
+import type { NewsTopic } from './news'
 import type { FrozenChartDto, FrozenChartPeriod, PublicationAccess } from './research'
 import type { SecurityType } from './securities'
 
@@ -121,13 +122,26 @@ export interface SharedPublicationDto {
   summary: string
 }
 
-export type SharedObjectDto = SharedSecurityDto | SharedChartDto | SharedPublicationDto
+/** A news item as it read when shared; its card opens the article at its own address. */
+export interface SharedNewsDto {
+  type: 'news'
+  newsId: string
+  publishedAt: IsoDateTime
+  /** Issuer code or institution, shown in amber: SEMC, BEAC, COSUMAF... */
+  source: string
+  headline: string
+  topic: NewsTopic
+}
+
+export type SharedObjectDto =
+  SharedSecurityDto | SharedChartDto | SharedPublicationDto | SharedNewsDto
 
 /** What a message shares; the server reads the object and keeps it as it is then. */
 export type SharedObjectInputDto =
   | { type: 'security'; securityId: string }
   | { type: 'chart'; securityId: string; period: FrozenChartPeriod }
   | { type: 'publication'; publicationId: string }
+  | { type: 'news'; newsId: string }
 
 export interface MessageAuthorDto {
   userId: string
