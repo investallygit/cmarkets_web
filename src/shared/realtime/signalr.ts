@@ -14,6 +14,10 @@ function connectHub(hubUrl: string) {
     .build()
 
   const stateListeners = new Set<(state: ConnectionState) => void>()
+  // An event keeps a handler that does nothing from its first listener on: a message still on
+  // its way when the last listener leaves (a screen left, its symbols being dropped) is ignored,
+  // where SignalR would warn of a method it does not know.
+  const heard = new Set<string>()
   let state: ConnectionState = 'disconnected'
   let stopped = false
   let stopping: Promise<void> | null = null
@@ -71,6 +75,10 @@ function connectHub(hubUrl: string) {
       await connection.invoke(method, ...args)
     },
     on<T>(event: string, handler: (payload: T) => void) {
+      if (!heard.has(event)) {
+        heard.add(event)
+        connection.on(event, () => undefined)
+      }
       connection.on(event, handler)
       return () => connection.off(event, handler)
     },

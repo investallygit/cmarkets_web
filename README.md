@@ -361,8 +361,10 @@ in `.env.development.local`. In general:
 2. Have `POST /auth/otp/verify` and `/auth/refresh` set the refresh token as an `HttpOnly`,
    `Secure` cookie on the `/auth` path. The login calls are sent with credentials; an API on
    another origin needs CORS with credentials for this site, and an API on another site
-   (another registrable domain) `SameSite=None` on the cookie, which browsers that block
-   third-party cookies refuse: keep the site and the API on one domain (`app.` and `api.`).
+   (another registrable domain) `SameSite=None` on the cookie, with the API's
+   `Auth:RefreshCookie:Partitioned` so that Chrome, Edge and Firefox keep it where they block
+   third-party cookies; Safari does not, so one domain (`app.` and `api.`) is the way for every
+   browser. Without the cookie, a reload, a new tab or the end of the access token logs out.
 
 The development helpers (the demo accounts of the login page, the code filled in, the account
 switch, `/_kit`) follow `VITE_DEV_TOOLS`, true in `.env.development` only: `CMarket.Api` serves

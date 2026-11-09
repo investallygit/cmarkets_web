@@ -9,6 +9,16 @@ test('the market dashboard loads its panels and real-time data', async ({ page }
     await expect(page.getByRole('heading', { name: title })).toBeVisible()
   }
   await expect(page.getByText('Real-time connected')).toBeVisible()
+  // The hub sends IndexUpdated to the screens that follow the index: the panel follows its own.
+  // Once the panels' first reads are over (the summary is read again every minute only), only
+  // the hub moves the value.
+  const indices = page.locator('section', {
+    has: page.getByRole('heading', { name: 'Indices', exact: true }),
+  })
+  const first = indices.getByRole('row').nth(1)
+  await page.waitForLoadState('networkidle')
+  const before = (await first.textContent()) ?? ''
+  await expect(first).not.toHaveText(before, { timeout: 15_000 })
 })
 
 test('the command bar opens a security profile', async ({ page }) => {

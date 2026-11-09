@@ -25,7 +25,10 @@ export function useRealtimeEvent<E extends RealtimeEventName>(
   useEffect(() => client.on(event, (payload) => handlerRef.current(payload)), [client, event])
 }
 
-/** Subscribes to quotes of the securities shown by the calling component. */
+/**
+ * Subscribes to the live values of the securities and indices shown by the calling component:
+ * the hub sends QuoteUpdated and IndexUpdated only to the connections that follow the symbol.
+ */
 export function useSymbolSubscription(symbols: readonly string[]) {
   const client = useRealtimeClient()
   const key = [...new Set(symbols)].sort().join('|')

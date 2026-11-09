@@ -9,9 +9,8 @@ import { Flash } from '@/shared/ui/Flash'
 /** Ticker tape under the top bar: indices and main securities with coloured change. */
 export function TickerTape() {
   const { data } = useTicker()
-  useSymbolSubscription(
-    data?.filter((item) => item.kind === 'security').map((item) => item.symbol) ?? [],
-  )
+  // Indices too: the hub sends each value only to the screens that follow its symbol.
+  useSymbolSubscription(data?.map((item) => item.symbol) ?? [])
 
   return (
     <div className="flex h-full items-center gap-8 overflow-hidden px-4 font-mono text-data whitespace-nowrap">

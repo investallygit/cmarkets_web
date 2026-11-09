@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useMarketSummary } from '@/entities/market'
 import { LiveIndexChange, LiveIndexChangePct, LiveIndexValue } from '@/entities/quote'
 import type { IndexQuoteDto } from '@/shared/api/contracts'
+import { useSymbolSubscription } from '@/shared/realtime'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { DataTable } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
@@ -21,6 +22,8 @@ interface IndicesPanelProps {
 export function IndicesPanel({ selectedCode = null, onSelect }: IndicesPanelProps) {
   const { t } = useTranslation()
   const summary = useMarketSummary()
+  // IndexUpdated reaches only the screens that follow the index.
+  useSymbolSubscription(summary.data?.indices.map((index) => index.code) ?? [])
 
   const columns = useMemo(
     () =>

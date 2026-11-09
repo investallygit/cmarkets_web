@@ -59,6 +59,8 @@ export function PortfolioHeader({ portfolios, portfolioId, onSelect }: Portfolio
   const performance = usePerformance(portfolioId, { from: rangeFrom('ytd', today) }).data
   const income = useIncome(portfolioId).data
   const liveIndex = useLiveIndex(performance?.benchmark.code ?? '')
+  // The benchmark's IndexUpdated reaches only the screens that follow it.
+  useSymbolSubscription(performance ? [performance.benchmark.code] : [])
 
   const period = (name: 'day' | 'ytd') =>
     performance?.periods.find((candidate) => candidate.period === name)

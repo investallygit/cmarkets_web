@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useIndexHistory, useMarketSummary } from '@/entities/market'
 import { INDEX_DECIMALS, useLiveIndex } from '@/entities/quote'
 import { CHART_PERIODS, isIntraday, type ChartPeriod } from '@/shared/lib/chartPeriods'
+import { useSymbolSubscription } from '@/shared/realtime'
 import { AreaChart } from '@/shared/ui/charts/AreaChart'
 import { useChartLabel } from '@/shared/ui/charts/useChartLabel'
 import { Panel } from '@/shared/ui/Panel'
@@ -24,6 +25,7 @@ export function IndexChartPanel({ indexCode = null }: { indexCode?: string | nul
   const index =
     summary.data?.indices.find((item) => item.code === indexCode) ?? summary.data?.indices.at(0)
   const history = useIndexHistory(index?.code, period)
+  useSymbolSubscription(index ? [index.code] : [])
   const liveValue = useLiveIndex(index?.code ?? '')?.value
   const values = useMemo(
     () => history.data?.map((point) => ({ close: point.value })) ?? NO_VALUES,
