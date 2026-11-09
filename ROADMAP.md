@@ -284,6 +284,14 @@ come in the README and the open questions of the second version.
   once, and a block stops it. Half a minute after login, S. Mvondo's contact request reaches the
   Analyst. Who is online is kept by the tab: each load starts from the mockup. Tested with fake
   timers (`chat.test.ts`); the client side with a fake hub (`useChatRealtimeSync.test.tsx`).
+- **Since, on CMarket.Api** (9 Nov 2026): `ConversationUpdated` opens the sender's thread when
+  their request is accepted, and closes the thread of a member taken out of a group, who no longer
+  reads anyone typing; a file's verdict comes as `MessageUpdated` (the thread asks every 3 s
+  meanwhile, in case the event is missed). A message found by the search loads the older pages
+  until it shows. The composer uploads five files at most of those chosen and says so; a message
+  refused in a closed conversation says it is closed. A hidden tab reads nothing until it shows.
+  The flows between two sessions replace the prototype's scripted people
+  (`e2e/messaging-realtime.spec.ts`, with `person()` of `e2e/people.ts`).
 
 ### Step 18 · Admin: directory and messaging (M): done
 
@@ -1332,8 +1340,14 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   of a conversation report are spam, harassment, scam or market manipulation, inappropriate
   content and other. The mockup's conversation with D. Moussavou is left out: the status of
   D. Moussavou waits for an Admin (screen 9), and a client waiting has no messaging.
-- **Messaging in real time**: what does JoinConversation change? The prototype sends "typing…"
-  to the connections that joined the conversation only, and the other events to every member.
+- **Messaging in real time**: what does JoinConversation change? CMarket.Api lets a connection
+  send "typing…" only from a thread it joined, and sends it, as every other event, to the members
+  still in the conversation; the client shows it in the thread it has open (a group per
+  conversation kept a member taken out reading the others typing). The spec has no event for a
+  conversation that changes: CMarket.Api adds `ConversationUpdated { conversationId }` (a request
+  accepted, a member added or taken out, a mute), which the client reads again; and tells a file's
+  verdict with `MessageUpdated`. Does a member brought back into a group read what was said while
+  they were out (CMarket.Api: yes, as a new member reads the whole history)?
   MessageUpdated and MessageDeleted carry no message: the client reads the thread again after an
   edit and marks a deletion in place. The online status needs a first value besides
   PresenceChanged: the prototype adds `online` to the members of `GET /conversations` and
@@ -1342,7 +1356,8 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   prototype: yes)? Does the hub send the user's own messages and reads to their other tabs (the
   client takes them)? ContactRequestReceived has no name: the toast gives the sender's account
   type. The count on MSG in the menu is the prototype's (the mockups draw none) and has no
-  endpoint: it reads `GET /conversations`.
+  endpoint: it reads `GET /conversations`. A thread reads the messages that arrive only while its
+  tab shows: hidden, it reads them when the user comes back, so ✓✓ means seen.
 - **Directory and messaging settings**: the default contact rules, the daily limits of new
   conversations, the report threshold and the list of specialties are the Admin's, without an
   endpoint: the prototype's are `GET / PUT /admin/settings/directory` and `/admin/specialties`

@@ -18,6 +18,7 @@ import { isApiError } from '@/shared/api'
 import type { ConversationDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { useNow } from '@/shared/lib/useNow'
+import { usePageVisible } from '@/shared/lib/usePageVisible'
 import { useJoinConversation } from '@/shared/realtime'
 import { Button } from '@/shared/ui/form/Button'
 import { Panel } from '@/shared/ui/Panel'
@@ -146,16 +147,26 @@ function Conversation({
   /** The last message when the thread showed, and the last one marked read. */
   const opened = useRef<string | null>(null)
   const marked = useRef<string | null>(null)
+  /** The message a search found, once framed. */
+  const framed = useRef<string | null>(null)
   const today = format.day(useNow(60_000))
+  const visible = usePageVisible()
   useJoinConversation(conversationId)
 
   const ready = Boolean(conversation) && !history.isPending
+  const { hasNextPage, isFetchingNextPage, fetchNextPage } = history
+  const highlightLoaded = highlightId !== null && messages.some(({ id }) => id === highlightId)
 
-  // The message a search found, framed in the middle.
+  // The message a search found, framed in the middle: older pages load until it is there.
   useEffect(() => {
-    if (!ready || !highlightId) return
+    if (!ready || !highlightId || framed.current === highlightId) return
+    if (!highlightLoaded) {
+      if (hasNextPage && !isFetchingNextPage) void fetchNextPage()
+      return
+    }
+    framed.current = highlightId
     document.getElementById(`message-${highlightId}`)?.scrollIntoView({ block: 'center' })
-  }, [highlightId, ready])
+  }, [highlightId, highlightLoaded, ready, hasNextPage, isFetchingNextPage, fetchNextPage])
 
   // The newest message shows once the thread is drawn, then each new one while the user reads the
   // end, or sent it; someone reading older messages stays where they are.
@@ -170,15 +181,16 @@ function Conversation({
   }, [lastId, lastOwn, highlightId, ready])
 
   // Read up to the last message: what was unread when the thread opened, then each message of
-  // another that the hub brings while it shows.
+  // another that the hub brings while it shows; in a hidden tab, once the user comes back.
   useEffect(() => {
     if (!last || !conversation) return
     opened.current ??= last.id
+    if (!visible) return
     const arrived = last.id !== opened.current && !lastOwn
     if ((!arrived && conversation.unreadCount === 0) || marked.current === last.id) return
     marked.current = last.id
     markRead.mutate(last.id)
-  }, [last, lastOwn, conversation, markRead])
+  }, [last, lastOwn, conversation, markRead, visible])
 
   if (details.isError) {
     return isApiError(details.error, 404) ? (

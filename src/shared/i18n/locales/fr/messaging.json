@@ -92,6 +92,7 @@
         "size": "10 Mo au plus.",
         "count": "{{max}} fichiers au plus.",
         "tooLong": "{{max}} caractères au plus.",
+        "closed": "Plus personne ne peut écrire dans cette conversation.",
         "contactNotOpen": "Cette personne n'accepte pas les messages de votre type de compte.",
         "limit": "Vous avez ouvert toutes les nouvelles conversations du jour.",
         "waiting": "Votre demande de contact attend une réponse."

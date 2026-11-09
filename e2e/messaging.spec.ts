@@ -1,25 +1,10 @@
-import { expect, test, type Page } from '@playwright/test'
 import { demoId } from './demoIds.js'
+import { composer, panel } from './msg.js'
+import { expect, test } from './people.js'
 
 // MSG, the messaging of screen 11 (step 16 of ROADMAP.md): the conversations of the demo
-// Analyst, K. Atangana, their requests, files, shared objects, groups and blocks. Step 17: the
-// /hubs/chat hub, whose simulated people are online, read, type and answer.
-
-const panel = (page: Page, title: string | RegExp) =>
-  page.locator('section', { has: page.getByRole('heading', { name: title, exact: true }) })
-
-const composer = (page: Page) => page.getByRole('textbox', { name: 'Message' })
-
-const msgLink = (page: Page) =>
-  page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /MSG/ })
-
-/** The prototype's account switch, from the Analyst's badge, reloads the app. */
-async function switchAccount(page: Page, account: string, badge: RegExp) {
-  await page.goto('/mkt')
-  await page.getByRole('button', { name: /analyst/i }).click()
-  await page.getByRole('menuitem', { name: account, exact: true }).click()
-  await expect(page.getByRole('button', { name: badge })).toBeVisible()
-}
+// Analyst, K. Atangana, their requests, files, shared objects, groups and blocks. The hub between
+// two sessions (step 17): messaging-realtime.spec.ts.
 
 // @fresh-db: the conversations as seeded, P. Owona's first: other flows start newer ones.
 test(
@@ -75,21 +60,35 @@ test(
   },
 )
 
-test('a contact request is accepted, then answered; unread messages are read', async ({ page }) => {
+test('a contact request is accepted, then answered; unread messages are read', async ({
+  page,
+  person,
+}) => {
+  // B. Eyinga waits for the answer, her thread open.
+  const eyinga = await person('b.eyinga@university.example')
+  await eyinga.goto(`/msg?c=${demoId('conversation-eyinga')}`)
+  const sent = panel(eyinga, /^K\. Atangana · Analyst/)
+  await expect(sent).toContainText('Your contact request waits for the answer of K. Atangana')
+  await expect(composer(eyinga)).toBeDisabled()
+
   await page.goto('/msg')
   const conversations = panel(page, 'Conversations')
   await expect(conversations.getByRole('button', { name: 'Unread (1)' })).toBeVisible()
   await conversations.getByRole('button', { name: 'Requests (1)' }).click()
   await conversations.getByRole('button', { name: /B\. Eyinga/ }).click()
 
-  const thread = panel(page, 'B. Eyinga · Student')
+  const thread = panel(page, /^B\. Eyinga · Student/)
   await expect(thread).toContainText('B. Eyinga would like to contact you.')
   await expect(composer(page)).toBeDisabled()
   await thread.getByRole('button', { name: 'Accept' }).click()
   await expect(page.getByText('Request accepted: you can write to each other.')).toBeVisible()
+  // Her thread opens at once, without a reload.
+  await expect(sent).not.toContainText('Your contact request waits')
+  await expect(composer(eyinga)).toBeEnabled()
   await composer(page).fill('Start with the annual reports of SEMC and SAFACAM.')
   await thread.getByRole('button', { name: 'Send' }).click()
   await expect(thread.getByText('Start with the annual reports of SEMC')).toBeVisible()
+  await expect(sent.getByText('Start with the annual reports of SEMC')).toBeVisible()
   await expect(conversations.getByRole('button', { name: 'Requests (1)' })).toHaveCount(0)
 
   // Opening R. Tamba's conversation reads it.
@@ -162,6 +161,31 @@ test('a file is scanned before it can be downloaded, and a virus is blocked', as
   await expect(panel(page, 'Participant').getByText('cameroon-curve.csv')).toBeVisible()
 })
 
+test('seven files chosen at once: the five of a message go up, the others are left', async ({
+  page,
+}) => {
+  await page.goto(`/msg?c=${demoId('conversation-tamba-atangana')}`)
+  const thread = panel(page, /^R\. Tamba · Journalist/)
+  const uploads: string[] = []
+  page.on('request', (request) => {
+    if (request.method() === 'POST' && request.url().endsWith('/api/v1/attachments')) {
+      uploads.push(request.url())
+    }
+  })
+  await page.locator('input[type=file]').setInputFiles(
+    Array.from({ length: 7 }, (_, index) => ({
+      name: `rows-${index + 1}.csv`,
+      mimeType: 'text/csv',
+      buffer: Buffer.from(`tenor,yield\n${index + 1}Y,5.8`),
+    })),
+  )
+  await expect(thread.getByRole('alert')).toHaveText('5 files at most.')
+  await expect(thread.getByRole('listitem').filter({ hasText: /^rows-\d\.csv/ })).toHaveCount(5)
+  await expect(thread.getByRole('button', { name: 'File' })).toBeDisabled()
+  await expect.poll(() => uploads.length).toBe(5)
+  await expect(thread.getByText('rows-6.csv')).toHaveCount(0)
+})
+
 test('a group is created from New, and a block closes a conversation', async ({ page }) => {
   await page.goto('/msg')
   await panel(page, 'Conversations').getByRole('button', { name: 'New conversation' }).click()
@@ -193,94 +217,3 @@ test('a group is created from New, and a block closes a conversation', async ({ 
   await blocked.getByRole('button', { name: 'Unblock' }).click()
   await expect(blocked.getByText('You blocked nobody.')).toBeVisible()
 })
-
-// @fresh-db. Written for the prototype's scripted people, who typed and answered on their own: on
-// CMarket.Api, a second session must play the other person, which this flow does not do yet.
-test(
-  'in real time, K. Atangana types then answers P. Owona, and M. Ndong reads then answers',
-  { tag: '@fresh-db' },
-  async ({ page }) => {
-    await switchAccount(page, 'Portfolio manager', /manager/i)
-    // Away from MSG, the menu counts the unread messages and the request: 2 + 1 + 1.
-    await expect(msgLink(page)).toContainText('4 unread messages or requests')
-    await msgLink(page).click()
-
-    // Screen 11: online, "typing…", then the answer, read in the open thread.
-    const thread = panel(page, 'K. Atangana · Analyst · Online')
-    await expect(thread.getByRole('status')).toHaveText('K. Atangana is typing…')
-    await expect(thread.getByText("It will include Wednesday's 5-year OTA auction")).toBeVisible({
-      timeout: 10_000,
-    })
-    await expect(thread.getByRole('status')).toHaveText('')
-    const conversations = panel(page, 'Conversations')
-    const atangana = conversations.getByRole('button', { name: /^K\. Atangana online/ })
-    await expect(atangana).toContainText("It will include Wednesday's")
-    await expect(atangana.getByRole('img', { name: /unread/ })).toHaveCount(0)
-
-    // M. Ndong, online too, reads the question (✓✓), types and answers.
-    await conversations.getByRole('button', { name: /^M\. Ndong online/ }).click()
-    const ndong = panel(page, 'M. Ndong · Analyst · Online')
-    await expect(ndong).toContainText("Gabon's budget assumes $70 a barrel")
-    await composer(page).fill('Does the budget include the new oil fields?')
-    await composer(page).press('Enter')
-    const question = ndong.getByRole('listitem').filter({ hasText: 'the new oil fields' })
-    await expect(question.getByRole('img', { name: 'Read' })).toBeVisible({ timeout: 10_000 })
-    await expect(ndong.getByRole('status')).toHaveText('M. Ndong is typing…')
-    await expect(ndong.getByText('after the budget debate in parliament')).toBeVisible({
-      timeout: 10_000,
-    })
-  },
-)
-
-// @fresh-db. Written for the prototype's scripted people, who typed and answered on their own: on
-// CMarket.Api, a second session must play the other person, which this flow does not do yet.
-test(
-  'away from MSG, the menu counts the answer of R. Tamba, who came online for it',
-  { tag: '@fresh-db' },
-  async ({ page }) => {
-    await page.goto(`/msg?c=${demoId('conversation-tamba-atangana')}`)
-    const conversations = panel(page, 'Conversations')
-    // Opening the thread reads it: B. Eyinga's request is all that waits.
-    await expect(conversations.getByRole('button', { name: 'Unread', exact: true })).toBeVisible()
-    await composer(page).fill('Yes, tomorrow at 10 suits me.')
-    await composer(page).press('Enter')
-    await expect(panel(page, /^R\. Tamba · Journalist/)).toContainText('tomorrow at 10 suits me')
-
-    await page
-      .getByRole('navigation', { name: 'Main menu' })
-      .getByRole('link', { name: /MKT/ })
-      .click()
-    await expect(msgLink(page)).toContainText('1 unread message or request')
-    await expect(msgLink(page)).toContainText('2 unread messages or requests', { timeout: 10_000 })
-    await msgLink(page).click()
-    await expect(conversations.getByRole('button', { name: /^R\. Tamba online/ })).toContainText(
-      "Perfect, thank you. I'll call you tomorrow at 10.",
-    )
-  },
-)
-
-// @fresh-db. Written for the prototype's scripted people, who typed and answered on their own: on
-// CMarket.Api, a second session must play the other person, which this flow does not do yet.
-test(
-  'a contact request reaches the Analyst half a minute after login, wherever they are',
-  { tag: '@fresh-db' },
-  async ({ page }) => {
-    await page.clock.install()
-    await page.goto('/mkt')
-    // R. Tamba's unread message and B. Eyinga's request.
-    await expect(msgLink(page)).toContainText('2 unread messages or requests')
-    // The hub connects first, then the half minute passes.
-    await page.clock.fastForward('00:01')
-    await page.clock.fastForward('00:31')
-    await expect(
-      page.getByText('New contact request (Student): see Requests in MSG.'),
-    ).toBeVisible()
-    await expect(msgLink(page)).toContainText('3 unread messages or requests')
-    await msgLink(page).click()
-    const conversations = panel(page, 'Conversations')
-    await conversations.getByRole('button', { name: 'Requests (2)' }).click()
-    await expect(conversations.getByRole('button', { name: /^S\. Mvondo/ })).toContainText(
-      "Contact request: “Hello, I'm writing my master's thesis on the BVMAC.",
-    )
-  },
-)

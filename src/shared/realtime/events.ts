@@ -41,6 +41,11 @@ export interface ChatEventMap {
   /** Only for the people who show their online status (spec section 15). */
   PresenceChanged: { userId: string; online: boolean }
   ContactRequestReceived: { conversationId: string; fromUserId: string; fromType: AccountType }
+  /**
+   * Beyond spec section 10 (CMarket.Api): the conversation changed for the user, a request
+   * accepted, a member added, taken out or gone, a mute; it is read again.
+   */
+  ConversationUpdated: { conversationId: string }
 }
 
 export type ChatEventName = keyof ChatEventMap

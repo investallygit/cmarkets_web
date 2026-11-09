@@ -139,7 +139,8 @@ src/
   shared/     no business knowledge: the API (client, contracts and the module of its endpoints,
               api/endpoints), real-time, config (.env), routes and screen list, UI kit (panels,
               tables, charts, form controls, dialogs, toasts), i18n, formatting
-e2e/          Playwright flows; auth.setup.ts logs in once and the other specs reuse the session
+e2e/          Playwright flows; auth.setup.ts logs in once and the other specs reuse the session;
+              people.ts logs in the other people of a flow, msg.ts finds MSG's panels
 public/       the favicon and the photos of the home page
 ```
 
@@ -196,8 +197,9 @@ ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
   `DataPublished` (a file published or rolled back, a price corrected) refreshes the quotes,
   histories, indices, auctions and curves the open screens show. The chat hub connects for the
   users who write to others: a new message joins its thread and the count on MSG in the menu,
-  "typing…" and the online status go to a store of `entities/conversation`, and a new
-  connection reads the conversations again.
+  "typing…" of an open thread and the online status go to a store of `entities/conversation`,
+  `ConversationUpdated` (a CMarket.Api event beyond the spec: a request accepted, a member added
+  or taken out) reads a conversation again, and a new connection reads them all again.
 - **Layouts**: each page declares its panels, their default grid and their names
   (`pages/*/config`, `ScreenPanel`); `features/workspace-layout` saves the user's layout through
   `GET/PUT /me/layouts/{screen}`: the places in the grid, the hidden panels, their order stacked
@@ -337,6 +339,9 @@ goes in both folders and is added to both `en.ts` and `fr.ts`.
   from its default layout (`defaultLayout`), one that changes the profile puts it back. The flows
   tagged `@fresh-db` need the demo data as seeded, which the other flows change:
   `E2E_FRESH_DB=1 npx playwright test e2e/<spec>.spec.ts` runs a spec's, on a fresh database.
+- A flow where someone else takes part (the messaging in real time) imports `test` from
+  `e2e/people.ts`: `person(email)` logs that person in, in a browser context of their own beside
+  the test's page, and `apiAs(page)` calls the API as the page's user to set a flow up.
 - A change is done when `npm run typecheck`, `npm run lint` and `npm run test:run` pass, and the
   Playwright flow of the screen it touches.
 

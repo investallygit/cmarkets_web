@@ -6,6 +6,7 @@ import type {
   MessageDto,
   SendMessageDto,
 } from '@/shared/api/contracts'
+import { isApiError } from '@/shared/api'
 import { messagingApi } from '@/shared/api/endpoints'
 import type { MessagePages } from '../lib/live'
 
@@ -18,8 +19,11 @@ export const conversationKeys = {
   search: (q: string) => [...conversationKeys.all, 'search', q] as const,
 }
 
-/** While a file is scanned, the thread asks again until it is available or blocked. */
-const SCAN_REFRESH_MS = 1_000
+/**
+ * While a file is scanned, the thread asks again until it is available or blocked: the hub tells
+ * the verdict (MessageUpdated), this covers an event missed.
+ */
+const SCAN_REFRESH_MS = 3_000
 
 /** GET /conversations?filter=: the rows of a tab, the latest first. */
 export function useConversations(
@@ -100,12 +104,18 @@ export function useStartConversation() {
   })
 }
 
-/** POST /conversations/{id}/messages */
+/**
+ * POST /conversations/{id}/messages. Refused (403 closed, 409 a request waiting), the conversation
+ * is read again: the thread then says why and locks the composer.
+ */
 export function useSendMessage(id: string) {
   const refresh = useRefresh()
   return useMutation({
     mutationFn: (input: SendMessageDto) => messagingApi.send(id, input),
     onSuccess: () => refresh(id),
+    onError: (error) => {
+      if (isApiError(error, 403) || isApiError(error, 409)) refresh(id)
+    },
   })
 }
 
@@ -128,11 +138,12 @@ export function useDeleteMessage(id: string) {
   })
 }
 
-/** POST /conversations/{id}/read: read up to a message. */
+/** POST /conversations/{id}/read: read up to a message; tried again twice, or the ✓✓ would wait. */
 export function useMarkRead(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (messageId: string) => messagingApi.markRead(id, messageId),
+    retry: (failures, error) => !isApiError(error, 400) && !isApiError(error, 404) && failures < 2,
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: conversationKeys.lists() })
       void queryClient.invalidateQueries({ queryKey: conversationKeys.detail(id) })

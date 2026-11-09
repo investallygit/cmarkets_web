@@ -16,6 +16,7 @@ import { isApiError } from '@/shared/api'
 import type { MessageAttachmentDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { Button } from '@/shared/ui/form/Button'
+import { fitFiles } from '../lib/files'
 import { ShareDialog, type PendingShare, type ShareKind } from './ShareDialog'
 
 interface ComposerProps {
@@ -56,6 +57,8 @@ export function Composer({
   const fileInput = useRef<HTMLInputElement>(null)
   const [text, setText] = useState('')
   const [files, setFiles] = useState<PendingFile[]>([])
+  /** Some of the files chosen went past the five of a message: they were not uploaded. */
+  const [tooMany, setTooMany] = useState(false)
   const [shared, setShared] = useState<PendingShare | null>(null)
   const [sharing, setSharing] = useState<ShareKind | null>(null)
   const send = useSendMessage(conversationId ?? '')
@@ -73,7 +76,9 @@ export function Composer({
   const blocked = disabled || sending || uploading || tooLong || empty
 
   const addFiles = (chosen: FileList | null) => {
-    for (const file of Array.from(chosen ?? [])) {
+    const { taken, dropped } = fitFiles(Array.from(chosen ?? []), files.length, ATTACHMENTS_MAX)
+    setTooMany(dropped > 0)
+    for (const file of taken) {
       const key = `${file.name}-${file.size}-${Math.random().toString(36).slice(2)}`
       const extension = file.name.split('.').at(-1)?.toLowerCase() ?? ''
       const problem = !ATTACHMENT_EXTENSIONS.includes(extension)
@@ -81,10 +86,10 @@ export function Composer({
         : file.size > ATTACHMENT_MAX_BYTES
           ? t('messaging.composer.errors.size')
           : null
-      setFiles((current) => {
-        if (current.length >= ATTACHMENTS_MAX) return current
-        return [...current, { key, fileName: file.name, attachment: null, error: problem }]
-      })
+      setFiles((current) => [
+        ...current,
+        { key, fileName: file.name, attachment: null, error: problem },
+      ])
       if (problem) continue
       // One promise per file: the callbacks of mutate() only follow the latest call.
       upload
@@ -105,6 +110,7 @@ export function Composer({
   const reset = () => {
     setText('')
     setFiles([])
+    setTooMany(false)
     setShared(null)
   }
 
@@ -126,10 +132,13 @@ export function Composer({
     }
   }
 
+  // A message refused in its conversation: closed (a block, a group left); a new one: the rule.
   const failure =
     error &&
     (isApiError(error, 403)
-      ? t('messaging.composer.errors.contactNotOpen')
+      ? send.error
+        ? t('messaging.composer.errors.closed')
+        : t('messaging.composer.errors.contactNotOpen')
       : isApiError(error, 409)
         ? t('messaging.composer.errors.waiting')
         : isApiError(error, 429)
@@ -174,9 +183,10 @@ export function Composer({
               <button
                 type="button"
                 aria-label={t('messaging.composer.removeFile', { name: file.fileName })}
-                onClick={() =>
+                onClick={() => {
                   setFiles((current) => current.filter((item) => item.key !== file.key))
-                }
+                  setTooMany(false)
+                }}
                 className="flex size-5 items-center justify-center text-secondary hover:text-primary"
               >
                 <X aria-hidden className="size-3" />
@@ -275,9 +285,13 @@ export function Composer({
           {t('messaging.composer.send')}
         </Button>
       </div>
-      {(failure || tooLong) && (
+      {(failure || tooLong || tooMany) && (
         <p role="alert" className="font-sans text-data text-down">
-          {tooLong ? t('messaging.composer.errors.tooLong', { max: MESSAGE_MAX_LENGTH }) : failure}
+          {tooLong
+            ? t('messaging.composer.errors.tooLong', { max: MESSAGE_MAX_LENGTH })
+            : tooMany
+              ? t('messaging.composer.errors.count', { max: ATTACHMENTS_MAX })
+              : failure}
         </p>
       )}
       <ShareDialog kind={sharing} onClose={() => setSharing(null)} onShare={setShared} />

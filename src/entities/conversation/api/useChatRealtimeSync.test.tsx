@@ -116,25 +116,45 @@ describe('useChatRealtimeSync', () => {
     expect(setup({ enabled: false }).hub.client.start).not.toHaveBeenCalled()
   })
 
-  it('adds a message of another to its thread, ends their "typing…" and refreshes the rows', () => {
+  it('adds a message of another to its thread and refreshes the rows', () => {
     const { hub, view, thread, refreshedKeys } = setup()
+    // No thread of the conversation shows: its "typing…" is not kept.
     hub.push('TypingIndicator', { conversationId: 'c1', userId: 'user-k' })
-    // The user's own Typing, from another tab, is not shown.
-    hub.push('TypingIndicator', { conversationId: 'c1', userId: 'user-me' })
-    expect(view.result.current.typing).toEqual(['user-k'])
+    expect(view.result.current.typing).toEqual([])
     hub.push('MessageReceived', { conversationId: 'c1', message: message('m2', 'user-k') })
     expect(thread()).toEqual([
       ['m1', false],
       ['m2', false],
     ])
-    expect(view.result.current.typing).toEqual([])
     expect(refreshedKeys()).toContainEqual(conversationKeys.lists())
   })
 
-  it('leaves the rows to the open thread, which reads the message', () => {
-    const { hub, refreshedKeys } = setup({ joined: true })
+  it('shows "typing…" in the open thread until the message, which the thread reads', () => {
+    const { hub, view, refreshedKeys } = setup({ joined: true })
+    hub.push('TypingIndicator', { conversationId: 'c1', userId: 'user-k' })
+    // The user's own Typing, from another tab, is not shown.
+    hub.push('TypingIndicator', { conversationId: 'c1', userId: 'user-me' })
+    expect(view.result.current.typing).toEqual(['user-k'])
     hub.push('MessageReceived', { conversationId: 'c1', message: message('m2', 'user-k') })
+    expect(view.result.current.typing).toEqual([])
+    // The rows are left to the open thread, which reads the message.
     expect(refreshedKeys()).not.toContainEqual(conversationKeys.lists())
+  })
+
+  it('reads a conversation again when it changed, and a message with its files', () => {
+    const { hub, refreshedKeys } = setup()
+    hub.push('ConversationUpdated', { conversationId: 'c1' })
+    expect(refreshedKeys()).toEqual([
+      conversationKeys.lists(),
+      conversationKeys.detail('c1'),
+      conversationKeys.messages('c1'),
+    ])
+    hub.push('MessageUpdated', { conversationId: 'c1', messageId: 'm1' })
+    expect(refreshedKeys().slice(3)).toEqual([
+      conversationKeys.messages('c1'),
+      conversationKeys.lists(),
+      conversationKeys.detail('c1'),
+    ])
   })
 
   it('deletes in place, reads the ✓✓ again and follows the presence', () => {
