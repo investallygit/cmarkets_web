@@ -5,10 +5,10 @@
       "losers": "Baisses",
       "volume": "Volume"
     },
-    "newsTopics": {
+    "newsFilters": {
       "all": "Tout",
-      "issuer": "Émetteurs",
-      "regulator": "Régulateur"
+      "issuers": "Émetteurs",
+      "regulation": "Régulateur"
     },
     "next7Days": "7 prochains jours",
     "eventTypes": {
@@ -104,8 +104,7 @@
     "badges": {
       "pdf": "PDF",
       "notice": "Avis",
-      "decision": "Décision",
-      "news": "Actu"
+      "decision": "Décision"
     },
     "pages_one": "{{count}} page",
     "pages_other": "{{count}} pages",
@@ -131,15 +130,46 @@
       "news": "Actualités",
       "documents": "Documents"
     },
-    "topics": {
-      "all": "Tous les sujets",
-      "issuer": "Émetteurs",
-      "regulator": "Régulateurs",
-      "market": "Marché"
+    "types": {
+      "article": "ARTICLE",
+      "flash": "FLASH"
+    },
+    "typeFilter": {
+      "all": "Tous les types",
+      "article": "Articles",
+      "flash": "Flashs"
+    },
+    "channels": {
+      "partner": "Journal partenaire",
+      "api": "API internationale",
+      "ai": "Traité par l'IA de CMarket",
+      "cmarket": "CMarket"
+    },
+    "categories": {
+      "all": "Toutes les catégories",
+      "markets": "Marchés",
+      "issuers": "Émetteurs",
+      "monetary": "Politique monétaire",
+      "ratesDebt": "Taux et dette publique",
+      "macro": "Macroéconomie",
+      "regulation": "Réglementation",
+      "commodities": "Matières premières",
+      "international": "International"
     },
     "allCountries": "Tous les pays",
-    "topic": "Sujet",
+    "allSources": "Tous les journaux",
+    "thisSource": "Ce journal",
+    "type": "Type",
+    "category": "Catégorie",
+    "source": "Journal",
     "country": "Pays",
+    "filterType": "{{type}} : afficher ces actualités",
+    "filterSource": "{{name}} : afficher les actualités de ce journal",
+    "verified": "Vérifié",
+    "byAuthor": "Par {{author}}",
+    "updatedOn": "Mis à jour le {{date}}",
+    "original": "Article d'origine",
+    "newTab": "(s'ouvre dans un nouvel onglet)",
     "security": "Filtrer par titre",
     "related": "Titres concernés",
     "empty": "Aucune actualité pour ces filtres",
@@ -217,12 +247,13 @@
     "types": {
       "price": "Cours ou variation",
       "volume": "Volume inhabituel",
-      "release": "Communiqué de l'émetteur",
+      "release": "Actualités",
       "auction": "Résultats d'adjudication",
       "portfolio": "Limite de portefeuille",
       "publication": "Nouvelle recherche"
     },
     "publicationAbout": "Recherche",
+    "newsAbout": "Actualités",
     "about": {
       "analysts": "Analystes suivis",
       "security": "Sur un titre",
@@ -268,7 +299,8 @@
       "price": "Cours {{direction}} {{threshold}}",
       "changePct": "Variation {{direction}} {{threshold}}",
       "volume": "Volume supérieur à {{multiple}}× la moyenne sur 20 jours",
-      "release": "Nouveau communiqué de l'émetteur",
+      "release": "Actualité sur le titre",
+      "releaseCountry": "Actualité sur le pays",
       "auction": "Résultats d'une adjudication BEAC",
       "portfolio": "Une limite de portefeuille est dépassée",
       "publication": {

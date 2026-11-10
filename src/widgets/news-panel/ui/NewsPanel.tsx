@@ -1,25 +1,28 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router'
-import { NewsTime, useNews } from '@/entities/news'
-import type { NewsTopic } from '@/shared/api/contracts'
+import { NewsRow, useNews } from '@/entities/news'
+import type { NewsCategory } from '@/shared/api/contracts'
 import { newsPath } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs } from '@/shared/ui/PanelTabs'
 import { QueryView } from '@/shared/ui/QueryView'
 
-type NewsFilter = 'all' | Extract<NewsTopic, 'issuer' | 'regulator'>
+/** The mockup's ALL · ISSUERS · REGULATOR: the categories of those names (ROADMAP decision 4). */
+type NewsFilter = 'all' | Extract<NewsCategory, 'issuers' | 'regulation'>
 
-const FILTERS: readonly NewsFilter[] = ['all', 'issuer', 'regulator']
+const FILTERS: readonly NewsFilter[] = ['all', 'issuers', 'regulation']
 
-/** Screen 1, News: time, source in amber, headline; each a link to its article. API /news. */
+/**
+ * Screen 1, News: time, the type and newspaper tags, the subject in amber, the headline; each a
+ * link to its content on the N screen, where its display counts the unique click. API /news.
+ */
 export function NewsPanel() {
   const { t } = useTranslation()
   const [filter, setFilter] = useState<NewsFilter>('all')
-  const news = useNews({ topic: filter === 'all' ? undefined : filter })
+  const news = useNews({ category: filter === 'all' ? undefined : filter })
 
   const tabs = useMemo(
-    () => FILTERS.map((value) => ({ value, label: t(`market.newsTopics.${value}`) })),
+    () => FILTERS.map((value) => ({ value, label: t(`market.newsFilters.${value}`) })),
     [t],
   )
 
@@ -34,20 +37,7 @@ export function NewsPanel() {
           <ul className="divide-y">
             {page.items.map((item) => (
               <li key={item.id}>
-                <Link
-                  to={newsPath(item.id)}
-                  className="grid w-full grid-cols-[48px_minmax(0,1fr)] gap-x-2 px-2 py-1.5 text-left hover:bg-panel-header"
-                >
-                  <span className="font-mono text-data text-secondary">
-                    <NewsTime publishedAt={item.publishedAt} />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block font-mono text-title font-semibold text-accent-amber">
-                      {item.source}
-                    </span>
-                    <span className="block truncate font-sans text-label">{item.headline}</span>
-                  </span>
-                </Link>
+                <NewsRow item={item} to={newsPath(item.id)} />
               </li>
             ))}
           </ul>

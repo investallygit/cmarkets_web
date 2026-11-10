@@ -15,8 +15,11 @@ export type AlertCondition =
     }
   /** Unusual volume: the session volume goes above `multiple` times the 20-day average. */
   | { type: 'volume'; securityId: string; multiple: number }
-  /** A new release (news or document) from the issuer of the security. */
-  | { type: 'release'; securityId: string }
+  /**
+   * News on a security (a release of its issuer, news naming it) or on a country: exactly one of
+   * the two. An ARTICLE notifies in the app, a FLASH also by the alert's channels (spec section 16).
+   */
+  | { type: 'release'; securityId: string | null; country: string | null }
   /** Results of a government securities auction; null: any CEMAC country. */
   | { type: 'auction'; country: string | null }
   /** A limit of a portfolio is breached; null: any of the user's portfolios. */

@@ -63,7 +63,7 @@ tables, read-excel-file to read the Excel templates before upload.
 | 9 · Account administration (USER) with ANLY and MOD                       | Done; MOD reviews the directory reports too                   |
 | Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged  |
 | News provider account type (third version)                                | Done; its studio comes with step 26                           |
-| News rebuilt: ARTICLE and FLASH, newspapers, tags, unique clicks          | To do, step 25                                                |
+| News rebuilt: ARTICLE and FLASH, newspapers, tags, unique clicks          | Done; the content shown 3 seconds counts a unique click       |
 | 13 · News studio (NEWS NEW)                                               | To do, step 26                                                |
 | News administration (SRC), AI ingestion, international news: no mockup    | To do, step 27                                                |
 | 18 · Media payments (MPAY)                                                | To do, step 28                                                |
@@ -249,7 +249,9 @@ ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
 `app/styles/index.css` holds the colour tokens of spec section 8 under their spec names
 (`--bg-panel`, `--accent-amber`...) and maps them to Tailwind utilities (`bg-panel`,
 `text-accent-amber`, `text-up`...), with the badge colour of each account type of section 9
-(`--type-student`...), which `ACCOUNT_TYPE_COLORS` gives wherever a type shows. Tailwind's default
+(`--type-student`...), which `ACCOUNT_TYPE_COLORS` gives wherever a type shows, and the news tags
+of section 16 (`--news-flash`, `--news-partner`...; the `news-tag` utility puts the colour at 15%
+on the panel, opaque, so that a selected row keeps the text's contrast). Tailwind's default
 palette is removed, so only these colours exist. Numbers use `shared/lib/format.ts` (`52 500,25`
 in French, `52,500.25` in English, dates `DD/MM/YYYY` in the time zone of the user's profile,
 Douala by default; a calendar day keeps its date in every zone, and the session clock stays in
@@ -267,7 +269,9 @@ Icons come from `lucide-react`.
 
 Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of a title bar),
 `ScreenTabs`, `Pager` (pages of a server list), `ScrollArea` (a box that scrolls and takes the
-focus when nothing in it can), `DataTable` (sorting, right-click menu, Excel and CSV export unless
+focus when nothing in it can), `HoverCard` (a card under its trigger on hover and focus, which
+stays while the pointer moves onto it, closes on Escape and follows its trigger when the page
+scrolls: the newspaper of a news tag), `DataTable` (sorting, right-click menu, Excel and CSV export unless
 the user lacks `analysis:export`; `exportRef` puts the export links in a title bar; a `footer` row
 stays out of the sorting; `sorting` and `onSortingChange` leave the order to the server for a
 paged list; the arrows move the selection, or a cursor where rows are not selected, Enter opens a

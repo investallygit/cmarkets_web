@@ -1,21 +1,19 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { NewsTopic, NewsWriteDto } from '@/shared/api/contracts'
-import { contentApi, dataAdminApi } from '@/shared/api/endpoints'
+import type { NewsWriteDto } from '@/shared/api/contracts'
+import { contentApi, dataAdminApi, type NewsFilters } from '@/shared/api/endpoints'
 
-export interface NewsQuery {
-  topic?: NewsTopic
-  securityId?: string
-  country?: string
+export interface NewsQuery extends NewsFilters {
   pageSize?: number
 }
 
 export const newsKeys = {
   all: ['news'] as const,
   list: (query: NewsQuery) => [...newsKeys.all, 'list', query] as const,
+  sources: () => [...newsKeys.all, 'sources'] as const,
   article: (id: string) => [...newsKeys.all, 'article', id] as const,
 }
 
-/** GET /news: the feed, newest first, filtered by topic, security or country. */
+/** GET /news: the feed, newest first, by type, channel, newspaper, security, country, category. */
 export function useNews({ pageSize = 20, ...filters }: NewsQuery = {}) {
   return useQuery({
     queryKey: newsKeys.list({ pageSize, ...filters }),
@@ -24,7 +22,16 @@ export function useNews({ pageSize = 20, ...filters }: NewsQuery = {}) {
   })
 }
 
-/** GET /news/{id}: the full article. */
+/** GET /news/sources: the newspapers that published, for the N screen's filter. */
+export function useNewsSources() {
+  return useQuery({
+    queryKey: newsKeys.sources(),
+    queryFn: ({ signal }) => contentApi.newsSources(signal),
+    staleTime: 10 * 60_000,
+  })
+}
+
+/** GET /news/{id}: the content, whose display counts the unique click (useNewsView). */
 export function useNewsArticle(id: string | null) {
   return useQuery({
     queryKey: newsKeys.article(id ?? ''),
@@ -34,7 +41,7 @@ export function useNewsArticle(id: string | null) {
   })
 }
 
-/** POST /data/news, or PUT /data/news/{id} for an edit: news entered by the Data admin. */
+/** POST /data/news, or PUT /data/news/{id} for an edit: an item of the CMARKET channel. */
 export function useSaveNews() {
   const queryClient = useQueryClient()
   return useMutation({

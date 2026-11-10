@@ -1,8 +1,20 @@
 import { useEffect, type RefObject } from 'react'
 
-/** What the keyboard reaches by itself in a box. */
-const FOCUSABLE =
-  'a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [contenteditable="true"], [tabindex]:not([tabindex="-1"])'
+/**
+ * What the keyboard reaches by itself in a box: not a link taken out of the tab order, as the news
+ * tags of a list (their filters are in the screen's bar).
+ */
+const FOCUSABLE = [
+  'a[href]',
+  'button:not(:disabled)',
+  'input:not(:disabled)',
+  'select:not(:disabled)',
+  'textarea:not(:disabled)',
+  '[contenteditable="true"]',
+  '[tabindex]',
+]
+  .map((selector) => `${selector}:not([tabindex="-1"])`)
+  .join(', ')
 
 /**
  * A box that scrolls with nothing in it to focus (a note, figures) takes the focus itself, so the

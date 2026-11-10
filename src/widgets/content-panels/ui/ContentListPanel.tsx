@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DocumentBadge, useDocuments } from '@/entities/document'
-import { NewsTime, useNews } from '@/entities/news'
+import { NewsTime, NewsTypeTag, useNews } from '@/entities/news'
 import type { DocumentDto, NewsItemDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import type { NewsTab } from '@/shared/routes/paths'
@@ -26,8 +26,9 @@ interface ContentListPanelProps {
 }
 
 /**
- * NEWS: the news and the documents published (GET /news, GET /documents), newest first; a click
- * opens one in the editor.
+ * NEWS: the CMARKET channel's news and the documents published (GET /news?channel=cmarket, GET
+ * /documents), newest first; a click opens one in the editor. The newspapers' items are theirs:
+ * their moderation comes with the news administration (ROADMAP step 27).
  */
 export function ContentListPanel({
   tab,
@@ -37,7 +38,7 @@ export function ContentListPanel({
 }: ContentListPanelProps) {
   const { t } = useTranslation()
   const format = useFormat()
-  const news = useNews({ pageSize: PAGE_SIZE })
+  const news = useNews({ channel: 'cmarket', pageSize: PAGE_SIZE })
   const documents = useDocuments({ pageSize: PAGE_SIZE })
 
   const newsColumns = useMemo(
@@ -48,8 +49,15 @@ export function ContentListPanel({
           meta: { width: '64px' },
           cell: ({ getValue }) => <NewsTime publishedAt={getValue()} />,
         }),
-        newsHelper.accessor('source', {
-          header: t('columns.source'),
+        newsHelper.accessor((item) => t(`news.types.${item.type}`), {
+          id: 'type',
+          header: t('content.type'),
+          meta: { width: '80px' },
+          cell: ({ row }) => <NewsTypeTag type={row.original.type} mode="none" />,
+        }),
+        newsHelper.accessor((item) => item.subject ?? '', {
+          id: 'subject',
+          header: t('content.subject'),
           meta: { width: '96px' },
           cell: ({ getValue }) => <span className="text-accent-amber">{getValue()}</span>,
         }),
@@ -62,10 +70,15 @@ export function ContentListPanel({
             </span>
           ),
         }),
-        newsHelper.accessor((item) => t(`content.topics.${item.topic}`), {
-          id: 'topic',
-          header: t('content.topic'),
-          meta: { width: '88px' },
+        newsHelper.accessor((item) => t(`news.categories.${item.category}`), {
+          id: 'category',
+          header: t('content.category'),
+          meta: { width: '1fr' },
+        }),
+        newsHelper.accessor((item) => item.countries.join(', '), {
+          id: 'countries',
+          header: t('content.countries'),
+          meta: { width: '1fr' },
         }),
         newsHelper.accessor((item) => item.securityIds.join(', '), {
           id: 'securities',

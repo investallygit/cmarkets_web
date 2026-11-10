@@ -4,16 +4,24 @@ import type {
   DocumentDto,
   DocumentType,
   NewsArticleDto,
+  NewsCategory,
+  NewsChannel,
   NewsItemDto,
-  NewsTopic,
+  NewsSourceDto,
+  NewsType,
   Paged,
 } from '../contracts'
 import { answer, route, send, sendBlob } from './define'
 
+/** The filters of the feed (spec section 10): each narrows it, none means every item. */
 export interface NewsFilters {
-  topic?: NewsTopic
+  type?: NewsType
+  channel?: NewsChannel
+  sourceId?: string
   securityId?: string
+  /** That country's items, those of the whole region included. */
   country?: string
+  category?: NewsCategory
 }
 
 export interface DocumentFilters {
@@ -40,19 +48,28 @@ export interface Page {
 /** CMarket.Api/Controllers/Content: the news feed, the document library and the calendar. */
 export const contentRoutes = {
   news: route('GET', '/news', answer<Paged<NewsItemDto>>()),
+  newsSources: route('GET', '/news/sources', answer<NewsSourceDto[]>()),
   article: route('GET', '/news/{id}', answer<NewsArticleDto>()),
+  newsView: route('POST', '/news/{id}/view'),
   documents: route('GET', '/documents', answer<Paged<DocumentDto>>()),
   documentFile: route('GET', '/documents/{id}/file', answer<Blob>()),
   calendar: route('GET', '/calendar', answer<CalendarEventDto[]>()),
 }
 
 export const contentApi = {
-  /** The feed, newest first, filtered by topic, security or country. */
+  /** The feed, newest first, filtered by type, channel, newspaper, security, country, category. */
   news: (filters: NewsFilters, page: Page, signal?: AbortSignal) =>
     send(contentRoutes.news, { query: { ...filters, ...page }, signal }),
-  /** The full article. */
+  /** The newspapers of the feed, by short name. */
+  newsSources: (signal?: AbortSignal) => send(contentRoutes.newsSources, { signal }),
+  /** The content of an item. */
   article: (id: string, signal?: AbortSignal) =>
     send(contentRoutes.article, { params: { id }, signal }),
+  /**
+   * The unique click: the content showed 3 seconds in an active tab. Always 204; only the first
+   * view of a user counts (spec section 16).
+   */
+  newsView: (id: string) => send(contentRoutes.newsView, { params: { id } }),
   /** Issuer releases, reports, notices and decisions, newest first. */
   documents: (filters: DocumentFilters, page: Page, signal?: AbortSignal) =>
     send(contentRoutes.documents, { query: { ...filters, ...page }, signal }),

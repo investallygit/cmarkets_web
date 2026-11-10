@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { NewsTags } from '@/entities/news'
 import { SEVERITY_TEXT, useMarkNotificationRead, useNotifications } from '@/entities/notification'
 import type { NotificationDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
@@ -55,8 +56,18 @@ export function AlertHistoryPanel({ onSelectAlert }: AlertHistoryPanelProps) {
         }),
         helper.accessor('subject', {
           header: t('columns.subject'),
-          cell: ({ getValue }) => (
-            <span className="font-semibold text-accent-amber">{getValue()}</span>
+          // A news alert starts with the item's two tags (spec section 16).
+          cell: ({ row, getValue }) => (
+            <span className="flex min-w-0 items-center gap-1.5">
+              {row.original.news && (
+                <NewsTags
+                  type={row.original.news.type}
+                  source={row.original.news.source}
+                  mode="none"
+                />
+              )}
+              <span className="truncate font-semibold text-accent-amber">{getValue()}</span>
+            </span>
           ),
         }),
         helper.accessor('message', {

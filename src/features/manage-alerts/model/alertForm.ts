@@ -19,6 +19,9 @@ export const ALERT_TYPES: readonly AlertType[] = [
 export const ALERT_CHANNELS: readonly AlertChannel[] = ['push', 'email', 'sms']
 
 type PriceCondition = Extract<AlertCondition, { type: 'price' }>
+
+/** A news alert follows the news on a security or on a country. */
+export type NewsAbout = 'security' | 'country'
 type PublicationCondition = Extract<AlertCondition, { type: 'publication' }>
 
 /** Every field of the form; the type decides which ones the alert keeps. */
@@ -32,6 +35,8 @@ export interface AlertFormState {
   /** '' for any CEMAC country. */
   country: string
   about: PublicationCondition['about']
+  /** What a news alert follows: a security or a country (ROADMAP decision 5). */
+  newsAbout: NewsAbout
   /** '' for all of the user's portfolios. */
   portfolioId: string
   channels: AlertChannel[]
@@ -58,6 +63,7 @@ export function initialAlertForm(
     multiple: DEFAULT_MULTIPLE,
     country: '',
     about: 'analysts',
+    newsAbout: 'security',
     portfolioId: '',
     channels: ['push'],
     enabled: true,
@@ -83,7 +89,12 @@ export function initialAlertForm(
     case 'volume':
       return { ...base, security: securityOf(condition.securityId), multiple: condition.multiple }
     case 'release':
-      return { ...base, security: securityOf(condition.securityId) }
+      return {
+        ...base,
+        newsAbout: condition.country ? 'country' : 'security',
+        security: securityOf(condition.securityId),
+        country: condition.country ?? '',
+      }
     case 'auction':
       return { ...base, country: condition.country ?? '' }
     case 'portfolio':
@@ -98,13 +109,21 @@ export function initialAlertForm(
   }
 }
 
-/** The security is needed by the price, volume and release types, and by a publication on it. */
-export function needsSecurity(form: Pick<AlertFormState, 'type' | 'about'>): boolean {
+/** The security is needed by the price and volume types, and by news or research on it. */
+export function needsSecurity(form: Pick<AlertFormState, 'type' | 'about' | 'newsAbout'>): boolean {
   return (
     form.type === 'price' ||
     form.type === 'volume' ||
-    form.type === 'release' ||
+    (form.type === 'release' && form.newsAbout === 'security') ||
     (form.type === 'publication' && form.about === 'security')
+  )
+}
+
+/** A country is needed by news or research on a country. */
+export function needsCountry(form: Pick<AlertFormState, 'type' | 'about' | 'newsAbout'>): boolean {
+  return (
+    (form.type === 'release' && form.newsAbout === 'country') ||
+    (form.type === 'publication' && form.about === 'country')
   )
 }
 
@@ -119,9 +138,7 @@ export function validateAlertForm(form: AlertFormState): AlertFormErrors {
     if (form.multiple === null) errors.multiple = 'required'
     else if (form.multiple <= 1) errors.multiple = 'aboveOne'
   }
-  if (form.type === 'publication' && form.about === 'country' && !form.country) {
-    errors.country = 'required'
-  }
+  if (needsCountry(form) && !form.country) errors.country = 'required'
   if (form.channels.length === 0) errors.channels = 'required'
   return errors
 }
@@ -142,7 +159,11 @@ export function toAlertInput(form: AlertFormState): AlertInputDto {
       case 'volume':
         return { type: 'volume', securityId, multiple: form.multiple ?? DEFAULT_MULTIPLE }
       case 'release':
-        return { type: 'release', securityId }
+        return {
+          type: 'release',
+          securityId: form.newsAbout === 'security' ? securityId : null,
+          country: form.newsAbout === 'country' ? form.country : null,
+        }
       case 'auction':
         return { type: 'auction', country: form.country || null }
       case 'portfolio':

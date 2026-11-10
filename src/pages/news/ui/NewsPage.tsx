@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Navigate, useParams } from 'react-router'
 import { isDocumentType, type DocumentQuery } from '@/entities/document'
 import type { NewsQuery } from '@/entities/news'
+import { NEWS_CATEGORIES, NEWS_TYPES } from '@/shared/api/contracts'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import { NEWS_TABS, newsTabPath, routes, type NewsTab } from '@/shared/routes/paths'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
@@ -15,15 +16,15 @@ import { DocumentFilters, type DocumentFilterValues } from './DocumentFilters'
 import { NewsFilters, type NewsFilterValues } from './NewsFilters'
 
 const TAB_CODES: Record<NewsTab, string> = { news: 'N', documents: 'DOC' }
-const NEWS_TOPICS = ['issuer', 'regulator', 'market'] as const
 
 const isNewsTab = (value: string): value is NewsTab => NEWS_TABS.some((tab) => tab === value)
 
 /**
- * N screen (spec section 5): the news feed filtered by issuer, country and topic with the article
- * next to it, and the document library with its full-text search and PDF viewer. /n and
- * /n/documents; the filters and the open item live in the URL, /n?article={id} being the address
- * of a news item that members share.
+ * N screen (spec sections 5 and 16): the news feed filtered by security, country, category, type
+ * and newspaper with the content next to it, and the document library with its full-text search
+ * and PDF viewer. /n and /n/documents; the filters and the open item live in the URL,
+ * /n?article={id} being the address of a news item that members share, /n?type=flash and
+ * /n?source={id} the feed a tag filters.
  */
 export function NewsPage() {
   const { t } = useTranslation()
@@ -62,12 +63,16 @@ function NewsTabPanels() {
   const filters: NewsFilterValues = {
     security: params.get('security') ?? '',
     country: params.get('country') ?? '',
-    topic: NEWS_TOPICS.find((topic) => topic === params.get('topic')) ?? '',
+    category: NEWS_CATEGORIES.find((category) => category === params.get('category')) ?? '',
+    type: NEWS_TYPES.find((type) => type === params.get('type')) ?? '',
+    source: params.get('source') ?? '',
   }
   const query: NewsQuery = {
     securityId: filters.security || undefined,
     country: filters.country || undefined,
-    topic: filters.topic || undefined,
+    category: filters.category || undefined,
+    type: filters.type || undefined,
+    sourceId: filters.source || undefined,
     pageSize: 50,
   }
   const articleId = params.get('article')

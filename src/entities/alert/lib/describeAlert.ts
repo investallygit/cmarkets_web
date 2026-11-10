@@ -43,7 +43,12 @@ export function useDescribeAlert(): (
               }),
             }
           case 'release':
-            return { subject: security, condition: t('alerts.conditions.release') }
+            return value.country
+              ? {
+                  subject: country(value.country),
+                  condition: t('alerts.conditions.releaseCountry'),
+                }
+              : { subject: security, condition: t('alerts.conditions.release') }
           case 'auction':
             return { subject: country(value.country), condition: t('alerts.conditions.auction') }
           case 'portfolio':

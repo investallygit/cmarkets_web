@@ -1,11 +1,15 @@
 import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
+import { NewsTags } from '@/entities/news'
 import { SEVERITY_TEXT, useTodayNotifications } from '@/entities/notification'
 import { useFormat } from '@/shared/i18n'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 
-/** Screen 1, My alerts triggered today. API /notifications, real-time AlertTriggered. */
+/**
+ * Screen 1, My alerts triggered today; a news alert starts with the item's two tags (spec
+ * section 16). API /notifications, real-time AlertTriggered.
+ */
 export function TriggeredAlertsPanel() {
   const { t } = useTranslation()
   const format = useFormat()
@@ -26,8 +30,17 @@ export function TriggeredAlertsPanel() {
                 className="grid h-row grid-cols-[56px_minmax(0,1fr)_minmax(0,2.4fr)] items-center gap-2 px-2 font-mono text-data"
               >
                 <span className="text-secondary">{format.time(notification.triggeredAt)}</span>
-                <span className="truncate font-semibold text-accent-amber">
-                  {notification.subject}
+                <span className="flex min-w-0 items-center gap-1.5">
+                  {notification.news && (
+                    <NewsTags
+                      type={notification.news.type}
+                      source={notification.news.source}
+                      mode="pointer"
+                    />
+                  )}
+                  <span className="truncate font-semibold text-accent-amber">
+                    {notification.subject}
+                  </span>
                 </span>
                 <span
                   className={clsx(

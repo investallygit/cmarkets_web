@@ -139,6 +139,8 @@ GET /me/purchases
 GET /messages/search
 GET /news
 GET /news/{id}
+POST /news/{id}/view
+GET /news/sources
 GET /notifications
 POST /notifications/{id}/read
 GET /organization

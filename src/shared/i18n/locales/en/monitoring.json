@@ -5,10 +5,10 @@
       "losers": "Losers",
       "volume": "Volume"
     },
-    "newsTopics": {
+    "newsFilters": {
       "all": "All",
-      "issuer": "Issuers",
-      "regulator": "Regulator"
+      "issuers": "Issuers",
+      "regulation": "Regulator"
     },
     "next7Days": "Next 7 days",
     "eventTypes": {
@@ -104,8 +104,7 @@
     "badges": {
       "pdf": "PDF",
       "notice": "Notice",
-      "decision": "Decision",
-      "news": "News"
+      "decision": "Decision"
     },
     "pages_one": "{{count}} page",
     "pages_other": "{{count}} pages",
@@ -131,15 +130,46 @@
       "news": "News",
       "documents": "Documents"
     },
-    "topics": {
-      "all": "All topics",
-      "issuer": "Issuers",
-      "regulator": "Regulators",
-      "market": "Market"
+    "types": {
+      "article": "ARTICLE",
+      "flash": "FLASH"
+    },
+    "typeFilter": {
+      "all": "All types",
+      "article": "Articles",
+      "flash": "Flashes"
+    },
+    "channels": {
+      "partner": "Partner newspaper",
+      "api": "International API",
+      "ai": "Processed by CMarket AI",
+      "cmarket": "CMarket"
+    },
+    "categories": {
+      "all": "All categories",
+      "markets": "Markets",
+      "issuers": "Issuers",
+      "monetary": "Monetary policy",
+      "ratesDebt": "Rates and public debt",
+      "macro": "Macroeconomy",
+      "regulation": "Regulation",
+      "commodities": "Commodities",
+      "international": "International"
     },
     "allCountries": "All countries",
-    "topic": "Topic",
+    "allSources": "All newspapers",
+    "thisSource": "This newspaper",
+    "type": "Type",
+    "category": "Category",
+    "source": "Newspaper",
     "country": "Country",
+    "filterType": "{{type}}: show these items",
+    "filterSource": "{{name}}: show this newspaper's news",
+    "verified": "Verified",
+    "byAuthor": "By {{author}}",
+    "updatedOn": "Updated on {{date}}",
+    "original": "Original article",
+    "newTab": "(opens in a new tab)",
     "security": "Filter by security",
     "related": "Securities concerned",
     "empty": "No news for these filters",
@@ -217,12 +247,13 @@
     "types": {
       "price": "Price or change",
       "volume": "Unusual volume",
-      "release": "Issuer release",
+      "release": "News",
       "auction": "Auction results",
       "portfolio": "Portfolio limit",
       "publication": "New research"
     },
     "publicationAbout": "Research",
+    "newsAbout": "News",
     "about": {
       "analysts": "Followed analysts",
       "security": "On a security",
@@ -268,7 +299,8 @@
       "price": "Price {{direction}} {{threshold}}",
       "changePct": "Change {{direction}} {{threshold}}",
       "volume": "Volume above {{multiple}}× the 20-day average",
-      "release": "New release from the issuer",
+      "release": "News on the security",
+      "releaseCountry": "News on the country",
       "auction": "Results of a BEAC auction",
       "portfolio": "A portfolio limit is breached",
       "publication": {

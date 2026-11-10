@@ -4,6 +4,8 @@ import type {
   IsoDateTime,
   MarketSessionStatus,
   MessageDto,
+  NewsChannel,
+  NewsType,
 } from '@/shared/api/contracts'
 
 /** Server → client messages of the /hubs/market SignalR hub (spec section 10). */
@@ -18,7 +20,16 @@ export interface RealtimeEventMap {
   }
   IndexUpdated: { code: string; value: number; changePct: number; ts: IsoDateTime }
   MarketStatusChanged: { status: MarketSessionStatus; nextOpen: IsoDateTime | null }
-  NewsPublished: { id: string; title: string; securityIds: string[]; ts: IsoDateTime }
+  /** A news item came out; a FLASH also reaches its followers' alerts (spec section 10). */
+  NewsPublished: {
+    id: string
+    title: string
+    type: NewsType
+    channel: NewsChannel
+    sourceId: string
+    securityIds: string[]
+    ts: IsoDateTime
+  }
   AlertTriggered: { alertId: string; message: string; ts: IsoDateTime }
   /** A data import was published: refresh the affected screens. */
   DataPublished: { importId: string; type: string; date: IsoDate }

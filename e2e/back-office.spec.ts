@@ -183,24 +183,34 @@ test('NEWS publishes the news of an issuer, which the terminals show', async ({ 
   await asDataAdmin(page)
   await page.goto('/data/content')
   const editor = panel(page, 'New news item')
+  // A FLASH has its text only: no body.
+  await editor.getByRole('radio', { name: 'Flash' }).check({ force: true })
+  await expect(editor.getByRole('textbox', { name: 'Text of the FLASH' })).toBeVisible()
+  await expect(editor.getByRole('textbox', { name: 'Body' })).toHaveCount(0)
+  await editor.getByRole('radio', { name: 'Article' }).check({ force: true })
   await editor.getByRole('textbox', { name: 'Headline' }).fill('Interim dividend announced')
-  await editor.getByRole('textbox', { name: 'Source' }).fill('semc')
+  await editor.getByRole('textbox', { name: 'Subject' }).fill('semc')
+  await editor.getByRole('checkbox', { name: 'Cameroon' }).check({ force: true })
   await editor.getByRole('combobox', { name: 'Add a security' }).fill('SEMC')
   await page.getByRole('option', { name: /SEMC/ }).first().click()
   await editor
-    .getByRole('textbox', { name: 'Text' })
-    .fill('The board declares an interim dividend.\n\nPayment on 15 December.')
+    .getByRole('textbox', { name: 'Standfirst' })
+    .fill('The board declares an interim dividend.')
+  await editor.getByRole('textbox', { name: 'Body' }).fill('Payment on 15 December.')
   await editor.getByRole('button', { name: 'Publish' }).click()
   await expect(page.getByText('Published: the terminals show it now.')).toBeVisible()
   await expect(panel(page, 'Edit the news item')).toBeVisible()
   await expect(panel(page, 'Published').getByRole('row').nth(1)).toContainText(
-    'Interim dividend announced',
+    /ARTICLE.*SEMC.*Interim dividend announced.*Issuers.*CM/,
   )
 
   await switchAccount(page, /data admin/i, 'Analyst', /analyst/i)
   await page.goto('/n')
-  await panel(page, 'News')
-    .getByRole('link', { name: /Interim dividend announced/ })
-    .click()
+  const item = panel(page, 'News')
+    .getByRole('listitem')
+    .filter({ hasText: 'Interim dividend announced' })
+  // The Data admin's channel: CMARKET.
+  await expect(item).toContainText(/ARTICLE\s*CMARKET\s*SEMC/)
+  await item.getByRole('link', { name: /Interim dividend announced/ }).click()
   await expect(panel(page, 'Article')).toContainText('Payment on 15 December.')
 })

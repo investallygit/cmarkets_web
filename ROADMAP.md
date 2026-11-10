@@ -47,7 +47,7 @@ relative: S < M < L < XL.
 | 22   | The Azure demo checked                                          | Done   |
 | 23   | Third version of the spec: the plan, its decisions, questions   | Done   |
 | 24   | News provider account type, approved by the Admin               | Done   |
-| 25   | News rebuilt: ARTICLE, FLASH, newspapers, tags, unique clicks   | To do  |
+| 25   | News rebuilt: ARTICLE, FLASH, newspapers, tags, unique clicks   | Done   |
 | 26   | NEWS NEW: the news studio of a News provider (screen 13)        | To do  |
 | 27   | News administration, AI ingestion, international news           | To do  |
 | 28   | MPAY: media payments (screen 18)                                | To do  |
@@ -641,7 +641,8 @@ CMarket.Api's phase 17.
     contact rules, widened by the migration `NewsProviderAccountType`.
   - The demo accounts: L. Mballa of Media I, a demo account on the login page, and two
     colleagues, S. Nana and J. Edzoa. Eleven generated providers of six partner newspapers
-    (Daily K, Éco Hebdo, Gabon Éco, Congo Info, Tchad Matin, Daily Z) make the 14 of screen 9.
+    (Daily K, Éco Hebdo, Gabon Éco, Congo Info, Tchad Matin, and Daily Z, which step 25 renames
+    Douala Éco) make the 14 of screen 9.
     They are generated last, so the other generated accounts keep their numbers.
   - The directory lists 1,177 profiles, 14 of them News providers.
 - **Checked**:
@@ -655,23 +656,82 @@ CMarket.Api's phase 17.
     sign-up, MKT, NET, NET ME and CFG as L. Mballa, and USER, ANLY and ADMCFG as the Admin:
     nothing found, nothing scrolls sideways.
 
-### Step 25 · News rebuilt (L): to do
+### Step 25 · News rebuilt (L): done
 
 CMarket.Api's phase 18.
 
-- **Contract**: an item has a `type` (`article`, `flash`), a `source`, a `category`, its
-  countries, its language and an excerpt; `GET /news?type=&channel=&sourceId=&securityId=&country=&category=`,
-  `GET /news/{id}` with the content, `POST /news/{id}/view`; `NewsPublished` carries the type, the
-  channel and the source.
-- **Tags**: `NewsTypeTag` and `NewsSourceTag` in `entities/news` (18 px, the newspaper's card on
-  hover, a click filters N), on MKT, N, the N tab of DES, the notifications, MSG's news cards and
-  NEWS.
-- **Unique click**: content shown 3 seconds in an active tab sends the view, once.
-- **Data admin**: NEWS writes the type, the category, the countries and the language, within the
-  limits of a FLASH.
-- **CMarket.Api**: the `news` schema takes over `data.News` (the Data admin's items become the
-  CMARKET channel's), views partitioned by month, excluded clicks sorted out, a FLASH pushed to
-  its followers, scheduled items published on time.
+- **Contract** (`contracts/news.ts`):
+  - An item has its `type` (`article`, `flash`) and its newspaper, `source`: id, channel, short
+    name, name, logo, verified, original link. It also has a `category` among the eight
+    (decision 4), a `subject` (the amber code: SEMC, BEAC), its `countries` (the six for CEMAC),
+    its `securityIds` (ten at most), its `language`, and an `excerpt`: an ARTICLE's standfirst,
+    none for a FLASH, whose text is its content.
+  - The feed, `GET /news?type=&channel=&sourceId=&securityId=&country=&category=`, gives no
+    content. `GET /news/{id}` gives it (`summary`, `body`, `author`, `updatedAt`).
+    `POST /news/{id}/view` records the unique click and always answers 204.
+  - `GET /news/sources` lists the newspapers for the N filter: an addition to section 10.
+  - `NewsPublished` carries the type, the channel and the source. MSG's news card and the
+    notifications carry the two tags too.
+- **Tags** (`entities/news`):
+  - `NewsTypeTag` is FLASH red or ARTICLE blue. `NewsSourceTag` is teal for a partner, grey
+    for the international API, green for the AI and CMarket.
+  - 18 px high, Inter 10.5 px bold, a 1 px border, the colour at 15% on the panel. The background
+    is opaque, so that a hovered or selected row keeps 4.9:1 at the least; a tint would leave
+    2.9:1 on a selected row.
+  - The newspaper's card (`shared/ui/HoverCard`) shows on hover and focus: name, logo or
+    initials, channel, original link. Escape closes it, and it follows its tag when the page
+    scrolls.
+  - A click on a tag filters N (`/n?type=flash`, `/n?source={id}`). In a list the tags take the
+    pointer only, since the filter bar does the same from the keyboard. `useKeyboardScrolling`
+    no longer counts the links taken out of the tab order.
+  - They show on MKT, N, the N tab and the DOC · N panel of DES, the notifications (MKT, ALRT),
+    MSG's news card and NEWS.
+- **MKT**: ALL · ISSUERS · REGULATOR filter the categories issuers and regulation.
+- **N**:
+  - Filters by security, country, category, type and newspaper, kept in the address.
+  - The content shows the newspaper's name and channel, the author, "Updated on …" and the
+    original article.
+- **Unique click** (`useNewsView`): the content shown 3 seconds in a visible tab sends the view,
+  once per item and tab. A hidden tab pauses the time.
+- **NEWS** (Data admin):
+  - An item of the CMARKET channel: its type, an ARTICLE's standfirst and body or a FLASH's
+    500 characters (the body field goes), the headline (150), subject, category, language,
+    countries (CEMAC ticks the six) and securities.
+  - The list shows the CMARKET channel's items, with their type tag, subject, category and
+    countries. The newspapers' items wait for the moderation of step 27.
+- **ALRT**: a news alert follows a security or a country (decision 5); the type reads "News".
+- **CMarket.Api** (phase 18):
+  - The schema `news`: `Sources`, `News` with `NewsCountries` and `NewsSecurities`, and
+    `NewsUniqueViews`, partitioned by month on SQL Server. The pair of item and user is unique
+    across the months.
+  - The migration `NewsOfTheThirdVersion` moves `data.News` there. The items become ARTICLEs of
+    CMARKET, their topic a category, their source code the subject, their first paragraph the
+    standfirst when it fits. The news shared in messages get the new shape.
+  - The unique click keeps the exclusion that sets it apart: the newspaper's own accounts (its
+    media organisation), CMarket's employees, suspended accounts and accounts less than a day
+    old. Also automated access: a headless browser or a robot, a view less than 3 seconds after
+    `GET /news/{id}` gave the content, or past 120 views an hour, until the Admin sets the cap
+    in step 27.
+  - A FLASH goes out on the channels of the news alerts of its securities and countries, its tags
+    first ("[FLASH · MEDIA I] SEMC: …"). An ARTICLE notifies in the app only.
+  - The demo has newspapers of the four channels and 19 items, those of the screen 1 mockup first,
+    in French and English. The demo market publishes five more, a FLASH of Media I first.
+  - Step 24's sixth partner organisation, Daily Z, is Douala Éco now: screen 1 shows DAILY Z in
+    green, a story the AI processed, and screen 18 has no Daily Z.
+- **Moved**: the scheduled items published on time and the clicks after a withdrawal come with
+  the studio (step 26), which schedules and withdraws. The Admin's cap of views an hour comes with
+  SRC (step 27).
+- **Checked**:
+  - Type check, lint, the 287 unit tests.
+  - Every Playwright flow on CMarket.Api from a fresh database: 83 flows. A new one covers the
+    tags, their card, the filters and the unique click; NEWS's flow enters an ARTICLE and tries a
+    FLASH.
+  - Each spec of `@fresh-db` flows on its own fresh database. All pass but the two of
+    `analysis.spec.ts`, which fail before this step too: the sector averages drift with the live
+    demo prices.
+  - axe (WCAG 2.2 AA) at 1600, 390 and 320 px, in English and French: MKT, N (a FLASH, an
+    ARTICLE, the newspaper's card open), DES and its N tab, ALRT and its news alert on a country,
+    MSG's news card and NEWS. Nothing found, nothing scrolls sideways.
 
 ### Step 26 · NEWS NEW · News studio (screen 13) (XL): to do
 
@@ -685,6 +745,8 @@ CMarket.Api's phase 19.
 - Publish stays off until the required fields and the rights box are filled; it reads Schedule for
   a future time; the type is fixed once published; an edit after publication shows "Updated on …".
 - The editor of PUB NEW (TipTap) and the drop zone and row checks of IMP are reused.
+- From step 25: the scheduled items published on time (a status, `publishAt`, a job every
+  minute), and the clicks after a withdrawal set apart.
 
 ### Step 27 · News administration, AI ingestion, international news (L): to do
 
@@ -694,7 +756,7 @@ CMarket.Api's phase 20.
 - **MOD** (Admin): the news items among the reports and the pending items.
 - **SRC** (Admin, new): the newspapers, their members, rate, cap, FLASH quota and moderation mode;
   the AI's moderation and confidence threshold; the ingestion clients, their keys, addresses and
-  quotas.
+  quotas; the cap of views an hour per account (decision 11), 120 since step 25.
 - **CMarket.Api**: `/ingest/*` signed with HMAC-SHA256, deduplicated (the same link, or a near
   headline within 24 hours), partner newspapers' stories refused; EODHD `/news` every 15 minutes,
   deduplicated by link, its securities through `SecurityMapping`, its publishers through their
@@ -1041,8 +1103,9 @@ Still to do, with the first screen that needs it:
   on the N screen; a double-click on a calendar event opens the security.
 - **Still to do**: sharing a list with colleagues of the same organisation (spec section 6) has no
   API yet.
-- **Third version (step 25)**: each news item shows its type and newspaper tags; a click on it
-  counts as a unique click once its content shows 3 seconds.
+- **Built in step 25 (third version)**: each news item shows its type and newspaper tags, which
+  filter N; ISSUERS and REGULATOR filter the categories issuers and regulation; the content
+  opened on N counts its unique click once it shows 3 seconds.
 
 ### DES · Security profile (screen 2): done
 
@@ -1057,8 +1120,9 @@ Still to do, with the first screen that needs it:
 - **Built in step 6**: the ANA tab, with the list, the preview and the analyst of PUB.
 - **Built in step 12**: GP has no drawing tools without `analysis:save` (the Journalist, the CEO).
 - **Still to do**: PNG and PDF export of the chart stays in the shared groundwork.
-- **Third version (steps 25 and 31)**: the N tab shows the news tags; DES opens the ETF or the
-  bond profile (screens 19 and 20) by the security's type, and screen 2 keeps the equities.
+- **Built in step 25 (third version)**: the N tab and the DOC · N panel show the news tags.
+- **Third version (step 31)**: DES opens the ETF or the bond profile (screens 19 and 20) by the
+  security's type, and screen 2 keeps the equities.
 
 ### N · News (no mockup): done
 
@@ -1077,8 +1141,9 @@ Still to do, with the first screen that needs it:
   says so instead of an error.
 - **Still to do**: the list shows the 50 newest items; "load more" comes with the pagination of
   the shared groundwork.
-- **Third version (step 25)**: the type and newspaper tags, filters by type, newspaper and
-  category (instead of topic), the content read from `GET /news/{id}` and its unique click.
+- **Built in step 25 (third version)**: the type and newspaper tags; filters by security, country,
+  category (instead of topic), type and newspaper; the content read from `GET /news/{id}`, with
+  its newspaper, author, original link and "Updated on …", and its unique click.
 
 ### CAL · Market calendar (no mockup): done
 
@@ -1107,6 +1172,9 @@ Still to do, with the first screen that needs it:
   channel is off and the form says where to add it; e-mail goes to the login address.
 - **Built in step 13**: a portfolio limit alert on a portfolio the user reads, as a CEO watches the
   organisation's fund; none for an account type without portfolios (the Journalist).
+- **Built in step 25 (third version)**: a news alert follows a security or a country (decision
+  5): a FLASH goes out on its channels, an ARTICLE in the app; the notification starts with the
+  item's two tags.
 - **Still to do**: setting off the publication alerts (a followed analyst, a security or a country)
   when a publication goes out: the analysts are followed from PUB since step 6.
 
@@ -1253,8 +1321,8 @@ Still to do, with the first screen that needs it:
 - **Still to do**: the thread's SEARCH and "⋯" of the mockup; the push and e-mail notifications
   of a message unread after 5 minutes, with the back end, which also encrypts the messages and
   keeps them 24 months.
-- **Third version (steps 25 and 31)**: a news card shows its tags; a security card opens the
-  profile of its type.
+- **Built in step 25 (third version)**: a news card shows its tags and subject.
+- **Third version (step 31)**: a security card opens the profile of its type.
 
 ### NET ME · My profile, visibility and contact (screen 12): done
 
@@ -1421,8 +1489,11 @@ Still to do, with the first screen that needs it:
   tab that sent it (a generated one stands in after a reload).
 - **Still to do**: the PDF attached to a news item (spec section 11): for now the Data admin
   publishes it as a document of the same securities.
-- **Third version (steps 25 and 27)**: an item's type, category, countries and language; the
-  pending and reported items (approve, take down, retype) and the publishers.
+- **Built in step 25 (third version)**: an item of the CMARKET channel with its type (an
+  ARTICLE's standfirst and body, a FLASH's 500 characters), subject, category, countries and
+  language; the list keeps the CMARKET channel's items.
+- **Third version (step 27)**: the pending and reported items (approve, take down, retype) and
+  the publishers.
 
 ### USER · Account administration (screen 9): done, with ANLY and MOD
 
@@ -1796,6 +1867,13 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   set by the Admin)? The administration of news (moderation, newspapers, publishers, ingestion
   clients) has no mockup: the plan puts the moderation and the publishers in NEWS and MOD, the
   rest in a new Admin screen, SRC.
+- **News, step 25**: the feed's "excerpt" is not described (the plan: an ARTICLE's standfirst,
+  none for a FLASH, whose text is the content whose display is paid). Screen 1 shows a subject in
+  amber that no field of the studio's table holds (the plan: a Subject field in NEWS, and in the
+  studio the first security's code unless written). How many views an hour make automated access
+  (the plan: 120 until the Admin sets it in SRC)? The feed filters by `sourceId`, but no endpoint
+  lists the newspapers (the plan: `GET /news/sources`). Screen 1 shows DAILY Z in the AI's green,
+  and screen 18 pays no Daily Z: the plan takes DAILY Z for a story the AI processed.
 - **Subscriptions, third version**: SUBS shows auto-renewal, a stored card and failed payments,
   but no payment provider that keeps cards is named. The plan: a renewal charges the stored card
   or sends a mobile money request, a simulated provider standing in; a failed charge is tried

@@ -25,6 +25,7 @@ import {
   ALERT_CHANNELS,
   ALERT_TYPES,
   initialAlertForm,
+  needsCountry,
   needsSecurity,
   toAlertInput,
   validateAlertForm,
@@ -136,6 +137,19 @@ function AlertForm({ request, onClose }: { request: AlertDialogRequest; onClose:
           />
         </Field>
 
+        {form.type === 'release' && (
+          <Field label={t('alerts.newsAbout')} group>
+            <SegmentedControl
+              value={form.newsAbout}
+              options={(['security', 'country'] as const).map((about) => ({
+                value: about,
+                label: t(`alerts.about.${about}`),
+              }))}
+              onChange={(newsAbout) => set({ newsAbout })}
+            />
+          </Field>
+        )}
+
         {form.type === 'publication' && (
           <Field label={t('alerts.publicationAbout')} group>
             <SegmentedControl
@@ -225,7 +239,7 @@ function AlertForm({ request, onClose }: { request: AlertDialogRequest; onClose:
           </Field>
         )}
 
-        {form.type === 'publication' && form.about === 'country' && (
+        {needsCountry(current) && (
           <Field label={t('alerts.country')} error={errorText(errors.country)}>
             <Select
               value={form.country}

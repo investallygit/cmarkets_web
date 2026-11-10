@@ -309,21 +309,33 @@
     }
   },
   "content": {
-    "topics": {
-      "issuer": "Issuer",
-      "regulator": "Regulator",
-      "market": "Market"
+    "types": {
+      "article": "Article",
+      "flash": "Flash"
+    },
+    "type": "Type",
+    "flashHint": "A headline and 500 characters, no body; it goes out on its followers' alerts.",
+    "language": "Language",
+    "languages": {
+      "fr": "French",
+      "en": "English"
     },
     "headline": "Headline",
+    "characters": "{{count}} / {{max}} characters",
+    "subject": "Subject",
+    "subjectHint": "The issuer or the institution, in amber: SEMC, BEAC.",
+    "category": "Category",
+    "countries": "Countries",
+    "cemac": "CEMAC (the six)",
     "source": "Source",
-    "topic": "Topic",
-    "country": "Country",
-    "allCountries": "All countries",
     "securities": "Securities",
+    "securitiesHint": "{{max}} at most: their profiles list the item.",
     "addSecurity": "Add a security",
     "removeSecurity": "Remove {{code}}",
-    "text": "Text",
-    "textHint": "Paragraphs separated by an empty line.",
+    "standfirst": "Standfirst",
+    "flashText": "Text of the FLASH",
+    "body": "Body",
+    "bodyHint": "Paragraphs separated by an empty line.",
     "title": "Title",
     "documentType": "Type",
     "file": "PDF file",

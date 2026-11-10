@@ -43,6 +43,17 @@
   /* On --bg-selected, the Trader's purple is 3.9:1: this lighter one keeps 4.5:1 (5.0:1). */
   --type-trader-selected: #bf98ff;
   /*
+   * The two tags of a news item (spec section 16): its type, FLASH red or ARTICLE blue, and its
+   * newspaper by channel: a partner newspaper teal, the international API grey, CMarket's AI and
+   * CMarket green.
+   */
+  --news-flash: var(--down);
+  --news-article: var(--info);
+  --news-partner: var(--type-news-provider);
+  --news-api: var(--text-secondary);
+  --news-ai: var(--brand-green);
+  --news-cmarket: var(--brand-green);
+  /*
    * Series of a chart that carry identity only (allocation by sector...), in this order and
    * never cycled. Section 8 has no chart palette: these eight pass the lightness, chroma,
    * colour-blind separation and 3:1 contrast checks on --bg-panel.
@@ -101,6 +112,8 @@
   --text-figure--line-height: 24px;
   --text-price: 26px; /* last price in the security header */
   --text-price--line-height: 30px;
+  --text-tag: 10.5px; /* the news tags (spec section 16) */
+  --text-tag--line-height: 16px;
   /* The home page only, a marketing page (spec section 8): lead text, section and page titles. */
   --text-lead: 16px;
   --text-lead--line-height: 24px;
@@ -541,6 +554,41 @@
   :where(.bg-selected, .hover\:bg-selected:hover) {
     --type-trader: var(--type-trader-selected);
   }
+}
+
+/*
+ * A news tag: 1 px border and text of its colour, the colour at 15% on the panel. Opaque, so that
+ * a hovered or selected row keeps the text's contrast: 4.9:1 at the least (the grey on the
+ * panel), where a tint on --bg-selected would leave it at 2.9:1.
+ */
+@utility news-tag {
+  color: var(--news-tag);
+  border-color: var(--news-tag);
+  background-color: color-mix(in srgb, var(--news-tag) 15%, var(--bg-panel));
+}
+
+@utility news-tag-flash {
+  --news-tag: var(--news-flash);
+}
+
+@utility news-tag-article {
+  --news-tag: var(--news-article);
+}
+
+@utility news-tag-partner {
+  --news-tag: var(--news-partner);
+}
+
+@utility news-tag-api {
+  --news-tag: var(--news-api);
+}
+
+@utility news-tag-ai {
+  --news-tag: var(--news-ai);
+}
+
+@utility news-tag-cmarket {
+  --news-tag: var(--news-cmarket);
 }
 
 /*

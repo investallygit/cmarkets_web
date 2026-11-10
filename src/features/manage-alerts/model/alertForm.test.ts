@@ -65,6 +65,36 @@ describe('alert form', () => {
     })
   })
 
+  it('follows the news of a security or of a country (ROADMAP decision 5)', () => {
+    const form = initialAlertForm(undefined, semc)
+    const onSecurity = { ...form, type: 'release' as const }
+    const onCountry = { ...onSecurity, newsAbout: 'country' as const }
+
+    expect(validateAlertForm({ ...onSecurity, security: null })).toEqual({ security: 'required' })
+    expect(validateAlertForm(onCountry)).toEqual({ country: 'required' })
+    expect(toAlertInput(onSecurity).condition).toEqual({
+      type: 'release',
+      securityId: 'SEMC',
+      country: null,
+    })
+    expect(toAlertInput({ ...onCountry, country: 'GA' }).condition).toEqual({
+      type: 'release',
+      securityId: null,
+      country: 'GA',
+    })
+    const opened = initialAlertForm({
+      id: 'alert-news',
+      condition: { type: 'release', securityId: null, country: 'CM' },
+      channels: ['push'],
+      enabled: true,
+      securityCode: null,
+      portfolioName: null,
+      createdAt: '2026-11-10T08:00:00Z',
+      lastTriggeredAt: null,
+    })
+    expect(opened).toMatchObject({ type: 'release', newsAbout: 'country', country: 'CM' })
+  })
+
   it('opens an existing alert with its values', () => {
     const alert: AlertDto = {
       id: 'alert-2',

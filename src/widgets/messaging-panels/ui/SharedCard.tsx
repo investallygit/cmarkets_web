@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
+import { NewsTags } from '@/entities/news'
 import { FrozenChart } from '@/entities/publication'
 import type { SharedObjectDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
@@ -21,8 +22,9 @@ function CardLink({ to, children }: { to: string; children: ReactNode }) {
 
 /**
  * A CMarket object shared in a message, in an amber frame, as it was when shared: a security
- * (a bond with its yield and duration), a frozen chart, a publication's preview or a news item.
- * It opens the matching screen (spec section 9, screen 11); a news item, its article.
+ * (a bond with its yield and duration), a frozen chart, a publication's preview or a news item
+ * with its two tags. It opens the matching screen (spec section 9, screen 11); a news item, its
+ * content.
  */
 export function SharedCard({ shared }: { shared: SharedObjectDto }) {
   const { t } = useTranslation()
@@ -60,11 +62,13 @@ export function SharedCard({ shared }: { shared: SharedObjectDto }) {
   if (shared.type === 'news') {
     return (
       <div className="flex flex-col gap-1.5 border border-accent-amber p-2.5">
-        <p className="font-mono text-data">
-          <span className="font-semibold text-accent-amber">{shared.source}</span>
+        <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 font-mono text-data">
+          <NewsTags type={shared.newsType} source={shared.source} mode="none" />
+          {shared.subject && (
+            <span className="font-semibold text-accent-amber">{shared.subject}</span>
+          )}
           <span className="text-secondary">
-            {' '}
-            · {format.date(shared.publishedAt)} {format.time(shared.publishedAt)}
+            {format.date(shared.publishedAt)} {format.time(shared.publishedAt)}
           </span>
         </p>
         <span className="font-sans text-label font-semibold">{shared.headline}</span>

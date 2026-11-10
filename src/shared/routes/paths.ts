@@ -79,6 +79,21 @@ export function newsPath(articleId?: string): string {
   return articleId ? `${routes.news}?article=${encodeURIComponent(articleId)}` : routes.news
 }
 
+/** What a news tag filters the N screen on: its type or its newspaper (spec section 16). */
+export interface NewsTagFilter {
+  type?: string
+  source?: string
+}
+
+/** The N screen filtered as a tag says: "/n?type=flash", "/n?source={id}". */
+export function newsFilterPath({ type, source }: NewsTagFilter): string {
+  const params = new URLSearchParams()
+  if (type) params.set('type', type)
+  if (source) params.set('source', source)
+  const query = params.toString()
+  return query ? `${routes.news}?${query}` : routes.news
+}
+
 /** The full address of a page of the app, to share: "https://…/n?article=news-1". */
 export function shareableUrl(path: string): string {
   return new URL(path, window.location.origin).href

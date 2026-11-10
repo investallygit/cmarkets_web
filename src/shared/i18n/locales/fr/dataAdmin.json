@@ -309,21 +309,33 @@
     }
   },
   "content": {
-    "topics": {
-      "issuer": "Émetteur",
-      "regulator": "Régulateur",
-      "market": "Marché"
+    "types": {
+      "article": "Article",
+      "flash": "Flash"
+    },
+    "type": "Type",
+    "flashHint": "Un titre et 500 caractères, sans corps ; il part sur les alertes de ses abonnés.",
+    "language": "Langue",
+    "languages": {
+      "fr": "Français",
+      "en": "Anglais"
     },
     "headline": "Titre",
+    "characters": "{{count}} / {{max}} caractères",
+    "subject": "Sujet",
+    "subjectHint": "L'émetteur ou l'institution, en ambre : SEMC, BEAC.",
+    "category": "Catégorie",
+    "countries": "Pays",
+    "cemac": "CEMAC (les six)",
     "source": "Source",
-    "topic": "Thème",
-    "country": "Pays",
-    "allCountries": "Tous les pays",
     "securities": "Titres",
+    "securitiesHint": "{{max}} au plus : leurs fiches listent l'actualité.",
     "addSecurity": "Ajouter un titre",
     "removeSecurity": "Retirer {{code}}",
-    "text": "Texte",
-    "textHint": "Paragraphes séparés par une ligne vide.",
+    "standfirst": "Chapô",
+    "flashText": "Texte du FLASH",
+    "body": "Corps",
+    "bodyHint": "Paragraphes séparés par une ligne vide.",
     "title": "Titre",
     "documentType": "Type",
     "file": "Fichier PDF",

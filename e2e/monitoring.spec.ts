@@ -46,11 +46,11 @@ test('an alert set from the right-click menu is listed on the ALRT screen', asyn
 test('the N screen filters the news and searches the documents', async ({ page }) => {
   await page.goto('/n')
   const news = panel(page, 'News')
-  await news.getByRole('combobox', { name: 'Topic' }).selectOption('regulator')
+  await news.getByRole('combobox', { name: 'Category' }).selectOption('regulation')
   await expect(news.getByRole('link', { name: /Annual results: revenue up/ })).toHaveCount(0)
   await news.getByRole('link', { name: /Approval granted for a bond issue/ }).click()
-  // CMarket.Api keys its news by their source and age: any id there.
-  await expect(page).toHaveURL(/topic=regulator&article=[\w-]+$/)
+  // CMarket.Api keys its news by deterministic ids: any id there.
+  await expect(page).toHaveURL(/category=regulation&article=[\w-]+$/)
   await expect(
     panel(page, 'Article').getByRole('heading', { name: 'Approval granted for a bond issue' }),
   ).toBeVisible()
@@ -60,6 +60,53 @@ test('the N screen filters the news and searches the documents', async ({ page }
   await documents.getByRole('searchbox', { name: 'Search the documents' }).fill('annual report')
   await expect(documents.getByRole('listitem')).toHaveCount(3)
   await expect(page).toHaveURL(/\/n\/documents\?q=annual\+report$/)
+})
+
+test('each item shows its two tags, which filter the feed, and its content counts a unique click', async ({
+  page,
+}) => {
+  await page.goto('/mkt')
+  const panelNews = panel(page, 'News')
+  // Screen 1: time, type and newspaper tags, subject in amber, headline. The demo market publishes
+  // an item every 45 seconds: rows are found by their headline.
+  const results = panelNews.getByRole('listitem').filter({ hasText: 'Annual results: revenue up' })
+  await expect(results).toContainText(/FLASH\s*MEDIA I\s*SEMC\s*Annual results: revenue up/)
+  // The newspaper's card on hover: its name, channel and original link.
+  await panelNews
+    .getByRole('listitem')
+    .filter({ hasText: 'Approval granted for a bond issue' })
+    .getByRole('link', { name: "DAILY Z: show this newspaper's news" })
+    .hover()
+  const card = page.getByRole('tooltip')
+  await expect(card).toContainText('Daily Z')
+  await expect(card).toContainText('Processed by CMarket AI')
+  await expect(card).toContainText('daily-z.example/article/12345')
+
+  // A click on a tag filters the N screen on that newspaper, then on the type.
+  await results.getByRole('link', { name: "MEDIA I: show this newspaper's news" }).click()
+  await expect(page).toHaveURL(/\/n\?source=[\w-]+$/)
+  const news = panel(page, 'News')
+  const rows = news.getByRole('listitem')
+  await expect(rows.filter({ hasText: 'Annual results: revenue up' })).toHaveCount(1)
+  await expect(rows.filter({ hasNotText: 'MEDIA I' })).toHaveCount(0)
+  await rows
+    .filter({ hasText: 'Annual results: revenue up' })
+    .getByRole('link', { name: 'FLASH: show these items' })
+    .click()
+  await expect(page).toHaveURL(/\/n\?type=flash$/)
+  await expect(rows.filter({ hasText: 'Brent crude above $90' })).toHaveCount(1)
+  await expect(rows.filter({ hasNotText: 'FLASH' })).toHaveCount(0)
+
+  // The content shown 3 seconds in this tab sends its view, once; the server answers 204.
+  const view = page.waitForResponse(
+    (response) => /\/api\/v1\/news\/[\w-]+\/view$/.test(response.url()),
+    { timeout: 10_000 },
+  )
+  await news.getByRole('link', { name: /Annual results: revenue up/ }).click()
+  const article = panel(page, 'Article')
+  await expect(article).toContainText('SEMC reports annual revenue up 9%')
+  await expect(article).toContainText('Media I · Partner newspaper')
+  expect((await view).status()).toBe(204)
 })
 
 // @fresh-db: a message to P. Owona, whose conversation MSG's flows find as seeded.
