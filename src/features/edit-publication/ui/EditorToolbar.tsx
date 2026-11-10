@@ -1,39 +1,6 @@
 import { useEditorState, type Editor } from '@tiptap/react'
-import { clsx } from 'clsx'
-import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-
-interface ToolProps {
-  label: ReactNode
-  /** Spoken and shown on hover when the label is a symbol. */
-  title: string
-  active?: boolean
-  disabled: boolean
-  onClick: () => void
-  className?: string
-}
-
-function Tool({ label, title, active = false, disabled, onClick, className }: ToolProps) {
-  return (
-    <button
-      type="button"
-      title={title}
-      aria-label={title}
-      aria-pressed={active}
-      disabled={disabled}
-      // The selection stays in the text while a button is pressed.
-      onMouseDown={(event) => event.preventDefault()}
-      onClick={onClick}
-      className={clsx(
-        'h-7 px-2 font-sans text-data disabled:opacity-40',
-        active ? 'text-accent-amber' : 'hover:text-accent-amber',
-        className,
-      )}
-    >
-      {label}
-    </button>
-  )
-}
+import { ToolButton as Tool } from '@/shared/ui/rich-text/ToolButton'
 
 interface EditorToolbarProps {
   editor: Editor
@@ -63,26 +30,26 @@ export function EditorToolbar({ editor, disabled, onImage, onChart, onLink }: Ed
   return (
     <div
       role="toolbar"
-      aria-label={t('studio.toolbar.label')}
+      aria-label={t('richText.toolbar.label')}
       className="flex shrink-0 flex-wrap items-center gap-x-1 border-b bg-panel-header px-1"
     >
       <Tool
         label={<b>B</b>}
-        title={t('studio.toolbar.bold')}
+        title={t('richText.toolbar.bold')}
         active={state.bold}
         disabled={disabled}
         onClick={() => chain().toggleBold().run()}
       />
       <Tool
         label={<i>I</i>}
-        title={t('studio.toolbar.italic')}
+        title={t('richText.toolbar.italic')}
         active={state.italic}
         disabled={disabled}
         onClick={() => chain().toggleItalic().run()}
       />
       <Tool
         label="H2"
-        title={t('studio.toolbar.heading', { level: 2 })}
+        title={t('richText.toolbar.heading', { level: 2 })}
         active={state.h2}
         disabled={disabled}
         onClick={() => chain().toggleHeading({ level: 2 }).run()}
@@ -90,28 +57,28 @@ export function EditorToolbar({ editor, disabled, onImage, onChart, onLink }: Ed
       />
       <Tool
         label="H3"
-        title={t('studio.toolbar.heading', { level: 3 })}
+        title={t('richText.toolbar.heading', { level: 3 })}
         active={state.h3}
         disabled={disabled}
         onClick={() => chain().toggleHeading({ level: 3 }).run()}
         className="font-semibold"
       />
       <Tool
-        label={`• ${t('studio.toolbar.list')}`}
-        title={t('studio.toolbar.list')}
+        label={`• ${t('richText.toolbar.list')}`}
+        title={t('richText.toolbar.list')}
         active={state.list}
         disabled={disabled}
         onClick={() => chain().toggleBulletList().run()}
       />
       <Tool
-        label={t('studio.toolbar.table')}
-        title={t('studio.toolbar.tableHint')}
+        label={t('richText.toolbar.table')}
+        title={t('richText.toolbar.tableHint')}
         active={state.table}
         disabled={disabled || state.table}
         onClick={() => chain().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
       />
       <Tool
-        label={t('studio.toolbar.image')}
+        label={t('richText.toolbar.image')}
         title={t('studio.toolbar.imageHint')}
         disabled={disabled}
         onClick={onImage}
@@ -124,8 +91,8 @@ export function EditorToolbar({ editor, disabled, onImage, onChart, onLink }: Ed
         className="text-accent-amber"
       />
       <Tool
-        label={t('studio.toolbar.link')}
-        title={t('studio.toolbar.link')}
+        label={t('richText.toolbar.link')}
+        title={t('richText.toolbar.link')}
         active={state.link}
         disabled={disabled}
         onClick={onLink}
@@ -134,31 +101,31 @@ export function EditorToolbar({ editor, disabled, onImage, onChart, onLink }: Ed
         <span className="ml-auto flex items-center border-l pl-1 text-secondary">
           <Tool
             label="+ ↓"
-            title={t('studio.toolbar.addRow')}
+            title={t('richText.toolbar.addRow')}
             disabled={false}
             onClick={() => chain().addRowAfter().run()}
           />
           <Tool
             label="+ →"
-            title={t('studio.toolbar.addColumn')}
+            title={t('richText.toolbar.addColumn')}
             disabled={false}
             onClick={() => chain().addColumnAfter().run()}
           />
           <Tool
             label="− ↓"
-            title={t('studio.toolbar.deleteRow')}
+            title={t('richText.toolbar.deleteRow')}
             disabled={false}
             onClick={() => chain().deleteRow().run()}
           />
           <Tool
             label="− →"
-            title={t('studio.toolbar.deleteColumn')}
+            title={t('richText.toolbar.deleteColumn')}
             disabled={false}
             onClick={() => chain().deleteColumn().run()}
           />
           <Tool
             label="×"
-            title={t('studio.toolbar.deleteTable')}
+            title={t('richText.toolbar.deleteTable')}
             disabled={false}
             onClick={() => chain().deleteTable().run()}
           />

@@ -334,6 +334,7 @@
       "portfolios": "Portefeuilles et alertes",
       "research": "Recherche",
       "network": "Annuaire et messagerie",
+      "news": "Studio d'actualités",
       "data": "Back-office données",
       "admin": "Administration"
     },
@@ -355,6 +356,8 @@
       "directoryList": "Consulter l'annuaire",
       "directoryProfile": "Figurer dans l'annuaire",
       "messagesWrite": "Messagerie",
+      "newsWrite": "Rédiger les actualités d'un journal partenaire (NEWS NEW)",
+      "newsStats": "Clics uniques et revenus des actualités",
       "dataImport": "Charger les fichiers, corriger les données",
       "contentPublish": "Publier actualités et documents d'émetteurs",
       "usersManage": "Créer, suspendre, changer le type d'un compte",

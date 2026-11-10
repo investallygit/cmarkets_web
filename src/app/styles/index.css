@@ -386,6 +386,19 @@
     height: auto;
   }
 
+  .publication-text blockquote {
+    border-left: 2px solid var(--accent-amber);
+    padding-left: 0.8em;
+    color: var(--text-secondary);
+  }
+
+  /* A news image and its credit (spec section 16). */
+  .publication-text figcaption {
+    margin-top: 2px;
+    color: var(--text-secondary);
+    font-size: 11px;
+  }
+
   /* TipTap's editing marks. */
   .publication-text.ProseMirror:focus {
     outline: none;
@@ -589,6 +602,23 @@
 
 @utility news-tag-cmarket {
   --news-tag: var(--news-cmarket);
+}
+
+/* The status of a newspaper's item in its studio (screen 13), drawn as the tags. */
+@utility news-status-draft {
+  --news-tag: var(--text-secondary);
+}
+
+@utility news-status-scheduled {
+  --news-tag: var(--info);
+}
+
+@utility news-status-published {
+  --news-tag: var(--up);
+}
+
+@utility news-status-withdrawn {
+  --news-tag: var(--down);
 }
 
 /*

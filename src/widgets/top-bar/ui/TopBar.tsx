@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
 import { MarketStatusBadge } from '@/entities/market'
+import { useProviderSource } from '@/entities/news'
 import { usePortfolio } from '@/entities/portfolio'
 import { useSecurityProfile } from '@/entities/security'
 import { audienceOf, canAccessScreen, lockedModule, useCurrentUser } from '@/entities/session'
@@ -36,7 +37,13 @@ export function TopBar({ className }: { className?: string }) {
   // The security's name once loaded, as in the screen 2 mockup; its code until then. The
   // portfolio screen names the portfolio, as in the screen 5 mockup.
   const subjectName = useSecurityProfile(subject).data?.name ?? subject ?? portfolioName
-  const title = screen ? `${subjectName ? `${subjectName} — ` : ''}${t(screen.titleKey)}` : ''
+  // The news studio names its newspaper after it, as the screen 13 mockup does.
+  const newspaper = useProviderSource({ enabled: open && screen.id === 'NEWSNEW' }).data?.name
+  const title = !screen
+    ? ''
+    : newspaper && screen.id === 'NEWSNEW'
+      ? `${t(screen.titleKey)} — ${newspaper}`
+      : `${subjectName ? `${subjectName} — ` : ''}${t(screen.titleKey)}`
   // A path that is no screen names itself (NotFoundPage).
   useDocumentTitle(screen ? title : null)
 

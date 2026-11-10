@@ -65,7 +65,7 @@ export function SideMenu() {
                         isActive ? 'text-accent-amber' : locked ? 'text-secondary' : 'text-primary',
                       )}
                     >
-                      {screen.code}
+                      {screen.menuCode ?? screen.code}
                       {locked && <Lock aria-hidden className="size-2.5" />}
                     </span>
                     <span

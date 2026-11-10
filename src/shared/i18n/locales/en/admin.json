@@ -334,6 +334,7 @@
       "portfolios": "Portfolios and alerts",
       "research": "Research",
       "network": "Directory and messaging",
+      "news": "News studio",
       "data": "Data back-office",
       "admin": "Administration"
     },
@@ -355,6 +356,8 @@
       "directoryList": "Browse the directory",
       "directoryProfile": "Be listed in the directory",
       "messagesWrite": "Messaging",
+      "newsWrite": "Write a partner newspaper's news (NEWS NEW)",
+      "newsStats": "Unique clicks and earnings of the news",
       "dataImport": "Upload data files, correct data",
       "contentPublish": "Publish news and issuer documents",
       "usersManage": "Create, suspend, change an account's type",

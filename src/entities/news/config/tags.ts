@@ -1,4 +1,4 @@
-import type { NewsChannel, NewsType } from '@/shared/api/contracts'
+import type { NewsChannel, NewsType, ProviderNewsStatus } from '@/shared/api/contracts'
 
 /** The colour of a type tag (spec section 16): FLASH red, ARTICLE blue. Utilities of app/styles. */
 export const TYPE_TAG: Record<NewsType, string> = {
@@ -15,4 +15,12 @@ export const CHANNEL_TAG: Record<NewsChannel, string> = {
   api: 'news-tag-api',
   ai: 'news-tag-ai',
   cmarket: 'news-tag-cmarket',
+}
+
+/** The status of an item in its studio (screen 13): Draft grey, Scheduled blue, Published green, Withdrawn red. */
+export const STATUS_TAG: Record<ProviderNewsStatus, string> = {
+  draft: 'news-status-draft',
+  scheduled: 'news-status-scheduled',
+  published: 'news-status-published',
+  withdrawn: 'news-status-withdrawn',
 }

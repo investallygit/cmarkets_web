@@ -76,6 +76,7 @@
     "PUB": { "title": "Bibliothèque de recherche", "menu": "Recherche" },
     "PUBNEW": { "title": "Studio de publication", "menu": "Studio" },
     "N": { "title": "Actualités", "menu": "Actus" },
+    "NEWSNEW": { "title": "Studio d'actualités", "menu": "Studio" },
     "CAL": { "title": "Calendrier du marché", "menu": "Calendrier" },
     "ALRT": { "title": "Alertes", "menu": "Alertes" },
     "CFG": { "title": "Paramètres", "menu": "Réglages" },
@@ -160,6 +161,10 @@
     "analyst": "Analyste",
     "myPublications": "Mes publications",
     "earnings": "Mes revenus",
+    "myNews": "Mes actualités",
+    "newsEarnings": "Revenus",
+    "publishing": "Publication",
+    "fileImport": "Import de fichier",
     "editor": "Éditeur",
     "publicationSettings": "Paramètres de la publication",
     "profile": "Profil",
@@ -420,5 +425,31 @@
     "commentRequired": "Dites ce qui ne va pas.",
     "commentTooLong": "{{max}} caractères au plus.",
     "send": "Envoyer le signalement"
+  },
+  "richText": {
+    "toolbar": {
+      "label": "Mise en forme",
+      "bold": "Gras",
+      "italic": "Italique",
+      "heading": "Titre {{level}}",
+      "list": "Liste",
+      "quote": "Citation",
+      "table": "Tableau",
+      "tableHint": "Insérer un tableau",
+      "image": "Image",
+      "link": "Lien",
+      "addRow": "Ajouter une ligne en dessous",
+      "addColumn": "Ajouter une colonne à droite",
+      "deleteRow": "Supprimer la ligne",
+      "deleteColumn": "Supprimer la colonne",
+      "deleteTable": "Supprimer le tableau"
+    },
+    "link": {
+      "title": "Lien",
+      "url": "Adresse",
+      "invalid": "Une adresse commençant par https://, http:// ou mailto:.",
+      "apply": "Appliquer",
+      "remove": "Retirer le lien"
+    }
   }
 }

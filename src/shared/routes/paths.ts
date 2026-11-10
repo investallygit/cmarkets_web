@@ -22,6 +22,8 @@ export const routes = {
   library: '/pub',
   publishingStudio: '/pub/new',
   news: '/n',
+  /** NEWS NEW (screen 13): a partner newspaper's news studio. */
+  newsStudio: '/n/new',
   /** Tabs of the N screen: /n (news) and /n/documents. */
   newsTabs: '/n/:tab?',
   calendar: '/cal',

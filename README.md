@@ -33,7 +33,7 @@ React 18, strict TypeScript, Vite · TanStack Query (server data) · Zustand (la
 selection) · TanStack Table + Virtual · TradingView Lightweight Charts (prices) · Recharts
 (comparison bars, yield curves, portfolio performance) · react-grid-layout · `@microsoft/signalr`
 · Tailwind CSS with the section 8 tokens · i18next (FR / EN) · Vitest, Testing Library,
-Playwright · TipTap 3 (the editor of the publishing studio, loaded with that screen only).
+Playwright · TipTap 3 (the editors of the publishing and news studios, loaded with them only).
 Supporting choices: React Router 7, lucide-react icons, write-excel-file for the Excel export of
 tables, read-excel-file to read the Excel templates before upload.
 
@@ -62,9 +62,9 @@ tables, read-excel-file to read the Excel templates before upload.
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done; corrections logged with their reason                    |
 | 9 · Account administration (USER) with ANLY and MOD                       | Done; MOD reviews the directory reports too                   |
 | Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged  |
-| News provider account type (third version)                                | Done; its studio comes with step 26                           |
+| News provider account type (third version)                                | Done; it writes in its studio, NEWS NEW                       |
 | News rebuilt: ARTICLE and FLASH, newspapers, tags, unique clicks          | Done; the content shown 3 seconds counts a unique click       |
-| 13 · News studio (NEWS NEW)                                               | To do, step 26                                                |
+| 13 · News studio (NEWS NEW)                                               | Done; drafts, schedule, withdrawal, file import, earnings     |
 | News administration (SRC), AI ingestion, international news: no mockup    | To do, step 27                                                |
 | 18 · Media payments (MPAY)                                                | To do, step 28                                                |
 | 17 · Bond screener (BS)                                                   | To do, step 29                                                |
@@ -130,19 +130,20 @@ src/
               payouts (PAY), platform-settings (ADMCFG), audit-log (AUDT), home (the home page),
               auth (login, sign-up, password reset), status, ui-kit (/_kit)
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
-              subscription-panel, current-upload-panel, messaging-panels...), the security header
-              and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
+              subscription-panel, current-upload-panel, messaging-panels, news-studio-panels...),
+              the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
               rate-publication, report-publication, follow-analyst, report-profile,
               start-conversation, send-message, share-news, report-conversation, block-user,
-              create-publication, edit-publication, draw-on-chart, compare-securities,
-              edit-profile, edit-network-profile, change-password, choose-plan, manage-members,
-              upload-data-file, review-import, roll-back-import, correct-price, publish-content,
-              create-account, manage-account, review-analyst-request, moderate-publication,
-              moderate-report, mark-payout-paid, edit-platform-settings, edit-permissions,
-              switch-language, switch-account, workspace-layout
+              create-publication, edit-publication, edit-news, import-news, draw-on-chart,
+              compare-securities, edit-profile, edit-network-profile, change-password,
+              choose-plan, manage-members, upload-data-file, review-import, roll-back-import,
+              correct-price, publish-content, create-account, manage-account,
+              review-analyst-request, moderate-publication, moderate-report, mark-payout-paid,
+              edit-platform-settings, edit-permissions, switch-language, switch-account,
+              workspace-layout
   entities/   business data: session, subscription, organization, security, quote (live
               prices), market, bond, yield-curve, fundamentals, screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news,
@@ -271,7 +272,10 @@ Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of
 `ScreenTabs`, `Pager` (pages of a server list), `ScrollArea` (a box that scrolls and takes the
 focus when nothing in it can), `HoverCard` (a card under its trigger on hover and focus, which
 stays while the pointer moves onto it, closes on Escape and follows its trigger when the page
-scrolls: the newspaper of a news tag), `DataTable` (sorting, right-click menu, Excel and CSV export unless
+scrolls: the newspaper of a news tag), `rich-text` (what the two studios' editors share: the
+toolbar's `ToolButton`, `LinkDialog`, `ApiImage`; and `RichTextView`, which draws a document of
+theirs for its readers, a publication's charts and a news item's security cards as nodes of their
+own), `DataTable` (sorting, right-click menu, Excel and CSV export unless
 the user lacks `analysis:export`; `exportRef` puts the export links in a title bar; a `footer` row
 stays out of the sorting; `sorting` and `onSortingChange` leave the order to the server for a
 paged list; the arrows move the selection, or a cursor where rows are not selected, Enter opens a

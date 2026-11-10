@@ -204,23 +204,9 @@
       "placeholder": "Write the publication: sections as H2 headings, tables, images and CMarket charts."
     },
     "toolbar": {
-      "label": "Formatting",
-      "bold": "Bold",
-      "italic": "Italic",
-      "heading": "Heading {{level}}",
-      "list": "List",
-      "table": "Table",
-      "tableHint": "Insert a table",
-      "image": "Image",
       "imageHint": "Insert an image: PNG, JPEG, WebP or GIF, 2 MB at most",
       "chart": "CMarket chart",
-      "chartHint": "Insert a CMarket chart, frozen as of today",
-      "link": "Link",
-      "addRow": "Add a row below",
-      "addColumn": "Add a column to the right",
-      "deleteRow": "Delete the row",
-      "deleteColumn": "Delete the column",
-      "deleteTable": "Delete the table"
+      "chartHint": "Insert a CMarket chart, frozen as of today"
     },
     "chart": {
       "title": "CMarket chart",
@@ -237,13 +223,6 @@
       "frozen": "Today's prices are copied into the publication: the chart will not move afterwards.",
       "insert": "Insert the chart",
       "missing": "This chart is no longer available."
-    },
-    "link": {
-      "title": "Link",
-      "url": "Address",
-      "invalid": "An address starting with https://, http:// or mailto:.",
-      "apply": "Apply",
-      "remove": "Remove the link"
     },
     "image": {
       "type": "{{name}}: a PNG, JPEG, WebP or GIF image only.",

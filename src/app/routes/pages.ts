@@ -27,6 +27,9 @@ const PublishingStudioPage = lazy(() =>
   import('@/pages/publishing-studio').then((module) => ({ default: module.PublishingStudioPage })),
 )
 const NewsPage = lazy(() => import('@/pages/news').then((module) => ({ default: module.NewsPage })))
+const NewsStudioPage = lazy(() =>
+  import('@/pages/news-studio').then((module) => ({ default: module.NewsStudioPage })),
+)
 const MarketCalendarPage = lazy(() =>
   import('@/pages/market-calendar').then((module) => ({ default: module.MarketCalendarPage })),
 )
@@ -94,6 +97,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   PUB: ResearchLibraryPage,
   PUBNEW: PublishingStudioPage,
   N: NewsPage,
+  NEWSNEW: NewsStudioPage,
   CAL: MarketCalendarPage,
   ALRT: AlertsPage,
   CFG: SettingsPage,

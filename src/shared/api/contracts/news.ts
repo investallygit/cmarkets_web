@@ -1,4 +1,5 @@
 import type { IsoDateTime } from './common'
+import type { RichTextDoc } from './research'
 
 /** ARTICLE or FLASH (spec section 16): the type is chosen at creation and kept once published. */
 export const NEWS_TYPES = ['article', 'flash'] as const
@@ -70,12 +71,33 @@ export interface NewsItemDto {
   language: NewsLanguage
 }
 
+/**
+ * The node of a "CMarket security" card in an ARTICLE's body (spec section 16): `attrs.securityId`
+ * names the security, which the reader sees live.
+ */
+export const SECURITY_CARD_NODE = 'cmarketSecurity'
+
+/** A file of an item: an ARTICLE's PDF, under its body; its address is its random id. */
+export interface NewsFileDto {
+  id: string
+  fileName: string
+  size: number
+  /** /api/v1/news-files/{id}: opened without the session, as an image is. */
+  url: string
+}
+
 /** GET /news/{id}: the content. Shown 3 seconds in an active tab, it sends POST /news/{id}/view. */
 export interface NewsArticleDto extends NewsItemDto {
   /** An ARTICLE's standfirst (400 characters), a FLASH's text (500 characters). */
   summary: string
-  /** An ARTICLE's body, paragraphs of plain text; empty for a FLASH. */
-  body: string[]
+  /**
+   * An ARTICLE's body, the document of the studio's editor: paragraphs, subheadings, lists, quotes,
+   * tables, images with their credit, links, "CMarket security" cards; null for a FLASH.
+   */
+  body: RichTextDoc | null
+  /** An ARTICLE's PDF. */
+  attachment: NewsFileDto | null
+  /** The byline: "Media I · Business desk". */
   author: string | null
   /** Set once the item was edited after its publication: "Updated on …". */
   updatedAt: IsoDateTime | null
@@ -97,6 +119,6 @@ export interface NewsWriteDto {
   language: NewsLanguage
   /** An ARTICLE's standfirst, a FLASH's text. */
   summary: string
-  /** An ARTICLE's body, paragraphs of plain text; empty for a FLASH. */
-  body: string[]
+  /** An ARTICLE's body, the editor's document; null for a FLASH. */
+  body: RichTextDoc | null
 }

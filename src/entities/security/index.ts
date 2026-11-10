@@ -14,4 +14,5 @@ export {
   type SecurityFilters,
 } from './api/queries'
 export { useSecurityRealtimeSync } from './api/useSecurityRealtimeSync'
+export { SecurityListField } from './ui/SecurityListField'
 export { SecurityPicker } from './ui/SecurityPicker'

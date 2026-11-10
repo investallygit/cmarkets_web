@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DOCUMENT_TYPES, useSaveDocument } from '@/entities/document'
+import { SecurityListField } from '@/entities/security'
 import { isApiError } from '@/shared/api'
 import type { DocumentDto, DocumentType } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
@@ -10,7 +11,6 @@ import { FileDrop } from '@/shared/ui/form/FileDrop'
 import { Select } from '@/shared/ui/form/Select'
 import { TextInput } from '@/shared/ui/form/TextInput'
 import { toast } from '@/shared/ui/toast'
-import { SecurityListField } from './SecurityListField'
 
 const MAX_PDF_BYTES = 20 * 1024 * 1024
 
@@ -80,7 +80,12 @@ export function DocumentForm({ document, onSaved }: DocumentFormProps) {
         <TextInput value={title} onChange={setTitle} highlight />
       </Field>
       <Field label={t('content.securities')} error={errors.securityIds?.[0]}>
-        <SecurityListField value={securityIds} onChange={setSecurityIds} />
+        <SecurityListField
+          value={securityIds}
+          onChange={setSecurityIds}
+          addLabel={t('content.addSecurity')}
+          removeLabel={(code) => t('content.removeSecurity', { code })}
+        />
       </Field>
       <Field
         label={t('content.file')}

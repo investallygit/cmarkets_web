@@ -76,6 +76,7 @@
     "PUB": { "title": "Research library", "menu": "Research" },
     "PUBNEW": { "title": "Publishing studio", "menu": "Studio" },
     "N": { "title": "News", "menu": "News" },
+    "NEWSNEW": { "title": "News studio", "menu": "Studio" },
     "CAL": { "title": "Market calendar", "menu": "Calendar" },
     "ALRT": { "title": "Alerts", "menu": "Alerts" },
     "CFG": { "title": "Settings", "menu": "Settings" },
@@ -160,6 +161,10 @@
     "analyst": "Analyst",
     "myPublications": "My publications",
     "earnings": "My earnings",
+    "myNews": "My news",
+    "newsEarnings": "Earnings",
+    "publishing": "Publishing",
+    "fileImport": "File import",
     "editor": "Editor",
     "publicationSettings": "Publication settings",
     "profile": "Profile",
@@ -420,5 +425,31 @@
     "commentRequired": "Say what is wrong.",
     "commentTooLong": "{{max}} characters at most.",
     "send": "Send the report"
+  },
+  "richText": {
+    "toolbar": {
+      "label": "Formatting",
+      "bold": "Bold",
+      "italic": "Italic",
+      "heading": "Heading {{level}}",
+      "list": "List",
+      "quote": "Quote",
+      "table": "Table",
+      "tableHint": "Insert a table",
+      "image": "Image",
+      "link": "Link",
+      "addRow": "Add a row below",
+      "addColumn": "Add a column to the right",
+      "deleteRow": "Delete the row",
+      "deleteColumn": "Delete the column",
+      "deleteTable": "Delete the table"
+    },
+    "link": {
+      "title": "Link",
+      "url": "Address",
+      "invalid": "An address starting with https://, http:// or mailto:.",
+      "apply": "Apply",
+      "remove": "Remove the link"
+    }
   }
 }

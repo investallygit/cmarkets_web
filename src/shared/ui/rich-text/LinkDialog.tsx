@@ -4,7 +4,7 @@ import { Dialog, DialogBody, DialogFooter } from '@/shared/ui/Dialog'
 import { Button } from '@/shared/ui/form/Button'
 import { Field } from '@/shared/ui/form/Field'
 import { TextInput } from '@/shared/ui/form/TextInput'
-import { isLinkAllowed } from './editorExtensions'
+import { isLinkAllowed } from './links'
 
 interface LinkDialogProps {
   open: boolean
@@ -18,7 +18,7 @@ interface LinkDialogProps {
 export function LinkDialog({ open, onClose, href, onSave }: LinkDialogProps) {
   const { t } = useTranslation()
   return (
-    <Dialog open={open} onClose={onClose} title={t('studio.link.title')}>
+    <Dialog open={open} onClose={onClose} title={t('richText.link.title')}>
       <LinkForm href={href} onClose={onClose} onSave={onSave} />
     </Dialog>
   )
@@ -41,7 +41,7 @@ function LinkForm({ href, onClose, onSave }: Omit<LinkDialogProps, 'open'>) {
       }}
     >
       <DialogBody>
-        <Field label={t('studio.link.url')} error={invalid ? t('studio.link.invalid') : null}>
+        <Field label={t('richText.link.url')} error={invalid ? t('richText.link.invalid') : null}>
           <TextInput
             value={url}
             onChange={setUrl}
@@ -61,12 +61,12 @@ function LinkForm({ href, onClose, onSave }: Omit<LinkDialogProps, 'open'>) {
               onClose()
             }}
           >
-            {t('studio.link.remove')}
+            {t('richText.link.remove')}
           </Button>
         )}
         <Button onClick={onClose}>{t('common.cancel')}</Button>
         <Button type="submit" variant="primary">
-          {t('studio.link.apply')}
+          {t('richText.link.apply')}
         </Button>
       </DialogFooter>
     </form>

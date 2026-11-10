@@ -66,6 +66,8 @@ export const PERMISSIONS = [
   'directory:list',
   'directory:profile',
   'messages:write',
+  'news:write',
+  'news:stats',
   'data:import',
   'content:publish',
   'users:manage',

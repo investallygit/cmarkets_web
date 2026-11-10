@@ -52,6 +52,15 @@ describe('useKeyboardScrolling', () => {
     expect(screen.getByTestId('box')).not.toHaveAttribute('tabindex')
   })
 
+  it('takes the focus when its only input is a hidden file input, as a read-only editor', () => {
+    render(
+      <Box>
+        <input type="file" hidden />
+      </Box>,
+    )
+    expect(screen.getByTestId('box')).toHaveAttribute('tabindex', '0')
+  })
+
   it('takes the focus when its links are out of the tab order, as the news tags of a list', () => {
     render(
       <Box>

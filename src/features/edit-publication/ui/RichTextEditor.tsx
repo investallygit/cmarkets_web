@@ -5,13 +5,13 @@ import { useUploadAttachment } from '@/entities/publication'
 import type { FrozenChartDto, RichTextDoc } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { CHART_NODE } from '@/shared/lib/richText'
+import { LinkDialog } from '@/shared/ui/rich-text/LinkDialog'
 import { toast } from '@/shared/ui/toast'
 import { useDraftStore } from '../model/draftStore'
 import { ChartDialog } from './ChartDialog'
 import { FrozenChartsContext } from './chartsContext'
 import { EditorToolbar } from './EditorToolbar'
 import { editorExtensions } from './editorExtensions'
-import { LinkDialog } from './LinkDialog'
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif']
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024

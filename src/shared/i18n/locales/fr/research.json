@@ -204,23 +204,9 @@
       "placeholder": "Rédigez la publication : sections en titres H2, tableaux, images et graphiques CMarket."
     },
     "toolbar": {
-      "label": "Mise en forme",
-      "bold": "Gras",
-      "italic": "Italique",
-      "heading": "Titre {{level}}",
-      "list": "Liste",
-      "table": "Tableau",
-      "tableHint": "Insérer un tableau",
-      "image": "Image",
       "imageHint": "Insérer une image : PNG, JPEG, WebP ou GIF, 2 Mo au plus",
       "chart": "Graphique CMarket",
-      "chartHint": "Insérer un graphique CMarket, figé à aujourd'hui",
-      "link": "Lien",
-      "addRow": "Ajouter une ligne en dessous",
-      "addColumn": "Ajouter une colonne à droite",
-      "deleteRow": "Supprimer la ligne",
-      "deleteColumn": "Supprimer la colonne",
-      "deleteTable": "Supprimer le tableau"
+      "chartHint": "Insérer un graphique CMarket, figé à aujourd'hui"
     },
     "chart": {
       "title": "Graphique CMarket",
@@ -237,13 +223,6 @@
       "frozen": "Les cours d'aujourd'hui sont copiés dans la publication : le graphique ne bougera plus.",
       "insert": "Insérer le graphique",
       "missing": "Ce graphique n'est plus disponible."
-    },
-    "link": {
-      "title": "Lien",
-      "url": "Adresse",
-      "invalid": "Une adresse commençant par https://, http:// ou mailto:.",
-      "apply": "Appliquer",
-      "remove": "Retirer le lien"
     },
     "image": {
       "type": "{{name}} : une image PNG, JPEG, WebP ou GIF seulement.",

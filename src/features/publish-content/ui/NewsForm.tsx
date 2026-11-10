@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNewsArticle, useSaveNews } from '@/entities/news'
+import { NEWS_LIMITS, summaryLimit, useNewsArticle, useSaveNews } from '@/entities/news'
+import { SecurityListField } from '@/entities/security'
 import { isApiError } from '@/shared/api'
 import {
   NEWS_CATEGORIES,
@@ -11,6 +12,7 @@ import {
   type NewsType,
 } from '@/shared/api/contracts'
 import { CEMAC_COUNTRIES } from '@/shared/config/countries'
+import { docParagraphs, textDoc } from '@/shared/lib/richText'
 import { useFormat, useLocale } from '@/shared/i18n'
 import { Button } from '@/shared/ui/form/Button'
 import { Checkbox } from '@/shared/ui/form/Checkbox'
@@ -21,8 +23,7 @@ import { Textarea } from '@/shared/ui/form/Textarea'
 import { TextInput } from '@/shared/ui/form/TextInput'
 import { QueryView } from '@/shared/ui/QueryView'
 import { toast } from '@/shared/ui/toast'
-import { NEWS_LIMITS, summaryLimit, toParagraphs } from '../lib/newsLimits'
-import { SecurityListField } from './SecurityListField'
+import { toParagraphs } from '../lib/paragraphs'
 
 const LANGUAGES: readonly NewsLanguage[] = ['fr', 'en']
 
@@ -67,7 +68,8 @@ function NewsFields({
   const [countries, setCountries] = useState<string[]>(article?.countries ?? [])
   const [securityIds, setSecurityIds] = useState<string[]>(article?.securityIds ?? [])
   const [summary, setSummary] = useState(article?.summary ?? '')
-  const [text, setText] = useState(article?.body.join('\n\n') ?? '')
+  // The NEWS screen writes plain paragraphs; the studio's richer bodies come back as their text.
+  const [text, setText] = useState(article?.body ? docParagraphs(article.body).join('\n\n') : '')
   const errors = isApiError(save.error, 400) ? (save.error.problem.errors ?? {}) : {}
   const flash = type === 'flash'
   const allCemac = CEMAC_COUNTRIES.every((code) => countries.includes(code))
@@ -97,7 +99,7 @@ function NewsFields({
               securityIds,
               language,
               summary: summary.trim(),
-              body: flash ? [] : toParagraphs(text),
+              body: flash ? null : textDoc(toParagraphs(text)),
             },
           },
           {
@@ -178,7 +180,12 @@ function NewsFields({
         hint={t('content.securitiesHint', { max: NEWS_LIMITS.securities })}
         error={errors.securityIds?.[0]}
       >
-        <SecurityListField value={securityIds} onChange={setSecurityIds} />
+        <SecurityListField
+          value={securityIds}
+          onChange={setSecurityIds}
+          addLabel={t('content.addSecurity')}
+          removeLabel={(code) => t('content.removeSecurity', { code })}
+        />
       </Field>
       <Field
         label={flash ? t('content.flashText') : t('content.standfirst')}

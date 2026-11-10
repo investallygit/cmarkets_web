@@ -17,6 +17,7 @@ import {
   ScanSearch,
   ScrollText,
   Server,
+  SquarePen,
   Settings,
   ShieldCheck,
   Upload,
@@ -48,6 +49,8 @@ export interface ScreenDefinition {
   module?: ModuleCode
   /** Listed in the left menu (spec section 9). */
   inMenu: boolean
+  /** The code the left menu shows when it is not the screen's own: NEWS for NEWS NEW (decision 2). */
+  menuCode?: string
   icon: LucideIcon
   titleKey: TranslationKey
   menuKey: TranslationKey
@@ -64,6 +67,7 @@ interface ScreenOptions {
   module?: ModuleCode
   inMenu?: boolean
   routePattern?: string
+  menuCode?: string
 }
 
 function screen(
@@ -72,13 +76,14 @@ function screen(
   path: string,
   audience: Audience,
   icon: LucideIcon,
-  { permission, module, inMenu = false, routePattern }: ScreenOptions = {},
+  { permission, module, inMenu = false, routePattern, menuCode }: ScreenOptions = {},
 ): ScreenDefinition {
   return {
     id,
     code,
     path,
     routePattern,
+    menuCode,
     audience,
     permission,
     module,
@@ -96,7 +101,7 @@ function screen(
 // prettier-ignore
 export const SCREENS: readonly ScreenDefinition[] = [
   // Client menu, in the order of screens 10 to 12: MKT, EQS, YCRV, PORT, PUB, NET, MSG, N, ALRT,
-  // CFG.
+  // CFG; a News provider's studio after N (spec section 9), NEWS in the menu (ROADMAP decision 2).
   screen('MKT', 'MKT', routes.market, 'client', LayoutDashboard, { permission: 'market:read', module: 'monitoring', inMenu: true }),
   screen('EQS', 'EQS', routes.screener, 'client', ScanSearch, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
   screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
@@ -105,6 +110,7 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('NET', 'NET', routes.directory, 'client', BookUser, { permission: 'directory:list', inMenu: true }),
   screen('MSG', 'MSG', routes.messages, 'client', MessagesSquare, { permission: 'messages:write', inMenu: true }),
   screen('N', 'N', routes.news, 'client', Newspaper, { permission: 'market:read', module: 'monitoring', inMenu: true, routePattern: routes.newsTabs }),
+  screen('NEWSNEW', 'NEWS NEW', routes.newsStudio, 'client', SquarePen, { permission: 'news:write', inMenu: true, menuCode: 'NEWS' }),
   screen('ALRT', 'ALRT', routes.alerts, 'client', Bell, { permission: 'alerts:write', module: 'monitoring', inMenu: true }),
   screen('CFG', 'CFG', routes.settings, 'client', Settings, { inMenu: true }),
 

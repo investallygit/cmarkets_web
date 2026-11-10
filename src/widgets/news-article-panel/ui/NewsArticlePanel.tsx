@@ -1,10 +1,12 @@
-import { ExternalLink } from 'lucide-react'
+import { ExternalLink, FileText } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
-import { NewsTags, useNewsArticle, useNewsView } from '@/entities/news'
+import { NewsBody, NewsTags, useNewsArticle, useNewsView } from '@/entities/news'
+import { QuoteCard } from '@/entities/quote'
 import { ShareNewsActions } from '@/features/share-news'
 import { isApiError } from '@/shared/api'
 import type { NewsArticleDto } from '@/shared/api/contracts'
+import { resolveApiUrl } from '@/shared/config/env'
 import { useFormat } from '@/shared/i18n'
 import { securityPath } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
@@ -13,8 +15,9 @@ import { PanelEmpty } from '@/shared/ui/StatusViews'
 
 /**
  * The content of a news item (spec section 16): its two tags, subject and headline, an ARTICLE's
- * standfirst and body or a FLASH's text, its author and original link, the securities it
- * concerns. API /news/{id}; shown 3 seconds in an active tab, it counts the unique click. Its
+ * standfirst, body (the studio's document: its images with their credit, its "CMarket security"
+ * cards with their live price) and PDF, or a FLASH's text; its author and original link, the
+ * securities it concerns. API /news/{id}; shown 3 seconds in an active tab, it counts the unique click. Its
  * title bar copies the item's address (/n?article={id}) or sends it to a conversation.
  */
 export function NewsArticlePanel({ articleId }: { articleId: string | null }) {
@@ -62,11 +65,27 @@ function NewsContent({ item }: { item: NewsArticleDto }) {
       >
         {item.summary}
       </p>
-      {item.body.map((paragraph, index) => (
-        <p key={index} className="font-sans text-label leading-relaxed">
-          {paragraph}
-        </p>
-      ))}
+      {item.body && (
+        <NewsBody
+          body={item.body}
+          renderSecurity={(securityId, code) => <QuoteCard securityId={securityId} code={code} />}
+        />
+      )}
+      {item.attachment && (
+        <a
+          href={resolveApiUrl(item.attachment.url)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 self-start font-sans text-data text-info underline underline-offset-2"
+        >
+          <FileText aria-hidden className="size-3.5" />
+          {t('newsStudio.editor.attachment', {
+            name: item.attachment.fileName,
+            size: format.fileSize(item.attachment.size),
+          })}
+          <span className="sr-only">{t('news.newTab')}</span>
+        </a>
+      )}
       <footer
         lang={format.locale}
         className="flex flex-col gap-1 border-t pt-2 font-sans text-data text-secondary"

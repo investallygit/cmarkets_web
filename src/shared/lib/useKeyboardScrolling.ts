@@ -2,7 +2,7 @@ import { useEffect, type RefObject } from 'react'
 
 /**
  * What the keyboard reaches by itself in a box: not a link taken out of the tab order, as the news
- * tags of a list (their filters are in the screen's bar).
+ * tags of a list (their filters are in the screen's bar), nor a hidden file input a button opens.
  */
 const FOCUSABLE = [
   'a[href]',
@@ -13,7 +13,7 @@ const FOCUSABLE = [
   '[contenteditable="true"]',
   '[tabindex]',
 ]
-  .map((selector) => `${selector}:not([tabindex="-1"])`)
+  .map((selector) => `${selector}:not([tabindex="-1"]):not([hidden])`)
   .join(', ')
 
 /**

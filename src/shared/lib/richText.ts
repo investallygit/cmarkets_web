@@ -91,6 +91,24 @@ export function docBlocks(doc: RichTextDoc): TextBlock[] {
   return blocks
 }
 
+/** The text of each block, in reading order: the Data admin's paragraphs, a preview's lines. */
+export function docParagraphs(doc: RichTextDoc): string[] {
+  return docBlocks(doc)
+    .map((block) => block.text)
+    .filter(Boolean)
+}
+
+/** The characters of a document's text, as the API counts its limit (marks and cards left out). */
+export function docLength(doc: RichTextDoc | RichTextNode): number {
+  if (doc.type === 'text') return (doc as RichTextNode).text?.length ?? 0
+  return (doc.content ?? []).reduce((total, node) => total + docLength(node), 0)
+}
+
+/** Some text: a body of images or cards alone is no article. */
+export function docHasText(doc: RichTextDoc | null): boolean {
+  return doc !== null && docParagraphs(doc).some((paragraph) => paragraph.trim().length > 0)
+}
+
 const WORDS_PER_PAGE = 450
 
 /** Pages of the PDF: the words at 450 a page; a chart, an image or a table takes a third. */
