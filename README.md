@@ -1,9 +1,9 @@
 # CMarket web
 
-Front end of CMarket, built from `CMarket-developer-spec-EN.pdf` (second version, 2 November
-2026): the client terminal with its professional directory and messaging, and the back-office of
-the Data admin and of the Admin. It takes all its data from `CMarket.Api`: the REST API and the
-SignalR hubs.
+Front end of CMarket, built from `CMarket-developer-spec-EN.pdf` (third version, 10 November
+2026, whose additions are under way): the client terminal with its professional directory and
+messaging, and the back-office of the Data admin and of the Admin. It takes all its data from
+`CMarket.Api`: the REST API and the SignalR hubs.
 
 - [Introduction](#introduction): what the app does, its stack, the status of each screen
 - [Installation](#installation): run it, log in, the scripts
@@ -62,10 +62,23 @@ tables, read-excel-file to read the Excel templates before upload.
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done; corrections logged with their reason                    |
 | 9 · Account administration (USER) with ANLY and MOD                       | Done; MOD reviews the directory reports too                   |
 | Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged  |
+| News provider account type (third version)                                | To do, step 24                                                |
+| News rebuilt: ARTICLE and FLASH, newspapers, tags, unique clicks          | To do, step 25                                                |
+| 13 · News studio (NEWS NEW)                                               | To do, step 26                                                |
+| News administration (SRC), AI ingestion, international news: no mockup    | To do, step 27                                                |
+| 18 · Media payments (MPAY)                                                | To do, step 28                                                |
+| 17 · Bond screener (BS)                                                   | To do, step 29                                                |
+| 16 · Bond pricing (BP), which YAS opens                                   | To do, step 30                                                |
+| 20 · Bond profile (DES on a bond)                                         | To do, step 31                                                |
+| 15 · ETF screener (ETFS)                                                  | To do, step 32                                                |
+| 19 · ETF profile (DES on an ETF)                                          | To do, step 33                                                |
+| 14 · Subscription management (SUBS)                                       | To do, step 34                                                |
+| Security descriptions on EQS (screen 3)                                   | To do, step 35                                                |
 
 How the screens were built, step by step, what the second version of the spec added (the
-Journalist and CEO account types, screens 10 to 12 and what they change on screen 9) and the open
-questions for the spec author are in [ROADMAP.md](ROADMAP.md). The screens follow WCAG 2.2 AA:
+Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), the plan of
+the third version (the News provider, the news rebuilt, screens 13 to 20) and the open questions
+for the spec author are in [ROADMAP.md](ROADMAP.md). The screens follow WCAG 2.2 AA:
 axe finds nothing on any of them for any account type, and each works from the keyboard and in a
 window down to 320 px wide.
 

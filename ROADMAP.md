@@ -1,16 +1,20 @@
 # Roadmap
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`, the version of
-2 November 2026; the first version, of 29 October, is kept as `CMarket-developer-spec-EN-v1.pdf`.
+10 November 2026; the earlier versions are kept as `CMarket-developer-spec-EN-v1.pdf` (29 October)
+and `CMarket-developer-spec-EN-v2.pdf` (2 November).
 
-Every screen of both versions is built: the client terminal (MKT, DES with its FA and ANA tabs,
-EQS, YCRV, YAS, PORT, PUB, PUB NEW, NET, MSG, NET ME, N, CAL, ALRT and CFG) with the public
+Every screen of the first two versions is built: the client terminal (MKT, DES with its FA and ANA
+tabs, EQS, YCRV, YAS, PORT, PUB, PUB NEW, NET, MSG, NET ME, N, CAL, ALRT and CFG) with the public
 profile page and the login, sign-up and password reset pages, the back-office of the Data admin
 (IMP with DATA, HIST and EODH, then CORR and NEWS) and that of the Admin (USER with ANLY and MOD,
 then ADMCFG, AUDT and PAY), and the home page that visitors see before login. The second version
 added the Journalist and CEO account types and the professional directory with its messaging
 (screens 10 to 12): steps 11 to 19, under [Second version of the spec](#second-version-of-the-spec).
-What remains is listed under "Still to do" and in the open questions for the spec author.
+The third version adds a ninth account type, the News provider, a news feed rebuilt around partner
+newspapers paid per unique click, and eight screens (13 to 20): steps 23 to 36, under
+[Third version of the spec](#third-version-of-the-spec). What remains is listed under "Still to
+do", in those steps and in the open questions for the spec author.
 
 ANLY and MOD were built with USER: in the mockups they are panels of the same screen. Sizes are
 relative: S < M < L < XL.
@@ -39,6 +43,22 @@ relative: S < M < L < XL.
 | 18   | Admin: reported profiles and conversations, directory settings  | Done   |
 | 19   | Second version done: README, accessibility, every flow          | Done   |
 | 20   | Connecting `CMarket.Api`: `.env`, the API module, its checks    | Done   |
+| 21   | The mock removed: every screen on `CMarket.Api`                 | Done   |
+| 22   | The Azure demo checked                                          | Done   |
+| 23   | Third version of the spec: the plan, its decisions, questions   | Done   |
+| 24   | News provider account type, approved by the Admin               | To do  |
+| 25   | News rebuilt: ARTICLE, FLASH, newspapers, tags, unique clicks   | To do  |
+| 26   | NEWS NEW: the news studio of a News provider (screen 13)        | To do  |
+| 27   | News administration, AI ingestion, international news           | To do  |
+| 28   | MPAY: media payments (screen 18)                                | To do  |
+| 29   | Daily bond analytics, BS: bond screener (screen 17)             | To do  |
+| 30   | BP: bond pricing (screen 16)                                    | To do  |
+| 31   | Bond profile (screen 20), the profile chosen by security type   | To do  |
+| 32   | ETF data, ETFS: ETF screener (screen 15)                        | To do  |
+| 33   | ETF profile (screen 19)                                         | To do  |
+| 34   | SUBS: subscription management (screen 14)                       | To do  |
+| 35   | Security descriptions on EQS (screen 3)                         | To do  |
+| 36   | Third version done: README, accessibility, every flow           | To do  |
 
 ## Second version of the spec
 
@@ -480,6 +500,266 @@ every GET of the API, found:
 Left to do on Azure: the API runs in West US 3 and its database in France Central, so every query
 crosses the Atlantic (1.5 to 3 s for the heavier reads); the App Service belongs in France Central.
 
+## Third version of the spec
+
+The version of 10 November 2026 (96 pages, against 56), compared sentence by sentence and image by
+image with the second. Sections 1, 2, 4 and 13 are unchanged, and so are the formulas of 14.1 to
+14.3 and the planned enhancements, which move from section 16 to section 17. The mockups of
+screens 2, 4 to 8 and 11 are the same images; those of screens 1, 3, 9, 10 and 12 are redrawn.
+
+- **Account types** (sections 6, 12 and 15): nine. The News provider is a seventh client type, for
+  media managers who publish flashes and articles under their newspaper's name and are paid per
+  unique click. An Admin approves it on a letter from the media and a signed content agreement,
+  which brings the VERIFIED badge, and links it to its newspaper (a source); several accounts may
+  publish for one source. In the matrix it has the prices; the order book, the analysis, the
+  curves and the calculator read only; no export, no portfolio, 20 alerts; the research, read and
+  bought; the directory and the messaging. Two rows are new: "Publish news (entry or file)" (the
+  News provider under its source, the Data admin) and "News read statistics" (the News provider
+  for its source, the Data admin, the Admin); the permissions named add `news:write`. Its badge is
+  teal, `#2EC4B6`; "Who can contact me" has seven types, Direct by default for the News provider.
+- **News** (sections 5 and 16, new): four channels feed it: partner newspapers (screen 13), an
+  international news API (EODHD `/news`, every 15 minutes), CMarket's AI (an ingestion API, server
+  to server) and the Data admin. An item is an ARTICLE (standfirst of 400 characters, body of
+  10,000, images and a PDF) or a FLASH (150 and 500 characters, no image, pushed to the users
+  following its securities or countries, 20 a day per newspaper), in one of eight categories, for
+  one or more countries ("CEMAC" for the six), in French or English, published at once or at a
+  time of Douala. It carries its newspaper (`source`: id, channel, short name, name, logo,
+  verified, original link) and shows two tags wherever it appears: its type and its newspaper,
+  coloured by channel. The feed no longer returns the content: `GET /news/{id}` does, and
+  `POST /news/{id}/view` records a unique click once the content showed 3 seconds in an active
+  tab. A partner newspaper is paid per unique click, monthly, within a cap; some clicks are
+  excluded (its own accounts, employees, suspended or day-old accounts, automated access, clicks
+  after withdrawal or invalidated) and anti-fraud checks alert the Admin.
+- **Screens** (section 9): twenty. 13 NEWS NEW, the news studio of a News provider; 14 SUBS,
+  subscription management (Admin); 15 ETFS, the ETF screener; 16 BP, bond pricing, which YAS now
+  opens; 17 BS, the bond screener; 18 MPAY, media payments (Admin); 19 and 20, the ETF and bond
+  profiles, which DES opens by the security's type. Screen 1's news shows the two tags, screen 3
+  adds the security's description, screen 9 counts nine types, screens 10 and 12 list the News
+  provider. The client menu adds NEWS for a News provider; ETFS sits under EQS, BP and BS under
+  YCRV. The Admin's menu becomes USER, SUBS, MPAY, ANLY, MOD, PAY, CFG, AUDT.
+- **API** (section 10): `/provider/*` for the studio; `/news` with its type, channel and source,
+  and `/news/{id}/view`; `/ingest/*` for the AI (an API key, an HMAC-SHA256 signature, allowed
+  addresses, 1,000 items an hour); `/admin/news*`, `/admin/news-sources`, `/admin/publishers`,
+  `/admin/ingest-clients`; `/admin/news-statements*` and `/admin/news-clicks*`, with a second
+  Admin's confirmation; `/admin/subscriptions*`; `/etfs*`; `/bonds/price`, `/bonds/screener*`,
+  `/bonds/{id}/analytics*`, `/cashflows` and `/ratings`; saved ETF and bond screens; the type and
+  the description of `/securities/{id}`.
+- **Data** (section 11): the bond list (`BOND_MASTER`) and its ratings (`BOND_RATINGS`), two ETF
+  files ("ETF profiles", "ETF NAV and spreads"); every night, each bond's figures (a model price
+  when its last quote is more than 5 sessions old) and each ETF's performance.
+- **Formulas** (sections 14.4 and 14.5, new): current yield, yield to worst, credit spread,
+  Z-spread, effective duration and convexity, composite rating; an ETF's returns, premium or
+  discount, bid-ask spread, distribution yield, tracking difference and tracking error.
+- **Back end only** (section 7): the `news` schema, which replaces `data.News`; the ETF and bond
+  tables.
+
+### Decisions taken
+
+Where the third version is silent or contradicts itself, the steps below follow these choices;
+each is also an open question for the spec author.
+
+1. **The News provider's menu**: as the text says, NEWS (the studio) after N, and no PORT; the
+   screen 13 mockup lights N and shows PORT.
+2. **The NEWS code**: the Data admin's news and documents screen keeps NEWS; the studio's code is
+   NEWS NEW, labelled NEWS in the News provider's menu. The command bar resolves a code among the
+   screens the account opens, so the two never meet.
+3. **Spelling of codes**: the API that the front end reads keeps its style (`etf`, `flash`,
+   `ratesDebt`, `newsProvider`, `bond-master`); the ingestion API and the uploaded files (news,
+   bonds, ETFs) take the spec's codes as written (`FLASH`, `RATES_DEBT`, `SOVEREIGN`), since other
+   teams write to them.
+4. **Topics and categories**: the eight categories replace the three topics, in the items and in
+   the feed's filter (`category=`, the spec's `topic=`); MKT's ISSUERS and REGULATOR filter the
+   categories of those names.
+5. **Followers of a FLASH**: the users whose news alerts watch one of its securities or countries,
+   as a publication reaches the alerts of its security and country; no new way to follow.
+6. **News administration, without a mockup**: pending and reported items are moderated in the
+   Data admin's NEWS (approve, take down, retype), which also keeps the publishers (domain →
+   name), and in MOD for the Admin; a new Admin screen, SRC, holds the newspapers (members, rate,
+   cap, FLASH quota, moderation mode), the AI's settings and the ingestion clients.
+7. **Subscriptions**: a renewal charges the stored card, or sends a payment request to the mobile
+   money number, through the payment port, a simulated provider standing in until a real one keeps
+   cards. A failed charge is tried again for 7 days, while SUBS shows "Payment failed", then the
+   plan expires. A change of plan is prorated by the day; a suspension cuts access at once, until
+   the Admin lifts it; a media's News providers share a "Media source" plan at XAF 0, paid by
+   "Agreement".
+8. **EODHD**: news, ETFs and curves are built and tested against EODHD's answers, with demo data
+   until the commercial licence; the "ETF profiles" and "ETF NAV and spreads" files fill what it
+   lacks; EUR and USD spreads show n/a until the codes of their government curves are confirmed.
+9. **Descriptions**: the Data admin writes a security's French and English text
+   (`PUT /data/securities/{id}/description`, from CORR); EODHD's English text fills Europe and
+   the US, and stands in, marked EN, where no French was written.
+10. **Flags**: country flags come from `flag-icons` (MIT), one SVG per country; lucide-react stays
+    the icon set.
+11. **Automated access**: a view counts only if it comes 3 seconds or more after the same user
+    read the item's content, from a browser that is not headless, below a number of views an hour
+    per account that the Admin sets.
+12. **A News provider's newspaper**: the media is the provider's organisation, as a CEO's; the
+    source of a partner newspaper belongs to it, and the approval links the provider to it.
+13. **Permissions**: `news:write` (the studio: an approved News provider), `news:stats` (read
+    statistics: the News provider for its source, the Data admin, the Admin), `news:moderate`
+    (moderation and publishers: the Data admin, the Admin), `news:payments` (MPAY and SRC: the
+    Admin), `subscriptions:manage` (SUBS: the Admin).
+
+### Step 23 · The plan (S): done
+
+The third version is now `CMarket-developer-spec-EN.pdf` and the second `-v2.pdf`; this section,
+the order above, the status of the screens to come in the README, the open questions of the third
+version, and the same plan in CMarket.Api's `docs/PLAN.md` (its phases 17 to 28). With the mock
+gone, each step writes its contract first (`shared/api/contracts` and `shared/api/endpoints`, from
+spec section 10), CMarket.Api serves it (domain, tests, migration, demo data as in the mockups),
+then the screen is built on the API and checked by its Playwright flow and axe.
+
+### Step 24 · News provider (M): to do
+
+CMarket.Api's phase 17.
+
+- **Type**: `newsProvider`, a client type after the CEO, verified like the Analyst, the Journalist
+  and the CEO; `news:write` and `news:stats` once approved; the matrix's other rows; 20 alerts, no
+  portfolio.
+- **Sign-up**: the media's name (its organisation), a letter from the media and the signed
+  content agreement.
+- **Admin**: USER counts nine types as on the redrawn screen 9; ANLY approves a News provider;
+  ADMCFG gets its quotas and its column of the matrix.
+- **Directory**: listed, the teal NEWS PROVIDER badge (`--type-news-provider`), a seventh row in
+  "Who can contact me", Direct by default.
+- **Home page and login**: seven client types; L. Mballa of Media I is the demo News provider.
+
+### Step 25 · News rebuilt (L): to do
+
+CMarket.Api's phase 18.
+
+- **Contract**: an item has a `type` (`article`, `flash`), a `source`, a `category`, its
+  countries, its language and an excerpt; `GET /news?type=&channel=&sourceId=&securityId=&country=&category=`,
+  `GET /news/{id}` with the content, `POST /news/{id}/view`; `NewsPublished` carries the type, the
+  channel and the source.
+- **Tags**: `NewsTypeTag` and `NewsSourceTag` in `entities/news` (18 px, the newspaper's card on
+  hover, a click filters N), on MKT, N, the N tab of DES, the notifications, MSG's news cards and
+  NEWS.
+- **Unique click**: content shown 3 seconds in an active tab sends the view, once.
+- **Data admin**: NEWS writes the type, the category, the countries and the language, within the
+  limits of a FLASH.
+- **CMarket.Api**: the `news` schema takes over `data.News` (the Data admin's items become the
+  CMARKET channel's), views partitioned by month, excluded clicks sorted out, a FLASH pushed to
+  its followers, scheduled items published on time.
+
+### Step 26 · NEWS NEW · News studio (screen 13) (XL): to do
+
+CMarket.Api's phase 19.
+
+- My news (all, drafts, scheduled, published, withdrawn; type; unique clicks), the month's
+  earnings, the editor (an ARTICLE's rich text with "CMarket security" cards and an attachment, a
+  FLASH's 500 characters), publishing (category, countries, securities, language, type, now or at
+  a time of Douala) and the file import (CSV, XLSX or ZIP of up to 500 rows, rows fixed one by
+  one), as the mockup.
+- Publish stays off until the required fields and the rights box are filled; it reads Schedule for
+  a future time; the type is fixed once published; an edit after publication shows "Updated on …".
+- The editor of PUB NEW (TipTap) and the drop zone and row checks of IMP are reused.
+
+### Step 27 · News administration, AI ingestion, international news (L): to do
+
+CMarket.Api's phase 20.
+
+- **NEWS** (Data admin): pending and reported items, approve, take down, retype; the publishers.
+- **MOD** (Admin): the news items among the reports and the pending items.
+- **SRC** (Admin, new): the newspapers, their members, rate, cap, FLASH quota and moderation mode;
+  the AI's moderation and confidence threshold; the ingestion clients, their keys, addresses and
+  quotas.
+- **CMarket.Api**: `/ingest/*` signed with HMAC-SHA256, deduplicated (the same link, or a near
+  headline within 24 hours), partner newspapers' stories refused; EODHD `/news` every 15 minutes,
+  deduplicated by link, its securities through `SecurityMapping`, its publishers through their
+  domains.
+
+### Step 28 · MPAY · Media payments (screen 18) (XL): to do
+
+CMarket.Api's phase 21.
+
+- The header (month, amount due, payable and excluded clicks, open anomalies, paid), the
+  statements by newspaper (rate, items, clicks, gross, cap, due, status; total, XLSX, transfer
+  file, global settings), the click anomalies (invalidate, keep with a reason, details) and the
+  newspaper's statement (status with a reason, payment settings dated by month, PDF), as the
+  mockup.
+- The cycle Computed, Under review, To approve, Approved, Paid, with Disputed and On hold; manual
+  changes with a reason; a second Admin above XAF 300,000 or to force a step (409, then confirm).
+- The studio gets its statements and their disputes (within 15 days).
+- **CMarket.Api**: the statements of the 1st at 02:00, the anomalies, min(payable clicks × rate,
+  cap), amounts under XAF 5,000 carried over, the audit log, the newspaper told at each step.
+
+### Step 29 · Bond analytics and BS · Bond screener (screen 17) (XL): to do
+
+CMarket.Api's phase 22.
+
+- IMP takes the `bond-master` and `bond-ratings` files.
+- BS: criteria (category, market, yield, duration, maturity, country, currency, rating, coupon
+  type), results (model prices starred, YTW in yellow when it differs), the four blocks of the
+  selected bond with Open in BP, saved screens, export by permission.
+- **CMarket.Api**: section 14.4 in `CMarket.Domain` with its tests; call, put and amortization
+  schedules, ratings with their history; reference curves by currency (Admin); the nightly
+  calculation into `mkt.BondAnalyticsDaily`.
+
+### Step 30 · BP · Bond pricing (screen 16) (M): to do
+
+CMarket.Api's phase 23.
+
+- YAS and BP open it, with or without a bond ("ECMR 6.25 2029 BP"); screen 4 keeps its
+  calculator.
+- Inputs (a bond of the list, or its terms by hand; the platform's yield, which the user may
+  change), pricing, risk and supplemental figures, the cash-flow schedule (XLSX), the price-yield
+  curve and the rate sensitivity, as the mockup.
+- **CMarket.Api**: `POST /bonds/price` on the engine of `/bonds/{id}/calculate`, the market yield
+  (BS, else the curve and a spread), the price-yield points; tested on case A of section 14.1, the
+  mockup's figures.
+
+### Step 31 · Bond profile (screen 20), profiles by security type (L): to do
+
+CMarket.Api's phase 24.
+
+- One place decides the profile from the security's type, for DES, a double-click, a search
+  result and a card shared in MSG.
+- The bond profile: header, tabs DES, GP, BP, CF, RAT, DOC, the price and yield history on two
+  axes (model prices lighter), today's analytics, ratings, characteristics, upcoming cash flows
+  with Open in BP, documents and news with their tags; screen 2 leaves bonds to it.
+
+### Step 32 · ETF data and ETFS · ETF screener (screen 15) (XL): to do
+
+CMarket.Api's phase 25.
+
+- Criteria, results with the domicile's flag, the five blocks of the selected ETF, saved screens,
+  export by permission; no comparison block.
+- **CMarket.Api**: the ETF type, `ref.Etfs`, `mkt.EtfDaily`, `mkt.EtfPerformance` worked out each
+  night (section 14.5), EODHD's ETF fundamentals and the two files; the risk-free rate by currency
+  (Admin); the mockup's six ETFs in the demo data.
+
+### Step 33 · ETF profile (screen 19) (L): to do
+
+CMarket.Api's phase 26.
+
+- Header, tabs DES, GP, HLD, PERF, DIST, DOC, the price and NAV history with the volume,
+  performance against the index, risk, the top 10 holdings, the allocation by sector or region,
+  structure and costs, as the mockup.
+
+### Step 34 · SUBS · Subscription management (screen 14) (L): to do
+
+CMarket.Api's phase 27.
+
+- Counters, the subscriptions (search, plan, status and expiry filters, sorted by expiry, CSV),
+  the account's subscription, its payments and invoices (PDF), Extend, Change plan, Resend last
+  invoice and Suspend, as the mockup; "via organisation" for a member.
+- **CMarket.Api**: auto-renewal and the stored method, renewals charged, Payment failed,
+  proration, suspension (decision 7).
+
+### Step 35 · Security descriptions on EQS (screen 3) (S): to do
+
+CMarket.Api's phase 28.
+
+- The panel under the results shows the selected security's description, its source and
+  FR / EN; CORR writes it (decision 9).
+
+### Step 36 · Third version done (M): to do
+
+- axe at 1600, 390 and 320 px and the keyboard on every new screen, for each account type; every
+  flow on a fresh database; the README and this roadmap; the new jobs and the ingestion endpoint
+  on Azure.
+
 ## Shared groundwork
 
 Done in step 1, shown on `/_kit` in the prototype:
@@ -730,6 +1010,8 @@ Still to do, with the first screen that needs it:
   on the N screen; a double-click on a calendar event opens the security.
 - **Still to do**: sharing a list with colleagues of the same organisation (spec section 6) has no
   API yet.
+- **Third version (step 25)**: each news item shows its type and newspaper tags; a click on it
+  counts as a unique click once its content shows 3 seconds.
 
 ### DES · Security profile (screen 2): done
 
@@ -744,6 +1026,8 @@ Still to do, with the first screen that needs it:
 - **Built in step 6**: the ANA tab, with the list, the preview and the analyst of PUB.
 - **Built in step 12**: GP has no drawing tools without `analysis:save` (the Journalist, the CEO).
 - **Still to do**: PNG and PDF export of the chart stays in the shared groundwork.
+- **Third version (steps 25 and 31)**: the N tab shows the news tags; DES opens the ETF or the
+  bond profile (screens 19 and 20) by the security's type, and screen 2 keeps the equities.
 
 ### N · News (no mockup): done
 
@@ -762,6 +1046,8 @@ Still to do, with the first screen that needs it:
   says so instead of an error.
 - **Still to do**: the list shows the 50 newest items; "load more" comes with the pagination of
   the shared groundwork.
+- **Third version (step 25)**: the type and newspaper tags, filters by type, newspaper and
+  category (instead of topic), the content read from `GET /news/{id}` and its unique click.
 
 ### CAL · Market calendar (no mockup): done
 
@@ -817,6 +1103,7 @@ Still to do, with the first screen that needs it:
   screens; the server refuses them too.
 - **Still to do**: the "ANNUAL" switch of the mockup: the statements file has half-years, the API
   no period parameter.
+- **Third version (step 35)**: the description panel under the results, as the redrawn mockup.
 
 ### YCRV / YAS · Yield curves and bond calculator (screen 4): done
 
@@ -836,6 +1123,8 @@ Still to do, with the first screen that needs it:
   point lower a month back.
 - **Still to do**: US and European curves (in the spec, not in the mockup); bond quotes on the
   CEMAC curves (left out by the mock).
+- **Third version (step 30)**: YAS opens BP, bond pricing (screen 16); the calculator of
+  screen 4 stays, on the same engine.
 
 ### PORT · Portfolio (screen 5): done
 
@@ -922,6 +1211,7 @@ Still to do, with the first screen that needs it:
   profile open in the URL, and the public page `/p/{handle}`. Since: Contact and Send a message
   open MSG, blocks (step 16); the reported profiles reviewed in MOD, the specialties of ADMCFG
   (step 18). See step 15.
+- **Third version (step 24)**: the News provider among the types, with its teal badge.
 
 ### MSG · Messaging (screen 11): done
 
@@ -932,6 +1222,8 @@ Still to do, with the first screen that needs it:
 - **Still to do**: the thread's SEARCH and "⋯" of the mockup; the push and e-mail notifications
   of a message unread after 5 minutes, with the back end, which also encrypts the messages and
   keeps them 24 months.
+- **Third version (steps 25 and 31)**: a news card shows its tags; a security card opens the
+  profile of its type.
 
 ### NET ME · My profile, visibility and contact (screen 12): done
 
@@ -939,6 +1231,7 @@ Still to do, with the first screen that needs it:
   mockup. Since: the people blocked (step 16); the Admin's default rules and specialties (step 18).
   See step 14.
 - **Still to do**: choosing the square of the photo (the mock keeps its centre).
+- **Third version (step 24)**: a seventh row, the News provider, in "Who can contact me".
 
 ### CFG · Settings (no mockup): done
 
@@ -984,6 +1277,7 @@ Still to do, with the first screen that needs it:
   least, measured behind each line of text at several scroll positions).
 - **Built in step 12**: the six client account types, in two rows of three, with two more photos.
 - **Still to do**: the texts are the prototype's, to be checked by the spec author.
+- **Third version (step 24)**: seven client types, the News provider among them.
 
 ### Login, OTP, sign-up, password reset: done
 
@@ -1004,6 +1298,32 @@ Still to do, with the first screen that needs it:
 - **Built in step 12**: the sign-up asks a Journalist for a press card or an employer letter, a
   CEO for a proof of position and the organisation they head; their status then waits for an
   Admin. R. Tamba (Journalist) and E. Fouda (CEO) are demo accounts.
+- **Third version (step 24)**: the sign-up of a News provider: its media, the media's letter
+  and the signed content agreement.
+
+### NEWS NEW · News studio (screen 13): to do
+
+- **Planned in step 26** (and its type in step 24): the studio of a News provider.
+
+### ETFS · ETF screener (screen 15): to do
+
+- **Planned in step 32**.
+
+### BP · Bond pricing (screen 16): to do
+
+- **Planned in step 30**.
+
+### BS · Bond screener (screen 17): to do
+
+- **Planned in step 29**.
+
+### DES on an ETF · ETF profile (screen 19): to do
+
+- **Planned in step 33**.
+
+### DES on a bond · Bond profile (screen 20): to do
+
+- **Planned in step 31**.
 
 ## Back-office
 
@@ -1046,6 +1366,7 @@ Still to do, with the first screen that needs it:
 - **Still to do**: the securities and financial statements files are checked and kept, but the
   security master and the statements of the screens do not read them yet; the curves of a
   published file apply from its date, without the shift of the sample file.
+- **Third version (steps 29 and 32)**: the bond list and ratings files, the two ETF files.
 
 ### CORR · Data corrections (no mockup): done
 
@@ -1056,6 +1377,7 @@ Still to do, with the first screen that needs it:
   are in the URL (`/data/corrections?security=SEMC&date=`).
 - **Mock**: a correction replaces the session for every screen, today's last price too, and
   outlives the rollback of an earlier file.
+- **Third version (step 35)**: a security's description, in French and English.
 
 ### NEWS · News and documents (no mockup): done
 
@@ -1068,6 +1390,8 @@ Still to do, with the first screen that needs it:
   tab that sent it (a generated one stands in after a reload).
 - **Still to do**: the PDF attached to a news item (spec section 11): for now the Data admin
   publishes it as a document of the same securities.
+- **Third version (steps 25 and 27)**: an item's type, category, countries and language; the
+  pending and reported items (approve, take down, retype) and the publishers.
 
 ### USER · Account administration (screen 9): done, with ANLY and MOD
 
@@ -1097,6 +1421,8 @@ Still to do, with the first screen that needs it:
   the second version); the three requests, the two reports and C. Nguema's first publication of
   the mockup are seeded. Suspending ends the user's sessions at once; a type changed to Analyst,
   Journalist or CEO is approved with it.
+- **Third version (steps 24 and 27)**: nine counters, the News provider approved in ANLY;
+  the news items in MOD.
 
 ### ADMCFG · Platform settings (no mockup): done
 
@@ -1110,6 +1436,8 @@ Still to do, with the first screen that needs it:
   messaging (default contact rules, new conversations a day, report threshold) and Specialties.
 - **Mock**: users get the new permissions and quotas with their next `/me`, the studio and the
   library the new price range, commission and moderation, PORT the new rate.
+- **Third version (steps 24, 29 and 32)**: the News provider's quotas and column of the
+  matrix; the reference curve and the risk-free rate of each currency.
 
 ### AUDT · Audit log (no mockup): done
 
@@ -1129,6 +1457,19 @@ Still to do, with the first screen that needs it:
   earnings in PUB NEW show the payment.
 - **Mock**: the months up to August are paid, K. Atangana's September too (on 5 October), the
   other analysts' September is due.
+
+### SUBS · Subscription management (screen 14): to do
+
+- **Planned in step 34**.
+
+### MPAY · Media payments (screen 18): to do
+
+- **Planned in step 28**.
+
+### SRC · News sources (no mockup): to do
+
+- **Planned in step 27**: the newspapers, the AI's settings and the ingestion clients (decision 6
+  of the third version).
 
 ## Open questions for the spec author
 
@@ -1407,3 +1748,33 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   conversations)? Does the Admin read a conversation whose reports were dismissed (the
   prototype: yes, it was reported)? The prototype reads it on request only, since each reading
   is logged.
+- **News provider, third version**: the text gives a News provider NEWS (the studio) in the menu,
+  but the screen 13 mockup lights N and shows PORT, which the matrix refuses: the plan follows the
+  text. The studio's code is NEWS NEW (section 9), while NEWS is the Data admin's news and
+  documents screen: the plan keeps both, each in its own menu. Is the media a News provider works
+  for its organisation, as a CEO's (the plan: yes, and its newspaper belongs to it)? Which
+  permission keys stand for the two new rows (the plan: `news:write` and `news:stats`, with
+  `news:moderate`, `news:payments` and `subscriptions:manage` for the back-office)?
+- **News, third version**: are the eight categories the feed's `topic=` (the plan: yes, as
+  `category=`, MKT's ISSUERS and REGULATOR filtering the categories of those names)? Who
+  "follows" the securities or countries of a FLASH (the plan: the owners of news alerts on them,
+  as for a publication)? Which casing does the JSON take: the spec writes `"type": "FLASH"` and
+  `EQUITY`, the API elsewhere `camelCase` (the plan: the spec's codes for the ingestion API and the
+  files, the API's style for the front end)? How is automated access told apart (the plan: a view
+  3 seconds or more after the content was read, no headless browser, a cap per account and hour
+  set by the Admin)? The administration of news (moderation, newspapers, publishers, ingestion
+  clients) has no mockup: the plan puts the moderation and the publishers in NEWS and MOD, the
+  rest in a new Admin screen, SRC.
+- **Subscriptions, third version**: SUBS shows auto-renewal, a stored card and failed payments,
+  but no payment provider that keeps cards is named. The plan: a renewal charges the stored card
+  or sends a mobile money request, a simulated provider standing in; a failed charge is tried
+  again for 7 days, then the plan expires. How is a change of plan prorated (the plan: by the
+  day)? Does Suspend cut access at once (the plan: yes, until lifted)? The mockup's Media I pays
+  XAF 0 by "Agreement": is that a plan of its own (the plan: "Media source", for the media's News
+  providers)?
+- **ETFs and bonds, third version**: which EODHD licence covers news, ETF holdings, NAV and
+  spreads, and the EUR and USD government curves, whose codes are "to confirm" (the plan: demo
+  data until then; EUR and USD spreads n/a)? The description of a security is in French and
+  English, but EODHD writes English only and no endpoint lets the Data admin write it (the plan:
+  `PUT /data/securities/{id}/description` from CORR, the English standing in, marked EN). Flags
+  are "SVG flag icons" while the icons come from lucide (the plan: `flag-icons`).
