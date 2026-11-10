@@ -1,6 +1,9 @@
 import type { IsoDate } from './common'
 
-/** Spec section 12. The first six are clients; Data admin and Admin are CMarket employees. */
+/**
+ * Spec section 12. The first seven are clients, the News provider added by the third version;
+ * Data admin and Admin are CMarket employees.
+ */
 export const ACCOUNT_TYPES = [
   'student',
   'analyst',
@@ -8,6 +11,7 @@ export const ACCOUNT_TYPES = [
   'trader',
   'journalist',
   'ceo',
+  'newsProvider',
   'dataAdmin',
   'admin',
 ] as const
@@ -21,15 +25,17 @@ export const CLIENT_ACCOUNT_TYPES = [
   'trader',
   'journalist',
   'ceo',
+  'newsProvider',
 ] as const
 export type ClientAccountType = (typeof CLIENT_ACCOUNT_TYPES)[number]
 
 /**
  * Types whose status an Admin approves after the sign-up, which brings the VERIFIED badge:
  * identity and background for an Analyst, a press card or an employer letter for a Journalist,
- * a proof of position for a CEO (spec section 12).
+ * a proof of position for a CEO, a letter from the media and the signed content agreement for a
+ * News provider (spec section 12).
  */
-export const VERIFIED_ACCOUNT_TYPES = ['analyst', 'journalist', 'ceo'] as const
+export const VERIFIED_ACCOUNT_TYPES = ['analyst', 'journalist', 'ceo', 'newsProvider'] as const
 export type VerifiedAccountType = (typeof VERIFIED_ACCOUNT_TYPES)[number]
 
 /** Modules of the subscription plans (spec section 6). */
@@ -88,7 +94,7 @@ export interface MeDto {
   /** null means unlimited. */
   quotas: { portfolios: number | null; alerts: number | null }
   /**
-   * An Analyst, a Journalist or a CEO is verified once an Admin approved the status, which
+   * An Analyst, a Journalist, a CEO or a News provider is verified once an Admin approved the status, which
    * brings the VERIFIED badge; an Analyst then publishes (spec section 12). Null for the others.
    */
   verificationStatus: VerificationStatus | null

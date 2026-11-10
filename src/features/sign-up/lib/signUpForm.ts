@@ -29,8 +29,9 @@ export const EMPTY_SIGN_UP: SignUpForm = {
 /**
  * Documents of spec section 12: a Student without a school address proves the enrolment (the
  * server knows the school domains); an Analyst sends an identity document and a CV, and a licence
- * if any; a Journalist a press card or a letter from the employer; a CEO a proof of position. An
- * Admin checks those of the last three before approving the status.
+ * if any; a Journalist a press card or a letter from the employer; a CEO a proof of position; a
+ * News provider a letter from its media and the content agreement the media signed. An Admin
+ * checks those of the last four before approving the status.
  */
 export function documentsFor(
   accountType: ClientAccountType | null,
@@ -45,7 +46,21 @@ export function documentsFor(
   }
   if (accountType === 'journalist') return [{ kind: 'pressCredential', required: true }]
   if (accountType === 'ceo') return [{ kind: 'proofOfPosition', required: true }]
+  if (accountType === 'newsProvider') {
+    return [
+      { kind: 'mediaLetter', required: true },
+      { kind: 'contentAgreement', required: true },
+    ]
+  }
   return []
+}
+
+/**
+ * A CEO is linked to the organisation they head, a News provider to the media it publishes for,
+ * its organisation (spec section 12; the third version's decision 12).
+ */
+export function namesOrganization(accountType: ClientAccountType | null): boolean {
+  return accountType === 'ceo' || accountType === 'newsProvider'
 }
 
 export type SignUpField =
@@ -70,8 +85,7 @@ export function signUpIssues(form: SignUpForm): Partial<Record<SignUpField, Sign
   if (passwordIssues(form.password).length > 0) issues.password = 'password'
   if (form.confirmPassword !== form.password) issues.confirmPassword = 'mismatch'
   if (form.phone.trim() && !isPhoneNumber(form.phone)) issues.phone = 'phone'
-  // A CEO is linked to the organisation they head (spec section 12).
-  if (form.accountType === 'ceo' && !form.organizationName.trim()) {
+  if (namesOrganization(form.accountType) && !form.organizationName.trim()) {
     issues.organizationName = 'required'
   }
   for (const { kind, required } of documentsFor(form.accountType)) {

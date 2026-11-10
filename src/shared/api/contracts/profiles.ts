@@ -13,7 +13,7 @@ export type ProfileVisibility = 'hidden' | 'members' | 'public'
  */
 export type ContactMode = 'direct' | 'request' | 'none'
 
-/** The mode of each of the six client types, which the user chooses. */
+/** The mode of each of the seven client types, which the user chooses. */
 export type ContactRules = Record<ClientAccountType, ContactMode>
 
 /** A position held, or a certification obtained. */
@@ -123,7 +123,7 @@ export type DirectorySort = 'relevance' | 'name' | 'recent'
 export interface DirectoryQuery {
   /** Name, organisation, job title or specialty, without accents or case. */
   q?: string
-  /** None: the six types. */
+  /** None: the seven types. */
   types?: ClientAccountType[]
   country?: string
   /** An id of GET /directory/specialties. */

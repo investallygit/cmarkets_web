@@ -13,6 +13,8 @@ import newspapers480 from '../assets/photos/newspapers-480.webp'
 import newspapers960 from '../assets/photos/newspapers-960.webp'
 import officesNight480 from '../assets/photos/offices-night-480.webp'
 import officesNight960 from '../assets/photos/offices-night-960.webp'
+import printingPress480 from '../assets/photos/printing-press-480.webp'
+import printingPress960 from '../assets/photos/printing-press-960.webp'
 import research480 from '../assets/photos/research-480.webp'
 import research960 from '../assets/photos/research-960.webp'
 import trading480 from '../assets/photos/trading-480.webp'
@@ -41,6 +43,7 @@ const photo = (small: string, large: string, width: number): PhotoFiles => ({
  * - trader: a trader before a chart, 7567522, Tima Miroshnichenko
  * - journalist: a stack of newspapers, 5505718
  * - ceo: the lit windows of an office tower at night, 18824803
+ * - newsProvider: a newspaper's printing press, its team sorting the day's copies, 36376366
  */
 export const PHOTOS = {
   hero: photo(cityNight960, cityNight1920, 960),
@@ -55,4 +58,5 @@ export const AUDIENCE_PHOTOS: Record<ClientAccountType, PhotoFiles> = {
   trader: photo(trading480, trading960, 480),
   journalist: photo(newspapers480, newspapers960, 480),
   ceo: photo(officesNight480, officesNight960, 480),
+  newsProvider: photo(printingPress480, printingPress960, 480),
 }

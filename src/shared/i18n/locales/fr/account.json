@@ -50,7 +50,8 @@
         "manager": "Gérez, valorisez et suivez des portefeuilles ; rapports clients.",
         "trader": "Cours en temps réel, carnet d'ordres, intraday et alertes.",
         "journalist": "Les marchés, la recherche et l'annuaire, pour contacter des professionnels pour un article.",
-        "ceo": "Les marchés et, en lecture, les portefeuilles de votre organisation ; des échanges avec les professionnels."
+        "ceo": "Les marchés et, en lecture, les portefeuilles de votre organisation ; des échanges avec les professionnels.",
+        "newsProvider": "Vos flashs et articles dans le fil de CMarket, sous le nom de votre journal, rémunérés au clic unique."
       },
       "name": "Nom complet",
       "phone": "Téléphone mobile",
@@ -58,17 +59,21 @@
       "organization": "Organisation",
       "organizationHint": "Facultatif : ouvre aussi un compte pour vos collègues.",
       "organizationHintCeo": "L'organisation que vous dirigez ; un compte s'ouvre aussi pour vos collègues.",
+      "organizationHintNewsProvider": "Le média pour lequel vous publiez ; un compte s'ouvre aussi pour vos collègues.",
       "studentNote": "Avec une adresse e-mail d'établissement, aucun justificatif n'est demandé ; sinon, joignez un certificat de scolarité.",
       "analystNote": "Un Admin vérifie ces documents avant votre première publication ; CMarket vous est ouvert en attendant.",
       "journalistNote": "Un Admin vérifie votre carte de presse ou la lettre de votre employeur, puis vous donne le badge VÉRIFIÉ ; CMarket est à vous en attendant.",
       "ceoNote": "Indiquez l'organisation que vous dirigez : un Admin vérifie votre fonction avant le badge VÉRIFIÉ ; CMarket est à vous en attendant.",
+      "newsProviderNote": "Un Admin vérifie la lettre de votre média et l'accord de contenu signé, puis vous donne le badge VÉRIFIÉ ; CMarket est à vous en attendant.",
       "documents": {
         "proofOfEnrolment": "Certificat de scolarité",
         "identityDocument": "Pièce d'identité",
         "cv": "CV",
         "licence": "Agrément",
         "pressCredential": "Carte de presse ou lettre de l'employeur",
-        "proofOfPosition": "Justificatif de fonction"
+        "proofOfPosition": "Justificatif de fonction",
+        "mediaLetter": "Lettre du média",
+        "contentAgreement": "Accord de contenu signé"
       },
       "optional": "{{label}} (facultatif)",
       "terms": "J'accepte les conditions d'utilisation et la politique de confidentialité.",

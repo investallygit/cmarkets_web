@@ -35,6 +35,13 @@ const NOTES: Partial<Record<ClientAccountType, TranslationKey>> = {
   analyst: 'auth.signUp.analystNote',
   journalist: 'auth.signUp.journalistNote',
   ceo: 'auth.signUp.ceoNote',
+  newsProvider: 'auth.signUp.newsProviderNote',
+}
+
+/** The hint under the organisation: optional for most, the one headed, or the media. */
+const ORGANIZATION_HINTS: Partial<Record<ClientAccountType, TranslationKey>> = {
+  ceo: 'auth.signUp.organizationHintCeo',
+  newsProvider: 'auth.signUp.organizationHintNewsProvider',
 }
 
 /**
@@ -173,9 +180,8 @@ export function SignUpForm({ accountType }: { accountType?: ClientAccountType })
         <Field
           label={t('auth.signUp.organization')}
           hint={t(
-            form.accountType === 'ceo'
-              ? 'auth.signUp.organizationHintCeo'
-              : 'auth.signUp.organizationHint',
+            (form.accountType && ORGANIZATION_HINTS[form.accountType]) ??
+              'auth.signUp.organizationHint',
           )}
           error={errorOf('organizationName')}
         >

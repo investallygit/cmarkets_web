@@ -55,14 +55,14 @@ tables, read-excel-file to read the Excel templates before upload.
 | Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
 | Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
-| 10 · Professional directory (NET), public profile page                    | Done; the demo data lists 1,163 profiles                      |
+| 10 · Professional directory (NET), public profile page                    | Done; the demo data lists 1,177 profiles                      |
 | 11 · Messaging (MSG)                                                      | Done; read, typing and presence in real time                  |
 | 12 · My profile, visibility and contact (NET ME)                          | Done; the API applies the contact rules of section 15         |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the API checks, publishes and rolls back the files      |
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done; corrections logged with their reason                    |
 | 9 · Account administration (USER) with ANLY and MOD                       | Done; MOD reviews the directory reports too                   |
 | Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged  |
-| News provider account type (third version)                                | To do, step 24                                                |
+| News provider account type (third version)                                | Done; its studio comes with step 26                           |
 | News rebuilt: ARTICLE and FLASH, newspapers, tags, unique clicks          | To do, step 25                                                |
 | 13 · News studio (NEWS NEW)                                               | To do, step 26                                                |
 | News administration (SRC), AI ingestion, international news: no mockup    | To do, step 27                                                |

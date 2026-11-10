@@ -11,6 +11,7 @@ export const ACCOUNT_TYPE_COLORS: Record<AccountType, string> = {
   trader: 'var(--type-trader)',
   journalist: 'var(--type-journalist)',
   ceo: 'var(--type-ceo)',
+  newsProvider: 'var(--type-news-provider)',
   dataAdmin: 'var(--text-secondary)',
   admin: 'var(--text-secondary)',
 }

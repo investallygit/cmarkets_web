@@ -141,6 +141,11 @@
         "cta": "S'inscrire comme dirigeant",
         "text": "Les marchés et, en lecture, les portefeuilles que vos gérants partagent avec votre organisation ; des échanges avec les professionnels."
       },
+      "newsProvider": {
+        "who": "Journaux, agences de presse et sites d'information économique",
+        "cta": "S'inscrire comme éditeur de presse",
+        "text": "Vos flashs et articles dans le fil de CMarket, sous le nom de votre journal, rémunérés au clic unique."
+      },
       "organization": "Un compte organisation réunit vos collègues sous une même offre, payée par l'organisation."
     },
     "plans": {

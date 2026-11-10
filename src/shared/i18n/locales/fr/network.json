@@ -124,7 +124,8 @@
         "manager": "Vu par un gérant",
         "trader": "Vu par un trader",
         "journalist": "Vu par un journaliste",
-        "ceo": "Vu par un dirigeant"
+        "ceo": "Vu par un dirigeant",
+        "newsProvider": "Vu par un éditeur de presse"
       },
       "viewpoint": "Changer de point de vue :",
       "hidden": "Masqué : votre fiche n'apparaît pas dans l'annuaire, et seules les personnes avec qui vous échangez déjà peuvent vous écrire.",

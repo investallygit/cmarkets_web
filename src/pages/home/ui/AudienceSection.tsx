@@ -11,7 +11,8 @@ import { Section } from './Section'
 
 /**
  * The target users of spec section 1 by client account type, each under a photo of its work and
- * with its sign-up; a visitor already logged in has an account, so no sign-up is offered.
+ * with its sign-up; a visitor already logged in has an account, so no sign-up is offered. Seven
+ * types fill rows of three (two on a tablet), the last one centred.
  */
 export function AudienceSection() {
   const { t } = useTranslation()
@@ -23,12 +24,12 @@ export function AudienceSection() {
       title={t('home.audience.title')}
       lead={t('home.audience.lead')}
     >
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="flex flex-wrap justify-center gap-4">
         {CLIENT_ACCOUNT_TYPES.map((accountType, index) => (
           <li
             key={accountType}
             style={revealDelay(index)}
-            className="reveal group flex flex-col border bg-panel"
+            className="reveal group flex basis-full flex-col border bg-panel sm:basis-[calc((100%-1rem)/2)] lg:basis-[calc((100%-2rem)/3)]"
           >
             <div className="aspect-3/2 overflow-hidden border-b">
               <Photo

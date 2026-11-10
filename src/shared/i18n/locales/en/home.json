@@ -141,6 +141,11 @@
         "cta": "Sign up as a CEO",
         "text": "The markets and, read only, the portfolios your managers share with your organisation; exchanges with professionals."
       },
+      "newsProvider": {
+        "who": "Newspapers, news agencies and business news sites",
+        "cta": "Sign up as a news provider",
+        "text": "Your flashes and articles in the CMarket feed, under your newspaper's name, paid per unique click."
+      },
       "organization": "An organisation account brings your colleagues together under one plan, paid by the organisation."
     },
     "plans": {

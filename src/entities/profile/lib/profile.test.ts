@@ -9,6 +9,7 @@ const RULES: ContactRules = {
   trader: 'none',
   journalist: 'direct',
   ceo: 'direct',
+  newsProvider: 'direct',
 }
 
 describe('profile helpers', () => {
@@ -24,7 +25,7 @@ describe('profile helpers', () => {
     expect(previewContactMode('trader', privacy)).toBe('none')
     expect(previewContactMode('manager', { ...privacy, visibility: 'hidden' })).toBe('none')
     expect(typesByMode(privacy)).toEqual({
-      direct: ['analyst', 'manager', 'journalist', 'ceo'],
+      direct: ['analyst', 'manager', 'journalist', 'ceo', 'newsProvider'],
       request: ['student'],
       none: ['trader'],
     })

@@ -106,7 +106,9 @@
       "licence": "licence",
       "proofOfEnrolment": "proof of enrolment",
       "pressCredential": "press card or employer letter",
-      "proofOfPosition": "proof of position"
+      "proofOfPosition": "proof of position",
+      "mediaLetter": "letter from the media",
+      "contentAgreement": "signed content agreement"
     },
     "statuses": {
       "pending": "Pending",
@@ -139,7 +141,8 @@
     "approveMessages": {
       "analyst": "{{name}} becomes an approved Analyst, with the VERIFIED badge, and may publish research.",
       "journalist": "{{name}} becomes a verified Journalist, with the VERIFIED badge.",
-      "ceo": "{{name}} becomes a verified CEO, with the VERIFIED badge."
+      "ceo": "{{name}} becomes a verified CEO, with the VERIFIED badge.",
+      "newsProvider": "{{name}} becomes a verified News provider, with the VERIFIED badge."
     },
     "approved": "{{name}}: {{type}} status approved.",
     "reject": "Reject",
@@ -147,7 +150,8 @@
     "rejectMessages": {
       "analyst": "The user reads the reason; the account stays, without publishing.",
       "journalist": "The user reads the reason; the account stays, without the VERIFIED badge.",
-      "ceo": "The user reads the reason; the account stays, without the VERIFIED badge."
+      "ceo": "The user reads the reason; the account stays, without the VERIFIED badge.",
+      "newsProvider": "The user reads the reason; the account stays, without the VERIFIED badge."
     },
     "rejected": "{{name}}: request rejected."
   },
@@ -354,7 +358,7 @@
       "dataImport": "Upload data files, correct data",
       "contentPublish": "Publish news and issuer documents",
       "usersManage": "Create, suspend, change an account's type",
-      "moderationManage": "Approve statuses (Analyst, Journalist, CEO), moderate",
+      "moderationManage": "Approve statuses (Analyst, Journalist, CEO, News provider), moderate",
       "settingsManage": "Settings and permissions",
       "auditRead": "Audit log",
       "payoutsManage": "Analyst payouts"

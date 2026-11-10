@@ -62,6 +62,25 @@ describe('sign-up form', () => {
     ).toEqual({})
   })
 
+  it("asks a News provider for its media, the media's letter and the signed content agreement", () => {
+    const provider = { ...filled, accountType: 'newsProvider' as const }
+    expect(signUpIssues(provider)).toEqual({
+      mediaLetter: 'required',
+      contentAgreement: 'required',
+      organizationName: 'required',
+    })
+    expect(
+      signUpIssues({
+        ...provider,
+        organizationName: 'Media I',
+        documents: {
+          mediaLetter: pdf('media-letter.pdf'),
+          contentAgreement: pdf('content-agreement.pdf'),
+        },
+      }),
+    ).toEqual({})
+  })
+
   it('sends the documents of the account type only', () => {
     const data = toFormData(
       {

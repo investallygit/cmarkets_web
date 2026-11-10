@@ -50,6 +50,7 @@
     "trader": "Trader",
     "journalist": "Journaliste",
     "ceo": "Dirigeant",
+    "newsProvider": "Éditeur de presse",
     "dataAdmin": "Admin données",
     "admin": "Admin"
   },
@@ -60,6 +61,7 @@
     "trader": "Trader",
     "journalist": "Journaliste",
     "ceo": "Dirigeant",
+    "newsProvider": "Éditeur de presse",
     "dataAdmin": "Admin données",
     "admin": "Admin"
   },

@@ -16,7 +16,7 @@ const SHOWN: readonly (keyof ProfileDisplayDto)[] = [
 
 /**
  * NET ME, visibility and contact (spec sections 9 and 15): hidden, CMarket members or public;
- * Direct, Request or No for each of the six client types; what the profile shows.
+ * Direct, Request or No for each of the seven client types; what the profile shows.
  */
 export function PrivacyFields({ editor }: { editor: ProfileEditor }) {
   const { t } = useTranslation()

@@ -30,7 +30,10 @@ test(
     // The counters of the mockup: most Students hide their profile.
     await expect(filters.getByRole('checkbox', { name: /^Student/ })).toHaveAccessibleName(/412/)
     await expect(filters.getByRole('checkbox', { name: /^CEO/ })).toHaveAccessibleName(/58/)
-    await expect(panel(page, /^Professionals: 1,163 results$/)).toBeVisible()
+    await expect(filters.getByRole('checkbox', { name: /^News provider/ })).toHaveAccessibleName(
+      /14/,
+    )
+    await expect(panel(page, /^Professionals: 1,177 results$/)).toBeVisible()
 
     // The URL holds the filters: a box shows ticked once the address changed.
     await tick(filters, 'Analyst 96')

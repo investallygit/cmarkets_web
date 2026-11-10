@@ -124,7 +124,8 @@
         "manager": "As seen by a manager",
         "trader": "As seen by a trader",
         "journalist": "As seen by a journalist",
-        "ceo": "As seen by a CEO"
+        "ceo": "As seen by a CEO",
+        "newsProvider": "As seen by a news provider"
       },
       "viewpoint": "Change viewpoint:",
       "hidden": "Hidden: your card does not show in the directory, and only the people you already talk with can write to you.",

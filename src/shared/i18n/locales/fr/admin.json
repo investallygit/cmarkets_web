@@ -106,7 +106,9 @@
       "licence": "agrément",
       "proofOfEnrolment": "certificat de scolarité",
       "pressCredential": "carte de presse ou lettre de l'employeur",
-      "proofOfPosition": "justificatif de fonction"
+      "proofOfPosition": "justificatif de fonction",
+      "mediaLetter": "lettre du média",
+      "contentAgreement": "accord de contenu signé"
     },
     "statuses": {
       "pending": "En attente",
@@ -139,7 +141,8 @@
     "approveMessages": {
       "analyst": "{{name}} devient Analyste approuvé, avec le badge VÉRIFIÉ, et peut publier de la recherche.",
       "journalist": "{{name}} devient Journaliste vérifié, avec le badge VÉRIFIÉ.",
-      "ceo": "{{name}} devient Dirigeant vérifié, avec le badge VÉRIFIÉ."
+      "ceo": "{{name}} devient Dirigeant vérifié, avec le badge VÉRIFIÉ.",
+      "newsProvider": "{{name}} devient Éditeur de presse vérifié, avec le badge VÉRIFIÉ."
     },
     "approved": "{{name}} : statut {{type}} approuvé.",
     "reject": "Refuser",
@@ -147,7 +150,8 @@
     "rejectMessages": {
       "analyst": "L'utilisateur lit le motif ; le compte reste, sans publication.",
       "journalist": "L'utilisateur lit le motif ; le compte reste, sans le badge VÉRIFIÉ.",
-      "ceo": "L'utilisateur lit le motif ; le compte reste, sans le badge VÉRIFIÉ."
+      "ceo": "L'utilisateur lit le motif ; le compte reste, sans le badge VÉRIFIÉ.",
+      "newsProvider": "L'utilisateur lit le motif ; le compte reste, sans le badge VÉRIFIÉ."
     },
     "rejected": "{{name}} : demande refusée."
   },
@@ -354,7 +358,7 @@
       "dataImport": "Charger les fichiers, corriger les données",
       "contentPublish": "Publier actualités et documents d'émetteurs",
       "usersManage": "Créer, suspendre, changer le type d'un compte",
-      "moderationManage": "Approuver les statuts (Analyste, Journaliste, Dirigeant), modérer",
+      "moderationManage": "Approuver les statuts (Analyste, Journaliste, Dirigeant, Éditeur de presse), modérer",
       "settingsManage": "Paramètres et permissions",
       "auditRead": "Journal d'audit",
       "payoutsManage": "Versements aux analystes"

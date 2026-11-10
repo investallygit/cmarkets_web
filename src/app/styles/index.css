@@ -38,6 +38,8 @@
   --type-trader: #b07cff;
   --type-journalist: #ff7ab6;
   --type-ceo: #e0c068;
+  /* The third version's News provider: 5.3:1 on --bg-selected, which needs no lighter one. */
+  --type-news-provider: #2ec4b6;
   /* On --bg-selected, the Trader's purple is 3.9:1: this lighter one keeps 4.5:1 (5.0:1). */
   --type-trader-selected: #bf98ff;
   /*

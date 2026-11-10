@@ -3,7 +3,8 @@ import { cemacPortfolioId } from './demoIds.js'
 
 // The Journalist and CEO account types of step 12 (ROADMAP.md): "Read" in the permission matrix
 // of spec section 12 views the analysis without saving anything. Step 13: a CEO reads the
-// portfolios the managers share with the organisation.
+// portfolios the managers share with the organisation. Step 24: the News provider of the third
+// version reads as a Journalist does.
 
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title }) })
@@ -43,6 +44,27 @@ test('a Journalist reads the analysis without portfolios, saved screens, drawing
   const chart = panel(page, 'Price chart')
   await expect(chart.getByRole('button', { name: 'Compare' })).toBeVisible()
   await expect(chart.getByRole('button', { name: 'Trend line' })).toHaveCount(0)
+})
+
+test('a News provider of Media I reads the analysis without portfolios, saves or exports', async ({
+  page,
+}) => {
+  await switchAccount(page, 'News provider', /news provider/i)
+  const menu = page.getByRole('navigation', { name: 'Main menu' })
+  await expect(menu).toContainText('NET')
+  await expect(menu).not.toContainText('PORT')
+
+  await page.goto('/eqs')
+  await expect(panel(page, 'Criteria').getByRole('button', { name: 'Run' })).toBeVisible()
+  await expect(
+    panel(page, 'Criteria').getByRole('button', { name: 'Save', exact: true }),
+  ).toHaveCount(0)
+  await expect(panel(page, /^Results/).getByRole('button', { name: 'XLSX' })).toHaveCount(0)
+
+  // CFG: the account type, approved, and the media as the organisation.
+  await page.goto('/cfg')
+  await expect(page.getByText('Media I').first()).toBeVisible()
+  await expect(page.getByText('Verified', { exact: true }).first()).toBeVisible()
 })
 
 test('a CEO exports, and reads the fund P. Owona shares without changing it', async ({ page }) => {

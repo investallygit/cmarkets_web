@@ -39,6 +39,7 @@ const privacy: ProfilePrivacyDto = {
     trader: 'direct',
     journalist: 'direct',
     ceo: 'direct',
+    newsProvider: 'direct',
   },
   show: { email: false, phone: false, onlineStatus: true, publicationStats: true },
 }

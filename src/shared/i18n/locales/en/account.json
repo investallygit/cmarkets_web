@@ -50,7 +50,8 @@
         "manager": "Manage, value and track portfolios; client reports.",
         "trader": "Real-time prices, order book, intraday charts and alerts.",
         "journalist": "Markets, research and the directory, to contact professionals for a story.",
-        "ceo": "Markets and, read only, your organisation's portfolios; exchanges with professionals."
+        "ceo": "Markets and, read only, your organisation's portfolios; exchanges with professionals.",
+        "newsProvider": "Flashes and articles under your newspaper's name in the CMarket feed, paid per unique click."
       },
       "name": "Full name",
       "phone": "Mobile phone",
@@ -58,17 +59,21 @@
       "organization": "Organisation",
       "organizationHint": "Optional: opens an account for your colleagues too.",
       "organizationHintCeo": "The organisation you head; an account opens for your colleagues too.",
+      "organizationHintNewsProvider": "The media you publish for; an account opens for your colleagues too.",
       "studentNote": "With a school e-mail address, no proof is needed; otherwise add a proof of enrolment.",
       "analystNote": "An Admin checks these documents before your first publication; CMarket is yours meanwhile.",
       "journalistNote": "An Admin checks your press card or the letter of your employer, then gives you the VERIFIED badge; CMarket is yours meanwhile.",
       "ceoNote": "Name the organisation you head: an Admin checks your position before the VERIFIED badge; CMarket is yours meanwhile.",
+      "newsProviderNote": "An Admin checks the letter of your media and the signed content agreement, then gives you the VERIFIED badge; CMarket is yours meanwhile.",
       "documents": {
         "proofOfEnrolment": "Proof of enrolment",
         "identityDocument": "Identity document",
         "cv": "CV",
         "licence": "Licence",
         "pressCredential": "Press card or employer letter",
-        "proofOfPosition": "Proof of position"
+        "proofOfPosition": "Proof of position",
+        "mediaLetter": "Letter from the media",
+        "contentAgreement": "Signed content agreement"
       },
       "optional": "{{label}} (optional)",
       "terms": "I accept the terms of use and the privacy policy.",

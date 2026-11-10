@@ -47,6 +47,7 @@ const HOME_SCREEN: Record<AccountType, string> = {
   trader: 'MKT',
   journalist: 'MKT',
   ceo: 'MKT',
+  newsProvider: 'MKT',
   dataAdmin: 'IMP',
   admin: 'USER',
 }
