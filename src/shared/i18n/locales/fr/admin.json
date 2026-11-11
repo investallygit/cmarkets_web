@@ -277,6 +277,11 @@
     "portfolios": "Portefeuilles",
     "riskFreeRate": "Taux sans risque",
     "riskFreeRateHint": "Utilisé par le ratio de Sharpe de chaque portefeuille et affiché sous celui-ci.",
+    "bonds": "Obligations",
+    "xafReferenceCurve": "Courbe de référence XAF",
+    "xafReferenceCurveHint": "La courbe souveraine CEMAC sur laquelle se lisent le spread de crédit et le Z-spread des obligations en XAF (BS). Les chiffres du jour sont recalculés.",
+    "countryCurve": "Courbe souveraine {{country}}",
+    "otherCurrencies": "EUR et USD : les courbes d'État d'EODHD, n.d. tant que leurs codes ne sont pas confirmés.",
     "updated": "Modifié le {{date}} par {{name}}",
     "cancel": "Annuler les modifications",
     "save": "Enregistrer les paramètres",
@@ -485,7 +490,8 @@
       "calculationDay": "Jour du calcul",
       "calculationTime": "Heure du calcul",
       "spikeFactor": "Facteur de pic",
-      "sharedAddressAccounts": "Comptes sur une adresse"
+      "sharedAddressAccounts": "Comptes sur une adresse",
+      "xafReferenceCurve": "Courbe de référence XAF"
     },
     "targetTypes": {
       "user": "Compte",

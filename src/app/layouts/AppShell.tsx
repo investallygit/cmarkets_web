@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Outlet } from 'react-router'
 import { useAlertRealtimeSync } from '@/entities/alert'
 import { useAuctionRealtimeSync } from '@/entities/auction'
+import { useBondScreenerRealtimeSync } from '@/entities/bond'
 import { useChatRealtimeSync } from '@/entities/conversation'
 import { useDataImportRealtimeSync } from '@/entities/data-import'
 import { useMarketRealtimeSync } from '@/entities/market'
@@ -41,6 +42,7 @@ export function AppShell() {
   useSecurityRealtimeSync()
   useAuctionRealtimeSync()
   useYieldCurveRealtimeSync()
+  useBondScreenerRealtimeSync()
   useDataImportRealtimeSync()
   // The second hub, of the messaging, for the users who write to others.
   useChatRealtimeSync(me.data ? mayWriteMessages(me.data) : false, me.data?.id)

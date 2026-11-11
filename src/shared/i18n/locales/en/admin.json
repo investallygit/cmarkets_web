@@ -277,6 +277,11 @@
     "portfolios": "Portfolios",
     "riskFreeRate": "Risk-free rate",
     "riskFreeRateHint": "Used by the Sharpe ratio of every portfolio and shown under it.",
+    "bonds": "Bonds",
+    "xafReferenceCurve": "XAF reference curve",
+    "xafReferenceCurveHint": "The CEMAC sovereign curve the XAF bonds' credit spread and Z-spread are read on (BS). The day's figures are computed again.",
+    "countryCurve": "{{country}} sovereign curve",
+    "otherCurrencies": "EUR and USD: the government curves of EODHD, n/a until their codes are confirmed.",
     "updated": "Last changed on {{date}} by {{name}}",
     "cancel": "Cancel the changes",
     "save": "Save the settings",
@@ -485,7 +490,8 @@
       "calculationDay": "Calculation day",
       "calculationTime": "Calculation time",
       "spikeFactor": "Spike factor",
-      "sharedAddressAccounts": "Accounts on one address"
+      "sharedAddressAccounts": "Accounts on one address",
+      "xafReferenceCurve": "XAF reference curve"
     },
     "targetTypes": {
       "user": "Account",

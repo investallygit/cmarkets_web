@@ -1,7 +1,7 @@
 import { clsx } from 'clsx'
 import { Lock, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { NavLink } from 'react-router'
+import { matchPath, NavLink, useLocation } from 'react-router'
 import { UnreadBadge } from '@/entities/conversation'
 import { canAccessScreen, lockedModule, mayWriteMessages, useCurrentUser } from '@/entities/session'
 import { SCREENS } from '@/shared/routes/screens'
@@ -18,6 +18,11 @@ export function SideMenu() {
   const expanded = useUiPreferences((state) => state.menuExpanded)
   const toggleMenu = useUiPreferences((state) => state.toggleMenu)
   const items = SCREENS.filter((screen) => screen.inMenu && canAccessScreen(user, screen))
+  const { pathname } = useLocation()
+  // A screen outside the menu lights its parent's entry: BS lights YCRV.
+  const litParent = SCREENS.find(
+    (screen) => screen.menuParent && matchPath({ path: screen.path, end: false }, pathname),
+  )?.menuParent
 
   return (
     <nav
@@ -45,7 +50,7 @@ export function SideMenu() {
                 className={({ isActive }) =>
                   clsx(
                     'relative flex border-l-[3px]',
-                    isActive
+                    isActive || screen.id === litParent
                       ? 'border-accent-amber bg-selected'
                       : 'border-transparent hover:bg-panel-header',
                     expanded
@@ -54,36 +59,43 @@ export function SideMenu() {
                   )
                 }
               >
-                {({ isActive }) => (
-                  <>
-                    {expanded && (
-                      <screen.icon aria-hidden className="size-4 shrink-0 text-secondary" />
-                    )}
-                    <span
-                      className={clsx(
-                        'inline-flex items-center gap-1 font-mono text-data font-bold',
-                        isActive ? 'text-accent-amber' : locked ? 'text-secondary' : 'text-primary',
+                {({ isActive: isOpen }) => {
+                  const isActive = isOpen || screen.id === litParent
+                  return (
+                    <>
+                      {expanded && (
+                        <screen.icon aria-hidden className="size-4 shrink-0 text-secondary" />
                       )}
-                    >
-                      {screen.menuCode ?? screen.code}
-                      {locked && <Lock aria-hidden className="size-2.5" />}
-                    </span>
-                    <span
-                      className={clsx(
-                        'truncate font-sans text-secondary',
-                        expanded ? 'text-label' : 'text-caption',
+                      <span
+                        className={clsx(
+                          'inline-flex items-center gap-1 font-mono text-data font-bold',
+                          isActive
+                            ? 'text-accent-amber'
+                            : locked
+                              ? 'text-secondary'
+                              : 'text-primary',
+                        )}
+                      >
+                        {screen.menuCode ?? screen.code}
+                        {locked && <Lock aria-hidden className="size-2.5" />}
+                      </span>
+                      <span
+                        className={clsx(
+                          'truncate font-sans text-secondary',
+                          expanded ? 'text-label' : 'text-caption',
+                        )}
+                      >
+                        {t(screen.menuKey)}
+                      </span>
+                      {screen.id === 'MSG' && !isActive && (
+                        <UnreadBadge
+                          enabled={mayWriteMessages(user)}
+                          className={expanded ? 'ml-auto' : 'absolute top-0.5 right-0.5'}
+                        />
                       )}
-                    >
-                      {t(screen.menuKey)}
-                    </span>
-                    {screen.id === 'MSG' && !isActive && (
-                      <UnreadBadge
-                        enabled={mayWriteMessages(user)}
-                        className={expanded ? 'ml-auto' : 'absolute top-0.5 right-0.5'}
-                      />
-                    )}
-                  </>
-                )}
+                    </>
+                  )
+                }}
               </NavLink>
             </li>
           )

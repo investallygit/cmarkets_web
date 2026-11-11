@@ -8,11 +8,13 @@ import {
   type PlatformSettingsDto,
   type QuotaDto,
 } from '@/shared/api/contracts'
+import { CEMAC_COUNTRIES } from '@/shared/config/countries'
 import { useFormat } from '@/shared/i18n'
 import { Button } from '@/shared/ui/form/Button'
 import { Field } from '@/shared/ui/form/Field'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
+import { Select } from '@/shared/ui/form/Select'
 import { toast } from '@/shared/ui/toast'
 import { Section } from './Section'
 
@@ -27,8 +29,9 @@ const clientQuotas = (settings: PlatformSettingsDto): Quotas =>
 
 /**
  * The Admin's settings (spec sections 12 to 14): the quotas of each client type, the price range,
- * CMarket's commission and the moderation mode of research, and the risk-free rate of the Sharpe
- * ratio. Saved together; each change is written to the audit log.
+ * CMarket's commission and the moderation mode of research, the risk-free rate of the Sharpe
+ * ratio and the curve the XAF bonds' spreads are read on (spec section 14.4). Saved together;
+ * each change is written to the audit log.
  */
 export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsDto }) {
   const { t } = useTranslation()
@@ -40,6 +43,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
   const [commissionPct, setCommissionPct] = useState<number | null>(settings.commissionPct)
   const [moderation, setModeration] = useState(settings.moderation)
   const [riskFreeRatePct, setRiskFreeRatePct] = useState<number | null>(settings.riskFreeRatePct)
+  const [xafReferenceCurve, setXafReferenceCurve] = useState(settings.xafReferenceCurve)
   const [submitted, setSubmitted] = useState(false)
 
   const local: Record<string, string | null> = {
@@ -74,6 +78,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     commissionPct: commissionPct ?? 0,
     moderation,
     riskFreeRatePct: riskFreeRatePct ?? 0,
+    xafReferenceCurve,
   }
   const changed =
     JSON.stringify(update) !==
@@ -84,6 +89,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
       commissionPct: settings.commissionPct,
       moderation: settings.moderation,
       riskFreeRatePct: settings.riskFreeRatePct,
+      xafReferenceCurve: settings.xafReferenceCurve,
     })
 
   const reset = () => {
@@ -95,6 +101,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     setCommissionPct(settings.commissionPct)
     setModeration(settings.moderation)
     setRiskFreeRatePct(settings.riskFreeRatePct)
+    setXafReferenceCurve(settings.xafReferenceCurve)
   }
 
   const quotaInput = (type: ClientAccountType, quota: keyof QuotaDto) => (
@@ -228,6 +235,28 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
               className="w-24"
             />
           </Field>
+        </Section>
+
+        <Section title={t('platformSettings.bonds')}>
+          <Field
+            label={t('platformSettings.xafReferenceCurve')}
+            hint={t('platformSettings.xafReferenceCurveHint')}
+            error={error('xafReferenceCurve')}
+          >
+            <Select
+              value={xafReferenceCurve}
+              options={CEMAC_COUNTRIES.map((code) => ({
+                value: code,
+                label: t('platformSettings.countryCurve', { country: format.country(code) }),
+              }))}
+              onChange={setXafReferenceCurve}
+              highlight
+              className="w-64"
+            />
+          </Field>
+          <p className="font-sans text-data text-secondary">
+            {t('platformSettings.otherCurrencies')}
+          </p>
         </Section>
       </div>
 

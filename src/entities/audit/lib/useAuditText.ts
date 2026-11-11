@@ -112,6 +112,8 @@ export function useAuditText() {
         return label(PUBLICATION_STATUSES, raw, (status) => t(`studio.statuses.${status}`))
       case 'importStatus':
         return label(IMPORT_STATUSES, raw, (status) => t(`dataImport.status.${status}`))
+      case 'xafReferenceCurve':
+        return t('platformSettings.countryCurve', { country: format.country(raw) })
       default:
         return raw
     }

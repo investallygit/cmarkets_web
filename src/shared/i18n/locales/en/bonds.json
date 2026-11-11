@@ -1,0 +1,150 @@
+{
+  "bondScreener": {
+    "criteria": "Criteria",
+    "save": "Save",
+    "all": "All",
+    "above": "> {{value}}",
+    "between": "between {{min}} and {{max}}",
+    "atLeast": "{{value}} and above",
+    "fromYear": "{{year}} and later",
+    "orBetter": "{{rating}} or better",
+    "investmentGrade": "{{rating}} or better (investment grade)",
+    "fields": {
+      "category": "Issue category",
+      "market": "Market",
+      "ytmMin": "Minimum yield (YTM)",
+      "duration": "Modified duration",
+      "maturity": "Maturity",
+      "country": "Country",
+      "currency": "Currency",
+      "ratingMin": "Minimum rating",
+      "couponType": "Coupon type"
+    },
+    "categoryGroups": {
+      "sovereign": "Sovereign",
+      "supranational": "Supranational / regional",
+      "corporate": "Corporate",
+      "municipal": "Municipal"
+    },
+    "marketChoices": {
+      "bvmac": "BVMAC (listed)",
+      "beac": "BEAC (BTA / OTA government securities)",
+      "other": "Other markets"
+    },
+    "run": "Run",
+    "reset": "Reset",
+    "tickOne": "Tick at least one issue category and one market.",
+    "notRun": "The criteria changed: run the screen to update the results.",
+    "results_one": "Results: {{count}} bond",
+    "results_other": "Results: {{count}} bonds",
+    "resultsTitle": "Results",
+    "computed": "Computed {{date}} {{time}}",
+    "export": "Export XLSX",
+    "modelPrice": "Model price: no recent quote",
+    "ytwTo": "To {{date}}",
+    "noResult": "No bond meets these criteria.",
+    "notComputed": "The bonds' figures are computed every evening after the close: none yet.",
+    "resultsHint": "* Model price (no recent quote): computed from the country curve + spread. YTW different from YTM shown in yellow (callable bond). Double-click: opens the bond's profile.",
+    "columns": {
+      "bond": "Bond",
+      "issuer": "Issuer",
+      "market": "Market",
+      "coupon": "Coupon %",
+      "maturity": "Maturity",
+      "cleanPrice": "Clean price",
+      "dirtyPrice": "Dirty price",
+      "ytm": "YTM %",
+      "ytw": "YTW %",
+      "currentYield": "Curr. yld %",
+      "spread": "Spread bp",
+      "rating": "Rating",
+      "modifiedDuration": "D. mod."
+    },
+    "categories": {
+      "sovereign": "Sovereign",
+      "supranational": "Supranational",
+      "regional": "Regional",
+      "corporate": "Corporate",
+      "municipal": "Municipal"
+    },
+    "markets": {
+      "bvmac": "BVMAC",
+      "beac": "BEAC",
+      "other": "Other"
+    },
+    "couponTypes": {
+      "fixed": "Fixed",
+      "float": "Floating",
+      "zero": "Zero",
+      "stepUp": "Step-up",
+      "inflation": "Inflation-linked"
+    },
+    "notRated": "NR",
+    "profile": "Selected bond",
+    "openInBp": "Open in BP",
+    "pickBond": "Run the screen, then pick a bond in the results.",
+    "bp": "{{value}} bp",
+    "floating": "{{rate}} · {{index}} {{margin}}",
+    "callAt": "{{date}} at {{price}}",
+    "noCall": "no call",
+    "toDate": "(to {{date}})",
+    "oasLater": "n/a (V2)",
+    "years": "{{value}} yrs",
+    "modelNote": "* Model price: no BVMAC quote for 5 sessions; the issuer country's curve plus the bond's last known spread.",
+    "blocks": {
+      "identification": "A. Identification and issuer",
+      "pricing": "B. Pricing, yield and spreads",
+      "risk": "C. Risk and ratings",
+      "structure": "D. Cash flow and structure"
+    },
+    "lines": {
+      "isinName": "ISIN · name",
+      "issuerSector": "Issuer · sector",
+      "countryCurrency": "Country · currency",
+      "seniority": "Seniority",
+      "cleanDirty": "Clean · dirty price",
+      "accrued": "Accrued interest",
+      "ytmYtw": "YTM · YTW",
+      "currentYield": "Current yield",
+      "spreads": "Credit spread · Z-spread",
+      "oas": "OAS",
+      "ratings": "Ratings S&P · Moody's · Fitch",
+      "bucket": "Credit bucket",
+      "durations": "Macaulay · modified duration",
+      "effective": "Effective duration · convexity",
+      "timeToMaturity": "Time to maturity",
+      "coupon": "Coupon · type",
+      "frequency": "Frequency",
+      "maturityCall": "Maturity · next call",
+      "status": "Status"
+    },
+    "sectors": {
+      "financials": "Financials",
+      "utilities": "Utilities",
+      "industrials": "Industrials"
+    },
+    "seniorities": {
+      "seniorUnsecured": "Senior unsecured",
+      "subordinatedT2": "Subordinated Tier 2",
+      "at1": "AT1 / CoCo",
+      "covered": "Covered bond",
+      "securitized": "Securitized"
+    },
+    "buckets": {
+      "investmentGrade": "Investment Grade",
+      "highYield": "High Yield",
+      "notRated": "Not rated"
+    },
+    "frequencies": {
+      "annual": "Annual",
+      "semiAnnual": "Semi-annual",
+      "quarterly": "Quarterly",
+      "monthly": "Monthly"
+    },
+    "statuses": {
+      "performing": "Performing",
+      "default": "Default",
+      "restructured": "Restructured"
+    }
+  }
+}

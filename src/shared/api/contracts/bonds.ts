@@ -25,7 +25,8 @@ export interface BondSummaryDto {
   frequency: number
   issueDate: IsoDate
   maturityDate: IsoDate
-  amortization: 'bullet' | 'straight'
+  /** Schedule: the shares of an amortization schedule (bond list, spec section 11). */
+  amortization: 'bullet' | 'straight' | 'schedule'
   dayCount: DayCount
   /** Face value of one bond at issue, in the bond's currency. */
   nominal: number

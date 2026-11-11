@@ -8,6 +8,14 @@ type Value = ImportValues[string]
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
 
+/** The bond list's columns whose dates must fall in order: after the issue, by maturity. */
+const BOND_DATE_COLUMNS: ReadonlySet<string> = new Set([
+  'maturity_date',
+  'first_coupon_date',
+  'call_schedule',
+  'put_schedule',
+])
+
 /** The name of a template column in the user's language; the file's name when not a template one. */
 export function useColumnLabel() {
   const { t } = useTranslation()
@@ -73,6 +81,19 @@ export function useIssueText() {
           return t('dataImport.issues.notASession', { date: day('date') })
         case 'otherSession':
           return t('dataImport.issues.otherSession', { date: day('date'), session: day('session') })
+        // The bond list's (spec section 11): a ticker or an ISIN another security holds, its schedules and dates.
+        case 'codeTaken':
+          return issue.column === 'isin'
+            ? t('dataImport.issues.isinTaken', { column })
+            : t('dataImport.issues.codeTaken', { code: String(params.code ?? '') })
+        case 'inconsistentAmounts':
+          return issue.column === 'amortization_schedule'
+            ? t('dataImport.issues.scheduleShares')
+            : t('dataImport.issues.inconsistentAmounts')
+        case 'inconsistentDates':
+          return issue.column && BOND_DATE_COLUMNS.has(issue.column)
+            ? t('dataImport.issues.bondDates', { column })
+            : t('dataImport.issues.inconsistentDates')
         default:
           return t(`dataImport.issues.${issue.code}`, {
             column,

@@ -1,6 +1,7 @@
 import account from './en/account.json'
 import admin from './en/admin.json'
 import analysis from './en/analysis.json'
+import bonds from './en/bonds.json'
 import core from './en/core.json'
 import dataAdmin from './en/dataAdmin.json'
 import home from './en/home.json'
@@ -24,6 +25,7 @@ const en = {
   ...account,
   ...monitoring,
   ...analysis,
+  ...bonds,
   ...portfolio,
   ...research,
   ...network,

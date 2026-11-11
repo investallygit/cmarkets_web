@@ -51,7 +51,7 @@ relative: S < M < L < XL.
 | 26   | NEWS NEW: the news studio of a News provider (screen 13)        | Done   |
 | 27   | News administration, AI ingestion, international news           | Done   |
 | 28   | MPAY: media payments (screen 18)                                | Done   |
-| 29   | Daily bond analytics, BS: bond screener (screen 17)             | To do  |
+| 29   | Daily bond analytics, BS: bond screener (screen 17)             | Done   |
 | 30   | BP: bond pricing (screen 16)                                    | To do  |
 | 31   | Bond profile (screen 20), the profile chosen by security type   | To do  |
 | 32   | ETF data, ETFS: ETF screener (screen 15)                        | To do  |
@@ -1000,17 +1000,75 @@ CMarket.Api's phase 21.
     anomaly) and the studio's statements with the dispute dialog: 54 audits, nothing found,
     nothing scrolls sideways.
 
-### Step 29 · Bond analytics and BS · Bond screener (screen 17) (XL): to do
+### Step 29 · Bond analytics and BS · Bond screener (screen 17) (XL): done
 
 CMarket.Api's phase 22.
 
-- IMP takes the `bond-master` and `bond-ratings` files.
-- BS: criteria (category, market, yield, duration, maturity, country, currency, rating, coupon
-  type), results (model prices starred, YTW in yellow when it differs), the four blocks of the
-  selected bond with Open in BP, saved screens, export by permission.
-- **CMarket.Api**: section 14.4 in `CMarket.Domain` with its tests; call, put and amortization
-  schedules, ratings with their history; reference curves by currency (Admin); the nightly
-  calculation into `mkt.BondAnalyticsDaily`.
+- **Built**:
+  - BS (`/bs`, `analysis:read` and the analysis module), opened from the command bar; the menu
+    lights YCRV, as the mockup does (`menuParent` of a screen outside the menu). The criteria of
+    the mockup: the issue category (Sovereign, Supranational / regional, Corporate, and
+    Municipal, which the mockup's boxes leave out) and the market (BVMAC, BEAC, and Other markets)
+    ticked, then minimum yield, modified duration, maturity, country, currency, minimum rating and
+    coupon type, each a drop-down with an amber border while it filters; the mockup's screen by
+    default (above 5%, duration 0 to 5, this year to six years on, XAF). RUN, Reset, SAVE under a
+    name and the saved screens below, as on EQS (`analysis:save`).
+  - The results of the latest daily calculation: bond, issuer and country, market, coupon ("Zero"
+    for a BTA), maturity, clean price (an asterisk for a model price), dirty price, YTM, YTW (in
+    yellow when it differs from YTM: a call), current yield, spread in bp, composite rating ("NR"
+    when not rated), modified duration; "Computed" with the date and time of the calculation and
+    "Export XLSX" for the accounts that export (`analysis:export`); the mockup's notes below. A
+    click shows the bond below, a double-click opens its profile (DES, the bond profile of step
+    31), the right-click menu is the security's.
+  - The selected bond in the mockup's four blocks: identification and issuer; pricing, yield and
+    spreads (YTW "(to 30/06/2027)", the OAS "n/a (V2)" for a bond with options); risk and ratings
+    (S&P, Moody's and Fitch, the credit bucket, the durations, the effective duration and
+    convexity, the time to maturity); cash flow and structure (coupon and type, frequency,
+    maturity and next call, payment status). "Open in BP" opens the bond in the pricing of
+    screen 4 (YAS) until BP (step 30).
+  - IMP takes the bond list (`bond-master`, BOND_MASTER) and the bond ratings (`bond-ratings`,
+    BOND_RATINGS): their templates and columns, their checks worded (a ticker another security
+    holds, an amortization schedule that does not add up, dates out of order), their publication
+    and rollback. ADMCFG chooses the XAF reference curve among the six CEMAC states' (EUR and USD:
+    n/a until their EODHD codes are confirmed, decision 8). AUDT words the new field.
+  - Slices: `features/screen-bonds` (criteria, store, saved screens),
+    `widgets/bond-screener-results-panel`, `widgets/bond-analytics-panel`, `pages/bond-screener`;
+    the screener's hooks and labels in `entities/bond`; the contracts in `bondScreener.ts`, the endpoints of
+    `/bonds/screener*`, `/bonds/{id}/analytics*` and `/analysis/bond-screens`; the strings in the
+    area file `bonds.json`.
+- **CMarket.Api** (phase 22):
+  - Section 14.4 in `CMarket.Domain`: current yield, yield to worst over each call (its date and
+    price), credit spread over the currency's reference curve at the average life, Z-spread over
+    its rates at each payment, OAS (the Z-spread without options, n/a with), effective duration
+    and convexity (±25 bp with the yield to worst's logic), time to maturity, composite rating
+    (median of the agencies, the lower of two; Investment Grade from BBB− / Baa3); the model price
+    of a bond without a quote for 5 sessions (its country's curve at the average life plus its
+    last known spread). The calculator of section 14.1 now takes zero coupons, a first coupon
+    date, odd first and last periods and amortization schedules; cases A and B unchanged.
+  - The bond list's terms on `ref.BondTerms` (category, sector, market, seniority, coupon type,
+    floating index and margin, first coupon, status), `ref.BondSchedule` and
+    `ref.BondCallSchedule`; `ref.BondRatings` (history); `mkt.BondAnalyticsDaily`;
+    `usr.BondScreens`; the XAF curve in `usr.PlatformSettings`; the markets BEAC and OTC and five
+    sectors of non-state issuers. The migration `BondAnalytics`, tested up, again by the
+    idempotent script, and down on SQL Server.
+  - The job `bond-analytics` at 18:30 Douala on weekdays, and after a publication of a bond list,
+    prices, auctions or curves, or a new reference curve: each bond of the list not matured,
+    settled the next session.
+  - The demo: the mockup's six bonds (ECMR and GAB; Cameroon's OTA 3 years and 26-week BTA of the
+    latest auction on the BEAC's market, at model prices; BDEAC 5.50% 2030 and COMPANY X 7.00%
+    2028, callable on 30/06/2027 at 101, listed on BVMAC at the mockup's prices), S&P's B and B−
+    of Gabon, 65 sessions of figures.
+- **Checked**:
+  - Type check, lint, the 321 unit tests.
+  - CMarket.Api: 1,285 tests and the SQL Server suite's 17.
+  - Every Playwright flow on CMarket.Api from a fresh database: 96, all passing, and the market's
+    two `@fresh-db` flows on a fresh database of their own. Three new ones, of BS: the mockup's
+    list, a callable bond's and a rated bond's blocks, the profile and the pricing it opens; the
+    BEAC's securities only, a saved screen loaded again, a minimum rating, the XLSX export; a bond
+    list published in IMP, whose new bond BS prices at a model price.
+  - axe (WCAG 2.2 AA) at 1600, 390 and 320 px, in English and French: BS (the list, a callable
+    bond, the save dialog), IMP's upload of a bond list, ADMCFG: 30 audits, nothing found,
+    nothing scrolls sideways.
 
 ### Step 30 · BP · Bond pricing (screen 16) (M): to do
 
@@ -1646,9 +1704,15 @@ Still to do, with the first screen that needs it:
 
 - **Planned in step 30**.
 
-### BS · Bond screener (screen 17): to do
+### BS · Bond screener (screen 17): done
 
-- **Planned in step 29**.
+- **Built in step 29**: the criteria, the results and the four blocks of the selected bond of the
+  mockup, saved screens and the XLSX export, on the daily calculation of CMarket.Api (see step
+  29).
+- **Mockup**: its figures are of 29/10/2026; the demo computes its bonds on the latest session,
+  so that the accrued interest, the yields and the durations follow the date. ECMR is the
+  amortizing bond of YAS (case B of section 14.1), where the mockup shows case A's yield.
+  "Open in BP" opens YAS until step 30.
 
 ### DES on an ETF · ETF profile (screen 19): to do
 
@@ -1700,6 +1764,8 @@ Still to do, with the first screen that needs it:
   security master and the statements of the screens do not read them yet; the curves of a
   published file apply from its date, without the shift of the sample file.
 - **Third version (steps 29 and 32)**: the bond list and ratings files, the two ETF files.
+- **Built in step 29**: the bond list (`bond-master`) and the bond ratings (`bond-ratings`): a
+  bond listed or described by its ISIN, a rating added to its history; their rollback.
 
 ### CORR · Data corrections (no mockup): done
 
@@ -1775,6 +1841,7 @@ Still to do, with the first screen that needs it:
   library the new price range, commission and moderation, PORT the new rate.
 - **Third version (steps 24, 29 and 32)**: the News provider's quotas and column of the
   matrix; the reference curve and the risk-free rate of each currency.
+- **Built in step 29**: the XAF reference curve of the bonds' spreads (Cameroon's by default).
 
 ### AUDT · Audit log (no mockup): done
 
@@ -2147,6 +2214,19 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   item's clicks of a day with the newspaper's clicks per item of the 30 days before, from 50 clicks;
   a "wave of new accounts" has no threshold (the plan: the 20 accounts of the shared address). Is
   the newspaper told of a hold (the plan: no)? MPAY sits after SRC until SUBS comes (step 34).
+- **Bond screener, third version**: the mockup's figures do not all follow from its bonds' terms:
+  ECMR's are case A of section 14.1 (bullet), YAS's case B (amortizing), and COMPANY X's accrued
+  interest of 4.51 matches no coupon date of an annual bond paying on 30/06. Its prices fit a
+  settlement the next session (29/10 → 30/10), YAS's mockup two sessions (28/10 → 30/10): which
+  convention does each market keep (the plan: the next session for the daily calculation)? The
+  BTA's spread reads "—": the plan computes it as for any bond (0 on its own curve). The mockup's
+  note says a double-click opens BP, the text the bond profile (screen 20): the plan follows the
+  text. The issue category boxes leave out MUNICIPAL, the market boxes OTHER: the plan adds a box
+  for each. A floating, step-up or inflation-linked coupon is held at the list's rate (the file
+  gives no fixings, steps nor index); an odd first or last period earns its share of a coupon by
+  actual days; a model price and the Z-spread read a curve flat beyond its ends, the credit spread
+  only inside it. The sector of a corporate issuer: FINANCIALS, UTILITIES or INDUSTRIALS, as block
+  A lists them. "ISIN · nom" in the mockup's block A is French.
 - **Subscriptions, third version**: SUBS shows auto-renewal, a stored card and failed payments,
   but no payment provider that keeps cards is named. The plan: a renewal charges the stored card
   or sends a mobile money request, a simulated provider standing in; a failed charge is tried

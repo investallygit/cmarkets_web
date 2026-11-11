@@ -226,7 +226,7 @@ export interface QuotaDto {
   alerts: number | null
 }
 
-/** GET / PUT /admin/settings: quotas, research pricing and moderation, risk-free rate. */
+/** GET / PUT /admin/settings: quotas, research pricing and moderation, risk-free rate, XAF curve. */
 export interface PlatformSettingsDto {
   /** null means unlimited. */
   quotas: Record<AccountType, QuotaDto>
@@ -237,6 +237,11 @@ export interface PlatformSettingsDto {
   moderation: 'before' | 'after'
   /** R_f of the Sharpe ratio (spec section 14.3). */
   riskFreeRatePct: number
+  /**
+   * The CEMAC state whose sovereign curve the XAF bonds' spreads are read on (spec section 14.4,
+   * "Reference curve per currency, set by the Admin"): "CM" by default.
+   */
+  xafReferenceCurve: string
   updatedAt: IsoDateTime | null
   updatedBy: string | null
 }
@@ -407,6 +412,7 @@ export const AUDIT_FIELDS = [
   'calculationTime',
   'spikeFactor',
   'sharedAddressAccounts',
+  'xafReferenceCurve',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

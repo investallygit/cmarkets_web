@@ -9,6 +9,8 @@
       "financial-statements": "Financial statements",
       "securities": "Securities",
       "history": "Price history",
+      "bond-master": "Bond list",
+      "bond-ratings": "Bond ratings",
       "news": "Issuer news"
     },
     "frequencies": {
@@ -71,7 +73,8 @@
       "notASession": "date outside a session",
       "otherSession": "date of another session",
       "changeAboveThreshold": "change from the stored value",
-      "zeroVolumeChanged": "zero volume with a changed price"
+      "zeroVolumeChanged": "zero volume with a changed price",
+      "codeTaken": "a code another security holds"
     },
     "points": "{{value}} pt",
     "typeLabel": "Type: {{type}}",
@@ -120,7 +123,31 @@
       "name": "Name",
       "sector": "Sector",
       "shares": "Shares",
-      "currency": "Currency"
+      "currency": "Currency",
+      "ticker": "Ticker",
+      "issuer": "Issuer",
+      "issuer_category": "Category",
+      "market": "Market",
+      "seniority": "Seniority",
+      "coupon_type": "Coupon type",
+      "coupon_rate": "Coupon",
+      "float_index": "Index",
+      "float_margin": "Margin",
+      "frequency": "Frequency",
+      "day_count": "Day count",
+      "issue_date": "Issue",
+      "first_coupon_date": "First coupon",
+      "maturity_date": "Maturity",
+      "redemption": "Redemption",
+      "amortization_schedule": "Amortization",
+      "call_schedule": "Calls",
+      "put_schedule": "Puts",
+      "face_value": "Face value",
+      "amount_outstanding": "Outstanding",
+      "status": "Status",
+      "agency": "Agency",
+      "rating": "Rating",
+      "rating_date": "Rating date"
     },
     "check": "Check",
     "issues": {
@@ -139,7 +166,11 @@
       "notASession": "{{date}}: no session that day",
       "otherSession": "Dated {{date}}, not {{session}}",
       "changeAboveThreshold": "{{field}} {{change}} vs previous (threshold {{threshold}})",
-      "zeroVolumeChanged": "No volume, but the close moved from {{previous}}"
+      "zeroVolumeChanged": "No volume, but the close moved from {{previous}}",
+      "codeTaken": "{{code}} is another security's code",
+      "isinTaken": "{{column}}: the ISIN of a security that is not a bond",
+      "scheduleShares": "The shares repaid fall on payment dates, add up to 100% and end at maturity",
+      "bondDates": "{{column}}: after the issue, by maturity at the latest"
     },
     "issueFields": {
       "close": "Close",
@@ -162,7 +193,9 @@
       "auctions": "the BEAC release",
       "curves": "the BEAC rates",
       "financial-statements": "the published accounts",
-      "securities": "the issuer's records"
+      "securities": "the issuer's records",
+      "bond-master": "the prospectus",
+      "bond-ratings": "the agency's release"
     },
     "selected": {
       "alert": "Row {{row}} selected: check the {{field}} against {{source}}, fix it if needed, then tick “Alert checked”.",
@@ -199,7 +232,9 @@
       "auctions": "On publish: yield curves, indices and alerts are recalculated; a DataPublished event is sent to open screens.",
       "curves": "On publish: the yield curves and the bond spreads are recalculated; a DataPublished event is sent to open screens.",
       "financial-statements": "On publish: ratios and the screener are recalculated; a DataPublished event is sent to open screens.",
-      "securities": "On publish: the security master is updated; a DataPublished event is sent to open screens."
+      "securities": "On publish: the security master is updated; a DataPublished event is sent to open screens.",
+      "bond-master": "On publish: the bonds are listed or described again and their figures of the day recalculated (BS); a DataPublished event is sent to open screens.",
+      "bond-ratings": "On publish: the ratings join their history and the composite ratings of BS follow; a DataPublished event is sent to open screens."
     },
     "fix": {
       "title": "Fix row {{row}}",

@@ -9,6 +9,8 @@
       "financial-statements": "États financiers",
       "securities": "Titres",
       "history": "Historique des cours",
+      "bond-master": "Liste des obligations",
+      "bond-ratings": "Notations des obligations",
       "news": "Actualités des émetteurs"
     },
     "frequencies": {
@@ -71,7 +73,8 @@
       "notASession": "date hors séance",
       "otherSession": "date d’une autre séance",
       "changeAboveThreshold": "écart avec la valeur enregistrée",
-      "zeroVolumeChanged": "volume nul avec un cours modifié"
+      "zeroVolumeChanged": "volume nul avec un cours modifié",
+      "codeTaken": "un code déjà pris par un autre titre"
     },
     "points": "{{value}} pt",
     "typeLabel": "Type : {{type}}",
@@ -120,7 +123,31 @@
       "name": "Nom",
       "sector": "Secteur",
       "shares": "Actions",
-      "currency": "Devise"
+      "currency": "Devise",
+      "ticker": "Mnémonique",
+      "issuer": "Émetteur",
+      "issuer_category": "Catégorie",
+      "market": "Marché",
+      "seniority": "Rang",
+      "coupon_type": "Type de coupon",
+      "coupon_rate": "Coupon",
+      "float_index": "Indice",
+      "float_margin": "Marge",
+      "frequency": "Fréquence",
+      "day_count": "Base de calcul",
+      "issue_date": "Émission",
+      "first_coupon_date": "1er coupon",
+      "maturity_date": "Échéance",
+      "redemption": "Remboursement",
+      "amortization_schedule": "Amortissement",
+      "call_schedule": "Calls",
+      "put_schedule": "Puts",
+      "face_value": "Nominal",
+      "amount_outstanding": "Encours",
+      "status": "Statut",
+      "agency": "Agence",
+      "rating": "Note",
+      "rating_date": "Date de la note"
     },
     "check": "Contrôle",
     "issues": {
@@ -139,7 +166,11 @@
       "notASession": "{{date}} : pas de séance ce jour-là",
       "otherSession": "Daté du {{date}}, pas du {{session}}",
       "changeAboveThreshold": "{{field}} {{change}} vs précédent (seuil {{threshold}})",
-      "zeroVolumeChanged": "Volume nul, mais la clôture a bougé depuis {{previous}}"
+      "zeroVolumeChanged": "Volume nul, mais la clôture a bougé depuis {{previous}}",
+      "codeTaken": "{{code}} est le code d’un autre titre",
+      "isinTaken": "{{column}} : l’ISIN d’un titre qui n’est pas une obligation",
+      "scheduleShares": "Les parts remboursées tombent à des dates de paiement, font 100 % et finissent à l’échéance",
+      "bondDates": "{{column}} : après l’émission, au plus tard à l’échéance"
     },
     "issueFields": {
       "close": "Clôture",
@@ -162,7 +193,9 @@
       "auctions": "le communiqué de la BEAC",
       "curves": "les taux de la BEAC",
       "financial-statements": "les comptes publiés",
-      "securities": "les données de l’émetteur"
+      "securities": "les données de l’émetteur",
+      "bond-master": "le prospectus",
+      "bond-ratings": "le communiqué de l’agence"
     },
     "selected": {
       "alert": "Ligne {{row}} sélectionnée : vérifiez {{field}} dans {{source}}, corrigez si besoin, puis cochez « Alerte vérifiée ».",
@@ -199,7 +232,9 @@
       "auctions": "À la publication : courbes de taux, indices et alertes sont recalculés ; un événement DataPublished est envoyé aux écrans ouverts.",
       "curves": "À la publication : les courbes de taux et les écarts des obligations sont recalculés ; un événement DataPublished est envoyé aux écrans ouverts.",
       "financial-statements": "À la publication : ratios et filtre d’actions sont recalculés ; un événement DataPublished est envoyé aux écrans ouverts.",
-      "securities": "À la publication : le référentiel des titres est mis à jour ; un événement DataPublished est envoyé aux écrans ouverts."
+      "securities": "À la publication : le référentiel des titres est mis à jour ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "bond-master": "À la publication : les obligations sont ajoutées ou décrites à nouveau et leurs chiffres du jour recalculés (BS) ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "bond-ratings": "À la publication : les notes rejoignent leur historique et les notes composites de BS suivent ; un événement DataPublished est envoyé aux écrans ouverts."
     },
     "fix": {
       "title": "Corriger la ligne {{row}}",

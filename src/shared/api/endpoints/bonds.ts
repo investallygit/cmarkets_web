@@ -1,9 +1,14 @@
 import type {
   AuctionDto,
   AuctionInstrument,
+  BondAnalyticsDayDto,
+  BondAnalyticsDto,
   BondCalculationDto,
   BondCalculationRequestDto,
   BondDto,
+  BondScreenerFacetsDto,
+  BondScreenerQuery,
+  BondScreenerResultDto,
   BondSummaryDto,
   YieldCurveDto,
 } from '../contracts'
@@ -21,13 +26,17 @@ export interface YieldCurveQuery {
   country?: string
 }
 
-/** CMarket.Api/Controllers/Bonds: listed bonds, the calculator, the BEAC auctions, the curves. */
+/** CMarket.Api/Controllers/Bonds: listed bonds, the calculator, the BEAC auctions, the curves, BS. */
 export const bondsRoutes = {
   list: route('GET', '/bonds', answer<BondSummaryDto[]>()),
   bond: route('GET', '/bonds/{id}', answer<BondDto>()),
   calculate: route('POST', '/bonds/{id}/calculate', answer<BondCalculationDto>()),
   auctions: route('GET', '/auctions', answer<AuctionDto[]>()),
   yieldCurves: route('GET', '/yield-curves', answer<YieldCurveDto[]>()),
+  screener: route('GET', '/bonds/screener', answer<BondScreenerResultDto>()),
+  screenerFacets: route('GET', '/bonds/screener/facets', answer<BondScreenerFacetsDto>()),
+  analytics: route('GET', '/bonds/{id}/analytics', answer<BondAnalyticsDto>()),
+  analyticsHistory: route('GET', '/bonds/{id}/analytics/history', answer<BondAnalyticsDayDto[]>()),
 }
 
 export const bondsApi = {
@@ -44,4 +53,15 @@ export const bondsApi = {
   /** One curve per country, shortest maturity first. */
   yieldCurves: (query: YieldCurveQuery, signal?: AbortSignal) =>
     send(bondsRoutes.yieldCurves, { query: { ...query }, signal }),
+  /** BS: the bonds of the latest daily calculation that meet every criterion. */
+  screener: (query: BondScreenerQuery, signal?: AbortSignal) =>
+    send(bondsRoutes.screener, { query: { ...query }, signal }),
+  /** The values each filter finds in the latest calculation. */
+  screenerFacets: (signal?: AbortSignal) => send(bondsRoutes.screenerFacets, { signal }),
+  /** The selected bond's blocks A to D. */
+  analytics: (id: string, signal?: AbortSignal) =>
+    send(bondsRoutes.analytics, { params: { id }, signal }),
+  /** The bond's daily calculations, oldest first; the last year by default. */
+  analyticsHistory: (id: string, query: { from?: string; to?: string }, signal?: AbortSignal) =>
+    send(bondsRoutes.analyticsHistory, { params: { id }, query: { ...query }, signal }),
 }

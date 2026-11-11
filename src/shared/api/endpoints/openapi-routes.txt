@@ -81,6 +81,9 @@ GET /alerts
 POST /alerts
 DELETE /alerts/{id}
 PUT /alerts/{id}
+GET /analysis/bond-screens
+POST /analysis/bond-screens
+DELETE /analysis/bond-screens/{id}
 GET /analysis/compare
 POST /analysis/screener
 GET /analysis/screens
@@ -102,7 +105,11 @@ DELETE /blocks/{userId}
 POST /blocks/{userId}
 GET /bonds
 GET /bonds/{id}
+GET /bonds/{id}/analytics
+GET /bonds/{id}/analytics/history
 POST /bonds/{id}/calculate
+GET /bonds/screener
+GET /bonds/screener/facets
 GET /calendar
 GET /charts/{securityId}/drawings
 PUT /charts/{securityId}/drawings

@@ -16,6 +16,7 @@ import {
   Newspaper,
   PenLine,
   Rss,
+  ScanLine,
   ScanSearch,
   ScrollText,
   Server,
@@ -53,6 +54,8 @@ export interface ScreenDefinition {
   inMenu: boolean
   /** The code the left menu shows when it is not the screen's own: NEWS for NEWS NEW (decision 2). */
   menuCode?: string
+  /** The menu entry lit while the screen shows, for a screen not in the menu: YCRV for BS (screen 17's mockup). */
+  menuParent?: ScreenTextKey
   icon: LucideIcon
   titleKey: TranslationKey
   menuKey: TranslationKey
@@ -70,6 +73,7 @@ interface ScreenOptions {
   inMenu?: boolean
   routePattern?: string
   menuCode?: string
+  menuParent?: ScreenTextKey
 }
 
 function screen(
@@ -78,7 +82,7 @@ function screen(
   path: string,
   audience: Audience,
   icon: LucideIcon,
-  { permission, module, inMenu = false, routePattern, menuCode }: ScreenOptions = {},
+  { permission, module, inMenu = false, routePattern, menuCode, menuParent }: ScreenOptions = {},
 ): ScreenDefinition {
   return {
     id,
@@ -86,6 +90,7 @@ function screen(
     path,
     routePattern,
     menuCode,
+    menuParent,
     audience,
     permission,
     module,
@@ -119,6 +124,8 @@ export const SCREENS: readonly ScreenDefinition[] = [
   // Client screens opened from the command bar or from another screen.
   screen('DES', 'DES', routes.security, 'client', FileText, { permission: 'market:read', module: 'monitoring' }),
   screen('YAS', 'YAS', routes.bondCalculator, 'client', Calculator, { permission: 'analysis:read', module: 'analysis' }),
+  // BS (screen 17) under YCRV, as its mockup lights the menu: the bond screener.
+  screen('BS', 'BS', routes.bondScreener, 'client', ScanLine, { permission: 'analysis:read', module: 'analysis', menuParent: 'YCRV' }),
   screen('PUBNEW', 'PUB NEW', routes.publishingStudio, 'client', PenLine, { permission: 'publications:write' }),
   screen('CAL', 'CAL', routes.calendar, 'client', CalendarDays, { permission: 'market:read', module: 'monitoring' }),
   screen('NETME', 'NET ME', routes.networkProfile, 'client', IdCard, { permission: 'directory:profile' }),

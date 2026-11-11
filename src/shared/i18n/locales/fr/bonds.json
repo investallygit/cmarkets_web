@@ -1,0 +1,150 @@
+{
+  "bondScreener": {
+    "criteria": "Critères",
+    "save": "Enregistrer",
+    "all": "Tous",
+    "above": "> {{value}}",
+    "between": "entre {{min}} et {{max}}",
+    "atLeast": "{{value}} et plus",
+    "fromYear": "{{year}} et après",
+    "orBetter": "{{rating}} ou mieux",
+    "investmentGrade": "{{rating}} ou mieux (investment grade)",
+    "fields": {
+      "category": "Catégorie d'émission",
+      "market": "Marché",
+      "ytmMin": "Rendement minimum (YTM)",
+      "duration": "Duration modifiée",
+      "maturity": "Échéance",
+      "country": "Pays",
+      "currency": "Devise",
+      "ratingMin": "Notation minimale",
+      "couponType": "Type de coupon"
+    },
+    "categoryGroups": {
+      "sovereign": "Souverain",
+      "supranational": "Supranational / régional",
+      "corporate": "Entreprises",
+      "municipal": "Collectivités locales"
+    },
+    "marketChoices": {
+      "bvmac": "BVMAC (cotées)",
+      "beac": "BEAC (titres publics BTA / OTA)",
+      "other": "Autres marchés"
+    },
+    "run": "Lancer",
+    "reset": "Réinitialiser",
+    "tickOne": "Cochez au moins une catégorie d'émission et un marché.",
+    "notRun": "Les critères ont changé : lancez le filtre pour mettre à jour les résultats.",
+    "results_one": "Résultats : {{count}} obligation",
+    "results_other": "Résultats : {{count}} obligations",
+    "resultsTitle": "Résultats",
+    "computed": "Calculé le {{date}} à {{time}}",
+    "export": "Export XLSX",
+    "modelPrice": "Prix modèle : pas de cotation récente",
+    "ytwTo": "Au {{date}}",
+    "noResult": "Aucune obligation ne répond à ces critères.",
+    "notComputed": "Les chiffres des obligations sont calculés chaque soir après la clôture : aucun pour l'instant.",
+    "resultsHint": "* Prix modèle (pas de cotation récente) : calculé sur la courbe du pays + spread. YTW différent du YTM en jaune (obligation remboursable par anticipation). Double-clic : ouvre la fiche de l'obligation.",
+    "columns": {
+      "bond": "Obligation",
+      "issuer": "Émetteur",
+      "market": "Marché",
+      "coupon": "Coupon %",
+      "maturity": "Échéance",
+      "cleanPrice": "Prix pied",
+      "dirtyPrice": "Prix plein",
+      "ytm": "YTM %",
+      "ytw": "YTW %",
+      "currentYield": "Rdt cour. %",
+      "spread": "Spread pb",
+      "rating": "Note",
+      "modifiedDuration": "D. mod."
+    },
+    "categories": {
+      "sovereign": "Souverain",
+      "supranational": "Supranational",
+      "regional": "Régional",
+      "corporate": "Entreprise",
+      "municipal": "Collectivité locale"
+    },
+    "markets": {
+      "bvmac": "BVMAC",
+      "beac": "BEAC",
+      "other": "Autre"
+    },
+    "couponTypes": {
+      "fixed": "Fixe",
+      "float": "Variable",
+      "zero": "Zéro",
+      "stepUp": "Progressif",
+      "inflation": "Indexé sur l'inflation"
+    },
+    "notRated": "NN",
+    "profile": "Obligation sélectionnée",
+    "openInBp": "Ouvrir dans BP",
+    "pickBond": "Lancez le filtre, puis choisissez une obligation dans les résultats.",
+    "bp": "{{value}} pb",
+    "floating": "{{rate}} · {{index}} {{margin}}",
+    "callAt": "{{date}} à {{price}}",
+    "noCall": "pas de remboursement anticipé",
+    "toDate": "(au {{date}})",
+    "oasLater": "n.d. (V2)",
+    "years": "{{value}} ans",
+    "modelNote": "* Prix modèle : pas de cotation BVMAC depuis 5 séances ; la courbe du pays émetteur plus le dernier spread connu de l'obligation.",
+    "blocks": {
+      "identification": "A. Identification et émetteur",
+      "pricing": "B. Prix, rendement et spreads",
+      "risk": "C. Risque et notations",
+      "structure": "D. Flux et structure"
+    },
+    "lines": {
+      "isinName": "ISIN · nom",
+      "issuerSector": "Émetteur · secteur",
+      "countryCurrency": "Pays · devise",
+      "seniority": "Rang",
+      "cleanDirty": "Prix pied · plein",
+      "accrued": "Coupon couru",
+      "ytmYtw": "YTM · YTW",
+      "currentYield": "Rendement courant",
+      "spreads": "Spread de crédit · Z-spread",
+      "oas": "OAS",
+      "ratings": "Notes S&P · Moody's · Fitch",
+      "bucket": "Catégorie de crédit",
+      "durations": "Duration de Macaulay · modifiée",
+      "effective": "Duration effective · convexité",
+      "timeToMaturity": "Durée résiduelle",
+      "coupon": "Coupon · type",
+      "frequency": "Fréquence",
+      "maturityCall": "Échéance · prochain remboursement anticipé",
+      "status": "Statut"
+    },
+    "sectors": {
+      "financials": "Finance",
+      "utilities": "Services publics",
+      "industrials": "Industrie"
+    },
+    "seniorities": {
+      "seniorUnsecured": "Senior non garanti",
+      "subordinatedT2": "Subordonné Tier 2",
+      "at1": "AT1 / CoCo",
+      "covered": "Obligation sécurisée",
+      "securitized": "Titrisé"
+    },
+    "buckets": {
+      "investmentGrade": "Investment Grade",
+      "highYield": "High Yield",
+      "notRated": "Non noté"
+    },
+    "frequencies": {
+      "annual": "Annuelle",
+      "semiAnnual": "Semestrielle",
+      "quarterly": "Trimestrielle",
+      "monthly": "Mensuelle"
+    },
+    "statuses": {
+      "performing": "Normal",
+      "default": "Défaut",
+      "restructured": "Restructuré"
+    }
+  }
+}

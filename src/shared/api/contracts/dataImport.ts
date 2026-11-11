@@ -10,6 +10,8 @@ export type ImportType =
   | 'auctions'
   | 'curves'
   | 'history'
+  | 'bond-master'
+  | 'bond-ratings'
 
 /** How often a file is expected: each session, each auction, weekly, or when there is news. */
 export type ImportFrequency = 'session' | 'auction' | 'weekly' | 'onDemand' | 'periodic' | 'once'
@@ -42,6 +44,7 @@ export type ImportCheckCode =
   | 'otherSession'
   | 'changeAboveThreshold'
   | 'zeroVolumeChanged'
+  | 'codeTaken'
 
 /** GET /data/import-types: the columns and the checks of each file. */
 export interface ImportTypeDto {

@@ -1,6 +1,7 @@
 import account from './fr/account.json'
 import admin from './fr/admin.json'
 import analysis from './fr/analysis.json'
+import bonds from './fr/bonds.json'
 import core from './fr/core.json'
 import dataAdmin from './fr/dataAdmin.json'
 import home from './fr/home.json'
@@ -20,6 +21,7 @@ const fr = {
   ...account,
   ...monitoring,
   ...analysis,
+  ...bonds,
   ...portfolio,
   ...research,
   ...network,

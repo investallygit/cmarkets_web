@@ -10,6 +10,8 @@ export const IMPORT_TYPES: readonly ImportType[] = [
   'financial-statements',
   'securities',
   'history',
+  'bond-master',
+  'bond-ratings',
 ]
 
 export function isImportType(value: string): value is ImportType {
@@ -35,7 +37,10 @@ export const IMPORT_COLUMNS = [
   'date', 'code', 'open', 'high', 'low', 'close', 'volume', 'value', 'index', 'type', 'ex_date',
   'pay_date', 'amount', 'country', 'security', 'maturity', 'offered', 'bids', 'allotted',
   'avg_rate', 'marginal_rate', 'rate', 'fiscal_year', 'line_item', 'isin', 'name', 'sector',
-  'shares', 'currency',
+  'shares', 'currency', 'ticker', 'issuer', 'issuer_category', 'market', 'seniority', 'coupon_type',
+  'coupon_rate', 'float_index', 'float_margin', 'frequency', 'day_count', 'issue_date', 'first_coupon_date',
+  'maturity_date', 'redemption', 'amortization_schedule', 'call_schedule', 'put_schedule', 'face_value',
+  'amount_outstanding', 'status', 'agency', 'rating', 'rating_date',
 ] as const
 export type ImportColumnName = (typeof IMPORT_COLUMNS)[number]
 

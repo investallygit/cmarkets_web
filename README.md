@@ -67,7 +67,7 @@ tables, read-excel-file to read the Excel templates before upload.
 | 13 · News studio (NEWS NEW)                                               | Done; drafts, schedule, withdrawal, file import, earnings     |
 | News sources (SRC), AI ingestion, international news: no mockup           | Done; the AI pushes signed items, EODHD news every 15 minutes |
 | 18 · Media payments (MPAY)                                                | Done; a second Admin above XAF 300,000; disputes in NEWS NEW  |
-| 17 · Bond screener (BS)                                                   | To do, step 29                                                |
+| 17 · Bond screener (BS)                                                   | Done; computed each evening, model prices, yield to worst     |
 | 16 · Bond pricing (BP), which YAS opens                                   | To do, step 30                                                |
 | 20 · Bond profile (DES on a bond)                                         | To do, step 31                                                |
 | 15 · ETF screener (ETFS)                                                  | To do, step 32                                                |
@@ -122,7 +122,7 @@ src/
   main.tsx    entry point: the hubs of CMarket.Api, then the app
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile, equity-screener,
-              yield-curves (YCRV and YAS), portfolio, research-library, publishing-studio, news,
+              yield-curves (YCRV and YAS), bond-screener (BS), portfolio, research-library, publishing-studio, news,
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
               network-profile (NET ME), public-profile (/p/{handle}), data-import (IMP),
               data-session (DATA), upload-history (HIST), eodhd (EODH), data-corrections (CORR),
@@ -132,10 +132,11 @@ src/
               auth (login, sign-up, password reset), status, ui-kit (/_kit)
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
               subscription-panel, current-upload-panel, messaging-panels, news-studio-panels,
-              news-moderation-panels, news-sources-panels, media-payments-panels...),
+              news-moderation-panels, news-sources-panels, media-payments-panels,
+              bond-screener-results-panel, bond-analytics-panel...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
-              security-actions, manage-watchlists, manage-alerts, screen-equities,
+              security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
               rate-publication, report-publication, follow-analyst, report-profile,
               start-conversation, send-message, share-news, report-conversation, block-user,
@@ -151,7 +152,7 @@ src/
               edit-platform-settings, edit-permissions, switch-language, switch-account,
               workspace-layout
   entities/   business data: session, subscription, organization, security, quote (live
-              prices), market, bond, yield-curve, fundamentals, screener, portfolio, publication,
+              prices), market, bond (with BS's screener and labels), yield-curve, fundamentals, screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
               (MPAY's statements, click anomalies and payment settings),
@@ -341,8 +342,8 @@ each other; the app shell mounts the form once.
 
 Every UI string is in French and English, in `shared/i18n/locales/en/` and `fr/`: one JSON file
 per area of the app (`core` for the shell and the shared UI, `home`, `account` for the login and
-the settings, `monitoring`, `analysis`, `portfolio`, `research`, `dataAdmin`, `admin`), which
-`en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:
+the settings, `monitoring`, `analysis`, `bonds`, `portfolio`, `research`, `network`, `messaging`,
+`newsStudio`, `newsAdmin`, `payments`, `dataAdmin`, `admin`), which `en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:
 `t('panels.indices')` is checked at compile time. A top-level key lives in one area file only, and
 `locales.test.ts` checks it as well as that both languages have the same keys. A new area file
 goes in both folders and is added to both `en.ts` and `fr.ts`.

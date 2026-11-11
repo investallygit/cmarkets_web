@@ -16,6 +16,8 @@ export const routes = {
   screener: '/eqs',
   yieldCurves: '/ycrv',
   bondCalculator: '/yas/:bondId',
+  /** BS (screen 17): the bond screener. */
+  bondScreener: '/bs',
   portfolio: '/port',
   /** A portfolio and one of its tabs: /port/{id} (positions), /port/{id}/risk... */
   portfolioTabs: '/port/:portfolioId?/:tab?',
