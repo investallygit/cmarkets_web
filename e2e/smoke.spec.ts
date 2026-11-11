@@ -50,12 +50,14 @@ test('the security profile follows the mockup and opens a document', async ({ pa
   await expect(page.locator('iframe[title="2025 annual report"]')).toBeAttached()
 })
 
-test('a bond profile shows its terms and redemption schedule', async ({ page }) => {
+test('a bond opens the bond profile, its characteristics and payments to come', async ({
+  page,
+}) => {
   await page.goto('/securities/ECMR-6.25-2029/des')
-  await expect(page.getByRole('heading', { name: 'Bond terms' })).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Redemption schedule' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Characteristics' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Upcoming cash flows' })).toBeVisible()
   const tabs = page.getByRole('navigation', { name: 'Security functions' })
-  await expect(tabs.getByRole('link', { name: 'GP Chart' })).toBeVisible()
+  await expect(tabs.getByRole('link', { name: 'GP Price and yield' })).toBeVisible()
   await expect(tabs.getByRole('link', { name: 'FA Fundamentals' })).toHaveCount(0)
 })
 

@@ -109,7 +109,6 @@
     },
     "card": {
       "openDes": "Open the profile",
-      "openBp": "Open in bond pricing",
       "openGp": "Open the chart",
       "openPub": "Open in PUB",
       "price": "Price {{value}}",

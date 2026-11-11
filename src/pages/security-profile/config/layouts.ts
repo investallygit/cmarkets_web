@@ -1,19 +1,23 @@
+import type { SecurityType } from '@/shared/api/contracts'
 import type { SecurityFunction } from '@/shared/routes/paths'
 import type { ScreenPanel } from '@/features/workspace-layout'
 
+type Layouts = Partial<Record<SecurityFunction, readonly ScreenPanel[]>>
+
 /**
- * Default panels of each tab, in grid units (12 columns x 26 rows). The DES tab follows the
- * screen 2 mockup (spec section 9):
+ * Default panels of each tab of an equity's profile and of the tabs every profile shares (N, DOC,
+ * ANA), in grid units (12 columns x 26 rows). The DES tab follows the screen 2 mockup (spec
+ * section 9):
  *
  *   chart    chart    | orderbook
  *   chart    chart    | trades
  *   keydata | income  | documents
  *
- * "income" holds the dividends of an equity or the redemption schedule of a bond. FA shows the
- * comparison and the statements of the screen 3 mockup, with the ratios and the price chart.
+ * "income" holds the dividends. FA shows the comparison and the statements of the screen 3
+ * mockup, with the ratios and the price chart.
  */
 // prettier-ignore
-export const PROFILE_LAYOUTS: Record<SecurityFunction, readonly ScreenPanel[]> = {
+const PROFILE_LAYOUTS: Layouts = {
   des: [
     { i: 'chart', name: 'priceChart', x: 0, y: 0, w: 8, h: 16, minW: 4, minH: 8 },
     { i: 'orderbook', name: 'orderBook', x: 8, y: 0, w: 4, h: 8, minW: 3, minH: 5 },
@@ -55,7 +59,62 @@ export const PROFILE_LAYOUTS: Record<SecurityFunction, readonly ScreenPanel[]> =
   ],
 }
 
-/** Layout key of a tab for /me/layouts/{screen}: DES, DES-GP, DES-DVD... */
-export function layoutKey(fn: SecurityFunction): string {
-  return fn === 'des' ? 'DES' : `DES-${fn.toUpperCase()}`
+/**
+ * A bond's tabs (screen 20 mockup). DES:
+ *
+ *   history  history  | analytics
+ *   history  history  | ratings
+ *   characteristics | cash flows | documents
+ *
+ * GP, the history alone; BP, the panels of screen 16; CF, the whole schedule beside the payments to
+ * come and the characteristics; RAT, the ratings in force, the day's figures and the ratings given.
+ */
+// prettier-ignore
+const BOND_LAYOUTS: Layouts = {
+  des: [
+    { i: 'history', name: 'priceYieldHistory', x: 0, y: 0, w: 8, h: 15, minW: 4, minH: 8 },
+    { i: 'analytics', name: 'todaysAnalytics', x: 8, y: 0, w: 4, h: 9, minW: 3, minH: 5 },
+    { i: 'ratings', name: 'bondRatings', x: 8, y: 9, w: 4, h: 6, minW: 3, minH: 4 },
+    { i: 'characteristics', name: 'bondCharacteristics', x: 0, y: 15, w: 4, h: 11, minW: 3, minH: 5 },
+    { i: 'cashFlows', name: 'upcomingCashFlows', x: 4, y: 15, w: 4, h: 11, minW: 3, minH: 5 },
+    { i: 'documents', name: 'documentsNews', x: 8, y: 15, w: 4, h: 11, minW: 3, minH: 4 },
+  ],
+  gp: [{ i: 'history', name: 'priceYieldHistory', x: 0, y: 0, w: 12, h: 26, minW: 6, minH: 10 }],
+  bp: [
+    { i: 'inputs', name: 'bondPricingInputs', x: 0, y: 0, w: 3, h: 26, minW: 2, minH: 10 },
+    { i: 'results', name: 'bondPricingResults', x: 3, y: 0, w: 6, h: 9, minW: 3, minH: 5 },
+    { i: 'cashFlows', name: 'cashFlowSchedule', x: 3, y: 9, w: 6, h: 17, minW: 3, minH: 5 },
+    { i: 'priceYield', name: 'priceYield', x: 9, y: 0, w: 3, h: 13, minW: 2, minH: 6 },
+    { i: 'sensitivity', name: 'rateSensitivity', x: 9, y: 13, w: 3, h: 13, minW: 2, minH: 6 },
+  ],
+  cf: [
+    { i: 'schedule', name: 'cashFlowSchedule', x: 0, y: 0, w: 7, h: 26, minW: 4, minH: 6 },
+    { i: 'cashFlows', name: 'upcomingCashFlows', x: 7, y: 0, w: 5, h: 13, minW: 3, minH: 5 },
+    { i: 'characteristics', name: 'bondCharacteristics', x: 7, y: 13, w: 5, h: 13, minW: 3, minH: 5 },
+  ],
+  rat: [
+    { i: 'ratings', name: 'bondRatings', x: 0, y: 0, w: 4, h: 9, minW: 3, minH: 4 },
+    { i: 'analytics', name: 'todaysAnalytics', x: 0, y: 9, w: 4, h: 17, minW: 3, minH: 5 },
+    { i: 'history', name: 'ratingHistory', x: 4, y: 0, w: 8, h: 26, minW: 4, minH: 6 },
+  ],
+}
+
+/** The tabs every profile shows alike, which keep one layout across types. */
+const SHARED_TABS: ReadonlySet<SecurityFunction> = new Set(['n', 'doc', 'ana'])
+
+const ownLayout = (fn: SecurityFunction, type: SecurityType) =>
+  type === 'bond' && !SHARED_TABS.has(fn)
+
+/** The default panels of a tab in the profile of the type. */
+export function defaultLayout(fn: SecurityFunction, type: SecurityType): readonly ScreenPanel[] {
+  return (ownLayout(fn, type) ? BOND_LAYOUTS[fn] : PROFILE_LAYOUTS[fn]) ?? []
+}
+
+/**
+ * Layout key of a tab for /me/layouts/{screen}: DES, DES-GP, DES-DVD... for an equity and the
+ * shared tabs; BOND, BOND-GP, BOND-CF... for a bond's own.
+ */
+export function layoutKey(fn: SecurityFunction, type: SecurityType): string {
+  const prefix = ownLayout(fn, type) ? 'BOND' : 'DES'
+  return fn === 'des' ? prefix : `${prefix}-${fn.toUpperCase()}`
 }

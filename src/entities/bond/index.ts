@@ -1,5 +1,6 @@
 export { bondKeys, useBond, useBondCalculation, useBonds } from './api/queries'
 export { bondPricingKeys, useBondPrice, useMarketYield } from './api/pricing'
+export { bondProfileKeys, useBondCashFlows, useBondHistory, useBondRatings } from './api/profile'
 export {
   bondScreenerKeys,
   useBondAnalytics,

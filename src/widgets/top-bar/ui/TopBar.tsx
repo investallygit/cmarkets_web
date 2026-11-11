@@ -8,6 +8,7 @@ import { audienceOf, canAccessScreen, lockedModule, useCurrentUser } from '@/ent
 import { CommandBar } from '@/features/command-bar'
 import { useDocumentTitle } from '@/shared/lib/useDocumentTitle'
 import { routes } from '@/shared/routes/paths'
+import { SECURITY_PROFILES } from '@/shared/routes/profiles'
 import { screenById } from '@/shared/routes/screens'
 import { useCurrentRoute } from '@/shared/routes/useCurrentRoute'
 import { Logo } from '@/shared/ui/Logo'
@@ -36,14 +37,21 @@ export function TopBar({ className }: { className?: string }) {
   const portfolioName = usePortfolio(open ? params.portfolioId : undefined).data?.name
   // The security's name once loaded, as in the screen 2 mockup; its code until then. The
   // portfolio screen names the portfolio, as in the screen 5 mockup.
-  const subjectName = useSecurityProfile(subject).data?.name ?? subject ?? portfolioName
+  const profile = useSecurityProfile(subject).data
+  const subjectName = profile?.name ?? subject ?? portfolioName
   // The news studio names its newspaper after it, as the screen 13 mockup does.
   const newspaper = useProviderSource({ enabled: open && screen.id === 'NEWSNEW' }).data?.name
+  // DES names the profile of the security's type: "Bond profile" (screen 20 mockup).
+  const screenTitle = !screen
+    ? ''
+    : screen.id === 'DES' && profile
+      ? t(SECURITY_PROFILES[profile.type].titleKey)
+      : t(screen.titleKey)
   const title = !screen
     ? ''
     : newspaper && screen.id === 'NEWSNEW'
-      ? `${t(screen.titleKey)} — ${newspaper}`
-      : `${subjectName ? `${subjectName} — ` : ''}${t(screen.titleKey)}`
+      ? `${screenTitle} — ${newspaper}`
+      : `${subjectName ? `${subjectName} — ` : ''}${screenTitle}`
   // A path that is no screen names itself (NotFoundPage).
   useDocumentTitle(screen ? title : null)
 

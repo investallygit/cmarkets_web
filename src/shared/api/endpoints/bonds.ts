@@ -3,11 +3,13 @@ import type {
   AuctionInstrument,
   BondAnalyticsDayDto,
   BondAnalyticsDto,
+  BondCashFlowsDto,
   BondCalculationDto,
   BondCalculationRequestDto,
   BondDto,
   BondPriceDto,
   BondPriceRequestDto,
+  BondRatingsDto,
   BondScreenerFacetsDto,
   BondScreenerQuery,
   BondScreenerResultDto,
@@ -39,7 +41,13 @@ export interface YieldCurveQuery {
   country?: string
 }
 
-/** CMarket.Api/Controllers/Bonds: listed bonds, the calculator, BP, the BEAC auctions, the curves, BS. */
+/** The bond profile's history (screen 20): the last year without bounds. */
+export interface BondHistoryQuery {
+  from?: string
+  to?: string
+}
+
+/** CMarket.Api/Controllers/Bonds: listed bonds, the calculator, BP, the BEAC auctions, the curves, BS, the bond profile. */
 export const bondsRoutes = {
   list: route('GET', '/bonds', answer<BondSummaryDto[]>()),
   bond: route('GET', '/bonds/{id}', answer<BondDto>()),
@@ -53,6 +61,8 @@ export const bondsRoutes = {
   screenerFacets: route('GET', '/bonds/screener/facets', answer<BondScreenerFacetsDto>()),
   analytics: route('GET', '/bonds/{id}/analytics', answer<BondAnalyticsDto>()),
   analyticsHistory: route('GET', '/bonds/{id}/analytics/history', answer<BondAnalyticsDayDto[]>()),
+  ratings: route('GET', '/bonds/{id}/ratings', answer<BondRatingsDto>()),
+  cashFlows: route('GET', '/bonds/{id}/cashflows', answer<BondCashFlowsDto>()),
 }
 
 export const bondsApi = {
@@ -87,6 +97,12 @@ export const bondsApi = {
   analytics: (id: string, signal?: AbortSignal) =>
     send(bondsRoutes.analytics, { params: { id }, signal }),
   /** The bond's daily calculations, oldest first; the last year by default. */
-  analyticsHistory: (id: string, query: { from?: string; to?: string }, signal?: AbortSignal) =>
+  analyticsHistory: (id: string, query: BondHistoryQuery, signal?: AbortSignal) =>
     send(bondsRoutes.analyticsHistory, { params: { id }, query: { ...query }, signal }),
+  /** The agencies' ratings in force, the composite and the ratings given (screen 20). */
+  ratings: (id: string, signal?: AbortSignal) =>
+    send(bondsRoutes.ratings, { params: { id }, signal }),
+  /** The payments from today and the days to the next coupon (screen 20). */
+  cashFlows: (id: string, signal?: AbortSignal) =>
+    send(bondsRoutes.cashFlows, { params: { id }, signal }),
 }

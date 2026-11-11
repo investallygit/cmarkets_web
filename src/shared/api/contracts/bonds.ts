@@ -1,3 +1,12 @@
+import type {
+  BondIssuerCategory,
+  BondMarket,
+  BondOptionDto,
+  BondPaymentStatus,
+  BondSector,
+  BondSeniority,
+  CouponType,
+} from './bondScreener'
 import type { CurrencyCode, IsoDate } from './common'
 
 /** Day-count convention, taken from the prospectus (spec section 14.1). */
@@ -34,8 +43,26 @@ export interface BondSummaryDto {
   amountOutstanding: number
 }
 
-/** GET /bonds/{id}: terms and cash-flow schedule. */
+/**
+ * GET /bonds/{id}: the terms, the bond list's details (the characteristics of the bond profile,
+ * screen 20), the calls and puts, and the cash-flow schedule.
+ */
 export interface BondDto extends BondSummaryDto {
+  isin: string | null
+  issuerCategory: BondIssuerCategory
+  /** A company's: financials, utilities or industrials. */
+  sector: BondSector | null
+  market: BondMarket
+  seniority: BondSeniority
+  couponType: CouponType
+  floatIndex: string | null
+  floatMarginPct: number | null
+  firstCouponDate: IsoDate | null
+  status: BondPaymentStatus
+  /** The issuer's early redemptions, the first first: date and price per 100. */
+  calls: BondOptionDto[]
+  /** The holder's. */
+  puts: BondOptionDto[]
   schedule: BondCashFlowDto[]
 }
 

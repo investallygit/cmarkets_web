@@ -249,5 +249,145 @@
     },
     "shift": "{{value}} pb",
     "sensitivityNote": "Variation du prix plein en % : à comparer avec −Dmod × Δy (approximation du premier ordre)."
+  },
+  "bondProfile": {
+    "categories": {
+      "sovereign": "Obligation souveraine",
+      "supranational": "Obligation supranationale",
+      "regional": "Obligation régionale",
+      "corporate": "Obligation d'entreprise",
+      "municipal": "Obligation de collectivité locale"
+    },
+    "couponLines": {
+      "annual": "Coupon {{type}} annuel",
+      "semiAnnual": "Coupon {{type}} semestriel",
+      "quarterly": "Coupon {{type}} trimestriel",
+      "monthly": "Coupon {{type}} mensuel"
+    },
+    "zeroCoupon": "Zéro coupon",
+    "redemptions": {
+      "bullet": "In fine",
+      "amortizing": "Amortissable"
+    },
+    "figures": {
+      "dirtyPrice": "Prix plein",
+      "ytm": "YTM",
+      "ytw": "YTW",
+      "modifiedDuration": "Dur. mod.",
+      "spread": "Spread",
+      "maturity": "Échéance"
+    },
+    "cleanPrice": "Prix pied",
+    "modelPrice": "Prix modèle : pas de cotation récente",
+    "noPrice": "Pas encore de prix",
+    "history": {
+      "periods": {
+        "6M": "6M",
+        "1Y": "1A",
+        "3Y": "3A",
+        "MAX": "MAX"
+      },
+      "periodsLabel": "Période",
+      "series": {
+        "price": "Prix",
+        "yield": "Rendement",
+        "spread": "Spread"
+      },
+      "seriesLabel": "Affiché",
+      "legend": {
+        "price": "Prix pied (axe de gauche)",
+        "ytm": "YTM (axe de droite)",
+        "ytmLeft": "YTM",
+        "ytw": "YTW (pointillé)",
+        "spread": "Spread sur la courbe, pb",
+        "model": "Plus clair : prix modèle",
+        "volume": "Barres : volume des séances avec échanges"
+      },
+      "empty": "Aucun calcul sur cette période.",
+      "summary": "{{what}} du {{from}} au {{to}} : {{first}} puis {{last}}, entre {{low}} et {{high}} ; {{traded}} séances avec échanges, {{model}} à un prix modèle."
+    },
+    "analytics": {
+      "computed": "Calculé le {{date}}",
+      "notComputed": "Pas encore calculée : les chiffres de l'obligation viendront avec le prochain calcul quotidien.",
+      "lines": {
+        "prices": "Pied · coupon couru · plein",
+        "yields": "YTM · YTW · rendement courant",
+        "durations": "Duration de Macaulay · modifiée",
+        "convexity": "Convexité · DV01 ({{currency}} 100 M)",
+        "spreads": "Spread · Z-spread",
+        "source": "Source du prix"
+      },
+      "sources": {
+        "quote": "Cotation BVMAC du {{date}}",
+        "model": "Prix modèle : la courbe {{country}} et le dernier spread",
+        "none": "Pas de prix"
+      }
+    },
+    "ratings": {
+      "agencies": {
+        "sp": "S&P",
+        "moodys": "Moody's",
+        "fitch": "Fitch"
+      },
+      "composite": "Composite : {{rating}}",
+      "bucket": "Catégorie de crédit",
+      "actions": {
+        "new": "Nouvelle",
+        "upgrade": "Relèvement",
+        "downgrade": "Abaissement",
+        "affirmed": "Confirmée"
+      },
+      "none": "Aucune agence ne note cette obligation."
+    },
+    "characteristics": {
+      "issuer": "Émetteur",
+      "categorySector": "Catégorie · secteur",
+      "seniority": "Rang",
+      "coupon": "Coupon · type",
+      "frequency": "Périodicité · base de calcul",
+      "dates": "Émission · échéance",
+      "firstCoupon": "Premier coupon",
+      "redemption": "Remboursement",
+      "earlyRedemption": "Remboursement anticipé",
+      "amountOutstanding": "Encours",
+      "status": "Statut des paiements",
+      "sectors": {
+        "sovereign": "État",
+        "municipal": "Collectivité locale"
+      },
+      "redemptions": {
+        "bullet": "In fine, au pair",
+        "straight": "Amortissable, par parts égales",
+        "schedule": "Amortissable, selon un échéancier"
+      },
+      "none": "Aucun",
+      "call": "Remboursable par l'émetteur le {{date}} à {{price}}",
+      "calls": "Remboursable par l'émetteur à partir du {{date}} à {{price}}, {{count}} dates",
+      "put": "Remboursable au porteur le {{date}} à {{price}}",
+      "puts": "Remboursable au porteur à partir du {{date}} à {{price}}, {{count}} dates"
+    },
+    "cashFlows": {
+      "perFace": "Pour 100 de nominal",
+      "columns": {
+        "date": "Date",
+        "coupon": "Coupon",
+        "principal": "Capital",
+        "total": "Total",
+        "outstanding": "Restant dû"
+      },
+      "nextCoupon_one": "Prochain coupon dans {{count}} jour.",
+      "nextCoupon_other": "Prochain coupon dans {{count}} jours.",
+      "couponToday": "Coupon payé aujourd'hui.",
+      "zeroCoupon": "Pas de coupon : le nominal est remboursé le {{date}}.",
+      "matured": "Échue : plus rien à payer.",
+      "openBp": "Ouvrir dans la valorisation (BP)"
+    },
+    "ratingColumns": {
+      "date": "Date",
+      "agency": "Agence",
+      "rating": "Note",
+      "previous": "Précédente",
+      "action": "Action"
+    }
   }
 }

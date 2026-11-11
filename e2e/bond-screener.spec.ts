@@ -71,6 +71,7 @@ test('BS lists the mockup’s bonds, model prices starred, and shows a callable 
   // A double-click opens the bond's profile; "Open in BP" its pricing.
   await list.getByRole('row', { name: /GAB 6\.50% 28/ }).dblclick()
   await expect(page).toHaveURL(/\/securities\/GAB-6\.50-2028\/des$/)
+  await expect(panel(page, /^Ratings$/)).toContainText('Composite: B-')
   await page.goBack()
   await panel(page, /^GAB 6\.50% 28/)
     .getByRole('link', { name: 'Open in BP' })

@@ -6,7 +6,7 @@ import { NewsTags } from '@/entities/news'
 import { FrozenChart } from '@/entities/publication'
 import type { SharedObjectDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
-import { bondPricingPath, libraryPath, newsPath, securityPath } from '@/shared/routes/paths'
+import { libraryPath, newsPath, securityPath } from '@/shared/routes/paths'
 
 function CardLink({ to, children }: { to: string; children: ReactNode }) {
   return (
@@ -23,8 +23,8 @@ function CardLink({ to, children }: { to: string; children: ReactNode }) {
 /**
  * A CMarket object shared in a message, in an amber frame, as it was when shared: a security
  * (a bond with its yield and duration), a frozen chart, a publication's preview or a news item
- * with its two tags. It opens the matching screen (spec section 9, screen 11); a news item, its
- * content.
+ * with its two tags. It opens the matching screen (spec section 9, screen 11): a security, the
+ * profile of its type (a bond's, screen 20); a news item, its content.
  */
 export function SharedCard({ shared }: { shared: SharedObjectDto }) {
   const { t } = useTranslation()
@@ -36,7 +36,7 @@ export function SharedCard({ shared }: { shared: SharedObjectDto }) {
       <div className="flex flex-col gap-1.5 border border-accent-amber p-2.5">
         <div className="flex items-baseline justify-between gap-3">
           <span className="font-mono text-label font-bold text-accent-amber">{shared.code}</span>
-          <span className="font-mono text-title text-secondary">{bond ? 'BP' : 'DES'}</span>
+          <span className="font-mono text-title text-secondary">DES</span>
         </div>
         <p className="font-mono text-data">
           {[
@@ -50,9 +50,7 @@ export function SharedCard({ shared }: { shared: SharedObjectDto }) {
             .filter(Boolean)
             .join(' · ')}
         </p>
-        <CardLink to={bond ? bondPricingPath(shared.securityId) : securityPath(shared.securityId)}>
-          {bond ? t('messaging.card.openBp') : t('messaging.card.openDes')}
-        </CardLink>
+        <CardLink to={securityPath(shared.securityId)}>{t('messaging.card.openDes')}</CardLink>
       </div>
     )
   }

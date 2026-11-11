@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useBond } from '@/entities/bond'
 import {
   LiveChange,
   LiveChangePct,
@@ -20,13 +19,12 @@ interface Figure {
 
 /**
  * Screen 2 header: code, name, last price at 26 px and change in real time, then 7 key figures
- * (spec section 9). Bonds show their coupon and maturity instead of the market cap and P/E.
+ * (spec section 9). A bond's profile has its own (screen 20, BondProfileHeader).
  */
 export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
   const { t } = useTranslation()
   const format = useFormat()
   const quote = useQuote(profile.id).data
-  const bond = useBond(profile.id, profile.type === 'bond').data
   const decimals = priceDecimals(profile.type, profile.currency)
   const missing = '—'
   const price = (value: number | undefined) =>
@@ -40,33 +38,17 @@ export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
       label: t('security.figures.volume'),
       value: quote ? <LiveVolume symbol={profile.id} value={quote.volume} /> : missing,
     },
-    ...(profile.type === 'bond'
-      ? [
-          {
-            label: t('security.figures.coupon'),
-            value: bond ? format.percent(bond.couponPct, 2, false) : missing,
-          },
-          {
-            label: t('security.figures.maturity'),
-            value: bond ? format.isoDate(bond.maturityDate) : missing,
-          },
-        ]
-      : [
-          {
-            label: t('security.figures.marketCap'),
-            value: quote ? format.compact(quote.marketCap) : missing,
-          },
-          {
-            label: t('security.figures.pe'),
-            value: profile.pe === null ? missing : `${format.number(profile.pe, 1)}x`,
-          },
-        ]),
+    {
+      label: t('security.figures.marketCap'),
+      value: quote ? format.compact(quote.marketCap) : missing,
+    },
+    {
+      label: t('security.figures.pe'),
+      value: profile.pe === null ? missing : `${format.number(profile.pe, 1)}x`,
+    },
     {
       label: t('security.figures.yield'),
-      value:
-        profile.yieldPct === null
-          ? missing
-          : format.percent(profile.yieldPct, profile.type === 'bond' ? 2 : 1, false),
+      value: profile.yieldPct === null ? missing : format.percent(profile.yieldPct, 1, false),
     },
   ]
   const details = [

@@ -43,7 +43,14 @@
       "n": "News",
       "doc": "Documents",
       "hds": "Shareholders",
-      "ana": "Research"
+      "ana": "Research",
+      "bp": "Pricing",
+      "cf": "Schedule",
+      "rat": "Ratings",
+      "priceYield": "Price and yield"
+    },
+    "profiles": {
+      "bond": "Bond profile"
     },
     "figures": {
       "open": "Open",
@@ -52,9 +59,7 @@
       "volume": "Volume",
       "marketCap": "Market cap",
       "pe": "P/E",
-      "yield": "Yield",
-      "coupon": "Coupon",
-      "maturity": "Maturity"
+      "yield": "Yield"
     },
     "delayed": "Delayed",
     "notFound": "No security {{id}}.",
@@ -69,22 +74,11 @@
     "beta": "Beta (1Y vs {{index}})",
     "lastDividend": "Last net dividend",
     "nextEvent": "Next event",
-    "issuer": "Issuer",
-    "coupon": "Coupon",
-    "issueDate": "Issue date",
-    "maturity": "Maturity",
-    "amortization": "Amortization",
-    "amortizations": {
-      "bullet": "At maturity",
-      "straight": "Straight, {{share}} a year"
-    },
     "frequencies": {
       "annual": "annual",
       "halfYearly": "half-yearly",
       "quarterly": "quarterly"
     },
-    "dayCount": "Day count",
-    "outstanding": "Amount outstanding",
     "insufficientData": "Insufficient data"
   },
   "orderBook": {

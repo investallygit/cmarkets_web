@@ -205,7 +205,32 @@ export const PROBES: Probe[] = [
     name: 'Bonds: bond',
     permission: 'market:read',
     call: (c) => bondsApi.bond(c.bondId),
-    check: has('schedule'),
+    check: has('schedule', 'issuerCategory', 'calls', 'puts'),
+  },
+  // The bond profile (screen 20) reads on the market's permission, as every profile.
+  {
+    name: 'Bonds: analytics',
+    permission: 'market:read',
+    call: (c) => bondsApi.analytics(c.bondId),
+    check: has('identification', 'pricing', 'risk', 'structure'),
+  },
+  {
+    name: 'Bonds: analytics history',
+    permission: 'market:read',
+    call: (c) => bondsApi.analyticsHistory(c.bondId, {}),
+    check: isList,
+  },
+  {
+    name: 'Bonds: ratings',
+    permission: 'market:read',
+    call: (c) => bondsApi.ratings(c.bondId),
+    check: has('agencies', 'composite', 'bucket', 'history'),
+  },
+  {
+    name: 'Bonds: cash flows',
+    permission: 'market:read',
+    call: (c) => bondsApi.cashFlows(c.bondId),
+    check: has('nextCouponDate', 'daysToNextCoupon', 'items'),
   },
   {
     name: 'Bonds: auctions',

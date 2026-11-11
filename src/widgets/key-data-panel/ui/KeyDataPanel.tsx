@@ -1,11 +1,9 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useBond } from '@/entities/bond'
 import { priceDecimals } from '@/entities/quote'
-import type { BondDto, SecurityProfileDto } from '@/shared/api/contracts'
+import type { SecurityProfileDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { Panel } from '@/shared/ui/Panel'
-import { QueryView } from '@/shared/ui/QueryView'
 
 type Row = [label: string, value: ReactNode]
 
@@ -35,14 +33,12 @@ function KeyValues({ rows }: { rows: readonly Row[] }) {
 }
 
 /**
- * Screen 2, key data: reference figures of an equity, or the terms of a bond.
- * API /securities/{id}, and /bonds/{id} for a bond.
+ * Screen 2, key data: an equity's reference figures (a bond's terms are its profile's
+ * characteristics, screen 20). API /securities/{id}.
  */
 export function KeyDataPanel({ profile }: { profile: SecurityProfileDto }) {
   const { t } = useTranslation()
   const format = useFormat()
-  const isBond = profile.type === 'bond'
-  const bond = useBond(profile.id, isBond)
   const decimals = priceDecimals(profile.type, profile.currency)
   const nextEvent = profile.nextEvent
     ? `${profile.nextEvent.title} · ${format.isoDate(profile.nextEvent.date)}`
@@ -76,40 +72,9 @@ export function KeyDataPanel({ profile }: { profile: SecurityProfileDto }) {
     [t('keyData.nextEvent'), nextEvent],
   ]
 
-  const bondRows = (terms: BondDto): Row[] => {
-    const frequency =
-      terms.frequency === 2
-        ? t('keyData.frequencies.halfYearly')
-        : terms.frequency === 4
-          ? t('keyData.frequencies.quarterly')
-          : t('keyData.frequencies.annual')
-    return [
-      [t('keyData.isin'), profile.isin],
-      [t('keyData.issuer'), terms.issuer],
-      [t('keyData.coupon'), `${format.percent(terms.couponPct, 2, false)} ${frequency}`],
-      [t('keyData.issueDate'), format.isoDate(terms.issueDate)],
-      [t('keyData.maturity'), format.isoDate(terms.maturityDate)],
-      [
-        t('keyData.amortization'),
-        terms.amortization === 'bullet'
-          ? t('keyData.amortizations.bullet')
-          : t('keyData.amortizations.straight', {
-              share: format.percent(100 / terms.schedule.length, 0, false),
-            }),
-      ],
-      [t('keyData.dayCount'), terms.dayCount],
-      [t('keyData.outstanding'), `${terms.currency} ${format.compact(terms.amountOutstanding)}`],
-      [t('keyData.nextEvent'), nextEvent],
-    ]
-  }
-
   return (
-    <Panel title={t(isBond ? 'panels.bondTerms' : 'panels.keyData')} code="DES">
-      {isBond ? (
-        <QueryView query={bond}>{(terms) => <KeyValues rows={bondRows(terms)} />}</QueryView>
-      ) : (
-        <KeyValues rows={equityRows} />
-      )}
+    <Panel title={t('panels.keyData')} code="DES">
+      <KeyValues rows={equityRows} />
     </Panel>
   )
 }

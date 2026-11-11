@@ -10,4 +10,7 @@ export const TAB_CODES: Record<SecurityFunction, string> = {
   doc: 'DOC',
   hds: 'HDS',
   ana: 'ANA',
+  bp: 'BP',
+  cf: 'CF',
+  rat: 'RAT',
 }

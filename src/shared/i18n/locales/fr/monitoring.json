@@ -43,7 +43,14 @@
       "n": "Actualités",
       "doc": "Documents",
       "hds": "Actionnaires",
-      "ana": "Recherche"
+      "ana": "Recherche",
+      "bp": "Valorisation",
+      "cf": "Échéancier",
+      "rat": "Notations",
+      "priceYield": "Prix et rendement"
+    },
+    "profiles": {
+      "bond": "Fiche obligataire"
     },
     "figures": {
       "open": "Ouverture",
@@ -52,9 +59,7 @@
       "volume": "Volume",
       "marketCap": "Capitalisation",
       "pe": "PER",
-      "yield": "Rendement",
-      "coupon": "Coupon",
-      "maturity": "Échéance"
+      "yield": "Rendement"
     },
     "delayed": "Différé",
     "notFound": "Aucune valeur {{id}}.",
@@ -69,22 +74,11 @@
     "beta": "Bêta (1 an vs {{index}})",
     "lastDividend": "Dernier dividende net",
     "nextEvent": "Prochain événement",
-    "issuer": "Émetteur",
-    "coupon": "Coupon",
-    "issueDate": "Date d'émission",
-    "maturity": "Échéance",
-    "amortization": "Amortissement",
-    "amortizations": {
-      "bullet": "In fine",
-      "straight": "Constant, {{share}} par an"
-    },
     "frequencies": {
       "annual": "annuel",
       "halfYearly": "semestriel",
       "quarterly": "trimestriel"
     },
-    "dayCount": "Base de calcul",
-    "outstanding": "Encours",
     "insufficientData": "Données insuffisantes"
   },
   "orderBook": {

@@ -109,7 +109,6 @@
     },
     "card": {
       "openDes": "Ouvrir la fiche",
-      "openBp": "Ouvrir dans la valorisation",
       "openGp": "Ouvrir le graphique",
       "openPub": "Ouvrir dans PUB",
       "price": "Cours {{value}}",

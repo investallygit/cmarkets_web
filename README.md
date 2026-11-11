@@ -45,7 +45,7 @@ tables, read-excel-file to read the Excel templates before upload.
 | App shell: top bar, command bar, ticker, menu by account type, status bar | Done; MSG in the menu counts the unread messages              |
 | Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
 | 1 · Market dashboard (MKT)                                                | Done, real-time quotes and indices, watchlists                |
-| 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done                                                          |
+| 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done; DES opens the profile of the security's type            |
 | 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done, saved screens                                           |
 | 4 · Yield curves and bond calculator (YCRV)                               | Done; the API computes spec section 14.1                      |
 | 5 · Portfolio (PORT)                                                      | Done; the API values portfolios with sections 14.2 and 14.3   |
@@ -69,7 +69,7 @@ tables, read-excel-file to read the Excel templates before upload.
 | 18 · Media payments (MPAY)                                                | Done; a second Admin above XAF 300,000; disputes in NEWS NEW  |
 | 17 · Bond screener (BS)                                                   | Done; computed each evening, model prices, yield to worst     |
 | 16 · Bond pricing (BP), which YAS opens                                   | Done; a bond of the list or by hand, at the platform's yield  |
-| 20 · Bond profile (DES on a bond)                                         | To do, step 31                                                |
+| 20 · Bond profile (DES on a bond: DES, GP, BP, CF, RAT, DOC)              | Done; a year of daily figures, model prices drawn lighter     |
 | 15 · ETF screener (ETFS)                                                  | To do, step 32                                                |
 | 19 · ETF profile (DES on an ETF)                                          | To do, step 33                                                |
 | 14 · Subscription management (SUBS)                                       | To do, step 34                                                |
@@ -121,7 +121,8 @@ split into slices by business domain, each slice into segments (`ui`, `model`, `
 src/
   main.tsx    entry point: the hubs of CMarket.Api, then the app
   app/        providers, router, app shell layout, global styles
-  pages/      one slice per screen: market-dashboard, security-profile, equity-screener,
+  pages/      one slice per screen: market-dashboard, security-profile (the profile of each
+              security type: an equity's, screen 2, a bond's, screen 20), equity-screener,
               yield-curves (YCRV), bond-pricing (BP, which YAS opens), bond-screener (BS), portfolio,
               research-library, publishing-studio, news,
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
@@ -134,7 +135,8 @@ src/
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
               subscription-panel, current-upload-panel, messaging-panels, news-studio-panels,
               news-moderation-panels, news-sources-panels, media-payments-panels,
-              bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels...),
+              bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
+              bond-profile-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
@@ -154,7 +156,8 @@ src/
               edit-platform-settings, edit-permissions, switch-language, switch-account,
               workspace-layout
   entities/   business data: session, subscription, organization, security, quote (live
-              prices), market, bond (with BS's screener and labels, BP's pricing), yield-curve, fundamentals,
+              prices), market, bond (with BS's screener and labels, BP's pricing, the bond
+              profile's history, ratings and payments), yield-curve, fundamentals,
               screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
@@ -163,8 +166,9 @@ src/
               account, analyst-request, moderation, payout, platform-settings, audit, profile
               (the professional profiles of the directory), conversation (the messaging)
   shared/     no business knowledge: the API (client, contracts and the module of its endpoints,
-              api/endpoints), real-time, config (.env), routes and screen list, UI kit (panels,
-              tables, charts, form controls, dialogs, toasts), i18n, formatting
+              api/endpoints), real-time, config (.env), routes, screen list and the profile of
+              each security type (routes/profiles.ts), UI kit (panels, tables, charts, form
+              controls, dialogs, toasts), i18n, formatting
 e2e/          Playwright flows; auth.setup.ts logs in once and the other specs reuse the session;
               people.ts logs in the other people of a flow, msg.ts finds MSG's panels
 public/       the favicon and the photos of the home page
@@ -310,16 +314,17 @@ in the user's format, password inputs, checkboxes, switches, segmented choices, 
 
 ### Where new code goes
 
-| Code                                                         | Place                                                                      |
-| ------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| A screen of the spec                                         | `SCREENS` in `shared/routes/screens.ts`, its page in `app/routes/pages.ts` |
-| The page of a screen: which panels, default layout           | `pages/<screen>`                                                           |
-| A panel, or any block shown on several screens               | `widgets/<name>`                                                           |
-| A user action (add to a list, create an alert, buy a report) | `features/<verb>-<noun>`                                                   |
-| A business object: types, API hooks, live state, small UI    | `entities/<object>`                                                        |
-| A call to the API (its route, its answer's type)             | `shared/api/endpoints/<API controller folder>.ts`                          |
-| A form opened from several screens (an alert, a list)        | `features/`, opened through a store in `entities/<object>/model`           |
-| Anything without business knowledge                          | `shared/`                                                                  |
+| Code                                                         | Place                                                                        |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| A screen of the spec                                         | `SCREENS` in `shared/routes/screens.ts`, its page in `app/routes/pages.ts`   |
+| The page of a screen: which panels, default layout           | `pages/<screen>`                                                             |
+| The profile of a security type: its tabs, title, menu entry  | `SECURITY_PROFILES` in `shared/routes/profiles.ts`, `pages/security-profile` |
+| A panel, or any block shown on several screens               | `widgets/<name>`                                                             |
+| A user action (add to a list, create an alert, buy a report) | `features/<verb>-<noun>`                                                     |
+| A business object: types, API hooks, live state, small UI    | `entities/<object>`                                                          |
+| A call to the API (its route, its answer's type)             | `shared/api/endpoints/<API controller folder>.ts`                            |
+| A form opened from several screens (an alert, a list)        | `features/`, opened through a store in `entities/<object>/model`             |
+| Anything without business knowledge                          | `shared/`                                                                    |
 
 When two widgets of a page must talk (the Indices panel picks the index of the chart, a screener
 row feeds the comparison and the statements), the page holds the state and passes props: see

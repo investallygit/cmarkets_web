@@ -3,7 +3,10 @@ import { Lock, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { matchPath, NavLink, useLocation } from 'react-router'
 import { UnreadBadge } from '@/entities/conversation'
+import { useSecurityProfile } from '@/entities/security'
 import { canAccessScreen, lockedModule, mayWriteMessages, useCurrentUser } from '@/entities/session'
+import { routes } from '@/shared/routes/paths'
+import { SECURITY_PROFILES } from '@/shared/routes/profiles'
 import { SCREENS } from '@/shared/routes/screens'
 import { useUiPreferences } from '../model/uiPreferences'
 
@@ -19,10 +22,15 @@ export function SideMenu() {
   const toggleMenu = useUiPreferences((state) => state.toggleMenu)
   const items = SCREENS.filter((screen) => screen.inMenu && canAccessScreen(user, screen))
   const { pathname } = useLocation()
-  // A screen outside the menu lights its parent's entry: BS lights YCRV.
-  const litParent = SCREENS.find(
-    (screen) => screen.menuParent && matchPath({ path: screen.path, end: false }, pathname),
-  )?.menuParent
+  // A profile lights the entry of its type, as its mockup: a bond's YCRV (screen 20). Another
+  // screen outside the menu lights its parent's: BS lights YCRV.
+  const profileType = useSecurityProfile(matchPath(routes.security, pathname)?.params.securityId)
+    .data?.type
+  const litParent =
+    (profileType && SECURITY_PROFILES[profileType].menuParent) ??
+    SCREENS.find(
+      (screen) => screen.menuParent && matchPath({ path: screen.path, end: false }, pathname),
+    )?.menuParent
 
   return (
     <nav

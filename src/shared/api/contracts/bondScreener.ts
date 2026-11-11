@@ -168,6 +168,8 @@ export interface BondAnalyticsDto {
     priceSource: BondPriceSource
     quoteDate: IsoDate | null
     cleanPrice: number | null
+    /** Since the calculation before: the bond profile's header (screen 20). */
+    cleanPriceChange: number | null
     dirtyPrice: number | null
     accruedInterest: number | null
     ytmPct: number | null
@@ -189,6 +191,9 @@ export interface BondAnalyticsDto {
     bucket: CreditBucket
     macaulayDuration: number | null
     modifiedDuration: number | null
+    convexity: number | null
+    /** The value of a basis point on 100 million of face value, in the bond's currency. */
+    dv01: number | null
     effectiveDuration: number | null
     effectiveConvexity: number | null
     timeToMaturity: number | null
@@ -223,6 +228,8 @@ export interface BondAnalyticsDayDto {
   ytwPct: number | null
   creditSpreadBp: number | null
   modifiedDuration: number | null
+  /** The bonds traded that session; null on a day without a trade. */
+  volume: number | null
 }
 
 /** The criteria of a saved bond screen: empty lists and nulls keep every bond. */

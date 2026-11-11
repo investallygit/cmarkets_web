@@ -33,4 +33,15 @@ describe('function codes (spec section 8)', () => {
     expect(appliesToSecurity(byCode('FA'), 'bond')).toBe(false)
     expect(appliesToSecurity(byCode('GP'), 'bond')).toBe(true)
   })
+
+  it("opens a bond's schedule and ratings, tabs of its profile (screen 20)", () => {
+    const byCode = (code: string) => availableFunctions(analyst).find((fn) => fn.code === code)!
+    expect(byCode('CF').resolve('ECMR-6.25-2029')).toBe('/securities/ECMR-6.25-2029/cf')
+    expect(byCode('RAT').resolve('GAB-6.50-2028')).toBe('/securities/GAB-6.50-2028/rat')
+    expect(appliesToSecurity(byCode('CF'), 'equity')).toBe(false)
+    expect(appliesToSecurity(byCode('RAT'), 'bond')).toBe(true)
+    // DES opens every security, the profile of its type.
+    expect(appliesToSecurity(byCode('DES'), 'equity')).toBe(true)
+    expect(appliesToSecurity(byCode('DES'), 'bond')).toBe(true)
+  })
 })

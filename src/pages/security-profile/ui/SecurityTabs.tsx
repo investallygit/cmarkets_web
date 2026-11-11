@@ -1,18 +1,20 @@
 import { useTranslation } from 'react-i18next'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
-import { SECURITY_FUNCTIONS, securityFunctionTypes, securityPath } from '@/shared/routes/paths'
+import { securityPath } from '@/shared/routes/paths'
+import { profileTabLabelKey, SECURITY_PROFILES } from '@/shared/routes/profiles'
 import { ScreenTabs } from '@/shared/ui/ScreenTabs'
 import { TAB_CODES } from '../config/tabs'
 
-/** DES, GP, FA, DVD, N, DOC, HDS, ANA: the tabs that apply to the security (spec section 9). */
+/**
+ * The tabs of the security's profile (spec section 9): DES, GP, FA, DVD, N, DOC, HDS, ANA for an
+ * equity; DES, GP, BP, CF, RAT, DOC, N, ANA for a bond.
+ */
 export function SecurityTabs({ security }: { security: SecurityProfileDto }) {
   const { t } = useTranslation()
-  const tabs = SECURITY_FUNCTIONS.filter(
-    (fn) => securityFunctionTypes(fn)?.includes(security.type) ?? true,
-  ).map((fn) => ({
+  const tabs = SECURITY_PROFILES[security.type].tabs.map((fn) => ({
     to: securityPath(security.id, fn),
     code: TAB_CODES[fn],
-    label: t(`security.tabs.${fn}`),
+    label: t(profileTabLabelKey(security.type, fn)),
   }))
   return <ScreenTabs tabs={tabs} label={t('security.tabsLabel')} />
 }

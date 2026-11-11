@@ -1,13 +1,8 @@
 import { canAccessScreen } from '@/entities/session'
 import type { MeDto, SecurityType } from '@/shared/api/contracts'
 import type { TranslationKey } from '@/shared/i18n'
-import {
-  bondPricingPath,
-  routes,
-  securityFunctionTypes,
-  securityPath,
-  type SecurityFunction,
-} from '@/shared/routes/paths'
+import { bondPricingPath, routes, securityPath, type SecurityFunction } from '@/shared/routes/paths'
+import { securityFunctionTypes } from '@/shared/routes/profiles'
 import { SCREENS, screenById, type ScreenDefinition } from '@/shared/routes/screens'
 
 /** none: "EQS"; security: "SEMC DES"; optional-security: "N" or "SIAT N". */
@@ -30,7 +25,10 @@ interface SecurityTab {
   labelKey: TranslationKey
 }
 
-/** Tabs of the security profile; each one matches a command bar code (spec section 9, screen 2). */
+/**
+ * Tabs of the security profiles; each one matches a command bar code (spec section 9, screens 2
+ * and 20), offered on the types whose profile has it. BP stays screen 16's code.
+ */
 const SECURITY_TABS: readonly SecurityTab[] = [
   { code: 'DES', fn: 'des', labelKey: 'functions.DES' },
   { code: 'GP', fn: 'gp', labelKey: 'functions.GP' },
@@ -39,6 +37,8 @@ const SECURITY_TABS: readonly SecurityTab[] = [
   { code: 'DOC', fn: 'doc', labelKey: 'functions.DOC' },
   { code: 'HDS', fn: 'hds', labelKey: 'functions.HDS' },
   { code: 'ANA', fn: 'ana', labelKey: 'functions.ANA' },
+  { code: 'CF', fn: 'cf', labelKey: 'functions.CF' },
+  { code: 'RAT', fn: 'rat', labelKey: 'functions.RAT' },
 ]
 
 const SECURITY_SCREENS = new Set(['DES', 'BP', 'N'])

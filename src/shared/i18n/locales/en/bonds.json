@@ -249,5 +249,145 @@
     },
     "shift": "{{value}} bp",
     "sensitivityNote": "Dirty price % change: compare with −Dmod × Δy (first-order approximation)."
+  },
+  "bondProfile": {
+    "categories": {
+      "sovereign": "Sovereign bond",
+      "supranational": "Supranational bond",
+      "regional": "Regional bond",
+      "corporate": "Corporate bond",
+      "municipal": "Municipal bond"
+    },
+    "couponLines": {
+      "annual": "Annual {{type}} coupon",
+      "semiAnnual": "Semi-annual {{type}} coupon",
+      "quarterly": "Quarterly {{type}} coupon",
+      "monthly": "Monthly {{type}} coupon"
+    },
+    "zeroCoupon": "Zero coupon",
+    "redemptions": {
+      "bullet": "Bullet",
+      "amortizing": "Amortizing"
+    },
+    "figures": {
+      "dirtyPrice": "Dirty price",
+      "ytm": "YTM",
+      "ytw": "YTW",
+      "modifiedDuration": "Mod. dur.",
+      "spread": "Spread",
+      "maturity": "Maturity"
+    },
+    "cleanPrice": "Clean price",
+    "modelPrice": "Model price: no recent quote",
+    "noPrice": "No price yet",
+    "history": {
+      "periods": {
+        "6M": "6M",
+        "1Y": "1Y",
+        "3Y": "3Y",
+        "MAX": "MAX"
+      },
+      "periodsLabel": "Period",
+      "series": {
+        "price": "Price",
+        "yield": "Yield",
+        "spread": "Spread"
+      },
+      "seriesLabel": "Shown",
+      "legend": {
+        "price": "Clean price (left axis)",
+        "ytm": "YTM (right axis)",
+        "ytmLeft": "YTM",
+        "ytw": "YTW (dotted)",
+        "spread": "Spread over the curve, bp",
+        "model": "Lighter: model price",
+        "volume": "Bars: volume on traded days"
+      },
+      "empty": "No calculation in this period.",
+      "summary": "{{what}} from {{from}} to {{to}}: {{first}} then {{last}}, between {{low}} and {{high}}; {{traded}} sessions with trades, {{model}} at a model price."
+    },
+    "analytics": {
+      "computed": "Computed {{date}}",
+      "notComputed": "Not computed yet: the bond's figures come with the next daily calculation.",
+      "lines": {
+        "prices": "Clean · accrued · dirty",
+        "yields": "YTM · YTW · current yield",
+        "durations": "Macaulay · modified duration",
+        "convexity": "Convexity · DV01 ({{currency}} 100 M)",
+        "spreads": "Spread · Z-spread",
+        "source": "Price source"
+      },
+      "sources": {
+        "quote": "BVMAC quote of {{date}}",
+        "model": "Model price: the {{country}} curve and the last spread",
+        "none": "No price"
+      }
+    },
+    "ratings": {
+      "agencies": {
+        "sp": "S&P",
+        "moodys": "Moody's",
+        "fitch": "Fitch"
+      },
+      "composite": "Composite: {{rating}}",
+      "bucket": "Credit bucket",
+      "actions": {
+        "new": "New",
+        "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
+        "affirmed": "Affirmed"
+      },
+      "none": "No agency rates this bond."
+    },
+    "characteristics": {
+      "issuer": "Issuer",
+      "categorySector": "Category · sector",
+      "seniority": "Seniority",
+      "coupon": "Coupon · type",
+      "frequency": "Frequency · day count",
+      "dates": "Issue · maturity",
+      "firstCoupon": "First coupon",
+      "redemption": "Redemption",
+      "earlyRedemption": "Early redemption",
+      "amountOutstanding": "Amount outstanding",
+      "status": "Payment status",
+      "sectors": {
+        "sovereign": "Government",
+        "municipal": "Local government"
+      },
+      "redemptions": {
+        "bullet": "Bullet, at par",
+        "straight": "Amortizing, in equal parts",
+        "schedule": "Amortizing, on a schedule"
+      },
+      "none": "None",
+      "call": "Callable on {{date}} at {{price}}",
+      "calls": "Callable from {{date}} at {{price}}, {{count}} dates",
+      "put": "Putable on {{date}} at {{price}}",
+      "puts": "Putable from {{date}} at {{price}}, {{count}} dates"
+    },
+    "cashFlows": {
+      "perFace": "Per 100 face value",
+      "columns": {
+        "date": "Date",
+        "coupon": "Coupon",
+        "principal": "Principal",
+        "total": "Total",
+        "outstanding": "Outstanding"
+      },
+      "nextCoupon_one": "Next coupon in {{count}} day.",
+      "nextCoupon_other": "Next coupon in {{count}} days.",
+      "couponToday": "Coupon paid today.",
+      "zeroCoupon": "No coupon: the face value is repaid on {{date}}.",
+      "matured": "Matured: nothing left to pay.",
+      "openBp": "Open in bond pricing (BP)"
+    },
+    "ratingColumns": {
+      "date": "Date",
+      "agency": "Agency",
+      "rating": "Rating",
+      "previous": "Previous",
+      "action": "Action"
+    }
   }
 }
