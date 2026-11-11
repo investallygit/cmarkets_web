@@ -3,6 +3,7 @@ import { BadgeCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import type { NewsItemSourceDto, NewsSourceDto, NewsType } from '@/shared/api/contracts'
+import { resolveApiUrl } from '@/shared/config/env'
 import { newsFilterPath } from '@/shared/routes/paths'
 import { HoverCard } from '@/shared/ui/HoverCard'
 import { CHANNEL_TAG, TYPE_TAG } from '../config/tags'
@@ -99,7 +100,11 @@ function SourceCard({ source }: { source: NewsSourceDto | NewsItemSourceDto }) {
   return (
     <span className="flex items-start gap-2">
       {source.logoUrl ? (
-        <img src={source.logoUrl} alt="" className="size-8 shrink-0 object-contain" />
+        <img
+          src={resolveApiUrl(source.logoUrl)}
+          alt=""
+          className="size-8 shrink-0 object-contain"
+        />
       ) : (
         <span
           aria-hidden

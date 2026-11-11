@@ -49,15 +49,17 @@ export function usePublishNews() {
         })
         useNewsDraftStore.getState().saved(current.newsId, item)
         toast.success(
-          item.status === 'scheduled' && item.publishAt
-            ? t('newsStudio.publishing.scheduledFor', {
-                when: t('newsStudio.publishing.when', {
-                  // The schedule is a time of Douala, whatever the profile's time zone.
-                  date: formatDate(item.publishAt),
-                  time: formatTime(item.publishAt),
-                }),
-              })
-            : t('newsStudio.publishing.published'),
+          item.status === 'pending'
+            ? t('newsStudio.publishing.sentForReview')
+            : item.status === 'scheduled' && item.publishAt
+              ? t('newsStudio.publishing.scheduledFor', {
+                  when: t('newsStudio.publishing.when', {
+                    // The schedule is a time of Douala, whatever the profile's time zone.
+                    date: formatDate(item.publishAt),
+                    time: formatTime(item.publishAt),
+                  }),
+                })
+              : t('newsStudio.publishing.published'),
         )
       } catch (error) {
         if (isApiError(error, 409) && error.problem.title === 'FLASH quota reached') {

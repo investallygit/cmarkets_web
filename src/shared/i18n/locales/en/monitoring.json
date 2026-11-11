@@ -128,7 +128,9 @@
     "tabsLabel": "News functions",
     "tabs": {
       "news": "News",
-      "documents": "Documents"
+      "documents": "Documents",
+      "moderation": "Moderation",
+      "publishers": "Publishers"
     },
     "types": {
       "article": "ARTICLE",

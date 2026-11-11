@@ -609,6 +609,11 @@
   --news-tag: var(--text-secondary);
 }
 
+/* Waiting for CMarket's review (ROADMAP step 27): the amber of what is still to do. */
+@utility news-status-pending {
+  --news-tag: var(--accent-amber);
+}
+
 @utility news-status-scheduled {
   --news-tag: var(--info);
 }

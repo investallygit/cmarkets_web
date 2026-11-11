@@ -1,4 +1,4 @@
-import type { NewsType } from '@/shared/api/contracts'
+import type { ContentReportReason, NewsType } from '@/shared/api/contracts'
 
 /** The limits of an item (spec section 16), as CMarket.Api checks them. */
 export const NEWS_LIMITS = {
@@ -19,6 +19,14 @@ export const NEWS_LIMITS = {
   tableBytes: 10 * 1024 * 1024,
   zipBytes: 50 * 1024 * 1024,
 } as const
+
+/** What a reader reports an item for: those of a publication (spec section 13). */
+export const NEWS_REPORT_REASONS: readonly ContentReportReason[] = [
+  'misleading',
+  'conflict',
+  'copyright',
+  'other',
+]
 
 /** An ARTICLE's standfirst has 400 characters, a FLASH's text 500. */
 export function summaryLimit(type: NewsType): number {

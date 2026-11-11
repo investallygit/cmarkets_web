@@ -32,7 +32,11 @@ export const PERMISSION_GROUPS: readonly {
     label: 'permissions.groups.network',
     permissions: ['directory:list', 'directory:profile', 'messages:write'],
   },
-  { id: 'news', label: 'permissions.groups.news', permissions: ['news:write', 'news:stats'] },
+  {
+    id: 'news',
+    label: 'permissions.groups.news',
+    permissions: ['news:write', 'news:stats', 'news:moderate', 'news:payments'],
+  },
   { id: 'data', label: 'permissions.groups.data', permissions: ['data:import', 'content:publish'] },
   {
     id: 'admin',
@@ -67,6 +71,8 @@ export const PERMISSION_LABELS: Record<Permission, TranslationKey> = {
   'messages:write': 'permissions.labels.messagesWrite',
   'news:write': 'permissions.labels.newsWrite',
   'news:stats': 'permissions.labels.newsStats',
+  'news:moderate': 'permissions.labels.newsModerate',
+  'news:payments': 'permissions.labels.newsPayments',
   'data:import': 'permissions.labels.dataImport',
   'content:publish': 'permissions.labels.contentPublish',
   'users:manage': 'permissions.labels.usersManage',

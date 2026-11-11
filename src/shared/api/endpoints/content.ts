@@ -7,6 +7,7 @@ import type {
   NewsCategory,
   NewsChannel,
   NewsItemDto,
+  NewsReportWriteDto,
   NewsSourceDto,
   NewsType,
   Paged,
@@ -51,6 +52,7 @@ export const contentRoutes = {
   newsSources: route('GET', '/news/sources', answer<NewsSourceDto[]>()),
   article: route('GET', '/news/{id}', answer<NewsArticleDto>()),
   newsView: route('POST', '/news/{id}/view'),
+  reportNews: route('POST', '/news/{id}/report'),
   documents: route('GET', '/documents', answer<Paged<DocumentDto>>()),
   documentFile: route('GET', '/documents/{id}/file', answer<Blob>()),
   calendar: route('GET', '/calendar', answer<CalendarEventDto[]>()),
@@ -70,6 +72,9 @@ export const contentApi = {
    * view of a user counts (spec section 16).
    */
   newsView: (id: string) => send(contentRoutes.newsView, { params: { id } }),
+  /** A reader's report to the moderators (NEWS, MOD); reported again, the latest words count. */
+  reportNews: (id: string, report: NewsReportWriteDto) =>
+    send(contentRoutes.reportNews, { params: { id }, body: report }),
   /** Issuer releases, reports, notices and decisions, newest first. */
   documents: (filters: DocumentFilters, page: Page, signal?: AbortSignal) =>
     send(contentRoutes.documents, { query: { ...filters, ...page }, signal }),

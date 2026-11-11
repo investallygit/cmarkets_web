@@ -67,8 +67,9 @@ function fromServer(item: ProviderNewsDto): NewsDraft {
 
 export const isNewsDirty = (draft: NewsDraft) => draft.edits !== draft.savedEdits
 
-/** A withdrawn item no longer changes. */
-export const isNewsEditable = (draft: Pick<NewsDraft, 'item'>) => draft.item.status !== 'withdrawn'
+/** A withdrawn item no longer changes, nor one waiting for CMarket's review (ROADMAP step 27). */
+export const isNewsEditable = (draft: Pick<NewsDraft, 'item'>) =>
+  draft.item.status !== 'withdrawn' && draft.item.status !== 'pending'
 
 /** Drafts save as they are written; scheduled and published items when Schedule or Update is pressed. */
 export const autosaves = (draft: Pick<NewsDraft, 'item'>) => draft.item.status === 'draft'

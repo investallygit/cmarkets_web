@@ -16,7 +16,7 @@ export function WithdrawNewsButton() {
   const { t } = useTranslation()
   const status = useNewsDraftStore((state) => state.draft?.item.status)
   const [open, setOpen] = useState(false)
-  if (status !== 'published' && status !== 'scheduled') return null
+  if (status !== 'published' && status !== 'scheduled' && status !== 'pending') return null
   return (
     <>
       <button

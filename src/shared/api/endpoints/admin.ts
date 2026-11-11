@@ -3,6 +3,9 @@ import type {
   AccountListStatus,
   AccountType,
   AdminConversationDto,
+  AdminNewsSourceDetailsDto,
+  AdminNewsSourceDto,
+  AdminNewsSourceWriteDto,
   AdminPayoutDto,
   AdminSpecialtyDto,
   AdminUserCreateDto,
@@ -13,12 +16,24 @@ import type {
   AuditEntryDto,
   DirectorySettingsDto,
   DirectorySettingsUpdateDto,
+  IngestClientCreatedDto,
+  IngestClientDto,
+  IngestClientWriteDto,
   LibraryPublicationDto,
+  ModeratedNewsDto,
   ModerationItemDto,
+  NewsChannel,
+  NewsQueueItemDto,
+  NewsQueueKind,
+  NewsSettingsDto,
+  NewsSettingsWriteDto,
+  NewsType,
   Paged,
   PayoutStatus,
   PlatformSettingsDto,
   PlatformSettingsUpdateDto,
+  PublisherDto,
+  PublisherWriteDto,
   ReportedItemDto,
   ReportedItemType,
   RolePermissionsDto,
@@ -26,7 +41,7 @@ import type {
   SpecialtyInputDto,
   VerificationStatus,
 } from '../contracts'
-import { answer, route, send, sendBlob } from './define'
+import { answer, route, send, sendBlob, sendForm } from './define'
 
 /** GET /admin/users: search, filters, sorting and page. */
 export interface AccountQuery {
@@ -51,6 +66,13 @@ export interface AuditQuery {
   pageSize?: number
 }
 
+/** GET /admin/news?status=&channel=&sourceId=: the moderation queue's filters. */
+export interface NewsQueueQuery {
+  kind?: NewsQueueKind | null
+  channel?: NewsChannel | null
+  sourceId?: string | null
+}
+
 /** GET /admin/payouts?month=&status=&analystId= */
 export interface PayoutQuery {
   /** YYYY-MM */
@@ -62,7 +84,8 @@ export interface PayoutQuery {
 /**
  * CMarket.Api/Controllers/Admin: the Admin's back-office (screen 9, spec section 12): accounts,
  * status requests, moderation of the publications and of the directory, platform settings and
- * permissions, payouts, the audit log.
+ * permissions, payouts, the audit log; the news moderation of NEWS and MOD, the publishers' domains
+ * and SRC's newspapers, AI settings and ingestion clients (ROADMAP step 27).
  */
 export const adminRoutes = {
   users: route('GET', '/admin/users', answer<Paged<AdminUserDto>>()),
@@ -107,6 +130,32 @@ export const adminRoutes = {
   payouts: route('GET', '/admin/payouts', answer<AdminPayoutDto[]>()),
   markPayoutPaid: route('POST', '/admin/payouts/{id}/mark-paid', answer<AdminPayoutDto>()),
   auditLog: route('GET', '/admin/audit-log', answer<Paged<AuditEntryDto>>()),
+  newsQueue: route('GET', '/admin/news', answer<NewsQueueItemDto[]>()),
+  moderatedNews: route('GET', '/admin/news/{id}', answer<ModeratedNewsDto>()),
+  approveNews: route('POST', '/admin/news/{id}/approve', answer<ModeratedNewsDto>()),
+  takeDownNews: route('POST', '/admin/news/{id}/takedown', answer<ModeratedNewsDto>()),
+  retypeNews: route('POST', '/admin/news/{id}/retype', answer<ModeratedNewsDto>()),
+  publishers: route('GET', '/admin/publishers', answer<PublisherDto[]>()),
+  savePublisher: route('PUT', '/admin/publishers', answer<PublisherDto>()),
+  removePublisher: route('DELETE', '/admin/publishers/{id}'),
+  newsSources: route('GET', '/admin/news-sources', answer<AdminNewsSourceDto[]>()),
+  newsSource: route('GET', '/admin/news-sources/{id}', answer<AdminNewsSourceDetailsDto>()),
+  saveNewsSource: route('PUT', '/admin/news-sources/{id}', answer<AdminNewsSourceDetailsDto>()),
+  uploadNewsSourceLogo: route(
+    'PUT',
+    '/admin/news-sources/{id}/logo',
+    answer<AdminNewsSourceDetailsDto>(),
+  ),
+  removeNewsSourceLogo: route(
+    'DELETE',
+    '/admin/news-sources/{id}/logo',
+    answer<AdminNewsSourceDetailsDto>(),
+  ),
+  newsSettings: route('GET', '/admin/news-settings', answer<NewsSettingsDto>()),
+  saveNewsSettings: route('PUT', '/admin/news-settings', answer<NewsSettingsDto>()),
+  ingestClients: route('GET', '/admin/ingest-clients', answer<IngestClientDto[]>()),
+  createIngestClient: route('POST', '/admin/ingest-clients', answer<IngestClientCreatedDto>()),
+  revokeIngestClient: route('DELETE', '/admin/ingest-clients/{id}'),
 }
 
 const of = (id: string, signal?: AbortSignal) => ({ params: { id }, signal })
@@ -196,4 +245,48 @@ export const adminApi = {
       query: { ...query, action: typeof action === 'string' ? action : action?.join(',') },
       signal,
     }),
+  /** The reported news items first, then those waiting, newest first. */
+  newsQueue: ({ kind, channel, sourceId }: NewsQueueQuery, signal?: AbortSignal) =>
+    send(adminRoutes.newsQueue, { query: { status: kind, channel, sourceId }, signal }),
+  /** The item as readers see it, or will once approved, with its reports. */
+  moderatedNews: (id: string, signal?: AbortSignal) =>
+    send(adminRoutes.moderatedNews, of(id, signal)),
+  /** One waiting goes live (or waits for its time); a reported one stays, its reports closed. */
+  approveNews: (id: string) => send(adminRoutes.approveNews, { params: { id } }),
+  /** Out of the feed, with the reason its newspaper reads. */
+  takeDownNews: (id: string, reason: string) =>
+    send(adminRoutes.takeDownNews, { params: { id }, body: { reason } }),
+  /** ARTICLE to FLASH, or back. */
+  retypeNews: (id: string, type: NewsType) =>
+    send(adminRoutes.retypeNews, { params: { id }, body: { type } }),
+  /** The domains the Data admin named, by domain. */
+  publishers: (signal?: AbortSignal) => send(adminRoutes.publishers, { signal }),
+  /** A domain named, or renamed: its newspapers take the names. */
+  savePublisher: (publisher: PublisherWriteDto) =>
+    send(adminRoutes.savePublisher, { body: publisher }),
+  removePublisher: (id: string) => send(adminRoutes.removePublisher, { params: { id } }),
+  /** The newspapers of a channel, or all, the partner newspapers first. */
+  newsSources: (channel: NewsChannel | null, signal?: AbortSignal) =>
+    send(adminRoutes.newsSources, { query: { channel }, signal }),
+  newsSource: (id: string, signal?: AbortSignal) => send(adminRoutes.newsSource, of(id, signal)),
+  /** Its description, verification and moderation; a partner newspaper's contract. */
+  saveNewsSource: (id: string, source: AdminNewsSourceWriteDto) =>
+    send(adminRoutes.saveNewsSource, { params: { id }, body: source }),
+  /** A PNG, JPEG or WebP image of 512 KB at most. */
+  uploadNewsSourceLogo: (id: string, file: File) => {
+    const form = new FormData()
+    form.append('file', file)
+    return sendForm(adminRoutes.uploadNewsSourceLogo, form, { params: { id } })
+  },
+  removeNewsSourceLogo: (id: string) => send(adminRoutes.removeNewsSourceLogo, { params: { id } }),
+  /** The AI's moderation and confidence threshold, the views an hour. */
+  newsSettings: (signal?: AbortSignal) => send(adminRoutes.newsSettings, { signal }),
+  saveNewsSettings: (settings: NewsSettingsWriteDto) =>
+    send(adminRoutes.saveNewsSettings, { body: settings }),
+  /** The servers allowed to push news, never their secrets. */
+  ingestClients: (signal?: AbortSignal) => send(adminRoutes.ingestClients, { signal }),
+  /** A new client and its signing secret, shown this once. */
+  createIngestClient: (client: IngestClientWriteDto) =>
+    send(adminRoutes.createIngestClient, { body: client }),
+  revokeIngestClient: (id: string) => send(adminRoutes.revokeIngestClient, { params: { id } }),
 }

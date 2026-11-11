@@ -160,7 +160,7 @@ export interface CoverageDto {
 }
 
 /** The bulk loads of spec section 11: closing prices after each close, fundamentals at night. */
-export type EodhdJob = 'us-eod' | 'europe-eod' | 'fundamentals'
+export type EodhdJob = 'us-eod' | 'europe-eod' | 'fundamentals' | 'news'
 
 export interface EodhdRunDto {
   id: string

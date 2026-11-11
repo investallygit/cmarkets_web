@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { NewsWriteDto } from '@/shared/api/contracts'
+import type { NewsReportWriteDto, NewsWriteDto } from '@/shared/api/contracts'
 import { contentApi, dataAdminApi, type NewsFilters } from '@/shared/api/endpoints'
 
 export interface NewsQuery extends NewsFilters {
@@ -38,6 +38,13 @@ export function useNewsArticle(id: string | null) {
     queryFn: ({ signal }) => contentApi.article(id ?? '', signal),
     staleTime: 5 * 60_000,
     enabled: Boolean(id),
+  })
+}
+
+/** POST /news/{id}/report: a reader reports the item to the moderators (NEWS, MOD). */
+export function useReportNews(id: string) {
+  return useMutation({
+    mutationFn: (report: NewsReportWriteDto) => contentApi.reportNews(id, report),
   })
 }
 

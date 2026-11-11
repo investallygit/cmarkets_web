@@ -244,7 +244,8 @@
     "jobs": {
       "us-eod": "Clôtures US (en masse)",
       "europe-eod": "Clôtures Europe (en masse)",
-      "fundamentals": "Fondamentaux (en masse)"
+      "fundamentals": "Fondamentaux (en masse)",
+      "news": "Actualités internationales"
     },
     "callsToday": "Appels aujourd’hui",
     "quotaUsed": "Quota journalier utilisé",

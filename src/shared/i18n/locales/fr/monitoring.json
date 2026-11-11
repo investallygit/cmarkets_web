@@ -128,7 +128,9 @@
     "tabsLabel": "Fonctions d'actualité",
     "tabs": {
       "news": "Actualités",
-      "documents": "Documents"
+      "documents": "Documents",
+      "moderation": "Modération",
+      "publishers": "Éditeurs"
     },
     "types": {
       "article": "ARTICLE",

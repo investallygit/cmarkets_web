@@ -244,7 +244,8 @@
     "jobs": {
       "us-eod": "US closes (bulk)",
       "europe-eod": "Europe closes (bulk)",
-      "fundamentals": "Fundamentals (bulk)"
+      "fundamentals": "Fundamentals (bulk)",
+      "news": "International news"
     },
     "callsToday": "Calls today",
     "quotaUsed": "Daily quota used",

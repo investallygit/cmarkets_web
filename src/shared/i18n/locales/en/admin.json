@@ -358,6 +358,8 @@
       "messagesWrite": "Messaging",
       "newsWrite": "Write a partner newspaper's news (NEWS NEW)",
       "newsStats": "Unique clicks and earnings of the news",
+      "newsModerate": "Moderate the news; name the publishers (NEWS, MOD)",
+      "newsPayments": "Newspapers, CMarket AI, ingestion clients (SRC); media payments",
       "dataImport": "Upload data files, correct data",
       "contentPublish": "Publish news and issuer documents",
       "usersManage": "Create, suspend, change an account's type",
@@ -409,7 +411,17 @@
       "news-publish": "News published",
       "news-edit": "News edited",
       "document-publish": "Document published",
-      "document-edit": "Document edited"
+      "document-edit": "Document edited",
+      "news-approve": "News approved",
+      "news-keep": "Reported news kept",
+      "news-takedown": "News taken down",
+      "news-retype": "News retyped",
+      "news-source-update": "Newspaper changed",
+      "news-settings-update": "News settings changed",
+      "publisher-save": "Publisher named",
+      "publisher-remove": "Publisher removed",
+      "ingest-client-create": "Ingestion client created",
+      "ingest-client-revoke": "Ingestion client revoked"
     },
     "fields": {
       "accountType": "Type",
@@ -439,7 +451,22 @@
       "newConversations": "New conversations a day",
       "reportThreshold": "Report threshold",
       "reports": "Open reports",
-      "name": "Name"
+      "name": "Name",
+      "newsStatus": "Status",
+      "newsType": "Type",
+      "shortName": "Tag",
+      "website": "Website",
+      "language": "Language",
+      "verified": "Verified",
+      "ratePerClick": "Rate per unique click",
+      "monthlyCap": "Monthly cap",
+      "flashQuota": "FLASH items a day",
+      "logo": "Logo",
+      "confidenceThreshold": "Confidence threshold",
+      "viewsPerHour": "Views an hour",
+      "domain": "Domain",
+      "addresses": "Addresses",
+      "hourlyQuota": "Items an hour"
     },
     "targetTypes": {
       "user": "Account",
@@ -453,7 +480,10 @@
       "payout": "Payout",
       "profile": "Profile",
       "conversation": "Conversation",
-      "specialty": "Specialty"
+      "specialty": "Specialty",
+      "newsSource": "Newspaper",
+      "publisher": "Publisher",
+      "ingestClient": "Ingestion client"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",

@@ -77,6 +77,9 @@ const AnalystRequestsPage = lazy(() =>
 const ModerationPage = lazy(() =>
   import('@/pages/moderation').then((module) => ({ default: module.ModerationPage })),
 )
+const NewsSourcesPage = lazy(() =>
+  import('@/pages/news-sources').then((module) => ({ default: module.NewsSourcesPage })),
+)
 const PayoutsPage = lazy(() =>
   import('@/pages/payouts').then((module) => ({ default: module.PayoutsPage })),
 )
@@ -111,6 +114,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   CORR: DataCorrectionsPage,
   NEWS: ContentPage,
   USER: AdminUsersPage,
+  SRC: NewsSourcesPage,
   ANLY: AnalystRequestsPage,
   MOD: ModerationPage,
   PAY: PayoutsPage,

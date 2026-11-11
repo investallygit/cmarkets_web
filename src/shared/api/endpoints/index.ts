@@ -31,6 +31,7 @@ export {
   adminRoutes,
   type AccountQuery,
   type AuditQuery,
+  type NewsQueueQuery,
   type PayoutQuery,
 } from './admin'
 export { alertsApi, alertsRoutes } from './alerts'

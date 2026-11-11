@@ -42,6 +42,7 @@ export const routes = {
   dataEodhd: '/data/eodhd',
   dataHistory: '/data/history',
   adminUsers: '/admin/users',
+  adminSources: '/admin/sources',
   adminAnalysts: '/admin/analysts',
   adminModeration: '/admin/moderation',
   adminPayouts: '/admin/payouts',

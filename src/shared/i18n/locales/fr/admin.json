@@ -358,6 +358,8 @@
       "messagesWrite": "Messagerie",
       "newsWrite": "Rédiger les actualités d'un journal partenaire (NEWS NEW)",
       "newsStats": "Clics uniques et revenus des actualités",
+      "newsModerate": "Modérer les actualités ; nommer les éditeurs (NEWS, MOD)",
+      "newsPayments": "Journaux, IA de CMarket, clients d'ingestion (SRC) ; paiements des médias",
       "dataImport": "Charger les fichiers, corriger les données",
       "contentPublish": "Publier actualités et documents d'émetteurs",
       "usersManage": "Créer, suspendre, changer le type d'un compte",
@@ -409,7 +411,17 @@
       "news-publish": "Actualité publiée",
       "news-edit": "Actualité modifiée",
       "document-publish": "Document publié",
-      "document-edit": "Document modifié"
+      "document-edit": "Document modifié",
+      "news-approve": "Actualité approuvée",
+      "news-keep": "Actualité signalée conservée",
+      "news-takedown": "Actualité retirée",
+      "news-retype": "Type d'actualité changé",
+      "news-source-update": "Journal modifié",
+      "news-settings-update": "Paramètres des actualités modifiés",
+      "publisher-save": "Éditeur nommé",
+      "publisher-remove": "Éditeur supprimé",
+      "ingest-client-create": "Client d'ingestion créé",
+      "ingest-client-revoke": "Client d'ingestion révoqué"
     },
     "fields": {
       "accountType": "Type",
@@ -439,7 +451,22 @@
       "newConversations": "Nouvelles conversations par jour",
       "reportThreshold": "Seuil de signalements",
       "reports": "Signalements ouverts",
-      "name": "Nom"
+      "name": "Nom",
+      "newsStatus": "État",
+      "newsType": "Type",
+      "shortName": "Étiquette",
+      "website": "Site web",
+      "language": "Langue",
+      "verified": "Vérifié",
+      "ratePerClick": "Tarif par clic unique",
+      "monthlyCap": "Plafond mensuel",
+      "flashQuota": "FLASH par jour",
+      "logo": "Logo",
+      "confidenceThreshold": "Seuil de confiance",
+      "viewsPerHour": "Lectures par heure",
+      "domain": "Domaine",
+      "addresses": "Adresses",
+      "hourlyQuota": "Actualités par heure"
     },
     "targetTypes": {
       "user": "Compte",
@@ -453,7 +480,10 @@
       "payout": "Versement",
       "profile": "Profil",
       "conversation": "Conversation",
-      "specialty": "Spécialité"
+      "specialty": "Spécialité",
+      "newsSource": "Journal",
+      "publisher": "Éditeur",
+      "ingestClient": "Client d'ingestion"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",

@@ -312,6 +312,16 @@ export const AUDIT_ACTIONS = [
   'news-edit',
   'document-publish',
   'document-edit',
+  'news-approve',
+  'news-keep',
+  'news-takedown',
+  'news-retype',
+  'news-source-update',
+  'news-settings-update',
+  'publisher-save',
+  'publisher-remove',
+  'ingest-client-create',
+  'ingest-client-revoke',
 ] as const
 export type AuditAction = (typeof AUDIT_ACTIONS)[number]
 
@@ -328,6 +338,9 @@ export type AuditTargetType =
   | 'profile'
   | 'conversation'
   | 'specialty'
+  | 'newsSource'
+  | 'publisher'
+  | 'ingestClient'
 
 /** What a change is about; `scope` says which account type, permission or security. */
 export const AUDIT_FIELDS = [
@@ -359,6 +372,21 @@ export const AUDIT_FIELDS = [
   'volume',
   'title',
   'name',
+  'newsStatus',
+  'newsType',
+  'shortName',
+  'website',
+  'language',
+  'verified',
+  'ratePerClick',
+  'monthlyCap',
+  'flashQuota',
+  'logo',
+  'confidenceThreshold',
+  'viewsPerHour',
+  'domain',
+  'addresses',
+  'hourlyQuota',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

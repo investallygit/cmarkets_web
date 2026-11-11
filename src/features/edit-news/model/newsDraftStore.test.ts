@@ -26,6 +26,7 @@ const item = (patch: Partial<ProviderNewsDto> = {}): ProviderNewsDto => ({
   withdrawalReason: null,
   externalId: null,
   version: 1,
+  submittedAt: null,
   ...patch,
 })
 

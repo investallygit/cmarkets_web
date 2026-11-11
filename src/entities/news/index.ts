@@ -3,6 +3,7 @@ export {
   useNews,
   useNewsArticle,
   useNewsSources,
+  useReportNews,
   useSaveNews,
   type NewsQuery,
 } from './api/queries'
@@ -31,7 +32,7 @@ export {
 export { useNewsRealtimeSync } from './api/useNewsRealtimeSync'
 export { useNewsView } from './api/useNewsView'
 export { CHANNEL_TAG, STATUS_TAG, TYPE_TAG } from './config/tags'
-export { NEWS_LIMITS, summaryLimit } from './config/limits'
+export { NEWS_LIMITS, NEWS_REPORT_REASONS, summaryLimit } from './config/limits'
 export { NewsBody } from './ui/NewsBody'
 export { NewsStatusBadge } from './ui/NewsStatusBadge'
 export { NewsTime } from './ui/NewsTime'

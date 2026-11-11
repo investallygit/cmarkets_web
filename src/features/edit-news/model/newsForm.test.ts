@@ -131,6 +131,7 @@ describe('the save of the editor', () => {
       externalId: null,
       author: null,
       originalUrl: null,
+      submittedAt: null,
     } satisfies ProviderNewsDto
     expect(toNewsForm(dto)).toMatchObject({ author: '', originalUrl: '', category: 'monetary' })
   })

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { NewsBody, NewsTags, useNewsArticle, useNewsView } from '@/entities/news'
 import { QuoteCard } from '@/entities/quote'
+import { ReportNews } from '@/features/report-news'
 import { ShareNewsActions } from '@/features/share-news'
 import { isApiError } from '@/shared/api'
 import type { NewsArticleDto } from '@/shared/api/contracts'
@@ -18,7 +19,8 @@ import { PanelEmpty } from '@/shared/ui/StatusViews'
  * standfirst, body (the studio's document: its images with their credit, its "CMarket security"
  * cards with their live price) and PDF, or a FLASH's text; its author and original link, the
  * securities it concerns. API /news/{id}; shown 3 seconds in an active tab, it counts the unique click. Its
- * title bar copies the item's address (/n?article={id}) or sends it to a conversation.
+ * title bar copies the item's address (/n?article={id}) or sends it to a conversation; its footer
+ * reports it to the moderators (ROADMAP step 27).
  */
 export function NewsArticlePanel({ articleId }: { articleId: string | null }) {
   const { t } = useTranslation()
@@ -129,6 +131,9 @@ function NewsContent({ item }: { item: NewsArticleDto }) {
             ))}
           </span>
         )}
+        <span className="self-start">
+          <ReportNews newsId={item.id} />
+        </span>
       </footer>
     </article>
   )

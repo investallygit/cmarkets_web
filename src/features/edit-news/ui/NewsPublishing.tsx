@@ -55,7 +55,9 @@ export function NewsPublishing() {
         ? [...form.countries, code]
         : form.countries.filter((country) => country !== code),
     })
-  const action = published ? 'update' : scheduled ? 'schedule' : 'publish'
+  // A newspaper reviewed before publication sends its item to CMarket's moderators (ROADMAP step 27).
+  const reviewed = source?.moderation === 'before'
+  const action = published ? 'update' : reviewed ? 'review' : scheduled ? 'schedule' : 'publish'
 
   return (
     <div className="flex min-h-full flex-col gap-2.5 p-3">
@@ -189,6 +191,11 @@ export function NewsPublishing() {
           </Button>
         )}
       </div>
+      {editable && reviewed && !published && (
+        <p className="font-sans text-data text-secondary">
+          {t('newsStudio.publishing.reviewNote', { name: source.name })}
+        </p>
+      )}
       {editable && needs.length > 0 && (
         <p className="font-sans text-data text-secondary">
           {t('newsStudio.publishing.missing', {
@@ -203,7 +210,15 @@ export function NewsPublishing() {
         </p>
       )}
       {!editable && (
-        <p className="font-sans text-data text-secondary">{t('newsStudio.publishing.readOnly')}</p>
+        <p className="font-sans text-data text-secondary">
+          {item.status === 'pending'
+            ? t('newsStudio.publishing.pendingNote', {
+                date: item.submittedAt
+                  ? `${format.date(item.submittedAt)} ${format.time(item.submittedAt)}`
+                  : '',
+              })
+            : t('newsStudio.publishing.readOnly')}
+        </p>
       )}
       <NewsPreviewDialog open={previewing} onClose={() => setPreviewing(false)} />
     </div>

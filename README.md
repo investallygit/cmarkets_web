@@ -59,13 +59,13 @@ tables, read-excel-file to read the Excel templates before upload.
 | 11 · Messaging (MSG)                                                      | Done; read, typing and presence in real time                  |
 | 12 · My profile, visibility and contact (NET ME)                          | Done; the API applies the contact rules of section 15         |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the API checks, publishes and rolls back the files      |
-| Data corrections (CORR), news and documents (NEWS): no mockup             | Done; corrections logged with their reason                    |
-| 9 · Account administration (USER) with ANLY and MOD                       | Done; MOD reviews the directory reports too                   |
+| Data corrections (CORR), news and documents (NEWS): no mockup             | Done; NEWS moderates the news and names the publishers        |
+| 9 · Account administration (USER) with ANLY and MOD                       | Done; MOD reviews the directory reports and the news too      |
 | Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged  |
 | News provider account type (third version)                                | Done; it writes in its studio, NEWS NEW                       |
 | News rebuilt: ARTICLE and FLASH, newspapers, tags, unique clicks          | Done; the content shown 3 seconds counts a unique click       |
 | 13 · News studio (NEWS NEW)                                               | Done; drafts, schedule, withdrawal, file import, earnings     |
-| News administration (SRC), AI ingestion, international news: no mockup    | To do, step 27                                                |
+| News sources (SRC), AI ingestion, international news: no mockup           | Done; the AI pushes signed items, EODHD news every 15 minutes |
 | 18 · Media payments (MPAY)                                                | To do, step 28                                                |
 | 17 · Bond screener (BS)                                                   | To do, step 29                                                |
 | 16 · Bond pricing (BP), which YAS opens                                   | To do, step 30                                                |
@@ -126,18 +126,21 @@ src/
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
               network-profile (NET ME), public-profile (/p/{handle}), data-import (IMP),
               data-session (DATA), upload-history (HIST), eodhd (EODH), data-corrections (CORR),
-              content (NEWS), admin-users (USER), analyst-requests (ANLY), moderation (MOD),
-              payouts (PAY), platform-settings (ADMCFG), audit-log (AUDT), home (the home page),
+              content (NEWS), admin-users (USER), news-sources (SRC), analyst-requests (ANLY),
+              moderation (MOD), payouts (PAY), platform-settings (ADMCFG), audit-log (AUDT), home,
               auth (login, sign-up, password reset), status, ui-kit (/_kit)
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
-              subscription-panel, current-upload-panel, messaging-panels, news-studio-panels...),
+              subscription-panel, current-upload-panel, messaging-panels, news-studio-panels,
+              news-moderation-panels, news-sources-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
               rate-publication, report-publication, follow-analyst, report-profile,
               start-conversation, send-message, share-news, report-conversation, block-user,
-              create-publication, edit-publication, edit-news, import-news, draw-on-chart,
+              create-publication, edit-publication, edit-news, import-news, report-news,
+              moderate-news, edit-publisher, edit-news-source, edit-news-settings,
+              manage-ingest-clients, draw-on-chart,
               compare-securities, edit-profile, edit-network-profile, change-password,
               choose-plan, manage-members, upload-data-file, review-import, roll-back-import,
               correct-price, publish-content, create-account, manage-account,
@@ -146,7 +149,8 @@ src/
               workspace-layout
   entities/   business data: session, subscription, organization, security, quote (live
               prices), market, bond, yield-curve, fundamentals, screener, portfolio, publication,
-              analyst, document, chart-drawing, watchlist, alert, auction, rate, news,
+              analyst, document, chart-drawing, watchlist, alert, auction, rate, news, news-source
+              (SRC's newspapers, the publishers, CMarket AI's settings and clients),
               calendar-event, notification, data-import, data-provider (EODHD), stored-price,
               account, analyst-request, moderation, payout, platform-settings, audit, profile
               (the professional profiles of the directory), conversation (the messaging)

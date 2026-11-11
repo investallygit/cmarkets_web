@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DocumentBadge, useDocuments } from '@/entities/document'
 import { NewsTime, NewsTypeTag, useNews } from '@/entities/news'
@@ -8,7 +8,6 @@ import type { NewsTab } from '@/shared/routes/paths'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { DataTable } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
-import { PanelTabs } from '@/shared/ui/PanelTabs'
 import { QueryView } from '@/shared/ui/QueryView'
 
 const newsHelper = createDataColumnHelper<NewsItemDto>()
@@ -20,7 +19,8 @@ const PAGE_SIZE = 100
 
 interface ContentListPanelProps {
   tab: NewsTab
-  onTabChange: (tab: NewsTab) => void
+  /** NEWS's tabs, in the title bar: news, documents, moderation, publishers. */
+  tabs: ReactNode
   selectedId: string | null
   onSelect: (id: string) => void
 }
@@ -28,14 +28,9 @@ interface ContentListPanelProps {
 /**
  * NEWS: the CMARKET channel's news and the documents published (GET /news?channel=cmarket, GET
  * /documents), newest first; a click opens one in the editor. The newspapers' items are theirs:
- * their moderation comes with the news administration (ROADMAP step 27).
+ * the Moderation tab reviews them (ROADMAP step 27).
  */
-export function ContentListPanel({
-  tab,
-  onTabChange,
-  selectedId,
-  onSelect,
-}: ContentListPanelProps) {
+export function ContentListPanel({ tab, tabs, selectedId, onSelect }: ContentListPanelProps) {
   const { t } = useTranslation()
   const format = useFormat()
   const news = useNews({ channel: 'cmarket', pageSize: PAGE_SIZE })
@@ -130,20 +125,7 @@ export function ContentListPanel({
   )
 
   return (
-    <Panel
-      title={t('panels.contentList')}
-      code="NEWS"
-      options={
-        <PanelTabs
-          value={tab}
-          options={[
-            { value: 'news', label: t('news.tabs.news') },
-            { value: 'documents', label: t('news.tabs.documents') },
-          ]}
-          onChange={onTabChange}
-        />
-      }
-    >
+    <Panel title={t('panels.contentList')} code="NEWS" options={tabs}>
       {tab === 'news' ? (
         <QueryView query={news}>
           {(page) => (

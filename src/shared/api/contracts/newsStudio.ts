@@ -1,13 +1,21 @@
 import type { IsoDateTime, Paged } from './common'
 import type { NewsCategory, NewsLanguage, NewsSourceDto, NewsType } from './news'
+import type { NewsModeration } from './newsAdmin'
 import type { RichTextDoc } from './research'
 
 /**
  * Where an item of a partner newspaper stands (spec section 10, GET /provider/news?status=): a draft,
- * scheduled at a time of Douala, published, or withdrawn with a reason. The feed shows the published
- * ones only.
+ * waiting for CMarket's review (a newspaper reviewed before publication, ROADMAP step 27),
+ * scheduled at a time of Douala, published, or withdrawn with a reason. The feed shows the
+ * published ones only.
  */
-export const PROVIDER_NEWS_STATUSES = ['draft', 'scheduled', 'published', 'withdrawn'] as const
+export const PROVIDER_NEWS_STATUSES = [
+  'draft',
+  'pending',
+  'scheduled',
+  'published',
+  'withdrawn',
+] as const
 export type ProviderNewsStatus = (typeof PROVIDER_NEWS_STATUSES)[number]
 
 /** GET /provider/news?status=&type= (paginated, newest first): a row of My news. */
@@ -66,6 +74,8 @@ export interface ProviderNewsDto extends ProviderNewsRowDto {
   externalId: string | null
   /** Sent back with the next save or publication: 409 when another one came between. */
   version: number
+  /** Since when an item waits for CMarket's review; null otherwise. */
+  submittedAt: IsoDateTime | null
 }
 
 /** PUT /provider/news/{id}: the editor's fields; a draft may be incomplete, within each limit. */
@@ -133,8 +143,10 @@ export interface ProviderSourceDto extends NewsSourceDto {
   ratePerClick: number
   monthlyCap: number | null
   flashQuota: number
-  /** FLASH items published or scheduled today, against the quota. */
+  /** FLASH items published, scheduled or waiting today, against the quota. */
   flashesToday: number
+  /** `before`: Publish sends the item for CMarket's review (SRC, spec section 16). */
+  moderation: NewsModeration
 }
 
 export interface ProviderSourceWriteDto {

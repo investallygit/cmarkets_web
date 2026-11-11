@@ -68,6 +68,8 @@ export const PERMISSIONS = [
   'messages:write',
   'news:write',
   'news:stats',
+  'news:moderate',
+  'news:payments',
   'data:import',
   'content:publish',
   'users:manage',

@@ -17,9 +17,13 @@ export const CHANNEL_TAG: Record<NewsChannel, string> = {
   cmarket: 'news-tag-cmarket',
 }
 
-/** The status of an item in its studio (screen 13): Draft grey, Scheduled blue, Published green, Withdrawn red. */
+/**
+ * The status of an item in its studio (screen 13): Draft grey, In review amber, Scheduled blue,
+ * Published green, Withdrawn red.
+ */
 export const STATUS_TAG: Record<ProviderNewsStatus, string> = {
   draft: 'news-status-draft',
+  pending: 'news-status-pending',
   scheduled: 'news-status-scheduled',
   published: 'news-status-published',
   withdrawn: 'news-status-withdrawn',
