@@ -15,7 +15,13 @@ export const routes = {
   security: '/securities/:securityId/:fn',
   screener: '/eqs',
   yieldCurves: '/ycrv',
-  bondCalculator: '/yas/:bondId',
+  /** Screen 4 with its calculator on a bond: /ycrv/{bondId}. */
+  yieldCurvesBond: '/ycrv/:bondId?',
+  /** BP (screen 16): bond pricing, on a bond of the list or one entered by hand. */
+  bondPricing: '/bp',
+  bondPricingBond: '/bp/:bondId?',
+  /** YAS opens BP (spec section 8): the addresses of the calculator before it lead there. */
+  bondCalculatorLegacy: '/yas/:bondId?',
   /** BS (screen 17): the bond screener. */
   bondScreener: '/bs',
   portfolio: '/port',
@@ -109,8 +115,14 @@ export function newsTabPath(tab: NewsTab): string {
   return tab === 'news' ? routes.news : `${routes.news}/${tab}`
 }
 
-export function bondCalculatorPath(bondId: string): string {
-  return `/yas/${encodeURIComponent(bondId)}`
+/** Screen 4, its calculator on the bond. */
+export function yieldCurvesPath(bondId: string): string {
+  return `${routes.yieldCurves}/${encodeURIComponent(bondId)}`
+}
+
+/** BP, bond pricing: on a bond of the list, or on the first one. */
+export function bondPricingPath(bondId?: string): string {
+  return bondId ? `${routes.bondPricing}/${encodeURIComponent(bondId)}` : routes.bondPricing
 }
 
 /** Tabs of the portfolio screen (spec section 9, screen 5); positions is the default. */

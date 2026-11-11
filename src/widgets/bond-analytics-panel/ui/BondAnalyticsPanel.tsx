@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 import { useBondAnalytics, useBondLabels, ytwDiffers } from '@/entities/bond'
 import type { BondAnalyticsDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
-import { bondCalculatorPath } from '@/shared/routes/paths'
+import { bondPricingPath } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 
@@ -43,10 +43,7 @@ export function BondAnalyticsPanel({ bondId }: BondAnalyticsPanelProps) {
       code="BS"
       options={
         bondId && (
-          <Link
-            to={bondCalculatorPath(bondId)}
-            className="panel-no-drag uppercase hover:text-primary"
-          >
+          <Link to={bondPricingPath(bondId)} className="panel-no-drag uppercase hover:text-primary">
             {t('bondScreener.openInBp')}
           </Link>
         )

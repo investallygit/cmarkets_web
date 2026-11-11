@@ -2,7 +2,7 @@ import { canAccessScreen } from '@/entities/session'
 import type { MeDto, SecurityType } from '@/shared/api/contracts'
 import type { TranslationKey } from '@/shared/i18n'
 import {
-  bondCalculatorPath,
+  bondPricingPath,
   routes,
   securityFunctionTypes,
   securityPath,
@@ -41,7 +41,7 @@ const SECURITY_TABS: readonly SecurityTab[] = [
   { code: 'ANA', fn: 'ana', labelKey: 'functions.ANA' },
 ]
 
-const SECURITY_SCREENS = new Set(['DES', 'YAS', 'N'])
+const SECURITY_SCREENS = new Set(['DES', 'BP', 'N'])
 
 /** Every function code of the command bar (spec section 8). */
 export const FUNCTION_CODES: readonly FunctionCode[] = [
@@ -53,14 +53,15 @@ export const FUNCTION_CODES: readonly FunctionCode[] = [
     appliesTo: securityFunctionTypes(fn),
     resolve: (securityId) => securityPath(securityId ?? '', fn),
   })),
-  {
-    code: 'YAS',
-    labelKey: 'functions.YAS',
-    target: 'security',
-    screen: screenById('YAS'),
+  // BP, bond pricing, with or without a bond ("ECMR 6.25 2029 BP"); YAS opens it too (spec section 8).
+  ...(['BP', 'YAS'] as const).map((code): FunctionCode => ({
+    code,
+    labelKey: code === 'BP' ? 'screens.BP.title' : 'functions.YAS',
+    target: 'optional-security',
+    screen: screenById('BP'),
     appliesTo: ['bond'],
-    resolve: (securityId) => bondCalculatorPath(securityId ?? ''),
-  },
+    resolve: (securityId) => bondPricingPath(securityId),
+  })),
   {
     code: 'N',
     labelKey: 'functions.N',

@@ -71,7 +71,7 @@
     "DES": { "title": "Fiche valeur", "menu": "Fiche" },
     "EQS": { "title": "Filtre actions et analyse fondamentale", "menu": "Analyse" },
     "YCRV": { "title": "Courbes de taux et calculateur obligataire", "menu": "Taux" },
-    "YAS": { "title": "Courbes de taux et calculateur obligataire", "menu": "Oblig." },
+    "BP": { "title": "Valorisation obligataire", "menu": "Valoris." },
     "BS": { "title": "Filtre obligataire", "menu": "Oblig." },
     "PORT": { "title": "Portefeuille", "menu": "Portef." },
     "PUB": { "title": "Bibliothèque de recherche", "menu": "Recherche" },
@@ -108,7 +108,7 @@
     "DOC": "Documents de l'émetteur",
     "HDS": "Actionnaires",
     "ANA": "Recherche sur la valeur",
-    "YAS": "Calculateur obligataire"
+    "YAS": "Valorisation obligataire"
   },
   "status": {
     "notFound": "Cet écran n'existe pas.",
@@ -223,6 +223,11 @@
     "bondCriteria": "Critères obligataires",
     "bondResults": "Résultats obligataires",
     "bondProfile": "Obligation sélectionnée",
+    "bondPricingInputs": "Saisie de la valorisation",
+    "bondPricingResults": "Résultats de la valorisation",
+    "cashFlowSchedule": "Échéancier des flux",
+    "priceYield": "Relation prix-rendement",
+    "rateSensitivity": "Sensibilité aux taux",
     "comparison": "Comparaison",
     "ratios": "Ratios",
     "statements": "États financiers",

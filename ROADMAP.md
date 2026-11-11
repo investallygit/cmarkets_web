@@ -52,7 +52,7 @@ relative: S < M < L < XL.
 | 27   | News administration, AI ingestion, international news           | Done   |
 | 28   | MPAY: media payments (screen 18)                                | Done   |
 | 29   | Daily bond analytics, BS: bond screener (screen 17)             | Done   |
-| 30   | BP: bond pricing (screen 16)                                    | To do  |
+| 30   | BP: bond pricing (screen 16)                                    | Done   |
 | 31   | Bond profile (screen 20), the profile chosen by security type   | To do  |
 | 32   | ETF data, ETFS: ETF screener (screen 15)                        | To do  |
 | 33   | ETF profile (screen 19)                                         | To do  |
@@ -1070,18 +1070,66 @@ CMarket.Api's phase 22.
     bond, the save dialog), IMP's upload of a bond list, ADMCFG: 30 audits, nothing found,
     nothing scrolls sideways.
 
-### Step 30 · BP · Bond pricing (screen 16) (M): to do
+### Step 30 · BP · Bond pricing (screen 16) (M): done
 
 CMarket.Api's phase 23.
 
-- YAS and BP open it, with or without a bond ("ECMR 6.25 2029 BP"); screen 4 keeps its
-  calculator.
-- Inputs (a bond of the list, or its terms by hand; the platform's yield, which the user may
-  change), pricing, risk and supplemental figures, the cash-flow schedule (XLSX), the price-yield
-  curve and the rate sensitivity, as the mockup.
-- **CMarket.Api**: `POST /bonds/price` on the engine of `/bonds/{id}/calculate`, the market yield
-  (BS, else the curve and a spread), the price-yield points; tested on case A of section 14.1, the
-  mockup's figures.
+- **Built**:
+  - BP (`/bp`, `/bp/{bondId}`, `analysis:read` and the analysis module), under YCRV in the menu as
+    the mockup lights it. "ECMR 6.25 2029 BP" opens it on that bond, BP alone on the first bond of
+    the master list; YAS now opens it too (spec section 8), with or without a bond, and the old
+    addresses `/yas/{bondId}` lead there. Screen 4 keeps its calculator, on `/ycrv/{bondId}`,
+    with a link to BP; BS's "Open in BP" and a bond shared in MSG ("Open in bond pricing") open BP.
+  - Inputs: A, a bond of the master list, whose characteristics fill the fields (face value M,
+    annual coupon C, frequency k, maturity, settlement, day count, redemption: bullet, or
+    amortizing with its schedule of dates and shares); changing one makes it a bond entered by
+    hand ("or enter all characteristics manually"). B, the target yield the platform supplies,
+    amber: the last YTM of the daily calculation ("Source: last computed YTM (BS screen) as of
+    …"), otherwise the issuer country's curve and the bond's spread; the user's own yield says the
+    platform's and offers it back. The face amount, XAF 100,000,000 by default. CALCULATE prices;
+    a bond opens calculated; inputs changed since show a note.
+  - Results: A, dirty price, accrued interest, clean price; B, Macaulay and modified durations,
+    DV01 of the face amount ("DV01 (100 M XAF)"); C, current yield, settlement amount, time to
+    maturity; "As of" the settlement. The cash-flow schedule (date, t, coupon, principal, total,
+    discount factor, present value per 100 outstanding; the Total row is the dirty price; XLSX
+    for the accounts that export); the clean price from 3 points below the yield to 3 above, the
+    bond in amber; the rate sensitivity for ±25, ±50 and ±100 bp, rises in green, falls in red,
+    the yield itself highlighted.
+  - Slices: `features/price-bond` (the form, its store, the inputs panel and the redemption
+    schedule), `widgets/bond-pricing-panels` (results, cash flows, price-yield, sensitivity),
+    `pages/bond-pricing`; `useMarketYield` and `useBondPrice` in `entities/bond`; the contracts in
+    `bondPricing.ts`, the endpoints of `/bonds/price`, `/bonds/{id}/market-yield` and
+    `/bonds/{id}/price-yield`; the strings under `bondPricing` in the area file `bonds.json`.
+- **CMarket.Api** (phase 23):
+  - `POST /bonds/price` on the calculator's engine, from a yield: a bond of the list (at its
+    market yield and its market's settlement by default) or its characteristics; the three
+    blocks, the cash flows discounted one by one, the shifts asked and the price-yield points in
+    one answer, so a bond entered by hand has its curve too. `GET /bonds/{id}/market-yield` (BS's
+    yield of the latest calculation, else the country curve at the average life plus the bond's
+    last spread) and `GET /bonds/{id}/price-yield` over any range.
+  - A bond entered by hand pays a period apart back from maturity, from the coupon date before
+    the settlement or before its first repayment; M is the price its principal is repaid at. BVMAC
+    settles at T+2, the BEAC's securities at T+1. Nothing stored, no migration. ADR-047.
+  - Tested on case A at the mockup's yield (dirty price 107.5643, DV01 XAF 27,242, the four cash
+    flows and the seven shifts of the mockup) and at its clean price's, on case B, by hand and on
+    the list.
+- **Checked**:
+  - Type check, lint, the 330 unit tests.
+  - CMarket.Api: 1,308 tests (the SQL Server suite's 17 not needed: no migration).
+  - Every Playwright flow on CMarket.Api from a fresh database: 98, all passing, and MSG's
+    `@fresh-db` flow, whose bond card now opens BP, on a database fresh for it. Two new ones, of BP: ECMR
+    from the command bar at BS's yield, its schedule, its cash flows and their export, a yield of
+    the user's, YAS alone; case A by hand with the mockup's figures, cash flows, shifts and curve,
+    then a repayment off the payment dates refused under the schedule. The flows of YCRV's
+    calculator, BS's "Open in BP" and MSG's bond card follow the new addresses.
+  - axe (WCAG 2.2 AA) at 1600, 390 and 320 px, in English and French: BP on a bond of the list,
+    case A by hand, a yield of the user's, a schedule refused, YCRV's calculator: 30 audits,
+    nothing found, nothing scrolls sideways.
+  - The audits of steps 24 to 29 set French in the browser, which the app replaces at each load
+    with the profile's language: their French runs were English ones. They now switch the
+    profile's language from the user menu, and ran again in French: steps 24 to 29, nothing
+    found, except the studio's dispute dialog of step 28, which needs a statement awaiting the
+    newspaper that this database did not have.
 
 ### Step 31 · Bond profile (screen 20), profiles by security type (L): to do
 
@@ -1503,8 +1551,9 @@ Still to do, with the first screen that needs it:
   point lower a month back.
 - **Still to do**: US and European curves (in the spec, not in the mockup); bond quotes on the
   CEMAC curves (left out by the mock).
-- **Third version (step 30)**: YAS opens BP, bond pricing (screen 16); the calculator of
-  screen 4 stays, on the same engine.
+- **Third version (step 30)**: YAS opens BP, bond pricing (screen 16), and its old addresses
+  `/yas/{bondId}` lead there; screen 4's calculator stays, on the same engine, at
+  `/ycrv/{bondId}`, with a link to BP ("Full pricing in BP").
 
 ### PORT · Portfolio (screen 5): done
 
@@ -1700,9 +1749,17 @@ Still to do, with the first screen that needs it:
 
 - **Planned in step 32**.
 
-### BP · Bond pricing (screen 16): to do
+### BP · Bond pricing (screen 16): done
 
-- **Planned in step 30**.
+- **Built in step 30**: the inputs (a bond of the master list or its characteristics entered by
+  hand, the platform's yield the user may change, the face amount), the three blocks of results,
+  the cash-flow schedule with its total and its XLSX export, the price-yield curve and the rate
+  sensitivity of the mockup, on CMarket.Api's `/bonds/price` (see step 30). YAS opens BP.
+- **Mockup**: its values are case A of section 14.1 at the yield it shows, 5.7302%: the dirty
+  price, the durations, DV01, the cash flows and the shifts follow that yield; its clean price
+  101.4000 and settlement amount XAF 107,564,384 follow case A's clean price of 101.40, whose
+  yield it rounds (BP shows 101.3999 and XAF 107,564,262 at 5.7302%, 101.4000 at the platform's
+  unrounded yield). The demo's ECMR is the amortizing bond of case B.
 
 ### BS · Bond screener (screen 17): done
 
@@ -1712,7 +1769,7 @@ Still to do, with the first screen that needs it:
 - **Mockup**: its figures are of 29/10/2026; the demo computes its bonds on the latest session,
   so that the accrued interest, the yields and the durations follow the date. ECMR is the
   amortizing bond of YAS (case B of section 14.1), where the mockup shows case A's yield.
-  "Open in BP" opens YAS until step 30.
+  "Open in BP" opens BP since step 30.
 
 ### DES on an ETF · ETF profile (screen 19): to do
 
@@ -2227,6 +2284,19 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   actual days; a model price and the Z-spread read a curve flat beyond its ends, the credit spread
   only inside it. The sector of a corporate issuer: FINANCIALS, UTILITIES or INDUSTRIALS, as block
   A lists them. "ISIN · nom" in the mockup's block A is French.
+- **Bond pricing, third version**: "Face value (M)" reads 100.00%: the plan takes it as what the
+  principal is repaid at per 100 of face value (the coupons run on the face). The
+  characteristics give no issue date nor first coupon: a bond entered by hand pays a period apart
+  back from maturity, every period whole. "T+1 or T+2 by default depending on the market": the
+  plan settles BVMAC and other markets at T+2, as the BP and YAS mockups settle ECMR, and the
+  BEAC's securities at T+1; which does each market keep? "The country curve + spread": the plan
+  adds the bond's last known spread over its country curve (0 without one), and takes BS's yield
+  when its latest calculation priced the bond. `/bonds/{id}/price-yield` cannot draw a bond
+  entered by hand: `POST /bonds/price` also answers the curve. The mockup mixes the yield it shows
+  (5.7302%, which gives the dirty price, the durations and the shifts) with case A's clean price
+  (101.4000 and XAF 107,564,384, which need the unrounded yield), and its +50 bp row reads −1.26%
+  where the dirty price falls 1.25%. The modified duration is written in percent, as the mockup
+  does; "CALCULATE" in the inputs' title bar is the button below it.
 - **Subscriptions, third version**: SUBS shows auto-renewal, a stored card and failed payments,
   but no payment provider that keeps cards is named. The plan: a renewal charges the stored card
   or sends a mobile money request, a simulated provider standing in; a failed charge is tried

@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// Analysis screens of step 4 (ROADMAP.md): EQS and the FA tab, YCRV and YAS.
+// Analysis screens of step 4 (ROADMAP.md): EQS and the FA tab, YCRV and its bond calculator (YAS
+// opens BP since step 30: bond-pricing.spec.ts).
 
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title }) })
@@ -62,7 +63,7 @@ test('a range criterion is run and a screen is saved under a name', async ({ pag
 })
 
 test('the bond calculator gives the results of spec section 14.1, case B', async ({ page }) => {
-  await page.goto('/yas/ECMR-6.25-2029')
+  await page.goto('/ycrv/ECMR-6.25-2029')
   const calculator = panel(page, 'Bond calculator')
   await expect(calculator.getByText('Dirty price')).toBeVisible()
 
@@ -94,11 +95,11 @@ test('the yield curves hide a country and compare with a past date', async ({ pa
   await curves.getByRole('combobox', { name: 'Compare to:' }).selectOption('3m')
   await expect(curves.getByText('Cameroon 3 months ago')).toBeVisible()
 
-  // Another bond: YAS, and the comparison follows its country.
+  // Another bond in the calculator: the comparison follows its country.
   await panel(page, 'Bond calculator')
     .getByRole('combobox', { name: 'Bond' })
     .selectOption('GAB-6.50-2028')
-  await expect(page).toHaveURL(/\/yas\/GAB-6.50-2028$/)
+  await expect(page).toHaveURL(/\/ycrv\/GAB-6.50-2028$/)
   await expect(panel(page, 'Bond calculator').getByText('Spread vs Gabon curve')).toBeVisible()
 })
 

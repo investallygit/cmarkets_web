@@ -71,7 +71,7 @@
     "DES": { "title": "Security profile", "menu": "Profile" },
     "EQS": { "title": "Equity screener and fundamental analysis", "menu": "Analysis" },
     "YCRV": { "title": "Yield curves and bond calculator", "menu": "Rates" },
-    "YAS": { "title": "Yield curves and bond calculator", "menu": "Bonds" },
+    "BP": { "title": "Bond pricing", "menu": "Pricing" },
     "BS": { "title": "Bond screener", "menu": "Bonds" },
     "PORT": { "title": "Portfolio", "menu": "Portf." },
     "PUB": { "title": "Research library", "menu": "Research" },
@@ -108,7 +108,7 @@
     "DOC": "Issuer documents",
     "HDS": "Shareholders",
     "ANA": "Research on the security",
-    "YAS": "Bond calculator"
+    "YAS": "Bond pricing"
   },
   "status": {
     "notFound": "This screen does not exist.",
@@ -223,6 +223,11 @@
     "bondCriteria": "Bond criteria",
     "bondResults": "Bond results",
     "bondProfile": "Selected bond",
+    "bondPricingInputs": "Bond pricing inputs",
+    "bondPricingResults": "Bond pricing results",
+    "cashFlowSchedule": "Cash flow schedule",
+    "priceYield": "Price-yield relationship",
+    "rateSensitivity": "Rate sensitivity",
     "comparison": "Comparison",
     "ratios": "Ratios",
     "statements": "Financial statements",

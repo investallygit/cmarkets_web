@@ -14,6 +14,9 @@ const SecurityProfilePage = lazy(() =>
 const EquityScreenerPage = lazy(() =>
   import('@/pages/equity-screener').then((module) => ({ default: module.EquityScreenerPage })),
 )
+const BondPricingPage = lazy(() =>
+  import('@/pages/bond-pricing').then((module) => ({ default: module.BondPricingPage })),
+)
 const BondScreenerPage = lazy(() =>
   import('@/pages/bond-screener').then((module) => ({ default: module.BondScreenerPage })),
 )
@@ -101,7 +104,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   DES: SecurityProfilePage,
   EQS: EquityScreenerPage,
   YCRV: YieldCurvesPage,
-  YAS: YieldCurvesPage,
+  BP: BondPricingPage,
   BS: BondScreenerPage,
   PORT: PortfolioPage,
   PUB: ResearchLibraryPage,

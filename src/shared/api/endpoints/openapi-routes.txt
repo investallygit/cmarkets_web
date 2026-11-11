@@ -108,6 +108,9 @@ GET /bonds/{id}
 GET /bonds/{id}/analytics
 GET /bonds/{id}/analytics/history
 POST /bonds/{id}/calculate
+GET /bonds/{id}/market-yield
+GET /bonds/{id}/price-yield
+POST /bonds/price
 GET /bonds/screener
 GET /bonds/screener/facets
 GET /calendar

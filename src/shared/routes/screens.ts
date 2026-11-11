@@ -111,7 +111,7 @@ export const SCREENS: readonly ScreenDefinition[] = [
   // CFG; a News provider's studio after N (spec section 9), NEWS in the menu (ROADMAP decision 2).
   screen('MKT', 'MKT', routes.market, 'client', LayoutDashboard, { permission: 'market:read', module: 'monitoring', inMenu: true }),
   screen('EQS', 'EQS', routes.screener, 'client', ScanSearch, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
-  screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
+  screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', module: 'analysis', inMenu: true, routePattern: routes.yieldCurvesBond }),
   screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', module: 'portfolio', inMenu: true, routePattern: routes.portfolioTabs }),
   screen('PUB', 'PUB', routes.library, 'client', BookOpen, { permission: 'research:read', inMenu: true }),
   screen('NET', 'NET', routes.directory, 'client', BookUser, { permission: 'directory:list', inMenu: true }),
@@ -123,8 +123,8 @@ export const SCREENS: readonly ScreenDefinition[] = [
 
   // Client screens opened from the command bar or from another screen.
   screen('DES', 'DES', routes.security, 'client', FileText, { permission: 'market:read', module: 'monitoring' }),
-  screen('YAS', 'YAS', routes.bondCalculator, 'client', Calculator, { permission: 'analysis:read', module: 'analysis' }),
-  // BS (screen 17) under YCRV, as its mockup lights the menu: the bond screener.
+  // BP (screen 16), which YAS opens too, and BS (screen 17) under YCRV, as their mockups light the menu.
+  screen('BP', 'BP', routes.bondPricing, 'client', Calculator, { permission: 'analysis:read', module: 'analysis', menuParent: 'YCRV', routePattern: routes.bondPricingBond }),
   screen('BS', 'BS', routes.bondScreener, 'client', ScanLine, { permission: 'analysis:read', module: 'analysis', menuParent: 'YCRV' }),
   screen('PUBNEW', 'PUB NEW', routes.publishingStudio, 'client', PenLine, { permission: 'publications:write' }),
   screen('CAL', 'CAL', routes.calendar, 'client', CalendarDays, { permission: 'market:read', module: 'monitoring' }),

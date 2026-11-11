@@ -146,5 +146,108 @@
       "default": "Default",
       "restructured": "Restructured"
     }
+  },
+  "bondPricing": {
+    "inputs": "Inputs",
+    "characteristics": "A. Bond characteristics",
+    "marketInput": "B. Market input (internal)",
+    "bond": "Bond",
+    "ofTheList": "{{code}} (master list)",
+    "byHand": "Characteristics entered by hand",
+    "orByHand": "or enter all characteristics manually",
+    "fields": {
+      "faceValue": "Face value (M)",
+      "faceValueHint": "The principal is repaid at M per 100 of face value.",
+      "couponRate": "Annual coupon rate (C)",
+      "frequency": "Frequency (k)",
+      "maturityDate": "Maturity date",
+      "settlementDate": "Settlement date",
+      "settlementLag": "Settlement date (T+{{sessions}})",
+      "dayCount": "Day count convention",
+      "redemption": "Redemption",
+      "ytm": "Target yield to maturity (YTM)",
+      "faceAmount": "Face amount ({{currency}})"
+    },
+    "frequencies": {
+      "1": "Annual (1)",
+      "2": "Semi-annual (2)",
+      "4": "Quarterly (4)",
+      "12": "Monthly (12)"
+    },
+    "redemptions": {
+      "bullet": "Bullet",
+      "amortizing": "Amortizing (schedule)"
+    },
+    "schedule": {
+      "legend": "Redemption schedule, % of the original face",
+      "date": "Repayment {{n}}: date",
+      "pct": "Repayment {{n}}: share of the face",
+      "remove": "Remove repayment {{n}}",
+      "add": "Add a repayment",
+      "total": "Total {{value}}",
+      "mustAddUp": "The shares add up to 100%."
+    },
+    "source": {
+      "bs": "Source: last computed YTM (BS screen) as of {{date}} · user can override",
+      "bsModel": "Source: last computed YTM (BS screen, model price) as of {{date}} · user can override",
+      "curve": "Source: {{country}} curve at the average life {{spread}}, as of {{date}} · user can override",
+      "none": "No yield from the platform for this bond: enter one.",
+      "byHand": "A bond entered by hand: enter its yield.",
+      "yours": "Your yield. The platform's: {{value}} ({{source}}, {{date}}).",
+      "bsShort": "BS",
+      "curveShort": "{{country}} curve",
+      "useIt": "Use it"
+    },
+    "calculate": "Calculate",
+    "changed": "The inputs changed: calculate to update the results.",
+    "incomplete": "Complete the inputs to calculate.",
+    "required": "Required.",
+    "dateRequired": "Enter a date DD/MM/YYYY.",
+    "positiveAmount": "Enter an amount above 0.",
+    "results": "Results",
+    "asOf": "As of {{date}}",
+    "pricing": "A. Pricing",
+    "risk": "B. Risk and sensitivity",
+    "supplemental": "C. Supplemental",
+    "dirtyPrice": "Dirty price",
+    "accruedInterest": "Accrued interest",
+    "cleanPrice": "Clean price",
+    "macaulay": "Macaulay duration",
+    "modified": "Modified duration",
+    "dv01": "DV01 ({{amount}} {{currency}})",
+    "currentYield": "Current yield",
+    "settlementAmount": "Settlement amount",
+    "timeToMaturity": "Time to maturity",
+    "years": "{{value}} yrs",
+    "zeroCoupon": "— (zero coupon)",
+    "notCalculated": "Enter the inputs, then Calculate.",
+    "cashFlows": "Cash flow schedule",
+    "export": "Export XLSX",
+    "columns": {
+      "date": "Payment date",
+      "years": "t (years)",
+      "coupon": "Coupon",
+      "principal": "Principal",
+      "cashFlow": "Total cash flow",
+      "discountFactor": "Discount factor",
+      "presentValue": "Present value"
+    },
+    "total": "Total",
+    "cashFlowsNote": "Amounts per 100 of face value outstanding at settlement. For an amortizing bond, the Principal column follows the redemption schedule.",
+    "priceYield": "Price-yield relationship",
+    "cleanPriceCurve": "Clean price",
+    "priceAxis": "Price (%)",
+    "point": "{{yield}} · {{price}}",
+    "chartSummary": "Clean price from {{high}} at {{lowYield}} to {{low}} at {{highYield}}; {{price}} at the yield of {{yield}}.",
+    "sensitivity": "Rate sensitivity",
+    "parallelShift": "Parallel shift",
+    "sensitivityColumns": {
+      "shift": "Shift",
+      "cleanPrice": "Clean price",
+      "priceChange": "Price chg.",
+      "dirtyChange": "Dirty chg. %"
+    },
+    "shift": "{{value}} bp",
+    "sensitivityNote": "Dirty price % change: compare with −Dmod × Δy (first-order approximation)."
   }
 }

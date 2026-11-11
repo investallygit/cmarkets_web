@@ -20,6 +20,7 @@ import {
 } from './pages'
 import { RequireSession } from './RequireSession'
 import { ScreenRoute } from './ScreenRoute'
+import { YasRedirect } from './YasRedirect'
 
 const prototypeRoutes = env.devTools
   ? [
@@ -59,6 +60,7 @@ export const router = createBrowserRouter([
     errorElement: <RouteErrorPage />,
     children: [
       { path: routes.app, element: <HomeRedirect /> },
+      { path: routes.bondCalculatorLegacy, element: <YasRedirect /> },
       ...SCREENS.map((screen) => ({
         path: screen.routePattern ?? screen.path,
         element: <ScreenRoute screen={screen} page={pageOf(screen)} />,

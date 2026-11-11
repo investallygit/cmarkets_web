@@ -2,6 +2,7 @@ import { clsx } from 'clsx'
 import { LoaderCircle } from 'lucide-react'
 import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import { useBond, useBondCalculation, useBonds } from '@/entities/bond'
 import { useQuote } from '@/entities/quote'
 import { isApiError } from '@/shared/api'
@@ -10,6 +11,7 @@ import { useFormat } from '@/shared/i18n'
 import { toMarketDay } from '@/shared/lib/format'
 import { useDebouncedValue } from '@/shared/lib/useDebouncedValue'
 import { useKeyboardScrolling } from '@/shared/lib/useKeyboardScrolling'
+import { bondPricingPath } from '@/shared/routes/paths'
 import { DateInput } from '@/shared/ui/form/DateInput'
 import { Field } from '@/shared/ui/form/Field'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
@@ -30,9 +32,9 @@ interface BondCalculatorPanelProps {
 }
 
 /**
- * Screen 4, bond calculator (YAS): settlement date, clean price or yield, face amount (amber
- * inputs); the other figure, accrued interest, durations and the spread over the issuer's curve
- * come from POST /bonds/{id}/calculate (spec section 14.1).
+ * Screen 4, bond calculator: settlement date, clean price or yield, face amount (amber inputs);
+ * the other figure, accrued interest, durations and the spread over the issuer's curve come from
+ * POST /bonds/{id}/calculate (spec section 14.1). BP, bond pricing, takes the bond further.
  */
 export function BondCalculatorPanel({ bondId, onBondChange }: BondCalculatorPanelProps) {
   const { t } = useTranslation()
@@ -184,6 +186,12 @@ function Calculator({ bond, lastPrice }: { bond: BondDto; lastPrice: number | nu
           <LoaderCircle aria-hidden className="size-3 shrink-0 animate-spin" />
         )}
         {t('calculator.hint')}
+        <Link
+          to={bondPricingPath(bond.id)}
+          className="ml-auto inline-flex min-h-6 shrink-0 items-center text-info hover:underline"
+        >
+          {t('calculator.openBp')}
+        </Link>
       </p>
     </div>
   )

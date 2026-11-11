@@ -187,6 +187,7 @@
     "spread": "Spread / courbe {{country}}",
     "curveYield": "courbe {{value}}",
     "basisPoints": "{{value}} pb",
-    "outsideCurve": "La durée de vie moyenne sort de la courbe, qui n'est pas extrapolée."
+    "outsideCurve": "La durée de vie moyenne sort de la courbe, qui n'est pas extrapolée.",
+    "openBp": "Valorisation complète (BP)"
   }
 }

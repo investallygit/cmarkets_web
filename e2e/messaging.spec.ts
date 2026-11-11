@@ -21,9 +21,9 @@ test(
     // The first conversation opens: the thread of the mockup, its bond and its files.
     const thread = panel(page, 'P. Owona · Manager')
     await expect(thread.getByText('ECMR 6.25% 29')).toBeVisible()
-    await expect(thread.getByRole('link', { name: 'Open in the calculator' })).toHaveAttribute(
+    await expect(thread.getByRole('link', { name: 'Open in bond pricing' })).toHaveAttribute(
       'href',
-      '/yas/ECMR-6.25-2029',
+      '/bp/ECMR-6.25-2029',
     )
     const participant = panel(page, 'Participant')
     await expect(participant.getByRole('heading', { name: 'P. Owona' })).toBeVisible()

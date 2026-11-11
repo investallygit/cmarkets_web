@@ -75,7 +75,7 @@ test('BS lists the mockup’s bonds, model prices starred, and shows a callable 
   await panel(page, /^GAB 6\.50% 28/)
     .getByRole('link', { name: 'Open in BP' })
     .click()
-  await expect(page).toHaveURL(/\/yas\/GAB-6\.50-2028$/)
+  await expect(page).toHaveURL(/\/bp\/GAB-6\.50-2028$/)
 })
 
 test('the criteria narrow the bonds, a screen is saved and the results export', async ({

@@ -187,6 +187,7 @@
     "spread": "Spread vs {{country}} curve",
     "curveYield": "curve {{value}}",
     "basisPoints": "{{value}} bp",
-    "outsideCurve": "The average life is outside the curve, which is not extrapolated."
+    "outsideCurve": "The average life is outside the curve, which is not extrapolated.",
+    "openBp": "Full pricing in BP"
   }
 }

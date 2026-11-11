@@ -6,7 +6,7 @@ import { NewsTags } from '@/entities/news'
 import { FrozenChart } from '@/entities/publication'
 import type { SharedObjectDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
-import { bondCalculatorPath, libraryPath, newsPath, securityPath } from '@/shared/routes/paths'
+import { bondPricingPath, libraryPath, newsPath, securityPath } from '@/shared/routes/paths'
 
 function CardLink({ to, children }: { to: string; children: ReactNode }) {
   return (
@@ -36,7 +36,7 @@ export function SharedCard({ shared }: { shared: SharedObjectDto }) {
       <div className="flex flex-col gap-1.5 border border-accent-amber p-2.5">
         <div className="flex items-baseline justify-between gap-3">
           <span className="font-mono text-label font-bold text-accent-amber">{shared.code}</span>
-          <span className="font-mono text-title text-secondary">{bond ? 'YAS' : 'DES'}</span>
+          <span className="font-mono text-title text-secondary">{bond ? 'BP' : 'DES'}</span>
         </div>
         <p className="font-mono text-data">
           {[
@@ -50,10 +50,8 @@ export function SharedCard({ shared }: { shared: SharedObjectDto }) {
             .filter(Boolean)
             .join(' · ')}
         </p>
-        <CardLink
-          to={bond ? bondCalculatorPath(shared.securityId) : securityPath(shared.securityId)}
-        >
-          {bond ? t('messaging.card.openYas') : t('messaging.card.openDes')}
+        <CardLink to={bond ? bondPricingPath(shared.securityId) : securityPath(shared.securityId)}>
+          {bond ? t('messaging.card.openBp') : t('messaging.card.openDes')}
         </CardLink>
       </div>
     )

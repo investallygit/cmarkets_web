@@ -17,10 +17,18 @@ describe('function codes (spec section 8)', () => {
     expect(cfg(admin).map((fn) => fn.resolve())).toEqual(['/admin/settings'])
   })
 
+  it('opens bond pricing from BP and YAS, with or without a bond', () => {
+    const byCode = (code: string) => availableFunctions(analyst).find((fn) => fn.code === code)!
+    expect(byCode('BP').resolve()).toBe('/bp')
+    expect(byCode('YAS').resolve('ECMR-6.25-2029')).toBe('/bp/ECMR-6.25-2029')
+    expect(byCode('YAS').target).toBe('optional-security')
+  })
+
   it('offers bond functions for bonds and equity functions for equities', () => {
     const byCode = (code: string) => availableFunctions(analyst).find((fn) => fn.code === code)!
+    expect(appliesToSecurity(byCode('BP'), 'bond')).toBe(true)
+    expect(appliesToSecurity(byCode('BP'), 'equity')).toBe(false)
     expect(appliesToSecurity(byCode('YAS'), 'bond')).toBe(true)
-    expect(appliesToSecurity(byCode('YAS'), 'equity')).toBe(false)
     expect(appliesToSecurity(byCode('FA'), 'equity')).toBe(true)
     expect(appliesToSecurity(byCode('FA'), 'bond')).toBe(false)
     expect(appliesToSecurity(byCode('GP'), 'bond')).toBe(true)

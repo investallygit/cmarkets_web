@@ -38,7 +38,13 @@ export {
 export { alertsApi, alertsRoutes } from './alerts'
 export { analysisApi, analysisRoutes } from './analysis'
 export { authApi, authRoutes } from './auth'
-export { bondsApi, bondsRoutes, type AuctionQuery, type YieldCurveQuery } from './bonds'
+export {
+  bondsApi,
+  bondsRoutes,
+  type AuctionQuery,
+  type PriceYieldQuery,
+  type YieldCurveQuery,
+} from './bonds'
 export { chartsApi, chartsRoutes } from './charts'
 export {
   contentApi,

@@ -47,7 +47,7 @@ tables, read-excel-file to read the Excel templates before upload.
 | 1 · Market dashboard (MKT)                                                | Done, real-time quotes and indices, watchlists                |
 | 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done                                                          |
 | 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done, saved screens                                           |
-| 4 · Yield curves and bond calculator (YCRV, YAS)                          | Done; the API computes spec section 14.1                      |
+| 4 · Yield curves and bond calculator (YCRV)                               | Done; the API computes spec section 14.1                      |
 | 5 · Portfolio (PORT)                                                      | Done; the API values portfolios with sections 14.2 and 14.3   |
 | 7 · Publishing studio (PUB NEW)                                           | Done, autosave, versions, frozen charts                       |
 | 8 · Research library (PUB)                                                | Done; mobile money and card payments                          |
@@ -68,7 +68,7 @@ tables, read-excel-file to read the Excel templates before upload.
 | News sources (SRC), AI ingestion, international news: no mockup           | Done; the AI pushes signed items, EODHD news every 15 minutes |
 | 18 · Media payments (MPAY)                                                | Done; a second Admin above XAF 300,000; disputes in NEWS NEW  |
 | 17 · Bond screener (BS)                                                   | Done; computed each evening, model prices, yield to worst     |
-| 16 · Bond pricing (BP), which YAS opens                                   | To do, step 30                                                |
+| 16 · Bond pricing (BP), which YAS opens                                   | Done; a bond of the list or by hand, at the platform's yield  |
 | 20 · Bond profile (DES on a bond)                                         | To do, step 31                                                |
 | 15 · ETF screener (ETFS)                                                  | To do, step 32                                                |
 | 19 · ETF profile (DES on an ETF)                                          | To do, step 33                                                |
@@ -122,7 +122,8 @@ src/
   main.tsx    entry point: the hubs of CMarket.Api, then the app
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile, equity-screener,
-              yield-curves (YCRV and YAS), bond-screener (BS), portfolio, research-library, publishing-studio, news,
+              yield-curves (YCRV), bond-pricing (BP, which YAS opens), bond-screener (BS), portfolio,
+              research-library, publishing-studio, news,
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
               network-profile (NET ME), public-profile (/p/{handle}), data-import (IMP),
               data-session (DATA), upload-history (HIST), eodhd (EODH), data-corrections (CORR),
@@ -133,10 +134,11 @@ src/
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
               subscription-panel, current-upload-panel, messaging-panels, news-studio-panels,
               news-moderation-panels, news-sources-panels, media-payments-panels,
-              bond-screener-results-panel, bond-analytics-panel...),
+              bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
+              price-bond,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
               rate-publication, report-publication, follow-analyst, report-profile,
               start-conversation, send-message, share-news, report-conversation, block-user,
@@ -152,7 +154,8 @@ src/
               edit-platform-settings, edit-permissions, switch-language, switch-account,
               workspace-layout
   entities/   business data: session, subscription, organization, security, quote (live
-              prices), market, bond (with BS's screener and labels), yield-curve, fundamentals, screener, portfolio, publication,
+              prices), market, bond (with BS's screener and labels, BP's pricing), yield-curve, fundamentals,
+              screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
               (MPAY's statements, click anomalies and payment settings),

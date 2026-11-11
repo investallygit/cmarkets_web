@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 import { useBonds } from '@/entities/bond'
 import { ScreenWorkspace } from '@/features/workspace-layout'
-import { bondCalculatorPath } from '@/shared/routes/paths'
+import { yieldCurvesPath } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { AuctionsPanel } from '@/widgets/auctions-panel'
@@ -11,8 +11,8 @@ import { YieldCurvesPanel } from '@/widgets/yield-curves-panel'
 import { YIELD_CURVES_LAYOUT } from '../config/layout'
 
 /**
- * Screen 4, yield curves and bond calculator: YCRV opens it on the first listed bond,
- * "ECMR 6.25 2029 YAS" (/yas/{bondId}) on that bond. Both share one saved layout.
+ * Screen 4, yield curves and bond calculator: YCRV opens it on the first listed bond, /ycrv/{bondId}
+ * on that bond. YAS opens BP, bond pricing (screen 16), since the third version of the spec.
  */
 export function YieldCurvesPage() {
   const { t } = useTranslation()
@@ -27,7 +27,7 @@ export function YieldCurvesPage() {
     calculator: current ? (
       <BondCalculatorPanel
         bondId={current}
-        onBondChange={(id) => void navigate(bondCalculatorPath(id))}
+        onBondChange={(id) => void navigate(yieldCurvesPath(id))}
       />
     ) : (
       <Panel title={t('panels.bondCalculator')} code="YAS">

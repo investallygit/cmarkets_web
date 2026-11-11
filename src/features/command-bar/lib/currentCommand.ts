@@ -5,6 +5,6 @@ import type { ScreenDefinition } from '@/shared/routes/screens'
 export function commandOf(screen: ScreenDefinition | null, params: Params): string {
   if (!screen) return ''
   if (screen.id === 'DES') return `${params.securityId ?? ''} ${(params.fn ?? 'des').toUpperCase()}`
-  if (screen.id === 'YAS') return `${params.bondId ?? ''} YAS`
+  if (screen.id === 'BP') return params.bondId ? `${params.bondId} BP` : screen.code
   return screen.code
 }

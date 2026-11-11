@@ -146,5 +146,108 @@
       "default": "Défaut",
       "restructured": "Restructuré"
     }
+  },
+  "bondPricing": {
+    "inputs": "Saisie",
+    "characteristics": "A. Caractéristiques de l'obligation",
+    "marketInput": "B. Donnée de marché (interne)",
+    "bond": "Obligation",
+    "ofTheList": "{{code}} (liste de référence)",
+    "byHand": "Caractéristiques saisies à la main",
+    "orByHand": "ou saisissez toutes les caractéristiques à la main",
+    "fields": {
+      "faceValue": "Valeur nominale (M)",
+      "faceValueHint": "Le principal est remboursé à M pour 100 de nominal.",
+      "couponRate": "Taux de coupon annuel (C)",
+      "frequency": "Fréquence (k)",
+      "maturityDate": "Date d'échéance",
+      "settlementDate": "Date de règlement",
+      "settlementLag": "Date de règlement (J+{{sessions}})",
+      "dayCount": "Base de décompte des jours",
+      "redemption": "Remboursement",
+      "ytm": "Rendement à l'échéance visé (YTM)",
+      "faceAmount": "Nominal ({{currency}})"
+    },
+    "frequencies": {
+      "1": "Annuelle (1)",
+      "2": "Semestrielle (2)",
+      "4": "Trimestrielle (4)",
+      "12": "Mensuelle (12)"
+    },
+    "redemptions": {
+      "bullet": "In fine",
+      "amortizing": "Amortissable (échéancier)"
+    },
+    "schedule": {
+      "legend": "Échéancier de remboursement, % du nominal d'origine",
+      "date": "Remboursement {{n}} : date",
+      "pct": "Remboursement {{n}} : part du nominal",
+      "remove": "Retirer le remboursement {{n}}",
+      "add": "Ajouter un remboursement",
+      "total": "Total {{value}}",
+      "mustAddUp": "Les parts font 100 % au total."
+    },
+    "source": {
+      "bs": "Source : dernier YTM calculé (écran BS) au {{date}} · modifiable",
+      "bsModel": "Source : dernier YTM calculé (écran BS, prix modèle) au {{date}} · modifiable",
+      "curve": "Source : courbe {{country}} à la durée de vie moyenne {{spread}}, au {{date}} · modifiable",
+      "none": "Pas de rendement de la plateforme pour cette obligation : saisissez-en un.",
+      "byHand": "Obligation saisie à la main : saisissez son rendement.",
+      "yours": "Votre rendement. Celui de la plateforme : {{value}} ({{source}}, {{date}}).",
+      "bsShort": "BS",
+      "curveShort": "courbe {{country}}",
+      "useIt": "Le reprendre"
+    },
+    "calculate": "Calculer",
+    "changed": "La saisie a changé : calculez pour mettre à jour les résultats.",
+    "incomplete": "Complétez la saisie pour calculer.",
+    "required": "Obligatoire.",
+    "dateRequired": "Saisissez une date JJ/MM/AAAA.",
+    "positiveAmount": "Saisissez un montant supérieur à 0.",
+    "results": "Résultats",
+    "asOf": "Au {{date}}",
+    "pricing": "A. Prix",
+    "risk": "B. Risque et sensibilité",
+    "supplemental": "C. Compléments",
+    "dirtyPrice": "Prix coupon couru inclus",
+    "accruedInterest": "Coupon couru",
+    "cleanPrice": "Prix pied de coupon",
+    "macaulay": "Duration de Macaulay",
+    "modified": "Duration modifiée",
+    "dv01": "DV01 ({{amount}} {{currency}})",
+    "currentYield": "Rendement courant",
+    "settlementAmount": "Montant à régler",
+    "timeToMaturity": "Durée résiduelle",
+    "years": "{{value}} ans",
+    "zeroCoupon": "— (zéro coupon)",
+    "notCalculated": "Complétez la saisie, puis Calculer.",
+    "cashFlows": "Échéancier des flux",
+    "export": "Exporter XLSX",
+    "columns": {
+      "date": "Date de paiement",
+      "years": "t (années)",
+      "coupon": "Coupon",
+      "principal": "Principal",
+      "cashFlow": "Flux total",
+      "discountFactor": "Facteur d'actualisation",
+      "presentValue": "Valeur actuelle"
+    },
+    "total": "Total",
+    "cashFlowsNote": "Montants pour 100 de nominal restant dû au règlement. Pour une obligation amortissable, la colonne Principal suit l'échéancier de remboursement.",
+    "priceYield": "Relation prix-rendement",
+    "cleanPriceCurve": "Prix pied de coupon",
+    "priceAxis": "Prix (%)",
+    "point": "{{yield}} · {{price}}",
+    "chartSummary": "Prix pied de coupon de {{high}} à {{lowYield}} jusqu'à {{low}} à {{highYield}} ; {{price}} au rendement de {{yield}}.",
+    "sensitivity": "Sensibilité aux taux",
+    "parallelShift": "Déplacement parallèle",
+    "sensitivityColumns": {
+      "shift": "Déplacement",
+      "cleanPrice": "Prix pied de coupon",
+      "priceChange": "Var. prix",
+      "dirtyChange": "Var. prix plein %"
+    },
+    "shift": "{{value}} pb",
+    "sensitivityNote": "Variation du prix plein en % : à comparer avec −Dmod × Δy (approximation du premier ordre)."
   }
 }
