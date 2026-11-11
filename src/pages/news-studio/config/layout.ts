@@ -11,4 +11,6 @@ export const NEWS_STUDIO_LAYOUT: readonly ScreenPanel[] = [
   { i: 'editor', name: 'editor', x: 3, y: 0, w: 6, h: 26, minW: 4, minH: 12 },
   { i: 'publishing', name: 'publishing', x: 9, y: 0, w: 3, h: 15, minW: 3, minH: 8 },
   { i: 'import', name: 'fileImport', x: 9, y: 15, w: 3, h: 11, minW: 3, minH: 6 },
+  // The newspaper's monthly statements (screen 18: it follows them on screen 13), under the studio.
+  { i: 'statements', name: 'newsStatements', x: 0, y: 26, w: 12, h: 9, minW: 4, minH: 5 },
 ]

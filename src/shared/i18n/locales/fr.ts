@@ -9,6 +9,7 @@ import monitoring from './fr/monitoring.json'
 import network from './fr/network.json'
 import newsAdmin from './fr/newsAdmin.json'
 import newsStudio from './fr/newsStudio.json'
+import payments from './fr/payments.json'
 import portfolio from './fr/portfolio.json'
 import research from './fr/research.json'
 
@@ -24,6 +25,7 @@ const fr = {
   ...network,
   ...newsStudio,
   ...newsAdmin,
+  ...payments,
   ...messaging,
   ...dataAdmin,
   ...admin,

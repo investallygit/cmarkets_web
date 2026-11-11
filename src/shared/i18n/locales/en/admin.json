@@ -383,7 +383,8 @@
       "moderation": "Moderation",
       "settings": "Settings and payouts",
       "data": "Data",
-      "content": "News and documents"
+      "content": "News and documents",
+      "payments": "Media payments"
     },
     "actions": {
       "user-create": "Account created",
@@ -421,7 +422,14 @@
       "publisher-save": "Publisher named",
       "publisher-remove": "Publisher removed",
       "ingest-client-create": "Ingestion client created",
-      "ingest-client-revoke": "Ingestion client revoked"
+      "ingest-client-revoke": "Ingestion client revoked",
+      "news-statement-status": "Statement status changed",
+      "news-statement-request": "Status change asked of a second Admin",
+      "news-statement-recalculate": "Statement recalculated",
+      "news-dispute-resolve": "Statement dispute answered",
+      "news-anomaly-decide": "Click anomaly decided",
+      "news-payment-terms": "Newspaper payment settings",
+      "news-payment-settings-update": "Payment settings changed"
     },
     "fields": {
       "accountType": "Type",
@@ -466,7 +474,18 @@
       "viewsPerHour": "Views an hour",
       "domain": "Domain",
       "addresses": "Addresses",
-      "hourlyQuota": "Items an hour"
+      "hourlyQuota": "Items an hour",
+      "statementStatus": "Status",
+      "amountDue": "Amount due",
+      "decision": "Decision",
+      "effectiveFrom": "Effective from",
+      "minimumPayment": "Minimum payment",
+      "fourEyesThreshold": "Four-eyes threshold",
+      "disputeWindow": "Dispute window (days)",
+      "calculationDay": "Calculation day",
+      "calculationTime": "Calculation time",
+      "spikeFactor": "Spike factor",
+      "sharedAddressAccounts": "Accounts on one address"
     },
     "targetTypes": {
       "user": "Account",
@@ -483,7 +502,9 @@
       "specialty": "Specialty",
       "newsSource": "Newspaper",
       "publisher": "Publisher",
-      "ingestClient": "Ingestion client"
+      "ingestClient": "Ingestion client",
+      "newsStatement": "Statement",
+      "clickAnomaly": "Click anomaly"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",

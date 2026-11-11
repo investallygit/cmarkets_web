@@ -11,11 +11,15 @@ import type {
   AdminUserCreateDto,
   AdminUserDetailsDto,
   AdminUserDto,
+  AnomalyClickDto,
+  AnomalyDecisionWriteDto,
   AnalystRequestDto,
   AuditAction,
   AuditEntryDto,
+  ClickAnomalyDto,
   DirectorySettingsDto,
   DirectorySettingsUpdateDto,
+  DisputeResolutionWriteDto,
   IngestClientCreatedDto,
   IngestClientDto,
   IngestClientWriteDto,
@@ -23,10 +27,15 @@ import type {
   ModeratedNewsDto,
   ModerationItemDto,
   NewsChannel,
+  NewsPaymentSettingsDto,
+  NewsPaymentSettingsWriteDto,
   NewsQueueItemDto,
   NewsQueueKind,
   NewsSettingsDto,
   NewsSettingsWriteDto,
+  NewsStatementDto,
+  NewsStatementRowDto,
+  NewsStatementsSummaryDto,
   NewsType,
   Paged,
   PayoutStatus,
@@ -38,7 +47,16 @@ import type {
   ReportedItemType,
   RolePermissionsDto,
   SignUpDocument,
+  SourcePaymentSettingsDto,
+  SourcePaymentSettingsSavedDto,
+  SourcePaymentSettingsWriteDto,
+  SourcePaymentTermsDto,
   SpecialtyInputDto,
+  StatementDisputeDto,
+  StatementHistoryEntryDto,
+  StatementItemDto,
+  StatementStatus,
+  StatementStatusWriteDto,
   VerificationStatus,
 } from '../contracts'
 import { answer, route, send, sendBlob, sendForm } from './define'
@@ -81,11 +99,15 @@ export interface PayoutQuery {
   analystId?: string
 }
 
+/** The order of a statement's items: the most clicked first, by headline, the latest published first. */
+export type StatementItemsSort = 'clicks' | 'headline' | 'published'
+
 /**
  * CMarket.Api/Controllers/Admin: the Admin's back-office (screen 9, spec section 12): accounts,
  * status requests, moderation of the publications and of the directory, platform settings and
  * permissions, payouts, the audit log; the news moderation of NEWS and MOD, the publishers' domains
- * and SRC's newspapers, AI settings and ingestion clients (ROADMAP step 27).
+ * and SRC's newspapers, AI settings and ingestion clients (ROADMAP step 27); MPAY's statements,
+ * click anomalies and payment settings (step 28).
  */
 export const adminRoutes = {
   users: route('GET', '/admin/users', answer<Paged<AdminUserDto>>()),
@@ -156,6 +178,99 @@ export const adminRoutes = {
   ingestClients: route('GET', '/admin/ingest-clients', answer<IngestClientDto[]>()),
   createIngestClient: route('POST', '/admin/ingest-clients', answer<IngestClientCreatedDto>()),
   revokeIngestClient: route('DELETE', '/admin/ingest-clients/{id}'),
+  statements: route('GET', '/admin/news-statements', answer<NewsStatementRowDto[]>()),
+  statementsSummary: route(
+    'GET',
+    '/admin/news-statements/summary',
+    answer<NewsStatementsSummaryDto>(),
+  ),
+  transferFile: route('GET', '/admin/news-statements/transfer-file', answer<Blob>()),
+  statement: route('GET', '/admin/news-statements/{id}', answer<NewsStatementDto>()),
+  statementItems: route('GET', '/admin/news-statements/{id}/items', answer<StatementItemDto[]>()),
+  statementHistory: route(
+    'GET',
+    '/admin/news-statements/{id}/history',
+    answer<StatementHistoryEntryDto[]>(),
+  ),
+  statementPdf: route('GET', '/admin/news-statements/{id}/pdf', answer<Blob>()),
+  changeStatementStatus: route(
+    'PUT',
+    '/admin/news-statements/{id}/status',
+    answer<NewsStatementDto>(),
+  ),
+  confirmStatementRequest: route(
+    'POST',
+    '/admin/news-statements/{id}/status-requests/{requestId}/confirm',
+    answer<NewsStatementDto>(),
+  ),
+  cancelStatementRequest: route(
+    'POST',
+    '/admin/news-statements/{id}/status-requests/{requestId}/cancel',
+    answer<NewsStatementDto>(),
+  ),
+  recalculateStatement: route(
+    'POST',
+    '/admin/news-statements/{id}/recalculate',
+    answer<NewsStatementDto>(),
+  ),
+  approveStatement: route(
+    'POST',
+    '/admin/news-statements/{id}/approve',
+    answer<NewsStatementDto>(),
+  ),
+  holdStatement: route('POST', '/admin/news-statements/{id}/hold', answer<NewsStatementDto>()),
+  releaseStatement: route(
+    'POST',
+    '/admin/news-statements/{id}/release',
+    answer<NewsStatementDto>(),
+  ),
+  markStatementPaid: route(
+    'POST',
+    '/admin/news-statements/{id}/mark-paid',
+    answer<NewsStatementDto>(),
+  ),
+  statementDisputes: route(
+    'GET',
+    '/admin/news-statements/{id}/disputes',
+    answer<StatementDisputeDto[]>(),
+  ),
+  resolveStatementDispute: route(
+    'POST',
+    '/admin/news-statements/{id}/disputes/{disputeId}/resolve',
+    answer<NewsStatementDto>(),
+  ),
+  clickAnomalies: route('GET', '/admin/news-clicks/anomalies', answer<ClickAnomalyDto[]>()),
+  anomalyClicks: route(
+    'GET',
+    '/admin/news-clicks/anomalies/{id}/clicks',
+    answer<AnomalyClickDto[]>(),
+  ),
+  decideAnomaly: route(
+    'POST',
+    '/admin/news-clicks/anomalies/{id}/decision',
+    answer<ClickAnomalyDto>(),
+  ),
+  paymentTerms: route(
+    'GET',
+    '/admin/news-sources/{id}/payment-settings',
+    answer<SourcePaymentTermsDto>(),
+  ),
+  savePaymentTerms: route(
+    'PUT',
+    '/admin/news-sources/{id}/payment-settings',
+    answer<SourcePaymentSettingsSavedDto>(),
+  ),
+  paymentTermsHistory: route(
+    'GET',
+    '/admin/news-sources/{id}/payment-settings/history',
+    answer<SourcePaymentSettingsDto[]>(),
+  ),
+  paymentSettings: route('GET', '/admin/news-payment-settings', answer<NewsPaymentSettingsDto>()),
+  savePaymentSettings: route(
+    'PUT',
+    '/admin/news-payment-settings',
+    answer<NewsPaymentSettingsDto>(),
+  ),
 }
 
 const of = (id: string, signal?: AbortSignal) => ({ params: { id }, signal })
@@ -289,4 +404,52 @@ export const adminApi = {
   createIngestClient: (client: IngestClientWriteDto) =>
     send(adminRoutes.createIngestClient, { body: client }),
   revokeIngestClient: (id: string) => send(adminRoutes.revokeIngestClient, { params: { id } }),
+  /** A month's statements ("2026-10"), one per newspaper, the largest amount due first. */
+  statements: (month: string, status: StatementStatus | null, signal?: AbortSignal) =>
+    send(adminRoutes.statements, { query: { month, status }, signal }),
+  statementsSummary: (month: string, signal?: AbortSignal) =>
+    send(adminRoutes.statementsSummary, { query: { month }, signal }),
+  /** The month's approved, unpaid statements: newspaper, amount, reference. */
+  transferFile: (month: string, format: 'xlsx' | 'csv') =>
+    sendBlob(adminRoutes.transferFile, { query: { month, format } }),
+  statement: (id: string, signal?: AbortSignal) => send(adminRoutes.statement, of(id, signal)),
+  statementItems: (id: string, sort: StatementItemsSort, signal?: AbortSignal) =>
+    send(adminRoutes.statementItems, { params: { id }, query: { sort }, signal }),
+  statementHistory: (id: string, signal?: AbortSignal) =>
+    send(adminRoutes.statementHistory, of(id, signal)),
+  statementPdf: (id: string) => sendBlob(adminRoutes.statementPdf, { params: { id } }),
+  /** A status and its reason; 409 statementSecondAdmin when a second Admin must confirm it. */
+  changeStatementStatus: (id: string, change: StatementStatusWriteDto) =>
+    send(adminRoutes.changeStatementStatus, { params: { id }, body: change }),
+  /** Another Admin confirms the change waiting. */
+  confirmStatementRequest: (id: string, requestId: string) =>
+    send(adminRoutes.confirmStatementRequest, { params: { id, requestId } }),
+  cancelStatementRequest: (id: string, requestId: string) =>
+    send(adminRoutes.cancelStatementRequest, { params: { id, requestId } }),
+  recalculateStatement: (id: string) => send(adminRoutes.recalculateStatement, { params: { id } }),
+  releaseStatement: (id: string, reason: string | null) =>
+    send(adminRoutes.releaseStatement, { params: { id }, body: { reason } }),
+  statementDisputes: (id: string, signal?: AbortSignal) =>
+    send(adminRoutes.statementDisputes, of(id, signal)),
+  /** The amount maintained, or the statement corrected. */
+  resolveStatementDispute: (id: string, disputeId: string, resolution: DisputeResolutionWriteDto) =>
+    send(adminRoutes.resolveStatementDispute, { params: { id, disputeId }, body: resolution }),
+  /** A month's click anomalies of a newspaper. */
+  clickAnomalies: (month: string, sourceId: string, signal?: AbortSignal) =>
+    send(adminRoutes.clickAnomalies, { query: { month, sourceId }, signal }),
+  anomalyClicks: (id: string, signal?: AbortSignal) =>
+    send(adminRoutes.anomalyClicks, of(id, signal)),
+  /** The clicks invalidated or kept, with a reason; the statement computed again. */
+  decideAnomaly: (id: string, decision: AnomalyDecisionWriteDto) =>
+    send(adminRoutes.decideAnomaly, { params: { id }, body: decision }),
+  paymentTerms: (sourceId: string, signal?: AbortSignal) =>
+    send(adminRoutes.paymentTerms, of(sourceId, signal)),
+  /** A new version from a month on; the statements not approved yet are computed again. */
+  savePaymentTerms: (sourceId: string, terms: SourcePaymentSettingsWriteDto) =>
+    send(adminRoutes.savePaymentTerms, { params: { id: sourceId }, body: terms }),
+  paymentTermsHistory: (sourceId: string, signal?: AbortSignal) =>
+    send(adminRoutes.paymentTermsHistory, of(sourceId, signal)),
+  paymentSettings: (signal?: AbortSignal) => send(adminRoutes.paymentSettings, { signal }),
+  savePaymentSettings: (settings: NewsPaymentSettingsWriteDto) =>
+    send(adminRoutes.savePaymentSettings, { body: settings }),
 }

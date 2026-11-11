@@ -9,6 +9,7 @@ import type {
   NewsStudioFileDto,
   NewsType,
   Paged,
+  ProviderStatementDto,
   ProviderNewsDto,
   ProviderNewsRowDto,
   ProviderNewsStatus,
@@ -29,7 +30,7 @@ export interface ProviderNewsQuery {
 /**
  * CMarket.Api/Controllers/Provider: NEWS NEW, the studio of an approved News provider (screen 13,
  * spec sections 10 and 16): its newspaper's items, their files, their clicks and earnings, the
- * newspaper itself and the file import.
+ * newspaper itself and the file import; its monthly statements and their disputes (ROADMAP step 28).
  */
 export const providerRoutes = {
   myNews: route('GET', '/provider/news', answer<Paged<ProviderNewsRowDto>>()),
@@ -51,6 +52,13 @@ export const providerRoutes = {
   importRows: route('GET', '/provider/news/imports/{id}/rows', answer<Paged<NewsImportRowDto>>()),
   fixRow: route('PATCH', '/provider/news/imports/{id}/rows/{rowId}', answer<NewsImportRowDto>()),
   publishImport: route('POST', '/provider/news/imports/{id}/publish', answer<NewsImportDto>()),
+  statements: route('GET', '/provider/statements', answer<ProviderStatementDto[]>()),
+  statementPdf: route('GET', '/provider/statements/{id}/pdf', answer<Blob>()),
+  disputeStatement: route(
+    'POST',
+    '/provider/statements/{id}/dispute',
+    answer<ProviderStatementDto>(),
+  ),
 }
 
 const of = (id: string, signal?: AbortSignal) => ({ params: { id }, signal })
@@ -106,4 +114,11 @@ export const providerApi = {
   fixRow: (id: string, rowId: number, fix: NewsImportRowFixDto) =>
     send(providerRoutes.fixRow, { params: { id, rowId }, body: fix }),
   publishImport: (id: string) => send(providerRoutes.publishImport, { params: { id } }),
+  /** The newspaper's monthly statements, the latest first. */
+  statements: (signal?: AbortSignal) => send(providerRoutes.statements, { signal }),
+  /** An approved statement's PDF. */
+  statementPdf: (id: string) => sendBlob(providerRoutes.statementPdf, { params: { id } }),
+  /** An approved statement disputed within the window, with a reason. */
+  disputeStatement: (id: string, reason: string) =>
+    send(providerRoutes.disputeStatement, { params: { id }, body: { reason } }),
 }

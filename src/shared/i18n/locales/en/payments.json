@@ -1,0 +1,219 @@
+{
+  "mediaPayments": {
+    "header": {
+      "month": "Month",
+      "amountDue": "Total amount due",
+      "payable": "Payable unique clicks",
+      "excluded": "Excluded clicks",
+      "openAnomalies": "Open anomalies",
+      "paid": "Already paid"
+    },
+    "statuses": {
+      "computed": "Computed",
+      "underReview": "Under review",
+      "toApprove": "To approve",
+      "approved": "Approved",
+      "paid": "Paid",
+      "disputed": "Disputed",
+      "onHold": "On hold"
+    },
+    "statusHints": {
+      "computed": "Automatic recompute",
+      "underReview": "Anomalies to handle",
+      "toApprove": "Anomalies handled",
+      "approved": "Second Admin above XAF {{amount}}",
+      "paid": "Date, method and reference required",
+      "disputed": "Newspaper dispute",
+      "onHold": "Set aside",
+      "current": "Current"
+    },
+    "columns": {
+      "newspaper": "Newspaper",
+      "rate": "XAF/click",
+      "items": "Items",
+      "unique": "Unique clicks",
+      "excluded": "Excluded",
+      "payable": "Payable",
+      "gross": "Gross XAF",
+      "cap": "Cap",
+      "due": "Due XAF",
+      "status": "Status",
+      "total": "Total"
+    },
+    "links": {
+      "settings": "Global settings",
+      "exportXlsx": "Export XLSX",
+      "transfers": "Transfers"
+    },
+    "cycle": "Cycle:",
+    "cycleNote": "Statements computed automatically on day {{day}} of the month at {{time}}. “Cap”: maximum monthly amount set in the contract.",
+    "manualNote": "Manual status changes allowed (reason required); forcing “Approved” with an open anomaly or leaving “Paid” requires a second Admin.",
+    "none": "No statement for this month yet: they are computed on the calculation day.",
+    "carriedOver": "Carried over",
+    "anomalies": {
+      "title": "Click anomalies · {{source}}",
+      "detection": "Automatic detection",
+      "columns": {
+        "date": "Date",
+        "signal": "Signal",
+        "items": "Items",
+        "clicks": "Clicks",
+        "decision": "Decision"
+      },
+      "signals": {
+        "spike": "Spike ×{{ratio}} the average",
+        "sharedAddress": "{{count}} accounts · same IP address",
+        "newAccounts": "Accounts under 24 h old"
+      },
+      "items": {
+        "several": "Several items",
+        "flash": "{{count}} FLASH items",
+        "article": "{{count}} ARTICLE items"
+      },
+      "decisions": {
+        "open": "To handle",
+        "invalidated": "Invalidated",
+        "kept": "Kept",
+        "excludedByRule": "Excluded (rule)"
+      },
+      "invalidate": "Invalidate the {{count}} clicks",
+      "keep": "Keep (reason)",
+      "details": "View click details",
+      "note": "Every decision needs a reason and is written to the audit log. Invalidated clicks become “excluded” and the statement is recomputed.",
+      "none": "No anomaly for this newspaper this month.",
+      "choose": "Pick a newspaper among the statements.",
+      "invalidateTitle": "Invalidate {{count}} clicks",
+      "keepTitle": "Keep {{count}} clicks",
+      "reason": "Reason",
+      "invalidated": "The clicks are invalidated: the statement is computed again.",
+      "kept": "The clicks are kept.",
+      "clicksTitle": "Clicks of the anomaly",
+      "clicksColumns": {
+        "at": "Time",
+        "item": "Item",
+        "account": "Account",
+        "address": "IP address",
+        "device": "Browser",
+        "exclusion": "Excluded"
+      },
+      "exclusions": {
+        "ownAccount": "Own account",
+        "employee": "CMarket",
+        "suspendedAccount": "Suspended",
+        "newAccount": "New account",
+        "automated": "Automated",
+        "withdrawn": "Withdrawn",
+        "invalidated": "Invalidated"
+      }
+    },
+    "statement": {
+      "title": "Statement · {{source}}",
+      "clicks": "Unique · excluded · payable clicks",
+      "gross": "Gross amount ({{payable}} × XAF {{rate}})",
+      "capApplied": "Cap applied",
+      "carriedIn": "Carried in from the month before",
+      "due": "Amount due",
+      "carriedOver": "Below the minimum, carried over",
+      "items": "Items",
+      "itemsValue": "{{items}} · ARTICLE {{articles}} · FLASH {{flashes}}",
+      "topItems": "Most clicked items",
+      "statusTitle": "Statement status",
+      "current": "Current:",
+      "newStatus": "New status",
+      "choose": "Choose…",
+      "reason": "Reason (required)",
+      "apply": "Apply",
+      "paidOn": "Payment date",
+      "method": "Method",
+      "methods": {
+        "transfer": "Transfer",
+        "mobileMoney": "Mobile money"
+      },
+      "reference": "Reference",
+      "applied": "The statement is {{status}}.",
+      "asked": "A second Admin must confirm: the change waits for them.",
+      "waiting": "Waiting for a second Admin: {{status}}",
+      "waitingBy": "Asked by {{name}}: {{reason}}",
+      "why": {
+        "amount": "above the four-eyes threshold",
+        "openAnomaly": "an anomaly is still open",
+        "notApproved": "paid without an approval",
+        "leavingPaid": "leaving Paid"
+      },
+      "confirm": "Confirm",
+      "cancel": "Drop",
+      "confirmed": "Confirmed: the statement is {{status}}.",
+      "dropped": "The change waiting is dropped.",
+      "release": "Release",
+      "released": "Released: back to {{status}}.",
+      "recalculate": "Recalculate",
+      "recalculated": "Computed again.",
+      "pdf": "Statement PDF",
+      "history": "History",
+      "historyLine": "{{from}} → {{to}}",
+      "system": "System",
+      "confirmedBy": "confirmed by {{name}}",
+      "payment": "Payment",
+      "paymentLine": "{{date}} · {{method}} · {{reference}}",
+      "cancelled": "cancelled",
+      "approved": "Approved {{date}} by {{name}}; disputable until {{until}}",
+      "dispute": "Dispute of {{name}}, {{date}}",
+      "maintain": "Maintain",
+      "correct": "Correct",
+      "answer": "Answer (required)",
+      "resolved": "The dispute is answered.",
+      "none": "Pick a statement."
+    },
+    "terms": {
+      "title": "Payment settings · {{source}}",
+      "rate": "Rate per unique click (XAF)",
+      "cap": "Monthly cap (XAF)",
+      "effectiveFrom": "Effective from",
+      "noCap": "No cap",
+      "save": "Save",
+      "note": "History kept. A change does not affect approved or paid statements; others are recomputed.",
+      "saved": "Saved from {{month}}: {{count}} statements computed again.",
+      "history": "Versions",
+      "version": "{{month}}: XAF {{rate}} a click, {{cap}}",
+      "capOf": "cap XAF {{cap}}",
+      "uncapped": "no cap",
+      "errors": {
+        "rate": "A positive whole number of XAF.",
+        "cap": "A positive whole number of XAF, or no cap."
+      }
+    },
+    "settings": {
+      "title": "Global settings",
+      "defaultRate": "Rate per click of a new newspaper (XAF)",
+      "defaultCap": "Cap of a new newspaper (XAF, empty for none)",
+      "minimum": "Minimum payment (XAF)",
+      "fourEyes": "Four-eyes threshold (XAF)",
+      "disputeWindow": "Dispute window (days)",
+      "calculationDay": "Calculation day",
+      "calculationTime": "Calculation time (Douala)",
+      "spikeFactor": "Spike: times the average",
+      "sharedAccounts": "Accounts on one IP address",
+      "save": "Save",
+      "saved": "Global settings saved.",
+      "invalid": "Check the values: whole numbers, a day from 1 to 28, a time such as 02:00."
+    },
+    "studio": {
+      "columns": {
+        "month": "Month",
+        "reference": "Reference",
+        "payable": "Payable",
+        "due": "Due XAF",
+        "status": "Status"
+      },
+      "none": "No statement yet: the first comes on the 1st of next month.",
+      "pdf": "PDF",
+      "dispute": "Dispute",
+      "disputeTitle": "Dispute the statement {{reference}}",
+      "disputeHint": "Within {{days}} days of the approval: until {{until}}. The Admin answers it.",
+      "reason": "Reason",
+      "disputed": "Your dispute is sent.",
+      "paidOn": "Paid {{date}}",
+      "answer": "Answer: {{answer}}"
+    }
+  }
+}

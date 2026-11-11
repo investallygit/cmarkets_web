@@ -1,0 +1,219 @@
+{
+  "mediaPayments": {
+    "header": {
+      "month": "Mois",
+      "amountDue": "Total à payer",
+      "payable": "Clics uniques payables",
+      "excluded": "Clics exclus",
+      "openAnomalies": "Anomalies ouvertes",
+      "paid": "Déjà payé"
+    },
+    "statuses": {
+      "computed": "Calculé",
+      "underReview": "En revue",
+      "toApprove": "À approuver",
+      "approved": "Approuvé",
+      "paid": "Payé",
+      "disputed": "Contesté",
+      "onHold": "Suspendu"
+    },
+    "statusHints": {
+      "computed": "Recalcul automatique",
+      "underReview": "Anomalies à traiter",
+      "toApprove": "Anomalies traitées",
+      "approved": "Second Admin au-delà de {{amount}} XAF",
+      "paid": "Date, moyen et référence requis",
+      "disputed": "Contestation du journal",
+      "onHold": "Mis de côté",
+      "current": "Actuel"
+    },
+    "columns": {
+      "newspaper": "Journal",
+      "rate": "XAF/clic",
+      "items": "Articles",
+      "unique": "Clics uniques",
+      "excluded": "Exclus",
+      "payable": "Payables",
+      "gross": "Brut XAF",
+      "cap": "Plafond",
+      "due": "Dû XAF",
+      "status": "Statut",
+      "total": "Total"
+    },
+    "links": {
+      "settings": "Réglages généraux",
+      "exportXlsx": "Export XLSX",
+      "transfers": "Virements"
+    },
+    "cycle": "Cycle :",
+    "cycleNote": "Relevés calculés automatiquement le {{day}} du mois à {{time}}. « Plafond » : montant mensuel maximal fixé au contrat.",
+    "manualNote": "Changements de statut manuels permis (motif requis) ; forcer « Approuvé » avec une anomalie ouverte ou sortir de « Payé » demande un second Admin.",
+    "none": "Aucun relevé pour ce mois : ils sont calculés le jour du calcul.",
+    "carriedOver": "Reporté",
+    "anomalies": {
+      "title": "Anomalies de clics · {{source}}",
+      "detection": "Détection automatique",
+      "columns": {
+        "date": "Date",
+        "signal": "Signal",
+        "items": "Contenus",
+        "clicks": "Clics",
+        "decision": "Décision"
+      },
+      "signals": {
+        "spike": "Pic ×{{ratio}} la moyenne",
+        "sharedAddress": "{{count}} comptes · même adresse IP",
+        "newAccounts": "Comptes de moins de 24 h"
+      },
+      "items": {
+        "several": "Plusieurs contenus",
+        "flash": "{{count}} FLASH",
+        "article": "{{count}} ARTICLE"
+      },
+      "decisions": {
+        "open": "À traiter",
+        "invalidated": "Invalidés",
+        "kept": "Conservés",
+        "excludedByRule": "Exclus (règle)"
+      },
+      "invalidate": "Invalider les {{count}} clics",
+      "keep": "Conserver (motif)",
+      "details": "Voir le détail des clics",
+      "note": "Chaque décision demande un motif et est inscrite au journal d'audit. Les clics invalidés deviennent « exclus » et le relevé est recalculé.",
+      "none": "Aucune anomalie pour ce journal ce mois-ci.",
+      "choose": "Choisissez un journal parmi les relevés.",
+      "invalidateTitle": "Invalider {{count}} clics",
+      "keepTitle": "Conserver {{count}} clics",
+      "reason": "Motif",
+      "invalidated": "Les clics sont invalidés : le relevé est recalculé.",
+      "kept": "Les clics sont conservés.",
+      "clicksTitle": "Clics de l'anomalie",
+      "clicksColumns": {
+        "at": "Heure",
+        "item": "Contenu",
+        "account": "Compte",
+        "address": "Adresse IP",
+        "device": "Navigateur",
+        "exclusion": "Exclu"
+      },
+      "exclusions": {
+        "ownAccount": "Compte du journal",
+        "employee": "CMarket",
+        "suspendedAccount": "Suspendu",
+        "newAccount": "Nouveau compte",
+        "automated": "Automatisé",
+        "withdrawn": "Retiré",
+        "invalidated": "Invalidé"
+      }
+    },
+    "statement": {
+      "title": "Relevé · {{source}}",
+      "clicks": "Clics uniques · exclus · payables",
+      "gross": "Montant brut ({{payable}} × {{rate}} XAF)",
+      "capApplied": "Plafond appliqué",
+      "carriedIn": "Report du mois précédent",
+      "due": "Montant dû",
+      "carriedOver": "Sous le minimum, reporté",
+      "items": "Contenus",
+      "itemsValue": "{{items}} · ARTICLE {{articles}} · FLASH {{flashes}}",
+      "topItems": "Contenus les plus cliqués",
+      "statusTitle": "Statut du relevé",
+      "current": "Actuel :",
+      "newStatus": "Nouveau statut",
+      "choose": "Choisir…",
+      "reason": "Motif (requis)",
+      "apply": "Appliquer",
+      "paidOn": "Date du paiement",
+      "method": "Moyen",
+      "methods": {
+        "transfer": "Virement",
+        "mobileMoney": "Mobile money"
+      },
+      "reference": "Référence",
+      "applied": "Le relevé est {{status}}.",
+      "asked": "Un second Admin doit confirmer : la demande l'attend.",
+      "waiting": "En attente d'un second Admin : {{status}}",
+      "waitingBy": "Demandé par {{name}} : {{reason}}",
+      "why": {
+        "amount": "au-delà du seuil des quatre yeux",
+        "openAnomaly": "une anomalie est encore ouverte",
+        "notApproved": "payé sans approbation",
+        "leavingPaid": "sortie de Payé"
+      },
+      "confirm": "Confirmer",
+      "cancel": "Abandonner",
+      "confirmed": "Confirmé : le relevé est {{status}}.",
+      "dropped": "La demande en attente est abandonnée.",
+      "release": "Lever la suspension",
+      "released": "Suspension levée : retour à {{status}}.",
+      "recalculate": "Recalculer",
+      "recalculated": "Recalculé.",
+      "pdf": "Relevé PDF",
+      "history": "Historique",
+      "historyLine": "{{from}} → {{to}}",
+      "system": "Système",
+      "confirmedBy": "confirmé par {{name}}",
+      "payment": "Paiement",
+      "paymentLine": "{{date}} · {{method}} · {{reference}}",
+      "cancelled": "annulé",
+      "approved": "Approuvé le {{date}} par {{name}} ; contestable jusqu'au {{until}}",
+      "dispute": "Contestation de {{name}}, {{date}}",
+      "maintain": "Maintenir",
+      "correct": "Corriger",
+      "answer": "Réponse (requise)",
+      "resolved": "La contestation a sa réponse.",
+      "none": "Choisissez un relevé."
+    },
+    "terms": {
+      "title": "Réglages de paiement · {{source}}",
+      "rate": "Tarif par clic unique (XAF)",
+      "cap": "Plafond mensuel (XAF)",
+      "effectiveFrom": "À partir de",
+      "noCap": "Sans plafond",
+      "save": "Enregistrer",
+      "note": "Historique conservé. Un changement ne touche pas les relevés approuvés ou payés ; les autres sont recalculés.",
+      "saved": "Enregistré à partir de {{month}} : {{count}} relevés recalculés.",
+      "history": "Versions",
+      "version": "{{month}} : {{rate}} XAF le clic, {{cap}}",
+      "capOf": "plafond {{cap}} XAF",
+      "uncapped": "sans plafond",
+      "errors": {
+        "rate": "Un nombre entier positif de XAF.",
+        "cap": "Un nombre entier positif de XAF, ou sans plafond."
+      }
+    },
+    "settings": {
+      "title": "Réglages généraux",
+      "defaultRate": "Tarif par clic d'un nouveau journal (XAF)",
+      "defaultCap": "Plafond d'un nouveau journal (XAF, vide pour aucun)",
+      "minimum": "Paiement minimal (XAF)",
+      "fourEyes": "Seuil des quatre yeux (XAF)",
+      "disputeWindow": "Délai de contestation (jours)",
+      "calculationDay": "Jour du calcul",
+      "calculationTime": "Heure du calcul (Douala)",
+      "spikeFactor": "Pic : fois la moyenne",
+      "sharedAccounts": "Comptes sur une même adresse IP",
+      "save": "Enregistrer",
+      "saved": "Réglages généraux enregistrés.",
+      "invalid": "Vérifiez les valeurs : des nombres entiers, un jour de 1 à 28, une heure comme 02:00."
+    },
+    "studio": {
+      "columns": {
+        "month": "Mois",
+        "reference": "Référence",
+        "payable": "Payables",
+        "due": "Dû XAF",
+        "status": "Statut"
+      },
+      "none": "Aucun relevé encore : le premier arrive le 1er du mois prochain.",
+      "pdf": "PDF",
+      "dispute": "Contester",
+      "disputeTitle": "Contester le relevé {{reference}}",
+      "disputeHint": "Dans les {{days}} jours de l'approbation : jusqu'au {{until}}. L'Admin y répond.",
+      "reason": "Motif",
+      "disputed": "Votre contestation est envoyée.",
+      "paidOn": "Payé le {{date}}",
+      "answer": "Réponse : {{answer}}"
+    }
+  }
+}

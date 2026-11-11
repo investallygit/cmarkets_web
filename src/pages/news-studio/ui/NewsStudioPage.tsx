@@ -12,6 +12,7 @@ import {
   NewsEditorPanel,
   NewsImportPanel,
   NewsPublishingPanel,
+  NewsStatementsPanel,
 } from '@/widgets/news-studio-panels'
 import { NEWS_STUDIO_LAYOUT } from '../config/layout'
 
@@ -48,6 +49,7 @@ function Studio() {
       <MyNewsPanel selectedId={selectedId} onSelect={select} onCreate={() => setCreating(true)} />
     ),
     earnings: <NewsEarningsPanel />,
+    statements: <NewsStatementsPanel />,
     editor: <NewsEditorPanel newsId={selectedId} />,
     publishing: <NewsPublishingPanel newsId={selectedId} />,
     import: <NewsImportPanel />,

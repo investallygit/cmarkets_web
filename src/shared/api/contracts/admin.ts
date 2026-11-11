@@ -322,6 +322,13 @@ export const AUDIT_ACTIONS = [
   'publisher-remove',
   'ingest-client-create',
   'ingest-client-revoke',
+  'news-statement-status',
+  'news-statement-request',
+  'news-statement-recalculate',
+  'news-dispute-resolve',
+  'news-anomaly-decide',
+  'news-payment-terms',
+  'news-payment-settings-update',
 ] as const
 export type AuditAction = (typeof AUDIT_ACTIONS)[number]
 
@@ -341,6 +348,8 @@ export type AuditTargetType =
   | 'newsSource'
   | 'publisher'
   | 'ingestClient'
+  | 'newsStatement'
+  | 'clickAnomaly'
 
 /** What a change is about; `scope` says which account type, permission or security. */
 export const AUDIT_FIELDS = [
@@ -387,6 +396,17 @@ export const AUDIT_FIELDS = [
   'domain',
   'addresses',
   'hourlyQuota',
+  'statementStatus',
+  'amountDue',
+  'decision',
+  'effectiveFrom',
+  'minimumPayment',
+  'fourEyesThreshold',
+  'disputeWindow',
+  'calculationDay',
+  'calculationTime',
+  'spikeFactor',
+  'sharedAddressAccounts',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

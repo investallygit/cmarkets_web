@@ -9,6 +9,7 @@ import monitoring from './en/monitoring.json'
 import network from './en/network.json'
 import newsAdmin from './en/newsAdmin.json'
 import newsStudio from './en/newsStudio.json'
+import payments from './en/payments.json'
 import portfolio from './en/portfolio.json'
 import research from './en/research.json'
 
@@ -28,6 +29,7 @@ const en = {
   ...network,
   ...newsStudio,
   ...newsAdmin,
+  ...payments,
   ...messaging,
   ...dataAdmin,
   ...admin,

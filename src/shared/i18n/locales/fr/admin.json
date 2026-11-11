@@ -383,7 +383,8 @@
       "moderation": "Modération",
       "settings": "Paramètres et versements",
       "data": "Données",
-      "content": "Actualités et documents"
+      "content": "Actualités et documents",
+      "payments": "Paiements aux médias"
     },
     "actions": {
       "user-create": "Compte créé",
@@ -421,7 +422,14 @@
       "publisher-save": "Éditeur nommé",
       "publisher-remove": "Éditeur supprimé",
       "ingest-client-create": "Client d'ingestion créé",
-      "ingest-client-revoke": "Client d'ingestion révoqué"
+      "ingest-client-revoke": "Client d'ingestion révoqué",
+      "news-statement-status": "Statut de relevé changé",
+      "news-statement-request": "Changement de statut soumis à un second Admin",
+      "news-statement-recalculate": "Relevé recalculé",
+      "news-dispute-resolve": "Contestation de relevé traitée",
+      "news-anomaly-decide": "Anomalie de clics décidée",
+      "news-payment-terms": "Réglages de paiement d'un journal",
+      "news-payment-settings-update": "Réglages de paiement changés"
     },
     "fields": {
       "accountType": "Type",
@@ -466,7 +474,18 @@
       "viewsPerHour": "Lectures par heure",
       "domain": "Domaine",
       "addresses": "Adresses",
-      "hourlyQuota": "Actualités par heure"
+      "hourlyQuota": "Actualités par heure",
+      "statementStatus": "Statut",
+      "amountDue": "Montant dû",
+      "decision": "Décision",
+      "effectiveFrom": "À partir de",
+      "minimumPayment": "Paiement minimal",
+      "fourEyesThreshold": "Seuil des quatre yeux",
+      "disputeWindow": "Délai de contestation (jours)",
+      "calculationDay": "Jour du calcul",
+      "calculationTime": "Heure du calcul",
+      "spikeFactor": "Facteur de pic",
+      "sharedAddressAccounts": "Comptes sur une adresse"
     },
     "targetTypes": {
       "user": "Compte",
@@ -483,7 +502,9 @@
       "specialty": "Spécialité",
       "newsSource": "Journal",
       "publisher": "Éditeur",
-      "ingestClient": "Client d'ingestion"
+      "ingestClient": "Client d'ingestion",
+      "newsStatement": "Relevé",
+      "clickAnomaly": "Anomalie de clics"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",

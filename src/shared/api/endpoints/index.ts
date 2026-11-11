@@ -33,6 +33,7 @@ export {
   type AuditQuery,
   type NewsQueueQuery,
   type PayoutQuery,
+  type StatementItemsSort,
 } from './admin'
 export { alertsApi, alertsRoutes } from './alerts'
 export { analysisApi, analysisRoutes } from './analysis'

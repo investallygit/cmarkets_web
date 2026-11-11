@@ -8,6 +8,7 @@ import {
   ChartSpline,
   Database,
   FileText,
+  HandCoins,
   History,
   IdCard,
   LayoutDashboard,
@@ -134,6 +135,8 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('USER', 'USER', routes.adminUsers, 'backoffice', Users, { permission: 'users:manage', inMenu: true }),
   // The news sources (ROADMAP decision 6): with MPAY (step 28), after the accounts in the Admin's menu.
   screen('SRC', 'SRC', routes.adminSources, 'backoffice', Rss, { permission: 'news:payments', inMenu: true }),
+  // MPAY, the media payments (screen 18): between the subscriptions (SUBS, step 34) and ANLY in the spec's menu.
+  screen('MPAY', 'MPAY', routes.adminMediaPayments, 'backoffice', HandCoins, { permission: 'news:payments', inMenu: true }),
   screen('ANLY', 'ANLY', routes.adminAnalysts, 'backoffice', UserCheck, { permission: 'moderation:manage', inMenu: true }),
   screen('MOD', 'MOD', routes.adminModeration, 'backoffice', ShieldCheck, { permission: 'moderation:manage', inMenu: true }),
   screen('PAY', 'PAY', routes.adminPayouts, 'backoffice', Wallet, { permission: 'payouts:manage', inMenu: true }),

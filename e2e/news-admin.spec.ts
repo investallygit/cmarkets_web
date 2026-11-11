@@ -129,7 +129,8 @@ test('SRC keeps a newspaper’s contract and logo, CMarket AI and its clients', 
   await expect(sources.getByRole('row', { name: /Douala Éco/ })).toContainText('Before publication')
   await sources.getByRole('row', { name: /Daily K/ }).click()
   const source = panel(page, 'Newspaper')
-  await expect(source.getByLabel('Rate per unique click (XAF)')).toHaveValue('18.00')
+  // The contract of the screen 18 mockup (ROADMAP step 28): XAF 15 a click.
+  await expect(source.getByLabel('Rate per unique click (XAF)')).toHaveValue('15.00')
   await source.getByLabel('FLASH items a day').fill('25')
   await source.getByRole('button', { name: 'Save' }).click()
   await expect(page.getByText('Daily K saved.')).toBeVisible()

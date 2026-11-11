@@ -43,6 +43,7 @@ export const routes = {
   dataHistory: '/data/history',
   adminUsers: '/admin/users',
   adminSources: '/admin/sources',
+  adminMediaPayments: '/admin/media-payments',
   adminAnalysts: '/admin/analysts',
   adminModeration: '/admin/moderation',
   adminPayouts: '/admin/payouts',

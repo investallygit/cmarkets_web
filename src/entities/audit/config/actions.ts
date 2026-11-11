@@ -40,6 +40,18 @@ export const AUDIT_ACTION_GROUPS: readonly {
     label: 'audit.groups.content',
     actions: ['news-publish', 'news-edit', 'document-publish', 'document-edit'],
   },
+  {
+    label: 'audit.groups.payments',
+    actions: [
+      'news-statement-status',
+      'news-statement-request',
+      'news-statement-recalculate',
+      'news-dispute-resolve',
+      'news-anomaly-decide',
+      'news-payment-terms',
+      'news-payment-settings-update',
+    ],
+  },
 ]
 
 export const isAuditAction = (value: unknown): value is AuditAction =>
