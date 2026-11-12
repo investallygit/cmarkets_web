@@ -6,7 +6,7 @@ import { expect, test, type Page } from '@playwright/test'
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title }) })
 
-// @fresh-db: the sector averages of the demo data as seeded.
+// @fresh-db: the saved screens and the accounts of the demo data as seeded.
 test(
   'a saved screen filters the equities and the lower panels follow the selected row',
   { tag: '@fresh-db' },
@@ -27,14 +27,15 @@ test(
     await expect(
       panel(page, /Income statement/).getByRole('row', { name: /Revenue/ }),
     ).toContainText('+8.4%')
-    // The values of the bars, as screen readers get them.
+    // The values of the bars, as screen readers get them. The ratios follow the live prices, and
+    // so does the sector average, over the equities CMarket covers in the sector.
     await expect(panel(page, /^Comparison/).getByRole('listitem')).toHaveText([
-      'SEMC: 6.2%',
+      /^SEMC: \d+\.\d%$/,
       /^BANGE: /,
       /^SOCAPALM: /,
       /^SAFACAM: /,
       /^REGIONALE: /,
-      'Sector average 6.3%',
+      /^Sector average \d+\.\d%$/,
     ])
 
     await results.getByRole('row', { name: /SEMC/ }).dblclick()
@@ -132,15 +133,16 @@ test('the yield curves hide a country and compare with a past date', async ({ pa
   await expect(panel(page, 'Bond calculator').getByText('Spread vs Gabon curve')).toBeVisible()
 })
 
-// @fresh-db: the sector averages of the demo data as seeded.
+// @fresh-db: the accounts of the demo data as seeded.
 test(
   'the FA tab shows the ratios and the statements of the security',
   { tag: '@fresh-db' },
   async ({ page }) => {
     await page.goto('/securities/SEMC/fa')
-    // The P/E moves with the price; the sector average does not.
+    // The P/E moves with the price. SEMC is the only Beverages equity CMarket covers, so its
+    // sector's average is its own P/E, from the same answer.
     await expect(panel(page, /^Ratios 2025/).getByRole('row', { name: /P\/E/ })).toHaveText(
-      /P\/E\s*1\d\.\dx\s*12\.1x/,
+      /P\/E\s*(\d+\.\d)x\s*\1x/,
     )
     await expect(
       panel(page, /Balance sheet & cash flow/).getByRole('row', { name: /Total assets/ }),

@@ -4,14 +4,15 @@ Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`
 10 November 2026; the earlier versions are kept as `CMarket-developer-spec-EN-v1.pdf` (29 October)
 and `CMarket-developer-spec-EN-v2.pdf` (2 November).
 
-Every screen of the first two versions is built: the client terminal (MKT, DES with its FA and ANA
-tabs, EQS, YCRV, YAS, PORT, PUB, PUB NEW, NET, MSG, NET ME, N, CAL, ALRT and CFG) with the public
-profile page and the login, sign-up and password reset pages, the back-office of the Data admin
-(IMP with DATA, HIST and EODH, then CORR and NEWS) and that of the Admin (USER with ANLY and MOD,
-then ADMCFG, AUDT and PAY), and the home page that visitors see before login. The second version
-added the Journalist and CEO account types and the professional directory with its messaging
-(screens 10 to 12): steps 11 to 19, under [Second version of the spec](#second-version-of-the-spec).
-The third version adds a ninth account type, the News provider, a news feed rebuilt around partner
+Every screen of the three versions is built: the client terminal (MKT, DES with its FA and ANA
+tabs, EQS, ETFS, YCRV, BP, BS, PORT, PUB, PUB NEW, NET, MSG, NET ME, N, NEWS NEW, CAL, ALRT and
+CFG, DES opening the equity, bond or ETF profile) with the public profile page and the login,
+sign-up and password reset pages, the back-office of the Data admin (IMP with DATA, HIST and EODH,
+then CORR and NEWS) and that of the Admin (USER with ANLY and MOD, SUBS, MPAY, SRC, ADMCFG, AUDT
+and PAY), and the home page that visitors see before login. The second version added the
+Journalist and CEO account types and the professional directory with its messaging (screens 10
+to 12): steps 11 to 19, under [Second version of the spec](#second-version-of-the-spec). The third
+version added a ninth account type, the News provider, a news feed rebuilt around partner
 newspapers paid per unique click, and eight screens (13 to 20): steps 23 to 36, under
 [Third version of the spec](#third-version-of-the-spec). What remains is listed under "Still to
 do", in those steps and in the open questions for the spec author.
@@ -58,7 +59,7 @@ relative: S < M < L < XL.
 | 33   | ETF profile (screen 19)                                         | Done   |
 | 34   | SUBS: subscription management (screen 14)                       | Done   |
 | 35   | Security descriptions on EQS (screen 3)                         | Done   |
-| 36   | Third version done: README, accessibility, every flow           | To do  |
+| 36   | Third version done: README, accessibility, every flow           | Done   |
 
 ## Second version of the spec
 
@@ -1477,11 +1478,73 @@ CMarket.Api's phase 28.
     English yet" under an English text once the reader had chosen French on another security:
     the note now follows the screen's language.
 
-### Step 36 · Third version done (M): to do
+### Step 36 · Third version done (M): done
 
-- axe at 1600, 390 and 320 px and the keyboard on every new screen, for each account type; every
-  flow on a fresh database; the README and this roadmap; the new jobs and the ingestion endpoint
-  on Azure.
+- **Checked**:
+  - axe-core (WCAG 2.2 AA) at 1600, 390 and 320 px on every screen of the menu of each of the
+    nine account types (S. Mvondo, K. Atangana, P. Owona, T. Bekale, R. Tamba, E. Fouda,
+    L. Mballa, A. Mbarga, L. Mvogo), of a client waiting for approval (F. Biyong) and of the
+    visitor (the home page, the sign-up as a News provider, the login, the password reset). For
+    each client also an equity's profile, a bond's (DES, CF) and an ETF's (DES, HLD), an ARTICLE
+    in N, BP on a bond, YCRV's calculator, CAL, NET ME and the screens it may not open (NEWS NEW,
+    PORT, PUB NEW, SUBS); ETFS and SUBS for the Data admin, ETFS and IMP for the Admin. In French
+    too for K. Atangana, L. Mballa, A. Mbarga, L. Mvogo and the visitor: 885 audits, 660 in
+    English and 225 in French. axe finds nothing, no page scrolls sideways, no translation key or
+    placeholder shows, no panel fails, the API answers no 5xx and no column of a table cuts what
+    it holds (the narrowest, HLD's rank, PUB's outcome icon and ADMCFG's "CEO", 30 to 38 px, hold
+    it). The console's only lines are the browser's notes of the 404 by which `GET /subscription`
+    says that no plan covers a client awaiting approval, which CFG reads as no plan.
+  - From the keyboard, Tab from the top of the page to its end on every screen the third version
+    adds or changes: MKT, N and an ARTICLE, EQS, ETFS, BS, BP, YCRV's calculator, the bond
+    profile's DES, BP, CF and RAT, the ETF profile's DES, HLD, PERF and DIST, NET ME, CFG and PUB
+    NEW as K. Atangana (ETFS, BS, BP, EQS, PUB NEW and both profiles at 390 px too); NEWS NEW as
+    L. Mballa; NEWS's three tabs, CORR, IMP and EODH as A. Mbarga; USER, SUBS, MPAY, SRC, ANLY,
+    MOD, ADMCFG and AUDT as L. Mvogo: 48 walks. Tab reaches every control, the focus shows at each
+    stop (the control or its frame looks different focused and not) and never sticks. Eleven
+    dialogs (BS's and ETFS's Save, N's Report, the studio's Preview and Withdraw, NEWS's Take
+    down, SUBS's Change plan, Extend and Suspend, MPAY's global settings, SRC's new client), opened
+    with Enter, take the focus, keep it on Tab and Shift+Tab, close on Escape and give it back to
+    their button.
+  - Every Playwright flow on CMarket.Api from a fresh database: 113, all passing, the new one
+    included. Each spec of `@fresh-db` flows on its own fresh database: 17 flows in 8 specs, all
+    passing, those of EQS and FA among them. The API answered no 5xx.
+  - Type check, lint, the 367 unit tests; no file over 700 lines.
+- **Fixed**:
+  - The text of an ARTICLE in NEWS NEW and of a publication in PUB NEW showed its focus by the
+    caret alone, TipTap's outline being off: while the text has the focus, the editor's frame
+    takes the amber border and ring of a field (WCAG 2.4.7).
+  - The two `@fresh-db` flows of EQS and FA expected the mock's table of sector averages
+    (Beverages at 6.3%, a P/E of 12.1x) and had failed since the mock went (step 21). CMarket.Api
+    averages the equities it covers in the sector, and SEMC is the only Beverages one: its
+    sector's average is its own ratio and follows its price. The flows check that.
+  - This roadmap: MPAY's section still read "to do", and "Done for every screen" named the mock.
+- **Added**: a Playwright flow from the keyboard alone: BS from the command bar, a bond reached
+  with the arrows, "Open in BP" with Enter, a yield typed and Calculate; then ETFS, where Enter
+  opens the ETF reached, as a double click does; the titles of BS, BP, ETFS and the ETF profile.
+- **Documentation**: the README (the introduction, what CMarket.Api keeps and computes) and this
+  roadmap (the third version done).
+- **On Azure**, read only, on 12 November 2026 at 20:10 UTC: steps 23 to 35 are live (the site's
+  build of step 35, the API's migration `SecurityDescriptions`).
+  - **Jobs**: Hangfire runs fifteen recurring jobs on three servers, six of them the third
+    version's: `news-scheduled` (every minute), `news-statements` (every 15 minutes),
+    `news-click-anomalies` (01:00), `billing-cycle` (06:00), `bond-analytics` (18:30 on
+    weekdays) and `etf-performance` (23:00 on weekdays), times of Douala. The last run of each
+    succeeded, but for `etf-performance`, registered that day, whose first run comes at 23:00;
+    no job has failed since 9 November (the messages' keys). EODHD's jobs, its news every 15
+    minutes among them, wait for its key (decision 8).
+  - **Ingestion**: `/ingest/*` answers 401 without a signature ("Signature required") and for an
+    unknown key ("Unknown key"); no client exists yet. The App Service runs in the Development
+    environment, whose settings file, in the repository, holds a development
+    `Ingestion:SecretKey`: the clients' secrets would be sealed with it. `Ingestion__SecretKey`
+    belongs in the deployment's secrets, as the other keys, before an Admin creates a client in
+    SRC.
+  - **Demo data**: the shared database got the descriptions but only part of the ETFs: 20 ETFs
+    without a price, NAV, portfolio or benchmark, so that ETFS and the ETF profile have nothing
+    to show there. BS lists 4 of the 6 bonds: BDEAC and COMPANY X joined the market's fixtures
+    after that database was seeded. The demo is seeded at start-up, before the API answers: the
+    ETFs' 20 years of prices, written across the Atlantic, likely outlasted the App Service's
+    start-up limit, and the next start skipped the ETFs already there. Filling them in writes to
+    a database people use, which is the owner's call.
 
 ## Shared groundwork
 
@@ -1716,7 +1779,8 @@ Still to do, with the first screen that needs it:
 
 ## Done for every screen
 
-- DTOs in `shared/api/contracts`, mock handlers and sample data from the mockup.
+- DTOs in `shared/api/contracts` and the calls in `shared/api/endpoints`, served by `CMarket.Api`
+  with demo data from the mockup (the mock handlers until step 21).
 - A `pages/<screen>` slice, registered in `app/routes/pages.ts`.
 - French and English strings; actions hidden or locked by permission and quota.
 - Tables: sorting, right-click menu, export. Layout saved per user, one column below 1280 px.
@@ -2263,9 +2327,13 @@ Still to do, with the first screen that needs it:
   with its payments and invoices (each invoice's PDF), Extend, Change plan, Resend last invoice and
   Suspend; "via organisation" for a member. See step 34.
 
-### MPAY · Media payments (screen 18): to do
+### MPAY · Media payments (screen 18): done
 
-- **Planned in step 28**.
+- **Built in step 28**: the month's header, the statements by newspaper with their total, the
+  global settings and the transfer file; the click anomalies of the newspaper picked, Invalidate
+  and Keep; the statement with its status, a change a second Admin confirms, the newspaper's
+  dispute, Release, Recalculate and the PDF; the newspaper's payment settings by month. NEWS NEW
+  shows the newspaper its statements and lets it dispute one. See step 28.
 
 ### SRC · News sources (no mockup): done
 
@@ -2388,9 +2456,11 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   `{ universe, items }`; saved screens are `{ name, criteria }`. No endpoint lists the sectors (the
   prototype reads them from `/securities`); section 10 filters on sector codes (`sector=BANK`) but
   the profile returns names, in English in both languages. The columns chosen have no endpoint.
-- **Fundamentals**: over which equities is a sector average computed (the prototype uses a fixed
-  table)? The line items of the "Financial statements" file need agreed codes (the prototype:
-  `revenue`, `ebitda`, `operatingIncome`...).
+- **Fundamentals**: over which equities is a sector average computed? The mock used a fixed
+  table (Beverages at the mockup's 6.3%); CMarket.Api averages the equities it covers in the
+  sector, so that SEMC, the only Beverages equity, is its own sector's average. The line items of
+  the "Financial statements" file need agreed codes (the prototype: `revenue`, `ebitda`,
+  `operatingIncome`...).
 - **Portfolios**: the bodies are not specified. The prototype sends a transaction as
   `{ type, date, securityId, quantity, price, fees, amount, note }`, prices and fees in the
   security's currency, amounts in the portfolio's; the server adds a bond's accrued interest.

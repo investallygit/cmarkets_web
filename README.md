@@ -1,9 +1,9 @@
 # CMarket web
 
 Front end of CMarket, built from `CMarket-developer-spec-EN.pdf` (third version, 10 November
-2026, whose additions are under way): the client terminal with its professional directory and
-messaging, and the back-office of the Data admin and of the Admin. It takes all its data from
-`CMarket.Api`: the REST API and the SignalR hubs.
+2026): the client terminal with its professional directory and messaging, the news of partner
+newspapers and the bond and ETF screens, and the back-office of the Data admin and of the Admin.
+It takes all its data from `CMarket.Api`: the REST API and the SignalR hubs.
 
 - [Introduction](#introduction): what the app does, its stack, the status of each screen
 - [Installation](#installation): run it, log in, the scripts
@@ -22,10 +22,12 @@ content.
 
 `CMarket.Api` keeps the accounts, organisations, plans and invoices, each user's watchlists,
 alerts, saved screens, portfolios, purchases, layouts and chart drawings, and what the accounts
-share: the research library, the professional profiles and the conversations. It sets off the
-alerts, applies the visibility and contact rules of spec section 15, runs the upload checks of
-spec section 11, the bond calculator of section 14.1 and the portfolio valuation of sections 14.2
-and 14.3, and takes the payments. The front end only knows the API contract.
+share: the research library, the news, the professional profiles and the conversations. It sets
+off the alerts, applies the visibility and contact rules of spec section 15, runs the upload
+checks of spec section 11, the bond calculator of section 14.1 and the portfolio valuation of
+sections 14.2 and 14.3, computes each evening the bonds' and the ETFs' figures of sections 14.4
+and 14.5, renews the plans and takes the payments, and counts the unique clicks it pays the
+partner newspapers for. The front end only knows the API contract.
 
 ### Stack (spec section 7)
 
@@ -77,9 +79,10 @@ before upload.
 | Security descriptions on EQS (screen 3), written in CORR                  | Done; in French and English, EODHD's English standing in      |
 
 How the screens were built, step by step, what the second version of the spec added (the
-Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), the plan of
-the third version (the News provider, the news rebuilt, screens 13 to 20) and the open questions
-for the spec author are in [ROADMAP.md](ROADMAP.md). The screens follow WCAG 2.2 AA:
+Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
+third added (the News provider, the news rebuilt, screens 13 to 20 and what they change on
+screens 1, 3, 9, 10 and 12) and the open questions for the spec author are in
+[ROADMAP.md](ROADMAP.md). The screens follow WCAG 2.2 AA:
 axe finds nothing on any of them for any account type, and each works from the keyboard and in a
 window down to 320 px wide.
 

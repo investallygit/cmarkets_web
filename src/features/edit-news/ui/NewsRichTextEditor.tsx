@@ -55,7 +55,8 @@ export function NewsRichTextEditor({
 
   return (
     <>
-      <div className="flex min-h-60 flex-1 flex-col border">
+      {/* The text shows its focus as a field does: TipTap's own outline is off (index.css). */}
+      <div className="flex min-h-60 flex-1 flex-col border has-[.ProseMirror:focus-visible]:border-accent-amber has-[.ProseMirror:focus-visible]:ring-1 has-[.ProseMirror:focus-visible]:ring-accent-amber/40">
         <NewsToolbar
           editor={editor}
           disabled={!editable}

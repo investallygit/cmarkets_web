@@ -141,3 +141,58 @@ test('NET and MSG from the keyboard: a profile found, a message sent, a dialog c
   await expect(dialog).toHaveCount(0)
   await expect(report).toBeFocused()
 })
+
+test('BS, BP and ETFS from the keyboard: a bond picked with the arrows and priced, an ETF opened', async ({
+  page,
+}) => {
+  await page.goto('/mkt')
+  await expect(page.getByRole('heading', { name: 'Indices' })).toBeVisible()
+  await page.keyboard.press('Control+K')
+  await page.keyboard.type('BS')
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/\/bs$/)
+  await expect(page).toHaveTitle('Bond screener · CMarket')
+
+  // The arrows move the selection, and the bond's four blocks follow it.
+  // BS's own flows may have added a bond: the list's count is theirs to check.
+  const list = panel(page, /^Results/)
+  await expect(list.getByRole('heading')).toHaveText(/Results: \d+ bonds/i)
+  await tabTo(page, list.locator('[tabindex="0"]').first())
+  const selected = list.locator('tr[aria-current="true"]')
+  for (let step = 0; step < 6; step += 1) {
+    if ((await selected.allTextContents()).join().includes('GAB 6.50% 28')) break
+    await page.keyboard.press('ArrowDown')
+  }
+  await expect(list.getByRole('status')).toHaveText(/^GAB 6\.50% 28, /)
+  const open = panel(page, /^GAB 6\.50% 28 ·/).getByRole('link', { name: 'Open in BP' })
+  await tabTo(page, open)
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/\/bp\/GAB-6\.50-2028$/)
+  await expect(page).toHaveTitle('Gabonese Republic 6.50% 2028 — Bond pricing · CMarket')
+
+  // Another yield, typed: the figures wait for Calculate, pressed with Enter.
+  const form = panel(page, 'Inputs')
+  await tabTo(page, form.getByRole('textbox', { name: 'Target yield to maturity (YTM)' }))
+  await page.keyboard.press('ControlOrMeta+A')
+  await page.keyboard.type('7')
+  await expect(form.getByText('The inputs changed: calculate to update the results.')).toBeVisible()
+  await tabTo(page, form.getByRole('button', { name: 'Calculate' }))
+  await page.keyboard.press('Enter')
+  await expect(form.getByText(/The inputs changed/)).toBeHidden()
+
+  // ETFS: Enter opens the ETF reached, as a double click does.
+  await page.keyboard.press('Control+K')
+  await page.keyboard.type('ETFS')
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/\/etfs$/)
+  await expect(page).toHaveTitle('ETF screener · CMarket')
+  const etfs = panel(page, /^Results/)
+  await expect(etfs.getByRole('heading')).toHaveText(/Results: \d+ ETFs?$/i)
+  await tabTo(page, etfs.locator('[tabindex="0"]').first())
+  await page.keyboard.press('ArrowDown')
+  await expect(etfs.getByRole('status')).not.toBeEmpty()
+  const reached = (await etfs.locator('tr[aria-current="true"]').innerText()).split(/\s/)[0]
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(new RegExp(`/securities/${reached}\\.[A-Z]+/des$`))
+  await expect(page).toHaveTitle(/ — ETF profile · CMarket$/)
+})
