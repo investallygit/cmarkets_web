@@ -56,8 +56,6 @@ export interface ScreenDefinition {
   inMenu: boolean
   /** The code the left menu shows when it is not the screen's own: NEWS for NEWS NEW (decision 2). */
   menuCode?: string
-  /** The menu entry lit while the screen shows, for a screen not in the menu: YCRV for BS (screen 17's mockup). */
-  menuParent?: ScreenTextKey
   icon: LucideIcon
   titleKey: TranslationKey
   menuKey: TranslationKey
@@ -75,7 +73,6 @@ interface ScreenOptions {
   inMenu?: boolean
   routePattern?: string
   menuCode?: string
-  menuParent?: ScreenTextKey
 }
 
 function screen(
@@ -84,7 +81,7 @@ function screen(
   path: string,
   audience: Audience,
   icon: LucideIcon,
-  { permission, module, inMenu = false, routePattern, menuCode, menuParent }: ScreenOptions = {},
+  { permission, module, inMenu = false, routePattern, menuCode }: ScreenOptions = {},
 ): ScreenDefinition {
   return {
     id,
@@ -92,7 +89,6 @@ function screen(
     path,
     routePattern,
     menuCode,
-    menuParent,
     audience,
     permission,
     module,
@@ -111,9 +107,14 @@ function screen(
 export const SCREENS: readonly ScreenDefinition[] = [
   // Client menu, in the order of screens 10 to 12: MKT, EQS, YCRV, PORT, PUB, NET, MSG, N, ALRT,
   // CFG; a News provider's studio after N (spec section 9), NEWS in the menu (ROADMAP decision 2).
+  // ETFS (screen 15) after EQS, BP (16) and BS (17) after YCRV, the entries their mockups light:
+  // each has its own since the spec author's answer of 12 November 2026.
   screen('MKT', 'MKT', routes.market, 'client', LayoutDashboard, { permission: 'market:read', module: 'monitoring', inMenu: true }),
   screen('EQS', 'EQS', routes.screener, 'client', ScanSearch, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
+  screen('ETFS', 'ETFS', routes.etfScreener, 'client', Layers, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
   screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', module: 'analysis', inMenu: true, routePattern: routes.yieldCurvesBond }),
+  screen('BP', 'BP', routes.bondPricing, 'client', Calculator, { permission: 'analysis:read', module: 'analysis', inMenu: true, routePattern: routes.bondPricingBond }),
+  screen('BS', 'BS', routes.bondScreener, 'client', ScanLine, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
   screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', module: 'portfolio', inMenu: true, routePattern: routes.portfolioTabs }),
   screen('PUB', 'PUB', routes.library, 'client', BookOpen, { permission: 'research:read', inMenu: true }),
   screen('NET', 'NET', routes.directory, 'client', BookUser, { permission: 'directory:list', inMenu: true }),
@@ -125,11 +126,6 @@ export const SCREENS: readonly ScreenDefinition[] = [
 
   // Client screens opened from the command bar or from another screen.
   screen('DES', 'DES', routes.security, 'client', FileText, { permission: 'market:read', module: 'monitoring' }),
-  // BP (screen 16), which YAS opens too, and BS (screen 17) under YCRV, as their mockups light the menu.
-  screen('BP', 'BP', routes.bondPricing, 'client', Calculator, { permission: 'analysis:read', module: 'analysis', menuParent: 'YCRV', routePattern: routes.bondPricingBond }),
-  screen('BS', 'BS', routes.bondScreener, 'client', ScanLine, { permission: 'analysis:read', module: 'analysis', menuParent: 'YCRV' }),
-  // ETFS (screen 15) under EQS, as its mockup lights the menu (spec section 9).
-  screen('ETFS', 'ETFS', routes.etfScreener, 'client', Layers, { permission: 'analysis:read', module: 'analysis', menuParent: 'EQS' }),
   screen('PUBNEW', 'PUB NEW', routes.publishingStudio, 'client', PenLine, { permission: 'publications:write' }),
   screen('CAL', 'CAL', routes.calendar, 'client', CalendarDays, { permission: 'market:read', module: 'monitoring' }),
   screen('NETME', 'NET ME', routes.networkProfile, 'client', IdCard, { permission: 'directory:profile' }),

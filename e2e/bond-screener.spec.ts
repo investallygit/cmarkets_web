@@ -27,9 +27,9 @@ test('BS lists the mockup’s bonds, model prices starred, and shows a callable 
   await page.getByRole('combobox', { name: 'Command bar' }).fill('BS')
   await page.keyboard.press('Enter')
   await expect(page).toHaveURL(/\/bs$/)
-  // Under YCRV in the menu, as the mockup lights it.
+  // Its own entry in the menu, after YCRV, which the mockup lights.
   await expect(
-    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^YCRV/ }),
+    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^BS/ }),
   ).toHaveClass(/border-accent-amber/)
 
   const list = results(page)

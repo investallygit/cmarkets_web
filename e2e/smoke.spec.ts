@@ -61,6 +61,39 @@ test('a bond opens the bond profile, its characteristics and payments to come', 
   await expect(tabs.getByRole('link', { name: 'FA Fundamentals' })).toHaveCount(0)
 })
 
+test('the client menu gives ETFS, BP and BS entries of their own, after EQS and YCRV', async ({
+  page,
+}) => {
+  await page.goto('/mkt')
+  const menu = page.getByRole('navigation', { name: 'Main menu' })
+  // The mockups light EQS on ETFS and YCRV on BP and BS: their entries come after those.
+  await expect(menu.getByRole('link')).toHaveText([
+    /^MKT/,
+    /^EQS/,
+    /^ETFS/,
+    /^YCRV/,
+    /^BP/,
+    /^BS/,
+    /^PORT/,
+    /^PUB/,
+    /^NET/,
+    /^MSG/,
+    /^N\s*News/,
+    /^ALRT/,
+    /^CFG/,
+  ])
+  for (const [code, address] of [
+    ['ETFS', /\/etfs$/],
+    ['BP', /\/bp$/],
+    ['BS', /\/bs$/],
+  ] as const) {
+    await menu.getByRole('link', { name: new RegExp(`^${code}`) }).click()
+    await expect(page).toHaveURL(address)
+    // Its entry alone is lit.
+    await expect(menu.locator('a.border-accent-amber')).toHaveText([new RegExp(`^${code}`)])
+  }
+})
+
 test('the back-office menu replaces the client menu for a Data admin', async ({ page }) => {
   await page.goto('/mkt')
   await page.getByRole('button', { name: /analyst/i }).click()

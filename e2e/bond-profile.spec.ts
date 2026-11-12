@@ -19,9 +19,9 @@ test('ECMR DES opens the bond profile of the mockup, and its BP tab the pricing'
   await command(page, 'ECMR 6.25 2029 DES')
   await expect(page).toHaveURL(/\/securities\/ECMR-6\.25-2029\/des$/)
   await expect(page).toHaveTitle(/ — Bond profile · CMarket$/)
-  // Under YCRV in the menu, as the mockup lights it.
+  // Under BS in the menu, which lists the bonds (the mockup lights YCRV).
   await expect(
-    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^YCRV/ }),
+    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^BS/ }),
   ).toHaveClass(/border-accent-amber/)
 
   const header = page.getByRole('region', { name: 'ECMR 6.25% 29' })

@@ -16,7 +16,7 @@ export interface SecurityProfileKind {
   titleKey: TranslationKey
   /** A tab named otherwise than in the other profiles: GP is "Price and yield" on a bond. */
   tabLabels?: Partial<Record<SecurityFunction, TranslationKey>>
-  /** The menu entry lit while it shows, as its mockup lights it: YCRV for a bond. */
+  /** The menu entry lit while it shows, the screener that lists the type: BS for a bond. */
   menuParent?: ScreenTextKey
 }
 
@@ -26,19 +26,20 @@ export const SECURITY_PROFILES: Record<SecurityType, SecurityProfileKind> = {
     tabs: ['des', 'gp', 'fa', 'dvd', 'n', 'doc', 'hds', 'ana'],
     titleKey: 'screens.DES.title',
   },
-  // Screen 20: the mockup's six tabs, then the news and the research every profile has.
+  // Screen 20: the mockup's six tabs, then the news and the research every profile has; under BS,
+  // which lists the bonds (the mockup, drawn before BS had an entry, lights YCRV).
   bond: {
     tabs: ['des', 'gp', 'bp', 'cf', 'rat', 'doc', 'n', 'ana'],
     titleKey: 'security.profiles.bond',
     tabLabels: { gp: 'security.tabs.priceYield' },
-    menuParent: 'YCRV',
+    menuParent: 'BS',
   },
-  // Screen 19: the mockup's six tabs, then the news and the research every profile has; under EQS
-  // as ETFS.
+  // Screen 19: the mockup's six tabs, then the news and the research every profile has; under
+  // ETFS, which lists the ETFs (the mockup, drawn before ETFS had an entry, lights EQS).
   etf: {
     tabs: ['des', 'gp', 'hld', 'perf', 'dist', 'doc', 'n', 'ana'],
     titleKey: 'security.profiles.etf',
-    menuParent: 'EQS',
+    menuParent: 'ETFS',
   },
 }
 

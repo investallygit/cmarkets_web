@@ -11,9 +11,10 @@ import { SCREENS } from '@/shared/routes/screens'
 import { useUiPreferences } from '../model/uiPreferences'
 
 /**
- * Left menu (56 px collapsed, 200 px expanded); its items depend on the account type. A screen
- * outside the user's plan shows a lock and opens on the plans. MSG counts the unread messages and
- * the requests, except on MSG itself, whose tabs count them.
+ * Left menu (56 px collapsed, 200 px expanded); its items depend on the account type. Collapsed,
+ * an entry is 44 px high, as the mockups draw it, so that a client's thirteen fit at 900 px. A
+ * screen outside the user's plan shows a lock and opens on the plans. MSG counts the unread
+ * messages and the requests, except on MSG itself, whose tabs count them.
  */
 export function SideMenu() {
   const { t } = useTranslation()
@@ -22,15 +23,10 @@ export function SideMenu() {
   const toggleMenu = useUiPreferences((state) => state.toggleMenu)
   const items = SCREENS.filter((screen) => screen.inMenu && canAccessScreen(user, screen))
   const { pathname } = useLocation()
-  // A profile lights the entry of its type, as its mockup: a bond's YCRV (screen 20). Another
-  // screen outside the menu lights its parent's: BS lights YCRV.
+  // A profile lights the entry of the screener that lists its type: a bond's BS, an ETF's ETFS.
   const profileType = useSecurityProfile(matchPath(routes.security, pathname)?.params.securityId)
     .data?.type
-  const litParent =
-    (profileType && SECURITY_PROFILES[profileType].menuParent) ??
-    SCREENS.find(
-      (screen) => screen.menuParent && matchPath({ path: screen.path, end: false }, pathname),
-    )?.menuParent
+  const litParent = profileType && SECURITY_PROFILES[profileType].menuParent
 
   return (
     <nav
@@ -63,7 +59,7 @@ export function SideMenu() {
                       : 'border-transparent hover:bg-panel-header',
                     expanded
                       ? 'h-10 items-center gap-3 px-3'
-                      : 'h-14 flex-col items-center justify-center gap-0.5',
+                      : 'h-11 flex-col items-center justify-center gap-0.5',
                   )
                 }
               >

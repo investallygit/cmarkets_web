@@ -32,14 +32,14 @@ describe('the profile of each security type (spec section 9)', () => {
     expect(hasProfileTab('etf', 'gp')).toBe(true)
   })
 
-  it("names a bond's GP tab Price and yield, and lights YCRV", () => {
+  it("names a bond's GP tab Price and yield, and lights BS, which lists the bonds", () => {
     expect(profileTabLabelKey('bond', 'gp')).toBe('security.tabs.priceYield')
     expect(profileTabLabelKey('equity', 'gp')).toBe('security.tabs.gp')
-    expect(SECURITY_PROFILES.bond.menuParent).toBe('YCRV')
+    expect(SECURITY_PROFILES.bond.menuParent).toBe('BS')
     expect(SECURITY_PROFILES.equity.menuParent).toBeUndefined()
   })
 
-  it("gives an ETF screen 19's six tabs, then the news and research, and lights EQS as ETFS", () => {
+  it("gives an ETF screen 19's six tabs, then the news and research, and lights ETFS", () => {
     expect(SECURITY_PROFILES.etf.tabs).toEqual([
       'des',
       'gp',
@@ -50,7 +50,7 @@ describe('the profile of each security type (spec section 9)', () => {
       'n',
       'ana',
     ])
-    expect(SECURITY_PROFILES.etf.menuParent).toBe('EQS')
+    expect(SECURITY_PROFILES.etf.menuParent).toBe('ETFS')
     expect(profileTabLabelKey('etf', 'gp')).toBe('security.tabs.gp')
     expect(securityFunctionTypes('hld')).toEqual(['etf'])
     expect(hasProfileTab('equity', 'dist')).toBe(false)

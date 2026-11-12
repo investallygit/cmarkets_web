@@ -20,9 +20,9 @@ test('BP prices a bond of the list at the yield BS computed, and YAS opens it', 
   await page.goto('/mkt')
   await command(page, 'ECMR 6.25 2029 BP')
   await expect(page).toHaveURL(/\/bp\/ECMR-6\.25-2029$/)
-  // Under YCRV in the menu, as the mockup lights it.
+  // Its own entry in the menu, after YCRV, which the mockup lights.
   await expect(
-    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^YCRV/ }),
+    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^BP/ }),
   ).toHaveClass(/border-accent-amber/)
 
   const form = inputs(page)

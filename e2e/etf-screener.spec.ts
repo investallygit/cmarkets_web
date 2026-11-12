@@ -17,9 +17,9 @@ test('ETFS lists the mockup’s ETFs under its criteria and shows IWDA’s five 
   await page.getByRole('combobox', { name: 'Command bar' }).fill('ETFS')
   await page.keyboard.press('Enter')
   await expect(page).toHaveURL(/\/etfs$/)
-  // Under EQS in the menu, as the mockup lights it.
+  // Its own entry in the menu, after EQS, which the mockup lights.
   await expect(
-    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^EQS/ }),
+    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^ETFS/ }),
   ).toHaveClass(/border-accent-amber/)
 
   const criteria = panel(page, 'Criteria')
@@ -156,7 +156,7 @@ test('a double-click opens an ETF’s profile, screen 19, under EQS', async ({ p
   await expect(tabs.getByRole('link', { name: /^FA/ })).toHaveCount(0)
   await expect(panel(page, 'Structure and costs')).toContainText('Physical (full)')
   await expect(
-    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^EQS/ }),
+    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^ETFS/ }),
   ).toHaveClass(/border-accent-amber/)
   // An equity's tab is not an ETF's.
   await page.goto('/securities/CSPX.LSE/dvd')

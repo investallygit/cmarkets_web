@@ -536,7 +536,8 @@ screens 2, 4 to 8 and 11 are the same images; those of screens 1, 3, 9, 10 and 1
   profiles, which DES opens by the security's type. Screen 1's news shows the two tags, screen 3
   adds the security's description, screen 9 counts nine types, screens 10 and 12 list the News
   provider. The client menu adds NEWS for a News provider; ETFS sits under EQS, BP and BS under
-  YCRV. The Admin's menu becomes USER, SUBS, MPAY, ANLY, MOD, PAY, CFG, AUDT.
+  YCRV (each has an entry of its own since [the spec author's answers](#the-spec-authors-answers)).
+  The Admin's menu becomes USER, SUBS, MPAY, ANLY, MOD, PAY, CFG, AUDT.
 - **API** (section 10): `/provider/*` for the studio; `/news` with its type, channel and source,
   and `/news/{id}/view`; `/ingest/*` for the AI (an API key, an HMAC-SHA256 signature, allowed
   addresses, 1,000 items an hour); `/admin/news*`, `/admin/news-sources`, `/admin/publishers`,
@@ -601,6 +602,15 @@ each is also an open question for the spec author.
     Admin), `subscriptions:manage` (SUBS: the Admin). Each comes with the endpoints it guards, as
     CMarket.Api does for every key, since the front end opens a screen to whoever holds its key:
     `news:write` and `news:stats` with the studio (step 26).
+
+### The spec author's answers
+
+- **ETFS, BP and BS in the menu** (12 November 2026): each has an entry of its own in the client
+  menu, after the one its mockup lights: MKT, EQS, ETFS, YCRV, BP, BS, PORT, and the rest as
+  before. A profile lights the screener that lists its type, BS for a bond and ETFS for an ETF
+  (the mockups of screens 19 and 20 light EQS and YCRV). Collapsed, an entry of the menu is now
+  44 px high, as the mockups draw it, against 56 px before, so that a client's thirteen entries
+  fit at 900 px.
 
 ### Step 23 · The plan (S): done
 
@@ -1005,14 +1015,15 @@ CMarket.Api's phase 21.
 CMarket.Api's phase 22.
 
 - **Built**:
-  - BS (`/bs`, `analysis:read` and the analysis module), opened from the command bar; the menu
-    lights YCRV, as the mockup does (`menuParent` of a screen outside the menu). The criteria of
-    the mockup: the issue category (Sovereign, Supranational / regional, Corporate, and
-    Municipal, which the mockup's boxes leave out) and the market (BVMAC, BEAC, and Other markets)
-    ticked, then minimum yield, modified duration, maturity, country, currency, minimum rating and
-    coupon type, each a drop-down with an amber border while it filters; the mockup's screen by
-    default (above 5%, duration 0 to 5, this year to six years on, XAF). RUN, Reset, SAVE under a
-    name and the saved screens below, as on EQS (`analysis:save`).
+  - BS (`/bs`, `analysis:read` and the analysis module), opened from the command bar; the menu lit
+    YCRV, as the mockup does, until BS had an entry of its own
+    ([the spec author's answers](#the-spec-authors-answers)). The criteria of the mockup: the issue
+    category (Sovereign, Supranational / regional, Corporate, and Municipal, which the mockup's
+    boxes leave out) and the market (BVMAC, BEAC, and Other markets) ticked, then minimum yield,
+    modified duration, maturity, country, currency, minimum rating and coupon type, each a
+    drop-down with an amber border while it filters; the mockup's screen by default (above 5%,
+    duration 0 to 5, this year to six years on, XAF). RUN, Reset, SAVE under a name and the saved
+    screens below, as on EQS (`analysis:save`).
   - The results of the latest daily calculation: bond, issuer and country, market, coupon ("Zero"
     for a BTA), maturity, clean price (an asterisk for a model price), dirty price, YTM, YTW (in
     yellow when it differs from YTM: a call), current yield, spread in bp, composite rating ("NR"
@@ -1076,10 +1087,12 @@ CMarket.Api's phase 23.
 
 - **Built**:
   - BP (`/bp`, `/bp/{bondId}`, `analysis:read` and the analysis module), under YCRV in the menu as
-    the mockup lights it. "ECMR 6.25 2029 BP" opens it on that bond, BP alone on the first bond of
-    the master list; YAS now opens it too (spec section 8), with or without a bond, and the old
-    addresses `/yas/{bondId}` lead there. Screen 4 keeps its calculator, on `/ycrv/{bondId}`,
-    with a link to BP; BS's "Open in BP" and a bond shared in MSG ("Open in bond pricing") open BP.
+    the mockup lights it, until BP had an entry of its own
+    ([the spec author's answers](#the-spec-authors-answers)). "ECMR 6.25 2029 BP" opens it on that
+    bond, BP alone on the first bond of the master list; YAS now opens it too (spec section 8),
+    with or without a bond, and the old addresses `/yas/{bondId}` lead there. Screen 4 keeps its
+    calculator, on `/ycrv/{bondId}`, with a link to BP; BS's "Open in BP" and a bond shared in MSG
+    ("Open in bond pricing") open BP.
   - Inputs: A, a bond of the master list, whose characteristics fill the fields (face value M,
     annual coupon C, frequency k, maturity, settlement, day count, redemption: bullet, or
     amortizing with its schedule of dates and shares); changing one makes it a bond entered by
@@ -1143,13 +1156,14 @@ CMarket.Api's phase 24.
     `GET /securities/{id}` answers picks the profile: screen 2 for an equity, screen 20 for a bond
     (an ETF's comes in step 33). The command bar offers a code on the types whose profile has it:
     CF and RAT on a bond, FA, DVD and HDS on an equity.
-  - The bond profile, under YCRV in the menu and named "Bond profile" in the title bar as the
-    mockup: the header (the issuer's country, the code, the issuer and ISIN, the line of the terms:
-    category, market, currency, coupon, redemption, seniority; the clean price of the latest daily
-    calculation, an asterisk for a model price, and its change; dirty price, YTM, YTW in yellow
-    when a call makes it lower, modified duration, spread, maturity) and the tabs DES, GP Price and
-    yield, BP Pricing, CF Schedule, RAT Ratings, DOC Documents, then N and ANA, which every
-    profile keeps.
+  - The bond profile, under YCRV in the menu (under BS since
+    [the spec author's answers](#the-spec-authors-answers)) and named "Bond profile" in the title
+    bar as the mockup: the header (the issuer's country, the code, the issuer and ISIN, the line of
+    the terms: category, market, currency, coupon, redemption, seniority; the clean price of the
+    latest daily calculation, an asterisk for a model price, and its change; dirty price, YTM, YTW
+    in yellow when a call makes it lower, modified duration, spread, maturity) and the tabs DES, GP
+    Price and yield, BP Pricing, CF Schedule, RAT Ratings, DOC Documents, then N and ANA, which
+    every profile keeps.
   - DES as the mockup: the price and yield history (the clean price in amber on the left axis,
     lighter on a model price's days, the YTM dotted in blue on the right; YIELD shows the YTM and
     the YTW, SPREAD the spread over the curve; 6M, 1Y by default, 3Y and MAX from the issue; the
@@ -1209,7 +1223,8 @@ CMarket.Api's phase 24.
 CMarket.Api's phase 25.
 
 - **Built**:
-  - ETFS under EQS in the menu, as its mockup lights it, on the Analysis module (the "Screener,
+  - ETFS under EQS in the menu, as its mockup lights it (an entry of its own since
+    [the spec author's answers](#the-spec-authors-answers)), on the Analysis module (the "Screener,
     XLSX / CSV exports" row): the criteria of the mockup (category, sub-category, geography,
     several at once, sector, issuer, listing exchange, minimum YTD return, minimum Sharpe ratio,
     maximum TER, UCITS only, accumulating only, currency-hedged only), active ones with an amber
@@ -1281,10 +1296,11 @@ CMarket.Api's phase 25.
 CMarket.Api's phase 26.
 
 - **Built**:
-  - DES on an ETF opens screen 19, under EQS as ETFS, named "ETF profile" in the title bar, with
-    the mockup's tabs DES Profile, GP Chart, HLD Holdings, PERF Performance, DIST Distributions,
-    DOC Documents, then N and ANA, which every profile keeps; the command bar offers HLD, PERF and
-    DIST on an ETF.
+  - DES on an ETF opens screen 19, under EQS as ETFS (under ETFS since
+    [the spec author's answers](#the-spec-authors-answers)), named "ETF profile" in the title bar,
+    with the mockup's tabs DES Profile, GP Chart, HLD Holdings, PERF Performance, DIST
+    Distributions, DOC Documents, then N and ANA, which every profile keeps; the command bar offers
+    HLD, PERF and DIST on an ETF.
   - The header: the flag and code of the fund's domicile, the ticker, the full name, the line of
     its description (class and geography as ETFS writes them, provider and brand, exchange,
     currency, UCITS, accumulating or distributing), the price and its change, then NAV, premium
@@ -1996,6 +2012,8 @@ Still to do, with the first screen that needs it:
   are 4% in dollars and 2% in euros, the Admin's to change, and IWDA's Sharpe ratio reads 1.45.
   Its prices "XX,XX $" are written as the user's language writes amounts ($121.80, 121,80 $).
   Its "30-day" averages are read as the last 30 sessions.
+- **Changed on 12 November 2026**: its own entry in the menu, after EQS, which the mockup lights
+  ([the spec author's answers](#the-spec-authors-answers)).
 
 ### BP · Bond pricing (screen 16): done
 
@@ -2008,6 +2026,8 @@ Still to do, with the first screen that needs it:
   101.4000 and settlement amount XAF 107,564,384 follow case A's clean price of 101.40, whose
   yield it rounds (BP shows 101.3999 and XAF 107,564,262 at 5.7302%, 101.4000 at the platform's
   unrounded yield). The demo's ECMR is the amortizing bond of case B.
+- **Changed on 12 November 2026**: its own entry in the menu, after YCRV, which the mockup lights
+  ([the spec author's answers](#the-spec-authors-answers)).
 
 ### BS · Bond screener (screen 17): done
 
@@ -2018,20 +2038,23 @@ Still to do, with the first screen that needs it:
   so that the accrued interest, the yields and the durations follow the date. ECMR is the
   amortizing bond of YAS (case B of section 14.1), where the mockup shows case A's yield.
   "Open in BP" opens BP since step 30.
+- **Changed on 12 November 2026**: its own entry in the menu, after BP, under YCRV, which the
+  mockup lights ([the spec author's answers](#the-spec-authors-answers)).
 
 ### DES on an ETF · ETF profile (screen 19): done
 
 - **Built in step 33**: the header and the tabs DES, GP, HLD, PERF, DIST and DOC of the mockup,
-  then N and ANA; DES with the price and NAV history, the performance against the index, the
-  risk, the top 10 holdings, the allocation and the structure and costs; under EQS in the menu.
-  See step 33.
+  then N and ANA; DES with the price and NAV history, the performance against the index, the risk,
+  the top 10 holdings, the allocation and the structure and costs; under ETFS in the menu (EQS, as
+  the mockup, until [the spec author's answers](#the-spec-authors-answers)). See step 33.
 
 ### DES on a bond · Bond profile (screen 20): done
 
-- **Built in step 31**: the header and the tabs DES, GP, BP, CF, RAT and DOC of the mockup, then
-  N and ANA; DES with the price and yield history (model prices lighter, volume bars), today's
-  analytics, ratings, characteristics, upcoming cash flows and documents and news; under YCRV
-  in the menu. See step 31.
+- **Built in step 31**: the header and the tabs DES, GP, BP, CF, RAT and DOC of the mockup, then N
+  and ANA; DES with the price and yield history (model prices lighter, volume bars), today's
+  analytics, ratings, characteristics, upcoming cash flows and documents and news; under BS in the
+  menu (YCRV, as the mockup, until [the spec author's answers](#the-spec-authors-answers)). See
+  step 31.
 
 ## Back-office
 

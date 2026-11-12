@@ -22,9 +22,9 @@ test('DES on IWDA shows the mockup’s header, history, performance, risk, holdi
   await page.getByRole('combobox', { name: 'Command bar' }).fill('IWDA DES')
   await page.keyboard.press('Enter')
   await expect(page).toHaveURL(/\/securities\/IWDA\.LSE\/des$/)
-  // Under EQS in the menu, as ETFS.
+  // Under ETFS in the menu, which lists the ETFs (the mockup lights EQS).
   await expect(
-    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^EQS/ }),
+    page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^ETFS/ }),
   ).toHaveClass(/border-accent-amber/)
 
   const header = page.getByRole('region', { name: 'IWDA' })
