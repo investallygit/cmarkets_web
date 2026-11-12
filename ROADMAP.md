@@ -55,7 +55,7 @@ relative: S < M < L < XL.
 | 30   | BP: bond pricing (screen 16)                                    | Done   |
 | 31   | Bond profile (screen 20), the profile chosen by security type   | Done   |
 | 32   | ETF data, ETFS: ETF screener (screen 15)                        | Done   |
-| 33   | ETF profile (screen 19)                                         | To do  |
+| 33   | ETF profile (screen 19)                                         | Done   |
 | 34   | SUBS: subscription management (screen 14)                       | To do  |
 | 35   | Security descriptions on EQS (screen 3)                         | To do  |
 | 36   | Third version done: README, accessibility, every flow           | To do  |
@@ -1276,13 +1276,71 @@ CMarket.Api's phase 25.
   - axe (WCAG 2.2 AA) at 1600, 390 and 320 px, in English and French: ETFS (the geographies'
     list open, VUSA selected), an ETF's DES and GP, ADMCFG's rates, IMP's ETF templates, EODH.
 
-### Step 33 · ETF profile (screen 19) (L): to do
+### Step 33 · ETF profile (screen 19) (L): done
 
 CMarket.Api's phase 26.
 
-- Header, tabs DES, GP, HLD, PERF, DIST, DOC, the price and NAV history with the volume,
-  performance against the index, risk, the top 10 holdings, the allocation by sector or region,
-  structure and costs, as the mockup.
+- **Built**:
+  - DES on an ETF opens screen 19, under EQS as ETFS, named "ETF profile" in the title bar, with
+    the mockup's tabs DES Profile, GP Chart, HLD Holdings, PERF Performance, DIST Distributions,
+    DOC Documents, then N and ANA, which every profile keeps; the command bar offers HLD, PERF and
+    DIST on an ETF.
+  - The header: the flag and code of the fund's domicile, the ticker, the full name, the line of
+    its description (class and geography as ETFS writes them, provider and brand, exchange,
+    currency, UCITS, accumulating or distributing), the price and its change, then NAV, premium
+    or discount, TER, AUM, 30-day average volume, YTD and 1Y volatility.
+  - DES as the mockup: the price history (the price in amber over its filled area and the NAV
+    dotted in blue on one price axis, 1M to MAX, 1Y by default, by week past three years; the
+    volume below; PRICE, NAV and VOLUME switch their line, one of the prices kept; the date, the
+    price, the NAV and the premium or discount under the cursor), the performance against the
+    benchmark index (1 month to 5 years a year, the ETF's, the index's and the gap in points),
+    the risk (volatility 1Y and 3Y, Sharpe 1Y on the currency's risk-free rate as a tooltip,
+    maximum drawdown with its dates as a tooltip, tracking error and difference, average spread),
+    the top 10 holdings (each line's weight as a bar and in percent, the number of lines in all;
+    a line CMarket lists opens its profile), the allocation ([SECTOR] · REGION: a stacked bar and
+    its legend, the six largest and the rest as "Other"), structure and costs.
+  - HLD, every line known (rank, name, sector, country, weight; the other lines and their weight;
+    the day and the source), the allocation by sector and by region side by side. PERF, the total
+    return against the index from 100 (1Y, 3Y by default, 5Y, MAX), every period of block E with
+    1 day and since inception, the calendar years (the latest to date, ten at most) and the risk.
+    DIST, the distributions (ex-date, payment date, amount per share) and the fund's policy (its
+    rhythm, the 12-month yield, what it paid over 12 months, its last distribution, what it paid
+    each calendar year as bars); a fund that accumulates says it pays none. GP keeps the price
+    chart. Each tab keeps its layout (ETF, ETF-GP, ETF-HLD, ETF-PERF, ETF-DIST).
+  - IMP: the "ETF profiles" file's portfolio columns (holdings_count, holdings_date,
+    top_holdings, sector_weights, region_weights) with their words and their check (weights
+    adding up past 100%).
+  - Slices: `widgets/etf-profile-panels` (the header and the eleven panels, their periods and the
+    portfolio's arithmetic in `lib`), `shared/ui/charts/AllocationBar` (PORT's stacked bar and
+    legend, shared), `TwoAxisChart` with a filled area, the price axis on either side and a
+    figure of the day beside the date; the contracts and calls of the four reads, their hooks in
+    `entities/etf` with the labels of the sectors and regions; the strings under `etfProfile`.
+- **CMarket.Api** (phase 26):
+  - An ETF's portfolio, `ref.EtfCompositions` with its lines (`ref.EtfHoldings`, the 100
+    largest) and its weights (`ref.EtfSectorWeights`, `ref.EtfRegionWeights`), written whole by
+    EODHD's weekly fundamentals (Holdings, Sector_Weights, World_Regions, Holdings_Count) or by
+    a row of the "ETF profiles" file that gives one of its lists ("name:weight" separated by "|",
+    as the bond list's schedules); migration `EtfComposition`. ADR-050.
+  - `GET /etfs/{id}/history?with=nav,total,index` (the NAV and the premium; the total return
+    from 100; the index on its scale), `/holdings?top=`, `/allocation?by=sector|region`, and
+    `/annual-returns` for PERF's calendar years, all on `market:read`.
+  - Benchmarks loaded over ten years the first time (eleven in the demo), for the calendar years.
+  - Demo: each ETF's portfolio as its factsheet gives it, IWDA's the mockup's; VNGA60 holds VWRL
+    and VUSA.
+- **Checked**:
+  - Type check, lint, the 349 unit tests.
+  - CMarket.Api: 1,387 tests, all passing: 1,368 in the usual run, and the SQL Server suite's 19
+    on SQL Server (the new migration up, as an idempotent script, and down). `npm run test:api`
+    now reads the profile as every demo account: 563 reads, 193 left out by permission or plan.
+  - Every Playwright flow on CMarket.Api from a fresh database: 108, all passing. Four new ones:
+    IWDA's DES from the command bar (the mockup's header, performance, risk, top 10, allocation
+    by sector and by region, structure and costs, the NAV switched off); HLD's 25 lines and
+    VNGA60's line opening VUSA's profile; PERF's total return against MSCI World, every period
+    and the calendar years; DIST with VUSA's distributions and IWDA accumulating. ETFS's
+    double-click opens the new profile.
+  - axe (WCAG 2.2 AA) at 1600, 390 and 320 px, in English and French: an ETF's DES (by sector and
+    by region), HLD, a fund of funds' HLD, PERF, DIST of a distributing and an accumulating fund,
+    ETFS, IMP's templates with the portfolio columns: 54 audits, nothing found.
 
 ### Step 34 · SUBS · Subscription management (screen 14) (L): to do
 
@@ -1906,10 +1964,12 @@ Still to do, with the first screen that needs it:
   amortizing bond of YAS (case B of section 14.1), where the mockup shows case A's yield.
   "Open in BP" opens BP since step 30.
 
-### DES on an ETF · ETF profile (screen 19): to do
+### DES on an ETF · ETF profile (screen 19): done
 
-- **Planned in step 33**. Until then (step 32), DES on an ETF shows its price chart, ETFS's five
-  blocks and its documents, under EQS, with the tabs GP, DOC, N and ANA.
+- **Built in step 33**: the header and the tabs DES, GP, HLD, PERF, DIST and DOC of the mockup,
+  then N and ANA; DES with the price and NAV history, the performance against the index, the
+  risk, the top 10 holdings, the allocation and the structure and costs; under EQS in the menu.
+  See step 33.
 
 ### DES on a bond · Bond profile (screen 20): done
 
@@ -1966,6 +2026,9 @@ Still to do, with the first screen that needs it:
   listed as an ETF or described again, the size, inception and benchmark EODHD keeps left as they
   are where the file is empty) and "ETF NAV and spreads" (`etf-nav`: a session's NAV and bid and
   ask, an alert past 10% from the NAV before); their rollback.
+- **Built in step 33**: the portfolio of "ETF profiles" (its count, day, largest lines and
+  weights by sector and region, packed as the bond list's schedules), written back the largest
+  first, its rollback to the portfolio it replaced.
 
 ### CORR · Data corrections (no mockup): done
 
@@ -2450,6 +2513,17 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   shown; since inception needs the history from the inception. The 1D return of block E (+0.3%)
   and the change of screen 19's header (+0.42%) are one figure for an ETF priced at the close.
   Which EODHD codes are the benchmarks' (MSCI World in dollars and in euros)?
+- **ETF profile, third version**: the mockup's allocation lists Health care (10.2%) above
+  Industrials (10.9%): the plan orders the classes by weight. Its header shows "$XX.XX" for the
+  price, the NAV and the AUM: the plan shows the latest close, NAV and size. Its description line
+  reads "Global equity", which the plan writes as ETFS's class line, "Equity · Global", in both
+  languages. The tabs HLD, PERF and DIST have no mockup: the plan gives HLD every line kept (the
+  100 largest) and both allocations, PERF the total return against the index, every period and
+  the calendar years, DIST the distributions and the policy; PERF's chart and years need the
+  index's and the fund's total return, which the spec's history (`with=nav`) does not name, so
+  the API adds `with=total,index` and `/etfs/{id}/annual-returns`. The "ETF profiles" file
+  carries the portfolio in five optional columns: is a separate holdings file wanted? The
+  mockup's tabs leave out N and ANA: kept after DOC, as on the bond profile.
 - **Bond profile, third version**: the mockup's tabs leave out N and ANA, which screen 2 has: the
   plan keeps them after DOC, so that a bond's news and the research on its country stay one
   click away. Its BP tab shows screen 16's panels inside the profile, as FA shows EQS's; "Open in

@@ -33,9 +33,10 @@ export const SECURITY_PROFILES: Record<SecurityType, SecurityProfileKind> = {
     tabLabels: { gp: 'security.tabs.priceYield' },
     menuParent: 'YCRV',
   },
-  // Screen 19 until step 33 builds its mockup: ETFS's blocks beside the chart, under EQS as ETFS.
+  // Screen 19: the mockup's six tabs, then the news and the research every profile has; under EQS
+  // as ETFS.
   etf: {
-    tabs: ['des', 'gp', 'doc', 'n', 'ana'],
+    tabs: ['des', 'gp', 'hld', 'perf', 'dist', 'doc', 'n', 'ana'],
     titleKey: 'security.profiles.etf',
     menuParent: 'EQS',
   },

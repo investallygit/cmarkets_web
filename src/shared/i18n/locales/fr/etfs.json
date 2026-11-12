@@ -64,6 +64,37 @@
       "AS": "Euronext Amsterdam",
       "MI": "Borsa Italiana",
       "US": "Marchés US"
+    },
+    "holdingSectors": {
+      "technology": "Technologie",
+      "financials": "Finance",
+      "healthCare": "Santé",
+      "industrials": "Industrie",
+      "consumerDiscretionary": "Conso. cyclique",
+      "consumerStaples": "Conso. de base",
+      "communication": "Communication",
+      "energy": "Énergie",
+      "materials": "Matériaux",
+      "utilities": "Services publics",
+      "realEstate": "Immobilier",
+      "government": "Souverain",
+      "corporate": "Entreprises",
+      "securitized": "Titrisé",
+      "cash": "Liquidités",
+      "other": "Autres"
+    },
+    "regions": {
+      "northAmerica": "Amérique du Nord",
+      "unitedKingdom": "Royaume-Uni",
+      "europeDeveloped": "Europe (développée)",
+      "europeEmerging": "Europe (émergente)",
+      "africaMiddleEast": "Afrique et Moyen-Orient",
+      "japan": "Japon",
+      "australasia": "Australasie",
+      "asiaDeveloped": "Asie (développée)",
+      "asiaEmerging": "Asie (émergente)",
+      "latinAmerica": "Amérique latine",
+      "other": "Autres"
     }
   },
   "etfScreener": {
@@ -155,5 +186,151 @@
     "spread": "{{pct}} ({{bp}} pb)",
     "perYear": "{{value}} par an",
     "accumulatingYield": "— (capitalisation)"
+  },
+  "etfProfile": {
+    "classLine": "ETF · {{assetClass}} · {{geography}}",
+    "policies": {
+      "accumulating": "Capitalisation",
+      "distributing": "Distribution"
+    },
+    "price": "Cours de marché",
+    "change": "Variation depuis la clôture précédente",
+    "figures": {
+      "nav": "VL",
+      "premium": "Prime/décote",
+      "ter": "TER",
+      "aum": "Encours",
+      "volume": "Vol. moy. 30 j",
+      "ytd": "YTD",
+      "volatility": "Vol. 1 an"
+    },
+    "periods": {
+      "1M": "1M",
+      "6M": "6M",
+      "1Y": "1A",
+      "3Y": "3A",
+      "5Y": "5A",
+      "MAX": "MAX"
+    },
+    "history": {
+      "series": {
+        "price": "Cours",
+        "nav": "VL",
+        "volume": "Volume"
+      },
+      "seriesLabel": "Courbes affichées",
+      "premium": "Prime/décote {{value}}",
+      "summary": "{{what}} du {{from}} au {{to}} : de {{first}} à {{last}}, plus bas {{low}}, plus haut {{high}}.",
+      "empty": "Aucune séance sur cette période."
+    },
+    "performance": {
+      "legend": "ETF · indice · écart",
+      "period": "Période",
+      "etf": "ETF",
+      "index": "Indice {{index}}",
+      "indexColumn": "Indice",
+      "gap": "Écart (pts)",
+      "perYear": "{{period}} (annualisé)",
+      "periods": {
+        "1D": "1 jour",
+        "1M": "1 mois",
+        "3M": "3 mois",
+        "YTD": "YTD",
+        "1Y": "1 an",
+        "3Y": "3 ans",
+        "5Y": "5 ans",
+        "SI": "Depuis la création"
+      },
+      "noIndex": "L'indice de ce fonds n'est pas dans les données de CMarket : pas d'écart."
+    },
+    "risk": {
+      "window": "1 an",
+      "volatility": "Volatilité 1 an · 3 ans",
+      "sharpe": "Sharpe 1 an",
+      "sharpeRate": "Sur un taux sans risque de {{rate}} par an",
+      "drawdown": "Perte maximale 1 an",
+      "drawdownDates": "Du {{peak}} au {{trough}}",
+      "tracking": "Tracking error · écart de suivi",
+      "spread": "Fourchette achat-vente moyenne"
+    },
+    "holdings": {
+      "count_one": "{{value}} ligne",
+      "count_other": "{{value}} lignes",
+      "rank": "N°",
+      "name": "Ligne",
+      "sector": "Secteur",
+      "country": "Pays",
+      "weight": "Poids",
+      "others_one": "{{value}} autre ligne",
+      "others_other": "{{value}} autres lignes",
+      "asOf": "Au {{date}} · {{source}}",
+      "sources": {
+        "eodhd": "EODHD",
+        "file": "fichier Fiches ETF"
+      },
+      "top": "Les 10 premières : {{value}} du fonds",
+      "listed": "Ouvre sa fiche",
+      "empty": "Aucune ligne connue pour ce fonds pour l'instant."
+    },
+    "allocation": {
+      "views": {
+        "sector": "Secteur",
+        "region": "Région"
+      },
+      "other": "Autres",
+      "empty": {
+        "sector": "Pas de répartition par secteur pour ce fonds.",
+        "region": "Pas de répartition par région pour ce fonds."
+      }
+    },
+    "structure": {
+      "replication": "Réplication",
+      "dividends": "Dividendes",
+      "domicile": "Domicile · statut",
+      "currency": "Devise du fonds · couverture",
+      "benchmark": "Indice de référence",
+      "inception": "Date de création",
+      "issuer": "Émetteur",
+      "ter": "TER",
+      "isin": "ISIN",
+      "accumulating": "Capitalisation · aucune distribution",
+      "distributing": "Distribution · {{frequency}}",
+      "distributingOnly": "Distribution"
+    },
+    "growth": {
+      "fund": "{{code}} (rendement total)",
+      "index": "Indice",
+      "summary": "{{fund}} du {{from}} au {{to}} : de 100 à {{last}} ; {{index}} : de 100 à {{indexLast}}.",
+      "summaryAlone": "{{fund}} du {{from}} au {{to}} : de 100 à {{last}}.",
+      "hint": "100 investis le premier jour, distributions réinvesties ; l'indice part de la courbe du fonds à sa première clôture.",
+      "empty": "Aucune séance sur cette période."
+    },
+    "annual": {
+      "year": "Année",
+      "etf": "ETF",
+      "index": "Indice",
+      "gap": "Écart (pts)",
+      "toDate": "{{year}} (YTD)",
+      "empty": "Pas encore d'année civile dans l'historique."
+    },
+    "distributions": {
+      "exDate": "Date de détachement",
+      "paymentDate": "Date de paiement",
+      "amount": "Montant",
+      "yield": "Rendement",
+      "empty": "Aucune distribution enregistrée pour l'instant.",
+      "accumulating": "{{code}} capitalise ses revenus : il ne distribue rien."
+    },
+    "policy": {
+      "policy": "Politique",
+      "frequency": "Fréquence",
+      "yield": "Rendement distribué sur 12 mois",
+      "trailing": "Versé sur 12 mois",
+      "last": "Dernière distribution",
+      "lastValue": "{{amount}} le {{date}}",
+      "count": "Distributions enregistrées",
+      "perYear": "Versé par année civile",
+      "yearToDate": "{{year}} à ce jour"
+    }
   }
 }

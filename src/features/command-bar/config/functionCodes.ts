@@ -26,8 +26,8 @@ interface SecurityTab {
 }
 
 /**
- * Tabs of the security profiles; each one matches a command bar code (spec section 9, screens 2
- * and 20), offered on the types whose profile has it. BP stays screen 16's code.
+ * Tabs of the security profiles; each one matches a command bar code (spec section 9, screens 2,
+ * 19 and 20), offered on the types whose profile has it. BP stays screen 16's code.
  */
 const SECURITY_TABS: readonly SecurityTab[] = [
   { code: 'DES', fn: 'des', labelKey: 'functions.DES' },
@@ -39,6 +39,9 @@ const SECURITY_TABS: readonly SecurityTab[] = [
   { code: 'ANA', fn: 'ana', labelKey: 'functions.ANA' },
   { code: 'CF', fn: 'cf', labelKey: 'functions.CF' },
   { code: 'RAT', fn: 'rat', labelKey: 'functions.RAT' },
+  { code: 'HLD', fn: 'hld', labelKey: 'functions.HLD' },
+  { code: 'PERF', fn: 'perf', labelKey: 'functions.PERF' },
+  { code: 'DIST', fn: 'dist', labelKey: 'functions.DIST' },
 ]
 
 const SECURITY_SCREENS = new Set(['DES', 'BP', 'N'])

@@ -34,6 +34,15 @@ describe('function codes (spec section 8)', () => {
     expect(appliesToSecurity(byCode('GP'), 'bond')).toBe(true)
   })
 
+  it("opens an ETF's holdings, performance and distributions, tabs of its profile (screen 19)", () => {
+    const byCode = (code: string) => availableFunctions(analyst).find((fn) => fn.code === code)!
+    expect(byCode('HLD').resolve('IWDA.LSE')).toBe('/securities/IWDA.LSE/hld')
+    expect(byCode('PERF').resolve('IWDA.LSE')).toBe('/securities/IWDA.LSE/perf')
+    expect(byCode('DIST').resolve('VUSA.LSE')).toBe('/securities/VUSA.LSE/dist')
+    expect(appliesToSecurity(byCode('HLD'), 'equity')).toBe(false)
+    expect(appliesToSecurity(byCode('DIST'), 'etf')).toBe(true)
+  })
+
   it("opens a bond's schedule and ratings, tabs of its profile (screen 20)", () => {
     const byCode = (code: string) => availableFunctions(analyst).find((fn) => fn.code === code)!
     expect(byCode('CF').resolve('ECMR-6.25-2029')).toBe('/securities/ECMR-6.25-2029/cf')

@@ -1,4 +1,5 @@
 import {
+  AreaSeries,
   createChart,
   createTextWatermark,
   HistogramSeries,
@@ -15,7 +16,13 @@ import type { IsoDate } from '@/shared/api/contracts'
 import { useLocale } from '@/shared/i18n'
 import { formatCompact } from '@/shared/lib/format'
 import { cssVar, withAlpha } from '@/shared/lib/theme'
-import { baseChartOptions, chartLocalization, formatChartTime, toChartTime } from './chartOptions'
+import {
+  baseChartOptions,
+  chartLocalization,
+  formatChartTime,
+  fromChartTime,
+  toChartTime,
+} from './chartOptions'
 
 /** Design token, e.g. "--accent-amber". */
 type ColorToken = `--${string}`
@@ -35,9 +42,11 @@ export interface TwoAxisLine {
   label: string
   format: (value: number) => string
   color: ColorToken
-  /** The left axis for the primary line, the right one for the secondary unless it shares the left. */
+  /** Its axis: the left one for screen 20's primary line, the right one for its yield or for screen 19's prices. */
   axis: 'left' | 'right'
   dotted?: boolean
+  /** The primary line's area filled below it (screen 19's price). */
+  fill?: boolean
 }
 
 interface TwoAxisChartProps {
@@ -49,6 +58,8 @@ interface TwoAxisChartProps {
   volumeLabel?: string
   /** What the chart shows, for screen readers: the canvas itself says nothing. */
   label: string
+  /** A figure of the day under the cursor beside its date: the premium or discount (screen 19). */
+  note?: (date: IsoDate) => string | null
 }
 
 /** The volume pane's height against the prices'. */
@@ -56,6 +67,10 @@ const VOLUME_PANE_STRETCH = 0.22
 
 /** How much of a faint stretch of the line shows: a model price drawn lighter (screen 20). */
 const FAINT_ALPHA = 0.4
+
+/** A filled area, strong under the line and fading to the axis. */
+const AREA_TOP_ALPHA = 0.28
+const AREA_BOTTOM_ALPHA = 0.02
 
 interface Hovered {
   time: Time
@@ -66,9 +81,9 @@ interface Hovered {
 
 /**
  * Two lines on two axes over time (TradingView Lightweight Charts): the primary one solid on the
- * left axis, lighter on its faint days; the secondary one on the right axis or on the left, dotted
- * when asked; the volume below on the days it has one. Wheel to zoom, drag to pan, the values of
- * the day under the cursor in the corner.
+ * left axis, lighter on its faint days, its area filled when asked; the secondary one on the right
+ * axis or on the left, dotted when asked; the volume below on the days it has one. Wheel to zoom,
+ * drag to pan, the values of the day under the cursor in the corner.
  */
 export function TwoAxisChart({
   points,
@@ -76,6 +91,7 @@ export function TwoAxisChart({
   secondary,
   volumeLabel,
   label,
+  note,
 }: TwoAxisChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<IChartApi | null>(null)
@@ -118,20 +134,48 @@ export function TwoAxisChart({
       priceLineVisible: false,
       priceFormat: { type: 'custom' as const, minMove: 0.0001, formatter: line.format },
     })
-    chart.applyOptions({ rightPriceScale: { visible: secondary?.axis === 'right' } })
+    // The axes the lines use: the left one for the primary line on screen 20, the right one for
+    // screen 19's prices.
+    const axes = [primary.axis, secondary?.axis]
+    chart.applyOptions({
+      leftPriceScale: { visible: axes.includes('left') },
+      rightPriceScale: { visible: axes.includes('right') },
+    })
 
     const primaryColor = cssVar(primary.color)
     const faintColor = withAlpha(primaryColor, FAINT_ALPHA)
-    const main = chart.addSeries(LineSeries, lineOptions(primary))
-    // A day without a value leaves a gap; a faint day draws the stretch that ends on it lighter.
-    main.setData(
-      points.map((point) => {
-        const time = toChartTime(point.time, false)
-        return point.primary === null
-          ? { time }
-          : { time, value: point.primary, color: point.faint ? faintColor : primaryColor }
-      }),
-    )
+    let main: ISeriesApi<'Line'> | ISeriesApi<'Area'>
+    if (primary.fill) {
+      const area = chart.addSeries(AreaSeries, {
+        ...lineOptions(primary),
+        lineColor: primaryColor,
+        topColor: withAlpha(primaryColor, AREA_TOP_ALPHA),
+        bottomColor: withAlpha(primaryColor, AREA_BOTTOM_ALPHA),
+      })
+      area.setData(
+        points.map((point) => {
+          const time = toChartTime(point.time, false)
+          return point.primary === null
+            ? { time }
+            : point.faint
+              ? { time, value: point.primary, lineColor: faintColor }
+              : { time, value: point.primary }
+        }),
+      )
+      main = area
+    } else {
+      const line = chart.addSeries(LineSeries, lineOptions(primary))
+      // A day without a value leaves a gap; a faint day draws the stretch that ends on it lighter.
+      line.setData(
+        points.map((point) => {
+          const time = toChartTime(point.time, false)
+          return point.primary === null
+            ? { time }
+            : { time, value: point.primary, color: point.faint ? faintColor : primaryColor }
+        }),
+      )
+      main = line
+    }
     const other = secondary ? chart.addSeries(LineSeries, lineOptions(secondary)) : null
     other?.setData(
       points.map((point) => {
@@ -186,7 +230,9 @@ export function TwoAxisChart({
         setHovered(null)
         return
       }
-      const valueOf = (series: ISeriesApi<'Line'> | ISeriesApi<'Histogram'> | null) => {
+      const valueOf = (
+        series: ISeriesApi<'Line'> | ISeriesApi<'Area'> | ISeriesApi<'Histogram'> | null,
+      ) => {
         const point = series ? param.seriesData.get(series) : undefined
         return point && 'value' in point && typeof point.value === 'number'
           ? point.value
@@ -215,6 +261,8 @@ export function TwoAxisChart({
     }
   }, [points, primary, secondary, volumeLabel, locale])
 
+  const hoveredNote = hovered && note ? note(fromChartTime(hovered.time, false)) : null
+
   return (
     <div className="relative h-full w-full">
       <div ref={containerRef} role="figure" aria-label={label} className="h-full w-full" />
@@ -223,7 +271,12 @@ export function TwoAxisChart({
           {primary.label}
           {hovered?.primary !== undefined && ` ${primary.format(hovered.primary)}`}
         </span>
-        {hovered && <span className="text-secondary">{formatChartTime(hovered.time)}</span>}
+        {hovered && (
+          <span className="text-secondary">
+            {formatChartTime(hovered.time)}
+            {hoveredNote && <span className="ml-2">{hoveredNote}</span>}
+          </span>
+        )}
         {secondary && (
           <span style={{ color: `var(${secondary.color})` }}>
             {secondary.label}

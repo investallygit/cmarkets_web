@@ -7,6 +7,8 @@ import type {
   EtfGeography,
   EtfReplication,
   EtfSector,
+  HoldingRegion,
+  HoldingSector,
 } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 
@@ -32,6 +34,10 @@ export function useEtfLabels() {
       replication: (value: EtfReplication) => t(`etf.replications.${value}`),
       distribution: (value: EtfDistribution) => t(`etf.distributions.${value}`),
       frequency: (value: DistributionFrequency) => t(`etf.frequencies.${value}`),
+      /** A sector of a fund's portfolio: "Technology", "Government". */
+      holdingSector: (value: HoldingSector) => t(`etf.holdingSectors.${value}`),
+      /** A region of a fund's portfolio: "North America", "Asia (emerging)". */
+      region: (value: HoldingRegion) => t(`etf.regions.${value}`),
       /** "LSE", "Xetra", "Euronext Paris"; the code of another. */
       exchange: (code: string) =>
         EXCHANGES.some((known) => known === code)

@@ -161,7 +161,11 @@ GET /documents
 GET /documents/{id}/file
 GET /etfs
 GET /etfs/{id}
+GET /etfs/{id}/allocation
+GET /etfs/{id}/annual-returns
 GET /etfs/{id}/distributions
+GET /etfs/{id}/history
+GET /etfs/{id}/holdings
 GET /etfs/{id}/performance
 GET /etfs/facets
 GET /fx

@@ -171,7 +171,12 @@
       "inception_date": "Création",
       "nav": "VL",
       "bid": "Achat",
-      "ask": "Vente"
+      "ask": "Vente",
+      "holdings_count": "Lignes",
+      "holdings_date": "Date des lignes",
+      "top_holdings": "Principales lignes",
+      "sector_weights": "Poids par secteur",
+      "region_weights": "Poids par région"
     },
     "check": "Contrôle",
     "issues": {
@@ -194,6 +199,7 @@
       "codeTaken": "{{code}} est le code d’un autre titre",
       "isinTaken": "{{column}} : l’ISIN d’un titre qui n’est pas une obligation",
       "scheduleShares": "Les parts remboursées tombent à des dates de paiement, font 100 % et finissent à l’échéance",
+      "weightsOver": "{{column}} : les poids font {{total}}, plus de 100 %",
       "bondDates": "{{column}} : après l’émission, au plus tard à l’échéance",
       "askBelowBid": "Le cours vendeur est sous le cours acheteur"
     },
@@ -264,7 +270,7 @@
       "securities": "À la publication : le référentiel des titres est mis à jour ; un événement DataPublished est envoyé aux écrans ouverts.",
       "bond-master": "À la publication : les obligations sont ajoutées ou décrites à nouveau et leurs chiffres du jour recalculés (BS) ; un événement DataPublished est envoyé aux écrans ouverts.",
       "bond-ratings": "À la publication : les notes rejoignent leur historique et les notes composites de BS suivent ; un événement DataPublished est envoyé aux écrans ouverts.",
-      "etf-profiles": "À la publication : les ETF sont référencés ou décrits à nouveau et leurs chiffres recalculés (ETFS) ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "etf-profiles": "À la publication : les ETF sont référencés ou décrits à nouveau, leurs lignes et répartitions remplacées quand le fichier les donne, et leurs chiffres recalculés (ETFS, DES) ; un événement DataPublished est envoyé aux écrans ouverts.",
       "etf-nav": "À la publication : les primes, décotes et fourchettes des ETF sont recalculées (ETFS) ; un événement DataPublished est envoyé aux écrans ouverts."
     },
     "fix": {

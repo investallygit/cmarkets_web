@@ -72,7 +72,7 @@ before upload.
 | 16 · Bond pricing (BP), which YAS opens                                   | Done; a bond of the list or by hand, at the platform's yield  |
 | 20 · Bond profile (DES on a bond: DES, GP, BP, CF, RAT, DOC)              | Done; a year of daily figures, model prices drawn lighter     |
 | 15 · ETF screener (ETFS)                                                  | Done; figures computed each evening, saved screens, export    |
-| 19 · ETF profile (DES on an ETF)                                          | Partly: ETFS's blocks beside the chart until step 33          |
+| 19 · ETF profile (DES on an ETF)                                          | Done; history with NAV, holdings, allocation, PERF, DIST      |
 | 14 · Subscription management (SUBS)                                       | To do, step 34                                                |
 | Security descriptions on EQS (screen 3)                                   | To do, step 35                                                |
 
@@ -123,9 +123,9 @@ src/
   main.tsx    entry point: the hubs of CMarket.Api, then the app
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile (the profile of each
-              security type: an equity's, screen 2, a bond's, screen 20, an ETF's), equity-screener,
-              etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which YAS opens),
-              bond-screener (BS), portfolio,
+              security type: an equity's, screen 2, a bond's, screen 20, an ETF's, screen 19),
+              equity-screener, etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which
+              YAS opens), bond-screener (BS), portfolio,
               research-library, publishing-studio, news,
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
               network-profile (NET ME), public-profile (/p/{handle}), data-import (IMP),
@@ -138,7 +138,8 @@ src/
               subscription-panel, current-upload-panel, messaging-panels, news-studio-panels,
               news-moderation-panels, news-sources-panels, media-payments-panels,
               bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
-              bond-profile-panels, etf-screener-results-panel, etf-blocks-panel...),
+              bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
+              etf-profile-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
@@ -160,7 +161,8 @@ src/
   entities/   business data: session, subscription, organization, security, quote (live
               prices), market, bond (with BS's screener and labels, BP's pricing, the bond
               profile's history, ratings and payments), etf (ETFS's screener, an ETF's blocks,
-              performance and distributions, its labels), yield-curve, fundamentals,
+              performance and distributions, the profile's history, holdings, allocation and
+              calendar years, its labels), yield-curve, fundamentals,
               screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement

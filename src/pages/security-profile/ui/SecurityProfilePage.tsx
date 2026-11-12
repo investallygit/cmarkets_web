@@ -8,6 +8,7 @@ import { isSecurityFunction, securityPath, type SecurityFunction } from '@/share
 import { hasProfileTab } from '@/shared/routes/profiles'
 import { PanelEmpty, PanelError, PanelLoading } from '@/shared/ui/StatusViews'
 import { BondProfileHeader } from '@/widgets/bond-profile-panels'
+import { EtfProfileHeader } from '@/widgets/etf-profile-panels'
 import { SecurityHeader } from '@/widgets/security-header'
 import { TAB_CODES } from '../config/tabs'
 import { BondTab, type BondFunction } from './BondTab'
@@ -25,8 +26,8 @@ const isShared = (fn: SecurityFunction): fn is SharedFunction =>
 /**
  * The security profile, DES and the other tabs of spec section 9: GET /securities/{id} answers
  * the security's type, which opens the profile of that type (SECURITY_PROFILES): screen 2 for an
- * equity, screen 20 for a bond, screen 19 for an ETF (ETFS's blocks until step 33). Its header, its
- * tabs, then the panels of the tab.
+ * equity, screen 20 for a bond, screen 19 for an ETF. Its header, its tabs, then the panels of the
+ * tab.
  * /securities/{id}/{tab}; ?doc= and ?article= open a document or an article.
  */
 export function SecurityProfilePage() {
@@ -47,6 +48,8 @@ export function SecurityProfilePage() {
       <div className="flex shrink-0 flex-col gap-2 px-2 pt-2">
         {security.type === 'bond' ? (
           <BondProfileHeader profile={security} />
+        ) : security.type === 'etf' ? (
+          <EtfProfileHeader profile={security} />
         ) : (
           <SecurityHeader profile={security} />
         )}

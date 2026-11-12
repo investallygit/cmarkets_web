@@ -64,6 +64,37 @@
       "AS": "Euronext Amsterdam",
       "MI": "Borsa Italiana",
       "US": "US markets"
+    },
+    "holdingSectors": {
+      "technology": "Technology",
+      "financials": "Financials",
+      "healthCare": "Health care",
+      "industrials": "Industrials",
+      "consumerDiscretionary": "Consumer discr.",
+      "consumerStaples": "Consumer staples",
+      "communication": "Communication",
+      "energy": "Energy",
+      "materials": "Materials",
+      "utilities": "Utilities",
+      "realEstate": "Real estate",
+      "government": "Government",
+      "corporate": "Corporate",
+      "securitized": "Securitized",
+      "cash": "Cash",
+      "other": "Other"
+    },
+    "regions": {
+      "northAmerica": "North America",
+      "unitedKingdom": "United Kingdom",
+      "europeDeveloped": "Europe (developed)",
+      "europeEmerging": "Europe (emerging)",
+      "africaMiddleEast": "Africa and Middle East",
+      "japan": "Japan",
+      "australasia": "Australasia",
+      "asiaDeveloped": "Asia (developed)",
+      "asiaEmerging": "Asia (emerging)",
+      "latinAmerica": "Latin America",
+      "other": "Other"
     }
   },
   "etfScreener": {
@@ -155,5 +186,151 @@
     "spread": "{{pct}} ({{bp}} bp)",
     "perYear": "{{value}} p.a.",
     "accumulatingYield": "— (accumulating)"
+  },
+  "etfProfile": {
+    "classLine": "ETF · {{assetClass}} · {{geography}}",
+    "policies": {
+      "accumulating": "Accumulating",
+      "distributing": "Distributing"
+    },
+    "price": "Market price",
+    "change": "Change since the previous close",
+    "figures": {
+      "nav": "NAV",
+      "premium": "Prem./disc.",
+      "ter": "TER",
+      "aum": "AUM",
+      "volume": "30-d avg vol.",
+      "ytd": "YTD",
+      "volatility": "Vol. 1Y"
+    },
+    "periods": {
+      "1M": "1M",
+      "6M": "6M",
+      "1Y": "1Y",
+      "3Y": "3Y",
+      "5Y": "5Y",
+      "MAX": "MAX"
+    },
+    "history": {
+      "series": {
+        "price": "Price",
+        "nav": "NAV",
+        "volume": "Volume"
+      },
+      "seriesLabel": "Lines shown",
+      "premium": "Prem./disc. {{value}}",
+      "summary": "{{what}} from {{from}} to {{to}}: {{first}} to {{last}}, low {{low}}, high {{high}}.",
+      "empty": "No session in this period."
+    },
+    "performance": {
+      "legend": "ETF · index · gap",
+      "period": "Period",
+      "etf": "ETF",
+      "index": "{{index}} index",
+      "indexColumn": "Index",
+      "gap": "Gap (pts)",
+      "perYear": "{{period}} (p.a.)",
+      "periods": {
+        "1D": "1 day",
+        "1M": "1 month",
+        "3M": "3 months",
+        "YTD": "YTD",
+        "1Y": "1Y",
+        "3Y": "3 years",
+        "5Y": "5 years",
+        "SI": "Since inception"
+      },
+      "noIndex": "No index of this fund in CMarket's data: no gap."
+    },
+    "risk": {
+      "window": "1 year",
+      "volatility": "Volatility 1Y · 3Y",
+      "sharpe": "Sharpe 1Y",
+      "sharpeRate": "On a risk-free rate of {{rate}} a year",
+      "drawdown": "Max drawdown 1Y",
+      "drawdownDates": "From {{peak}} to {{trough}}",
+      "tracking": "Tracking error · difference",
+      "spread": "Average bid-ask spread"
+    },
+    "holdings": {
+      "count_one": "{{value}} holding",
+      "count_other": "{{value}} holdings",
+      "rank": "#",
+      "name": "Holding",
+      "sector": "Sector",
+      "country": "Country",
+      "weight": "Weight",
+      "others_one": "{{value}} other holding",
+      "others_other": "{{value}} other holdings",
+      "asOf": "As of {{date}} · {{source}}",
+      "sources": {
+        "eodhd": "EODHD",
+        "file": "ETF profiles file"
+      },
+      "top": "The 10 largest: {{value}} of the fund",
+      "listed": "Opens its profile",
+      "empty": "No holdings known for this fund yet."
+    },
+    "allocation": {
+      "views": {
+        "sector": "Sector",
+        "region": "Region"
+      },
+      "other": "Other",
+      "empty": {
+        "sector": "No breakdown by sector for this fund.",
+        "region": "No breakdown by region for this fund."
+      }
+    },
+    "structure": {
+      "replication": "Replication",
+      "dividends": "Dividends",
+      "domicile": "Domicile · status",
+      "currency": "Fund currency · hedging",
+      "benchmark": "Benchmark index",
+      "inception": "Inception date",
+      "issuer": "Issuer",
+      "ter": "TER",
+      "isin": "ISIN",
+      "accumulating": "Accumulating · no distribution",
+      "distributing": "Distributing · {{frequency}}",
+      "distributingOnly": "Distributing"
+    },
+    "growth": {
+      "fund": "{{code}} (total return)",
+      "index": "Index",
+      "summary": "{{fund}} from {{from}} to {{to}}: 100 to {{last}}; {{index}}: 100 to {{indexLast}}.",
+      "summaryAlone": "{{fund}} from {{from}} to {{to}}: 100 to {{last}}.",
+      "hint": "100 invested on the first day, distributions reinvested; the index from its first close on the fund's line.",
+      "empty": "No session in this period."
+    },
+    "annual": {
+      "year": "Year",
+      "etf": "ETF",
+      "index": "Index",
+      "gap": "Gap (pts)",
+      "toDate": "{{year}} (YTD)",
+      "empty": "No calendar year in the history yet."
+    },
+    "distributions": {
+      "exDate": "Ex-date",
+      "paymentDate": "Payment date",
+      "amount": "Amount",
+      "yield": "Yield",
+      "empty": "No distribution recorded yet.",
+      "accumulating": "{{code}} accumulates its income: it pays no distributions."
+    },
+    "policy": {
+      "policy": "Policy",
+      "frequency": "Frequency",
+      "yield": "12-month distribution yield",
+      "trailing": "Paid over 12 months",
+      "last": "Last distribution",
+      "lastValue": "{{amount}} on {{date}}",
+      "count": "Distributions recorded",
+      "perYear": "Paid per calendar year",
+      "yearToDate": "{{year}} so far"
+    }
   }
 }

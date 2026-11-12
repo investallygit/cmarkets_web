@@ -171,7 +171,12 @@
       "inception_date": "Inception",
       "nav": "NAV",
       "bid": "Bid",
-      "ask": "Ask"
+      "ask": "Ask",
+      "holdings_count": "Holdings",
+      "holdings_date": "Holdings date",
+      "top_holdings": "Top holdings",
+      "sector_weights": "Sector weights",
+      "region_weights": "Region weights"
     },
     "check": "Check",
     "issues": {
@@ -194,6 +199,7 @@
       "codeTaken": "{{code}} is another security's code",
       "isinTaken": "{{column}}: the ISIN of a security that is not a bond",
       "scheduleShares": "The shares repaid fall on payment dates, add up to 100% and end at maturity",
+      "weightsOver": "{{column}}: the weights add up to {{total}}, over 100%",
       "bondDates": "{{column}}: after the issue, by maturity at the latest",
       "askBelowBid": "The ask is below the bid"
     },
@@ -264,7 +270,7 @@
       "securities": "On publish: the security master is updated; a DataPublished event is sent to open screens.",
       "bond-master": "On publish: the bonds are listed or described again and their figures of the day recalculated (BS); a DataPublished event is sent to open screens.",
       "bond-ratings": "On publish: the ratings join their history and the composite ratings of BS follow; a DataPublished event is sent to open screens.",
-      "etf-profiles": "On publish: the ETFs are listed or described again and their figures recalculated (ETFS); a DataPublished event is sent to open screens.",
+      "etf-profiles": "On publish: the ETFs are listed or described again, their holdings and allocations replaced where the file gives them, and their figures recalculated (ETFS, DES); a DataPublished event is sent to open screens.",
       "etf-nav": "On publish: the ETFs' premiums, discounts and spreads are recalculated (ETFS); a DataPublished event is sent to open screens."
     },
     "fix": {

@@ -16,6 +16,13 @@ const BOND_DATE_COLUMNS: ReadonlySet<string> = new Set([
   'put_schedule',
 ])
 
+/** The "ETF profiles" columns of weights, each list at most 100% (screen 19's portfolio). */
+const WEIGHT_COLUMNS: ReadonlySet<string> = new Set([
+  'top_holdings',
+  'sector_weights',
+  'region_weights',
+])
+
 /** The name of a template column in the user's language; the file's name when not a template one. */
 export function useColumnLabel() {
   const { t } = useTranslation()
@@ -91,7 +98,14 @@ export function useIssueText() {
           return issue.column === 'ask'
             ? t('dataImport.issues.askBelowBid')
             : t('dataImport.issues.inconsistentPrices')
+        // The ETF profiles' portfolio (screen 19): weights adding up past 100%.
         case 'inconsistentAmounts':
+          if (issue.column && WEIGHT_COLUMNS.has(issue.column)) {
+            return t('dataImport.issues.weightsOver', {
+              column,
+              total: format.percent(Number(params.total ?? 0), 1, false),
+            })
+          }
           return issue.column === 'amortization_schedule'
             ? t('dataImport.issues.scheduleShares')
             : t('dataImport.issues.inconsistentAmounts')

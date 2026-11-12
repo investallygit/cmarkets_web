@@ -100,21 +100,42 @@ const BOND_LAYOUTS: Layouts = {
 }
 
 /**
- * An ETF's tabs until its mockup (screen 19, step 33). DES:
+ * An ETF's tabs (screen 19 mockup). DES:
  *
- *   chart     chart     | blocks
- *   documents documents | blocks
+ *   history  history  | performance
+ *   history  history  | risk
+ *   holdings | allocation | structure
  *
- * The blocks are ETFS's five of the selected ETF; GP, the chart alone.
+ * GP, the price chart alone; HLD, every line beside the sectors and the regions; PERF, the total
+ * return against the index over the calendar years, beside every period and the risk; DIST, the
+ * distributions beside the fund's policy.
  */
 // prettier-ignore
 const ETF_LAYOUTS: Layouts = {
   des: [
-    { i: 'chart', name: 'priceChart', x: 0, y: 0, w: 7, h: 15, minW: 4, minH: 8 },
-    { i: 'blocks', name: 'etfProfile', x: 7, y: 0, w: 5, h: 26, minW: 3, minH: 8 },
-    { i: 'documents', name: 'documentsNews', x: 0, y: 15, w: 7, h: 11, minW: 3, minH: 4 },
+    { i: 'history', name: 'etfPriceHistory', x: 0, y: 0, w: 8, h: 16, minW: 4, minH: 8 },
+    { i: 'performance', name: 'etfPerformance', x: 8, y: 0, w: 4, h: 9, minW: 3, minH: 5 },
+    { i: 'risk', name: 'etfRisk', x: 8, y: 9, w: 4, h: 7, minW: 3, minH: 4 },
+    { i: 'holdings', name: 'etfTopHoldings', x: 0, y: 16, w: 4, h: 10, minW: 3, minH: 5 },
+    { i: 'allocation', name: 'etfAllocation', x: 4, y: 16, w: 4, h: 10, minW: 3, minH: 5 },
+    { i: 'structure', name: 'etfStructure', x: 8, y: 16, w: 4, h: 10, minW: 3, minH: 5 },
   ],
   gp: [{ i: 'chart', name: 'priceChart', x: 0, y: 0, w: 12, h: 26, minW: 6, minH: 10 }],
+  hld: [
+    { i: 'holdings', name: 'etfHoldings', x: 0, y: 0, w: 7, h: 26, minW: 4, minH: 6 },
+    { i: 'sectors', name: 'etfSectors', x: 7, y: 0, w: 5, h: 13, minW: 3, minH: 5 },
+    { i: 'regions', name: 'etfRegions', x: 7, y: 13, w: 5, h: 13, minW: 3, minH: 5 },
+  ],
+  perf: [
+    { i: 'growth', name: 'etfGrowth', x: 0, y: 0, w: 8, h: 15, minW: 4, minH: 8 },
+    { i: 'performance', name: 'etfPerformance', x: 8, y: 0, w: 4, h: 13, minW: 3, minH: 6 },
+    { i: 'annual', name: 'etfAnnualReturns', x: 0, y: 15, w: 8, h: 11, minW: 4, minH: 5 },
+    { i: 'risk', name: 'etfRisk', x: 8, y: 13, w: 4, h: 13, minW: 3, minH: 4 },
+  ],
+  dist: [
+    { i: 'distributions', name: 'etfDistributions', x: 0, y: 0, w: 7, h: 26, minW: 4, minH: 6 },
+    { i: 'policy', name: 'etfDistributionPolicy', x: 7, y: 0, w: 5, h: 26, minW: 3, minH: 6 },
+  ],
 }
 
 /** The tabs every profile shows alike, which keep one layout across types. */
@@ -136,7 +157,7 @@ export function defaultLayout(fn: SecurityFunction, type: SecurityType): readonl
 
 /**
  * Layout key of a tab for /me/layouts/{screen}: DES, DES-GP, DES-DVD... for an equity and the
- * shared tabs; BOND, BOND-GP, BOND-CF... for a bond's own; ETF, ETF-GP for an ETF's.
+ * shared tabs; BOND, BOND-GP, BOND-CF... for a bond's own; ETF, ETF-GP, ETF-HLD... for an ETF's.
  */
 export function layoutKey(fn: SecurityFunction, type: SecurityType): string {
   const prefix = ownLayouts(fn, type)?.prefix ?? 'DES'

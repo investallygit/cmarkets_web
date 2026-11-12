@@ -39,9 +39,20 @@ describe('the profile of each security type (spec section 9)', () => {
     expect(SECURITY_PROFILES.equity.menuParent).toBeUndefined()
   })
 
-  it("gives an ETF its chart, its documents, its news and its research, and lights EQS as ETFS", () => {
-    expect(SECURITY_PROFILES.etf.tabs).toEqual(['des', 'gp', 'doc', 'n', 'ana'])
+  it("gives an ETF screen 19's six tabs, then the news and research, and lights EQS as ETFS", () => {
+    expect(SECURITY_PROFILES.etf.tabs).toEqual([
+      'des',
+      'gp',
+      'hld',
+      'perf',
+      'dist',
+      'doc',
+      'n',
+      'ana',
+    ])
     expect(SECURITY_PROFILES.etf.menuParent).toBe('EQS')
     expect(profileTabLabelKey('etf', 'gp')).toBe('security.tabs.gp')
+    expect(securityFunctionTypes('hld')).toEqual(['etf'])
+    expect(hasProfileTab('equity', 'dist')).toBe(false)
   })
 })

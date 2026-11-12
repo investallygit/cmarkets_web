@@ -57,7 +57,7 @@ export {
 } from './content'
 export { dataAdminApi, dataAdminRoutes, type ImportQuery, type UploadInput } from './dataAdmin'
 export { devToolsApi, devToolsRoutes, type DemoAccountsDto, type SentCodeQuery } from './devTools'
-export { etfsApi, etfsRoutes } from './etfs'
+export { etfsApi, etfsRoutes, type EtfHistoryQuery } from './etfs'
 export { marketApi, marketRoutes, type HistoryRange } from './market'
 export { meApi, meRoutes } from './me'
 export { messagingApi, messagingRoutes } from './messaging'

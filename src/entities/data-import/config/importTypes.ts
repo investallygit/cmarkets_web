@@ -45,7 +45,7 @@ export const IMPORT_COLUMNS = [
   'amount_outstanding', 'status', 'agency', 'rating', 'rating_date', 'exchange', 'short_name', 'provider', 'brand',
   'asset_class', 'sub_category', 'geography', 'replication', 'distribution', 'distribution_frequency', 'ucits',
   'hedged', 'fund_currency', 'domicile', 'ter', 'aum', 'benchmark', 'benchmark_symbol', 'inception_date', 'nav',
-  'bid', 'ask',
+  'bid', 'ask', 'holdings_count', 'holdings_date', 'top_holdings', 'sector_weights', 'region_weights',
 ] as const
 export type ImportColumnName = (typeof IMPORT_COLUMNS)[number]
 

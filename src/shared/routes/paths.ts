@@ -62,8 +62,8 @@ export const routes = {
 } as const
 
 /**
- * Tabs of the security profiles, each matching a command bar code (spec section 9, screens 2 and
- * 20); which profile has which tab: SECURITY_PROFILES (profiles.ts).
+ * Tabs of the security profiles, each matching a command bar code (spec section 9, screens 2, 19
+ * and 20); which profile has which tab: SECURITY_PROFILES (profiles.ts).
  */
 export const SECURITY_FUNCTIONS = [
   'des',
@@ -77,6 +77,9 @@ export const SECURITY_FUNCTIONS = [
   'bp',
   'cf',
   'rat',
+  'hld',
+  'perf',
+  'dist',
 ] as const
 export type SecurityFunction = (typeof SECURITY_FUNCTIONS)[number]
 

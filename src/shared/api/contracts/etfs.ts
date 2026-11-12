@@ -303,3 +303,126 @@ export interface SavedEtfScreenInputDto {
   name: string
   criteria: EtfScreenCriteriaDto
 }
+
+// The ETF profile's own reads (spec, screen 19): the price and NAV history, the holdings, the
+// allocation by sector or region (the HLD tab, DES's top 10 and allocation), the calendar years
+// (PERF).
+
+/** What GET /etfs/{id}/history adds to each session: the NAV, the total return, the index. */
+export type EtfHistorySeries = 'nav' | 'total' | 'index'
+
+/** GET /etfs/{id}/history?from=&to=&interval=&with=: a session, or a week's last one. */
+export interface EtfHistoryDayDto {
+  date: IsoDate
+  close: number
+  /** The session's, or the week's with interval=1w. */
+  volume: number
+  /** with=nav: the NAV per share, null without one that day. */
+  nav: number | null
+  /** with=nav: (close − NAV) / NAV × 100. */
+  premiumDiscountPct: number | null
+  /** with=total: the close with the distributions reinvested, 100 on the first day given (by week, the first week's last session). */
+  totalReturn: number | null
+  /** with=index: the benchmark on the total return's scale, equal to it on its first close. */
+  index: number | null
+}
+
+/** The sectors of a fund's portfolio: the eleven of the equity markets, a bond fund's issuers, cash. */
+export const HOLDING_SECTORS = [
+  'technology',
+  'financials',
+  'healthCare',
+  'industrials',
+  'consumerDiscretionary',
+  'consumerStaples',
+  'communication',
+  'energy',
+  'materials',
+  'utilities',
+  'realEstate',
+  'government',
+  'corporate',
+  'securitized',
+  'cash',
+  'other',
+] as const
+export type HoldingSector = (typeof HOLDING_SECTORS)[number]
+
+/** The regions of a fund's portfolio, the ten EODHD gives (Morningstar's). */
+export const HOLDING_REGIONS = [
+  'northAmerica',
+  'unitedKingdom',
+  'europeDeveloped',
+  'europeEmerging',
+  'africaMiddleEast',
+  'japan',
+  'australasia',
+  'asiaDeveloped',
+  'asiaEmerging',
+  'latinAmerica',
+  'other',
+] as const
+export type HoldingRegion = (typeof HOLDING_REGIONS)[number]
+
+/** Where a portfolio comes from: EODHD's fundamentals, else the "ETF profiles" file. */
+export type EtfPortfolioSource = 'eodhd' | 'file'
+
+/** A line of the portfolio, the largest first. */
+export interface EtfHoldingDto {
+  rank: number
+  name: string
+  weightPct: number
+  /** The security CMarket lists under it, whose profile it opens; null otherwise. */
+  securityId: string | null
+  isin: string | null
+  sector: HoldingSector | null
+  /** The issuer's country (ISO). */
+  country: string | null
+}
+
+/** GET /etfs/{id}/holdings?top=: the largest lines and the number of lines in all. */
+export interface EtfHoldingsDto {
+  etfId: string
+  /** Null before a portfolio is known. */
+  asOf: IsoDate | null
+  source: EtfPortfolioSource | null
+  /** The lines of the whole portfolio, e.g. 1,523. */
+  total: number | null
+  items: EtfHoldingDto[]
+}
+
+export type EtfAllocationBy = 'sector' | 'region'
+
+export interface EtfAllocationItemDto {
+  /** A sector or a region, "other" for what the source does not name. */
+  key: HoldingSector | HoldingRegion
+  weightPct: number
+}
+
+/** GET /etfs/{id}/allocation?by=: the weights the largest first, "other" last. */
+export interface EtfAllocationDto {
+  etfId: string
+  by: EtfAllocationBy
+  asOf: IsoDate | null
+  source: EtfPortfolioSource | null
+  items: EtfAllocationItemDto[]
+}
+
+/** A calendar year's total return, the fund's and its index's, and the gap in points. */
+export interface EtfAnnualReturnDto {
+  year: number
+  etfPct: number | null
+  indexPct: number | null
+  gapPts: number | null
+  /** The current year, so far. */
+  toDate: boolean
+}
+
+/** GET /etfs/{id}/annual-returns?years=: the calendar years, the latest first. */
+export interface EtfAnnualReturnsDto {
+  etfId: string
+  /** The latest calculation's session, which the current year runs to. */
+  date: IsoDate | null
+  benchmark: string | null
+  years: EtfAnnualReturnDto[]
+}

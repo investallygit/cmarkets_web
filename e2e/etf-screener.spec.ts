@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test'
 // ETFS, the ETF screener of ROADMAP step 32 (spec screen 15): the demo's twenty ETFs, the
 // mockup's six among them with its figures; its criteria, which leave CW8 out (its 0.38% is above
 // the 0.25% they ask: a slip of the mockup); IWDA's five blocks; the criteria narrowed, a screen
-// saved and loaded back, the export; a double-click to the ETF's profile.
+// saved and loaded back, the export; a double-click to the ETF's profile (screen 19, step 33).
 
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title }) })
@@ -71,7 +71,9 @@ test('ETFS lists the mockup’s ETFs under its criteria and shows IWDA’s five 
   await expect(performance).toContainText(
     /\+9\.6%\s*·\s*\+12\.1%\s*Since inception \(p\.a\.\)\s*\+9\.0%/,
   )
-  await expect(performance).toContainText(/0\.12% · [-−]0\.15%\s*Volatility 1Y · 3Y\s*11\.9% · 15\.2%/)
+  await expect(performance).toContainText(
+    /0\.12% · [-−]0\.15%\s*Volatility 1Y · 3Y\s*11\.9% · 15\.2%/,
+  )
   await expect(performance).toContainText(/Sharpe 1Y · max drawdown\s*\d\.\d{2} · [-−]8\.4%/)
 
   // VUSA distributes every quarter.
@@ -138,23 +140,21 @@ test('the criteria narrow the ETFs, a screen is saved and loaded back, the resul
   await expect(criteria.getByRole('button', { name: 'Hedged bonds', exact: true })).toHaveCount(0)
 })
 
-test('a double-click opens an ETF’s profile, its blocks beside its chart, under EQS', async ({
-  page,
-}) => {
+test('a double-click opens an ETF’s profile, screen 19, under EQS', async ({ page }) => {
   await page.goto('/etfs')
   await results(page).getByRole('row', { name: /CSPX/ }).dblclick()
   await expect(page).toHaveURL(/\/securities\/CSPX\.LSE\/des$/)
   await expect(page.getByRole('heading', { level: 1, name: 'CSPX' })).toBeVisible()
-  await expect(page.getByText(/^ETF · LSE · Ireland · USD$/)).toBeVisible()
+  await expect(
+    page.getByText(
+      /^ETF · Equity · US · BlackRock \(iShares\) · LSE · USD · UCITS · Accumulating$/,
+    ),
+  ).toBeVisible()
   const tabs = page.getByRole('navigation', { name: 'Security functions' })
-  for (const tab of ['DES', 'GP', 'DOC', 'N', 'ANA'])
+  for (const tab of ['DES', 'GP', 'HLD', 'PERF', 'DIST', 'DOC', 'N', 'ANA'])
     await expect(tabs.getByRole('link', { name: new RegExp(`^${tab}\\b`) })).toBeVisible()
   await expect(tabs.getByRole('link', { name: /^FA/ })).toHaveCount(0)
-  await expect(
-    panel(page, 'iShares Core S&P 500 UCITS ETF · CSPX').getByRole('region', {
-      name: 'B. Structure',
-    }),
-  ).toContainText('Physical (full)')
+  await expect(panel(page, 'Structure and costs')).toContainText('Physical (full)')
   await expect(
     page.getByRole('navigation', { name: 'Main menu' }).getByRole('link', { name: /^EQS/ }),
   ).toHaveClass(/border-accent-amber/)

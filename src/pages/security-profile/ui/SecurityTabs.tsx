@@ -7,7 +7,8 @@ import { TAB_CODES } from '../config/tabs'
 
 /**
  * The tabs of the security's profile (spec section 9): DES, GP, FA, DVD, N, DOC, HDS, ANA for an
- * equity; DES, GP, BP, CF, RAT, DOC, N, ANA for a bond.
+ * equity; DES, GP, BP, CF, RAT, DOC, N, ANA for a bond; DES, GP, HLD, PERF, DIST, DOC, N, ANA for
+ * an ETF.
  */
 export function SecurityTabs({ security }: { security: SecurityProfileDto }) {
   const { t } = useTranslation()

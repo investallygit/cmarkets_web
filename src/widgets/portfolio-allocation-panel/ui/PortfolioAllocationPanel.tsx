@@ -5,6 +5,7 @@ import { useAllocation } from '@/entities/portfolio'
 import type { AllocationBy, AllocationItemDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { withAlpha } from '@/shared/lib/theme'
+import { AllocationBar as Breakdown } from '@/shared/ui/charts/AllocationBar'
 import { MAX_SERIES, useChartTheme } from '@/shared/ui/charts/chartTheme'
 import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs } from '@/shared/ui/PanelTabs'
@@ -109,41 +110,14 @@ function AllocationBar({ items, by }: { items: AllocationItemDto[]; by: Allocati
   const ordered = by === 'maturity' ? [...rows].sort((a, b) => order(a.key) - order(b.key)) : rows
 
   return (
-    <div className="flex h-full flex-col gap-3 p-3">
-      <div
-        role="img"
-        aria-label={ordered
-          .map((row) => `${labelOf(row.key)} ${format.percent(row.weightPct, 1, false)}`)
-          .join(', ')}
-        className="flex h-5 w-full shrink-0 gap-0.5"
-      >
-        {ordered
-          .filter((row) => row.weightPct > 0)
-          .map((row) => (
-            <div
-              key={row.key}
-              title={`${labelOf(row.key)}: ${format.percent(row.weightPct, 1, false)}`}
-              className="min-w-0.5 first:rounded-l-xs last:rounded-r-xs"
-              style={{ flexGrow: row.weightPct, flexBasis: 0, backgroundColor: colorOf(row.key) }}
-            />
-          ))}
-      </div>
-      <ul className="flex min-h-0 flex-col gap-1.5 overflow-auto">
-        {ordered.map((row) => (
-          <li key={row.key} className="flex items-center gap-2 font-sans text-label">
-            <span
-              aria-hidden
-              className="size-2.5 shrink-0"
-              style={{ backgroundColor: colorOf(row.key) }}
-            />
-            <span className="truncate">{labelOf(row.key)}</span>
-            <span className="ml-auto font-mono text-data">
-              {format.percent(row.weightPct, 1, false)}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Breakdown
+      rows={ordered.map((row) => ({
+        key: row.key,
+        label: labelOf(row.key),
+        weightPct: row.weightPct,
+        color: colorOf(row.key),
+      }))}
+    />
   )
 }
 

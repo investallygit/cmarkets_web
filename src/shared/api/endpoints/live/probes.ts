@@ -267,6 +267,35 @@ export const PROBES: Probe[] = [
     call: (c) => etfsApi.distributions(c.etfId),
     check: has('distribution', 'frequency', 'items'),
   },
+  // The ETF profile's own (screen 19): the price and NAV history, the holdings, the allocation,
+  // the calendar years of PERF.
+  {
+    name: 'ETFs: history',
+    permission: 'market:read',
+    call: (c) => etfsApi.history(c.etfId, { interval: '1w', with: ['nav', 'total', 'index'] }),
+    check: (days: { date: string; close: number; totalReturn: number | null }[]) => {
+      expect(days.length).toBeGreaterThan(0)
+      expect(days[0].totalReturn).toBe(100)
+    },
+  },
+  {
+    name: 'ETFs: holdings',
+    permission: 'market:read',
+    call: (c) => etfsApi.holdings(c.etfId, 10),
+    check: has('asOf', 'source', 'total', 'items'),
+  },
+  {
+    name: 'ETFs: allocation',
+    permission: 'market:read',
+    call: (c) => etfsApi.allocation(c.etfId, 'region'),
+    check: has('by', 'asOf', 'items'),
+  },
+  {
+    name: 'ETFs: annual returns',
+    permission: 'market:read',
+    call: (c) => etfsApi.annualReturns(c.etfId),
+    check: has('date', 'benchmark', 'years'),
+  },
   {
     name: 'Analysis: saved ETF screens',
     permission: 'analysis:read',

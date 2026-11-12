@@ -48,6 +48,9 @@
       "bp": "Valorisation",
       "cf": "Échéancier",
       "rat": "Notations",
+      "hld": "Composition",
+      "perf": "Performance",
+      "dist": "Distributions",
       "priceYield": "Prix et rendement"
     },
     "profiles": {

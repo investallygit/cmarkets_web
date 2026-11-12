@@ -48,6 +48,9 @@
       "bp": "Pricing",
       "cf": "Schedule",
       "rat": "Ratings",
+      "hld": "Holdings",
+      "perf": "Performance",
+      "dist": "Distributions",
       "priceYield": "Price and yield"
     },
     "profiles": {
