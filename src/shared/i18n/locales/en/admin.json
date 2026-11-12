@@ -277,6 +277,9 @@
     "portfolios": "Portfolios",
     "riskFreeRate": "Risk-free rate",
     "riskFreeRateHint": "Used by the Sharpe ratio of every portfolio and shown under it.",
+    "riskFreeRates": "Risk-free rates of the ETFs' currencies",
+    "riskFreeRatesHint": "The XAF rate above is a portfolio's; these give the Sharpe ratio of an ETF trading in each currency (ETFS). The ETFs' figures are computed again.",
+    "riskFreeRateOf": "{{currency}} rate",
     "bonds": "Bonds",
     "xafReferenceCurve": "XAF reference curve",
     "xafReferenceCurveHint": "The CEMAC sovereign curve the XAF bonds' credit spread and Z-spread are read on (BS). The day's figures are computed again.",
@@ -534,6 +537,7 @@
     "actionFilter": "Action:",
     "allActions": "All",
     "none": "No entry matches.",
-    "choose": "Click an entry to see its values before and after."
+    "choose": "Click an entry to see its values before and after.",
+    "riskFreeRateOf": "Risk-free rate ({{currency}})"
   }
 }

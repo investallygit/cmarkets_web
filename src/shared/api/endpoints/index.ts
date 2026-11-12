@@ -14,6 +14,7 @@ import { contentRoutes } from './content'
 import { dataAdminRoutes } from './dataAdmin'
 import type { RouteTable } from './define'
 import { devToolsRoutes } from './devTools'
+import { etfsRoutes } from './etfs'
 import { marketRoutes } from './market'
 import { meRoutes } from './me'
 import { messagingRoutes } from './messaging'
@@ -56,6 +57,7 @@ export {
 } from './content'
 export { dataAdminApi, dataAdminRoutes, type ImportQuery, type UploadInput } from './dataAdmin'
 export { devToolsApi, devToolsRoutes, type DemoAccountsDto, type SentCodeQuery } from './devTools'
+export { etfsApi, etfsRoutes } from './etfs'
 export { marketApi, marketRoutes, type HistoryRange } from './market'
 export { meApi, meRoutes } from './me'
 export { messagingApi, messagingRoutes } from './messaging'
@@ -92,6 +94,7 @@ export const ROUTE_TABLES: Readonly<Record<string, RouteTable>> = {
   Content: contentRoutes,
   DataAdmin: dataAdminRoutes,
   DevTools: devToolsRoutes,
+  Etfs: etfsRoutes,
   Market: marketRoutes,
   Me: meRoutes,
   Messaging: messagingRoutes,

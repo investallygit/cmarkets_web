@@ -44,6 +44,10 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
   const [moderation, setModeration] = useState(settings.moderation)
   const [riskFreeRatePct, setRiskFreeRatePct] = useState<number | null>(settings.riskFreeRatePct)
   const [xafReferenceCurve, setXafReferenceCurve] = useState(settings.xafReferenceCurve)
+  // The ETFs' currencies (spec section 14.5): EUR, USD, GBP.
+  const [rates, setRates] = useState<{ currency: string; ratePct: number | null }[]>(
+    settings.riskFreeRates,
+  )
   const [submitted, setSubmitted] = useState(false)
 
   const local: Record<string, string | null> = {
@@ -67,9 +71,18 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
       riskFreeRatePct === null || riskFreeRatePct < 0 || riskFreeRatePct > 30
         ? t('platformSettings.errors.riskFreeRate')
         : null,
+    riskFreeRates: rates.some(
+      (rate) => rate.ratePct === null || rate.ratePct < 0 || rate.ratePct > 30,
+    )
+      ? t('platformSettings.errors.riskFreeRate')
+      : null,
   }
   const server = isApiError(save.error, 400) ? (save.error.problem.errors ?? {}) : {}
-  const error = (field: string) => (submitted && local[field]) || server[field]?.[0]
+  // A rate's error comes under riskFreeRates[0].ratePct: the list's own field shows it.
+  const serverError = (field: string) =>
+    server[field]?.[0] ??
+    Object.entries(server).find(([key]) => key.startsWith(`${field}[`))?.[1]?.[0]
+  const error = (field: string) => (submitted && local[field]) || serverError(field)
 
   const update = {
     quotas: { ...settings.quotas, ...quotas },
@@ -78,6 +91,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     commissionPct: commissionPct ?? 0,
     moderation,
     riskFreeRatePct: riskFreeRatePct ?? 0,
+    riskFreeRates: rates.map((rate) => ({ currency: rate.currency, ratePct: rate.ratePct ?? 0 })),
     xafReferenceCurve,
   }
   const changed =
@@ -89,6 +103,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
       commissionPct: settings.commissionPct,
       moderation: settings.moderation,
       riskFreeRatePct: settings.riskFreeRatePct,
+      riskFreeRates: settings.riskFreeRates,
       xafReferenceCurve: settings.xafReferenceCurve,
     })
 
@@ -101,6 +116,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     setCommissionPct(settings.commissionPct)
     setModeration(settings.moderation)
     setRiskFreeRatePct(settings.riskFreeRatePct)
+    setRates(settings.riskFreeRates)
     setXafReferenceCurve(settings.xafReferenceCurve)
   }
 
@@ -234,6 +250,35 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
               highlight
               className="w-24"
             />
+          </Field>
+          <Field
+            group
+            label={t('platformSettings.riskFreeRates')}
+            hint={t('platformSettings.riskFreeRatesHint')}
+            error={error('riskFreeRates')}
+          >
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              {rates.map((rate) => (
+                <label key={rate.currency} className="flex items-center gap-2 font-mono text-data">
+                  <span>{rate.currency}</span>
+                  <NumberInput
+                    value={rate.ratePct}
+                    onChange={(ratePct) =>
+                      setRates((current) =>
+                        current.map((entry) =>
+                          entry.currency === rate.currency ? { ...entry, ratePct } : entry,
+                        ),
+                      )
+                    }
+                    decimals={2}
+                    suffix="%"
+                    aria-label={t('platformSettings.riskFreeRateOf', { currency: rate.currency })}
+                    highlight
+                    className="w-24"
+                  />
+                </label>
+              ))}
+            </div>
           </Field>
         </Section>
 

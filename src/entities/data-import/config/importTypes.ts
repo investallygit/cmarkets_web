@@ -12,6 +12,8 @@ export const IMPORT_TYPES: readonly ImportType[] = [
   'history',
   'bond-master',
   'bond-ratings',
+  'etf-profiles',
+  'etf-nav',
 ]
 
 export function isImportType(value: string): value is ImportType {
@@ -40,7 +42,10 @@ export const IMPORT_COLUMNS = [
   'shares', 'currency', 'ticker', 'issuer', 'issuer_category', 'market', 'seniority', 'coupon_type',
   'coupon_rate', 'float_index', 'float_margin', 'frequency', 'day_count', 'issue_date', 'first_coupon_date',
   'maturity_date', 'redemption', 'amortization_schedule', 'call_schedule', 'put_schedule', 'face_value',
-  'amount_outstanding', 'status', 'agency', 'rating', 'rating_date',
+  'amount_outstanding', 'status', 'agency', 'rating', 'rating_date', 'exchange', 'short_name', 'provider', 'brand',
+  'asset_class', 'sub_category', 'geography', 'replication', 'distribution', 'distribution_frequency', 'ucits',
+  'hedged', 'fund_currency', 'domicile', 'ter', 'aum', 'benchmark', 'benchmark_symbol', 'inception_date', 'nav',
+  'bid', 'ask',
 ] as const
 export type ImportColumnName = (typeof IMPORT_COLUMNS)[number]
 
@@ -49,7 +54,7 @@ export function isImportColumn(name: string): name is ImportColumnName {
 }
 
 /** The figures whose change from the stored value raises an alert. */
-export const CHANGE_FIELDS = ['close', 'value', 'avg_rate', 'rate'] as const
+export const CHANGE_FIELDS = ['close', 'value', 'avg_rate', 'rate', 'nav'] as const
 export type ChangeField = (typeof CHANGE_FIELDS)[number]
 
 export function isChangeField(name: string): name is ChangeField {

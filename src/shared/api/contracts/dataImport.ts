@@ -12,6 +12,8 @@ export type ImportType =
   | 'history'
   | 'bond-master'
   | 'bond-ratings'
+  | 'etf-profiles'
+  | 'etf-nav'
 
 /** How often a file is expected: each session, each auction, weekly, or when there is news. */
 export type ImportFrequency = 'session' | 'auction' | 'weekly' | 'onDemand' | 'periodic' | 'once'
@@ -162,8 +164,11 @@ export interface CoverageDto {
   items: CoverageItemDto[]
 }
 
-/** The bulk loads of spec section 11: closing prices after each close, fundamentals at night. */
-export type EodhdJob = 'us-eod' | 'europe-eod' | 'fundamentals' | 'news'
+/**
+ * The loads of spec section 11: closing prices after each close, fundamentals at night, the news,
+ * and the ETFs' data (their benchmarks each evening, their profiles and distributions each week).
+ */
+export type EodhdJob = 'us-eod' | 'europe-eod' | 'fundamentals' | 'news' | 'etfs'
 
 export interface EodhdRunDto {
   id: string

@@ -226,7 +226,13 @@ export interface QuotaDto {
   alerts: number | null
 }
 
-/** GET / PUT /admin/settings: quotas, research pricing and moderation, risk-free rate, XAF curve. */
+/** A risk-free rate of a currency, in percent a year. */
+export interface RiskFreeRateDto {
+  currency: string
+  ratePct: number
+}
+
+/** GET / PUT /admin/settings: quotas, research pricing and moderation, risk-free rates, XAF curve. */
 export interface PlatformSettingsDto {
   /** null means unlimited. */
   quotas: Record<AccountType, QuotaDto>
@@ -235,8 +241,13 @@ export interface PlatformSettingsDto {
   maxPrice: number
   commissionPct: number
   moderation: 'before' | 'after'
-  /** R_f of the Sharpe ratio (spec section 14.3). */
+  /** R_f of the Sharpe ratio (spec section 14.3): the XAF rate, a portfolio's. */
   riskFreeRatePct: number
+  /**
+   * The rates of the other trading currencies, which an ETF's Sharpe ratio is worked out on (spec
+   * section 14.5): EUR, USD and GBP.
+   */
+  riskFreeRates: RiskFreeRateDto[]
   /**
    * The CEMAC state whose sovereign curve the XAF bonds' spreads are read on (spec section 14.4,
    * "Reference curve per currency, set by the Admin"): "CM" by default.

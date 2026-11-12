@@ -22,11 +22,14 @@ describe('the profile of each security type (spec section 9)', () => {
   })
 
   it('offers a tab on the types whose profile has it', () => {
-    expect(securityFunctionTypes('des')).toEqual(['equity', 'bond'])
+    expect(securityFunctionTypes('des')).toEqual(['equity', 'bond', 'etf'])
     expect(securityFunctionTypes('fa')).toEqual(['equity'])
     expect(securityFunctionTypes('cf')).toEqual(['bond'])
     expect(hasProfileTab('bond', 'dvd')).toBe(false)
     expect(hasProfileTab('equity', 'rat')).toBe(false)
+    // An ETF has no accounts, dividends nor shareholders of its own.
+    expect(hasProfileTab('etf', 'fa')).toBe(false)
+    expect(hasProfileTab('etf', 'gp')).toBe(true)
   })
 
   it("names a bond's GP tab Price and yield, and lights YCRV", () => {
@@ -34,5 +37,11 @@ describe('the profile of each security type (spec section 9)', () => {
     expect(profileTabLabelKey('equity', 'gp')).toBe('security.tabs.gp')
     expect(SECURITY_PROFILES.bond.menuParent).toBe('YCRV')
     expect(SECURITY_PROFILES.equity.menuParent).toBeUndefined()
+  })
+
+  it("gives an ETF its chart, its documents, its news and its research, and lights EQS as ETFS", () => {
+    expect(SECURITY_PROFILES.etf.tabs).toEqual(['des', 'gp', 'doc', 'n', 'ana'])
+    expect(SECURITY_PROFILES.etf.menuParent).toBe('EQS')
+    expect(profileTabLabelKey('etf', 'gp')).toBe('security.tabs.gp')
   })
 })

@@ -62,6 +62,10 @@ export function useAuditText() {
     }
     const permission = oneOf(PERMISSIONS, change.scope)
     if (change.field === 'permission' && permission) return t(PERMISSION_LABELS[permission])
+    // An ETF currency's rate (spec section 14.5): its code as the scope, XAF's without one.
+    if (change.field === 'riskFreeRatePct' && change.scope) {
+      return t('audit.riskFreeRateOf', { currency: change.scope })
+    }
     return t(`audit.fields.${change.field}`)
   }
 

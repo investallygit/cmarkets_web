@@ -7,6 +7,7 @@ import { bondsApi } from '../bonds'
 import { chartsApi } from '../charts'
 import { contentApi } from '../content'
 import { dataAdminApi } from '../dataAdmin'
+import { etfsApi } from '../etfs'
 import { marketApi } from '../market'
 import { meApi } from '../me'
 import { messagingApi } from '../messaging'
@@ -22,6 +23,7 @@ export interface ProbeContext {
   me: MeDto
   equityId: string
   bondId: string
+  etfId: string
 }
 
 /** One read of the API module, made when the account has what it needs. */
@@ -231,6 +233,46 @@ export const PROBES: Probe[] = [
     permission: 'market:read',
     call: (c) => bondsApi.cashFlows(c.bondId),
     check: has('nextCouponDate', 'daysToNextCoupon', 'items'),
+  },
+  // ETFS (screen 15) on the screener's permissions; an ETF's reads on the market's, as its profile.
+  {
+    name: 'ETFs: screener',
+    permission: 'analysis:read',
+    module: 'analysis',
+    call: () => etfsApi.screener({ pageSize: 200 }),
+    check: has('universe', 'total', 'items'),
+  },
+  {
+    name: 'ETFs: facets',
+    permission: 'analysis:read',
+    module: 'analysis',
+    call: () => etfsApi.facets(),
+    check: has('assetClasses', 'geographies', 'providers', 'exchanges'),
+  },
+  {
+    name: 'ETFs: etf',
+    permission: 'market:read',
+    call: (c) => etfsApi.etf(c.etfId),
+    check: has('identification', 'structure', 'size', 'costs'),
+  },
+  {
+    name: 'ETFs: performance',
+    permission: 'market:read',
+    call: (c) => etfsApi.performance(c.etfId, ['1D', 'YTD', '1Y']),
+    check: has('returns', 'trackingErrorPct', 'volatility1yPct', 'sharpe', 'maxDrawdownPct'),
+  },
+  {
+    name: 'ETFs: distributions',
+    permission: 'market:read',
+    call: (c) => etfsApi.distributions(c.etfId),
+    check: has('distribution', 'frequency', 'items'),
+  },
+  {
+    name: 'Analysis: saved ETF screens',
+    permission: 'analysis:read',
+    module: 'analysis',
+    call: () => analysisApi.etfScreens(),
+    check: isList,
   },
   {
     name: 'Bonds: auctions',

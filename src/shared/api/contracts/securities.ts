@@ -2,7 +2,7 @@ import type { CalendarEventType } from './calendar'
 import type { CurrencyCode, DataSource, IsoDate, IsoDateTime } from './common'
 import type { HistoryPointDto } from './market'
 
-export type SecurityType = 'equity' | 'bond'
+export type SecurityType = 'equity' | 'bond' | 'etf'
 
 export interface SecuritySearchItemDto {
   /** CMarket security code, e.g. "SEMC" or "AAPL.US". */
@@ -102,7 +102,8 @@ export interface TradeDto {
 /** GET /securities/{id}/dividends: newest first. */
 export interface DividendDto {
   fiscalYear: number
-  kind: 'final' | 'interim' | 'special'
+  /** A fund's distribution for an ETF. */
+  kind: 'final' | 'interim' | 'special' | 'distribution'
   /** Net amount per share. */
   amount: number
   currency: CurrencyCode

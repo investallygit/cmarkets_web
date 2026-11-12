@@ -85,6 +85,9 @@ GET /analysis/bond-screens
 POST /analysis/bond-screens
 DELETE /analysis/bond-screens/{id}
 GET /analysis/compare
+GET /analysis/etf-screens
+POST /analysis/etf-screens
+DELETE /analysis/etf-screens/{id}
 POST /analysis/screener
 GET /analysis/screens
 POST /analysis/screens
@@ -156,6 +159,11 @@ GET /directory/facets
 GET /directory/specialties
 GET /documents
 GET /documents/{id}/file
+GET /etfs
+GET /etfs/{id}
+GET /etfs/{id}/distributions
+GET /etfs/{id}/performance
+GET /etfs/facets
 GET /fx
 GET /indicators/{securityId}
 GET /indices

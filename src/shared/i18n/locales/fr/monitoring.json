@@ -32,7 +32,8 @@
   "security": {
     "types": {
       "equity": "Action ordinaire",
-      "bond": "Obligation"
+      "bond": "Obligation",
+      "etf": "ETF"
     },
     "tabsLabel": "Fonctions de la valeur",
     "tabs": {
@@ -50,7 +51,8 @@
       "priceYield": "Prix et rendement"
     },
     "profiles": {
-      "bond": "Fiche obligataire"
+      "bond": "Fiche obligataire",
+      "etf": "Fiche ETF"
     },
     "figures": {
       "open": "Ouverture",
@@ -92,7 +94,8 @@
   "dividendKinds": {
     "final": "Solde",
     "interim": "Acompte",
-    "special": "Exceptionnel"
+    "special": "Exceptionnel",
+    "distribution": "Distribution"
   },
   "documents": {
     "badges": {

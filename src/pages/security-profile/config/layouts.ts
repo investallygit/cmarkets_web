@@ -99,22 +99,46 @@ const BOND_LAYOUTS: Layouts = {
   ],
 }
 
+/**
+ * An ETF's tabs until its mockup (screen 19, step 33). DES:
+ *
+ *   chart     chart     | blocks
+ *   documents documents | blocks
+ *
+ * The blocks are ETFS's five of the selected ETF; GP, the chart alone.
+ */
+// prettier-ignore
+const ETF_LAYOUTS: Layouts = {
+  des: [
+    { i: 'chart', name: 'priceChart', x: 0, y: 0, w: 7, h: 15, minW: 4, minH: 8 },
+    { i: 'blocks', name: 'etfProfile', x: 7, y: 0, w: 5, h: 26, minW: 3, minH: 8 },
+    { i: 'documents', name: 'documentsNews', x: 0, y: 15, w: 7, h: 11, minW: 3, minH: 4 },
+  ],
+  gp: [{ i: 'chart', name: 'priceChart', x: 0, y: 0, w: 12, h: 26, minW: 6, minH: 10 }],
+}
+
 /** The tabs every profile shows alike, which keep one layout across types. */
 const SHARED_TABS: ReadonlySet<SecurityFunction> = new Set(['n', 'doc', 'ana'])
 
-const ownLayout = (fn: SecurityFunction, type: SecurityType) =>
-  type === 'bond' && !SHARED_TABS.has(fn)
+/** The profiles with tabs of their own, each with its layouts and the prefix of their keys. */
+const OWN_LAYOUTS: Partial<Record<SecurityType, { prefix: string; layouts: Layouts }>> = {
+  bond: { prefix: 'BOND', layouts: BOND_LAYOUTS },
+  etf: { prefix: 'ETF', layouts: ETF_LAYOUTS },
+}
+
+const ownLayouts = (fn: SecurityFunction, type: SecurityType) =>
+  SHARED_TABS.has(fn) ? undefined : OWN_LAYOUTS[type]
 
 /** The default panels of a tab in the profile of the type. */
 export function defaultLayout(fn: SecurityFunction, type: SecurityType): readonly ScreenPanel[] {
-  return (ownLayout(fn, type) ? BOND_LAYOUTS[fn] : PROFILE_LAYOUTS[fn]) ?? []
+  return (ownLayouts(fn, type)?.layouts ?? PROFILE_LAYOUTS)[fn] ?? []
 }
 
 /**
  * Layout key of a tab for /me/layouts/{screen}: DES, DES-GP, DES-DVD... for an equity and the
- * shared tabs; BOND, BOND-GP, BOND-CF... for a bond's own.
+ * shared tabs; BOND, BOND-GP, BOND-CF... for a bond's own; ETF, ETF-GP for an ETF's.
  */
 export function layoutKey(fn: SecurityFunction, type: SecurityType): string {
-  const prefix = ownLayout(fn, type) ? 'BOND' : 'DES'
+  const prefix = ownLayouts(fn, type)?.prefix ?? 'DES'
   return fn === 'des' ? prefix : `${prefix}-${fn.toUpperCase()}`
 }

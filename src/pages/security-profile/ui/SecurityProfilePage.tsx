@@ -12,6 +12,7 @@ import { SecurityHeader } from '@/widgets/security-header'
 import { TAB_CODES } from '../config/tabs'
 import { BondTab, type BondFunction } from './BondTab'
 import { EquityTab, type EquityFunction } from './EquityTab'
+import { EtfTab, type EtfFunction } from './EtfTab'
 import { SecurityTabs } from './SecurityTabs'
 import { SharedTab, type SharedFunction } from './SharedTab'
 
@@ -24,7 +25,8 @@ const isShared = (fn: SecurityFunction): fn is SharedFunction =>
 /**
  * The security profile, DES and the other tabs of spec section 9: GET /securities/{id} answers
  * the security's type, which opens the profile of that type (SECURITY_PROFILES): screen 2 for an
- * equity, screen 20 for a bond. Its header, its tabs, then the panels of the tab.
+ * equity, screen 20 for a bond, screen 19 for an ETF (ETFS's blocks until step 33). Its header, its
+ * tabs, then the panels of the tab.
  * /securities/{id}/{tab}; ?doc= and ?article= open a document or an article.
  */
 export function SecurityProfilePage() {
@@ -72,9 +74,7 @@ function ProfileTab({ fn, security }: { fn: SecurityFunction; security: Security
     return <ModuleLocked module="analysis" />
   }
   if (isShared(fn)) return <SharedTab fn={fn} security={security} />
-  return security.type === 'bond' ? (
-    <BondTab fn={fn as BondFunction} security={security} />
-  ) : (
-    <EquityTab fn={fn as EquityFunction} security={security} />
-  )
+  if (security.type === 'bond') return <BondTab fn={fn as BondFunction} security={security} />
+  if (security.type === 'etf') return <EtfTab fn={fn as EtfFunction} security={security} />
+  return <EquityTab fn={fn as EquityFunction} security={security} />
 }

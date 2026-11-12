@@ -6,7 +6,8 @@ import type { SecurityFunction } from './paths'
  * The profile a security's type opens (spec section 9, "Opening a profile by security type"):
  * DES in the command bar, a double-click in a list or a screener, a search result and a card
  * shared in MSG all lead to /securities/{id}/des, and the type that GET /securities/{id} answers
- * decides the profile, its tabs, its title and the menu entry it lights.
+ * decides the profile, its tabs, its title and the menu entry it lights: screen 2 for an equity,
+ * screen 20 for a bond, screen 19 for an ETF.
  */
 export interface SecurityProfileKind {
   /** Its tabs, in order, each a command bar code. */
@@ -31,6 +32,12 @@ export const SECURITY_PROFILES: Record<SecurityType, SecurityProfileKind> = {
     titleKey: 'security.profiles.bond',
     tabLabels: { gp: 'security.tabs.priceYield' },
     menuParent: 'YCRV',
+  },
+  // Screen 19 until step 33 builds its mockup: ETFS's blocks beside the chart, under EQS as ETFS.
+  etf: {
+    tabs: ['des', 'gp', 'doc', 'n', 'ana'],
+    titleKey: 'security.profiles.etf',
+    menuParent: 'EQS',
   },
 }
 

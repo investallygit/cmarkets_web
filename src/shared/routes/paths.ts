@@ -24,6 +24,8 @@ export const routes = {
   bondCalculatorLegacy: '/yas/:bondId?',
   /** BS (screen 17): the bond screener. */
   bondScreener: '/bs',
+  /** ETFS (screen 15): the ETF screener. */
+  etfScreener: '/etfs',
   portfolio: '/port',
   /** A portfolio and one of its tabs: /port/{id} (positions), /port/{id}/risk... */
   portfolioTabs: '/port/:portfolioId?/:tab?',

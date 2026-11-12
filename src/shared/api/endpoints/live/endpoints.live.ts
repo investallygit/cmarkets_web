@@ -44,6 +44,7 @@ describe.each(accounts)('$accountType ($email)', ({ email }) => {
     context.me = await meApi.get()
     context.equityId = await firstId(() => securitiesApi.list({ type: 'equity' }))
     context.bondId = await firstId(() => bondsApi.list())
+    context.etfId = await firstId(() => securitiesApi.list({ type: 'etf' }))
   })
 
   it.for(PROBES)('$name', async (probe, { skip }) => {

@@ -11,6 +11,7 @@ import {
   HandCoins,
   History,
   IdCard,
+  Layers,
   LayoutDashboard,
   MessagesSquare,
   Newspaper,
@@ -126,6 +127,8 @@ export const SCREENS: readonly ScreenDefinition[] = [
   // BP (screen 16), which YAS opens too, and BS (screen 17) under YCRV, as their mockups light the menu.
   screen('BP', 'BP', routes.bondPricing, 'client', Calculator, { permission: 'analysis:read', module: 'analysis', menuParent: 'YCRV', routePattern: routes.bondPricingBond }),
   screen('BS', 'BS', routes.bondScreener, 'client', ScanLine, { permission: 'analysis:read', module: 'analysis', menuParent: 'YCRV' }),
+  // ETFS (screen 15) under EQS, as its mockup lights the menu (spec section 9).
+  screen('ETFS', 'ETFS', routes.etfScreener, 'client', Layers, { permission: 'analysis:read', module: 'analysis', menuParent: 'EQS' }),
   screen('PUBNEW', 'PUB NEW', routes.publishingStudio, 'client', PenLine, { permission: 'publications:write' }),
   screen('CAL', 'CAL', routes.calendar, 'client', CalendarDays, { permission: 'market:read', module: 'monitoring' }),
   screen('NETME', 'NET ME', routes.networkProfile, 'client', IdCard, { permission: 'directory:profile' }),

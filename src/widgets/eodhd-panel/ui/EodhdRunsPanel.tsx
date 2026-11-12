@@ -12,7 +12,7 @@ import { QueryView } from '@/shared/ui/QueryView'
 const helper = createDataColumnHelper<EodhdRunDto>()
 const getRunId = (run: EodhdRunDto) => run.id
 
-const JOBS: readonly EodhdJob[] = ['us-eod', 'europe-eod', 'fundamentals']
+const JOBS: readonly EodhdJob[] = ['us-eod', 'europe-eod', 'fundamentals', 'etfs']
 const STATUSES = ['ok', 'failed'] as const
 
 /** EODH: the bulk loads of the last 7 days, filtered by load and by result. */

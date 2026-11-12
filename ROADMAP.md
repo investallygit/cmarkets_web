@@ -54,7 +54,7 @@ relative: S < M < L < XL.
 | 29   | Daily bond analytics, BS: bond screener (screen 17)             | Done   |
 | 30   | BP: bond pricing (screen 16)                                    | Done   |
 | 31   | Bond profile (screen 20), the profile chosen by security type   | Done   |
-| 32   | ETF data, ETFS: ETF screener (screen 15)                        | To do  |
+| 32   | ETF data, ETFS: ETF screener (screen 15)                        | Done   |
 | 33   | ETF profile (screen 19)                                         | To do  |
 | 34   | SUBS: subscription management (screen 14)                       | To do  |
 | 35   | Security descriptions on EQS (screen 3)                         | To do  |
@@ -1204,15 +1204,77 @@ CMarket.Api's phase 24.
     (and its yields over 6M), COMPANY X's, GP, BP, CF, RAT, an equity's profile and MSG's bond
     card: 49 audits, nothing found, nothing scrolls sideways.
 
-### Step 32 · ETF data and ETFS · ETF screener (screen 15) (XL): to do
+### Step 32 · ETF data and ETFS · ETF screener (screen 15) (XL): done
 
 CMarket.Api's phase 25.
 
-- Criteria, results with the domicile's flag, the five blocks of the selected ETF, saved screens,
-  export by permission; no comparison block.
-- **CMarket.Api**: the ETF type, `ref.Etfs`, `mkt.EtfDaily`, `mkt.EtfPerformance` worked out each
-  night (section 14.5), EODHD's ETF fundamentals and the two files; the risk-free rate by currency
-  (Admin); the mockup's six ETFs in the demo data.
+- **Built**:
+  - ETFS under EQS in the menu, as its mockup lights it, on the Analysis module (the "Screener,
+    XLSX / CSV exports" row): the criteria of the mockup (category, sub-category, geography,
+    several at once, sector, issuer, listing exchange, minimum YTD return, minimum Sharpe ratio,
+    maximum TER, UCITS only, accumulating only, currency-hedged only), active ones with an amber
+    border; it opens on the mockup's screen, to which Reset returns; RUN, SAVE and the saved
+    screens as on BS; the values of the drop-downs from `/etfs/facets`.
+  - The results: the flag of the fund's domicile left of the ticker (`flag-icons`, decision 10),
+    name, class (asset class · geography), issuer, exchange · currency, TER, AUM in the trading
+    currency, YTD and 1Y in colour, Sharpe, 1Y volatility; the largest funds first; the time of the
+    evening's calculation; XLSX and CSV for the accounts that export; a click shows the ETF below,
+    a double-click opens its profile. No comparison block, as the spec says.
+  - The selected ETF in its five blocks: A. identification (ticker and name with the listing
+    country's flag, asset class, sub-category, sector of a sector fund, issuer and brand, exchange
+    and currency); B. structure (replication, dividends, UCITS status, fund currency and hedging,
+    domicile); C. size and liquidity (AUM, market price, NAV, premium or discount, 30-session
+    volume, average bid-ask spread in % and bp); D. costs and yield (TER, 12-month distribution
+    yield, "— (accumulating)" for a fund that accumulates, distribution frequency); E. performance
+    and risk (1D, 1M, 3M, YTD, 1Y, 3Y and 5Y a year, since inception a year, tracking error and
+    difference, volatility 1Y and 3Y, Sharpe 1Y and maximum drawdown). "ETF profile" opens DES.
+  - DES on an ETF until step 33: the type `etf` in `SECURITY_PROFILES`, under EQS, tabs DES (the
+    price chart, the five blocks, the documents and news), GP, DOC, N and ANA; its header shows the
+    session's open, high, low and volume (an ETF has no capitalisation, earnings nor dividend of
+    its own). Its layouts ETF and ETF-GP are saved apart.
+  - IMP: the "ETF profiles" and "ETF NAV and spreads" files (their templates, columns, checks and
+    words, an ask below its bid named as such); ADMCFG: the risk-free rates of EUR, USD and GBP
+    beside XAF's, audited by currency; EODH: the ETFs' loads among the jobs.
+  - Slices: `pages/etf-screener`, `features/screen-etfs` (criteria, store, saved screens),
+    `widgets/etf-screener-results-panel`, `widgets/etf-blocks-panel`, `entities/etf` (hooks,
+    labels, the realtime refresh after an ETF file); `shared/ui/CountryFlag` and
+    `shared/ui/form/MultiSelect`; the contracts in `etfs.ts`; the strings under `etf` and
+    `etfScreener` in the new area file `etfs.json`.
+- **CMarket.Api** (phase 25):
+  - The ETF type, a security per listing (TICKER.EXCHANGE, EODHD's code) whose fund's ISIN its
+    other listings share; `ref.Etfs` (blocks A, B and D), `mkt.EtfDaily` (NAV, bid and ask),
+    `mkt.EtfPerformance` (block E and block C's figures, a row per ETF and session),
+    `mkt.BenchmarkCloses`, `usr.RiskFreeRates`, `usr.EtfScreens`; EODHD's exchanges (LSE, Xetra,
+    Euronext Paris and Amsterdam, Borsa Italiana, the US) and the countries of the listings and
+    domiciles in the reference data; migration `EtfData`.
+  - The evening's calculation (section 14.5, the risk as section 14.3 with 252 sessions a year):
+    total returns with the distributions added back on their ex-dates, annualized over 3 and 5
+    years and since inception, the index's over the same periods, premium, 30-session averages,
+    12-month yield, volatilities, Sharpe ratio on the trading currency's rate, maximum drawdown,
+    tracking error and difference; at 23:00 Douala, and after an ETF file, a correction, EODHD's
+    ETF data or a change of the rates.
+  - `GET /etfs` (the criteria of the spec's query, the largest funds first), `/etfs/facets`,
+    `/etfs/{id}` (blocks A to D), `/etfs/{id}/performance?periods=` (block E),
+    `/etfs/{id}/distributions`, `/analysis/etf-screens`; the screener in the analysis module, an
+    ETF's reads on `market:read`, as its profile.
+  - EODHD: each evening the benchmarks' closes, each Saturday each listing's fundamentals (fees,
+    assets, inception, index) and distributions, the job `etfs` on EODH; built and tested on
+    EODHD's documented answers.
+  - Demo: twenty ETFs, the mockup's six and fourteen others of each class, geography and kind,
+    drawn so that the evening finds the mockup's figures (IWDA's blocks and profile, the five
+    others' YTD, 1Y and volatility). ADR-049.
+- **Checked**:
+  - Type check, lint, the 342 unit tests.
+  - CMarket.Api: 1,369 tests, all passing: 1,351 in the usual run, and the SQL Server suite's 18
+    on SQL Server (the new migration up, as an idempotent script, and down). `npm run test:api`
+    now reads the ETFs as every demo account: 527 reads, 193 left out by permission or plan.
+  - Every Playwright flow on CMarket.Api from a fresh database: 104, all passing. Three new ones:
+    ETFS from the command bar (the mockup's criteria and five ETFs, IWDA's flag and five blocks,
+    VUSA's quarterly distributions); the criteria narrowed to hedged bonds, saved, loaded back
+    after Reset, the XLSX and CSV export; a double-click to CSPX's profile (its tabs, its blocks,
+    EQS lit, DVD refused).
+  - axe (WCAG 2.2 AA) at 1600, 390 and 320 px, in English and French: ETFS (the geographies'
+    list open, VUSA selected), an ETF's DES and GP, ADMCFG's rates, IMP's ETF templates, EODH.
 
 ### Step 33 · ETF profile (screen 19) (L): to do
 
@@ -1810,9 +1872,17 @@ Still to do, with the first screen that needs it:
   live price shown. The withdrawal, which section 16 asks for, has no control on the mockup: it
   sits in the publishing panel's title bar.
 
-### ETFS · ETF screener (screen 15): to do
+### ETFS · ETF screener (screen 15): done
 
-- **Planned in step 32**.
+- **Built in step 32**: the criteria, the results with the domicile's flag and the five blocks
+  of the selected ETF of the mockup, saved screens and the XLSX and CSV export, on the evening's
+  calculation of CMarket.Api (see step 32).
+- **Mockup**: its criteria keep fees "< 0.25%" while its results list CW8 at 0.38%: the screen
+  keeps the criteria, five ETFs. Its Sharpe ratios (1.18 to 1.45) imply a risk-free rate near 6%
+  in dollars and in euros, which no single rate a currency gives for all six: the demo's rates
+  are 4% in dollars and 2% in euros, the Admin's to change, and IWDA's Sharpe ratio reads 1.45.
+  Its prices "XX,XX $" are written as the user's language writes amounts ($121.80, 121,80 $).
+  Its "30-day" averages are read as the last 30 sessions.
 
 ### BP · Bond pricing (screen 16): done
 
@@ -1838,7 +1908,8 @@ Still to do, with the first screen that needs it:
 
 ### DES on an ETF · ETF profile (screen 19): to do
 
-- **Planned in step 33**.
+- **Planned in step 33**. Until then (step 32), DES on an ETF shows its price chart, ETFS's five
+  blocks and its documents, under EQS, with the tabs GP, DOC, N and ANA.
 
 ### DES on a bond · Bond profile (screen 20): done
 
@@ -1891,6 +1962,10 @@ Still to do, with the first screen that needs it:
 - **Third version (steps 29 and 32)**: the bond list and ratings files, the two ETF files.
 - **Built in step 29**: the bond list (`bond-master`) and the bond ratings (`bond-ratings`): a
   bond listed or described by its ISIN, a rating added to its history; their rollback.
+- **Built in step 32**: "ETF profiles" (`etf-profiles`: a listing by its ticker and exchange,
+  listed as an ETF or described again, the size, inception and benchmark EODHD keeps left as they
+  are where the file is empty) and "ETF NAV and spreads" (`etf-nav`: a session's NAV and bid and
+  ask, an alert past 10% from the NAV before); their rollback.
 
 ### CORR · Data corrections (no mockup): done
 
@@ -2365,6 +2440,16 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   (101.4000 and XAF 107,564,384, which need the unrounded yield), and its +50 bp row reads −1.26%
   where the dirty price falls 1.25%. The modified duration is written in percent, as the mockup
   does; "CALCULATE" in the inputs' title bar is the button below it.
+- **ETFS, third version**: the screen 15 mockup keeps fees "< 0.25%" yet lists CW8 at 0.38%; its
+  Sharpe ratios need a risk-free rate near 6% for both the dollar and the euro, which no single
+  rate a currency fits (the plan: the Admin's rate of each trading currency, 4% and 2% in the
+  demo). An ETF is a security per listing, so that IWDA and EUNL, one fund, have their own prices,
+  spreads and premiums: are both to be listed, as the mockup does (the plan: yes)? The AUM shows
+  in the listing's currency, the fund's turned at the day's rate. "30-day" averages are read as 30
+  sessions; the returns are worked out from the stored prices, EODHD's published returns not
+  shown; since inception needs the history from the inception. The 1D return of block E (+0.3%)
+  and the change of screen 19's header (+0.42%) are one figure for an ETF priced at the close.
+  Which EODHD codes are the benchmarks' (MSCI World in dollars and in euros)?
 - **Bond profile, third version**: the mockup's tabs leave out N and ANA, which screen 2 has: the
   plan keeps them after DOC, so that a bond's news and the research on its country stay one
   click away. Its BP tab shows screen 16's panels inside the profile, as FA shows EQS's; "Open in

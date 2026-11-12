@@ -7,6 +7,8 @@ import type {
   RatiosDto,
   SavedBondScreenDto,
   SavedBondScreenInputDto,
+  SavedEtfScreenDto,
+  SavedEtfScreenInputDto,
   SavedScreenDto,
   SavedScreenInputDto,
   ScreenerRequestDto,
@@ -30,6 +32,9 @@ export const analysisRoutes = {
   bondScreens: route('GET', '/analysis/bond-screens', answer<SavedBondScreenDto[]>()),
   saveBondScreen: route('POST', '/analysis/bond-screens', answer<SavedBondScreenDto>()),
   deleteBondScreen: route('DELETE', '/analysis/bond-screens/{id}'),
+  etfScreens: route('GET', '/analysis/etf-screens', answer<SavedEtfScreenDto[]>()),
+  saveEtfScreen: route('POST', '/analysis/etf-screens', answer<SavedEtfScreenDto>()),
+  deleteEtfScreen: route('DELETE', '/analysis/etf-screens/{id}'),
   indicator: route('GET', '/indicators/{securityId}', answer<IndicatorDto>()),
 }
 
@@ -57,6 +62,11 @@ export const analysisApi = {
   saveBondScreen: (input: SavedBondScreenInputDto) =>
     send(analysisRoutes.saveBondScreen, { body: input }),
   deleteBondScreen: (id: string) => send(analysisRoutes.deleteBondScreen, { params: { id } }),
+  /** ETFS's saved screens. */
+  etfScreens: (signal?: AbortSignal) => send(analysisRoutes.etfScreens, { signal }),
+  saveEtfScreen: (input: SavedEtfScreenInputDto) =>
+    send(analysisRoutes.saveEtfScreen, { body: input }),
+  deleteEtfScreen: (id: string) => send(analysisRoutes.deleteEtfScreen, { params: { id } }),
   /** A technical indicator over a chart period, computed by the server. */
   indicator: (
     securityId: string,

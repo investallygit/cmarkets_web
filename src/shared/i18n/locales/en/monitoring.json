@@ -32,7 +32,8 @@
   "security": {
     "types": {
       "equity": "Ordinary share",
-      "bond": "Bond"
+      "bond": "Bond",
+      "etf": "ETF"
     },
     "tabsLabel": "Security functions",
     "tabs": {
@@ -50,7 +51,8 @@
       "priceYield": "Price and yield"
     },
     "profiles": {
-      "bond": "Bond profile"
+      "bond": "Bond profile",
+      "etf": "ETF profile"
     },
     "figures": {
       "open": "Open",
@@ -92,7 +94,8 @@
   "dividendKinds": {
     "final": "Final",
     "interim": "Interim",
-    "special": "Special"
+    "special": "Special",
+    "distribution": "Distribution"
   },
   "documents": {
     "badges": {

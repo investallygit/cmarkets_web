@@ -4,6 +4,7 @@ import analysis from './en/analysis.json'
 import bonds from './en/bonds.json'
 import core from './en/core.json'
 import dataAdmin from './en/dataAdmin.json'
+import etfs from './en/etfs.json'
 import home from './en/home.json'
 import messaging from './en/messaging.json'
 import monitoring from './en/monitoring.json'
@@ -26,6 +27,7 @@ const en = {
   ...monitoring,
   ...analysis,
   ...bonds,
+  ...etfs,
   ...portfolio,
   ...research,
   ...network,

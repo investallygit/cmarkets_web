@@ -19,7 +19,8 @@ interface Figure {
 
 /**
  * Screen 2 header: code, name, last price at 26 px and change in real time, then 7 key figures
- * (spec section 9). A bond's profile has its own (screen 20, BondProfileHeader).
+ * (spec section 9); an ETF's, its session's four until screen 19 (step 33). A bond's profile has its
+ * own (screen 20, BondProfileHeader).
  */
 export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
   const { t } = useTranslation()
@@ -30,6 +31,9 @@ export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
   const price = (value: number | undefined) =>
     value === undefined ? missing : format.number(value, decimals)
 
+  // An ETF has no capitalisation, earnings nor dividend of its own: its session's figures (its
+  // profile's key figures come with screen 19, ROADMAP step 33).
+  const etf = profile.type === 'etf'
   const figures: Figure[] = [
     { label: t('security.figures.open'), value: price(quote?.open) },
     { label: t('security.figures.high'), value: price(quote?.high) },
@@ -38,24 +42,28 @@ export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
       label: t('security.figures.volume'),
       value: quote ? <LiveVolume symbol={profile.id} value={quote.volume} /> : missing,
     },
-    {
-      label: t('security.figures.marketCap'),
-      value: quote ? format.compact(quote.marketCap) : missing,
-    },
-    {
-      label: t('security.figures.pe'),
-      value: profile.pe === null ? missing : `${format.number(profile.pe, 1)}x`,
-    },
-    {
-      label: t('security.figures.yield'),
-      value: profile.yieldPct === null ? missing : format.percent(profile.yieldPct, 1, false),
-    },
+    ...(etf
+      ? []
+      : [
+          {
+            label: t('security.figures.marketCap'),
+            value: quote ? format.compact(quote.marketCap) : missing,
+          },
+          {
+            label: t('security.figures.pe'),
+            value: profile.pe === null ? missing : `${format.number(profile.pe, 1)}x`,
+          },
+          {
+            label: t('security.figures.yield'),
+            value: profile.yieldPct === null ? missing : format.percent(profile.yieldPct, 1, false),
+          },
+        ]),
   ]
   const details = [
     t(`security.types.${profile.type}`),
     profile.exchange,
     format.country(profile.country),
-    profile.sector,
+    ...(etf ? [] : [profile.sector]),
     profile.currency,
   ]
 

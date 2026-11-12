@@ -86,6 +86,11 @@ export function useIssueText() {
           return issue.column === 'isin'
             ? t('dataImport.issues.isinTaken', { column })
             : t('dataImport.issues.codeTaken', { code: String(params.code ?? '') })
+        // The NAV file's (spec section 11): an ask below its bid.
+        case 'inconsistentPrices':
+          return issue.column === 'ask'
+            ? t('dataImport.issues.askBelowBid')
+            : t('dataImport.issues.inconsistentPrices')
         case 'inconsistentAmounts':
           return issue.column === 'amortization_schedule'
             ? t('dataImport.issues.scheduleShares')

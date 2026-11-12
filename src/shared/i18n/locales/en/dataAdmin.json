@@ -11,7 +11,9 @@
       "history": "Price history",
       "bond-master": "Bond list",
       "bond-ratings": "Bond ratings",
-      "news": "Issuer news"
+      "news": "Issuer news",
+      "etf-profiles": "ETF profiles",
+      "etf-nav": "ETF NAV and spreads"
     },
     "frequencies": {
       "session": "Every session",
@@ -147,7 +149,29 @@
       "status": "Status",
       "agency": "Agency",
       "rating": "Rating",
-      "rating_date": "Rating date"
+      "rating_date": "Rating date",
+      "exchange": "Exchange",
+      "short_name": "Short name",
+      "provider": "Provider",
+      "brand": "Brand",
+      "asset_class": "Asset class",
+      "sub_category": "Sub-category",
+      "geography": "Geography",
+      "replication": "Replication",
+      "distribution": "Distribution",
+      "distribution_frequency": "Distribution frequency",
+      "ucits": "UCITS",
+      "hedged": "Hedged",
+      "fund_currency": "Fund currency",
+      "domicile": "Domicile",
+      "ter": "TER",
+      "aum": "AUM",
+      "benchmark": "Benchmark",
+      "benchmark_symbol": "Benchmark symbol",
+      "inception_date": "Inception",
+      "nav": "NAV",
+      "bid": "Bid",
+      "ask": "Ask"
     },
     "check": "Check",
     "issues": {
@@ -170,20 +194,23 @@
       "codeTaken": "{{code}} is another security's code",
       "isinTaken": "{{column}}: the ISIN of a security that is not a bond",
       "scheduleShares": "The shares repaid fall on payment dates, add up to 100% and end at maturity",
-      "bondDates": "{{column}}: after the issue, by maturity at the latest"
+      "bondDates": "{{column}}: after the issue, by maturity at the latest",
+      "askBelowBid": "The ask is below the bid"
     },
     "issueFields": {
       "close": "Close",
       "value": "Value",
       "avg_rate": "Rate",
-      "rate": "Rate"
+      "rate": "Rate",
+      "nav": "NAV"
     },
     "checkFields": {
       "close": "close",
       "value": "value",
       "avg_rate": "rate",
       "rate": "rate",
-      "volume": "volume"
+      "volume": "volume",
+      "nav": "NAV"
     },
     "sources": {
       "daily-prices": "the BVMAC price bulletin",
@@ -195,7 +222,9 @@
       "financial-statements": "the published accounts",
       "securities": "the issuer's records",
       "bond-master": "the prospectus",
-      "bond-ratings": "the agency's release"
+      "bond-ratings": "the agency's release",
+      "etf-profiles": "the provider's factsheet",
+      "etf-nav": "the provider's or the market maker's data"
     },
     "selected": {
       "alert": "Row {{row}} selected: check the {{field}} against {{source}}, fix it if needed, then tick “Alert checked”.",
@@ -234,7 +263,9 @@
       "financial-statements": "On publish: ratios and the screener are recalculated; a DataPublished event is sent to open screens.",
       "securities": "On publish: the security master is updated; a DataPublished event is sent to open screens.",
       "bond-master": "On publish: the bonds are listed or described again and their figures of the day recalculated (BS); a DataPublished event is sent to open screens.",
-      "bond-ratings": "On publish: the ratings join their history and the composite ratings of BS follow; a DataPublished event is sent to open screens."
+      "bond-ratings": "On publish: the ratings join their history and the composite ratings of BS follow; a DataPublished event is sent to open screens.",
+      "etf-profiles": "On publish: the ETFs are listed or described again and their figures recalculated (ETFS); a DataPublished event is sent to open screens.",
+      "etf-nav": "On publish: the ETFs' premiums, discounts and spreads are recalculated (ETFS); a DataPublished event is sent to open screens."
     },
     "fix": {
       "title": "Fix row {{row}}",
@@ -280,7 +311,8 @@
       "us-eod": "US closes (bulk)",
       "europe-eod": "Europe closes (bulk)",
       "fundamentals": "Fundamentals (bulk)",
-      "news": "International news"
+      "news": "International news",
+      "etfs": "ETF data (benchmarks, fundamentals, distributions)"
     },
     "callsToday": "Calls today",
     "quotaUsed": "Daily quota used",

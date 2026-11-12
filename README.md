@@ -34,8 +34,9 @@ selection) · TanStack Table + Virtual · TradingView Lightweight Charts (prices
 (comparison bars, yield curves, portfolio performance) · react-grid-layout · `@microsoft/signalr`
 · Tailwind CSS with the section 8 tokens · i18next (FR / EN) · Vitest, Testing Library,
 Playwright · TipTap 3 (the editors of the publishing and news studios, loaded with them only).
-Supporting choices: React Router 7, lucide-react icons, write-excel-file for the Excel export of
-tables, read-excel-file to read the Excel templates before upload.
+Supporting choices: React Router 7, lucide-react icons, flag-icons for the countries' flags,
+write-excel-file for the Excel export of tables, read-excel-file to read the Excel templates
+before upload.
 
 ### Status
 
@@ -70,8 +71,8 @@ tables, read-excel-file to read the Excel templates before upload.
 | 17 · Bond screener (BS)                                                   | Done; computed each evening, model prices, yield to worst     |
 | 16 · Bond pricing (BP), which YAS opens                                   | Done; a bond of the list or by hand, at the platform's yield  |
 | 20 · Bond profile (DES on a bond: DES, GP, BP, CF, RAT, DOC)              | Done; a year of daily figures, model prices drawn lighter     |
-| 15 · ETF screener (ETFS)                                                  | To do, step 32                                                |
-| 19 · ETF profile (DES on an ETF)                                          | To do, step 33                                                |
+| 15 · ETF screener (ETFS)                                                  | Done; figures computed each evening, saved screens, export    |
+| 19 · ETF profile (DES on an ETF)                                          | Partly: ETFS's blocks beside the chart until step 33          |
 | 14 · Subscription management (SUBS)                                       | To do, step 34                                                |
 | Security descriptions on EQS (screen 3)                                   | To do, step 35                                                |
 
@@ -122,8 +123,9 @@ src/
   main.tsx    entry point: the hubs of CMarket.Api, then the app
   app/        providers, router, app shell layout, global styles
   pages/      one slice per screen: market-dashboard, security-profile (the profile of each
-              security type: an equity's, screen 2, a bond's, screen 20), equity-screener,
-              yield-curves (YCRV), bond-pricing (BP, which YAS opens), bond-screener (BS), portfolio,
+              security type: an equity's, screen 2, a bond's, screen 20, an ETF's), equity-screener,
+              etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which YAS opens),
+              bond-screener (BS), portfolio,
               research-library, publishing-studio, news,
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
               network-profile (NET ME), public-profile (/p/{handle}), data-import (IMP),
@@ -136,11 +138,11 @@ src/
               subscription-panel, current-upload-panel, messaging-panels, news-studio-panels,
               news-moderation-panels, news-sources-panels, media-payments-panels,
               bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
-              bond-profile-panels...),
+              bond-profile-panels, etf-screener-results-panel, etf-blocks-panel...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
-              price-bond,
+              screen-etfs, price-bond,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
               rate-publication, report-publication, follow-analyst, report-profile,
               start-conversation, send-message, share-news, report-conversation, block-user,
@@ -157,7 +159,8 @@ src/
               workspace-layout
   entities/   business data: session, subscription, organization, security, quote (live
               prices), market, bond (with BS's screener and labels, BP's pricing, the bond
-              profile's history, ratings and payments), yield-curve, fundamentals,
+              profile's history, ratings and payments), etf (ETFS's screener, an ETF's blocks,
+              performance and distributions, its labels), yield-curve, fundamentals,
               screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
@@ -168,7 +171,8 @@ src/
   shared/     no business knowledge: the API (client, contracts and the module of its endpoints,
               api/endpoints), real-time, config (.env), routes, screen list and the profile of
               each security type (routes/profiles.ts), UI kit (panels, tables, charts, form
-              controls, dialogs, toasts), i18n, formatting
+              controls with a multiple choice, dialogs, toasts, the countries' flags), i18n,
+              formatting
 e2e/          Playwright flows; auth.setup.ts logs in once and the other specs reuse the session;
               people.ts logs in the other people of a flow, msg.ts finds MSG's panels
 public/       the favicon and the photos of the home page
@@ -282,7 +286,9 @@ the photos of its sections move against the scroll, its sections come in as they
 view, and its picture of the terminal types commands, moves its sample quotes with the 400 ms
 flash of the screens and scrolls its tape, only while on screen and until its Pause button;
 nothing moves under `prefers-reduced-motion`. The screens keep the flash alone.
-Icons come from `lucide-react`.
+Icons come from `lucide-react`; a country's flag from `flag-icons` (MIT), through
+`shared/ui/CountryFlag`, which inlines the flags of the countries the platform names (add a
+country's SVG there when a new one appears).
 
 Screens build on `shared/ui`: `Panel`, `PanelTabs` and `PanelSelect` (options of a title bar),
 `ScreenTabs`, `Pager` (pages of a server list), `ScrollArea` (a box that scrolls and takes the
@@ -303,8 +309,9 @@ and given as `aria-keyshortcuts`),
 `charts/` (`PriceChart` with indicator panes, comparison rebased to 100 and drawings;
 `AreaChart`; both named for screen readers by `useChartLabel`; `useChartTheme`, the section 8
 colours for Recharts, which draws in SVG, and the `--chart-*` series palette checked for
-colour-blind separation), `PdfViewer`, `form/` (buttons, fields, selects, number and date inputs
-in the user's format, password inputs, checkboxes, switches, segmented choices, file drop zone),
+colour-blind separation), `PdfViewer`, `form/` (buttons, fields, selects, a multiple choice that
+lists its boxes under its field, number and date inputs in the user's format, password inputs,
+checkboxes, switches, segmented choices, file drop zone), `CountryFlag`,
 `Dialog` (also as a side form; on closing it gives the focus back to the control that opened it),
 `ConfirmDialog` (with a required reason), `ReportForm` (the reason and comment of a report) and
 `toast`. Entities add small business components, such as the security picker of

@@ -20,6 +20,9 @@ const BondPricingPage = lazy(() =>
 const BondScreenerPage = lazy(() =>
   import('@/pages/bond-screener').then((module) => ({ default: module.BondScreenerPage })),
 )
+const EtfScreenerPage = lazy(() =>
+  import('@/pages/etf-screener').then((module) => ({ default: module.EtfScreenerPage })),
+)
 const YieldCurvesPage = lazy(() =>
   import('@/pages/yield-curves').then((module) => ({ default: module.YieldCurvesPage })),
 )
@@ -106,6 +109,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   YCRV: YieldCurvesPage,
   BP: BondPricingPage,
   BS: BondScreenerPage,
+  ETFS: EtfScreenerPage,
   PORT: PortfolioPage,
   PUB: ResearchLibraryPage,
   PUBNEW: PublishingStudioPage,

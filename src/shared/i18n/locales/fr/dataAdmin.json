@@ -11,7 +11,9 @@
       "history": "Historique des cours",
       "bond-master": "Liste des obligations",
       "bond-ratings": "Notations des obligations",
-      "news": "Actualités des émetteurs"
+      "news": "Actualités des émetteurs",
+      "etf-profiles": "Profils d’ETF",
+      "etf-nav": "VL et fourchettes des ETF"
     },
     "frequencies": {
       "session": "Chaque séance",
@@ -147,7 +149,29 @@
       "status": "Statut",
       "agency": "Agence",
       "rating": "Note",
-      "rating_date": "Date de la note"
+      "rating_date": "Date de la note",
+      "exchange": "Place",
+      "short_name": "Nom court",
+      "provider": "Gestionnaire",
+      "brand": "Marque",
+      "asset_class": "Classe d’actifs",
+      "sub_category": "Sous-catégorie",
+      "geography": "Zone",
+      "replication": "Réplication",
+      "distribution": "Distribution",
+      "distribution_frequency": "Fréquence de distribution",
+      "ucits": "UCITS",
+      "hedged": "Couvert",
+      "fund_currency": "Devise du fonds",
+      "domicile": "Domiciliation",
+      "ter": "TER",
+      "aum": "Encours",
+      "benchmark": "Indice de référence",
+      "benchmark_symbol": "Symbole de l’indice",
+      "inception_date": "Création",
+      "nav": "VL",
+      "bid": "Achat",
+      "ask": "Vente"
     },
     "check": "Contrôle",
     "issues": {
@@ -170,20 +194,23 @@
       "codeTaken": "{{code}} est le code d’un autre titre",
       "isinTaken": "{{column}} : l’ISIN d’un titre qui n’est pas une obligation",
       "scheduleShares": "Les parts remboursées tombent à des dates de paiement, font 100 % et finissent à l’échéance",
-      "bondDates": "{{column}} : après l’émission, au plus tard à l’échéance"
+      "bondDates": "{{column}} : après l’émission, au plus tard à l’échéance",
+      "askBelowBid": "Le cours vendeur est sous le cours acheteur"
     },
     "issueFields": {
       "close": "Clôture",
       "value": "Valeur",
       "avg_rate": "Taux",
-      "rate": "Taux"
+      "rate": "Taux",
+      "nav": "VL"
     },
     "checkFields": {
       "close": "la clôture",
       "value": "la valeur",
       "avg_rate": "le taux",
       "rate": "le taux",
-      "volume": "le volume"
+      "volume": "le volume",
+      "nav": "la VL"
     },
     "sources": {
       "daily-prices": "le bulletin des cours BVMAC",
@@ -195,7 +222,9 @@
       "financial-statements": "les comptes publiés",
       "securities": "les données de l’émetteur",
       "bond-master": "le prospectus",
-      "bond-ratings": "le communiqué de l’agence"
+      "bond-ratings": "le communiqué de l’agence",
+      "etf-profiles": "la fiche du gestionnaire",
+      "etf-nav": "les données du gestionnaire ou du teneur de marché"
     },
     "selected": {
       "alert": "Ligne {{row}} sélectionnée : vérifiez {{field}} dans {{source}}, corrigez si besoin, puis cochez « Alerte vérifiée ».",
@@ -234,7 +263,9 @@
       "financial-statements": "À la publication : ratios et filtre d’actions sont recalculés ; un événement DataPublished est envoyé aux écrans ouverts.",
       "securities": "À la publication : le référentiel des titres est mis à jour ; un événement DataPublished est envoyé aux écrans ouverts.",
       "bond-master": "À la publication : les obligations sont ajoutées ou décrites à nouveau et leurs chiffres du jour recalculés (BS) ; un événement DataPublished est envoyé aux écrans ouverts.",
-      "bond-ratings": "À la publication : les notes rejoignent leur historique et les notes composites de BS suivent ; un événement DataPublished est envoyé aux écrans ouverts."
+      "bond-ratings": "À la publication : les notes rejoignent leur historique et les notes composites de BS suivent ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "etf-profiles": "À la publication : les ETF sont référencés ou décrits à nouveau et leurs chiffres recalculés (ETFS) ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "etf-nav": "À la publication : les primes, décotes et fourchettes des ETF sont recalculées (ETFS) ; un événement DataPublished est envoyé aux écrans ouverts."
     },
     "fix": {
       "title": "Corriger la ligne {{row}}",
@@ -280,7 +311,8 @@
       "us-eod": "Clôtures US (en masse)",
       "europe-eod": "Clôtures Europe (en masse)",
       "fundamentals": "Fondamentaux (en masse)",
-      "news": "Actualités internationales"
+      "news": "Actualités internationales",
+      "etfs": "Données des ETF (indices, fondamentaux, distributions)"
     },
     "callsToday": "Appels aujourd’hui",
     "quotaUsed": "Quota journalier utilisé",
