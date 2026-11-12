@@ -447,7 +447,8 @@
       "subscription-plan": "Formule d’abonnement changée",
       "subscription-suspend": "Abonnement suspendu",
       "subscription-reactivate": "Suspension d’abonnement levée",
-      "invoice-resend": "Facture renvoyée"
+      "invoice-resend": "Facture renvoyée",
+      "security-describe": "Description d'un titre"
     },
     "fields": {
       "accountType": "Type",
@@ -507,7 +508,8 @@
       "xafReferenceCurve": "Courbe de référence XAF",
       "plan": "Formule",
       "billingCycle": "Périodicité",
-      "periodEnd": "Échéance"
+      "periodEnd": "Échéance",
+      "description": "Description"
     },
     "targetTypes": {
       "user": "Compte",
@@ -528,11 +530,16 @@
       "newsStatement": "Relevé",
       "clickAnomaly": "Anomalie de clics",
       "subscription": "Abonnement",
-      "invoice": "Facture"
+      "invoice": "Facture",
+      "security": "Titre"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",
     "nameIn": "Nom en {{language}}",
+    "descriptionIn": {
+      "fr": "Description en français",
+      "en": "Description en anglais"
+    },
     "statusOf": "Statut {{type}}",
     "roleOf": "Permissions : {{type}}",
     "platformSettings": "Paramètres de la plateforme",

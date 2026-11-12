@@ -350,6 +350,7 @@ export const AUDIT_ACTIONS = [
   'subscription-suspend',
   'subscription-reactivate',
   'invoice-resend',
+  'security-describe',
 ] as const
 export type AuditAction = (typeof AUDIT_ACTIONS)[number]
 
@@ -374,6 +375,8 @@ export type AuditTargetType =
   /** A subscription, by its payer: the user's own or the organisation's (SUBS). */
   | 'subscription'
   | 'invoice'
+  /** A security, by its id (CORR's description). */
+  | 'security'
 
 /** What a change is about; `scope` says which account type, permission or security. */
 export const AUDIT_FIELDS = [
@@ -435,6 +438,8 @@ export const AUDIT_FIELDS = [
   'plan',
   'billingCycle',
   'periodEnd',
+  /** A security's description, its language (fr, en) in the scope. */
+  'description',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

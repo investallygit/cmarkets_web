@@ -47,7 +47,7 @@ before upload.
 | Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
 | 1 · Market dashboard (MKT)                                                | Done, real-time quotes and indices, watchlists                |
 | 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done; DES opens the profile of the security's type            |
-| 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done, saved screens                                           |
+| 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done, saved screens; each security's description              |
 | 4 · Yield curves and bond calculator (YCRV)                               | Done; the API computes spec section 14.1                      |
 | 5 · Portfolio (PORT)                                                      | Done; the API values portfolios with sections 14.2 and 14.3   |
 | 7 · Publishing studio (PUB NEW)                                           | Done, autosave, versions, frozen charts                       |
@@ -74,7 +74,7 @@ before upload.
 | 15 · ETF screener (ETFS)                                                  | Done; figures computed each evening, saved screens, export    |
 | 19 · ETF profile (DES on an ETF)                                          | Done; history with NAV, holdings, allocation, PERF, DIST      |
 | 14 · Subscription management (SUBS)                                       | Done; renewals charged, failures retried, plans prorated      |
-| Security descriptions on EQS (screen 3)                                   | To do, step 35                                                |
+| Security descriptions on EQS (screen 3), written in CORR                  | Done; in French and English, EODHD's English standing in      |
 
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), the plan of
@@ -141,7 +141,7 @@ src/
               subscription-admin-panels,
               bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
               bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
-              etf-profile-panels...),
+              etf-profile-panels, security-description-panel, description-editor-panel...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
@@ -157,12 +157,13 @@ src/
               dispute-statement, draw-on-chart,
               compare-securities, edit-profile, edit-network-profile, change-password,
               choose-plan, manage-members, upload-data-file, review-import, roll-back-import,
-              correct-price, publish-content, create-account, manage-account,
+              correct-price, describe-security, publish-content, create-account, manage-account,
               review-analyst-request, moderate-publication, moderate-report, mark-payout-paid,
               edit-platform-settings, edit-permissions, switch-language, switch-account,
               workspace-layout
   entities/   business data: session, subscription (CFG's plan and checkout, SUBS's
-              subscriptions, payments and actions), organization, security, quote (live
+              subscriptions, payments and actions), organization, security (with its
+              description in French and English), quote (live
               prices), market, bond (with BS's screener and labels, BP's pricing, the bond
               profile's history, ratings and payments), etf (ETFS's screener, an ETF's blocks,
               performance and distributions, the profile's history, holdings, allocation and

@@ -380,6 +380,31 @@
       "high": "Au moins l’ouverture, la clôture et le plus bas.",
       "low": "Au plus l’ouverture et la clôture.",
       "reason": "Indiquez pourquoi la séance est corrigée."
+    },
+    "description": {
+      "title": "{{code}} — Description",
+      "pick": "Choisissez un titre dans la correction de cours pour rédiger sa description.",
+      "intro": "Activité, marchés, historique de cotation : ce qu'EQS affiche sous ses résultats, 2 000 caractères par langue.",
+      "languages": {
+        "fr": "Français",
+        "en": "Anglais"
+      },
+      "languageNames": {
+        "fr": "français",
+        "en": "anglais"
+      },
+      "count": "{{count}} / {{max}} caractères",
+      "written": "rédigée par {{who}} le {{when}}",
+      "empty": {
+        "eodhd": "vide : EQS affiche l'anglais d'EODHD, ci-dessous",
+        "other": "vide : EQS affiche le texte en {{other}}, signalé",
+        "none": "vide : EQS n'affiche aucune description"
+      },
+      "eodhd": "Anglais d'EODHD, chargé le {{when}}",
+      "tooLong": "{{max}} caractères au plus.",
+      "submit": "Enregistrer la description",
+      "unchanged": "Modifiez un texte pour l'enregistrer.",
+      "saved": "{{code}} : description enregistrée."
     }
   },
   "content": {

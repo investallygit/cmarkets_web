@@ -11,6 +11,8 @@ export const securityKeys = {
   search: (query: string) => ['search', query] as const,
   of: (id: string) => [...securityKeys.all, id] as const,
   profile: (id: string) => [...securityKeys.of(id), 'profile'] as const,
+  /** The texts stored, as CORR shows them; the profile carries the ones the screens show. */
+  description: (id: string) => [...securityKeys.of(id), 'description'] as const,
   history: (id: string, period: ChartPeriod) =>
     [...securityKeys.of(id), 'history', period] as const,
   orderBook: (id: string) => [...securityKeys.of(id), 'orderbook'] as const,

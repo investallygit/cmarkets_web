@@ -42,6 +42,35 @@ test(
   },
 )
 
+test("the selected security's description shows under the results, in English or French", async ({
+  page,
+}) => {
+  await page.goto('/eqs')
+  const results = panel(page, /^Results/)
+  await results.getByRole('row', { name: /SEMC/ }).click()
+  // The Data admin's text of the screen 3 mockup, in the screen's language first.
+  const description = panel(page, 'SEMC — Description')
+  await expect(description).toContainText('Source: Data admin')
+  await expect(description.getByRole('tab', { name: '[EN]' })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  )
+  await expect(description).toContainText(
+    'Société des Eaux Minérales du Cameroun produces and distributes mineral water',
+  )
+  await description.getByRole('tab', { name: 'FR' }).click()
+  await expect(description.getByText(/produit et distribue des eaux minérales/)).toHaveAttribute(
+    'lang',
+    'fr',
+  )
+
+  // SCG-RE's is written in English only: no choice of language.
+  await results.getByRole('row', { name: /SCG-RE/ }).click()
+  const reinsurer = panel(page, 'SCG-RE — Description')
+  await expect(reinsurer).toContainText('reinsures insurance companies in Gabon')
+  await expect(reinsurer.getByRole('tab')).toHaveCount(0)
+})
+
 test('a range criterion is run and a screen is saved under a name', async ({ page }) => {
   await page.goto('/eqs')
   const criteria = panel(page, 'Criteria')

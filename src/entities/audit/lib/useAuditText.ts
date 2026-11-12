@@ -60,6 +60,8 @@ export function useAuditText() {
     if (change.field === 'name' && language) {
       return t('audit.nameIn', { language: t(`specialties.${language}`) })
     }
+    // A security's description (CORR): its language as the scope.
+    if (change.field === 'description' && language) return t(`audit.descriptionIn.${language}`)
     const permission = oneOf(PERMISSIONS, change.scope)
     if (change.field === 'permission' && permission) return t(PERMISSION_LABELS[permission])
     // An ETF currency's rate (spec section 14.5): its code as the scope, XAF's without one.

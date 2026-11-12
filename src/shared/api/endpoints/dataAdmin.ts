@@ -1,5 +1,6 @@
 import type {
   CoverageDto,
+  DescriptionWriteDto,
   DocumentDto,
   DocumentWriteDto,
   EodhdStatusDto,
@@ -15,6 +16,7 @@ import type {
   Paged,
   PriceCorrectionDto,
   PriceCorrectionRequestDto,
+  StoredDescriptionDto,
   StoredPriceDto,
 } from '../contracts'
 import { answer, route, send, sendBlob, sendForm } from './define'
@@ -41,8 +43,8 @@ export interface UploadInput {
 
 /**
  * CMarket.Api/Controllers/DataAdmin: the Data admin's back-office (spec section 11): uploads and
- * their checks, the session's coverage, stored prices and their corrections, news and documents
- * entered by hand, the EODHD connector.
+ * their checks, the session's coverage, stored prices and their corrections, a security's
+ * description, news and documents entered by hand, the EODHD connector.
  */
 export const dataAdminRoutes = {
   importTypes: route('GET', '/data/import-types', answer<ImportTypeDto[]>()),
@@ -59,6 +61,8 @@ export const dataAdminRoutes = {
   storedPrices: route('GET', '/data/securities/{id}/prices', answer<StoredPriceDto[]>()),
   correctPrice: route('PUT', '/data/securities/{id}/prices/{date}', answer<PriceCorrectionDto>()),
   corrections: route('GET', '/data/corrections', answer<Paged<PriceCorrectionDto>>()),
+  description: route('GET', '/data/securities/{id}/description', answer<StoredDescriptionDto>()),
+  describe: route('PUT', '/data/securities/{id}/description', answer<StoredDescriptionDto>()),
   eodhdStatus: route('GET', '/data/providers/eodhd/status', answer<EodhdStatusDto>()),
   createNews: route('POST', '/data/news', answer<NewsArticleDto>()),
   updateNews: route('PUT', '/data/news/{id}', answer<NewsArticleDto>()),
@@ -120,6 +124,12 @@ export const dataAdminApi = {
     query: { securityId: string | null; page: number; pageSize: number },
     signal?: AbortSignal,
   ) => send(dataAdminRoutes.corrections, { query, signal }),
+  /** A security's description as stored: the Data admin's French and English, EODHD's apart. */
+  description: (id: string, signal?: AbortSignal) =>
+    send(dataAdminRoutes.description, of(id, signal)),
+  /** The Data admin's texts, an empty one removed (CORR). */
+  describe: (id: string, description: DescriptionWriteDto) =>
+    send(dataAdminRoutes.describe, { params: { id }, body: description }),
   eodhdStatus: (signal?: AbortSignal) => send(dataAdminRoutes.eodhdStatus, { signal }),
   /** News entered by the Data admin: a new item, or an edit of one. */
   saveNews: (id: string | null, news: NewsWriteDto) =>

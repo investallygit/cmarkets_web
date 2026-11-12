@@ -179,6 +179,43 @@ test('CORR corrects a stored session with a reason, kept in the log', async ({ p
   )
 })
 
+test("CORR writes a security's French description, which EQS shows", async ({ page }) => {
+  await asDataAdmin(page)
+  await page.goto('/data/corrections?security=SCG-RE')
+  const editor = panel(page, 'SCG-RE — Description')
+  const french = editor.getByRole('textbox', { name: 'French' })
+  // The demo's: English only, which EQS shows in French too, marked.
+  await expect(french).toHaveValue('')
+  await expect(editor).toContainText('empty: EQS shows the English text, marked')
+  await expect(editor.getByRole('textbox', { name: 'English' })).toHaveValue(
+    /reinsures insurance companies/,
+  )
+  await french.fill(
+    "La SCG-Ré réassure les compagnies d'assurances du Gabon et d'ailleurs en Afrique.",
+  )
+  await editor.getByRole('button', { name: 'Save the description' }).click()
+  await expect(page.getByText('SCG-RE: description saved.')).toBeVisible()
+  await expect(editor.getByText(/^\d+ \/ 2,000 characters · written by /)).toHaveCount(2)
+
+  await switchAccount(page, /data admin/i, 'Analyst', /analyst/i)
+  await page.goto('/eqs')
+  await panel(page, /^Results/)
+    .getByRole('row', { name: /SCG-RE/ })
+    .click()
+  const description = panel(page, 'SCG-RE — Description')
+  await description.getByRole('tab', { name: 'FR' }).click()
+  await expect(description).toContainText('La SCG-Ré réassure les compagnies')
+
+  // Back to the demo's: the French removed, EQS shows the English again.
+  await switchAccount(page, /analyst/i, 'Data admin', /data admin/i)
+  await page.goto('/data/corrections?security=SCG-RE')
+  await panel(page, 'SCG-RE — Description').getByRole('textbox', { name: 'French' }).fill('')
+  await panel(page, 'SCG-RE — Description')
+    .getByRole('button', { name: 'Save the description' })
+    .click()
+  await expect(page.getByText('SCG-RE: description saved.')).toBeVisible()
+})
+
 test('NEWS publishes the news of an issuer, which the terminals show', async ({ page }) => {
   await asDataAdmin(page)
   await page.goto('/data/content')

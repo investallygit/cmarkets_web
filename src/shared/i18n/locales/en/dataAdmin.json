@@ -380,6 +380,31 @@
       "high": "At least the open, the close and the low.",
       "low": "At most the open and the close.",
       "reason": "Say why the session is corrected."
+    },
+    "description": {
+      "title": "{{code}} — Description",
+      "pick": "Pick a security in the price correction to write its description.",
+      "intro": "Business, markets, listing history: what EQS shows under its results, 2,000 characters in each language.",
+      "languages": {
+        "fr": "French",
+        "en": "English"
+      },
+      "languageNames": {
+        "fr": "French",
+        "en": "English"
+      },
+      "count": "{{count}} / {{max}} characters",
+      "written": "written by {{who}} on {{when}}",
+      "empty": {
+        "eodhd": "empty: EQS shows EODHD's English, below",
+        "other": "empty: EQS shows the {{other}} text, marked",
+        "none": "empty: EQS shows no description"
+      },
+      "eodhd": "EODHD's English, loaded on {{when}}",
+      "tooLong": "{{max}} characters at most.",
+      "submit": "Save the description",
+      "unchanged": "Change a text to save it.",
+      "saved": "{{code}}: description saved."
     }
   },
   "content": {

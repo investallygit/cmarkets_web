@@ -166,6 +166,8 @@ PATCH /data/imports/{id}/rows/{rowId}
 POST /data/news
 PUT /data/news/{id}
 GET /data/providers/eodhd/status
+GET /data/securities/{id}/description
+PUT /data/securities/{id}/description
 GET /data/securities/{id}/prices
 PUT /data/securities/{id}/prices/{date}
 GET /directory

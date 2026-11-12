@@ -9,6 +9,7 @@ import {
 } from '@/widgets/financial-statements-panel'
 import { PeerComparisonPanel } from '@/widgets/peer-comparison-panel'
 import { ScreenerResultsPanel } from '@/widgets/screener-results-panel'
+import { SecurityDescriptionPanel } from '@/widgets/security-description-panel'
 import { EQUITY_SCREENER_LAYOUT } from '../config/layout'
 import { useScreenerSelection } from '../model/selection'
 
@@ -35,6 +36,11 @@ function ScreenerResults() {
   )
 }
 
+function ScreenerDescription() {
+  const { selected } = useSelectedRow()
+  return <SecurityDescriptionPanel securityId={selected?.securityId} code={selected?.code} />
+}
+
 // The selected security against the other results.
 function ScreenerComparison() {
   const select = useScreenerSelection((state) => state.select)
@@ -58,14 +64,15 @@ function ScreenerSummary() {
 const PANELS = {
   criteria: <CriteriaPanel />,
   results: <ScreenerResults />,
+  description: <ScreenerDescription />,
   comparison: <ScreenerComparison />,
   statements: <ScreenerStatements />,
   summary: <ScreenerSummary />,
 }
 
 /**
- * Screen 3, equity screener and fundamental analysis (EQS): criteria, results, then the
- * comparison and the statements of the selected row.
+ * Screen 3, equity screener and fundamental analysis (EQS): criteria, results, the description of
+ * the selected row, then its comparison and statements.
  */
 export function EquityScreenerPage() {
   return <ScreenWorkspace screenId="EQS" defaultLayout={EQUITY_SCREENER_LAYOUT} panels={PANELS} />

@@ -135,6 +135,25 @@
       "dividendsPaid": "Dividendes versés"
     }
   },
+  "description": {
+    "title": "{{code}} — Description",
+    "source": "Source : {{source}}",
+    "sources": {
+      "dataAdmin": "Admin données",
+      "eodhd": "EODHD"
+    },
+    "languages": {
+      "fr": "FR",
+      "en": "EN"
+    },
+    "languageNames": {
+      "fr": "français",
+      "en": "anglais"
+    },
+    "fallback": "Pas encore rédigée en français : le texte en {{language}}.",
+    "none": "Pas encore de description de {{code}}.",
+    "noSecurity": "Sélectionnez un titre dans les résultats."
+  },
   "ratios": {
     "titleShort": "Ratios",
     "title": "Ratios {{year}} face à {{sector}}",

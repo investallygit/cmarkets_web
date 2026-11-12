@@ -135,6 +135,25 @@
       "dividendsPaid": "Dividends paid"
     }
   },
+  "description": {
+    "title": "{{code}} — Description",
+    "source": "Source: {{source}}",
+    "sources": {
+      "dataAdmin": "Data admin",
+      "eodhd": "EODHD"
+    },
+    "languages": {
+      "fr": "FR",
+      "en": "EN"
+    },
+    "languageNames": {
+      "fr": "French",
+      "en": "English"
+    },
+    "fallback": "Not written in English yet: the text in {{language}}.",
+    "none": "No description of {{code}} yet.",
+    "noSecurity": "Select a security in the results."
+  },
   "ratios": {
     "titleShort": "Ratios",
     "title": "Ratios {{year}} vs {{sector}}",

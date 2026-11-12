@@ -233,3 +233,27 @@ export interface PriceCorrectionDto {
   correctedAt: IsoDateTime
   correctedBy: string
 }
+
+/** A text the Data admin wrote: when, and by whom, last. */
+export interface WrittenDescriptionDto {
+  text: string
+  updatedAt: IsoDateTime
+  updatedBy: string
+}
+
+/**
+ * GET and PUT /data/securities/{id}/description (CORR): the Data admin's French and English, and
+ * EODHD's English kept apart, which the screens show where the Data admin wrote no English.
+ */
+export interface StoredDescriptionDto {
+  securityId: string
+  fr: WrittenDescriptionDto | null
+  en: WrittenDescriptionDto | null
+  eodhd: { text: string; updatedAt: IsoDateTime } | null
+}
+
+/** PUT /data/securities/{id}/description: each language's text, empty or null to remove it. */
+export interface DescriptionWriteDto {
+  fr: string | null
+  en: string | null
+}

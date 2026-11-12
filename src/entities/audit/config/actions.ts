@@ -34,7 +34,13 @@ export const AUDIT_ACTION_GROUPS: readonly {
   },
   {
     label: 'audit.groups.data',
-    actions: ['import-publish', 'import-rollback', 'import-discard', 'price-correct'],
+    actions: [
+      'import-publish',
+      'import-rollback',
+      'import-discard',
+      'price-correct',
+      'security-describe',
+    ],
   },
   {
     label: 'audit.groups.content',

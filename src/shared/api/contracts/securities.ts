@@ -26,7 +26,30 @@ export interface SearchResultsDto {
   securities: SecuritySearchItemDto[]
 }
 
-/** GET /securities/{id}: reference data of the security profile (spec section 9, screen 2). */
+/** Who wrote a description: the Data admin (CORR), or EODHD for the European and US securities. */
+export type DescriptionSource = 'dataAdmin' | 'eodhd'
+
+/** A description in one language. */
+export interface DescriptionTextDto {
+  /** 2,000 characters at most; paragraphs apart by a blank line, lines by a line feed. */
+  text: string
+  source: DescriptionSource
+  updatedAt: IsoDateTime
+}
+
+/**
+ * A security's description (spec section 9, screen 3): in each language the Data admin's text,
+ * else EODHD's English; null in a language without text, which EQS fills with the other, marked.
+ */
+export interface SecurityDescriptionDto {
+  fr: DescriptionTextDto | null
+  en: DescriptionTextDto | null
+}
+
+/**
+ * GET /securities/{id}: reference data of the security profile (spec section 9, screen 2), and the
+ * description screen 3 shows.
+ */
 export interface SecurityProfileDto extends SecuritySearchItemDto {
   isin: string
   issuer: string
@@ -44,6 +67,7 @@ export interface SecurityProfileDto extends SecuritySearchItemDto {
   yieldPct: number | null
   lastDividend: { amount: number; paymentDate: IsoDate } | null
   nextEvent: { type: CalendarEventType; title: string; date: IsoDate } | null
+  description: SecurityDescriptionDto
 }
 
 /** One bar of GET /securities/{id}/history?from=&to=&interval= (OHLCV, spec section 10). */

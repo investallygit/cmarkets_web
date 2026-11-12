@@ -1,3 +1,4 @@
+import { clsx } from 'clsx'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AccountTypeText } from '@/entities/account'
@@ -63,22 +64,27 @@ export function AuditEntryPanel({ entry }: { entry: AuditEntryDto | null }) {
                 </tr>
               </thead>
               <tbody>
-                {entry.changes.map((change) => (
-                  <tr
-                    key={`${change.field}|${change.scope ?? ''}`}
-                    className="border-b border-border/60"
-                  >
-                    <th scope="row" className="py-0.5 pr-2 text-left font-normal">
-                      {text.field(change)}
-                    </th>
-                    <td className="py-0.5 pr-2 text-right font-mono text-secondary">
-                      {text.value(change, change.before)}
-                    </td>
-                    <td className="py-0.5 text-right font-mono">
-                      {text.value(change, change.after)}
-                    </td>
-                  </tr>
-                ))}
+                {entry.changes.map((change) => {
+                  // A description's paragraphs read as text, not as a figure.
+                  const value =
+                    change.field === 'description'
+                      ? 'text-left align-top font-sans whitespace-pre-line'
+                      : 'text-right font-mono'
+                  return (
+                    <tr
+                      key={`${change.field}|${change.scope ?? ''}`}
+                      className="border-b border-border/60"
+                    >
+                      <th scope="row" className="py-0.5 pr-2 text-left align-top font-normal">
+                        {text.field(change)}
+                      </th>
+                      <td className={clsx('py-0.5 pr-2 text-secondary', value)}>
+                        {text.value(change, change.before)}
+                      </td>
+                      <td className={clsx('py-0.5', value)}>{text.value(change, change.after)}</td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           )}

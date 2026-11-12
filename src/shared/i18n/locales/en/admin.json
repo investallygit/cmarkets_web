@@ -447,7 +447,8 @@
       "subscription-plan": "Subscription plan changed",
       "subscription-suspend": "Subscription suspended",
       "subscription-reactivate": "Subscription suspension lifted",
-      "invoice-resend": "Invoice sent again"
+      "invoice-resend": "Invoice sent again",
+      "security-describe": "Security description"
     },
     "fields": {
       "accountType": "Type",
@@ -507,7 +508,8 @@
       "xafReferenceCurve": "XAF reference curve",
       "plan": "Plan",
       "billingCycle": "Billing cycle",
-      "periodEnd": "Expiry"
+      "periodEnd": "Expiry",
+      "description": "Description"
     },
     "targetTypes": {
       "user": "Account",
@@ -528,11 +530,16 @@
       "newsStatement": "Statement",
       "clickAnomaly": "Click anomaly",
       "subscription": "Subscription",
-      "invoice": "Invoice"
+      "invoice": "Invoice",
+      "security": "Security"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",
     "nameIn": "Name in {{language}}",
+    "descriptionIn": {
+      "fr": "Description in French",
+      "en": "Description in English"
+    },
     "statusOf": "{{type}} status",
     "roleOf": "Permissions of {{type}}",
     "platformSettings": "Platform settings",
