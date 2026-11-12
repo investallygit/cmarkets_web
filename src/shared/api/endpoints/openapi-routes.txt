@@ -9,6 +9,8 @@ GET /admin/conversations/{id}
 GET /admin/ingest-clients
 POST /admin/ingest-clients
 DELETE /admin/ingest-clients/{id}
+GET /admin/invoices/{id}/pdf
+POST /admin/invoices/{id}/resend
 GET /admin/news
 GET /admin/news-clicks/anomalies
 GET /admin/news-clicks/anomalies/{id}/clicks
@@ -68,6 +70,18 @@ GET /admin/specialties
 POST /admin/specialties
 DELETE /admin/specialties/{id}
 PUT /admin/specialties/{id}
+GET /admin/subscriptions
+GET /admin/subscriptions/{accountId}
+POST /admin/subscriptions/{accountId}/extend
+GET /admin/subscriptions/{accountId}/invoices
+GET /admin/subscriptions/{accountId}/payments
+PUT /admin/subscriptions/{accountId}/plan
+GET /admin/subscriptions/{accountId}/proration
+POST /admin/subscriptions/{accountId}/reactivate
+POST /admin/subscriptions/{accountId}/suspend
+GET /admin/subscriptions/export
+GET /admin/subscriptions/plans
+GET /admin/subscriptions/stats
 GET /admin/users
 POST /admin/users
 GET /admin/users/{id}

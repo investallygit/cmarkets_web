@@ -56,7 +56,7 @@ relative: S < M < L < XL.
 | 31   | Bond profile (screen 20), the profile chosen by security type   | Done   |
 | 32   | ETF data, ETFS: ETF screener (screen 15)                        | Done   |
 | 33   | ETF profile (screen 19)                                         | Done   |
-| 34   | SUBS: subscription management (screen 14)                       | To do  |
+| 34   | SUBS: subscription management (screen 14)                       | Done   |
 | 35   | Security descriptions on EQS (screen 3)                         | To do  |
 | 36   | Third version done: README, accessibility, every flow           | To do  |
 
@@ -1342,15 +1342,70 @@ CMarket.Api's phase 26.
     by region), HLD, a fund of funds' HLD, PERF, DIST of a distributing and an accumulating fund,
     ETFS, IMP's templates with the portfolio columns: 54 audits, nothing found.
 
-### Step 34 · SUBS · Subscription management (screen 14) (L): to do
+### Step 34 · SUBS · Subscription management (screen 14) (L): done
 
 CMarket.Api's phase 27.
 
-- Counters, the subscriptions (search, plan, status and expiry filters, sorted by expiry, CSV),
-  the account's subscription, its payments and invoices (PDF), Extend, Change plan, Resend last
-  invoice and Suspend, as the mockup; "via organisation" for a member.
-- **CMarket.Api**: auto-renewal and the stored method, renewals charged, Payment failed,
-  proration, suspension (decision 7).
+- **Built**:
+  - SUBS (/admin/subscriptions, `subscriptions:manage`, the Admin's), in the Admin's menu between
+    USER and MPAY as the spec orders them; SRC, which the spec does not place, now follows MPAY.
+    The command bar opens it with SUBS.
+  - The counters: active subscriptions, expiring within 30 days (yellow), expired and not renewed
+    and failed payments over 30 days (red), the amount collected this month (green); the yellow
+    and red ones filter the list on their status.
+  - The subscriptions: a row per account, its own plan or its organisation's ("Org. (name)", "—
+    (via organisation)"), and per organisation that pays one ("Manager ×4, CEO ×1"); search by
+    name, e-mail or organisation, plan, status and expiry (7, 30, 90 days) filters in the address,
+    the mockup's columns sorted by expiry (the plans in force first, a failed charge's at the top,
+    then those that ended), the status colours of the mockup, the footer "14 of 1,871
+    subscriptions · page 1 / 134 · sort: expiry date", Export CSV of every row of the filters.
+  - The account subscription: account, type, plan and price, status, start, expiry, auto-renewal
+    with the stored card or number ("Yes · card •••• 4417"), last payment and invoice, a failed
+    charge's last try, a suspension's reason; for a member, the organisation's subscription. Its
+    payments and invoices, the latest first, "Failed, then paid" in yellow; each invoice number
+    opens its PDF in a dialog. Extend subscription (a later day and a reason), Change plan (a plan
+    the account may have and its cycle, the proration previewed before it is confirmed), Resend
+    last invoice (by e-mail with its PDF), Suspend subscription (a reason, confirmed) or Lift the
+    suspension.
+  - CFG names the plan in force (the media's included) and shows a failed charge and a suspension;
+    USER's account details too; AUDT words the five new actions.
+  - Slices: `widgets/subscription-admin-panels` (the counters, the list, the account's
+    subscription, its payments; the words and the address's filters in `lib`),
+    `features/manage-subscription` (the actions and their dialogs), `pages/subscription-management`,
+    SUBS's hooks and colours in `entities/subscription`, the contracts `subscriptionAdmin.ts` and
+    the routes of /admin/subscriptions and /admin/invoices/{id}; the strings in the area file
+    `subscriptions.json`.
+- **CMarket.Api** (phase 27, ADR-051):
+  - Renewals for real (decision 7): the billing job charges the card or mobile money number stored
+    at checkout through the payment port, invoices a transfer, gives an agreement free, expires a
+    plan that does not renew by itself; a failed charge keeps the plan in force and is tried again
+    once a day for seven days, then the plan expires. The statuses Payment failed and Suspended;
+    the method Agreement and the plan "Media source" (XAF 0), offered to nobody, which an Admin
+    gives to a media; migration `SubscriptionManagement` (the periods moved on to today's).
+  - The endpoints of section 10 (`/admin/subscriptions`, `/stats`, `/export`, `/{accountId}`,
+    `/payments`, `/invoices`, `/plan`, `/extend`, `/suspend`, `/admin/invoices/{id}/pdf` and
+    `/resend`), and `/plans`, `/proration` and `/reactivate`.
+  - A change of plan prorated by the day: the days left of the plan in force buy days of the new
+    one; less than a day, a full period charged at once.
+  - Demo: the demo accounts as their mockup rows where the other screens allow it, and the
+    generated accounts' plans drawn so that the counters read the mockup's whatever the day.
+- **Checked**:
+  - Type check, lint, the 354 unit tests (the address's filters, the footer's pages, the
+    members' line among them).
+  - CMarket.Api: 1,422 tests, all passing: 1,402 in the usual run, and the SQL Server suite's 20
+    on SQL Server (the new migration up with its periods moved on, as an idempotent script, and
+    down). `npm run test:api` reads SUBS as the Admin: 567 reads, 225 left out by permission or
+    plan.
+  - Every Playwright flow on CMarket.Api from a fresh database: 110, all passing. Two new ones:
+    the Admin extends L. Fotso's month, suspends and lifts it, changes M. Ndong's plan prorated by
+    the day; the counters filter the list, Research house M's declined card, Media I by agreement,
+    a resent invoice and the CSV. CFG's transfer flow now takes the newest of K. Atangana's
+    invoices, among the months the SUBS demo gives him. On a fresh database (`@fresh-db`): the
+    mockup's counters (1,871 · 143 · 62 · 9 · 48.6 M XAF), the list by expiry, K. Atangana's plan,
+    history and an invoice's PDF.
+  - axe (WCAG 2.2 AA) at 1600, 390 and 320 px, in English and French: SUBS, an account's
+    subscription, the Change plan, Extend and Suspend dialogs, an invoice's PDF, a declined card's
+    retries, CFG of a News provider on the media's plan: 43 audits, nothing found.
 
 ### Step 35 · Security descriptions on EQS (screen 3) (S): to do
 
@@ -2125,9 +2180,12 @@ Still to do, with the first screen that needs it:
 - **Mock**: the months up to August are paid, K. Atangana's September too (on 5 October), the
   other analysts' September is due.
 
-### SUBS · Subscription management (screen 14): to do
+### SUBS · Subscription management (screen 14): done
 
-- **Planned in step 34**.
+- **Built in step 34**: the counters, the subscriptions of every account and paying organisation
+  (search, plan, status and expiry filters, sorted by expiry, CSV), the account's subscription
+  with its payments and invoices (each invoice's PDF), Extend, Change plan, Resend last invoice and
+  Suspend; "via organisation" for a member. See step 34.
 
 ### MPAY · Media payments (screen 18): to do
 
@@ -2476,7 +2534,8 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   transfer file: is that the intent? "Spike above 5 times the average": the plan compares an
   item's clicks of a day with the newspaper's clicks per item of the 30 days before, from 50 clicks;
   a "wave of new accounts" has no threshold (the plan: the 20 accounts of the shared address). Is
-  the newspaper told of a hold (the plan: no)? MPAY sits after SRC until SUBS comes (step 34).
+  the newspaper told of a hold (the plan: no)? MPAY follows SUBS (step 34), and SRC, which the spec
+  does not place, follows MPAY.
 - **Bond screener, third version**: the mockup's figures do not all follow from its bonds' terms:
   ECMR's are case A of section 14.1 (bullet), YAS's case B (amortizing), and COMPANY X's accrued
   interest of 4.51 matches no coupon date of an annual bond paying on 30/06. Its prices fit a
@@ -2545,7 +2604,29 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   again for 7 days, then the plan expires. How is a change of plan prorated (the plan: by the
   day)? Does Suspend cut access at once (the plan: yes, until lifted)? The mockup's Media I pays
   XAF 0 by "Agreement": is that a plan of its own (the plan: "Media source", for the media's News
-  providers)?
+  providers)? Built in step 34: the proration converts the value of the days left into days of
+  the new plan (no refund, no credit carried), a full period charged at once when they buy less
+  than a day; Suspend has its own lifting, `/reactivate`, which section 10 does not list, nor the
+  catalogue (`/plans`) and the preview of a change (`/proration`) that SUBS reads.
+- **SUBS, third version**: the mockup's plans are by account type ("Analyst annual", "Org.
+  annual", "Institution annual") where the catalogue's are by module (Monitoring, Analysis,
+  Professional, Student, the prototype's): SUBS shows the catalogue's with their cycle
+  ("Professional annual") and its prices; is a catalogue by account type wanted? Its invoices are
+  numbered FAC-2026-0412, the platform's CM-2026-000130 since phase 9. Its counters count accounts
+  (1,871 active against a list of 1,871 subscriptions), which the plan follows: a member counts as
+  a subscription, and the list adds a row per paying organisation. Its rows disagree with the
+  other screens' demo accounts: S. Mvondo and T. Bekale pay their own plans there, members of
+  University B and Bank C elsewhere; Bank C and E. Fouda are expired, while the Trader's flows need
+  Bank C's plan and E. Fouda heads Asset manager A; D. Moussavou pays since April, while screen 9
+  has him waiting for approval since 22 October; Asset manager A has 5 managers, the demo 3 and a
+  CEO; University B 120 students, the demo 4. The plan keeps the other screens' accounts and fits
+  the counters with the generated ones. The list says "sort: expiry date" but its rows are not in
+  that order; an organisation's expiry is the last day of its period (31/12/2026) where an
+  account's is the day it renews (15/03/2027): the plan shows the day it renews or ends for all.
+  The organisations of the demo logins renew by themselves, so that a demo account keeps its
+  modules (the mockup's "No"). Is "Expiring soon" meant for a plan that renews by itself (the
+  mockup's S. Mvondo is)?
+
 - **ETFs and bonds, third version**: which EODHD licence covers news, ETF holdings, NAV and
   spreads, and the EUR and USD government curves, whose codes are "to confirm" (the plan: demo
   data until then; EUR and USD spreads n/a)? The description of a security is in French and

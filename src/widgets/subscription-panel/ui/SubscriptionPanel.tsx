@@ -61,7 +61,7 @@ export function SubscriptionPanel() {
         />
       ) : (
         <div className="flex flex-col gap-3 p-3">
-          <CurrentPlan subscription={subscription.data} plans={plans.data} />
+          <CurrentPlan subscription={subscription.data} />
           <PlanTable
             plans={plans.data}
             subscription={subscription.data}
@@ -80,29 +80,28 @@ export function SubscriptionPanel() {
   )
 }
 
-function CurrentPlan({
-  subscription,
-  plans,
-}: {
-  subscription: SubscriptionDto | null
-  plans: PlanDto[]
-}) {
+/** The plan in force, by the name the API gives it: the media's plan by agreement is not among those offered. */
+function CurrentPlan({ subscription }: { subscription: SubscriptionDto | null }) {
   const { t } = useTranslation()
   const format = useFormat()
   if (!subscription) {
     return <p className="font-sans text-label text-secondary">{t('subscription.none')}</p>
   }
-  const name = plans.find((plan) => plan.id === subscription.planId)?.name ?? subscription.planId
+  const name = subscription.planName
   const end = format.isoDate(subscription.periodEnd)
   const status =
     subscription.status === 'trial'
       ? t('subscription.status.trial', { date: end })
       : subscription.status === 'expired'
         ? t('subscription.status.expired', { date: end })
-        : t('subscription.status.active', {
-            cycle: t(`subscription.cycles.${subscription.billingCycle ?? 'monthly'}`),
-            date: end,
-          })
+        : subscription.status === 'paymentFailed'
+          ? t('subscription.status.paymentFailed')
+          : subscription.status === 'suspended'
+            ? t('subscription.status.suspended')
+            : t('subscription.status.active', {
+                cycle: t(`subscription.cycles.${subscription.billingCycle ?? 'monthly'}`),
+                date: end,
+              })
 
   return (
     <section aria-label={t('subscription.current')} className="flex flex-col gap-1.5">
@@ -112,7 +111,9 @@ function CurrentPlan({
         <span
           className={clsx(
             'font-sans text-label',
-            subscription.status === 'expired'
+            subscription.status === 'expired' ||
+              subscription.status === 'paymentFailed' ||
+              subscription.status === 'suspended'
               ? 'text-down'
               : subscription.status === 'trial'
                 ? 'text-warning'

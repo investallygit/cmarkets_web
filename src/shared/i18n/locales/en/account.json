@@ -149,7 +149,9 @@
     "status": {
       "trial": "Free trial until {{date}}",
       "active": "Paid {{cycle}}, renews on {{date}}",
-      "expired": "Ended on {{date}}"
+      "expired": "Ended on {{date}}",
+      "paymentFailed": "Payment failed: your card or number is tried again for 7 days, the plan in force meanwhile",
+      "suspended": "Suspended by CMarket: its modules are closed until the suspension is lifted"
     },
     "cycles": {
       "monthly": "monthly",

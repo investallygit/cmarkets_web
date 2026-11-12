@@ -43,6 +43,7 @@ export const PERMISSION_GROUPS: readonly {
     label: 'permissions.groups.admin',
     permissions: [
       'users:manage',
+      'subscriptions:manage',
       'moderation:manage',
       'settings:manage',
       'payouts:manage',
@@ -76,6 +77,7 @@ export const PERMISSION_LABELS: Record<Permission, TranslationKey> = {
   'data:import': 'permissions.labels.dataImport',
   'content:publish': 'permissions.labels.contentPublish',
   'users:manage': 'permissions.labels.usersManage',
+  'subscriptions:manage': 'permissions.labels.subscriptionsManage',
   'moderation:manage': 'permissions.labels.moderationManage',
   'settings:manage': 'permissions.labels.settingsManage',
   'audit:read': 'permissions.labels.auditRead',

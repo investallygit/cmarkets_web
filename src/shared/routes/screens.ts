@@ -6,6 +6,7 @@ import {
   Calculator,
   CalendarDays,
   ChartSpline,
+  CreditCard,
   Database,
   FileText,
   HandCoins,
@@ -143,10 +144,11 @@ export const SCREENS: readonly ScreenDefinition[] = [
 
   // Back-office, Admin (screen 9).
   screen('USER', 'USER', routes.adminUsers, 'backoffice', Users, { permission: 'users:manage', inMenu: true }),
-  // The news sources (ROADMAP decision 6): with MPAY (step 28), after the accounts in the Admin's menu.
-  screen('SRC', 'SRC', routes.adminSources, 'backoffice', Rss, { permission: 'news:payments', inMenu: true }),
-  // MPAY, the media payments (screen 18): between the subscriptions (SUBS, step 34) and ANLY in the spec's menu.
+  // SUBS, the subscriptions (screen 14), then MPAY, the media payments (screen 18), as the spec's menu orders them; the
+  // news sources (ROADMAP decision 6), which have no place there, after MPAY.
+  screen('SUBS', 'SUBS', routes.adminSubscriptions, 'backoffice', CreditCard, { permission: 'subscriptions:manage', inMenu: true }),
   screen('MPAY', 'MPAY', routes.adminMediaPayments, 'backoffice', HandCoins, { permission: 'news:payments', inMenu: true }),
+  screen('SRC', 'SRC', routes.adminSources, 'backoffice', Rss, { permission: 'news:payments', inMenu: true }),
   screen('ANLY', 'ANLY', routes.adminAnalysts, 'backoffice', UserCheck, { permission: 'moderation:manage', inMenu: true }),
   screen('MOD', 'MOD', routes.adminModeration, 'backoffice', ShieldCheck, { permission: 'moderation:manage', inMenu: true }),
   screen('PAY', 'PAY', routes.adminPayouts, 'backoffice', Wallet, { permission: 'payouts:manage', inMenu: true }),

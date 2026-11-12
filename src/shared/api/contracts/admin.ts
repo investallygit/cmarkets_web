@@ -18,7 +18,7 @@ import type {
   PublicationStatus,
   PublicationSubjectDto,
 } from './research'
-import type { BillingCycle } from './subscription'
+import type { BillingCycle, SubscriptionStatus } from './subscription'
 
 // Administration, under /admin and for the Admin only (spec sections 9, screen 9, and 10).
 
@@ -69,7 +69,7 @@ export interface AdminDecisionDto {
 /** The plan that covers the account, its own or its organisation's. */
 export interface AdminSubscriptionDto {
   planName: string
-  status: 'trial' | 'active' | 'expired'
+  status: SubscriptionStatus
   billingCycle: BillingCycle | null
   /** First day after the period or the trial. */
   periodEnd: IsoDate
@@ -345,6 +345,11 @@ export const AUDIT_ACTIONS = [
   'news-anomaly-decide',
   'news-payment-terms',
   'news-payment-settings-update',
+  'subscription-extend',
+  'subscription-plan',
+  'subscription-suspend',
+  'subscription-reactivate',
+  'invoice-resend',
 ] as const
 export type AuditAction = (typeof AUDIT_ACTIONS)[number]
 
@@ -366,6 +371,9 @@ export type AuditTargetType =
   | 'ingestClient'
   | 'newsStatement'
   | 'clickAnomaly'
+  /** A subscription, by its payer: the user's own or the organisation's (SUBS). */
+  | 'subscription'
+  | 'invoice'
 
 /** What a change is about; `scope` says which account type, permission or security. */
 export const AUDIT_FIELDS = [
@@ -424,6 +432,9 @@ export const AUDIT_FIELDS = [
   'spikeFactor',
   'sharedAddressAccounts',
   'xafReferenceCurve',
+  'plan',
+  'billingCycle',
+  'periodEnd',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

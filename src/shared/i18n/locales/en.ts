@@ -14,6 +14,7 @@ import newsStudio from './en/newsStudio.json'
 import payments from './en/payments.json'
 import portfolio from './en/portfolio.json'
 import research from './en/research.json'
+import subscriptions from './en/subscriptions.json'
 
 /**
  * The English strings, one file per area of the app in ./en: the shell and the shared UI (core),
@@ -37,6 +38,7 @@ const en = {
   ...messaging,
   ...dataAdmin,
   ...admin,
+  ...subscriptions,
 }
 
 export default en

@@ -149,7 +149,9 @@
     "status": {
       "trial": "Essai gratuit jusqu'au {{date}}",
       "active": "Payée {{cycle}}, renouvelée le {{date}}",
-      "expired": "Terminée le {{date}}"
+      "expired": "Terminée le {{date}}",
+      "paymentFailed": "Paiement échoué : votre carte ou votre numéro est présenté à nouveau pendant 7 jours, la formule restant en vigueur",
+      "suspended": "Suspendu par CMarket : ses modules sont fermés jusqu’à la levée de la suspension"
     },
     "cycles": {
       "monthly": "au mois",

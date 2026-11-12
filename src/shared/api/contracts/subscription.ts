@@ -17,7 +17,11 @@ export interface PlanDto {
   accountTypes: ClientAccountType[]
 }
 
-export type SubscriptionStatus = 'trial' | 'active' | 'expired'
+/**
+ * A failed renewal is tried again for 7 days, the plan in force meanwhile; an Admin's suspension
+ * cuts the modules at once (ROADMAP decision 7).
+ */
+export type SubscriptionStatus = 'trial' | 'active' | 'paymentFailed' | 'suspended' | 'expired'
 
 /** GET /subscription: the plan that covers the user, their own or their organisation's; 404 for none. */
 export interface SubscriptionDto {
@@ -35,9 +39,14 @@ export interface SubscriptionDto {
   canManage: boolean
   /** An invoice still to pay by bank transfer. */
   dueInvoiceId: string | null
+  /** The plan's name, the one given by agreement included, which the plans of the account omit. */
+  planName: string
 }
 
 export type CheckoutMethod = 'card' | 'mobileMoney' | 'transfer'
+
+/** A plan's method: the checkout's, or an agreement (a media's free plan, given by an Admin). */
+export type PlanPaymentMethod = CheckoutMethod | 'agreement'
 
 /** POST /subscription/checkout */
 export interface CheckoutRequestDto {
@@ -91,7 +100,7 @@ export interface InvoiceDto {
   taxAmount: number
   total: number
   currency: CurrencyCode
-  method: CheckoutMethod | null
+  method: PlanPaymentMethod | null
   status: InvoiceStatus
   transfer: TransferDetailsDto | null
 }

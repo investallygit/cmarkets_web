@@ -111,9 +111,12 @@ test('a bank transfer gives the invoice to pay, and the new plan at once', async
 
   await expect(subscription).toContainText('An invoice is due by bank transfer')
   await expect(subscription).toContainText('Monitoring, Analysis')
-  await expect(panel(page, 'Invoices').getByRole('row', { name: /Analysis/ })).toContainText(
-    /Due \d{2}\/\d{2}/,
-  )
+  // The newest first: the demo's Analysis months of 2025 and 2026 follow (SUBS, step 34).
+  await expect(
+    panel(page, 'Invoices')
+      .getByRole('row', { name: /Analysis/ })
+      .first(),
+  ).toContainText(/Due \d{2}\/\d{2}/)
   // The plan has no Portfolio module any more.
   await expect(page.getByRole('link', { name: /PORT/ })).toHaveAttribute(
     'title',
@@ -122,7 +125,10 @@ test('a bank transfer gives the invoice to pay, and the new plan at once', async
 
   // The title bar's PDF button downloads the invoice selected.
   const invoices = panel(page, 'Invoices')
-  await invoices.getByRole('row', { name: /CM-2025/ }).click()
+  await invoices
+    .getByRole('row', { name: /CM-2025/ })
+    .first()
+    .click()
   const download = page.waitForEvent('download')
   await invoices.getByRole('button', { name: /Download invoice CM-2025/ }).click()
   expect((await download).suggestedFilename()).toMatch(/^CM-2025-\d{6}\.pdf$/)

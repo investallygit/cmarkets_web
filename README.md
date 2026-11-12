@@ -73,7 +73,7 @@ before upload.
 | 20 · Bond profile (DES on a bond: DES, GP, BP, CF, RAT, DOC)              | Done; a year of daily figures, model prices drawn lighter     |
 | 15 · ETF screener (ETFS)                                                  | Done; figures computed each evening, saved screens, export    |
 | 19 · ETF profile (DES on an ETF)                                          | Done; history with NAV, holdings, allocation, PERF, DIST      |
-| 14 · Subscription management (SUBS)                                       | To do, step 34                                                |
+| 14 · Subscription management (SUBS)                                       | Done; renewals charged, failures retried, plans prorated      |
 | Security descriptions on EQS (screen 3)                                   | To do, step 35                                                |
 
 How the screens were built, step by step, what the second version of the spec added (the
@@ -130,13 +130,15 @@ src/
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
               network-profile (NET ME), public-profile (/p/{handle}), data-import (IMP),
               data-session (DATA), upload-history (HIST), eodhd (EODH), data-corrections (CORR),
-              content (NEWS), admin-users (USER), news-sources (SRC), media-payments (MPAY),
+              content (NEWS), admin-users (USER), subscription-management (SUBS), news-sources
+              (SRC), media-payments (MPAY),
               analyst-requests (ANLY),
               moderation (MOD), payouts (PAY), platform-settings (ADMCFG), audit-log (AUDT), home,
               auth (login, sign-up, password reset), status, ui-kit (/_kit)
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
               subscription-panel, current-upload-panel, messaging-panels, news-studio-panels,
               news-moderation-panels, news-sources-panels, media-payments-panels,
+              subscription-admin-panels,
               bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
               bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
               etf-profile-panels...),
@@ -151,6 +153,7 @@ src/
               moderate-news, edit-publisher, edit-news-source, edit-news-settings,
               manage-ingest-clients, change-statement-status, decide-click-anomaly,
               edit-payment-terms, edit-payment-settings, resolve-statement-dispute,
+              manage-subscription,
               dispute-statement, draw-on-chart,
               compare-securities, edit-profile, edit-network-profile, change-password,
               choose-plan, manage-members, upload-data-file, review-import, roll-back-import,
@@ -158,7 +161,8 @@ src/
               review-analyst-request, moderate-publication, moderate-report, mark-payout-paid,
               edit-platform-settings, edit-permissions, switch-language, switch-account,
               workspace-layout
-  entities/   business data: session, subscription, organization, security, quote (live
+  entities/   business data: session, subscription (CFG's plan and checkout, SUBS's
+              subscriptions, payments and actions), organization, security, quote (live
               prices), market, bond (with BS's screener and labels, BP's pricing, the bond
               profile's history, ratings and payments), etf (ETFS's screener, an ETF's blocks,
               performance and distributions, the profile's history, holdings, allocation and

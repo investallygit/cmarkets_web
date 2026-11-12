@@ -42,6 +42,10 @@
     "trialUntil": "Free trial until {{date}}",
     "planEnded": "{{plan}} · ended {{date}}",
     "planEnds": "{{plan}} {{cycle}} · ends {{date}}",
+    "plan": {
+      "paymentFailed": "{{plan}} · payment failed, tried again",
+      "suspended": "{{plan}} · suspended (SUBS)"
+    },
     "paidByOrganization": "paid by the organisation",
     "twoFactor": "Two-factor auth",
     "mfaEnabled": "Enabled · {{channel}}",
@@ -371,6 +375,7 @@
       "dataImport": "Upload data files, correct data",
       "contentPublish": "Publish news and issuer documents",
       "usersManage": "Create, suspend, change an account's type",
+      "subscriptionsManage": "Subscriptions, their payments and invoices (SUBS)",
       "moderationManage": "Approve statuses (Analyst, Journalist, CEO, News provider), moderate",
       "settingsManage": "Settings and permissions",
       "auditRead": "Audit log",
@@ -437,7 +442,12 @@
       "news-dispute-resolve": "Statement dispute answered",
       "news-anomaly-decide": "Click anomaly decided",
       "news-payment-terms": "Newspaper payment settings",
-      "news-payment-settings-update": "Payment settings changed"
+      "news-payment-settings-update": "Payment settings changed",
+      "subscription-extend": "Subscription extended",
+      "subscription-plan": "Subscription plan changed",
+      "subscription-suspend": "Subscription suspended",
+      "subscription-reactivate": "Subscription suspension lifted",
+      "invoice-resend": "Invoice sent again"
     },
     "fields": {
       "accountType": "Type",
@@ -494,7 +504,10 @@
       "calculationTime": "Calculation time",
       "spikeFactor": "Spike factor",
       "sharedAddressAccounts": "Accounts on one address",
-      "xafReferenceCurve": "XAF reference curve"
+      "xafReferenceCurve": "XAF reference curve",
+      "plan": "Plan",
+      "billingCycle": "Billing cycle",
+      "periodEnd": "Expiry"
     },
     "targetTypes": {
       "user": "Account",
@@ -513,7 +526,9 @@
       "publisher": "Publisher",
       "ingestClient": "Ingestion client",
       "newsStatement": "Statement",
-      "clickAnomaly": "Click anomaly"
+      "clickAnomaly": "Click anomaly",
+      "subscription": "Subscription",
+      "invoice": "Invoice"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",

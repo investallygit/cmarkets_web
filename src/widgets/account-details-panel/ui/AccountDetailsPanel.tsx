@@ -90,13 +90,15 @@ function AccountDetails({ account }: { account: AdminUserDetailsDto }) {
                     plan: subscription.planName,
                     date: format.date(subscription.periodEnd),
                   })
-                : t('accounts.planEnds', {
-                    plan: subscription.planName,
-                    cycle: subscription.billingCycle
-                      ? t(`subscription.cycles.${subscription.billingCycle}`)
-                      : '',
-                    date: format.month(subscription.periodEnd.slice(0, 7)),
-                  })}
+                : subscription.status === 'paymentFailed' || subscription.status === 'suspended'
+                  ? t(`accounts.plan.${subscription.status}`, { plan: subscription.planName })
+                  : t('accounts.planEnds', {
+                      plan: subscription.planName,
+                      cycle: subscription.billingCycle
+                        ? t(`subscription.cycles.${subscription.billingCycle}`)
+                        : '',
+                      date: format.month(subscription.periodEnd.slice(0, 7)),
+                    })}
           {subscription?.paidBy === 'organization' && (
             <span className="text-secondary"> · {t('accounts.paidByOrganization')}</span>
           )}

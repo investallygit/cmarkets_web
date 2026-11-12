@@ -73,6 +73,7 @@ export const PERMISSIONS = [
   'data:import',
   'content:publish',
   'users:manage',
+  'subscriptions:manage',
   'moderation:manage',
   'settings:manage',
   'audit:read',

@@ -89,6 +89,11 @@ const ModerationPage = lazy(() =>
 const NewsSourcesPage = lazy(() =>
   import('@/pages/news-sources').then((module) => ({ default: module.NewsSourcesPage })),
 )
+const SubscriptionManagementPage = lazy(() =>
+  import('@/pages/subscription-management').then((module) => ({
+    default: module.SubscriptionManagementPage,
+  })),
+)
 const MediaPaymentsPage = lazy(() =>
   import('@/pages/media-payments').then((module) => ({ default: module.MediaPaymentsPage })),
 )
@@ -128,8 +133,9 @@ const PAGES: Record<ScreenTextKey, Page> = {
   CORR: DataCorrectionsPage,
   NEWS: ContentPage,
   USER: AdminUsersPage,
-  SRC: NewsSourcesPage,
+  SUBS: SubscriptionManagementPage,
   MPAY: MediaPaymentsPage,
+  SRC: NewsSourcesPage,
   ANLY: AnalystRequestsPage,
   MOD: ModerationPage,
   PAY: PayoutsPage,

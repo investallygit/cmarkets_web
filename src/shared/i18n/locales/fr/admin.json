@@ -42,6 +42,10 @@
     "trialUntil": "Essai gratuit jusqu'au {{date}}",
     "planEnded": "{{plan}} · terminé le {{date}}",
     "planEnds": "{{plan}} {{cycle}} · jusqu'à {{date}}",
+    "plan": {
+      "paymentFailed": "{{plan}} · paiement échoué, nouvel essai",
+      "suspended": "{{plan}} · suspendu (SUBS)"
+    },
     "paidByOrganization": "payé par l'organisation",
     "twoFactor": "Double authentification",
     "mfaEnabled": "Activée · {{channel}}",
@@ -371,6 +375,7 @@
       "dataImport": "Charger les fichiers, corriger les données",
       "contentPublish": "Publier actualités et documents d'émetteurs",
       "usersManage": "Créer, suspendre, changer le type d'un compte",
+      "subscriptionsManage": "Abonnements, leurs paiements et factures (SUBS)",
       "moderationManage": "Approuver les statuts (Analyste, Journaliste, Dirigeant, Éditeur de presse), modérer",
       "settingsManage": "Paramètres et permissions",
       "auditRead": "Journal d'audit",
@@ -437,7 +442,12 @@
       "news-dispute-resolve": "Contestation de relevé traitée",
       "news-anomaly-decide": "Anomalie de clics décidée",
       "news-payment-terms": "Réglages de paiement d'un journal",
-      "news-payment-settings-update": "Réglages de paiement changés"
+      "news-payment-settings-update": "Réglages de paiement changés",
+      "subscription-extend": "Abonnement prolongé",
+      "subscription-plan": "Formule d’abonnement changée",
+      "subscription-suspend": "Abonnement suspendu",
+      "subscription-reactivate": "Suspension d’abonnement levée",
+      "invoice-resend": "Facture renvoyée"
     },
     "fields": {
       "accountType": "Type",
@@ -494,7 +504,10 @@
       "calculationTime": "Heure du calcul",
       "spikeFactor": "Facteur de pic",
       "sharedAddressAccounts": "Comptes sur une adresse",
-      "xafReferenceCurve": "Courbe de référence XAF"
+      "xafReferenceCurve": "Courbe de référence XAF",
+      "plan": "Formule",
+      "billingCycle": "Périodicité",
+      "periodEnd": "Échéance"
     },
     "targetTypes": {
       "user": "Compte",
@@ -513,7 +526,9 @@
       "publisher": "Éditeur",
       "ingestClient": "Client d'ingestion",
       "newsStatement": "Relevé",
-      "clickAnomaly": "Anomalie de clics"
+      "clickAnomaly": "Anomalie de clics",
+      "subscription": "Abonnement",
+      "invoice": "Facture"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",

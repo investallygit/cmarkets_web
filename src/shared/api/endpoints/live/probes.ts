@@ -502,4 +502,44 @@ export const PROBES: Probe[] = [
     call: () => adminApi.auditLog({ pageSize: 5 }),
     check: isPage,
   },
+  {
+    name: 'Admin: subscriptions',
+    permission: 'subscriptions:manage',
+    call: () => adminApi.subscriptions({ pageSize: 5, status: 'active' }),
+    check: isPage,
+  },
+  {
+    name: 'Admin: subscription counters',
+    permission: 'subscriptions:manage',
+    call: () => adminApi.subscriptionStats(),
+    check: has(
+      'active',
+      'expiringSoon',
+      'expiredNotRenewed',
+      'failedPayments',
+      'collectedThisMonth',
+    ),
+  },
+  {
+    name: 'Admin: subscription plans',
+    permission: 'subscriptions:manage',
+    call: () => adminApi.subscriptionPlans(),
+    check: isList,
+  },
+  {
+    name: 'Admin: an account subscription, its payments, invoices and a change of plan',
+    permission: 'subscriptions:manage',
+    call: async () => {
+      const [row] = (await adminApi.subscriptions({ pageSize: 1, status: 'active' })).items
+      if (!row) return []
+      const details = await adminApi.subscription(row.accountId)
+      await adminApi.subscriptionPayments(row.accountId)
+      await adminApi.subscriptionInvoices(row.accountId)
+      const other = details.planIds.find((planId) => planId !== details.planId)
+      if (other)
+        await adminApi.planChangeProration(row.accountId, { planId: other, billingCycle: 'yearly' })
+      return details
+    },
+    check: has('payer', 'planIds'),
+  },
 ]

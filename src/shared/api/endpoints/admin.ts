@@ -7,7 +7,11 @@ import type {
   AdminNewsSourceDto,
   AdminNewsSourceWriteDto,
   AdminPayoutDto,
+  AdminPlanDto,
   AdminSpecialtyDto,
+  AdminSubscriptionDetailsDto,
+  AdminSubscriptionQuery,
+  AdminSubscriptionRowDto,
   AdminUserCreateDto,
   AdminUserDetailsDto,
   AdminUserDto,
@@ -23,6 +27,8 @@ import type {
   IngestClientCreatedDto,
   IngestClientDto,
   IngestClientWriteDto,
+  InvoiceDto,
+  InvoiceSentDto,
   LibraryPublicationDto,
   ModeratedNewsDto,
   ModerationItemDto,
@@ -39,6 +45,7 @@ import type {
   NewsType,
   Paged,
   PayoutStatus,
+  PlanChangeProrationDto,
   PlatformSettingsDto,
   PlatformSettingsUpdateDto,
   PublisherDto,
@@ -57,6 +64,10 @@ import type {
   StatementItemDto,
   StatementStatus,
   StatementStatusWriteDto,
+  SubscriptionExtendDto,
+  SubscriptionPaymentDto,
+  SubscriptionPlanWriteDto,
+  SubscriptionStatsDto,
   VerificationStatus,
 } from '../contracts'
 import { answer, route, send, sendBlob, sendForm } from './define'
@@ -107,7 +118,8 @@ export type StatementItemsSort = 'clicks' | 'headline' | 'published'
  * status requests, moderation of the publications and of the directory, platform settings and
  * permissions, payouts, the audit log; the news moderation of NEWS and MOD, the publishers' domains
  * and SRC's newspapers, AI settings and ingestion clients (ROADMAP step 27); MPAY's statements,
- * click anomalies and payment settings (step 28).
+ * click anomalies and payment settings (step 28); SUBS's subscriptions, their payments and invoices
+ * (step 34).
  */
 export const adminRoutes = {
   users: route('GET', '/admin/users', answer<Paged<AdminUserDto>>()),
@@ -271,6 +283,52 @@ export const adminRoutes = {
     '/admin/news-payment-settings',
     answer<NewsPaymentSettingsDto>(),
   ),
+  subscriptions: route('GET', '/admin/subscriptions', answer<Paged<AdminSubscriptionRowDto>>()),
+  subscriptionStats: route('GET', '/admin/subscriptions/stats', answer<SubscriptionStatsDto>()),
+  subscriptionPlans: route('GET', '/admin/subscriptions/plans', answer<AdminPlanDto[]>()),
+  exportSubscriptions: route('GET', '/admin/subscriptions/export', answer<Blob>()),
+  subscription: route(
+    'GET',
+    '/admin/subscriptions/{accountId}',
+    answer<AdminSubscriptionDetailsDto>(),
+  ),
+  subscriptionPayments: route(
+    'GET',
+    '/admin/subscriptions/{accountId}/payments',
+    answer<SubscriptionPaymentDto[]>(),
+  ),
+  subscriptionInvoices: route(
+    'GET',
+    '/admin/subscriptions/{accountId}/invoices',
+    answer<InvoiceDto[]>(),
+  ),
+  planChangeProration: route(
+    'GET',
+    '/admin/subscriptions/{accountId}/proration',
+    answer<PlanChangeProrationDto>(),
+  ),
+  changeSubscriptionPlan: route(
+    'PUT',
+    '/admin/subscriptions/{accountId}/plan',
+    answer<AdminSubscriptionDetailsDto>(),
+  ),
+  extendSubscription: route(
+    'POST',
+    '/admin/subscriptions/{accountId}/extend',
+    answer<AdminSubscriptionDetailsDto>(),
+  ),
+  suspendSubscription: route(
+    'POST',
+    '/admin/subscriptions/{accountId}/suspend',
+    answer<AdminSubscriptionDetailsDto>(),
+  ),
+  reactivateSubscription: route(
+    'POST',
+    '/admin/subscriptions/{accountId}/reactivate',
+    answer<AdminSubscriptionDetailsDto>(),
+  ),
+  invoicePdf: route('GET', '/admin/invoices/{id}/pdf', answer<Blob>()),
+  resendInvoice: route('POST', '/admin/invoices/{id}/resend', answer<InvoiceSentDto>()),
 }
 
 const of = (id: string, signal?: AbortSignal) => ({ params: { id }, signal })
@@ -452,4 +510,36 @@ export const adminApi = {
   paymentSettings: (signal?: AbortSignal) => send(adminRoutes.paymentSettings, { signal }),
   savePaymentSettings: (settings: NewsPaymentSettingsWriteDto) =>
     send(adminRoutes.savePaymentSettings, { body: settings }),
+  /** A page of SUBS's accounts and paying organisations, the soonest expiry first by default. */
+  subscriptions: (query: AdminSubscriptionQuery, signal?: AbortSignal) =>
+    send(adminRoutes.subscriptions, { query: { ...query }, signal }),
+  subscriptionStats: (signal?: AbortSignal) => send(adminRoutes.subscriptionStats, { signal }),
+  subscriptionPlans: (signal?: AbortSignal) => send(adminRoutes.subscriptionPlans, { signal }),
+  /** Every row of the filters as CSV, not only the page shown. */
+  exportSubscriptions: (query: Omit<AdminSubscriptionQuery, 'page' | 'pageSize'>) =>
+    sendBlob(adminRoutes.exportSubscriptions, { query: { format: 'csv', ...query } }),
+  subscription: (accountId: string, signal?: AbortSignal) =>
+    send(adminRoutes.subscription, { params: { accountId }, signal }),
+  subscriptionPayments: (accountId: string, signal?: AbortSignal) =>
+    send(adminRoutes.subscriptionPayments, { params: { accountId }, signal }),
+  subscriptionInvoices: (accountId: string, signal?: AbortSignal) =>
+    send(adminRoutes.subscriptionInvoices, { params: { accountId }, signal }),
+  /** A change of plan as PUT .../plan would make it today. */
+  planChangeProration: (
+    accountId: string,
+    change: SubscriptionPlanWriteDto,
+    signal?: AbortSignal,
+  ) =>
+    send(adminRoutes.planChangeProration, { params: { accountId }, query: { ...change }, signal }),
+  changeSubscriptionPlan: (accountId: string, change: SubscriptionPlanWriteDto) =>
+    send(adminRoutes.changeSubscriptionPlan, { params: { accountId }, body: change }),
+  extendSubscription: (accountId: string, extension: SubscriptionExtendDto) =>
+    send(adminRoutes.extendSubscription, { params: { accountId }, body: extension }),
+  suspendSubscription: (accountId: string, reason: string) =>
+    send(adminRoutes.suspendSubscription, { params: { accountId }, body: { reason } }),
+  reactivateSubscription: (accountId: string, reason: string) =>
+    send(adminRoutes.reactivateSubscription, { params: { accountId }, body: { reason } }),
+  invoicePdf: (id: string) => sendBlob(adminRoutes.invoicePdf, { params: { id } }),
+  /** E-mailed again to the user it bills, or to the organisation's administrators. */
+  resendInvoice: (id: string) => send(adminRoutes.resendInvoice, { params: { id } }),
 }
