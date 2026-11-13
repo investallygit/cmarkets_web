@@ -30,6 +30,8 @@ import type {
   InvoiceDto,
   InvoiceSentDto,
   LibraryPublicationDto,
+  MacroSettingsDto,
+  MacroSettingsUpdateDto,
   ModeratedNewsDto,
   ModerationItemDto,
   NewsChannel,
@@ -157,6 +159,8 @@ export const adminRoutes = {
   ),
   directorySettings: route('GET', '/admin/settings/directory', answer<DirectorySettingsDto>()),
   saveDirectorySettings: route('PUT', '/admin/settings/directory', answer<DirectorySettingsDto>()),
+  macroSettings: route('GET', '/admin/macro/settings', answer<MacroSettingsDto>()),
+  saveMacroSettings: route('PUT', '/admin/macro/settings', answer<MacroSettingsDto>()),
   specialties: route('GET', '/admin/specialties', answer<AdminSpecialtyDto[]>()),
   addSpecialty: route('POST', '/admin/specialties', answer<AdminSpecialtyDto>()),
   renameSpecialty: route('PUT', '/admin/specialties/{id}', answer<AdminSpecialtyDto>()),
@@ -399,6 +403,10 @@ export const adminApi = {
   directorySettings: (signal?: AbortSignal) => send(adminRoutes.directorySettings, { signal }),
   saveDirectorySettings: (settings: DirectorySettingsUpdateDto) =>
     send(adminRoutes.saveDirectorySettings, { body: settings }),
+  /** FX's currencies against the XAF and those of its matrix. */
+  macroSettings: (signal?: AbortSignal) => send(adminRoutes.macroSettings, { signal }),
+  saveMacroSettings: (settings: MacroSettingsUpdateDto) =>
+    send(adminRoutes.saveMacroSettings, { body: settings }),
   /** The closed list and the profiles listing each. */
   specialties: (signal?: AbortSignal) => send(adminRoutes.specialties, { signal }),
   addSpecialty: (input: SpecialtyInputDto) => send(adminRoutes.addSpecialty, { body: input }),

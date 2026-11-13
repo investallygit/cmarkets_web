@@ -61,14 +61,15 @@ test('a bond opens the bond profile, its characteristics and payments to come', 
   await expect(tabs.getByRole('link', { name: 'FA Fundamentals' })).toHaveCount(0)
 })
 
-test('the client menu gives ETFS, BP and BS entries of their own, after EQS and YCRV', async ({
+test('the client menu gives ETFS, BP, BS and FX entries of their own, after the ones they light', async ({
   page,
 }) => {
   await page.goto('/mkt')
   const menu = page.getByRole('navigation', { name: 'Main menu' })
-  // The mockups light EQS on ETFS and YCRV on BP and BS: their entries come after those.
+  // The mockups light EQS on ETFS, YCRV on BP and BS, MKT on FX: their entries come after those.
   await expect(menu.getByRole('link')).toHaveText([
     /^MKT/,
+    /^FX/,
     /^EQS/,
     /^ETFS/,
     /^YCRV/,

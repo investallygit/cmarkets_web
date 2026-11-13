@@ -1,7 +1,9 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link, useNavigate } from 'react-router'
 import { useFxRates, usePolicyRates } from '@/entities/rate'
 import { useFormat } from '@/shared/i18n'
+import { fxPath, routes } from '@/shared/routes/paths'
 import { ChangeText } from '@/shared/ui/ChangeText'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { DataTable } from '@/shared/ui/DataTable'
@@ -24,10 +26,15 @@ const DASHBOARD_FX_PAIRS = ['EURXAF', 'USDXAF', 'CNYXAF'] as const
 const helper = createDataColumnHelper<RateRow>()
 const getRowId = (row: RateRow) => row.id
 
-/** Screen 1, Rates and FX: BEAC policy rates and XAF exchange rates. API /rates/policy, /fx. */
+/**
+ * Screen 1, Rates and FX: BEAC policy rates and XAF exchange rates, the ECB's reference rates of FX
+ * (ROADMAP decision 22). The panel opens FX (spec section 9, screen 26): its title bar, and an
+ * exchange rate opened (double click or Enter) on its currency. API /rates/policy, /fx.
+ */
 export function RatesFxPanel() {
   const { t } = useTranslation()
   const format = useFormat()
+  const navigate = useNavigate()
   const policy = usePolicyRates()
   const fx = useFxRates(DASHBOARD_FX_PAIRS)
 
@@ -85,7 +92,15 @@ export function RatesFxPanel() {
 
   const error = policy.error ?? fx.error
   return (
-    <Panel title={t('panels.ratesFx')} code="FX">
+    <Panel
+      title={t('panels.ratesFx')}
+      code="FX"
+      options={
+        <Link to={routes.fx} className="panel-no-drag uppercase hover:text-primary">
+          {t('fx.openFx')}
+        </Link>
+      }
+    >
       {error ? (
         <PanelError
           error={error}
@@ -100,6 +115,11 @@ export function RatesFxPanel() {
           columns={columns}
           getRowId={getRowId}
           enableSorting={false}
+          onRowDoubleClick={(row) => {
+            // The euro is pegged: FX opens on its table's first currency.
+            if (!row.isRate)
+              void navigate(fxPath(row.id === 'EURXAF' ? undefined : row.id.slice(0, 3)))
+          }}
           exportName="rates-fx"
         />
       ) : (

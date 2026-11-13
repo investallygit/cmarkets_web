@@ -8,6 +8,9 @@ type Page = LazyExoticComponent<ComponentType<ScreenProps>>
 const MarketDashboardPage = lazy(() =>
   import('@/pages/market-dashboard').then((module) => ({ default: module.MarketDashboardPage })),
 )
+const FxDashboardPage = lazy(() =>
+  import('@/pages/fx-dashboard').then((module) => ({ default: module.FxDashboardPage })),
+)
 const SecurityProfilePage = lazy(() =>
   import('@/pages/security-profile').then((module) => ({ default: module.SecurityProfilePage })),
 )
@@ -109,6 +112,7 @@ const AuditLogPage = lazy(() =>
 
 const PAGES: Record<ScreenTextKey, Page> = {
   MKT: MarketDashboardPage,
+  FX: FxDashboardPage,
   DES: SecurityProfilePage,
   EQS: EquityScreenerPage,
   YCRV: YieldCurvesPage,

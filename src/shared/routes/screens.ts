@@ -1,4 +1,5 @@
 import {
+  ArrowRightLeft,
   Bell,
   BookOpen,
   BookUser,
@@ -108,8 +109,10 @@ export const SCREENS: readonly ScreenDefinition[] = [
   // Client menu, in the order of screens 10 to 12: MKT, EQS, YCRV, PORT, PUB, NET, MSG, N, ALRT,
   // CFG; a News provider's studio after N (spec section 9), NEWS in the menu (ROADMAP decision 2).
   // ETFS (screen 15) after EQS, BP (16) and BS (17) after YCRV, the entries their mockups light:
-  // each has its own since the spec author's answer of 12 November 2026.
+  // each has its own since the spec author's answer of 12 November 2026; FX (26) after MKT.
   screen('MKT', 'MKT', routes.market, 'client', LayoutDashboard, { permission: 'market:read', module: 'monitoring', inMenu: true }),
+  // FX (screen 26) after MKT, which its mockup lights: an entry of its own (ROADMAP decision 15).
+  screen('FX', 'FX', routes.fx, 'client', ArrowRightLeft, { permission: 'market:read', module: 'monitoring', inMenu: true }),
   screen('EQS', 'EQS', routes.screener, 'client', ScanSearch, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
   screen('ETFS', 'ETFS', routes.etfScreener, 'client', Layers, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
   screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', module: 'analysis', inMenu: true, routePattern: routes.yieldCurvesBond }),

@@ -79,7 +79,7 @@ before upload.
 | 14 · Subscription management (SUBS)                                       | Done; renewals charged, failures retried, plans prorated      |
 | Security descriptions on EQS (screen 3), written in CORR                  | Done; in French and English, EODHD's English standing in      |
 | Rate series, CEMAC sovereign yields file (IMP), stale points on YCRV      | Done; EODHD's yields each day, a replaced point confirmed     |
-| 26 · FX dashboard (FX)                                                    | To do, step 39                                                |
+| 26 · FX dashboard (FX)                                                    | Done; the ECB's rates each business day, MKT's on them too    |
 | 25 · Macroeconomic dashboard (ECO)                                        | To do, step 40                                                |
 | 21 · Commodities (CMDTY, DES on a commodity)                              | To do, step 41                                                |
 | 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | To do, step 42                                                |
@@ -139,8 +139,9 @@ split into slices by business domain, each slice into segments (`ui`, `model`, `
 src/
   main.tsx    entry point: the hubs of CMarket.Api, then the app
   app/        providers, router, app shell layout, global styles
-  pages/      one slice per screen: market-dashboard, security-profile (the profile of each
-              security type: an equity's, screen 2, a bond's, screen 20, an ETF's, screen 19),
+  pages/      one slice per screen: market-dashboard, fx-dashboard (FX), security-profile (the
+              profile of each security type: an equity's, screen 2, a bond's, screen 20, an
+              ETF's, screen 19),
               equity-screener, etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which
               YAS opens), bond-screener (BS), portfolio,
               research-library, publishing-studio, news,
@@ -158,7 +159,8 @@ src/
               subscription-admin-panels,
               bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
               bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
-              etf-profile-panels, security-description-panel, description-editor-panel...),
+              etf-profile-panels, security-description-panel, description-editor-panel,
+              fx-dashboard-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
@@ -384,8 +386,9 @@ each other; the app shell mounts the form once.
 
 Every UI string is in French and English, in `shared/i18n/locales/en/` and `fr/`: one JSON file
 per area of the app (`core` for the shell and the shared UI, `home`, `account` for the login and
-the settings, `monitoring`, `analysis`, `bonds`, `portfolio`, `research`, `network`, `messaging`,
-`newsStudio`, `newsAdmin`, `payments`, `dataAdmin`, `admin`), which `en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:
+the settings, `monitoring`, `analysis`, `bonds`, `etfs`, `macro` (FX and its settings),
+`portfolio`, `research`, `network`, `messaging`, `newsStudio`, `newsAdmin`, `payments`,
+`dataAdmin`, `admin`), which `en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:
 `t('panels.indices')` is checked at compile time. A top-level key lives in one area file only, and
 `locales.test.ts` checks it as well as that both languages have the same keys. A new area file
 goes in both folders and is added to both `en.ts` and `fr.ts`.

@@ -570,6 +570,30 @@
 }
 
 /*
+ * A list that scrolls says so at the edge where items are hidden (the left menu, ROADMAP decision
+ * 15): a band of the app's background moves with the content and covers a grey glow that stays at
+ * each edge, so the glow shows only while something lies beyond it. Nothing animates.
+ */
+@utility scroll-edges-y {
+  background:
+    linear-gradient(var(--bg-app) 40%, transparent) top / 100% 1.5rem no-repeat local,
+    linear-gradient(transparent, var(--bg-app) 60%) bottom / 100% 1.5rem no-repeat local,
+    radial-gradient(
+        farthest-side at 50% 0,
+        color-mix(in srgb, var(--text-secondary) 45%, transparent),
+        transparent
+      )
+      top / 100% 0.75rem no-repeat scroll,
+    radial-gradient(
+        farthest-side at 50% 100%,
+        color-mix(in srgb, var(--text-secondary) 45%, transparent),
+        transparent
+      )
+      bottom / 100% 0.75rem no-repeat scroll;
+  background-color: var(--bg-app);
+}
+
+/*
  * A news tag: 1 px border and text of its colour, the colour at 15% on the panel. Opaque, so that
  * a hovered or selected row keeps the text's contrast: 4.9:1 at the least (the grey on the
  * panel), where a tint on --bg-selected would leave it at 2.9:1.

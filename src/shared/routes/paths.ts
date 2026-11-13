@@ -12,6 +12,8 @@ export const routes = {
   /** The home screen of the user's account type: MKT, IMP or USER. */
   app: '/app',
   market: '/mkt',
+  /** FX (screen 26): the CFA franc against the ECB's currencies; ?currency= picks the chart's. */
+  fx: '/fx',
   security: '/securities/:securityId/:fn',
   screener: '/eqs',
   yieldCurves: '/ycrv',
@@ -126,6 +128,11 @@ export function shareableUrl(path: string): string {
 
 export function newsTabPath(tab: NewsTab): string {
   return tab === 'news' ? routes.news : `${routes.news}/${tab}`
+}
+
+/** FX (screen 26), its chart on a currency: /fx?currency=USD. */
+export function fxPath(currency?: string): string {
+  return currency ? `${routes.fx}?currency=${encodeURIComponent(currency)}` : routes.fx
 }
 
 /** Screen 4, its calculator on the bond. */

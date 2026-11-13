@@ -149,6 +149,10 @@ by which step, and what is still to do. The terminal's screens are in
 - **Built in step 29**: the XAF reference curve of the bonds' spreads (Cameroon's by default).
 - **Built in step 38**: under Bonds, the age past which a curve point is stale (90 days, 1 to
   3,650), audited as "Stale curve point after (days)".
+- **Built in step 39**: "Macro and FX", the currencies of FX's table (1 to 20 of the ECB's, in
+  order) and of its matrix (2 to 8, the euro and the franc allowed): moved up or down, removed,
+  added; each list changed audited, "Macro and FX settings" in AUDT. A currency added gets its
+  rates at once when CMarket loads them from EODHD.
 - **Fourth version (steps 38 to 47)**: the age past which a curve point is stale; ECO's comparison
   countries and tiles, FX's currencies; the licensed SVTs with their back-office address, the
   minimum trading amount, the validity of a link, the approval window and the RFQ's switch

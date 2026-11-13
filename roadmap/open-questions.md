@@ -514,7 +514,10 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   on both, decision 22). The matrix writes EUR/XAF 655.96, the header 655.957 (the plan: three
   decimals for the peg, two for the others, as MKT). Which currencies are quoted per 100 (the
   plan: the yen alone)? A currency the ECB lacks, such as the naira, "can be added by file or
-  through the EODHD Forex API", without a template (the plan: not built).
+  through the EODHD Forex API", without a template (the plan: not built). (Step 39 quotes the yen
+  alone per 100 and shows an XAF value below one franc, the won's or the rupiah's, with four
+  decimals; offers the 29 currencies the ECB publishes in 2026, the lev gone with the euro;
+  writes the parity 655.957 in the matrix too.)
 - **ECO, fourth version**: the chart offers "any of the 39 indicators", the table names 25 and
   the rules leave two out (the plan: the 37 that EODHD serves besides those two, decision 21). Its
   routes and its code take ISO alpha-3 codes (`CMR`), the rest of the API alpha-2 (`CM`): the plan

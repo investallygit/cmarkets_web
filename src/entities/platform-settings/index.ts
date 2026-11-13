@@ -3,11 +3,13 @@ export {
   useAddSpecialty,
   useAdminSpecialties,
   useDirectorySettings,
+  useMacroSettings,
   usePlatformSettings,
   useRemoveSpecialty,
   useRenameSpecialty,
   useRolePermissions,
   useSaveDirectorySettings,
+  useSaveMacroSettings,
   useSavePlatformSettings,
   useSaveRolePermissions,
 } from './api/queries'

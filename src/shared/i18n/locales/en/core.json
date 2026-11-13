@@ -68,6 +68,7 @@
   "verifiedBadge": "Verified",
   "screens": {
     "MKT": { "title": "Market dashboard", "menu": "Market" },
+    "FX": { "title": "FX dashboard — CFA franc (XAF)", "menu": "Forex" },
     "DES": { "title": "Security profile", "menu": "Profile" },
     "EQS": { "title": "Equity screener and fundamental analysis", "menu": "Analysis" },
     "YCRV": { "title": "Yield curves and bond calculator", "menu": "Rates" },
@@ -125,6 +126,12 @@
     "notFoundTitle": "Screen not found"
   },
   "panels": {
+    "fxCrosses": "Cross rates against XAF",
+    "fxChart": "Currency against XAF",
+    "fxConverter": "Converter",
+    "fxMatrix": "Cross-rate matrix",
+    "euroBenchmarks": "Euro area benchmarks",
+    "macroSettings": "Macro and FX",
     "indices": "Indices",
     "indexChart": "Index chart",
     "topMovers": "Top movers",

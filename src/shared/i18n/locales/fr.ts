@@ -6,6 +6,7 @@ import core from './fr/core.json'
 import dataAdmin from './fr/dataAdmin.json'
 import etfs from './fr/etfs.json'
 import home from './fr/home.json'
+import macro from './fr/macro.json'
 import messaging from './fr/messaging.json'
 import monitoring from './fr/monitoring.json'
 import network from './fr/network.json'
@@ -25,6 +26,7 @@ const fr = {
   ...analysis,
   ...bonds,
   ...etfs,
+  ...macro,
   ...portfolio,
   ...research,
   ...network,

@@ -1,0 +1,67 @@
+{
+  "fx": {
+    "parity": "1 EUR = {{parity}} XAF",
+    "parityNote": "Fixed parity of the BEAC CFA franc with the euro · crosses computed from ECB reference rates of {{date}} (published around 16:00 CET)",
+    "parityNoteNone": "Fixed parity of the BEAC CFA franc with the euro · no ECB reference rate loaded yet",
+    "ecbReference": "ECB reference",
+    "perUnit": "XAF per 1 unit of currency",
+    "columns": {
+      "currency": "Currency",
+      "name": "Name",
+      "ecbRate": "ECB (EUR→)",
+      "xaf": "XAF",
+      "day": "1 day",
+      "month": "1 month",
+      "ytd": "YTD",
+      "year": "1 year"
+    },
+    "perHundred": "{{name}} (per {{unit}})",
+    "formula": "XAF per currency = 655.957 ÷ ECB rate (EUR → currency). Positive change: the currency gains against the XAF.",
+    "indicative": "Indicative reference rates, not usable for settlement.",
+    "noRates": "No ECB reference rate loaded yet.",
+    "pair": "{{currency}} / XAF",
+    "chartLabel": "{{currency}} against the CFA franc over {{period}}",
+    "periods": {
+      "1M": "1 month",
+      "6M": "6 months",
+      "1Y": "1 year",
+      "5Y": "5 years",
+      "MAX": "every year since 1999"
+    },
+    "periodsLabel": "Period of the chart",
+    "last": "Last",
+    "high": "1-year high",
+    "low": "1-year low",
+    "volatility": "1-year volatility",
+    "chartHint": "Click a currency in the table to change the chart.",
+    "amount": "Amount",
+    "fromCurrency": "Currency converted",
+    "toCurrency": "Currency of the result",
+    "result": "Converted amount",
+    "rateApplied": "Rate applied: 1 {{base}} = {{rate}} {{quote}} (ECB reference of {{date}}).",
+    "parityApplied": "Rate applied: 1 EUR = 655.957 XAF, the fixed parity.",
+    "euroAtParity": "For EUR, conversion always uses the fixed parity.",
+    "matrixCaption": "1 unit in row = … in column",
+    "money": "Money",
+    "euroNote": "XAF peg: euro rate moves weigh on BEAC monetary policy.",
+    "openFx": "FX dashboard"
+  },
+  "macroSettings": {
+    "fxCurrencies": "Cross rates against XAF",
+    "fxCurrenciesHint": "FX's table, in its order: 1 to 20 currencies of the ECB's reference rates.",
+    "matrixCurrencies": "Cross-rate matrix",
+    "matrixCurrenciesHint": "Its rows and columns, in order: 2 to 8 currencies, the euro and the franc among them if you wish.",
+    "add": "Add a currency",
+    "addTo": "Add a currency to “{{list}}”",
+    "remove": "Remove {{currency}}",
+    "moveUp": "Move {{currency}} up",
+    "moveDown": "Move {{currency}} down",
+    "save": "Save the currencies",
+    "saved": "Currencies saved.",
+    "loadNote": "A currency added gets its reference rates, its history with them, at CMarket's next load from EODHD.",
+    "errors": {
+      "fxCurrencies": "From 1 to 20 currencies.",
+      "matrixCurrencies": "From 2 to 8 currencies."
+    }
+  }
+}

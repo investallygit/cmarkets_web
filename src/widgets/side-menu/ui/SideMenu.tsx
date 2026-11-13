@@ -1,5 +1,6 @@
 import { clsx } from 'clsx'
 import { Lock, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { matchPath, NavLink, useLocation } from 'react-router'
 import { UnreadBadge } from '@/entities/conversation'
@@ -12,7 +13,9 @@ import { useUiPreferences } from '../model/uiPreferences'
 
 /**
  * Left menu (56 px collapsed, 200 px expanded); its items depend on the account type. Collapsed,
- * an entry is 44 px high, as the mockups draw it, so that a client's thirteen fit at 900 px. A
+ * an entry is 44 px high, as the mockups draw it, so that a client's fourteen fit at 900 px. A
+ * window too short for them all scrolls the menu (ROADMAP decision 15, settled in step 39): the
+ * open screen's entry is brought into view, and a glow at an edge says entries lie beyond it. A
  * screen outside the user's plan shows a lock and opens on the plans. MSG counts the unread
  * messages and the requests, except on MSG itself, whose tabs count them.
  */
@@ -27,6 +30,11 @@ export function SideMenu() {
   const profileType = useSecurityProfile(matchPath(routes.security, pathname)?.params.securityId)
     .data?.type
   const litParent = profileType && SECURITY_PROFILES[profileType].menuParent
+  const listRef = useRef<HTMLUListElement>(null)
+  // The open screen's entry stays in view when the menu scrolls, without moving the page.
+  useEffect(() => {
+    listRef.current?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest' })
+  }, [pathname])
 
   return (
     <nav
@@ -36,7 +44,7 @@ export function SideMenu() {
         expanded ? 'w-menu-expanded' : 'w-menu',
       )}
     >
-      <ul className="min-h-0 flex-1 overflow-y-auto">
+      <ul ref={listRef} className="min-h-0 flex-1 scroll-edges-y overflow-y-auto">
         {items.map((screen) => {
           const locked = lockedModule(user, screen)
           return (

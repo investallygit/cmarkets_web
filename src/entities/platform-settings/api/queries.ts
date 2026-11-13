@@ -13,6 +13,7 @@ export const settingsKeys = {
   platform: () => [...settingsKeys.all, 'platform'] as const,
   role: (role: AccountType) => [...settingsKeys.all, 'role', role] as const,
   directory: () => [...settingsKeys.all, 'directory'] as const,
+  macro: () => [...settingsKeys.all, 'macro'] as const,
   specialties: () => [...settingsKeys.all, 'specialties'] as const,
 }
 
@@ -75,6 +76,26 @@ export function useSaveDirectorySettings() {
   const refresh = useRefreshAdminData()
   return useMutation({
     mutationFn: adminApi.saveDirectorySettings,
+    onSuccess: refresh,
+  })
+}
+
+/** GET /admin/macro/settings: FX's currencies against the XAF and those of its matrix. */
+export function useMacroSettings() {
+  return useQuery({
+    queryKey: settingsKeys.macro(),
+    queryFn: ({ signal }) => adminApi.macroSettings(signal),
+  })
+}
+
+/**
+ * PUT /admin/macro/settings: each list changed is written to the audit log; a currency added
+ * gets its reference rates with CMarket's next load (at once with EODHD's key).
+ */
+export function useSaveMacroSettings() {
+  const refresh = useRefreshAdminData()
+  return useMutation({
+    mutationFn: adminApi.saveMacroSettings,
     onSuccess: refresh,
   })
 }

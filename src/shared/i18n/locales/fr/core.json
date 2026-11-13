@@ -68,6 +68,7 @@
   "verifiedBadge": "Vérifié",
   "screens": {
     "MKT": { "title": "Tableau de bord du marché", "menu": "Marché" },
+    "FX": { "title": "Tableau de bord des changes — franc CFA (XAF)", "menu": "Devises" },
     "DES": { "title": "Fiche valeur", "menu": "Fiche" },
     "EQS": { "title": "Filtre actions et analyse fondamentale", "menu": "Analyse" },
     "YCRV": { "title": "Courbes de taux et calculateur obligataire", "menu": "Taux" },
@@ -125,6 +126,12 @@
     "notFoundTitle": "Écran introuvable"
   },
   "panels": {
+    "fxCrosses": "Cours croisés contre XAF",
+    "fxChart": "Devise contre XAF",
+    "fxConverter": "Convertisseur",
+    "fxMatrix": "Matrice des cours croisés",
+    "euroBenchmarks": "Références de la zone euro",
+    "macroSettings": "Macro et changes",
     "indices": "Indices",
     "indexChart": "Graphique d'indice",
     "topMovers": "Plus fortes variations",

@@ -11,6 +11,8 @@ POST /admin/ingest-clients
 DELETE /admin/ingest-clients/{id}
 GET /admin/invoices/{id}/pdf
 POST /admin/invoices/{id}/resend
+GET /admin/macro/settings
+PUT /admin/macro/settings
 GET /admin/news
 GET /admin/news-clicks/anomalies
 GET /admin/news-clicks/anomalies/{id}/clicks
@@ -185,6 +187,10 @@ GET /etfs/{id}/holdings
 GET /etfs/{id}/performance
 GET /etfs/facets
 GET /fx
+GET /fx/{ccy}/history
+GET /fx/convert
+GET /fx/matrix
+GET /fx/xaf-crosses
 GET /indicators/{securityId}
 GET /indices
 GET /indices/{code}/history

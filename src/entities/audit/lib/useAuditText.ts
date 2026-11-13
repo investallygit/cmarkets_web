@@ -133,7 +133,10 @@ export function useAuditText() {
         return type ? t('audit.roleOf', { type: t(`accountTypes.${type}`) }) : target.label
       }
       if (target.type !== 'settings') return target.label
-      return target.id === 'directory' ? t('audit.directorySettings') : t('audit.platformSettings')
+      if (target.id === 'directory') return t('audit.directorySettings')
+      // FX's currencies (step 39), ECO's countries and tiles with them from step 40.
+      if (target.id === 'macro') return t('audit.macroSettings')
+      return t('audit.platformSettings')
     },
     /** "Type: Trader → Analyst"; only the new value when there was none. */
     change: (change: AuditChangeDto) =>

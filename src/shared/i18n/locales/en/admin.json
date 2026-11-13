@@ -514,7 +514,9 @@
       "plan": "Plan",
       "billingCycle": "Billing cycle",
       "periodEnd": "Expiry",
-      "description": "Description"
+      "description": "Description",
+      "fxCurrencies": "FX currencies against XAF",
+      "matrixCurrencies": "FX matrix currencies"
     },
     "targetTypes": {
       "user": "Account",
@@ -549,6 +551,7 @@
     "roleOf": "Permissions of {{type}}",
     "platformSettings": "Platform settings",
     "directorySettings": "Directory and messaging settings",
+    "macroSettings": "Macro and FX settings",
     "unlimited": "unlimited",
     "granted": "yes",
     "notGranted": "no",

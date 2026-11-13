@@ -95,7 +95,9 @@ itself, steps 38 to 48 follow these; each is also an open question for the spec 
     mockups light; RFQ after BS (the mockups of screens 22 to 24 draw it after YCRV); OPT after
     PORT, which its mockups light. A Trader's menu then has eighteen entries, more than a window
     900 px high shows at 44 px each: the menu scrolls, and step 39, the first to add an entry,
-    settles how it holds them.
+    settles how it holds them. Settled in step 39: the entries keep their 44 px; a window too
+    short for them scrolls the menu, the open screen's entry is brought into view, and a glow at
+    the top or the bottom edge says entries lie beyond it.
 16. **The SVT account**: not offered at sign-up. An Admin creates it from USER, on the bank's
     request, its licence and an employer letter, for a bank of the licensed SVTs; the bank is its
     organisation, as a media is a News provider's (decision 12). Its menu is the mockup's (SVT,

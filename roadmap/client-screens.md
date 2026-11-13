@@ -16,8 +16,10 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Built in step 25 (third version)**: each news item shows its type and newspaper tags, which
   filter N; ISSUERS and REGULATOR filter the categories issuers and regulation; the content
   opened on N counts its unique click once it shows 3 seconds.
-- **Fourth version (steps 39 and 42)**: the Rates and FX panel opens FX (screen 26); a watchlist
-  gets "Optimise", which opens OPT on its securities.
+- **Built in step 39 (fourth version)**: the Rates and FX panel opens FX (screen 26), from its
+  title bar or an exchange rate opened (double click or Enter) on its currency; its rates are FX's,
+  the ECB's reference rates (decision 22).
+- **Fourth version (step 42)**: a watchlist gets "Optimise", which opens OPT on its securities.
 
 ## DES · Security profile (screen 2): done
 
@@ -428,9 +430,17 @@ what is still to do. The Data admin's and the Admin's screens are in
 
 - **Planned in step 40**.
 
-## FX · FX dashboard (screen 26): to do
+## FX · FX dashboard (screen 26): done
 
-- **Planned in step 39**.
+- **Built in step 39**: as the mockup, under the parity's header (the day of the ECB's reference
+  rates): the cross rates against XAF of the Admin's currencies (the ECB's rate, XAF per unit, the
+  yen per 100, the changes over a day, a month, the year and a year; a click draws the currency,
+  kept in the address), the chart from 1M to MAX with the last rate, the 1-year high, low and
+  volatility, the converter, the cross-rate matrix and the euro area's benchmarks; the note that
+  the rates are indicative and settle nothing. An entry of the menu after MKT (decision 15); MKT's
+  rates panel opens it.
+- **Still to do**: a currency the ECB lacks, such as the naira, "added by file or through the EODHD
+  Forex API" (spec section 9), waits for the spec author (open questions, fourth version).
 
 ## SVT · SVT approval (screen 27): to do
 

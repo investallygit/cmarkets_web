@@ -514,7 +514,9 @@
       "plan": "Formule",
       "billingCycle": "Périodicité",
       "periodEnd": "Échéance",
-      "description": "Description"
+      "description": "Description",
+      "fxCurrencies": "Devises de FX contre XAF",
+      "matrixCurrencies": "Devises de la matrice de FX"
     },
     "targetTypes": {
       "user": "Compte",
@@ -549,6 +551,7 @@
     "roleOf": "Permissions : {{type}}",
     "platformSettings": "Paramètres de la plateforme",
     "directorySettings": "Réglages de l'annuaire et de la messagerie",
+    "macroSettings": "Paramètres macro et changes",
     "unlimited": "illimité",
     "granted": "oui",
     "notGranted": "non",

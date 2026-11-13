@@ -1,4 +1,8 @@
 import type {
+  FxConversionDto,
+  FxHistoryDto,
+  FxInterval,
+  FxMatrixDto,
   FxRateDto,
   GlobalRatesSet,
   HistoryPointDto,
@@ -12,6 +16,7 @@ import type {
   RateOrigin,
   RateSeriesDto,
   TickerItemDto,
+  XafCrossesDto,
 } from '../contracts'
 import { answer, route, send } from './define'
 
@@ -24,7 +29,7 @@ export interface HistoryRange {
 
 /**
  * CMarket.Api/Controllers/Market: the session, the dashboard's panels, indices, rates and FX, the
- * rate series (spec section 11) and the rates of screens 25 and 26.
+ * rate series (spec section 11), the rates of screens 25 and 26 and screen 26's exchange rates.
  */
 export const marketRoutes = {
   status: route('GET', '/market/status', answer<MarketStatusDto>()),
@@ -35,6 +40,10 @@ export const marketRoutes = {
   indexHistory: route('GET', '/indices/{code}/history', answer<HistoryPointDto[]>()),
   policyRates: route('GET', '/rates/policy', answer<PolicyRateDto[]>()),
   fx: route('GET', '/fx', answer<FxRateDto[]>()),
+  xafCrosses: route('GET', '/fx/xaf-crosses', answer<XafCrossesDto>()),
+  fxHistory: route('GET', '/fx/{ccy}/history', answer<FxHistoryDto>()),
+  fxConvert: route('GET', '/fx/convert', answer<FxConversionDto>()),
+  fxMatrix: route('GET', '/fx/matrix', answer<FxMatrixDto>()),
   rateSeries: route('GET', '/rates/series', answer<RateSeriesDto[]>()),
   rateHistory: route('GET', '/rates/{code}/history', answer<RateHistoryDto>()),
   globalRates: route('GET', '/macro/global-rates', answer<RateSeriesDto[]>()),
@@ -54,6 +63,27 @@ export const marketApi = {
   /** Pairs such as EURXAF. */
   fx: (pairs: readonly string[], signal?: AbortSignal) =>
     send(marketRoutes.fx, { query: { pairs: pairs.join(',') }, signal }),
+  /** Screen 26: the parity and the Admin's currencies against the XAF, on a day (today without one). */
+  xafCrosses: (date: string | undefined, signal?: AbortSignal) =>
+    send(marketRoutes.xafCrosses, { query: { date }, signal }),
+  /** A currency against the XAF, oldest first; ISO dates, each publication or each week's last. */
+  fxHistory: (
+    currency: string,
+    range: { from?: string; to?: string; interval?: FxInterval },
+    signal?: AbortSignal,
+  ) => send(marketRoutes.fxHistory, { params: { ccy: currency }, query: { ...range }, signal }),
+  /** An amount in another currency at the reference rates of a day; EUR and XAF at the parity. */
+  fxConvert: (
+    input: { amount: number; from: string; to: string; date?: string },
+    signal?: AbortSignal,
+  ) =>
+    send(marketRoutes.fxConvert, {
+      query: { amount: String(input.amount), from: input.from, to: input.to, date: input.date },
+      signal,
+    }),
+  /** The cross rates of the currencies given, or the Admin's. */
+  fxMatrix: (currencies: readonly string[] | undefined, signal?: AbortSignal) =>
+    send(marketRoutes.fxMatrix, { query: { currencies: currencies?.join(',') }, signal }),
   /** The series CMarket follows, those of an origin or a country (ISO alpha-2) when given. */
   rateSeries: (filter: { origin?: RateOrigin; country?: string }, signal?: AbortSignal) =>
     send(marketRoutes.rateSeries, { query: { ...filter }, signal }),

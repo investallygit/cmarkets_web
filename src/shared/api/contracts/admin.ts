@@ -1,5 +1,6 @@
 import type { SignUpDocument } from './auth'
-import type { IsoDate, IsoDateTime } from './common'
+import type { CurrencyCode, IsoDate, IsoDateTime } from './common'
+import type { FxCurrencyDto } from './fx'
 import type {
   AccountType,
   ClientAccountType,
@@ -278,6 +279,23 @@ export interface DirectorySettingsDto {
 
 export type DirectorySettingsUpdateDto = Omit<DirectorySettingsDto, 'updatedAt' | 'updatedBy'>
 
+/**
+ * GET / PUT /admin/macro/settings (spec section 10, "currencies shown"): the currencies of FX's
+ * cross rates against the XAF, in the table's order, and of its matrix; the currencies they may
+ * hold (the euro and the franc, the matrix's only, then the ECB's), who saved them last.
+ */
+export interface MacroSettingsDto {
+  /** ISO codes of the ECB's currencies: USD, GBP, CHF, JPY, CNY, ZAR, INR, TRY, BRL, CAD by default. */
+  fxCurrencies: CurrencyCode[]
+  /** ISO codes, the euro and the franc too: EUR, USD, GBP, CNY, XAF by default. */
+  matrixCurrencies: CurrencyCode[]
+  currencies: FxCurrencyDto[]
+  updatedAt: IsoDateTime | null
+  updatedBy: string | null
+}
+
+export type MacroSettingsUpdateDto = Pick<MacroSettingsDto, 'fxCurrencies' | 'matrixCurrencies'>
+
 /** GET /admin/specialties, the prototype's: the closed list, with the profiles listing each. */
 export interface AdminSpecialtyDto extends SpecialtyDto {
   profiles: number
@@ -443,6 +461,9 @@ export const AUDIT_FIELDS = [
   'periodEnd',
   /** A security's description, its language (fr, en) in the scope. */
   'description',
+  /** FX's currencies against the XAF and those of its matrix, as "USD, GBP, CHF". */
+  'fxCurrencies',
+  'matrixCurrencies',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 
