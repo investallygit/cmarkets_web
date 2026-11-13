@@ -93,8 +93,10 @@ How the screens were built, step by step, what the second version of the spec ad
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
 third added (the News provider, the news rebuilt, screens 13 to 20 and what they change on
 screens 1, 3, 9, 10 and 12), the plan of the fourth (the SVT account type, requests for quotes on
-government securities, screens 21 to 29) and the open questions for the spec author are in
-[ROADMAP.md](ROADMAP.md). The screens follow WCAG 2.2 AA:
+government securities, screens 21 to 29) and the open questions for the spec author are in the
+roadmap: [ROADMAP.md](ROADMAP.md) gives the order of the steps and their status, and leads to the
+files of [`roadmap/`](roadmap): one per version of the spec, one per step, the state of each
+screen and the open questions. The screens follow WCAG 2.2 AA:
 axe finds nothing on any of them for any account type, and each works from the keyboard and in a
 window down to 320 px wide.
 
@@ -227,6 +229,8 @@ ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
 - Files that do the same job share a folder: the endpoints in `shared/api/endpoints/`, the
   translations of each area in `locales/en/` and `fr/`, the parts of a split file in the folder
   named after it.
+- The roadmap is split the same way: `ROADMAP.md` stays the entry point, and its parts are in
+  `roadmap/`, with a file per step in `roadmap/steps/`.
 
 ### Data flow
 
@@ -373,7 +377,8 @@ each other; the app shell mounts the form once.
 5. Tables sort, have a right-click menu and export; the layout is saved per user and stacks in one
    column below 1280 px.
 6. Cover its logic with Vitest and its main flow with Playwright, then update its line in
-   [Status](#status) and in ROADMAP.md.
+   [Status](#status) and the roadmap: the step's file in `roadmap/steps/`, the screen in
+   `roadmap/client-screens.md` or `roadmap/back-office-screens.md`, the order in `ROADMAP.md`.
 
 ### Translations
 
