@@ -516,7 +516,9 @@
       "periodEnd": "Échéance",
       "description": "Description",
       "fxCurrencies": "Devises de FX contre XAF",
-      "matrixCurrencies": "Devises de la matrice de FX"
+      "matrixCurrencies": "Devises de la matrice de FX",
+      "comparisonCountries": "Pays de comparaison d’ECO",
+      "tileIndicators": "Indicateurs des tuiles d’ECO"
     },
     "targetTypes": {
       "user": "Compte",

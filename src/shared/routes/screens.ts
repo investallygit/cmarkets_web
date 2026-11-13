@@ -10,6 +10,7 @@ import {
   CreditCard,
   Database,
   FileText,
+  Globe,
   HandCoins,
   History,
   IdCard,
@@ -109,9 +110,10 @@ export const SCREENS: readonly ScreenDefinition[] = [
   // Client menu, in the order of screens 10 to 12: MKT, EQS, YCRV, PORT, PUB, NET, MSG, N, ALRT,
   // CFG; a News provider's studio after N (spec section 9), NEWS in the menu (ROADMAP decision 2).
   // ETFS (screen 15) after EQS, BP (16) and BS (17) after YCRV, the entries their mockups light:
-  // each has its own since the spec author's answer of 12 November 2026; FX (26) after MKT.
+  // each has its own since the spec author's answer of 12 November 2026; ECO (25) and FX (26) after MKT.
   screen('MKT', 'MKT', routes.market, 'client', LayoutDashboard, { permission: 'market:read', module: 'monitoring', inMenu: true }),
-  // FX (screen 26) after MKT, which its mockup lights: an entry of its own (ROADMAP decision 15).
+  // ECO (screen 25) and FX (screen 26) after MKT, which their mockups light: entries of their own (ROADMAP decision 15).
+  screen('ECO', 'ECO', routes.eco, 'client', Globe, { permission: 'market:read', module: 'monitoring', inMenu: true }),
   screen('FX', 'FX', routes.fx, 'client', ArrowRightLeft, { permission: 'market:read', module: 'monitoring', inMenu: true }),
   screen('EQS', 'EQS', routes.screener, 'client', ScanSearch, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
   screen('ETFS', 'ETFS', routes.etfScreener, 'client', Layers, { permission: 'analysis:read', module: 'analysis', inMenu: true }),

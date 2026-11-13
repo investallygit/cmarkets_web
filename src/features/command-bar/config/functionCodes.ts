@@ -1,12 +1,18 @@
 import { canAccessScreen } from '@/entities/session'
 import type { MeDto, SecurityType } from '@/shared/api/contracts'
 import type { TranslationKey } from '@/shared/i18n'
-import { bondPricingPath, routes, securityPath, type SecurityFunction } from '@/shared/routes/paths'
+import {
+  bondPricingPath,
+  ecoPath,
+  routes,
+  securityPath,
+  type SecurityFunction,
+} from '@/shared/routes/paths'
 import { securityFunctionTypes } from '@/shared/routes/profiles'
 import { SCREENS, screenById, type ScreenDefinition } from '@/shared/routes/screens'
 
-/** none: "EQS"; security: "SEMC DES"; optional-security: "N" or "SIAT N". */
-export type FunctionTarget = 'none' | 'security' | 'optional-security'
+/** none: "EQS"; security: "SEMC DES"; optional-security: "N" or "SIAT N"; argument: "ECO" or "ECO CMR". */
+export type FunctionTarget = 'none' | 'security' | 'optional-security' | 'argument'
 
 export interface FunctionCode {
   code: string
@@ -16,7 +22,8 @@ export interface FunctionCode {
   screen: ScreenDefinition
   /** Security types the function makes sense for; all types when absent. */
   appliesTo?: readonly SecurityType[]
-  resolve: (securityId?: string) => string
+  /** The address: of the security for a security's code, of the word that follows for an argument's. */
+  resolve: (securityIdOrArgument?: string) => string
 }
 
 interface SecurityTab {
@@ -44,7 +51,8 @@ const SECURITY_TABS: readonly SecurityTab[] = [
   { code: 'DIST', fn: 'dist', labelKey: 'functions.DIST' },
 ]
 
-const SECURITY_SCREENS = new Set(['DES', 'BP', 'N'])
+/** The screens whose code reads a security or a word beside it, listed apart below. */
+const SECURITY_SCREENS = new Set(['DES', 'BP', 'N', 'ECO'])
 
 /** Every function code of the command bar (spec section 8). */
 export const FUNCTION_CODES: readonly FunctionCode[] = [
@@ -71,6 +79,14 @@ export const FUNCTION_CODES: readonly FunctionCode[] = [
     target: 'optional-security',
     screen: screenById('N'),
     resolve: (securityId) => (securityId ? securityPath(securityId, 'n') : routes.news),
+  },
+  // ECO, the macroeconomic dashboard, on an economy: "ECO CMR" opens Cameroon (spec section 9).
+  {
+    code: 'ECO',
+    labelKey: 'screens.ECO.title',
+    target: 'argument',
+    screen: screenById('ECO'),
+    resolve: (country) => ecoPath(country),
   },
   ...SCREENS.filter((screen) => !SECURITY_SCREENS.has(screen.id)).map((screen): FunctionCode => ({
     code: screen.code,

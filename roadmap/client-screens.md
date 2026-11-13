@@ -426,9 +426,18 @@ what is still to do. The Data admin's and the Admin's screens are in
 
 - **Planned in step 46**.
 
-## ECO · Macroeconomic dashboard (screen 25): to do
+## ECO · Macroeconomic dashboard (screen 25): done
 
-- **Planned in step 40**.
+- **Built in step 40**: as the mockup, the country bar (the CEMAC's six, Sub-Saharan Africa, the
+  Admin's comparison countries, the World; "Annual World Bank data · latest year"), the six tiles
+  the Admin chose (the figure, its year, its seven years; "n/a" with "series not published", or
+  "no figure since 1999" for a series stopped ten years ago or more; the source of a Data admin's
+  figure), the chart of any of the 37 indicators for up to six economies (the CEMAC's first four
+  by default, 2010 to 2025; 10Y, 15Y, 30Y or MAX; XLSX), the sovereign and reference rates (the
+  CEMAC's yields in amber, their point described on hover, then the world's) and the CEMAC
+  comparison (a figure's year beside it when not its row's; XLSX). An entry of the menu after
+  MKT, before FX (decision 15); `ECO CMR` (or `CMR ECO`) opens an economy, `?country=CMR` keeps it.
+  See [step 40](steps/step-40-macro-dashboard.md).
 
 ## FX · FX dashboard (screen 26): done
 

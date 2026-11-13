@@ -80,7 +80,7 @@ before upload.
 | Security descriptions on EQS (screen 3), written in CORR                  | Done; in French and English, EODHD's English standing in      |
 | Rate series, CEMAC sovereign yields file (IMP), stale points on YCRV      | Done; EODHD's yields each day, a replaced point confirmed     |
 | 26 · FX dashboard (FX)                                                    | Done; the ECB's rates each business day, MKT's on them too    |
-| 25 · Macroeconomic dashboard (ECO)                                        | To do, step 40                                                |
+| 25 · Macroeconomic dashboard (ECO)                                        | Done; the World Bank's figures each month, a file fills gaps  |
 | 21 · Commodities (CMDTY, DES on a commodity)                              | To do, step 41                                                |
 | 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | To do, step 42                                                |
 | SVT account type (fourth version), licensed SVTs, trader links            | To do, step 43                                                |
@@ -139,7 +139,8 @@ split into slices by business domain, each slice into segments (`ui`, `model`, `
 src/
   main.tsx    entry point: the hubs of CMarket.Api, then the app
   app/        providers, router, app shell layout, global styles
-  pages/      one slice per screen: market-dashboard, fx-dashboard (FX), security-profile (the
+  pages/      one slice per screen: market-dashboard, macro-dashboard (ECO), fx-dashboard (FX),
+              security-profile (the
               profile of each security type: an equity's, screen 2, a bond's, screen 20, an
               ETF's, screen 19),
               equity-screener, etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which
@@ -160,7 +161,7 @@ src/
               bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
               bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
               etf-profile-panels, security-description-panel, description-editor-panel,
-              fx-dashboard-panels...),
+              macro-dashboard-panels, fx-dashboard-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
@@ -188,7 +189,8 @@ src/
               performance and distributions, the profile's history, holdings, allocation and
               calendar years, its labels), yield-curve, fundamentals,
               screener, portfolio, publication,
-              analyst, document, chart-drawing, watchlist, alert, auction, rate, news, news-source
+              analyst, document, chart-drawing, watchlist, alert, auction, rate, macro (ECO's
+              economies, indicators and figures), news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
               (MPAY's statements, click anomalies and payment settings),
               calendar-event, notification, data-import, data-provider (EODHD), stored-price,
@@ -386,7 +388,7 @@ each other; the app shell mounts the form once.
 
 Every UI string is in French and English, in `shared/i18n/locales/en/` and `fr/`: one JSON file
 per area of the app (`core` for the shell and the shared UI, `home`, `account` for the login and
-the settings, `monitoring`, `analysis`, `bonds`, `etfs`, `macro` (FX and its settings),
+the settings, `monitoring`, `analysis`, `bonds`, `etfs`, `macro` (ECO, FX and their settings),
 `portfolio`, `research`, `network`, `messaging`, `newsStudio`, `newsAdmin`, `payments`,
 `dataAdmin`, `admin`), which `en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:
 `t('panels.indices')` is checked at compile time. A top-level key lives in one area file only, and

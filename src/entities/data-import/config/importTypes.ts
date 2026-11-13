@@ -14,6 +14,7 @@ export const IMPORT_TYPES: readonly ImportType[] = [
   'bond-ratings',
   'etf-profiles',
   'etf-nav',
+  'macro',
 ]
 
 /**
@@ -52,7 +53,7 @@ export const IMPORT_COLUMNS = [
   'asset_class', 'sub_category', 'geography', 'replication', 'distribution', 'distribution_frequency', 'ucits',
   'hedged', 'fund_currency', 'domicile', 'ter', 'aum', 'benchmark', 'benchmark_symbol', 'inception_date', 'nav',
   'bid', 'ask', 'holdings_count', 'holdings_date', 'top_holdings', 'sector_weights', 'region_weights',
-  'tenor', 'yield', 'point_type', 'reference_security', 'source', 'comment',
+  'tenor', 'yield', 'point_type', 'reference_security', 'source', 'comment', 'indicator', 'year',
 ] as const
 export type ImportColumnName = (typeof IMPORT_COLUMNS)[number]
 

@@ -17,6 +17,8 @@ export type ImportType =
   | 'bond-ratings'
   | 'etf-profiles'
   | 'etf-nav'
+  /** The yearly figures the World Bank does not publish for an economy, with their source (MACRO). */
+  | 'macro'
 
 /** How often a file is expected: each session, each auction, weekly, or when there is news. */
 export type ImportFrequency = 'session' | 'auction' | 'weekly' | 'onDemand' | 'periodic' | 'once'

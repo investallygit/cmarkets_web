@@ -81,7 +81,7 @@ test('FX gives the mockup’s cross rates, draws the currency picked, converts a
   await expect(euro.getByText('2.02%')).toBeVisible()
 })
 
-test('MKT’s rates panel opens FX on the currency of a rate, and the menu has FX after MKT', async ({
+test('MKT’s rates panel opens FX on the currency of a rate, and the menu has FX after MKT and ECO', async ({
   page,
 }) => {
   await page.goto('/mkt')
@@ -92,7 +92,7 @@ test('MKT’s rates panel opens FX on the currency of a rate, and the menu has F
   await expect(panel(page, 'CNY / XAF').getByText('84.33')).toBeVisible()
   const menu = page.getByRole('navigation', { name: 'Main menu' })
   await expect(menu.getByRole('link', { name: /^FX/ })).toHaveAttribute('aria-current', 'page')
-  await expect(menu.getByRole('link').nth(1)).toHaveAccessibleName(/^FX/)
+  await expect(menu.getByRole('link').nth(2)).toHaveAccessibleName(/^FX/)
 })
 
 test('ADMCFG chooses FX’s currencies, audited, and FX follows them', async ({ page }) => {
@@ -105,8 +105,8 @@ test('ADMCFG chooses FX’s currencies, audited, and FX follows them', async ({ 
   await macro
     .getByRole('combobox', { name: 'Add a currency to “Cross-rate matrix”' })
     .selectOption('CHF')
-  await macro.getByRole('button', { name: 'Save the currencies' }).click()
-  await expect(page.getByText('Currencies saved.')).toBeVisible()
+  await macro.getByRole('button', { name: 'Save the settings' }).click()
+  await expect(page.getByText('Settings saved.')).toBeVisible()
 
   await page.getByRole('link', { name: /AUDT/ }).click()
   const entry = panel(page, 'Audit log').getByRole('row').nth(1)

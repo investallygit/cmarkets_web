@@ -68,6 +68,7 @@
   "verifiedBadge": "Verified",
   "screens": {
     "MKT": { "title": "Market dashboard", "menu": "Market" },
+    "ECO": { "title": "Macroeconomic dashboard", "menu": "Economy" },
     "FX": { "title": "FX dashboard — CFA franc (XAF)", "menu": "Forex" },
     "DES": { "title": "Security profile", "menu": "Profile" },
     "EQS": { "title": "Equity screener and fundamental analysis", "menu": "Analysis" },
@@ -126,6 +127,9 @@
     "notFoundTitle": "Screen not found"
   },
   "panels": {
+    "macroChart": "Indicator chart",
+    "sovereignRates": "Sovereign and reference rates",
+    "cemacComparison": "CEMAC comparison · latest year available",
     "fxCrosses": "Cross rates against XAF",
     "fxChart": "Currency against XAF",
     "fxConverter": "Converter",

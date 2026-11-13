@@ -56,12 +56,82 @@
     "remove": "Remove {{currency}}",
     "moveUp": "Move {{currency}} up",
     "moveDown": "Move {{currency}} down",
-    "save": "Save the currencies",
-    "saved": "Currencies saved.",
     "loadNote": "A currency added gets its reference rates, its history with them, at CMarket's next load from EODHD.",
     "errors": {
       "fxCurrencies": "From 1 to 20 currencies.",
-      "matrixCurrencies": "From 2 to 8 currencies."
-    }
+      "matrixCurrencies": "From 2 to 8 currencies.",
+      "comparisonCountries": "Up to 8 countries.",
+      "tileIndicators": "Six different indicators."
+    },
+    "ecoTitle": "ECO, the macroeconomic dashboard",
+    "comparisonCountries": "Comparison countries",
+    "comparisonCountriesHint": "After the CEMAC's six and Sub-Saharan Africa, in this order, the World last: up to 8 countries.",
+    "addCountry": "Add a country",
+    "addCountryTo": "Add a country to “{{list}}”",
+    "tileIndicators": "Key indicator tiles",
+    "tileIndicatorsHint": "The six tiles of ECO, in their order.",
+    "tile": "Tile {{position}}",
+    "countryLoadNote": "A country added gets its figures, every year of them, at CMarket's next load from EODHD.",
+    "currenciesTitle": "FX, the exchange-rate dashboard",
+    "saveAll": "Save the settings",
+    "savedAll": "Settings saved."
+  },
+  "eco": {
+    "country": "Country",
+    "annualData": "Annual World Bank data",
+    "latestYear": "Annual World Bank data · latest year: {{year}}",
+    "unknownCountry": "No economy {{code}} on ECO: {{country}} is shown.",
+    "tiles": "Key indicators",
+    "notAvailable": "n/a",
+    "notPublished": "series not published",
+    "notSince": "no figure since {{year}}",
+    "source": "Source: {{source}}",
+    "publishers": {
+      "worldBank": "World Bank",
+      "beac": "BEAC",
+      "imf": "IMF",
+      "ministry": "Ministry",
+      "statistics": "Statistics office"
+    },
+    "units": {
+      "usd": "$",
+      "internationalDollar": "PPP $",
+      "percent": "%",
+      "index": "",
+      "people": "M",
+      "years": "years",
+      "number": "",
+      "perHundred": "",
+      "tonnes": "t",
+      "squareKm": "km²"
+    },
+    "indicator": "Indicator",
+    "year": "Year",
+    "periodsLabel": "Years of the chart",
+    "exportChart": "Export the chart's figures to Excel",
+    "chartLabel": "{{indicator}} of {{countries}} from {{from}} to {{to}}",
+    "chartCountries": "Economies of the chart",
+    "chartHint": "Up to {{count}} countries per chart.",
+    "chartFull": "{{count}} economies at most: take one away first.",
+    "noFigures": "No figure of this indicator for these economies.",
+    "ratesScope": "CEMAC + World",
+    "rateColumns": {
+      "rate": "Rate",
+      "code": "Code",
+      "level": "Level",
+      "change": "Change"
+    },
+    "basisPoints": "{{value}} bp",
+    "stale": "stale",
+    "noRates": "No rate loaded yet.",
+    "ratesNote": "In amber: CEMAC yields uploaded by the Data admin (latest {{date}}); change since the previous point. Other series: EODHD, daily.",
+    "ratesNoteNone": "In amber: CEMAC yields uploaded by the Data admin; change since the previous point. Other series: EODHD, daily.",
+    "columns": {
+      "indicator": "Indicator",
+      "year": "Year"
+    },
+    "export": "Export",
+    "exportTable": "Export the CEMAC comparison to Excel",
+    "tableNote": "“n/a”: series not published for this country by the World Bank, or not for ten years. Series refreshed monthly; the latest year available is usually the previous year."
   }
 }

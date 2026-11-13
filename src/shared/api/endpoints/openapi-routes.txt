@@ -210,7 +210,12 @@ POST /library/{id}/purchase
 POST /library/{id}/rating
 POST /library/{id}/report
 GET /macro
+GET /macro/cemac-table
+GET /macro/compare
+GET /macro/countries
+GET /macro/countries/{iso3}/summary
 GET /macro/global-rates
+GET /macro/indicators
 GET /market/movers
 GET /market/status
 GET /market/summary

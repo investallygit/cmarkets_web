@@ -8,10 +8,11 @@ const menu = (audience: 'client' | 'backoffice') =>
   )
 
 describe('the left menu (spec section 9)', () => {
-  it('gives ETFS, BP, BS and FX entries of their own, after the screens their mockups light', () => {
-    // FX (screen 26) after MKT, ROADMAP decision 15.
+  it('gives ETFS, BP, BS, ECO and FX entries of their own, after the screens their mockups light', () => {
+    // ECO (screen 25) and FX (screen 26) after MKT, ROADMAP decision 15.
     expect(menu('client')).toEqual([
       'MKT',
+      'ECO',
       'FX',
       'EQS',
       'ETFS',

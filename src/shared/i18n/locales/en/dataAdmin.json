@@ -14,7 +14,8 @@
       "bond-ratings": "Bond ratings",
       "news": "Issuer news",
       "etf-profiles": "ETF profiles",
-      "etf-nav": "ETF NAV and spreads"
+      "etf-nav": "ETF NAV and spreads",
+      "macro": "Macro indicators"
     },
     "frequencies": {
       "session": "Every session",
@@ -186,7 +187,9 @@
       "holdings_date": "Holdings date",
       "top_holdings": "Top holdings",
       "sector_weights": "Sector weights",
-      "region_weights": "Region weights"
+      "region_weights": "Region weights",
+      "indicator": "Indicator",
+      "year": "Year"
     },
     "check": "Check",
     "issues": {
@@ -244,7 +247,8 @@
       "bond-master": "the prospectus",
       "bond-ratings": "the agency's release",
       "etf-profiles": "the provider's factsheet",
-      "etf-nav": "the provider's or the market maker's data"
+      "etf-nav": "the provider's or the market maker's data",
+      "macro": "the report named in the row"
     },
     "selected": {
       "alert": "Row {{row}} selected: check the {{field}} against {{source}}, fix it if needed, then tick “Alert checked”.",
@@ -286,7 +290,8 @@
       "bond-master": "On publish: the bonds are listed or described again and their figures of the day recalculated (BS); a DataPublished event is sent to open screens.",
       "bond-ratings": "On publish: the ratings join their history and the composite ratings of BS follow; a DataPublished event is sent to open screens.",
       "etf-profiles": "On publish: the ETFs are listed or described again, their holdings and allocations replaced where the file gives them, and their figures recalculated (ETFS, DES); a DataPublished event is sent to open screens.",
-      "etf-nav": "On publish: the ETFs' premiums, discounts and spreads are recalculated (ETFS); a DataPublished event is sent to open screens."
+      "etf-nav": "On publish: the ETFs' premiums, discounts and spreads are recalculated (ETFS); a DataPublished event is sent to open screens.",
+      "macro": "On publish: the macro indicators of ECO (tiles, chart, CEMAC comparison) are read again, the source shown beside each figure; a DataPublished event is sent to open screens."
     },
     "fix": {
       "title": "Fix row {{row}}",

@@ -1,4 +1,5 @@
 import type {
+  CemacTableDto,
   FxConversionDto,
   FxHistoryDto,
   FxInterval,
@@ -7,6 +8,10 @@ import type {
   GlobalRatesSet,
   HistoryPointDto,
   IndexQuoteDto,
+  MacroComparisonDto,
+  MacroCountryDto,
+  MacroIndicatorInfoDto,
+  MacroSummaryDto,
   MarketStatusDto,
   MarketSummaryDto,
   MoverDto,
@@ -29,7 +34,8 @@ export interface HistoryRange {
 
 /**
  * CMarket.Api/Controllers/Market: the session, the dashboard's panels, indices, rates and FX, the
- * rate series (spec section 11), the rates of screens 25 and 26 and screen 26's exchange rates.
+ * rate series (spec section 11), the rates of screens 25 and 26, screen 26's exchange rates and
+ * screen 25's macro indicators.
  */
 export const marketRoutes = {
   status: route('GET', '/market/status', answer<MarketStatusDto>()),
@@ -47,6 +53,11 @@ export const marketRoutes = {
   rateSeries: route('GET', '/rates/series', answer<RateSeriesDto[]>()),
   rateHistory: route('GET', '/rates/{code}/history', answer<RateHistoryDto>()),
   globalRates: route('GET', '/macro/global-rates', answer<RateSeriesDto[]>()),
+  macroCountries: route('GET', '/macro/countries', answer<MacroCountryDto[]>()),
+  macroSummary: route('GET', '/macro/countries/{iso3}/summary', answer<MacroSummaryDto>()),
+  macroIndicators: route('GET', '/macro/indicators', answer<MacroIndicatorInfoDto[]>()),
+  macroCompare: route('GET', '/macro/compare', answer<MacroComparisonDto>()),
+  cemacTable: route('GET', '/macro/cemac-table', answer<CemacTableDto>()),
 }
 
 export const marketApi = {
@@ -92,4 +103,27 @@ export const marketApi = {
     send(marketRoutes.rateHistory, { params: { code }, query: { ...range }, signal }),
   globalRates: (set: GlobalRatesSet, signal?: AbortSignal) =>
     send(marketRoutes.globalRates, { query: { set }, signal }),
+  /** ECO's selector: the CEMAC's six, Sub-Saharan Africa, the Admin's countries, the World. */
+  macroCountries: (signal?: AbortSignal) => send(marketRoutes.macroCountries, { signal }),
+  /** An economy's key indicator tiles, by its World Bank code ("CMR"). */
+  macroSummary: (iso3: string, signal?: AbortSignal) =>
+    send(marketRoutes.macroSummary, { params: { iso3 }, signal }),
+  macroIndicators: (signal?: AbortSignal) => send(marketRoutes.macroIndicators, { signal }),
+  /** An indicator's yearly figures for up to six economies, every year without a range. */
+  macroCompare: (
+    input: { countries: readonly string[]; indicator: string; from?: number; to?: number },
+    signal?: AbortSignal,
+  ) =>
+    send(marketRoutes.macroCompare, {
+      query: {
+        countries: input.countries.join(','),
+        indicator: input.indicator,
+        from: input.from === undefined ? undefined : String(input.from),
+        to: input.to === undefined ? undefined : String(input.to),
+      },
+      signal,
+    }),
+  /** The CEMAC's six and Sub-Saharan Africa on the indicators given, or the mockup's seven. */
+  cemacTable: (indicators: readonly string[] | undefined, signal?: AbortSignal) =>
+    send(marketRoutes.cemacTable, { query: { indicators: indicators?.join(',') }, signal }),
 }

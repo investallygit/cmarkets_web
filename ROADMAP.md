@@ -90,7 +90,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 37   | [Fourth version of the spec: the plan, its decisions, questions](roadmap/steps/step-37-fourth-version-plan.md)       | Done   |
 | 38   | [Rate series, the CEMAC sovereign yields file, stale curve points](roadmap/steps/step-38-rate-series.md)             | Done   |
 | 39   | [FX: the XAF's cross rates on the ECB's reference rates (screen 26)](roadmap/steps/step-39-fx-dashboard.md)          | Done   |
-| 40   | [ECO: macroeconomic dashboard (screen 25)](roadmap/steps/step-40-macro-dashboard.md)                                 | To do  |
+| 40   | [ECO: macroeconomic dashboard (screen 25)](roadmap/steps/step-40-macro-dashboard.md)                                 | Done   |
 | 41   | [CMDTY: commodities, the profile of a commodity (screen 21)](roadmap/steps/step-41-commodities.md)                   | To do  |
 | 42   | [OPT, OPT RES: portfolio optimisation (screens 28 and 29)](roadmap/steps/step-42-portfolio-optimisation.md)          | To do  |
 | 43   | [SVT account type, licensed SVTs, trader links, `/hubs/rfq`](roadmap/steps/step-43-svt-accounts.md)                  | To do  |

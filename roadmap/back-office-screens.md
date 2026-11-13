@@ -63,6 +63,14 @@ by which step, and what is still to do. The terminal's screens are in
   stored for its day, state and tenor ("Replaces the stored yield of 6.20%"), are alerts to tick,
   the spec's confirmation; its rollback puts the point back. "Curves and rates" is no longer
   offered nor taken: its uploads stay in HIST, filtered by their type, and still roll back.
+- **Built in step 40**: "Macro indicators" (`macro`: country, the World Bank's code or a name,
+  `CMR`, `SSF`, `Cameroun`; indicator, the spec's key or ECO's code, `debt_percent_gdp`; year;
+  value, a deficit below zero; source, `BEAC`, `IMF`, `MINISTRY` or `NSO`; comment), a periodic
+  file out of the session coverage; its template, the IMF's debt of Cameroon as the example. A
+  row that replaces a stored figure, the World Bank's or an earlier file's ("Replaces the stored
+  value of 3.6"), is an alert to tick; the figure published stands with its source, which ECO
+  shows, until the upload is rolled back, whatever EODHD's monthly load brings; the rollback
+  puts back the figure it replaced.
 
 ## CORR · Data corrections (no mockup): done
 
@@ -153,6 +161,11 @@ by which step, and what is still to do. The terminal's screens are in
   order) and of its matrix (2 to 8, the euro and the franc allowed): moved up or down, removed,
   added; each list changed audited, "Macro and FX settings" in AUDT. A currency added gets its
   rates at once when CMarket loads them from EODHD.
+- **Built in step 40**: "Macro and FX" opens with ECO: its comparison countries (up to 8 of the
+  20 offered, Nigeria and France by default, in the selector's order), moved, removed or added,
+  and its six tiles, an indicator each of the 37; saved with FX's lists ("Save the settings"),
+  each list changed audited ("ECO comparison countries: NGA, FRA → NGA, ZAF"). A country added
+  gets its figures at once when CMarket loads them from EODHD.
 - **Fourth version (steps 38 to 47)**: the age past which a curve point is stale; ECO's comparison
   countries and tiles, FX's currencies; the licensed SVTs with their back-office address, the
   minimum trading amount, the validity of a link, the approval window and the RFQ's switch

@@ -1,6 +1,7 @@
 import type { SignUpDocument } from './auth'
 import type { CurrencyCode, IsoDate, IsoDateTime } from './common'
 import type { FxCurrencyDto } from './fx'
+import type { MacroCountryDto, MacroIndicatorInfoDto } from './macro'
 import type {
   AccountType,
   ClientAccountType,
@@ -280,9 +281,11 @@ export interface DirectorySettingsDto {
 export type DirectorySettingsUpdateDto = Omit<DirectorySettingsDto, 'updatedAt' | 'updatedBy'>
 
 /**
- * GET / PUT /admin/macro/settings (spec section 10, "currencies shown"): the currencies of FX's
- * cross rates against the XAF, in the table's order, and of its matrix; the currencies they may
- * hold (the euro and the franc, the matrix's only, then the ECB's), who saved them last.
+ * GET / PUT /admin/macro/settings (spec section 10, "Comparison countries, tile indicators,
+ * currencies shown"): the currencies of FX's cross rates against the XAF, in the table's order, and
+ * of its matrix, with the currencies they may hold (the euro and the franc, the matrix's only, then
+ * the ECB's); ECO's comparison countries, in the selector's order, and the indicators of its six
+ * tiles, with the countries and the indicators they may name; who saved them last.
  */
 export interface MacroSettingsDto {
   /** ISO codes of the ECB's currencies: USD, GBP, CHF, JPY, CNY, ZAR, INR, TRY, BRL, CAD by default. */
@@ -290,11 +293,22 @@ export interface MacroSettingsDto {
   /** ISO codes, the euro and the franc too: EUR, USD, GBP, CNY, XAF by default. */
   matrixCurrencies: CurrencyCode[]
   currencies: FxCurrencyDto[]
+  /** World Bank codes, after the CEMAC's six and Sub-Saharan Africa: NGA, FRA by default (8 at most). */
+  comparisonCountries: string[]
+  /** Six indicator codes: gdpGrowth, inflation, gdpPerCapitaUsd, governmentDebt, exports, population. */
+  tileIndicators: string[]
+  /** The countries offered for comparison. */
+  countries: MacroCountryDto[]
+  /** The 37 indicators ECO offers. */
+  indicators: MacroIndicatorInfoDto[]
   updatedAt: IsoDateTime | null
   updatedBy: string | null
 }
 
-export type MacroSettingsUpdateDto = Pick<MacroSettingsDto, 'fxCurrencies' | 'matrixCurrencies'>
+export type MacroSettingsUpdateDto = Pick<
+  MacroSettingsDto,
+  'fxCurrencies' | 'matrixCurrencies' | 'comparisonCountries' | 'tileIndicators'
+>
 
 /** GET /admin/specialties, the prototype's: the closed list, with the profiles listing each. */
 export interface AdminSpecialtyDto extends SpecialtyDto {
@@ -464,6 +478,9 @@ export const AUDIT_FIELDS = [
   /** FX's currencies against the XAF and those of its matrix, as "USD, GBP, CHF". */
   'fxCurrencies',
   'matrixCurrencies',
+  /** ECO's comparison countries ("NGA, FRA") and the indicators of its tiles ("gdpGrowth, inflation"). */
+  'comparisonCountries',
+  'tileIndicators',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

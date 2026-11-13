@@ -68,6 +68,7 @@
   "verifiedBadge": "Vérifié",
   "screens": {
     "MKT": { "title": "Tableau de bord du marché", "menu": "Marché" },
+    "ECO": { "title": "Tableau de bord macroéconomique", "menu": "Économie" },
     "FX": { "title": "Tableau de bord des changes — franc CFA (XAF)", "menu": "Devises" },
     "DES": { "title": "Fiche valeur", "menu": "Fiche" },
     "EQS": { "title": "Filtre actions et analyse fondamentale", "menu": "Analyse" },
@@ -126,6 +127,9 @@
     "notFoundTitle": "Écran introuvable"
   },
   "panels": {
+    "macroChart": "Graphique d’un indicateur",
+    "sovereignRates": "Taux souverains et de référence",
+    "cemacComparison": "Comparaison CEMAC · dernière année disponible",
     "fxCrosses": "Cours croisés contre XAF",
     "fxChart": "Devise contre XAF",
     "fxConverter": "Convertisseur",

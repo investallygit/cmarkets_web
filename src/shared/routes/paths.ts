@@ -13,6 +13,7 @@ export const routes = {
   app: '/app',
   market: '/mkt',
   /** FX (screen 26): the CFA franc against the ECB's currencies; ?currency= picks the chart's. */
+  eco: '/eco',
   fx: '/fx',
   security: '/securities/:securityId/:fn',
   screener: '/eqs',
@@ -128,6 +129,11 @@ export function shareableUrl(path: string): string {
 
 export function newsTabPath(tab: NewsTab): string {
   return tab === 'news' ? routes.news : `${routes.news}/${tab}`
+}
+
+/** ECO (screen 25) on an economy, by its World Bank code: /eco?country=CMR (`ECO CMR`). */
+export function ecoPath(country?: string): string {
+  return country ? `${routes.eco}?country=${encodeURIComponent(country.toUpperCase())}` : routes.eco
 }
 
 /** FX (screen 26), its chart on a currency: /fx?currency=USD. */

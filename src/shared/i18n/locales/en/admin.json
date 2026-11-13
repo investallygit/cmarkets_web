@@ -516,7 +516,9 @@
       "periodEnd": "Expiry",
       "description": "Description",
       "fxCurrencies": "FX currencies against XAF",
-      "matrixCurrencies": "FX matrix currencies"
+      "matrixCurrencies": "FX matrix currencies",
+      "comparisonCountries": "ECO comparison countries",
+      "tileIndicators": "ECO tile indicators"
     },
     "targetTypes": {
       "user": "Account",

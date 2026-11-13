@@ -29,6 +29,29 @@ describe('parseCommand (spec section 8 examples)', () => {
     expect(parseCommand('NET ME', CODES)).toEqual({ securityQuery: '', functionCode: 'NET ME' })
   })
 
+  it('reads a code followed by its word, the economy of ECO (screen 25)', () => {
+    const codes = new Set([...CODES, 'ECO'])
+    const argumentCodes = new Set(['ECO'])
+    expect(parseCommand('eco cmr', codes, argumentCodes)).toEqual({
+      securityQuery: '',
+      functionCode: 'ECO',
+      argument: 'CMR',
+    })
+    expect(parseCommand('ECO', codes, argumentCodes)).toEqual({
+      securityQuery: '',
+      functionCode: 'ECO',
+    })
+    expect(parseCommand('CMR ECO', codes, argumentCodes)).toEqual({
+      securityQuery: 'CMR',
+      functionCode: 'ECO',
+    })
+    // Another code read last is that code's: "ECO DES" is no economy.
+    expect(parseCommand('ECO DES', codes, argumentCodes)).toEqual({
+      securityQuery: 'ECO',
+      functionCode: 'DES',
+    })
+  })
+
   it('reads a security alone', () => {
     expect(parseCommand('  semc ', CODES)).toEqual({ securityQuery: 'SEMC', functionCode: null })
     expect(parseCommand('', CODES)).toEqual({ securityQuery: '', functionCode: null })

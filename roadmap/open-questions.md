@@ -525,7 +525,11 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   countries of the selector like the others (the plan: yes, as `SSF` and `WLD`)? The "Macro" file
   that fills a missing series has no template (the plan: year, country, indicator, value,
   source). Is ECO the "country page" that sections 10 and 11 still name for `GET /macro?country=`
-  and that has no mockup (the plan: yes; that route stays as CMarket.Api serves it)?
+  and that has no mockup (the plan: yes; that route stays as CMarket.Api serves it)? (Step 40
+  offers twenty comparison countries, the Admin choosing up to eight; shows "n/a" for a figure
+  older than ten years, Cameroon's government debt of 1999 for one; takes the file's sources as
+  `BEAC`, `IMF`, `MINISTRY` and `NSO`, and keeps a file's figure over the World Bank's until its
+  upload is rolled back.)
 - **CMDTY, fourth version**: the five series of the CEMAC complement have no code, unit nor
   frequency (the mockup lists cocoa, rubber and palm oil by day, gold at "XX", timber by month at
   "XXX"), and their sources and licences are "to be confirmed before go-live": the plan seeds

@@ -1,3 +1,4 @@
+import { clsx } from 'clsx'
 import { ChevronDown } from 'lucide-react'
 
 export interface PanelSelectOption<T extends string> {
@@ -10,6 +11,8 @@ interface PanelSelectProps<T extends string> {
   options: readonly PanelSelectOption<T>[]
   onChange: (value: T) => void
   'aria-label': string
+  /** The select's own classes, such as a width at most for long labels. */
+  className?: string
 }
 
 /**
@@ -22,6 +25,7 @@ export function PanelSelect<T extends string>({
   options,
   onChange,
   'aria-label': ariaLabel,
+  className,
 }: PanelSelectProps<T>) {
   return (
     <span className="panel-no-drag relative inline-flex items-center">
@@ -29,7 +33,10 @@ export function PanelSelect<T extends string>({
         value={value}
         aria-label={ariaLabel}
         onChange={(event) => onChange(event.target.value as T)}
-        className="min-h-6 cursor-pointer appearance-none bg-transparent pr-3.5 uppercase outline-none hover:text-primary focus-visible:text-primary focus-visible:ring-1 focus-visible:ring-accent-amber"
+        className={clsx(
+          'min-h-6 cursor-pointer appearance-none bg-transparent pr-3.5 uppercase outline-none hover:text-primary focus-visible:text-primary focus-visible:ring-1 focus-visible:ring-accent-amber',
+          className,
+        )}
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

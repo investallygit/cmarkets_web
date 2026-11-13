@@ -38,6 +38,10 @@ export function CommandBar() {
 
   const functions = useMemo(() => availableFunctions(user), [user])
   const codes = useMemo(() => new Set(functions.map((fn) => fn.code)), [functions])
+  const argumentCodes = useMemo(
+    () => new Set(functions.filter((fn) => fn.target === 'argument').map((fn) => fn.code)),
+    [functions],
+  )
 
   const editing = draft !== null
   const text = draft ?? ''
@@ -107,12 +111,14 @@ export function CommandBar() {
   }
 
   async function execute(command: string) {
-    const { securityQuery, functionCode } = parseCommand(command, codes)
+    const { securityQuery, functionCode, argument } = parseCommand(command, codes, argumentCodes)
     if (!securityQuery && !functionCode) return
     // A security alone opens its profile.
     const code = functionCode ?? 'DES'
     const fn = functions.find((candidate) => candidate.code === code)
     if (!fn) return setError(t('shell.unknownFunction', { code }))
+    // "ECO CMR" or "CMR ECO": the word is the screen's, no security is looked for.
+    if (fn.target === 'argument') return go(fn.resolve(argument ?? (securityQuery || undefined)))
     if (fn.target === 'none' || (fn.target === 'optional-security' && !securityQuery)) {
       return go(fn.resolve())
     }

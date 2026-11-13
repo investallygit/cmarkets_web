@@ -56,12 +56,82 @@
     "remove": "Retirer {{currency}}",
     "moveUp": "Monter {{currency}}",
     "moveDown": "Descendre {{currency}}",
-    "save": "Enregistrer les devises",
-    "saved": "Devises enregistrées.",
     "loadNote": "Une devise ajoutée reçoit ses taux de référence, avec leur historique, au prochain chargement de CMarket depuis EODHD.",
     "errors": {
       "fxCurrencies": "De 1 à 20 devises.",
-      "matrixCurrencies": "De 2 à 8 devises."
-    }
+      "matrixCurrencies": "De 2 à 8 devises.",
+      "comparisonCountries": "8 pays au plus.",
+      "tileIndicators": "Six indicateurs différents."
+    },
+    "ecoTitle": "ECO, le tableau de bord macroéconomique",
+    "comparisonCountries": "Pays de comparaison",
+    "comparisonCountriesHint": "Après les six pays de la CEMAC et l’Afrique subsaharienne, dans cet ordre, le Monde en dernier : 8 pays au plus.",
+    "addCountry": "Ajouter un pays",
+    "addCountryTo": "Ajouter un pays à « {{list}} »",
+    "tileIndicators": "Tuiles des indicateurs clés",
+    "tileIndicatorsHint": "Les six tuiles d’ECO, dans leur ordre.",
+    "tile": "Tuile {{position}}",
+    "countryLoadNote": "Un pays ajouté reçoit ses chiffres, toutes années comprises, au prochain chargement de CMarket depuis EODHD.",
+    "currenciesTitle": "FX, le tableau de bord des changes",
+    "saveAll": "Enregistrer les réglages",
+    "savedAll": "Réglages enregistrés."
+  },
+  "eco": {
+    "country": "Pays",
+    "annualData": "Données annuelles de la Banque mondiale",
+    "latestYear": "Données annuelles de la Banque mondiale · dernière année : {{year}}",
+    "unknownCountry": "Aucune économie {{code}} sur ECO : {{country}} est affiché.",
+    "tiles": "Indicateurs clés",
+    "notAvailable": "n.d.",
+    "notPublished": "série non publiée",
+    "notSince": "aucun chiffre depuis {{year}}",
+    "source": "Source : {{source}}",
+    "publishers": {
+      "worldBank": "Banque mondiale",
+      "beac": "BEAC",
+      "imf": "FMI",
+      "ministry": "Ministère",
+      "statistics": "Institut statistique"
+    },
+    "units": {
+      "usd": "$",
+      "internationalDollar": "$ PPA",
+      "percent": "%",
+      "index": "",
+      "people": "M",
+      "years": "ans",
+      "number": "",
+      "perHundred": "",
+      "tonnes": "t",
+      "squareKm": "km²"
+    },
+    "indicator": "Indicateur",
+    "year": "Année",
+    "periodsLabel": "Années du graphique",
+    "exportChart": "Exporter les chiffres du graphique vers Excel",
+    "chartLabel": "{{indicator}} de {{countries}} de {{from}} à {{to}}",
+    "chartCountries": "Économies du graphique",
+    "chartHint": "Jusqu’à {{count}} pays par graphique.",
+    "chartFull": "{{count}} économies au plus : retirez-en une d’abord.",
+    "noFigures": "Aucun chiffre de cet indicateur pour ces économies.",
+    "ratesScope": "CEMAC + Monde",
+    "rateColumns": {
+      "rate": "Taux",
+      "code": "Code",
+      "level": "Niveau",
+      "change": "Variation"
+    },
+    "basisPoints": "{{value}} pb",
+    "stale": "ancien",
+    "noRates": "Aucun taux chargé pour l’instant.",
+    "ratesNote": "En ambre : taux souverains CEMAC chargés par le Data admin (dernier le {{date}}) ; variation depuis le point précédent. Autres séries : EODHD, quotidien.",
+    "ratesNoteNone": "En ambre : taux souverains CEMAC chargés par le Data admin ; variation depuis le point précédent. Autres séries : EODHD, quotidien.",
+    "columns": {
+      "indicator": "Indicateur",
+      "year": "Année"
+    },
+    "export": "Exporter",
+    "exportTable": "Exporter la comparaison CEMAC vers Excel",
+    "tableNote": "« n.d. » : série non publiée pour ce pays par la Banque mondiale, ou pas depuis dix ans. Séries actualisées chaque mois ; la dernière année disponible est en général l’année précédente."
   }
 }
