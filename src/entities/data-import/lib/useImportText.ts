@@ -77,6 +77,14 @@ export function useIssueText() {
               : number('threshold'),
           })
         }
+        // The CEMAC sovereign yields' (spec section 11): a row replaces the point stored, once confirmed.
+        case 'replacesStored': {
+          const field = String(params.field)
+          return t('dataImport.issues.replacesStored', {
+            field: isChangeField(field) ? t(`dataImport.checkFields.${field}`) : field,
+            previous: format.percent(Number(params.previous ?? 0), 2, false),
+          })
+        }
         case 'zeroVolumeChanged':
           return t('dataImport.issues.zeroVolumeChanged', { previous: number('previous') })
         case 'duplicate':

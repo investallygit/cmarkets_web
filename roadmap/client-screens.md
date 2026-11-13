@@ -146,6 +146,12 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Fourth version (step 38)**: the CEMAC curves read the sovereign yield series of the
   `CEMAC_SOV_YIELDS` file, the latest point of each tenor; a point older than 90 days is marked
   stale, and the tooltip gives its type, reference security and source.
+- **Built in step 38**: behind the auctions of 90 days and the bonds' closes, each tenor's latest
+  point of the country's series (`CMR5Y.CMKT`), however old (decision 20). A point older than the
+  Admin's limit (90 days) is a hollow square, and the legend says so ("Stale point: older than 90
+  days": in the demo, the CAR's 7 and 10 years, last published 17 weeks before). The tooltip says
+  what gave each point and when: "Auction", "BVMAC close", or the series' type, source and
+  security ("Secondary market · CRCT · CM0000035002"), then the day, "stale" in amber.
 
 ## PORT · Portfolio (screen 5): done
 

@@ -1,5 +1,6 @@
 import type {
   FxRateDto,
+  GlobalRatesSet,
   HistoryPointDto,
   IndexQuoteDto,
   MarketStatusDto,
@@ -7,6 +8,9 @@ import type {
   MoverDto,
   MoversType,
   PolicyRateDto,
+  RateHistoryDto,
+  RateOrigin,
+  RateSeriesDto,
   TickerItemDto,
 } from '../contracts'
 import { answer, route, send } from './define'
@@ -18,7 +22,10 @@ export interface HistoryRange {
   interval?: string
 }
 
-/** CMarket.Api/Controllers/Market: the session, the dashboard's panels, indices, rates and FX. */
+/**
+ * CMarket.Api/Controllers/Market: the session, the dashboard's panels, indices, rates and FX, the
+ * rate series (spec section 11) and the rates of screens 25 and 26.
+ */
 export const marketRoutes = {
   status: route('GET', '/market/status', answer<MarketStatusDto>()),
   summary: route('GET', '/market/summary', answer<MarketSummaryDto>()),
@@ -28,6 +35,9 @@ export const marketRoutes = {
   indexHistory: route('GET', '/indices/{code}/history', answer<HistoryPointDto[]>()),
   policyRates: route('GET', '/rates/policy', answer<PolicyRateDto[]>()),
   fx: route('GET', '/fx', answer<FxRateDto[]>()),
+  rateSeries: route('GET', '/rates/series', answer<RateSeriesDto[]>()),
+  rateHistory: route('GET', '/rates/{code}/history', answer<RateHistoryDto>()),
+  globalRates: route('GET', '/macro/global-rates', answer<RateSeriesDto[]>()),
 }
 
 export const marketApi = {
@@ -44,4 +54,12 @@ export const marketApi = {
   /** Pairs such as EURXAF. */
   fx: (pairs: readonly string[], signal?: AbortSignal) =>
     send(marketRoutes.fx, { query: { pairs: pairs.join(',') }, signal }),
+  /** The series CMarket follows, those of an origin or a country (ISO alpha-2) when given. */
+  rateSeries: (filter: { origin?: RateOrigin; country?: string }, signal?: AbortSignal) =>
+    send(marketRoutes.rateSeries, { query: { ...filter }, signal }),
+  /** A series' points, oldest first; ISO dates. */
+  rateHistory: (code: string, range: { from?: string; to?: string }, signal?: AbortSignal) =>
+    send(marketRoutes.rateHistory, { params: { code }, query: { ...range }, signal }),
+  globalRates: (set: GlobalRatesSet, signal?: AbortSignal) =>
+    send(marketRoutes.globalRates, { query: { set }, signal }),
 }

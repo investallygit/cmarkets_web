@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   IMPORT_TYPES,
+  RETIRED_IMPORT_TYPES,
   ImportStatusText,
   importStatusLabel,
   isImportType,
@@ -182,7 +183,11 @@ export function UploadHistoryPanel({
             aria-label={t('dataImport.upload.fileType')}
             options={[
               { value: '', label: t('dataImport.history.allTypes') },
-              ...IMPORT_TYPES.map((value) => ({ value, label: t(`dataImport.types.${value}`) })),
+              // The weekly curves file of the first versions stays a filter: its uploads are in the history.
+              ...[...IMPORT_TYPES, ...RETIRED_IMPORT_TYPES].map((value) => ({
+                value,
+                label: t(`dataImport.types.${value}`),
+              })),
             ]}
             onChange={(value) => setFilter({ type: value })}
             className="w-56"

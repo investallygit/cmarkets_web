@@ -177,7 +177,25 @@
     "pastLegend": "{{country}} {{offset}}",
     "show": "Afficher {{country}}",
     "hide": "Masquer {{country}}",
-    "auction": "adjudication"
+    "sources": {
+      "auction": "Adjudication",
+      "quote": "Clôture BVMAC"
+    },
+    "pointTypes": {
+      "auction": "Adjudication",
+      "secondary": "Marché secondaire",
+      "model": "Modèle"
+    },
+    "pointSources": {
+      "beac": "BEAC",
+      "crct": "CRCT",
+      "svt": "SVT",
+      "bvmac": "BVMAC",
+      "cmarket": "CMarket"
+    },
+    "stale": "ancien",
+    "staleLegend_one": "Point ancien : plus de {{count}} jour",
+    "staleLegend_other": "Point ancien : plus de {{count}} jours"
   },
   "calculator": {
     "bond": "Obligation",

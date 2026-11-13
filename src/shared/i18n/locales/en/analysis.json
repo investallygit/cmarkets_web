@@ -177,7 +177,25 @@
     "pastLegend": "{{country}} {{offset}}",
     "show": "Show {{country}}",
     "hide": "Hide {{country}}",
-    "auction": "auction"
+    "sources": {
+      "auction": "Auction",
+      "quote": "BVMAC close"
+    },
+    "pointTypes": {
+      "auction": "Auction",
+      "secondary": "Secondary market",
+      "model": "Model"
+    },
+    "pointSources": {
+      "beac": "BEAC",
+      "crct": "CRCT",
+      "svt": "SVT",
+      "bvmac": "BVMAC",
+      "cmarket": "CMarket"
+    },
+    "stale": "stale",
+    "staleLegend_one": "Stale point: older than {{count}} day",
+    "staleLegend_other": "Stale point: older than {{count}} days"
   },
   "calculator": {
     "bond": "Bond",

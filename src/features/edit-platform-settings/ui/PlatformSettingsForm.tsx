@@ -20,6 +20,9 @@ import { Section } from './Section'
 
 const MAX_QUOTA = 10_000
 
+/** A point of a curve is stale after 1 day at least, ten years at most (CMarket.Api's PlatformSettings). */
+const MAX_STALE_DAYS = 3_650
+
 type Quotas = Record<ClientAccountType, QuotaDto>
 
 const clientQuotas = (settings: PlatformSettingsDto): Quotas =>
@@ -30,8 +33,8 @@ const clientQuotas = (settings: PlatformSettingsDto): Quotas =>
 /**
  * The Admin's settings (spec sections 12 to 14): the quotas of each client type, the price range,
  * CMarket's commission and the moderation mode of research, the risk-free rate of the Sharpe
- * ratio and the curve the XAF bonds' spreads are read on (spec section 14.4). Saved together;
- * each change is written to the audit log.
+ * ratio, the curve the XAF bonds' spreads are read on (spec section 14.4) and the age of a stale
+ * curve point (spec section 11). Saved together; each change is written to the audit log.
  */
 export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsDto }) {
   const { t } = useTranslation()
@@ -44,6 +47,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
   const [moderation, setModeration] = useState(settings.moderation)
   const [riskFreeRatePct, setRiskFreeRatePct] = useState<number | null>(settings.riskFreeRatePct)
   const [xafReferenceCurve, setXafReferenceCurve] = useState(settings.xafReferenceCurve)
+  const [curveStaleDays, setCurveStaleDays] = useState<number | null>(settings.curveStaleDays)
   // The ETFs' currencies (spec section 14.5): EUR, USD, GBP.
   const [rates, setRates] = useState<{ currency: string; ratePct: number | null }[]>(
     settings.riskFreeRates,
@@ -76,6 +80,10 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     )
       ? t('platformSettings.errors.riskFreeRate')
       : null,
+    curveStaleDays:
+      curveStaleDays === null || curveStaleDays < 1 || curveStaleDays > MAX_STALE_DAYS
+        ? t('platformSettings.errors.curveStaleDays')
+        : null,
   }
   const server = isApiError(save.error, 400) ? (save.error.problem.errors ?? {}) : {}
   // A rate's error comes under riskFreeRates[0].ratePct: the list's own field shows it.
@@ -93,6 +101,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     riskFreeRatePct: riskFreeRatePct ?? 0,
     riskFreeRates: rates.map((rate) => ({ currency: rate.currency, ratePct: rate.ratePct ?? 0 })),
     xafReferenceCurve,
+    curveStaleDays: curveStaleDays ?? 0,
   }
   const changed =
     JSON.stringify(update) !==
@@ -105,6 +114,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
       riskFreeRatePct: settings.riskFreeRatePct,
       riskFreeRates: settings.riskFreeRates,
       xafReferenceCurve: settings.xafReferenceCurve,
+      curveStaleDays: settings.curveStaleDays,
     })
 
   const reset = () => {
@@ -118,6 +128,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     setRiskFreeRatePct(settings.riskFreeRatePct)
     setRates(settings.riskFreeRates)
     setXafReferenceCurve(settings.xafReferenceCurve)
+    setCurveStaleDays(settings.curveStaleDays)
   }
 
   const quotaInput = (type: ClientAccountType, quota: keyof QuotaDto) => (
@@ -302,6 +313,20 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
           <p className="font-sans text-data text-secondary">
             {t('platformSettings.otherCurrencies')}
           </p>
+          <Field
+            label={t('platformSettings.curveStaleDays')}
+            hint={t('platformSettings.curveStaleDaysHint')}
+            error={error('curveStaleDays')}
+          >
+            <NumberInput
+              value={curveStaleDays}
+              onChange={setCurveStaleDays}
+              decimals={0}
+              suffix={t('platformSettings.days')}
+              highlight
+              className="w-28"
+            />
+          </Field>
         </Section>
       </div>
 

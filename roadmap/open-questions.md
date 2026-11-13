@@ -506,7 +506,9 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   due (the plan: each session)? Its tenors 13W, 26W and 52W are read as the old file's 3M, 6M and
   1Y. Are the German and US yields of the GBOND series the reference curves of BS's EUR and USD
   spreads, n/a since decision 8? Which EODHD plan will the commercial licence cover: the spec
-  names the Fundamentals Data Feed and All-in-One plans for the macro, GBOND and MONEY data.
+  names the Fundamentals Data Feed and All-in-One plans for the macro, GBOND and MONEY data. (Step
+  38 moved the old file's points into the series as computed points given by the BEAC, and loads
+  the Treasury, Bund, OAT and gilt curves each day: they could serve as those reference curves.)
 - **FX, fourth version**: section 11 still feeds `/fx` from EODHD's real-time FOREX, screen 26
   from the ECB's daily reference rates: two USD/XAF on two screens (the plan: the reference rate
   on both, decision 22). The matrix writes EUR/XAF 655.96, the header 655.957 (the plan: three

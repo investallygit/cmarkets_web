@@ -59,6 +59,90 @@ test('the BEAC auctions of the session are checked, published and reach the term
   await expect(auctions.getByRole('row', { name: /7\.45%/ })).toBeVisible()
 })
 
+test('the CEMAC sovereign yields replace a point once confirmed, reach YCRV and roll back', async ({
+  page,
+}) => {
+  // An upload, YCRV, then a rollback: three screens and two accounts.
+  test.setTimeout(60_000)
+  await asDataAdmin(page)
+  await page.goto('/imp')
+  await expect(panel(page, 'Session coverage')).toContainText('CEMAC sovereign yields')
+  await page.goto('/imp?import=new')
+  const form = panel(page, 'New upload')
+  await form.getByRole('combobox', { name: 'File type' }).selectOption('cemac-sov-yields')
+  const sessionField = form.getByRole('textbox', { name: 'Session' })
+  await expect(sessionField).toHaveValue(/^\d{2}\/\d{2}\/\d{4}$/)
+  const [day, month, year] = (await sessionField.inputValue()).split('/')
+  // Cameroon's 7 years traded on the BVMAC: the session's point of the weekly file was 6.90%. No
+  // auction stands at 7 years, which would come first on the curve (the auctions flow adds a 3-year OTA).
+  const csv = [
+    'date;country;tenor;yield;point_type;reference_security;source;comment',
+    `${year}-${month}-${day};CMR;7Y;7.1;SECONDARY;CM0000035002;CRCT;BVMAC trade`,
+    `${year}-${month}-${day};NGA;5Y;17.9;MODEL;;CMARKET;`,
+  ].join('\r\n')
+  await form.locator('input[type=file]').setInputFiles({
+    name: 'taux_souverains_e2e.csv',
+    mimeType: 'text/csv',
+    buffer: Buffer.from(csv),
+  })
+  await form.getByRole('button', { name: 'Upload and check' }).click()
+
+  const upload = panel(page, 'Current upload: taux_souverains_e2e.csv')
+  await expect(upload.getByRole('row', { name: /NGA/ })).toContainText('Unknown country NGA')
+  const replaced = upload.getByRole('row', { name: /Replaces the stored yield/ })
+  await expect(replaced).toContainText('Replaces the stored yield of 6.90%')
+  // The error row was the CAR's 7 years, whose series has had no point for 17 weeks: a new one.
+  await upload.getByRole('row', { name: /NGA/ }).click()
+  await upload.getByRole('button', { name: 'Fix row' }).click()
+  const dialog = page.getByRole('dialog')
+  await dialog.getByRole('textbox', { name: 'Country', exact: true }).fill('CAF')
+  await dialog.getByRole('textbox', { name: 'Tenor', exact: true }).fill('7Y')
+  await dialog.getByRole('textbox', { name: 'Yield', exact: true }).fill('8.75')
+  await dialog.getByRole('button', { name: 'Save and check' }).click()
+  await expect(dialog).toBeHidden()
+  await expect(upload.getByRole('row', { name: /CAR 7Y/ })).not.toContainText('Replaces')
+  // The replaced point waits for its tick.
+  await replaced.click()
+  await expect(upload).toContainText(
+    'Row 1 selected: check the yield against the source named in the row, fix it if needed, then tick “Alert checked”.',
+  )
+  const publish = upload.getByRole('button', { name: 'Publish 2 rows' })
+  await expect(publish).toBeDisabled()
+  await upload.getByText('Alert checked', { exact: true }).click()
+  await expect(publish).toBeEnabled()
+  await publish.click()
+  await expect(upload.getByText(/^Published .* 2 rows\.$/)).toBeVisible()
+  await expect(panel(page, 'Session coverage')).toContainText(
+    /CEMAC sovereign yields\d+ files? published/,
+  )
+
+  // YCRV's tooltip says what gave the point: the trade, its security and its source.
+  await switchAccount(page, /data admin/i, 'Analyst', /analyst/i)
+  await page.goto('/ycrv')
+  const curves = panel(page, 'CEMAC sovereign yield curves')
+  const tick = curves.locator('.recharts-cartesian-axis-tick-value', { hasText: /^7Y$/ })
+  const box = await tick.boundingBox()
+  if (!box) throw new Error('No 7Y tick on the curves.')
+  await page.mouse.move(box.x + box.width / 2, box.y - 60)
+  await expect(curves.locator('.recharts-tooltip-wrapper')).toContainText(
+    /Cameroon\s*7\.10%\s*Secondary market · CRCT · CM0000035002/,
+  )
+
+  // Taken back from the history: the weekly file's point returns.
+  await switchAccount(page, /analyst/i, 'Data admin', /data admin/i)
+  await page.goto('/data/history')
+  const history = panel(page, 'Upload history')
+  await history.getByRole('combobox', { name: 'File type' }).selectOption('cemac-sov-yields')
+  const row = history.getByRole('row', { name: /taux_souverains_e2e\.csv/ })
+  await row.click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Roll back…' }).click()
+  const rollBack = page.getByRole('dialog', { name: 'Roll back the publication' })
+  await rollBack.getByRole('textbox', { name: 'Reason' }).fill('Trade of the wrong session.')
+  await rollBack.getByRole('button', { name: 'Roll back' }).click()
+  await expect(rollBack).toBeHidden()
+  await expect(row).toContainText('Rolled back')
+})
+
 test('a daily prices file in error is fixed row by row, then published', async ({ page }) => {
   await asDataAdmin(page)
   await page.goto('/imp?import=new')

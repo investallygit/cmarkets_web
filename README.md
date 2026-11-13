@@ -78,7 +78,7 @@ before upload.
 | 19 · ETF profile (DES on an ETF)                                          | Done; history with NAV, holdings, allocation, PERF, DIST      |
 | 14 · Subscription management (SUBS)                                       | Done; renewals charged, failures retried, plans prorated      |
 | Security descriptions on EQS (screen 3), written in CORR                  | Done; in French and English, EODHD's English standing in      |
-| Rate series, CEMAC sovereign yields file (IMP), stale points on YCRV      | To do, step 38                                                |
+| Rate series, CEMAC sovereign yields file (IMP), stale points on YCRV      | Done; EODHD's yields each day, a replaced point confirmed     |
 | 26 · FX dashboard (FX)                                                    | To do, step 39                                                |
 | 25 · Macroeconomic dashboard (ECO)                                        | To do, step 40                                                |
 | 21 · Commodities (CMDTY, DES on a commodity)                              | To do, step 41                                                |

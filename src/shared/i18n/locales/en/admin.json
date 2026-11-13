@@ -287,6 +287,9 @@
     "bonds": "Bonds",
     "xafReferenceCurve": "XAF reference curve",
     "xafReferenceCurveHint": "The CEMAC sovereign curve the XAF bonds' credit spread and Z-spread are read on (BS). The day's figures are computed again.",
+    "curveStaleDays": "Stale curve point after",
+    "curveStaleDaysHint": "A point of a CEMAC yield curve older than this is marked stale on YCRV (spec section 11). Nothing is computed again.",
+    "days": "days",
     "countryCurve": "{{country}} sovereign curve",
     "otherCurrencies": "EUR and USD: the government curves of EODHD, n/a until their codes are confirmed.",
     "updated": "Last changed on {{date}} by {{name}}",
@@ -298,7 +301,8 @@
       "minPrice": "A price of zero or more.",
       "maxPrice": "Above the minimum price.",
       "commission": "From 0 to 50%.",
-      "riskFreeRate": "From 0 to 30%."
+      "riskFreeRate": "From 0 to 30%.",
+      "curveStaleDays": "From 1 to 3,650 days."
     }
   },
   "directorySettings": {
@@ -506,6 +510,7 @@
       "spikeFactor": "Spike factor",
       "sharedAddressAccounts": "Accounts on one address",
       "xafReferenceCurve": "XAF reference curve",
+      "curveStaleDays": "Stale curve point after (days)",
       "plan": "Plan",
       "billingCycle": "Billing cycle",
       "periodEnd": "Expiry",

@@ -78,10 +78,25 @@ export function SessionCoveragePanel({
           : t('dataImport.coverage.files', { count: item.published })
       case 'checking':
         return t('dataImport.coverage.checking')
-      case 'expected':
-        return !item.dueOn || item.dueOn === session
+      case 'expected': {
+        const today = !item.dueOn || item.dueOn === session
+        // A file due at a time of Douala (UTC+1 all year), shown in the user's time zone: the CEMAC
+        // sovereign yields at 17:30, as the screen 6 mockup expects them.
+        if (item.dueOn && item.dueTime) {
+          const time = format.time(`${item.dueOn}T${item.dueTime}:00+01:00`)
+          return today
+            ? t('dataImport.coverage.expectedAt', { time })
+            : t('dataImport.coverage.expectedOnAt', {
+                day: format.weekday(item.dueOn, 'long'),
+                time,
+              })
+        }
+        return today
           ? t('dataImport.coverage.expectedToday')
-          : t('dataImport.coverage.expectedOn', { day: format.weekday(item.dueOn, 'long') })
+          : t('dataImport.coverage.expectedOn', {
+              day: format.weekday(item.dueOn ?? session, 'long'),
+            })
+      }
       case 'missing':
         return t('dataImport.coverage.missing')
       case 'none':

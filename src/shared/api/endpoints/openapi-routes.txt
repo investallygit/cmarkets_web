@@ -203,6 +203,8 @@ GET /library/{id}/pdf
 POST /library/{id}/purchase
 POST /library/{id}/rating
 POST /library/{id}/report
+GET /macro
+GET /macro/global-rates
 GET /market/movers
 GET /market/status
 GET /market/summary
@@ -297,7 +299,9 @@ PUT /publications/{id}/pricing
 POST /publications/{id}/submit
 POST /publications/{id}/versions
 GET /publications/rules
+GET /rates/{code}/history
 GET /rates/policy
+GET /rates/series
 GET /reports/{jobId}
 GET /reports/{jobId}/file
 GET /research-images/{id}

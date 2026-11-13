@@ -22,6 +22,7 @@ export {
   isChangeField,
   isImportType,
   MAX_UPLOAD_BYTES,
+  RETIRED_IMPORT_TYPES,
   UPLOAD_ACCEPT,
   type ChangeField,
   type ImportStatusLabel,

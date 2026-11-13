@@ -88,7 +88,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 35   | [Security descriptions on EQS (screen 3)](roadmap/steps/step-35-security-descriptions.md)                            | Done   |
 | 36   | [Third version done: README, accessibility, every flow](roadmap/steps/step-36-third-version-done.md)                 | Done   |
 | 37   | [Fourth version of the spec: the plan, its decisions, questions](roadmap/steps/step-37-fourth-version-plan.md)       | Done   |
-| 38   | [Rate series, the CEMAC sovereign yields file, stale curve points](roadmap/steps/step-38-rate-series.md)             | To do  |
+| 38   | [Rate series, the CEMAC sovereign yields file, stale curve points](roadmap/steps/step-38-rate-series.md)             | Done   |
 | 39   | [FX: the XAF's cross rates on the ECB's reference rates (screen 26)](roadmap/steps/step-39-fx-dashboard.md)          | To do  |
 | 40   | [ECO: macroeconomic dashboard (screen 25)](roadmap/steps/step-40-macro-dashboard.md)                                 | To do  |
 | 41   | [CMDTY: commodities, the profile of a commodity (screen 21)](roadmap/steps/step-41-commodities.md)                   | To do  |

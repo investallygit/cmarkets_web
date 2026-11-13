@@ -1,12 +1,12 @@
 import type { ImportDto, ImportType } from '@/shared/api/contracts'
 
-/** File types in the order of the session coverage of the screen 6 mockup. */
+/** File types the Data admin uploads, in the order of the session coverage of the screen 6 mockup. */
 export const IMPORT_TYPES: readonly ImportType[] = [
   'daily-prices',
   'indices',
   'corporate-actions',
   'auctions',
-  'curves',
+  'cemac-sov-yields',
   'financial-statements',
   'securities',
   'history',
@@ -16,8 +16,14 @@ export const IMPORT_TYPES: readonly ImportType[] = [
   'etf-nav',
 ]
 
+/**
+ * Files of the earlier versions of the spec, no longer uploaded: the weekly "Curves and rates",
+ * which the CEMAC sovereign yields replaced. Their uploads stay in the history.
+ */
+export const RETIRED_IMPORT_TYPES: readonly ImportType[] = ['curves']
+
 export function isImportType(value: string): value is ImportType {
-  return IMPORT_TYPES.some((type) => type === value)
+  return [...IMPORT_TYPES, ...RETIRED_IMPORT_TYPES].some((type) => type === value)
 }
 
 /** What the history says of an upload: a rolled back file published again says both. */
@@ -46,6 +52,7 @@ export const IMPORT_COLUMNS = [
   'asset_class', 'sub_category', 'geography', 'replication', 'distribution', 'distribution_frequency', 'ucits',
   'hedged', 'fund_currency', 'domicile', 'ter', 'aum', 'benchmark', 'benchmark_symbol', 'inception_date', 'nav',
   'bid', 'ask', 'holdings_count', 'holdings_date', 'top_holdings', 'sector_weights', 'region_weights',
+  'tenor', 'yield', 'point_type', 'reference_security', 'source', 'comment',
 ] as const
 export type ImportColumnName = (typeof IMPORT_COLUMNS)[number]
 
@@ -54,7 +61,7 @@ export function isImportColumn(name: string): name is ImportColumnName {
 }
 
 /** The figures whose change from the stored value raises an alert. */
-export const CHANGE_FIELDS = ['close', 'value', 'avg_rate', 'rate', 'nav'] as const
+export const CHANGE_FIELDS = ['close', 'value', 'avg_rate', 'rate', 'yield', 'nav'] as const
 export type ChangeField = (typeof CHANGE_FIELDS)[number]
 
 export function isChangeField(name: string): name is ChangeField {

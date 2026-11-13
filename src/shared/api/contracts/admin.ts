@@ -253,6 +253,8 @@ export interface PlatformSettingsDto {
    * "Reference curve per currency, set by the Admin"): "CM" by default.
    */
   xafReferenceCurve: string
+  /** A point of a CEMAC yield curve older than this many days is marked stale (spec section 11): 90 by default. */
+  curveStaleDays: number
   updatedAt: IsoDateTime | null
   updatedBy: string | null
 }
@@ -435,6 +437,7 @@ export const AUDIT_FIELDS = [
   'spikeFactor',
   'sharedAddressAccounts',
   'xafReferenceCurve',
+  'curveStaleDays',
   'plan',
   'billingCycle',
   'periodEnd',

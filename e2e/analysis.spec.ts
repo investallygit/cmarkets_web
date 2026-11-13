@@ -117,6 +117,8 @@ test('the yield curves hide a country and compare with a past date', async ({ pa
   await page.goto('/ycrv')
   const curves = panel(page, 'CEMAC sovereign yield curves')
   await expect(curves.getByText('Cameroon 1 month ago')).toBeVisible()
+  // The CAR's 7 and 10 years were last published 17 weeks ago: stale past the Admin's 90 days.
+  await expect(curves.getByText('Stale point: older than 90 days')).toBeVisible()
   await curves.getByRole('button', { name: 'Gabon' }).click()
   await expect(curves.getByRole('button', { name: 'Gabon' })).toHaveAttribute(
     'aria-pressed',

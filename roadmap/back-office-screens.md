@@ -41,8 +41,7 @@ by which step, and what is still to do. The terminal's screens are in
   points and the dividends; the EODHD loads are generated, a 429 now and then retried 15
   minutes later.
 - **Still to do**: the securities and financial statements files are checked and kept, but the
-  security master and the statements of the screens do not read them yet; the curves of a
-  published file apply from its date, without the shift of the sample file.
+  security master and the statements of the screens do not read them yet.
 - **Third version (steps 29 and 32)**: the bond list and ratings files, the two ETF files.
 - **Built in step 29**: the bond list (`bond-master`) and the bond ratings (`bond-ratings`): a
   bond listed or described by its ISIN, a rating added to its history; their rollback.
@@ -57,6 +56,13 @@ by which step, and what is still to do. The terminal's screens are in
   place of "Curves and rates" in the session coverage (expected at 17:30, "Under review" while it
   is checked, as the redrawn mockup); the commodity prices file; a "Macro" file for the series
   the World Bank lacks.
+- **Built in step 38**: "CEMAC sovereign yields" (`cemac-sov-yields`: date, country as the spec
+  writes it, `CMR`, tenor 13W to 10Y, yield, point type, reference security, source, comment):
+  after the auctions in the coverage, "Expected 17:30" (in the user's time zone); its template;
+  a move of more than 100 bp from the series' point before, and a row that replaces the point
+  stored for its day, state and tenor ("Replaces the stored yield of 6.20%"), are alerts to tick,
+  the spec's confirmation; its rollback puts the point back. "Curves and rates" is no longer
+  offered nor taken: its uploads stay in HIST, filtered by their type, and still roll back.
 
 ## CORR · Data corrections (no mockup): done
 
@@ -141,6 +147,8 @@ by which step, and what is still to do. The terminal's screens are in
 - **Third version (steps 24, 29 and 32)**: the News provider's quotas and column of the
   matrix; the reference curve and the risk-free rate of each currency.
 - **Built in step 29**: the XAF reference curve of the bonds' spreads (Cameroon's by default).
+- **Built in step 38**: under Bonds, the age past which a curve point is stale (90 days, 1 to
+  3,650), audited as "Stale curve point after (days)".
 - **Fourth version (steps 38 to 47)**: the age past which a curve point is stale; ECO's comparison
   countries and tiles, FX's currencies; the licensed SVTs with their back-office address, the
   minimum trading amount, the validity of a link, the approval window and the RFQ's switch

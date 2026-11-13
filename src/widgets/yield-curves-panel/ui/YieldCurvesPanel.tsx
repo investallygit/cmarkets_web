@@ -12,7 +12,7 @@ import {
   type DotItemDotProps,
 } from 'recharts'
 import { CURVE_COLOR_TOKENS, useMaturityLabel, useYieldCurves } from '@/entities/yield-curve'
-import type { YieldCurveDto } from '@/shared/api/contracts'
+import type { YieldCurveDto, YieldCurvePointDto } from '@/shared/api/contracts'
 import { CEMAC_COUNTRIES, isCemacCountry, type CemacCountry } from '@/shared/config/countries'
 import { useFormat } from '@/shared/i18n'
 import { cssVar } from '@/shared/lib/theme'
@@ -32,8 +32,9 @@ interface YieldCurvesPanelProps {
 
 /**
  * Screen 4, CEMAC sovereign yield curves: one colour per country, maturities on a log scale,
- * the focus country dashed at a past date; a click on a legend item hides that country.
- * API /yield-curves.
+ * the focus country dashed at a past date; a click on a legend item hides that country. A point
+ * older than the Admin's limit (90 days) is a hollow square; the tooltip says what gave each point
+ * and when (spec section 11). API /yield-curves.
  */
 export function YieldCurvesPanel({ focusCountry }: YieldCurvesPanelProps) {
   const { t } = useTranslation()
@@ -127,13 +128,14 @@ function CurvesChart({ curves, pastCurve, focusCountry, pastLabel }: CurvesChart
     }
     return row
   })
-  const auctionPoints = new Set(
-    curves.flatMap((curve) =>
-      curve.points
-        .filter((point) => point.source === 'auction')
-        .map((point) => `${curve.country}|${point.years}`),
+  // Each point by its curve and maturity, for its dot and its line of the tooltip.
+  const points = new Map<string, YieldCurvePointDto>(
+    [...curves, ...(past ? [{ ...past, country: PAST }] : [])].flatMap((curve) =>
+      curve.points.map((point) => [`${curve.country}|${point.years}`, point] as const),
     ),
   )
+  const staleShown = visible.some((curve) => curve.points.some((point) => point.stale))
+  const staleAfterDays = curves.at(0)?.staleAfterDays ?? 90
 
   // Half-point ticks around the curves shown.
   const shown = [...visible, ...(past ? [past] : [])].flatMap((curve) =>
@@ -147,13 +149,39 @@ function CurvesChart({ curves, pastCurve, focusCountry, pastLabel }: CurvesChart
       ? t('curves.pastLegend', { country: format.country(past.country), offset: pastLabel })
       : format.country(code)
 
-  // Small squares at each maturity, as in the mockup.
+  // What gave a point and when: an auction, a close, or the series' type, source and security.
+  const pointNote = (point: YieldCurvePointDto) => {
+    const origin = point.series
+      ? [
+          t(`curves.pointTypes.${point.series.pointType}`),
+          t(`curves.pointSources.${point.series.source}`),
+          point.series.referenceSecurity,
+        ]
+      : [t(`curves.sources.${point.source === 'quote' ? 'quote' : 'auction'}`)]
+    return [...origin, format.isoDate(point.asOf)].filter(Boolean).join(' · ')
+  }
+
+  // Small squares at each maturity, as in the mockup; a stale point's square is hollow.
   const squareDot =
-    (color: string) =>
-    ({ cx, cy, index }: DotItemDotProps) =>
-      typeof cx === 'number' && typeof cy === 'number' ? (
+    (color: string, country: string) =>
+    ({ cx, cy, index, payload }: DotItemDotProps) => {
+      if (typeof cx !== 'number' || typeof cy !== 'number') return null
+      const stale = points.get(`${country}|${String((payload as { years?: number }).years)}`)?.stale
+      return stale ? (
+        <rect
+          key={index}
+          x={cx - 3}
+          y={cy - 3}
+          width={6}
+          height={6}
+          fill={theme.panel}
+          stroke={color}
+          strokeWidth={1.25}
+        />
+      ) : (
         <rect key={index} x={cx - 2} y={cy - 2} width={4} height={4} fill={color} />
-      ) : null
+      )
+    }
 
   return (
     <>
@@ -185,12 +213,14 @@ function CurvesChart({ curves, pastCurve, focusCountry, pastLabel }: CurvesChart
               cursor={{ stroke: theme.secondary, strokeDasharray: '2 2' }}
               content={({ active, payload, label }) =>
                 active && payload.length > 0 ? (
-                  <div className="grid grid-cols-[auto_auto_auto_auto] items-center gap-x-2 border bg-panel-header px-2 py-1.5 font-mono text-data shadow-lg">
-                    <div className="col-span-4 mb-1 text-secondary">
+                  // Narrow, each point's note goes under its country, within the screen's width.
+                  <div className="grid max-w-[min(36rem,calc(100vw-6rem))] grid-cols-[auto_auto_auto] items-center gap-x-2 border bg-panel-header px-2 py-1.5 font-mono text-data shadow-lg sm:grid-cols-[auto_auto_auto_auto]">
+                    <div className="col-span-full mb-1 text-secondary">
                       {maturityLabel(Number(label))}
                     </div>
                     {payload.map((entry) => {
                       const key = String(entry.dataKey)
+                      const point = points.get(`${key}|${Number(label)}`)
                       return (
                         <Fragment key={key}>
                           <span
@@ -202,8 +232,11 @@ function CurvesChart({ curves, pastCurve, focusCountry, pastLabel }: CurvesChart
                           <span className="pl-2 text-right">
                             {format.percent(Number(entry.value), 2, false)}
                           </span>
-                          <span className="text-secondary">
-                            {auctionPoints.has(`${key}|${Number(label)}`) && t('curves.auction')}
+                          <span className="col-span-2 col-start-2 font-sans text-secondary sm:col-span-1 sm:col-start-auto sm:truncate">
+                            {point && pointNote(point)}
+                            {point?.stale && (
+                              <span className="text-warning"> · {t('curves.stale')}</span>
+                            )}
                           </span>
                         </Fragment>
                       )
@@ -220,7 +253,7 @@ function CurvesChart({ curves, pastCurve, focusCountry, pastLabel }: CurvesChart
                   dataKey={curve.country}
                   stroke={color}
                   strokeWidth={curve.country === focusCountry ? 2 : 1.5}
-                  dot={squareDot(color)}
+                  dot={squareDot(color, curve.country)}
                   activeDot={{ r: 3, fill: color, stroke: color }}
                   isAnimationActive={false}
                   connectNulls
@@ -267,6 +300,12 @@ function CurvesChart({ curves, pastCurve, focusCountry, pastLabel }: CurvesChart
             </button>
           )
         })}
+        {staleShown && (
+          <span className="inline-flex items-center gap-1.5 text-secondary">
+            <span aria-hidden className="size-1.5 border border-secondary" />
+            {t('curves.staleLegend', { count: staleAfterDays })}
+          </span>
+        )}
         {past && (
           <span
             className="inline-flex items-center gap-1.5 font-mono"

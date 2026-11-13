@@ -8,6 +8,9 @@ export type ImportType =
   | 'corporate-actions'
   | 'financial-statements'
   | 'auctions'
+  /** The CEMAC states' sovereign yields by tenor (CEMAC_SOV_YIELDS, fourth version of the spec). */
+  | 'cemac-sov-yields'
+  /** "Curves and rates", the weekly file it replaced: its uploads stay in the history. */
   | 'curves'
   | 'history'
   | 'bond-master'
@@ -47,6 +50,8 @@ export type ImportCheckCode =
   | 'changeAboveThreshold'
   | 'zeroVolumeChanged'
   | 'codeTaken'
+  /** The row replaces the point stored for its key, which the CEMAC sovereign yields file confirms. */
+  | 'replacesStored'
 
 /** GET /data/import-types: the columns and the checks of each file. */
 export interface ImportTypeDto {
@@ -152,8 +157,10 @@ export interface CoverageItemDto {
   /** Files published for the session; news items for news. */
   published: number
   lastPublishedAt: IsoDateTime | null
-  /** When an expected file is due, e.g. the Friday of the weekly curves. */
+  /** When an expected file is due. */
   dueOn: IsoDate | null
+  /** The time of Douala it is due at, "17:30", for the file that has one (the CEMAC sovereign yields). */
+  dueTime: string | null
   /** The latest upload for the session, to open it. */
   importId: string | null
 }

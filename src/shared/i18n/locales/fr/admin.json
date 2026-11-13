@@ -287,6 +287,9 @@
     "bonds": "Obligations",
     "xafReferenceCurve": "Courbe de référence XAF",
     "xafReferenceCurveHint": "La courbe souveraine CEMAC sur laquelle se lisent le spread de crédit et le Z-spread des obligations en XAF (BS). Les chiffres du jour sont recalculés.",
+    "curveStaleDays": "Point de courbe ancien après",
+    "curveStaleDaysHint": "Un point d’une courbe de taux CEMAC plus ancien est signalé sur YCRV (section 11 de la spécification). Rien n’est recalculé.",
+    "days": "jours",
     "countryCurve": "Courbe souveraine {{country}}",
     "otherCurrencies": "EUR et USD : les courbes d'État d'EODHD, n.d. tant que leurs codes ne sont pas confirmés.",
     "updated": "Modifié le {{date}} par {{name}}",
@@ -298,7 +301,8 @@
       "minPrice": "Un prix de zéro ou plus.",
       "maxPrice": "Au-dessus du prix minimum.",
       "commission": "De 0 à 50 %.",
-      "riskFreeRate": "De 0 à 30 %."
+      "riskFreeRate": "De 0 à 30 %.",
+      "curveStaleDays": "De 1 à 3 650 jours."
     }
   },
   "directorySettings": {
@@ -506,6 +510,7 @@
       "spikeFactor": "Facteur de pic",
       "sharedAddressAccounts": "Comptes sur une adresse",
       "xafReferenceCurve": "Courbe de référence XAF",
+      "curveStaleDays": "Point de courbe ancien après (jours)",
       "plan": "Formule",
       "billingCycle": "Périodicité",
       "periodEnd": "Échéance",
