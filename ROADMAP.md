@@ -1,10 +1,11 @@
 # Roadmap
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`, the version of
-10 November 2026; the earlier versions are kept as `CMarket-developer-spec-EN-v1.pdf` (29 October)
-and `CMarket-developer-spec-EN-v2.pdf` (2 November).
+13 November 2026; the earlier versions are kept as `CMarket-developer-spec-EN-v1.pdf` (29 October),
+`CMarket-developer-spec-EN-v2.pdf` (2 November) and `CMarket-developer-spec-EN-v3.pdf` (10
+November).
 
-Every screen of the three versions is built: the client terminal (MKT, DES with its FA and ANA
+Every screen of the first three versions is built: the client terminal (MKT, DES with its FA and ANA
 tabs, EQS, ETFS, YCRV, BP, BS, PORT, PUB, PUB NEW, NET, MSG, NET ME, N, NEWS NEW, CAL, ALRT and
 CFG, DES opening the equity, bond or ETF profile) with the public profile page and the login,
 sign-up and password reset pages, the back-office of the Data admin (IMP with DATA, HIST and EODH,
@@ -14,52 +15,66 @@ Journalist and CEO account types and the professional directory with its messagi
 to 12): steps 11 to 19, under [Second version of the spec](#second-version-of-the-spec). The third
 version added a ninth account type, the News provider, a news feed rebuilt around partner
 newspapers paid per unique click, and eight screens (13 to 20): steps 23 to 36, under
-[Third version of the spec](#third-version-of-the-spec). What remains is listed under "Still to
-do", in those steps and in the open questions for the spec author.
+[Third version of the spec](#third-version-of-the-spec). The fourth version adds a tenth account
+type, the SVT, requests for quotes on government securities, and nine screens (21 to 29): steps 37
+to 48, under [Fourth version of the spec](#fourth-version-of-the-spec). What remains is listed
+under "Still to do", in those steps and in the open questions for the spec author.
 
 ANLY and MOD were built with USER: in the mockups they are panels of the same screen. Sizes are
 relative: S < M < L < XL.
 
 ## Order
 
-| Step | Work                                                            | Status |
-| ---- | --------------------------------------------------------------- | ------ |
-| 1    | Shared groundwork, batch 1: form kit, `PriceChart`, XLSX export | Done   |
-| 2    | DES                                                             | Done   |
-| 3    | Watchlist editing (MKT), N, CAL, ALRT                           | Done   |
-| 4    | EQS / FA, then YCRV / YAS                                       | Done   |
-| 5    | PORT                                                            | Done   |
-| 6    | PUB, then PUB NEW                                               | Done   |
-| 7    | CFG, login and OTP (needed before connecting the real back end) | Done   |
-| 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS  | Done   |
-| 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY            | Done   |
-| 10   | Home page, before login: the product, markets, users, plans     | Done   |
-| 11   | Second version of the spec: the plan, its open questions        | Done   |
-| 12   | Journalist and CEO account types, approved by the Admin         | Done   |
-| 13   | Portfolios shared with the organisation, read by its CEO        | Done   |
-| 14   | NET ME: professional profile, visibility and contact rules      | Done   |
-| 15   | NET: professional directory, public profile page                | Done   |
-| 16   | MSG: conversations, contact requests, files, shared objects     | Done   |
-| 17   | MSG in real time: the `/hubs/chat` hub                          | Done   |
-| 18   | Admin: reported profiles and conversations, directory settings  | Done   |
-| 19   | Second version done: README, accessibility, every flow          | Done   |
-| 20   | Connecting `CMarket.Api`: `.env`, the API module, its checks    | Done   |
-| 21   | The mock removed: every screen on `CMarket.Api`                 | Done   |
-| 22   | The Azure demo checked                                          | Done   |
-| 23   | Third version of the spec: the plan, its decisions, questions   | Done   |
-| 24   | News provider account type, approved by the Admin               | Done   |
-| 25   | News rebuilt: ARTICLE, FLASH, newspapers, tags, unique clicks   | Done   |
-| 26   | NEWS NEW: the news studio of a News provider (screen 13)        | Done   |
-| 27   | News administration, AI ingestion, international news           | Done   |
-| 28   | MPAY: media payments (screen 18)                                | Done   |
-| 29   | Daily bond analytics, BS: bond screener (screen 17)             | Done   |
-| 30   | BP: bond pricing (screen 16)                                    | Done   |
-| 31   | Bond profile (screen 20), the profile chosen by security type   | Done   |
-| 32   | ETF data, ETFS: ETF screener (screen 15)                        | Done   |
-| 33   | ETF profile (screen 19)                                         | Done   |
-| 34   | SUBS: subscription management (screen 14)                       | Done   |
-| 35   | Security descriptions on EQS (screen 3)                         | Done   |
-| 36   | Third version done: README, accessibility, every flow           | Done   |
+| Step | Work                                                               | Status |
+| ---- | ------------------------------------------------------------------ | ------ |
+| 1    | Shared groundwork, batch 1: form kit, `PriceChart`, XLSX export    | Done   |
+| 2    | DES                                                                | Done   |
+| 3    | Watchlist editing (MKT), N, CAL, ALRT                              | Done   |
+| 4    | EQS / FA, then YCRV / YAS                                          | Done   |
+| 5    | PORT                                                               | Done   |
+| 6    | PUB, then PUB NEW                                                  | Done   |
+| 7    | CFG, login and OTP (needed before connecting the real back end)    | Done   |
+| 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS     | Done   |
+| 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY               | Done   |
+| 10   | Home page, before login: the product, markets, users, plans        | Done   |
+| 11   | Second version of the spec: the plan, its open questions           | Done   |
+| 12   | Journalist and CEO account types, approved by the Admin            | Done   |
+| 13   | Portfolios shared with the organisation, read by its CEO           | Done   |
+| 14   | NET ME: professional profile, visibility and contact rules         | Done   |
+| 15   | NET: professional directory, public profile page                   | Done   |
+| 16   | MSG: conversations, contact requests, files, shared objects        | Done   |
+| 17   | MSG in real time: the `/hubs/chat` hub                             | Done   |
+| 18   | Admin: reported profiles and conversations, directory settings     | Done   |
+| 19   | Second version done: README, accessibility, every flow             | Done   |
+| 20   | Connecting `CMarket.Api`: `.env`, the API module, its checks       | Done   |
+| 21   | The mock removed: every screen on `CMarket.Api`                    | Done   |
+| 22   | The Azure demo checked                                             | Done   |
+| 23   | Third version of the spec: the plan, its decisions, questions      | Done   |
+| 24   | News provider account type, approved by the Admin                  | Done   |
+| 25   | News rebuilt: ARTICLE, FLASH, newspapers, tags, unique clicks      | Done   |
+| 26   | NEWS NEW: the news studio of a News provider (screen 13)           | Done   |
+| 27   | News administration, AI ingestion, international news              | Done   |
+| 28   | MPAY: media payments (screen 18)                                   | Done   |
+| 29   | Daily bond analytics, BS: bond screener (screen 17)                | Done   |
+| 30   | BP: bond pricing (screen 16)                                       | Done   |
+| 31   | Bond profile (screen 20), the profile chosen by security type      | Done   |
+| 32   | ETF data, ETFS: ETF screener (screen 15)                           | Done   |
+| 33   | ETF profile (screen 19)                                            | Done   |
+| 34   | SUBS: subscription management (screen 14)                          | Done   |
+| 35   | Security descriptions on EQS (screen 3)                            | Done   |
+| 36   | Third version done: README, accessibility, every flow              | Done   |
+| 37   | Fourth version of the spec: the plan, its decisions, questions     | Done   |
+| 38   | Rate series, the CEMAC sovereign yields file, stale curve points   | To do  |
+| 39   | FX: the XAF's cross rates on the ECB's reference rates (screen 26) | To do  |
+| 40   | ECO: macroeconomic dashboard (screen 25)                           | To do  |
+| 41   | CMDTY: commodities, the profile of a commodity (screen 21)         | To do  |
+| 42   | OPT, OPT RES: portfolio optimisation (screens 28 and 29)           | To do  |
+| 43   | SVT account type, licensed SVTs, trader links, `/hubs/rfq`         | To do  |
+| 44   | RFQ: requests for quotes on BTA and OTA (screen 22)                | To do  |
+| 45   | SVT: approval of the agreements, tickets by e-mail (screen 27)     | To do  |
+| 46   | RFQ AGR: agreements (screen 23)                                    | To do  |
+| 47   | RFQ REP: daily reporting to the BEAC (screen 24)                   | To do  |
+| 48   | Fourth version done: README, accessibility, every flow             | To do  |
 
 ## Second version of the spec
 
@@ -1546,6 +1561,355 @@ CMarket.Api's phase 28.
     start-up limit, and the next start skipped the ETFs already there. Filling them in writes to
     a database people use, which is the owner's call.
 
+## Fourth version of the spec
+
+The version of 13 November 2026 (132 pages, against 96), compared sentence by sentence and image by
+image with the third. Nothing of the third version is taken out: sections 1 to 5, 7, 13 and 15 to
+17 are unchanged, and so are the formulas of 14.1 to 14.5; sections 6, 8, 9 and 12 are reworded
+where they count the account types, the codes and the screens. The mockups of screens 1 to 5 and 7
+to 20 are the same images; that of screen 6 is redrawn: its session coverage expects "CEMAC
+sovereign yields" at 17:30 where it expected "Curves and rates" on Friday, and the BEAC auctions
+are "Under review" where they were "Being checked".
+
+- **Account types** (sections 6 and 12): ten. The SVT is an officer of the securities back office
+  of a bank licensed as a Treasury Securities Specialist: it approves or rejects the RFQ agreements
+  that name its bank, confirms the traders' links and sets their limits (screen 27). The account is
+  created at the bank's request and approved by the Admin (the SVT licence and an employer letter),
+  logs in with a code every time, neither publishes nor answers requests (the bank's traders hold
+  Trader accounts) and is not listed in the directory. The matrix has no column for it; a paragraph
+  gives its rights: the markets as a CEO reads them, screen 27, the list and the export of the
+  agreements that name its bank, messages with its linked traders; no portfolio, no publication, no
+  request board. The Trader now trades BTA and OTA through the RFQ, the CEO reads the
+  organisation's agreements, and the News provider is for "managers of local partner newspapers"
+  (media managers of newspapers, agencies and business news sites until then).
+- **RFQ** (screens 22 to 24 and 27): requests for quotes on the BTA and OTA of the BEAC's auctions.
+  A Trader or a Manager of a registered organisation, linked to at least one SVT that confirmed the
+  link, publishes a request (the security, buy or sell, the face amount, a rate for a BTA, a clean
+  price or a yield for an OTA, the delivery-versus-payment date, 1 to 30 minutes, its SVT for the
+  trade, anonymous or not) on a board that every such trader sees. The others answer with a price
+  or a rate, a quantity and their SVT, and improve or withdraw the answer until the confirmation.
+  CMarket ranks the answers (the best price, then the largest quantity, then the earliest) and
+  fills them in that order; the requester confirms the selection as computed, or cancels. Each
+  answer selected makes an agreement, "Awaiting SVT": the buyer's SVT and the seller's each approve
+  it within 60 minutes and before 16:00 (two approvers above XAF 1 bn), or reject it with a reason.
+  Once concluded, its PDF ticket goes by e-mail to both traders and both back offices; the SVTs
+  settle at the CRCT, outside CMarket. Every business day at 18:00, a PDF summary and an Excel file
+  of the day's concluded agreements go to the BEAC. The spec itself lists points to confirm before
+  development: the module's status with the BEAC and, if needed, COSUMAF, the scope of the SVTs'
+  confirmation, the BTA calculation convention and the format of the reporting.
+- **Screens** (section 9): twenty-nine. 21 CMDTY, the commodities and the profile of one (DES on a
+  commodity); 22 RFQ, 23 RFQ AGR (the agreements) and 24 RFQ REP (the daily reporting to the BEAC),
+  under one tab bar; 25 ECO, the macroeconomic dashboard (`ECO CMR` opens Cameroon); 26 FX, the
+  XAF's cross rates; 27 SVT, the SVT's approvals; 28 OPT and 29 OPT RES, portfolio optimisation,
+  its setup and its result. Screen 1's "Rates and FX" panel opens FX; PORT and a watchlist get
+  "Optimise"; BS and the bond profile get "Request a price (RFQ)" on a BTA or an OTA; screen 4
+  marks a curve point older than 90 days. The mockups of screens 22 to 24 add RFQ to the client
+  menu, after YCRV; those of screens 21, 25 and 26 light MKT, those of 28 and 29 PORT; the SVT's
+  menu is SVT, TRD, AGR, N, CFG.
+- **API** (section 10): some seventy-five rows of routes. `/commodities*` and
+  `PUT /data/commodities/{code}`; `/rfq*` (the requests, the board, the answers, the allocation,
+  confirm, cancel, the blotter), `/me/svt` and `/svt-links/{token}`, `/rfq/agreements*` with their
+  ticket, export and saved filters, `/rfq/daily-reports*`; `/svt/*` (the summary, the approvals,
+  the links and their limits, the settings); `/macro/*` (countries, a country's summary, the
+  indicators, compare, the CEMAC table, the global rates), `/fx/*` (the crosses, a currency's
+  history, convert, the matrix), `/rates/series` and `/rates/{code}/history`; `/optimizer/*` (the
+  estimates, check, run, a point of the frontier, the scenarios with their portfolio, rebalancing
+  and export); for the Admin, `/admin/rfq/svt`, `/admin/rfq/audit`,
+  `/admin/rfq/daily-report-settings`, `/admin/svt-accounts` and `/admin/macro/settings`. A third
+  hub, `/hubs/rfq`, with fifteen events.
+- **Data** (section 11): from EODHD, the commodities (23 series that FRED publishes, 5 calls a
+  request), the macro indicators (39 World Bank series a country, by year, 10 calls), the
+  sovereign yields (`.GBOND`: 154 series of 34 countries, none of the CEMAC, 1 call), and Euribor,
+  the EUR 10-year swap and the ECB's reference rates of the euro against 42 currencies (`.MONEY`,
+  10 calls). Two file templates: `COMMODITY_PRICES` for the products the API lacks (cocoa, rubber,
+  palm oil, gold, okoumé timber) and `CEMAC_SOV_YIELDS` for the six countries' yields (a tenor from
+  13W to 10Y, a point of type AUCTION, SECONDARY or MODEL, series named `CMR5Y.CMKT`), which
+  replaces the "Curves and rates" file.
+- **Formulas** (section 14.6, new): mean-variance optimisation under constraints: the expected
+  return, the volatility, the Sharpe ratio, each security's share of the risk, the 1-day 95% VaR
+  and the bonds' duration; estimates from weekly returns (a bond's yield to maturity), a covariance
+  shrunk towards a constant correlation (Ledoit-Wolf); four problems (the lowest risk for a minimum
+  return, the highest return for a maximum risk, the best ratio, the lowest risk), a frontier of 25
+  points and a test case of eight securities.
+- **Back end only** (the notes of section 10): the `rfq` schema (Svt, TraderSvtLinks, Requests,
+  Responses, ResponseVersions, Allocations, Agreements, AgreementEmails, AgreementCancellations,
+  SavedFilters, SvtApprovals, SvtSettings, DailyReports, DailyReportSends, AuditLog);
+  `ref.Commodities` and `mkt.CommodityValues`; `ref.MacroIndicators` and `mkt.MacroValues`;
+  `ref.RateSeries`, `mkt.RateValues` and `mkt.FxReferenceRates`; `pf.OptScenarios`,
+  `pf.OptScenarioSecurities` and `pf.OptResults`.
+
+CMarket.Api already loads the macro indicators: since 13 November 2026 (its ADR-053) it asks EODHD
+for the 39 indicators of the six CEMAC countries once a week, with its key alone, keeps them by
+country, indicator and year and answers `GET /macro?country=`, for which the web project has no
+contract yet. Step 40 builds on it.
+
+### Decisions taken
+
+The decisions of the third version stand (1 to 13). Where the fourth is silent or contradicts
+itself, the steps below follow these; each is also an open question for the spec author.
+
+14. **The spec's files**: the fourth version is `CMarket-developer-spec-EN.pdf`, as the code's
+    comments name the spec, and the third `CMarket-developer-spec-EN-v3.pdf`.
+15. **The menu**: CMDTY, ECO, FX, RFQ and OPT each get an entry of their own, as ETFS, BP and BS
+    since the spec author's answer of 12 November: CMDTY, ECO and FX after MKT, which their
+    mockups light; RFQ after BS (the mockups of screens 22 to 24 draw it after YCRV); OPT after
+    PORT, which its mockups light. A Trader's menu then has eighteen entries, more than a window
+    900 px high shows at 44 px each: the menu scrolls, and step 39, the first to add an entry,
+    settles how it holds them.
+16. **The SVT account**: not offered at sign-up. An Admin creates it from USER, on the bank's
+    request, its licence and an employer letter, for a bank of the licensed SVTs; the bank is its
+    organisation, as a media is a News provider's (decision 12). Its menu is the mockup's (SVT,
+    TRD, AGR, N, CFG) with MSG, for its messages with the traders linked to it; the market
+    screens a CEO reads stay open to it from the command bar, out of the menu.
+17. **The compliance team**: the Admin. RFQ REP (screen 24), every organisation's agreements and
+    the compliance export are back-office screens, under an RFQ entry of the Admin's menu; the
+    screen 24 mockup draws the client menu for a "CMARKET ADMIN" account.
+18. **Permissions**: `rfq:trade` (publish and answer: the Trader and the Manager, once an SVT
+    confirmed their link), `rfq:read` (the organisation's requests and agreements: the Trader, the
+    Manager and the CEO), `svt:approve` (screen 27, the links and the agreements that name the
+    bank: the SVT), `rfq:report` (RFQ REP, every agreement, the compliance export and the RFQ's
+    settings: the Admin), `portfolios:optimize` (OPT: the Student, the Analyst, the Manager and the
+    Trader). CMDTY, ECO and FX open with `market:read`. Each key comes with the endpoints it guards
+    (decision 13).
+19. **Commodities**: a commodity is a security of type `commodity`, as section 9 has
+    `GET /securities/{id}` answer it, so that the search, DES, the watchlists, the alerts and the
+    news hold it as they hold an equity; its profile is the fourth of `SECURITY_PROFILES`. The
+    files and the Data admin write the spec's codes as written (`BRENT`, `COMMODITY_PRICES`,
+    decision 3).
+20. **CEMAC curves**: the `.CMKT` series take the place of the weekly file's points in screen 4's
+    curves (the latest point of each tenor, stale past 90 days); the auctions of the last 90 days
+    and the closes of the listed bonds still feed them, as since step 4 (CMarket.Api's ADR-023).
+    The points the weekly files published are kept, as points of those series.
+21. **Macro indicators**: what CMarket.Api loads since 13 November stays; the refresh becomes
+    monthly, as the spec says; ECO offers the 37 indicators EODHD serves once the two the spec
+    leaves out are taken off (`real_interest_rate`, `startup_procedures_register`), in the spec's
+    six categories, where its table names 25.
+22. **Exchange rates**: the ECB's reference rates feed MKT's `/fx` too (EUR/XAF at the peg, the
+    others through the euro), so that MKT and FX show one USD/XAF; section 11 still names EODHD's
+    real-time FOREX for MKT.
+23. **The optimiser**: the quadratic programmes of section 14.6 are solved in `CMarket.Domain`, by
+    a solver written for at most 20 securities and checked on the spec's test case, without a
+    native library (the spec leaves the library, OSQP or ALGLIB, "to be confirmed by the
+    developer").
+24. **The RFQ behind a switch**: the module is built with its demo data behind a platform setting
+    of the Admin, off until the BEAC confirms its status (on in the demo): off, RFQ leaves the
+    menus and its endpoints are closed.
+
+### Step 37 · The plan (S): done
+
+The fourth version is now `CMarket-developer-spec-EN.pdf` and the third `-v3.pdf`; this section,
+the order above, the status of the screens to come in the README, the open questions of the fourth
+version, and the same plan in CMarket.Api's `docs/PLAN.md` (its phases 29 to 38). Each step still
+writes its contract first (`shared/api/contracts` and `shared/api/endpoints`, from spec section
+10), CMarket.Api serves it, then the screen is built on the API and checked by its Playwright flow
+and axe. The market data comes first (steps 38 to 41), then the optimisation (step 42): they wait
+for no answer. The RFQ (steps 43 to 47), about half of the work, comes last, which leaves the spec
+author time to answer its points to confirm.
+
+The spec's test case of section 14.6 was recomputed from the correlations of the screen 28 mockup:
+its weights give a return of 8.01%, a volatility of 5.41%, a Sharpe ratio of 0.65 and a VaR of
+0.56%, and equal weights 8.74% and 7.84%, as it expects.
+
+### Step 38 · Rate series and CEMAC sovereign yields (M): to do
+
+CMarket.Api's phase 29.
+
+- **Contract**: `GET /rates/series?origin=&country=`, `GET /rates/{code}/history?from=&to=` and
+  `GET /macro/global-rates?set=world|euro`, which steps 39 and 40 read. A series has a code
+  (`US10Y.GBOND`, `EURIBOR3M.MONEY`, `CMR5Y.CMKT`), an origin, a country, a tenor and its French
+  and English names; a CEMAC point also has its type, reference security and source.
+- **IMP**: the `cemac-sov-yields` file (date, country, tenor from 13W to 10Y, yield, point type,
+  reference security, source, comment): a yield between 0 and 30%; a move of more than 100 bp from
+  the series' point before, to confirm; a point of the same date, country and tenor replaced once
+  confirmed. It takes the place of "Curves and rates" in the session coverage, expected at 17:30;
+  a file being checked reads "Under review", as the redrawn mockup.
+- **YCRV**: a country's curve takes the latest point of each tenor; a point older than 90 days
+  (the Admin's setting) is marked stale; the tooltip gives the point's type, reference security
+  and source.
+- **CMarket.Api**: `ref.RateSeries` and `mkt.RateValues`; EODHD's sovereign yields (`.GBOND`) and
+  its Euribor and swap rates (`.MONEY`) every day, once it is known which of them the key in use
+  opens; the points of the weekly files kept as CMKT points (decision 20).
+
+### Step 39 · FX · FX dashboard (screen 26) (M): to do
+
+CMarket.Api's phase 30.
+
+- The header (the fixed parity, the date of the reference rates), the cross rates against the XAF
+  (the ECB's rate, XAF per unit, the change over 1 day, 1 month, the year to date and 1 year; a
+  click draws the currency), the chart from 1 month to MAX with the last rate, the year's high and
+  low and the volatility, the converter, the cross-rate matrix and the euro area's benchmarks
+  (Euribor at 1, 3, 6 and 12 months, the EUR 10-year swap), as the mockup; the note that reference
+  rates are indicative and settle nothing.
+- FX in the menu, after MKT (decision 15); MKT's "Rates and FX" panel opens it.
+- **Contract**: `/fx/xaf-crosses?date=`, `/fx/{ccy}/history`, `/fx/convert`,
+  `/fx/matrix?currencies=`; `GET / PUT /admin/macro/settings` for the currencies shown (ADMCFG).
+- **CMarket.Api**: `mkt.FxReferenceRates`; the ECB's rate of each currency shown, once a day at
+  17:15 CET (10 calls each), the last value kept on a day without publication; XAF per unit =
+  655.957 / the ECB's rate, the yen per 100; MKT's `/fx` on the same rates (decision 22).
+
+### Step 40 · ECO · Macroeconomic dashboard (screen 25) (L): to do
+
+CMarket.Api's phase 31, on the indicators it loads since 13 November 2026 (its ADR-053).
+
+- The country selector (the six CEMAC countries, Sub-Saharan Africa and the World, the comparison
+  countries the Admin chooses); six tiles (GDP growth, inflation, GDP per capita, government debt
+  to GDP, exports to GDP, population) with their year and seven years of history, "n/a" for a
+  series not published; the chart of an indicator for up to six countries since 1960, with its
+  XLSX export; the sovereign and reference rates (the CEMAC's in amber, then the 10-year yields of
+  seven countries and the 3-month Euribor); the CEMAC comparison table with the year of each
+  value, as the mockup.
+- ECO in the menu, after MKT (decision 15); `ECO CMR` opens Cameroon.
+- **Contract**: `/macro/countries`, `/macro/countries/{iso3}/summary`, `/macro/indicators`,
+  `/macro/compare` and `/macro/cemac-table`; the comparison countries and the tiles' indicators in
+  `/admin/macro/settings`.
+- **CMarket.Api**: the World Bank's aggregates and the comparison countries beside the six; the
+  refresh once a month (10 calls a request); the indicators in the spec's six categories, less the
+  two it leaves out (decision 21); a "Macro" file by which the Data admin fills a series the World
+  Bank lacks, its source shown.
+
+### Step 41 · CMDTY · Commodities (screen 21) (L): to do
+
+CMarket.Api's phase 32.
+
+- The list by category (energy, metals, agriculture, indices, the CEMAC complement) with the last
+  value, the change since the observation before and the frequency's badge (D, W, M). The profile
+  of a commodity: the header, the tabs DES, GP, CMP (up to five series rebased to 100 and their
+  correlations) and N, the history (the value in amber, its moving average in blue, by day, week
+  or month, without volume or candles), the statistics, the description in French and English, the
+  data's sources and usual lag, the CEMAC links (the countries exposed, the related securities,
+  the latest news), as the mockup.
+- The observation date beside every value, yellow past 10 days for a daily or weekly series and
+  past 50 days for a monthly one.
+- `CMDTY` opens the screen, in the menu after MKT (decision 15); `BRENT DES`, a search result or a
+  card opens the profile (decision 19). An alert on a commodity goes off when a new value comes.
+- **Data admin**: the `commodity-prices` file of IMP (date, code, value, unit, source) for cocoa,
+  rubber, palm oil, gold and okoumé timber; a commodity's name, description, countries and
+  securities in CORR (`PUT /data/commodities/{code}`).
+- **CMarket.Api**: the `commodity` type, `ref.Commodities` and `mkt.CommodityValues`; EODHD's 23
+  series twice a day, each series and interval kept 12 hours (5 calls a request); the changes, the
+  volatility at the series' own frequency and the correlations on monthly changes.
+
+### Step 42 · OPT · Portfolio optimisation (screens 28 and 29) (XL): to do
+
+CMarket.Api's phase 33.
+
+- **Setup** (screen 28): the universe (2 to 20 equities, bonds and ETFs, searched or taken from a
+  portfolio or a watchlist, each with its type, an expected return the user may change, its
+  volatility and its minimum and maximum weights), one of four objectives, the constraints (per
+  security, asset class, country or currency), the capital, the history of the estimates and the
+  risk-free rate, the correlations changed cell by cell, and the checks before a run.
+- **Result** (screen 29): the indicators; the allocation with each weight, amount and share of the
+  risk ("max" or "min" where a limit binds); the efficient frontier with the securities, the
+  optimum, equal weights and an existing portfolio (a click on the curve computes that point); the
+  breakdown by class, country and currency; the binding constraints and the comparison; then Save
+  as a model portfolio, Create a portfolio, the trades that adjust an existing one, the XLSX and
+  PDF export. A scenario is saved, opened again, duplicated and computed again on today's data.
+- OPT in the menu, after PORT (decision 15); "Optimise" on PORT and on a watchlist; "not
+  investment advice" on both screens. A Student saves an allocation as a model portfolio only.
+- **CMarket.Api**: section 14.6 in `CMarket.Domain`: the estimates (weekly returns over the
+  history chosen, a bond's yield to maturity, the covariance in XAF shrunk towards a constant
+  correlation, a security quoted too seldom flagged), the solver (decision 23) checked on the
+  spec's test case, amounts rounded to whole securities with the rest in cash, under 2 seconds for
+  20 securities; `pf.OptScenarios` and its results.
+
+### Step 43 · SVT accounts and trader links (L): to do
+
+CMarket.Api's phase 34.
+
+- **Type**: `svt`, the tenth account type, created by an Admin from USER for a bank of the
+  licensed SVTs (decision 16), with a code at every login and no profile in the directory; ten
+  counters on USER; its menu SVT, TRD, AGR, MSG, N, CFG.
+- **Licensed SVTs** (ADMCFG): the banks, their back-office address, the minimum trading amount and
+  the validity of a link (`/admin/rfq/svt`); the RFQ's switch (decision 24).
+- **Links**: a Trader or a Manager asks an SVT of the list for a link from "My SVTs" (`/me/svt`),
+  the right panel of screen 22, alone on the RFQ screen until step 44. The bank's SVT accounts are
+  told by e-mail and on TRD, where they confirm the link with a daily limit, decline it, change
+  the limit or remove the link (`/svt/links`); a request without an answer expires after 7 days, a
+  link after a year.
+- **Real time**: the `/hubs/rfq` hub, with `LinkRequested`, `LinkChanged`, `SvtLinkChanged` and
+  `ServerTime`.
+
+### Step 44 · RFQ · Government securities RFQ (screen 22) (XL): to do
+
+CMarket.Api's phase 35.
+
+- New request (a BTA or an OTA of the master list, buy or sell, the face amount, a rate for a BTA,
+  a clean price or a yield for an OTA, the delivery-versus-payment date, 1 to 30 minutes, the
+  requester's SVT, anonymous or not, the curve's reference); my request (the countdown, the
+  answers ranked with their allocation, the total, the weighted average price, Confirm selection
+  and Cancel request); the board of the other organisations' requests with the answer form (a
+  price or a rate, the other worked out, a quantity, an SVT, a validity; Send, Improve, Withdraw);
+  today's blotter; the tab bar Trading, Agreements, BEAC reporting, as the mockup.
+- RFQ in the menu, after BS (decision 15); "Request a price (RFQ)" on BS and on the bond profile,
+  for a BTA or an OTA; the organisation's requests read only for its CEO.
+- **Rules**: the selection is the server's: the requester confirms the version shown, or gets the
+  new one (409). A responder sees neither the other answers nor their number, nor an anonymous
+  requester before the agreement. An organisation does not answer its own requests; a trader
+  without a confirmed SVT reads the board only.
+- **CMarket.Api**: the `rfq` schema; the ranking (the best price, the largest quantity, the
+  earliest answer) and the allocation (in that order up to the face amount, the last answer in
+  part, down to the minimum trading amount of XAF 10 million); a request without confirmation
+  expires 10 minutes after its end; each answer selected makes an agreement that waits for its
+  SVTs; a BTA priced by section 14.1, an OTA by BP's engine; every event stamped to the
+  millisecond and kept five years, with the compliance export (`/admin/rfq/audit`); the hub's
+  `RfqPublished`, `RfqClosed`, `ResponseReceived`, `ResponseUpdated`, `AllocationChanged`,
+  `RfqConfirmed` and `AgreementCreated`.
+
+### Step 45 · SVT · SVT approval (screen 27) (XL): to do
+
+CMarket.Api's phase 36.
+
+- The counters, the agreements to approve by time left with the checks on the client (its link,
+  its daily limit and what it used of it, the day's trades), the latest decisions, the trader
+  links (step 43), the approval settings and the agreement's detail with both approvals, Approve
+  and Reject (a reason required), as the mockup.
+- **Rules**: 60 minutes to decide (the Admin's setting) and 16:00 at the latest, 10:00 on the next
+  business day for an agreement confirmed after the cut-off; without a decision the approval
+  expires and the agreement is cancelled; two approvers above the bank's threshold (XAF 1 bn); one
+  decision when both sides chose the same SVT; a rejection's reason told to both traders; a
+  reminder 15 minutes before the deadline.
+- **CMarket.Api**: `rfq.SvtApprovals` and `rfq.SvtSettings`; once both SVTs approved, the
+  agreement is concluded and its PDF ticket (a timestamp, a SHA-256 fingerprint, the approvers'
+  names) goes by e-mail to both traders and both back offices; `ApprovalRequested`,
+  `ApprovalDecided`, `AgreementConcluded` and `AgreementRejected`; the notices on screen, by
+  e-mail and by SMS.
+
+### Step 46 · RFQ AGR · Agreements (screen 23) (L): to do
+
+CMarket.Api's phase 37.
+
+- The filters (search, period, status, e-mail status, side, type, country, security, SVT, role,
+  trader, face amount; the filters saved), the list with its count and total face amount, sorted,
+  paged and exported (XLSX, CSV), and the detail (the request and the agreement's rank, the buyer,
+  the seller and their SVTs, the security and its CRCT code, the amounts, the e-mail log by
+  recipient; Download ticket PDF, Resend ticket, Cancel agreement), as the mockup.
+- Each organisation reads the agreements it is party to, its CEO too; an SVT those that name its
+  bank, from AGR; the Admin all of them (decision 17).
+- **CMarket.Api**: a ticket sent again is the same document; a concluded agreement is cancelled
+  only on both parties' written requests, with a reason and a notice to the four recipients, and
+  then leaves the BEAC's reporting; a delivery that fails alerts the trader and the Admin.
+
+### Step 47 · RFQ REP · Daily reporting to the BEAC (screen 24) (L): to do
+
+CMarket.Api's phase 38.
+
+- The header (the send time, the recipients, the files, the next send), the month's reports by
+  business day (scheduled, sent, nil report sent, failed, resent), the preview of the day's PDF,
+  the send panel (Send now or Resend, Download PDF, Download Excel) and the settings (the send
+  time, the BEAC's address, the copies, the nil report), as the mockup; in the Admin's back-office
+  (decision 17).
+- **CMarket.Api**: a job at the send time (18:00) of each business day: the agreements concluded
+  since the send before, a one-page PDF (the key figures, by security, by residual maturity) and
+  an Excel file of 17 columns, each with its fingerprint; a cancellation reported on its day; a
+  nil report on a day without a trade; a send that fails alerts the Admin; every send logged, the
+  files kept five years.
+
+### Step 48 · Fourth version done (M): to do
+
+- axe at 1600, 390 and 320 px and the keyboard on every new screen, for each of the ten account
+  types; every flow on a fresh database; the README and this roadmap; the new jobs (the rates, the
+  exchange rates, the macro indicators, the commodities, the BEAC's report) on Azure.
+
 ## Shared groundwork
 
 Done in step 1, shown on `/_kit` in the prototype:
@@ -1800,6 +2164,8 @@ Still to do, with the first screen that needs it:
 - **Built in step 25 (third version)**: each news item shows its type and newspaper tags, which
   filter N; ISSUERS and REGULATOR filter the categories issuers and regulation; the content
   opened on N counts its unique click once it shows 3 seconds.
+- **Fourth version (steps 39 and 42)**: the Rates and FX panel opens FX (screen 26); a watchlist
+  gets "Optimise", which opens OPT on its securities.
 
 ### DES · Security profile (screen 2): done
 
@@ -1818,6 +2184,7 @@ Still to do, with the first screen that needs it:
 - **Built in step 31 (third version)**: DES opens the profile of the security's type, the bond
   profile (screen 20) for a bond, and screen 2 keeps the equities (the ETF profile, screen 19,
   comes in step 33).
+- **Fourth version (step 41)**: DES opens the commodity profile (screen 21) for a commodity.
 
 ### N · News (no mockup): done
 
@@ -1872,6 +2239,7 @@ Still to do, with the first screen that needs it:
   item's two tags.
 - **Still to do**: setting off the publication alerts (a followed analyst, a security or a country)
   when a publication goes out: the analysts are followed from PUB since step 6.
+- **Fourth version (step 41)**: an alert on a commodity goes off when a new value comes.
 
 ### EQS / FA · Equity screener and fundamental analysis (screen 3): done
 
@@ -1923,6 +2291,9 @@ Still to do, with the first screen that needs it:
 - **Third version (step 30)**: YAS opens BP, bond pricing (screen 16), and its old addresses
   `/yas/{bondId}` lead there; screen 4's calculator stays, on the same engine, at
   `/ycrv/{bondId}`, with a link to BP ("Full pricing in BP").
+- **Fourth version (step 38)**: the CEMAC curves read the sovereign yield series of the
+  `CEMAC_SOV_YIELDS` file, the latest point of each tenor; a point older than 90 days is marked
+  stale, and the tooltip gives its type, reference security and source.
 
 ### PORT · Portfolio (screen 5): done
 
@@ -1956,6 +2327,8 @@ Still to do, with the first screen that needs it:
   and generate no report.
 - **Still to do**: the mock leaves the logo out of the PDF; a portfolio in EUR holds XAF
   securities at the peg, no floating currency.
+- **Fourth version (step 42)**: "Optimise" opens OPT on the portfolio's securities; an allocation
+  of OPT becomes a model portfolio, a portfolio, or the trades that adjust an existing one.
 
 ### PUB · Research library (screen 8): done
 
@@ -2010,6 +2383,7 @@ Still to do, with the first screen that needs it:
   open MSG, blocks (step 16); the reported profiles reviewed in MOD, the specialties of ADMCFG
   (step 18). See step 15.
 - **Third version (step 24)**: the News provider among the types, with its teal badge.
+- **Fourth version (step 43)**: the SVT, a tenth type, has no profile and is not listed.
 
 ### MSG · Messaging (screen 11): done
 
@@ -2023,6 +2397,7 @@ Still to do, with the first screen that needs it:
 - **Built in step 25 (third version)**: a news card shows its tags and subject.
 - **Built in step 31 (third version)**: a security card opens the profile of its type, a
   bond's the bond profile (it opened BP since step 30).
+- **Fourth version (step 43)**: an SVT writes to the traders linked to its bank.
 
 ### NET ME · My profile, visibility and contact (screen 12): done
 
@@ -2099,6 +2474,8 @@ Still to do, with the first screen that needs it:
   Admin. R. Tamba (Journalist) and E. Fouda (CEO) are demo accounts.
 - **Third version (step 24)**: the sign-up of a News provider: its media, the media's letter
   and the signed content agreement.
+- **Fourth version (step 43)**: the SVT is not among the types of the sign-up: an Admin creates
+  it, and it logs in with a code every time.
 
 ### NEWS NEW · News studio (screen 13): done
 
@@ -2154,6 +2531,7 @@ Still to do, with the first screen that needs it:
   "Open in BP" opens BP since step 30.
 - **Changed on 12 November 2026**: its own entry in the menu, after BP, under YCRV, which the
   mockup lights ([the spec author's answers](#the-spec-authors-answers)).
+- **Fourth version (step 44)**: "Request a price (RFQ)" on a BTA or an OTA.
 
 ### DES on an ETF · ETF profile (screen 19): done
 
@@ -2169,6 +2547,37 @@ Still to do, with the first screen that needs it:
   analytics, ratings, characteristics, upcoming cash flows and documents and news; under BS in the
   menu (YCRV, as the mockup, until [the spec author's answers](#the-spec-authors-answers)). See
   step 31.
+- **Fourth version (step 44)**: "Request a price (RFQ)" on a BTA or an OTA.
+
+### CMDTY · Commodities (screen 21): to do
+
+- **Planned in step 41**: the list of the commodities and the profile of one, DES on a commodity.
+
+### RFQ · Government securities RFQ (screen 22): to do
+
+- **Planned in steps 43 and 44**: "My SVTs" first, then the requests, the answers, the automatic
+  selection and the blotter.
+
+### RFQ AGR · Agreements (screen 23): to do
+
+- **Planned in step 46**.
+
+### ECO · Macroeconomic dashboard (screen 25): to do
+
+- **Planned in step 40**.
+
+### FX · FX dashboard (screen 26): to do
+
+- **Planned in step 39**.
+
+### SVT · SVT approval (screen 27): to do
+
+- **Planned in steps 43 and 45**: the SVT's account, menu and trader links first, then the
+  approval of the agreements.
+
+### OPT / OPT RES · Portfolio optimisation (screens 28 and 29): to do
+
+- **Planned in step 42**.
 
 ## Back-office
 
@@ -2221,6 +2630,10 @@ Still to do, with the first screen that needs it:
 - **Built in step 33**: the portfolio of "ETF profiles" (its count, day, largest lines and
   weights by sector and region, packed as the bond list's schedules), written back the largest
   first, its rollback to the portfolio it replaced.
+- **Fourth version (steps 38, 40 and 41)**: the CEMAC sovereign yields file, which takes the
+  place of "Curves and rates" in the session coverage (expected at 17:30, "Under review" while it
+  is checked, as the redrawn mockup); the commodity prices file; a "Macro" file for the series
+  the World Bank lacks.
 
 ### CORR · Data corrections (no mockup): done
 
@@ -2235,6 +2648,8 @@ Still to do, with the first screen that needs it:
   English (2,000 characters each), who wrote each and when, what EQS shows of a language left
   empty, EODHD's English apart; an empty text removes that language. AUDT keeps each language
   changed, before and after.
+- **Fourth version (step 41)**: a commodity's name, description, exposed countries and related
+  securities.
 
 ### NEWS · News and documents (no mockup): done
 
@@ -2284,6 +2699,8 @@ Still to do, with the first screen that needs it:
   Journalist or CEO is approved with it.
 - **Third version (steps 24 and 27)**: nine counters, the News provider approved in ANLY;
   MOD's news panel (step 27).
+- **Fourth version (step 43)**: ten counters; the SVT accounts of a licensed bank, which an Admin
+  creates.
 
 ### ADMCFG · Platform settings (no mockup): done
 
@@ -2300,6 +2717,10 @@ Still to do, with the first screen that needs it:
 - **Third version (steps 24, 29 and 32)**: the News provider's quotas and column of the
   matrix; the reference curve and the risk-free rate of each currency.
 - **Built in step 29**: the XAF reference curve of the bonds' spreads (Cameroon's by default).
+- **Fourth version (steps 38 to 47)**: the age past which a curve point is stale; ECO's comparison
+  countries and tiles, FX's currencies; the licensed SVTs with their back-office address, the
+  minimum trading amount, the validity of a link, the approval window and the RFQ's switch
+  (decision 24); the keys of the RFQ and of OPT in the matrix.
 
 ### AUDT · Audit log (no mockup): done
 
@@ -2309,6 +2730,7 @@ Still to do, with the first screen that needs it:
   after. USER's "View audit log" opens it on the account: what it did and what was done to it.
 - **Built in steps 12 and 18**: a status approved or rejected, with the account type; the reports
   dismissed, the reported conversations read, the specialties and the directory settings changed.
+- **Fourth version (step 44)**: the RFQ's compliance export, over a period.
 
 ### PAY · Analyst payouts (no mockup): done
 
@@ -2340,6 +2762,11 @@ Still to do, with the first screen that needs it:
 - **Built in step 27**: the newspapers by channel (contract, review mode, logo, News providers),
   CMarket AI's review mode and threshold, the views an hour, the ingestion clients (decision 6 of
   the third version).
+
+### RFQ REP · Daily reporting to the BEAC (screen 24): to do
+
+- **Planned in step 47**, in the Admin's back-office with every organisation's agreements
+  (decision 17 of the fourth version).
 
 ## Open questions for the spec author
 
@@ -2786,3 +3213,84 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   listed. FR / EN reads as a choice between the two texts, the one shown in brackets as on the
   screen's other tabs. The spec shows the description on EQS alone: should DES, or its FA tab,
   show it too (the plan: no)?
+- **RFQ, fourth version**: the spec's own points to confirm before development: the status, with
+  the BEAC and if needed COSUMAF, of a board where every trader sees the requests and answers them
+  with firm prices, which resembles a multilateral trading system; the scope of the SVTs'
+  confirmation, to be backed by participation terms; the BTA calculation convention (section
+  14.1's until the CRCT's is confirmed); the format of the reporting. The plan builds the module
+  behind a switch, off until then (decision 24). Besides: which days are the "BEAC payment system
+  business days" of the delivery date, the cut-off and the daily report (the plan: BVMAC's
+  sessions, until a calendar is given)? The 16:00 cut-off and the 18:00 send are read as times of
+  Douala. A trader belongs to a "registered organisation": may an individual account trade (the
+  plan: no)? The "maximum face amount per request and per day set by each organisation" and the
+  "quota of cancelled or expired requests" have no endpoint and no figure: who sets them, and
+  where? A security's "CRCT code", the mockup's `CMXXXXXXXXXX`, is not in the master list (the
+  plan: its ISIN, which the Excel file allows). Section 10 keeps the tracking of the CRCT's
+  settlement for a later phase, in a note placed under the commodities.
+- **SVT, fourth version**: the matrix has no column for the SVT, whose rights a paragraph gives:
+  which keys stand for them (the plan: `svt:approve`, with `market:read` and `messages:write`)?
+  Its menu on the screen 27 mockup is SVT, TRD, AGR, N, CFG, without the markets "a CEO views" nor
+  the messaging "with linked traders" (the plan: MSG added, the market screens from the command
+  bar, decision 16); TRD and AGR have no mockup (the plan: the trader links on a screen of their
+  own, and screen 23 on the agreements that name the bank). Is the account, "created at the
+  bank's request and approved by the Admin", a sign-up to approve, as an Analyst's, or an account
+  the Admin creates (the plan: the latter)? Does it need a plan (the plan: none to pay, as a
+  media's News providers)? It has no badge colour, which screen 9's counters need. The link's
+  e-mail "opens screen 27 after signing in" while the screen 22 mockup reads "Confirmed by
+  e-mail": the plan confirms on screen 27. The mockup's buttons read Confirm and Reject for a link
+  the text confirms or declines; a link the SVT removes and one the trader removes both read
+  "Withdrawn".
+- **The compliance team, fourth version**: screen 24 is "reserved for the CMarket compliance
+  team", which is no account type; its mockup draws the client menu, RFQ lit, for a "CMARKET
+  ADMIN" account without the BACK-OFFICE badge (the plan: the Admin, in the back-office, decision
+  17). Its tab bar is the traders', who may not open it: the plan shows them two tabs.
+- **Menu and codes, fourth version**: section 9's text of the client menu is unchanged and lacks
+  RFQ, which the mockups of screens 22 to 24 draw after YCRV; the codes of section 8 name ECO, FX,
+  SVT and OPT, not CMDTY, RFQ, RFQ AGR, RFQ REP nor OPT RES, which the mockups type (the plan: all
+  of them). The mockups of CMDTY, ECO and FX light MKT, those of OPT light PORT (the plan: an
+  entry each, decision 15, which makes eighteen entries for a Trader). Which module of the plans
+  holds each new screen (the plan: Monitoring for CMDTY, ECO and FX, Portfolio for OPT, none for
+  the RFQ)?
+- **Rates and curves, fourth version**: `CEMAC_SOV_YIELDS` "replaces the Curves and rates file
+  type", yet section 11's table of files still lists "Curves and rates", and its sources still
+  feed screen 4 from the "Auctions" and "Curves" files: are the auctions and the bonds' closes
+  still points of the curve (the plan: yes, decision 20)? The old file also carried the "BEAC
+  rates", for which the new template has no row: where do the policy rates and the money market
+  rates of `/rates/policy` and `/rates/money-market` come from (the demo's are seeded)? Screen 6
+  expects the file at 17:30 of its session, while its points follow the auctions: how often is it
+  due (the plan: each session)? Its tenors 13W, 26W and 52W are read as the old file's 3M, 6M and
+  1Y. Are the German and US yields of the GBOND series the reference curves of BS's EUR and USD
+  spreads, n/a since decision 8? Which EODHD plan will the commercial licence cover: the spec
+  names the Fundamentals Data Feed and All-in-One plans for the macro, GBOND and MONEY data.
+- **FX, fourth version**: section 11 still feeds `/fx` from EODHD's real-time FOREX, screen 26
+  from the ECB's daily reference rates: two USD/XAF on two screens (the plan: the reference rate
+  on both, decision 22). The matrix writes EUR/XAF 655.96, the header 655.957 (the plan: three
+  decimals for the peg, two for the others, as MKT). Which currencies are quoted per 100 (the
+  plan: the yen alone)? A currency the ECB lacks, such as the naira, "can be added by file or
+  through the EODHD Forex API", without a template (the plan: not built).
+- **ECO, fourth version**: the chart offers "any of the 39 indicators", the table names 25 and
+  the rules leave two out (the plan: the 37 that EODHD serves besides those two, decision 21). Its
+  routes and its code take ISO alpha-3 codes (`CMR`), the rest of the API alpha-2 (`CM`): the plan
+  keeps each as written. Are Sub-Saharan Africa and the World, which are World Bank aggregates,
+  countries of the selector like the others (the plan: yes, as `SSF` and `WLD`)? The "Macro" file
+  that fills a missing series has no template (the plan: year, country, indicator, value,
+  source). Is ECO the "country page" that sections 10 and 11 still name for `GET /macro?country=`
+  and that has no mockup (the plan: yes; that route stays as CMarket.Api serves it)?
+- **CMDTY, fourth version**: the five series of the CEMAC complement have no code, unit nor
+  frequency (the mockup lists cocoa, rubber and palm oil by day, gold at "XX", timber by month at
+  "XXX"), and their sources and licences are "to be confirmed before go-live": the plan seeds
+  them as demo data. Which series is the "reference series" of a commodity's 1-year correlation
+  (the mockup: WTI for Brent)? Is an alert on a commodity a threshold on its value, checked when
+  a new value comes (the plan: yes, as a price alert)? `PUT /data/commodities/{code}` is placed
+  on screen 6 (the plan: in CORR, beside a security's description). The catalogue's market rows
+  still give `/commodities` and `/global/indices` to screen 1, which no mockup of MKT shows.
+- **OPT, fourth version**: "Student on simulated portfolios": the plan lets a Student run OPT and
+  save the allocation as a model portfolio only. The test case's weights add up to 100.1%: ECMR's
+  8.6% reads 8.5% on the screen 29 mockup. The estimates are "mean weekly return × 52" while the
+  setup offers a history "weekly or daily" (the plan: the same formulas on daily returns, × 252,
+  refused when a security is flagged as quoted too seldom). The mockup's risk-free rate is 4.50%,
+  "52-week BTA", where PORT's Sharpe ratio takes the Admin's rate (the plan: the Admin's rate,
+  which the user changes for a run). "Create a portfolio from the allocation": with which
+  transactions (the plan: buys at the last prices, dated today, the rest in cash)? The mockup's
+  amounts are round and add up to the capital, while the rule rounds them to whole securities and
+  leaves the rest in cash.

@@ -1,9 +1,10 @@
 # CMarket web
 
-Front end of CMarket, built from `CMarket-developer-spec-EN.pdf` (third version, 10 November
-2026): the client terminal with its professional directory and messaging, the news of partner
-newspapers and the bond and ETF screens, and the back-office of the Data admin and of the Admin.
-It takes all its data from `CMarket.Api`: the REST API and the SignalR hubs.
+Front end of CMarket, built from `CMarket-developer-spec-EN.pdf` (fourth version, 13 November
+2026, whose additions are under way): the client terminal with its professional directory and
+messaging, the news of partner newspapers and the bond and ETF screens, and the back-office of the
+Data admin and of the Admin. It takes all its data from `CMarket.Api`: the REST API and the
+SignalR hubs.
 
 - [Introduction](#introduction): what the app does, its stack, the status of each screen
 - [Installation](#installation): run it, log in, the scripts
@@ -77,11 +78,22 @@ before upload.
 | 19 · ETF profile (DES on an ETF)                                          | Done; history with NAV, holdings, allocation, PERF, DIST      |
 | 14 · Subscription management (SUBS)                                       | Done; renewals charged, failures retried, plans prorated      |
 | Security descriptions on EQS (screen 3), written in CORR                  | Done; in French and English, EODHD's English standing in      |
+| Rate series, CEMAC sovereign yields file (IMP), stale points on YCRV      | To do, step 38                                                |
+| 26 · FX dashboard (FX)                                                    | To do, step 39                                                |
+| 25 · Macroeconomic dashboard (ECO)                                        | To do, step 40                                                |
+| 21 · Commodities (CMDTY, DES on a commodity)                              | To do, step 41                                                |
+| 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | To do, step 42                                                |
+| SVT account type (fourth version), licensed SVTs, trader links            | To do, step 43                                                |
+| 22 · Government securities RFQ (RFQ)                                      | To do, step 44                                                |
+| 27 · SVT approval (SVT)                                                   | To do, step 45                                                |
+| 23 · Agreements (RFQ AGR)                                                 | To do, step 46                                                |
+| 24 · Daily reporting to the BEAC (RFQ REP)                                | To do, step 47                                                |
 
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
 third added (the News provider, the news rebuilt, screens 13 to 20 and what they change on
-screens 1, 3, 9, 10 and 12) and the open questions for the spec author are in
+screens 1, 3, 9, 10 and 12), the plan of the fourth (the SVT account type, requests for quotes on
+government securities, screens 21 to 29) and the open questions for the spec author are in
 [ROADMAP.md](ROADMAP.md). The screens follow WCAG 2.2 AA:
 axe finds nothing on any of them for any account type, and each works from the keyboard and in a
 window down to 320 px wide.
