@@ -38,6 +38,7 @@ relative: S < M < L < XL.
 | [Back-office screens](roadmap/back-office-screens.md)   | The same for the screens of the Data admin and of the Admin                                                            |
 | [Shared groundwork](roadmap/shared-groundwork.md)       | What steps 1 to 10 added to the shared kit, and what it still lacks                                                    |
 | [Open questions](roadmap/open-questions.md)             | The questions for the spec author, by version of the spec, each with the choice made meanwhile                         |
+| [Lanes](roadmap/lanes.md)                               | Steps 41 to 48 in three lanes at once: who does which step, what waits for what, the files they share                  |
 
 The code's comments cite a step or a decision by its number ("ROADMAP step 27", "ROADMAP decision
 6"): a step is its file of [`roadmap/steps/`](roadmap/steps), decisions 1 to 13 are in the
@@ -49,56 +50,59 @@ in the order below, the screens it touched and the README's status are brought u
 
 ## Order
 
-| Step | Work                                                                                                                 | Status |
-| ---- | -------------------------------------------------------------------------------------------------------------------- | ------ |
-| 1    | Shared groundwork, batch 1: form kit, `PriceChart`, XLSX export                                                      | Done   |
-| 2    | DES                                                                                                                  | Done   |
-| 3    | Watchlist editing (MKT), N, CAL, ALRT                                                                                | Done   |
-| 4    | EQS / FA, then YCRV / YAS                                                                                            | Done   |
-| 5    | PORT                                                                                                                 | Done   |
-| 6    | PUB, then PUB NEW                                                                                                    | Done   |
-| 7    | CFG, login and OTP (needed before connecting the real back end)                                                      | Done   |
-| 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS                                                       | Done   |
-| 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY                                                                 | Done   |
-| 10   | Home page, before login: the product, markets, users, plans                                                          | Done   |
-| 11   | [Second version of the spec: the plan, its open questions](roadmap/steps/step-11-second-version-plan.md)             | Done   |
-| 12   | [Journalist and CEO account types, approved by the Admin](roadmap/steps/step-12-journalist-and-ceo.md)               | Done   |
-| 13   | [Portfolios shared with the organisation, read by its CEO](roadmap/steps/step-13-organisation-portfolios.md)         | Done   |
-| 14   | [NET ME: professional profile, visibility and contact rules](roadmap/steps/step-14-net-me-profile.md)                | Done   |
-| 15   | [NET: professional directory, public profile page](roadmap/steps/step-15-net-directory.md)                           | Done   |
-| 16   | [MSG: conversations, contact requests, files, shared objects](roadmap/steps/step-16-msg-messaging.md)                | Done   |
-| 17   | [MSG in real time: the `/hubs/chat` hub](roadmap/steps/step-17-msg-real-time.md)                                     | Done   |
-| 18   | [Admin: reported profiles and conversations, directory settings](roadmap/steps/step-18-admin-directory-messaging.md) | Done   |
-| 19   | [Second version done: README, accessibility, every flow](roadmap/steps/step-19-second-version-done.md)               | Done   |
-| 20   | [Connecting `CMarket.Api`: `.env`, the API module, its checks](roadmap/steps/step-20-connecting-the-api.md)          | Done   |
-| 21   | [The mock removed: every screen on `CMarket.Api`](roadmap/steps/step-21-mock-removed.md)                             | Done   |
-| 22   | [The Azure demo checked](roadmap/steps/step-22-azure-demo-checked.md)                                                | Done   |
-| 23   | [Third version of the spec: the plan, its decisions, questions](roadmap/steps/step-23-third-version-plan.md)         | Done   |
-| 24   | [News provider account type, approved by the Admin](roadmap/steps/step-24-news-provider.md)                          | Done   |
-| 25   | [News rebuilt: ARTICLE, FLASH, newspapers, tags, unique clicks](roadmap/steps/step-25-news-rebuilt.md)               | Done   |
-| 26   | [NEWS NEW: the news studio of a News provider (screen 13)](roadmap/steps/step-26-news-studio.md)                     | Done   |
-| 27   | [News administration, AI ingestion, international news](roadmap/steps/step-27-news-administration.md)                | Done   |
-| 28   | [MPAY: media payments (screen 18)](roadmap/steps/step-28-media-payments.md)                                          | Done   |
-| 29   | [Daily bond analytics, BS: bond screener (screen 17)](roadmap/steps/step-29-bond-screener.md)                        | Done   |
-| 30   | [BP: bond pricing (screen 16)](roadmap/steps/step-30-bond-pricing.md)                                                | Done   |
-| 31   | [Bond profile (screen 20), the profile chosen by security type](roadmap/steps/step-31-bond-profile.md)               | Done   |
-| 32   | [ETF data, ETFS: ETF screener (screen 15)](roadmap/steps/step-32-etf-screener.md)                                    | Done   |
-| 33   | [ETF profile (screen 19)](roadmap/steps/step-33-etf-profile.md)                                                      | Done   |
-| 34   | [SUBS: subscription management (screen 14)](roadmap/steps/step-34-subscription-management.md)                        | Done   |
-| 35   | [Security descriptions on EQS (screen 3)](roadmap/steps/step-35-security-descriptions.md)                            | Done   |
-| 36   | [Third version done: README, accessibility, every flow](roadmap/steps/step-36-third-version-done.md)                 | Done   |
-| 37   | [Fourth version of the spec: the plan, its decisions, questions](roadmap/steps/step-37-fourth-version-plan.md)       | Done   |
-| 38   | [Rate series, the CEMAC sovereign yields file, stale curve points](roadmap/steps/step-38-rate-series.md)             | Done   |
-| 39   | [FX: the XAF's cross rates on the ECB's reference rates (screen 26)](roadmap/steps/step-39-fx-dashboard.md)          | Done   |
-| 40   | [ECO: macroeconomic dashboard (screen 25)](roadmap/steps/step-40-macro-dashboard.md)                                 | Done   |
-| 41   | [CMDTY: commodities, the profile of a commodity (screen 21)](roadmap/steps/step-41-commodities.md)                   | To do  |
-| 42   | [OPT, OPT RES: portfolio optimisation (screens 28 and 29)](roadmap/steps/step-42-portfolio-optimisation.md)          | To do  |
-| 43   | [SVT account type, licensed SVTs, trader links, `/hubs/rfq`](roadmap/steps/step-43-svt-accounts.md)                  | To do  |
-| 44   | [RFQ: requests for quotes on BTA and OTA (screen 22)](roadmap/steps/step-44-rfq-trading.md)                          | To do  |
-| 45   | [SVT: approval of the agreements, tickets by e-mail (screen 27)](roadmap/steps/step-45-svt-approval.md)              | To do  |
-| 46   | [RFQ AGR: agreements (screen 23)](roadmap/steps/step-46-rfq-agreements.md)                                           | To do  |
-| 47   | [RFQ REP: daily reporting to the BEAC (screen 24)](roadmap/steps/step-47-beac-reporting.md)                          | To do  |
-| 48   | [Fourth version done: README, accessibility, every flow](roadmap/steps/step-48-fourth-version-done.md)               | To do  |
+| Step | Work                                                                                                                 | Status        |
+| ---- | -------------------------------------------------------------------------------------------------------------------- | ------------- |
+| 1    | Shared groundwork, batch 1: form kit, `PriceChart`, XLSX export                                                      | Done          |
+| 2    | DES                                                                                                                  | Done          |
+| 3    | Watchlist editing (MKT), N, CAL, ALRT                                                                                | Done          |
+| 4    | EQS / FA, then YCRV / YAS                                                                                            | Done          |
+| 5    | PORT                                                                                                                 | Done          |
+| 6    | PUB, then PUB NEW                                                                                                    | Done          |
+| 7    | CFG, login and OTP (needed before connecting the real back end)                                                      | Done          |
+| 8    | Back-office: IMP (with DATA, HIST, EODH), then CORR, then NEWS                                                       | Done          |
+| 9    | Admin: USER (with ANLY, MOD), then ADMCFG, AUDT, PAY                                                                 | Done          |
+| 10   | Home page, before login: the product, markets, users, plans                                                          | Done          |
+| 11   | [Second version of the spec: the plan, its open questions](roadmap/steps/step-11-second-version-plan.md)             | Done          |
+| 12   | [Journalist and CEO account types, approved by the Admin](roadmap/steps/step-12-journalist-and-ceo.md)               | Done          |
+| 13   | [Portfolios shared with the organisation, read by its CEO](roadmap/steps/step-13-organisation-portfolios.md)         | Done          |
+| 14   | [NET ME: professional profile, visibility and contact rules](roadmap/steps/step-14-net-me-profile.md)                | Done          |
+| 15   | [NET: professional directory, public profile page](roadmap/steps/step-15-net-directory.md)                           | Done          |
+| 16   | [MSG: conversations, contact requests, files, shared objects](roadmap/steps/step-16-msg-messaging.md)                | Done          |
+| 17   | [MSG in real time: the `/hubs/chat` hub](roadmap/steps/step-17-msg-real-time.md)                                     | Done          |
+| 18   | [Admin: reported profiles and conversations, directory settings](roadmap/steps/step-18-admin-directory-messaging.md) | Done          |
+| 19   | [Second version done: README, accessibility, every flow](roadmap/steps/step-19-second-version-done.md)               | Done          |
+| 20   | [Connecting `CMarket.Api`: `.env`, the API module, its checks](roadmap/steps/step-20-connecting-the-api.md)          | Done          |
+| 21   | [The mock removed: every screen on `CMarket.Api`](roadmap/steps/step-21-mock-removed.md)                             | Done          |
+| 22   | [The Azure demo checked](roadmap/steps/step-22-azure-demo-checked.md)                                                | Done          |
+| 23   | [Third version of the spec: the plan, its decisions, questions](roadmap/steps/step-23-third-version-plan.md)         | Done          |
+| 24   | [News provider account type, approved by the Admin](roadmap/steps/step-24-news-provider.md)                          | Done          |
+| 25   | [News rebuilt: ARTICLE, FLASH, newspapers, tags, unique clicks](roadmap/steps/step-25-news-rebuilt.md)               | Done          |
+| 26   | [NEWS NEW: the news studio of a News provider (screen 13)](roadmap/steps/step-26-news-studio.md)                     | Done          |
+| 27   | [News administration, AI ingestion, international news](roadmap/steps/step-27-news-administration.md)                | Done          |
+| 28   | [MPAY: media payments (screen 18)](roadmap/steps/step-28-media-payments.md)                                          | Done          |
+| 29   | [Daily bond analytics, BS: bond screener (screen 17)](roadmap/steps/step-29-bond-screener.md)                        | Done          |
+| 30   | [BP: bond pricing (screen 16)](roadmap/steps/step-30-bond-pricing.md)                                                | Done          |
+| 31   | [Bond profile (screen 20), the profile chosen by security type](roadmap/steps/step-31-bond-profile.md)               | Done          |
+| 32   | [ETF data, ETFS: ETF screener (screen 15)](roadmap/steps/step-32-etf-screener.md)                                    | Done          |
+| 33   | [ETF profile (screen 19)](roadmap/steps/step-33-etf-profile.md)                                                      | Done          |
+| 34   | [SUBS: subscription management (screen 14)](roadmap/steps/step-34-subscription-management.md)                        | Done          |
+| 35   | [Security descriptions on EQS (screen 3)](roadmap/steps/step-35-security-descriptions.md)                            | Done          |
+| 36   | [Third version done: README, accessibility, every flow](roadmap/steps/step-36-third-version-done.md)                 | Done          |
+| 37   | [Fourth version of the spec: the plan, its decisions, questions](roadmap/steps/step-37-fourth-version-plan.md)       | Done          |
+| 38   | [Rate series, the CEMAC sovereign yields file, stale curve points](roadmap/steps/step-38-rate-series.md)             | Done          |
+| 39   | [FX: the XAF's cross rates on the ECB's reference rates (screen 26)](roadmap/steps/step-39-fx-dashboard.md)          | Done          |
+| 40   | [ECO: macroeconomic dashboard (screen 25)](roadmap/steps/step-40-macro-dashboard.md)                                 | Done          |
+| 41   | [CMDTY: commodities, the profile of a commodity (screen 21)](roadmap/steps/step-41-commodities.md)                   | To do, lane 2 |
+| 42   | [OPT, OPT RES: portfolio optimisation (screens 28 and 29)](roadmap/steps/step-42-portfolio-optimisation.md)          | To do, lane 3 |
+| 43   | [SVT account type, licensed SVTs, trader links, `/hubs/rfq`](roadmap/steps/step-43-svt-accounts.md)                  | To do, lane 1 |
+| 44   | [RFQ: requests for quotes on BTA and OTA (screen 22)](roadmap/steps/step-44-rfq-trading.md)                          | To do, lane 1 |
+| 45   | [SVT: approval of the agreements, tickets by e-mail (screen 27)](roadmap/steps/step-45-svt-approval.md)              | To do, lane 1 |
+| 46   | [RFQ AGR: agreements (screen 23)](roadmap/steps/step-46-rfq-agreements.md)                                           | To do, lane 2 |
+| 47   | [RFQ REP: daily reporting to the BEAC (screen 24)](roadmap/steps/step-47-beac-reporting.md)                          | To do, lane 3 |
+| 48   | [Fourth version done: README, accessibility, every flow](roadmap/steps/step-48-fourth-version-done.md)               | To do, lane 1 |
+
+Steps 41 to 48 run in three lanes at once, each with its own steps: see [Lanes](roadmap/lanes.md),
+which also says what waits for what.
 
 Steps 1 to 10 built the first version, screen by screen, and have no file of their own: their
 record is under each screen in [Client screens](roadmap/client-screens.md) and

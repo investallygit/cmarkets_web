@@ -3,7 +3,9 @@
 Step 44 of the [roadmap](../../ROADMAP.md#order), for the
 [fourth version of the spec](../fourth-version.md).
 
-CMarket.Api's phase 35.
+CMarket.Api's phase 35. Lane 1 of the [lanes](../lanes.md), once step 43 is on `main`. It sets
+the agreement's whole model (section 10's columns of `rfq.Agreements`, every status, demo
+agreements in each), on which steps 46 and 47 start.
 
 - New request (a BTA or an OTA of the master list, buy or sell, the face amount, a rate for a BTA,
   a clean price or a yield for an OTA, the delivery-versus-payment date, 1 to 30 minutes, the

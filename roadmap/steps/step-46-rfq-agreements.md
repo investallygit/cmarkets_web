@@ -3,7 +3,8 @@
 Step 46 of the [roadmap](../../ROADMAP.md#order), for the
 [fourth version of the spec](../fourth-version.md).
 
-CMarket.Api's phase 37.
+CMarket.Api's phase 37. Lane 2 of the [lanes](../lanes.md), once step 44 is on `main`; the
+ticket's download and resending and the e-mail log once step 45 is.
 
 - The filters (search, period, status, e-mail status, side, type, country, security, SVT, role,
   trader, face amount; the filters saved), the list with its count and total face amount, sorted,

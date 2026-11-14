@@ -3,7 +3,7 @@
 Step 41 of the [roadmap](../../ROADMAP.md#order), for the
 [fourth version of the spec](../fourth-version.md).
 
-CMarket.Api's phase 32.
+CMarket.Api's phase 32. Lane 2 of the [lanes](../lanes.md), its first step.
 
 - The list by category (energy, metals, agriculture, indices, the CEMAC complement) with the last
   value, the change since the observation before and the frequency's badge (D, W, M). The profile

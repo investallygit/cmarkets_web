@@ -3,7 +3,8 @@
 Step 47 of the [roadmap](../../ROADMAP.md#order), for the
 [fourth version of the spec](../fourth-version.md).
 
-CMarket.Api's phase 38.
+CMarket.Api's phase 38. Lane 3 of the [lanes](../lanes.md), once step 44 is on `main`; the
+concluded agreements once step 45 is, the cancellations once step 46 is.
 
 - The header (the send time, the recipients, the files, the next send), the month's reports by
   business day (scheduled, sent, nil report sent, failed, resent), the preview of the day's PDF,
