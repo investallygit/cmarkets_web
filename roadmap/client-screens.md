@@ -19,7 +19,8 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Built in step 39 (fourth version)**: the Rates and FX panel opens FX (screen 26), from its
   title bar or an exchange rate opened (double click or Enter) on its currency; its rates are FX's,
   the ECB's reference rates (decision 22).
-- **Fourth version (step 42)**: a watchlist gets "Optimise", which opens OPT on its securities.
+- **Built in step 42 (fourth version)**: a watchlist of two securities or more gets "Optimise" in
+  its title bar, which opens OPT on its equities, bonds and ETFs.
 
 ## DES · Security profile (screen 2): done
 
@@ -189,8 +190,11 @@ what is still to do. The Data admin's and the Admin's screens are in
   and generate no report.
 - **Still to do**: the mock leaves the logo out of the PDF; a portfolio in EUR holds XAF
   securities at the peg, no floating currency.
-- **Fourth version (step 42)**: "Optimise" opens OPT on the portfolio's securities; an allocation
-  of OPT becomes a model portfolio, a portfolio, or the trades that adjust an existing one.
+- **Built in step 42 (fourth version)**: "Optimise" in the header opens OPT on the portfolio's
+  lines, the portfolio as the one compared; an allocation of OPT becomes a model portfolio, a
+  portfolio (francs and euros only, decision 25), or the trades that adjust an existing one.
+- **Still to do (found in step 42)**: a line quoted in dollars (IWDA) is valued without its
+  exchange rate, as the PORT valuation converts only the euro at the peg.
 
 ## PUB · Research library (screen 8): done
 
@@ -476,6 +480,28 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Planned in step 45**: the approval of the agreements, the counters, the settings, the
   messages with the linked traders.
 
-## OPT / OPT RES · Portfolio optimisation (screens 28 and 29): to do
+## OPT / OPT RES · Portfolio optimisation (screens 28 and 29): done
 
-- **Planned in step 42**.
+- **Built in step 42 (fourth version)**: OPT, the setup, under a tab bar with OPT RES: the
+  investment universe (2 to 20 equities, bonds and ETFs, searched or taken from a portfolio or a
+  watchlist, each with its type, its expected return and volatility, the estimate shown and the
+  value entered in amber, its minimum and maximum weight, flagged when under a year of prices,
+  quoted too seldom or without a price), where the estimates come from; one of the four
+  objectives with its target; the constraints (100% invested and no short sale, the maximum per
+  security, each security's own bounds, the totals per class, country or ETF market, currency,
+  "+ Add a constraint"); the capital, the history (1, 3 or 5 years, weekly or daily), the
+  risk-free rate (the Admin's shown), the portfolio to compare with; the correlations, a cell
+  edited with a click and taken back with Delete, the brighter the closer; the pre-run checks,
+  which name the constraints in conflict and the reachable returns and hold OPTIMISE back. The
+  scenarios: one opened from a list (`/opt?scenario=`), saved again on today's data, saved as a
+  copy, deleted, a new setup.
+- OPT RES, the result: the objective, the securities, the constraints and the time taken; the six
+  indicators; the allocation (weight and bar, whole securities, amount, risk share, "max" or
+  "min", the cash the rounding leaves); the efficient frontier (25 points, the securities by
+  class, the optimum, equal weights, the portfolio compared), another point picked on the curve
+  or in its list; the breakdown by class with its limits, by country or by currency; the binding
+  constraints and the comparison; the next steps: a model portfolio, a portfolio, the trades that
+  adjust one, the export in XLSX or PDF, back to the setup. "Not investment advice" on both.
+- OPT in the menu after PORT (decision 15), `OPT` and `OPT RES` in the command bar; open to the
+  Student, the Analyst, the Manager and the Trader (`portfolios:optimize`, decision 18), a Student
+  making model portfolios only.

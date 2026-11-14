@@ -8,9 +8,10 @@ const menu = (audience: 'client' | 'backoffice') =>
   )
 
 describe('the left menu (spec section 9)', () => {
-  it('gives ETFS, BP, BS, CMDTY, ECO, FX and RFQ entries of their own, after the screens their mockups light', () => {
+  it('gives ETFS, BP, BS, CMDTY, ECO, FX, RFQ and OPT entries of their own, after the screens their mockups light', () => {
     // CMDTY (screen 21), ECO (screen 25) and FX (screen 26) after MKT, RFQ (screen 22) after BS,
-    // ROADMAP decision 15; TRD, the SVT's trader links, in the SVT's own menu (decision 16).
+    // OPT (screens 28 and 29) after PORT, ROADMAP decision 15; TRD, the SVT's trader links, in the
+    // SVT's own menu (decision 16).
     expect(menu('client')).toEqual([
       'MKT',
       'CMDTY',
@@ -24,6 +25,7 @@ describe('the left menu (spec section 9)', () => {
       'RFQ',
       'TRD',
       'PORT',
+      'OPT',
       'PUB',
       'NET',
       'MSG',
@@ -36,6 +38,6 @@ describe('the left menu (spec section 9)', () => {
 
   it('keeps the screens opened from another one out of it', () => {
     const outside = SCREENS.filter((screen) => !screen.inMenu).map((screen) => screen.id)
-    expect(outside).toEqual(['DES', 'PUBNEW', 'CAL', 'NETME'])
+    expect(outside).toEqual(['DES', 'PUBNEW', 'CAL', 'NETME', 'OPTRES'])
   })
 })

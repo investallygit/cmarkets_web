@@ -136,3 +136,13 @@ itself, steps 38 to 48 follow these; each is also an open question for the spec 
 24. **The RFQ behind a switch**: the module is built with its demo data behind a platform setting
     of the Admin, off until the BEAC confirms its status (on in the demo): off, RFQ leaves the
     menus and its endpoints are closed.
+25. **The optimiser's rules** (step 42): the whole capital is invested and nothing is sold short,
+    section 14.6's common constraints (Σ w = 1, every weight from 0): screen 28 shows "Total
+    invested 100%" and "Short selling: Not allowed" as rules, not settings. The frontier runs from
+    the lowest-risk allocation's return to the highest reachable, its efficient part. A security
+    with under a year of prices has its volatility, and an equity's or an ETF's expected return,
+    entered, and the average correlation of the others until one is entered. The portfolio
+    compared is valued with the same estimates, its cash at the risk-free rate. Amounts are whole
+    shares, or bonds of their nominal at their dirty price. A real portfolio made from an
+    allocation holds securities quoted in francs or euros only: PORT values a line in another
+    currency without its exchange rate (an ETF in dollars is saved as a model portfolio).

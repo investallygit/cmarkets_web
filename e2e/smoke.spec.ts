@@ -61,12 +61,13 @@ test('a bond opens the bond profile, its characteristics and payments to come', 
   await expect(tabs.getByRole('link', { name: 'FA Fundamentals' })).toHaveCount(0)
 })
 
-test('the client menu gives ETFS, BP, BS, CMDTY, ECO and FX entries of their own, after the ones they light', async ({
+test('the client menu gives ETFS, BP, BS, CMDTY, ECO, FX and OPT entries of their own, after the ones they light', async ({
   page,
 }) => {
   await page.goto('/mkt')
   const menu = page.getByRole('navigation', { name: 'Main menu' })
-  // The mockups light EQS on ETFS, YCRV on BP and BS, MKT on CMDTY, ECO and FX: their entries come after those.
+  // The mockups light EQS on ETFS, YCRV on BP and BS, MKT on CMDTY, ECO and FX, PORT on OPT: their
+  // entries come after those.
   await expect(menu.getByRole('link')).toHaveText([
     /^MKT/,
     /^CMDTY/,
@@ -78,6 +79,7 @@ test('the client menu gives ETFS, BP, BS, CMDTY, ECO and FX entries of their own
     /^BP/,
     /^BS/,
     /^PORT/,
+    /^OPT/,
     /^PUB/,
     /^NET/,
     /^MSG/,
@@ -89,6 +91,7 @@ test('the client menu gives ETFS, BP, BS, CMDTY, ECO and FX entries of their own
     ['ETFS', /\/etfs$/],
     ['BP', /\/bp$/],
     ['BS', /\/bs$/],
+    ['OPT', /\/opt$/],
   ] as const) {
     await menu.getByRole('link', { name: new RegExp(`^${code}`) }).click()
     await expect(page).toHaveURL(address)

@@ -1,0 +1,332 @@
+{
+  "opt": {
+    "tabs": {
+      "label": "Portfolio optimisation",
+      "setup": "Setup",
+      "result": "Result"
+    },
+    "advice": "Decision-support tool; this is not investment advice.",
+    "adviceResult": "Estimates based on the past: actual return and risk may differ. This is not investment advice.",
+    "classes": {
+      "equity": "Equity",
+      "bond": "Bond",
+      "etf": "ETF"
+    },
+    "classTotals": {
+      "equity": "Equities",
+      "bond": "Bonds",
+      "etf": "ETFs"
+    },
+    "etfMarket": "{{market}} (ETF)",
+    "objectives": {
+      "minRiskForReturn": "Lowest risk for a minimum return",
+      "maxReturnForRisk": "Highest return for a maximum risk",
+      "maxSharpe": "Best return / risk ratio",
+      "minRisk": "Lowest risk, no return target"
+    },
+    "objectiveSummary": {
+      "minRiskForReturn": "lowest risk for a return of at least {{target}}",
+      "maxReturnForRisk": "highest return for a volatility of at most {{target}}",
+      "maxSharpe": "best return / risk ratio",
+      "minRisk": "lowest risk"
+    },
+    "scenario": {
+      "label": "Scenario",
+      "unsaved": "New setup",
+      "new": "New",
+      "save": "Save",
+      "saveAs": "Save a copy",
+      "delete": "Delete",
+      "name": "Scenario name",
+      "saveTitle": "Save the scenario",
+      "copyTitle": "Save a copy of the scenario",
+      "saveHint": "The setup is computed on today's data and saved with its result.",
+      "copyName": "{{name}} (copy)",
+      "saved": "Scenario {{name}} saved",
+      "deleted": "Scenario {{name}} deleted",
+      "deleteTitle": "Delete the scenario",
+      "deleteConfirm": "Delete the scenario {{name}}? Its setup and its result go with it.",
+      "failed": "The scenario was not saved: {{message}}",
+      "deleteFailed": "The scenario was not deleted: {{message}}",
+      "openFailed": "The scenario did not open: {{message}}",
+      "dataOf": "Data of {{date}}",
+      "recompute": "Recompute on today's data",
+      "recomputed": "Scenario {{name}} computed again on today's data"
+    },
+    "universe": {
+      "title": "Investment universe",
+      "add": "Add",
+      "fromPortfolio": "From a portfolio",
+      "fromWatchlist": "From a watchlist",
+      "search": "Search an equity, a bond or an ETF to add…",
+      "searchLabel": "Add a security to the optimisation",
+      "columns": {
+        "security": "Security",
+        "type": "Type",
+        "expectedReturn": "Exp. return %",
+        "volatility": "Volatility %",
+        "minWeight": "Min weight %",
+        "maxWeight": "Max weight %"
+      },
+      "remove": "Remove {{code}}",
+      "fieldLabel": "{{field}} of {{code}}",
+      "empty": "Add 2 to 20 equities, bonds or ETFs, or take those of a portfolio or a watchlist.",
+      "count": "{{count}} securities · 20 max per optimisation",
+      "full": "20 securities at most: remove one first.",
+      "estimate": "Estimate: {{value}}",
+      "noEstimate": "No estimate: enter it",
+      "flags": {
+        "shortHistory": "Under a year of prices: enter its volatility",
+        "illiquid": "No trade in more than 30% of the weeks",
+        "converted": "Converted into XAF at the ECB's rates",
+        "noPrice": "No price: no amount can be bought"
+      },
+      "sourcesTitle": "Where the estimates come from",
+      "sourceEquities": "Equities and ETFs: annualised return and volatility over {{history}} of {{frequency}} changes.",
+      "sourceBonds": "Bonds: expected return = today's yield to maturity (YTM); price volatility over {{history}}.",
+      "sourceForeign": "Foreign-currency ETFs: return and risk converted into XAF (ECB rates and fixed parity).",
+      "sourceEdited": "Every expected return can be edited: the value entered replaces the estimate.",
+      "sourceShort": "A security with under one year of history is flagged; its volatility must be entered.",
+      "pickPortfolio": "Portfolio to take the securities of",
+      "pickWatchlist": "Watchlist to take the securities of",
+      "take": "Take",
+      "imported": "{{count}} securities taken from {{name}}",
+      "importNone": "{{name}} holds no equity, bond or ETF.",
+      "importFailed": "The securities were not taken: {{message}}"
+    },
+    "objective": {
+      "title": "Objective and constraints",
+      "heading": "Objective",
+      "target": {
+        "minRiskForReturn": "Minimum return wanted",
+        "maxReturnForRisk": "Maximum volatility accepted"
+      },
+      "constraintsHeading": "Constraints",
+      "totalInvested": "Total invested",
+      "shortSelling": "Short selling",
+      "notAllowed": "Not allowed",
+      "maxWeight": "Maximum weight per security",
+      "securityMax": "{{code}} · maximum weight",
+      "securityMin": "{{code}} · minimum weight",
+      "groupMax": "{{group}} · maximum total",
+      "groupMin": "{{group}} · minimum total",
+      "addConstraint": "Add a constraint (security, class, country, currency)",
+      "addTitle": "New constraint",
+      "scopeLabel": "On",
+      "keyLabel": "Which",
+      "boundLabel": "Limit",
+      "valueLabel": "Value %",
+      "scopes": {
+        "security": "Security",
+        "assetClass": "Asset class",
+        "country": "Country",
+        "currency": "Currency"
+      },
+      "bounds": {
+        "min": "Minimum",
+        "max": "Maximum"
+      },
+      "add": "Add",
+      "cancel": "Cancel",
+      "removeConstraint": "Remove: {{name}}",
+      "settingsHeading": "Settings",
+      "capital": "Capital to invest",
+      "history": "Estimation history",
+      "histories": {
+        "1y": "1 year",
+        "3y": "3 years",
+        "5y": "5 years"
+      },
+      "frequency": "Frequency of the returns",
+      "frequencies": {
+        "weekly": "weekly",
+        "daily": "daily"
+      },
+      "riskFree": "Risk-free rate",
+      "riskFreeDefault": "{{rate}} (52-week BTA)",
+      "compare": "Compare with",
+      "compareNone": "No portfolio",
+      "optimise": "Optimise",
+      "runFailed": "The optimisation did not run: {{message}}"
+    },
+    "correlations": {
+      "title": "Correlations ({{history}})",
+      "editable": "Editable",
+      "caption": "The brighter the cell, the more the two securities move together.",
+      "entered": "Entered; the estimate is {{value}}.",
+      "cell": "Correlation of {{a}} and {{b}}: {{value}}",
+      "edit": "Correlation of {{a}} and {{b}}, from -1 to 1",
+      "reset": "Back to the estimate",
+      "shrinkage": "Shrunk by {{value}} towards the average correlation (Ledoit-Wolf).",
+      "empty": "Add two securities to see their correlations."
+    },
+    "checks": {
+      "title": "Pre-run checks",
+      "waiting": "Add 2 to 20 securities and the objective's target.",
+      "constraintsOk": "Constraints are compatible",
+      "constraintsError": "Constraints conflict",
+      "involved": "Involved: {{list}}",
+      "targetReturnOk": "Minimum return is reachable",
+      "targetReturnError": "Minimum return is out of reach",
+      "targetRiskOk": "Maximum risk can be met",
+      "targetRiskError": "Maximum risk is below the lowest reachable",
+      "returnRange": "between {{min}} and {{max}}",
+      "riskRange": "volatility from {{min}} to {{max}}",
+      "sharpeOk": "Some allocations beat the risk-free rate",
+      "sharpeError": "No allocation beats the risk-free rate",
+      "historyOk": "Enough history",
+      "historyError": "Estimates missing",
+      "historyCount": "{{count}} of {{total}} securities",
+      "historyMissing": "Enter the expected return and the volatility of {{list}}",
+      "illiquidOk": "No illiquid security",
+      "illiquidWarning": "Illiquid securities",
+      "illiquidDetail": "{{list}}: risk may be understated",
+      "frequencyError": "Weekly returns are needed",
+      "frequencyDetail": "{{list}}: quoted too seldom for daily returns",
+      "correlationsError": "The correlations entered do not fit together",
+      "correlationsDetail": "No securities can move this way: change one of them.",
+      "statuses": {
+        "ok": "Passed",
+        "warning": "Warning",
+        "error": "Blocking"
+      }
+    },
+    "constraintRefs": {
+      "targetReturn": "Minimum return of {{value}}",
+      "targetRisk": "Maximum volatility of {{value}}",
+      "maxWeight": "{{code}}: {{value}} (maximum per security)",
+      "maxWeightAll": "Maximum per security: {{value}}",
+      "securityMin": "{{code}}: {{value}} (its minimum)",
+      "securityMax": "{{code}}: {{value}} (its maximum)",
+      "groupMin": "{{group}}: at least {{value}}",
+      "groupMax": "{{group}}: at most {{value}}",
+      "metExactly": "{{constraint}}: met exactly"
+    },
+    "result": {
+      "empty": "No result yet: set up the optimisation, then press OPTIMISE.",
+      "toSetup": "Open the setup",
+      "summary": "Objective: {{objective}} · {{count}} securities · {{constraints}} constraints · computed in {{seconds}} s",
+      "stale": "The setup changed since this result: optimise again.",
+      "dataOf": "Data of {{date}}"
+    },
+    "indicators": {
+      "label": "Indicators of the optimal portfolio",
+      "expectedReturn": "Expected return",
+      "volatility": "Volatility",
+      "sharpe": "Sharpe ratio",
+      "var": "VaR 95% · 1 day",
+      "varAmount": "{{amount}} of the capital",
+      "duration": "Duration",
+      "bondYield": "Bond yield"
+    },
+    "allocation": {
+      "title": "Optimal allocation",
+      "capital": "Capital XAF {{amount}}",
+      "columns": {
+        "security": "Security",
+        "type": "Type",
+        "weight": "Weight",
+        "quantity": "Quantity",
+        "amount": "Amount XAF",
+        "riskShare": "Risk share"
+      },
+      "total": "Total",
+      "cash": "Cash left by the rounding",
+      "max": "max",
+      "min": "min",
+      "caption": "\"max\": the weight hits its limit. Amounts in whole securities; risk share: the security's contribution to portfolio volatility."
+    },
+    "frontier": {
+      "title": "Efficient frontier",
+      "axes": "Expected return / volatility",
+      "yAxis": "Expected return",
+      "xAxis": "Annualised volatility",
+      "optimal": "Optimal portfolio {{ret}} / {{vol}}",
+      "equal": "Equal weights {{ret}} / {{vol}}",
+      "portfolio": "{{name}} {{ret}} / {{vol}}",
+      "caption": "Blue curve: best possible return for each level of risk, under your constraints. Click: another portfolio.",
+      "pick": "Another point of the frontier",
+      "pickPlaceholder": "Return / volatility…",
+      "point": "{{ret}} / {{vol}}",
+      "failed": "That point was not computed: {{message}}"
+    },
+    "breakdown": {
+      "title": "Breakdown",
+      "byClass": "By class",
+      "byCountry": "By country",
+      "byCurrency": "By currency",
+      "min": "min {{value}}",
+      "max": "max {{value}}"
+    },
+    "comparison": {
+      "title": "Constraints and comparison",
+      "binding": "Binding constraints",
+      "noBinding": "No constraint binds: the optimum lies inside them.",
+      "heading": "Comparison",
+      "columns": {
+        "portfolio": "Portfolio",
+        "return": "Return",
+        "risk": "Risk",
+        "sharpe": "Sharpe"
+      },
+      "optimal": "Optimal portfolio",
+      "equal": "Equal weights",
+      "current": "{{name}} (current)",
+      "noPortfolio": "Pick a portfolio in the settings of OPT to compare it."
+    },
+    "nextSteps": {
+      "title": "Next steps",
+      "saveModel": "Save as model portfolio",
+      "createPortfolio": "Create a portfolio from the allocation",
+      "trades": "Trades to adjust “{{name}}”",
+      "tradesAny": "Trades to adjust a portfolio",
+      "export": "Export (XLSX · PDF)",
+      "editSetup": "Edit the setup"
+    },
+    "toPortfolio": {
+      "modelTitle": "Save as a model portfolio",
+      "realTitle": "Create a portfolio from the allocation",
+      "modelHint": "A model portfolio holds the allocation's weights from the last session, the capital as its notional.",
+      "realHint": "A real portfolio: a deposit of the capital, then the purchases of the whole securities at the last prices.",
+      "studentOnly": "A Student account saves the allocation as a model portfolio only.",
+      "name": "Portfolio name",
+      "benchmark": "Benchmark",
+      "scenarioName": "Scenario name",
+      "scenarioHint": "The scenario is saved first, with its result.",
+      "create": "Create",
+      "created": "Portfolio {{name}} created",
+      "open": "Open",
+      "failed": "The portfolio was not created: {{message}}"
+    },
+    "rebalance": {
+      "title": "Trades to adjust a portfolio",
+      "portfolio": "Portfolio",
+      "info": "For information: CMarket sends no orders.",
+      "value": "Value of the portfolio: XAF {{value}}, at the prices of {{date}}",
+      "columns": {
+        "security": "Security",
+        "side": "Trade",
+        "current": "Held",
+        "target": "Target",
+        "quantity": "Quantity",
+        "amount": "Amount XAF"
+      },
+      "sides": {
+        "buy": "Buy",
+        "sell": "Sell",
+        "hold": "Hold"
+      },
+      "totals": "Sales XAF {{sells}} · purchases XAF {{buys}} · cash after XAF {{cash}}",
+      "failed": "The trades were not computed: {{message}}",
+      "close": "Close"
+    },
+    "export": {
+      "title": "Export the scenario",
+      "xlsx": "Excel (XLSX)",
+      "pdf": "PDF",
+      "failed": "The export failed: {{message}}"
+    },
+    "saveFirst": "Saved first as a scenario: name it.",
+    "optimiseFrom": "Optimise"
+  }
+}

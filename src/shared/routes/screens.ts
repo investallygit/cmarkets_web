@@ -6,6 +6,7 @@ import {
   Briefcase,
   Calculator,
   CalendarDays,
+  ChartScatter,
   ChartSpline,
   CreditCard,
   Database,
@@ -129,6 +130,8 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('RFQ', 'RFQ', routes.rfq, 'client', Handshake, { permission: 'rfq:trade', inMenu: true }),
   screen('TRD', 'TRD', routes.svtTraders, 'client', Link2, { permission: 'svt:approve', inMenu: true }),
   screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', module: 'portfolio', inMenu: true, routePattern: routes.portfolioTabs }),
+  // OPT (screens 28 and 29) after PORT, which its mockups light: an entry of its own (ROADMAP decision 15).
+  screen('OPT', 'OPT', routes.optimizer, 'client', ChartScatter, { permission: 'portfolios:optimize', module: 'portfolio', inMenu: true }),
   screen('PUB', 'PUB', routes.library, 'client', BookOpen, { permission: 'research:read', inMenu: true }),
   screen('NET', 'NET', routes.directory, 'client', BookUser, { permission: 'directory:list', inMenu: true }),
   screen('MSG', 'MSG', routes.messages, 'client', MessagesSquare, { permission: 'messages:write', inMenu: true }),
@@ -142,6 +145,7 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('PUBNEW', 'PUB NEW', routes.publishingStudio, 'client', PenLine, { permission: 'publications:write' }),
   screen('CAL', 'CAL', routes.calendar, 'client', CalendarDays, { permission: 'market:read', module: 'monitoring' }),
   screen('NETME', 'NET ME', routes.networkProfile, 'client', IdCard, { permission: 'directory:profile' }),
+  screen('OPTRES', 'OPT RES', routes.optimizerResult, 'client', ChartScatter, { permission: 'portfolios:optimize', module: 'portfolio', menuCode: 'OPT' }),
 
   // Back-office, Data admin (screen 6).
   screen('DATA', 'DATA', routes.dataSession, 'backoffice', Database, { permission: 'data:import', inMenu: true }),

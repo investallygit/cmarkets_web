@@ -119,6 +119,16 @@ const PlatformSettingsPage = lazy(() =>
 const AuditLogPage = lazy(() =>
   import('@/pages/audit-log').then((module) => ({ default: module.AuditLogPage })),
 )
+const OptimisationSetupPage = lazy(() =>
+  import('@/pages/portfolio-optimisation').then((module) => ({
+    default: module.OptimisationSetupPage,
+  })),
+)
+const OptimisationResultPage = lazy(() =>
+  import('@/pages/portfolio-optimisation').then((module) => ({
+    default: module.OptimisationResultPage,
+  })),
+)
 
 const PAGES: Record<ScreenTextKey, Page> = {
   MKT: MarketDashboardPage,
@@ -134,6 +144,8 @@ const PAGES: Record<ScreenTextKey, Page> = {
   TRD: SvtTradersPage,
   ETFS: EtfScreenerPage,
   PORT: PortfolioPage,
+  OPT: OptimisationSetupPage,
+  OPTRES: OptimisationResultPage,
   PUB: ResearchLibraryPage,
   PUBNEW: PublishingStudioPage,
   N: NewsPage,

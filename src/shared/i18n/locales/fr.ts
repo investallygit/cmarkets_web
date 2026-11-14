@@ -11,6 +11,7 @@ import macro from './fr/macro.json'
 import messaging from './fr/messaging.json'
 import monitoring from './fr/monitoring.json'
 import network from './fr/network.json'
+import optimizer from './fr/optimizer.json'
 import newsAdmin from './fr/newsAdmin.json'
 import newsStudio from './fr/newsStudio.json'
 import payments from './fr/payments.json'
@@ -31,6 +32,7 @@ const fr = {
   ...macro,
   ...commodities,
   ...portfolio,
+  ...optimizer,
   ...research,
   ...rfq,
   ...network,

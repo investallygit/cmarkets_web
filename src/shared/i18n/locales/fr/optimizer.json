@@ -1,0 +1,332 @@
+{
+  "opt": {
+    "tabs": {
+      "label": "Optimisation de portefeuille",
+      "setup": "Paramétrage",
+      "result": "Résultat"
+    },
+    "advice": "Outil d'aide à la décision ; ceci n'est pas un conseil en investissement.",
+    "adviceResult": "Estimations fondées sur le passé : le rendement et le risque réels peuvent différer. Ceci n'est pas un conseil en investissement.",
+    "classes": {
+      "equity": "Action",
+      "bond": "Obligation",
+      "etf": "ETF"
+    },
+    "classTotals": {
+      "equity": "Actions",
+      "bond": "Obligations",
+      "etf": "ETF"
+    },
+    "etfMarket": "{{market}} (ETF)",
+    "objectives": {
+      "minRiskForReturn": "Risque minimal pour un rendement minimal",
+      "maxReturnForRisk": "Rendement maximal pour un risque maximal",
+      "maxSharpe": "Meilleur rapport rendement / risque",
+      "minRisk": "Risque minimal, sans objectif de rendement"
+    },
+    "objectiveSummary": {
+      "minRiskForReturn": "risque minimal pour un rendement d'au moins {{target}}",
+      "maxReturnForRisk": "rendement maximal pour une volatilité d'au plus {{target}}",
+      "maxSharpe": "meilleur rapport rendement / risque",
+      "minRisk": "risque minimal"
+    },
+    "scenario": {
+      "label": "Scénario",
+      "unsaved": "Nouveau paramétrage",
+      "new": "Nouveau",
+      "save": "Enregistrer",
+      "saveAs": "Enregistrer une copie",
+      "delete": "Supprimer",
+      "name": "Nom du scénario",
+      "saveTitle": "Enregistrer le scénario",
+      "copyTitle": "Enregistrer une copie du scénario",
+      "saveHint": "Le paramétrage est calculé sur les données du jour et enregistré avec son résultat.",
+      "copyName": "{{name}} (copie)",
+      "saved": "Scénario {{name}} enregistré",
+      "deleted": "Scénario {{name}} supprimé",
+      "deleteTitle": "Supprimer le scénario",
+      "deleteConfirm": "Supprimer le scénario {{name}} ? Son paramétrage et son résultat partent avec lui.",
+      "failed": "Le scénario n'a pas été enregistré : {{message}}",
+      "deleteFailed": "Le scénario n'a pas été supprimé : {{message}}",
+      "openFailed": "Le scénario ne s'est pas ouvert : {{message}}",
+      "dataOf": "Données du {{date}}",
+      "recompute": "Recalculer sur les données du jour",
+      "recomputed": "Scénario {{name}} recalculé sur les données du jour"
+    },
+    "universe": {
+      "title": "Univers d'investissement",
+      "add": "Ajouter",
+      "fromPortfolio": "D'un portefeuille",
+      "fromWatchlist": "D'une liste de suivi",
+      "search": "Rechercher une action, une obligation ou un ETF à ajouter…",
+      "searchLabel": "Ajouter un titre à l'optimisation",
+      "columns": {
+        "security": "Titre",
+        "type": "Type",
+        "expectedReturn": "Rend. attendu %",
+        "volatility": "Volatilité %",
+        "minWeight": "Poids min. %",
+        "maxWeight": "Poids max. %"
+      },
+      "remove": "Retirer {{code}}",
+      "fieldLabel": "{{field}} de {{code}}",
+      "empty": "Ajoutez 2 à 20 actions, obligations ou ETF, ou prenez ceux d'un portefeuille ou d'une liste de suivi.",
+      "count": "{{count}} titres · 20 au plus par optimisation",
+      "full": "20 titres au plus : retirez-en un d'abord.",
+      "estimate": "Estimation : {{value}}",
+      "noEstimate": "Pas d'estimation : saisissez-la",
+      "flags": {
+        "shortHistory": "Moins d'un an de cours : saisissez sa volatilité",
+        "illiquid": "Aucune transaction dans plus de 30 % des semaines",
+        "converted": "Converti en XAF aux cours de la BCE",
+        "noPrice": "Pas de cours : aucun montant ne peut être acheté"
+      },
+      "sourcesTitle": "D'où viennent les estimations",
+      "sourceEquities": "Actions et ETF : rendement et volatilité annualisés sur {{history}} de variations {{frequency}}.",
+      "sourceBonds": "Obligations : rendement attendu = rendement actuariel du jour (YTM) ; volatilité du prix sur {{history}}.",
+      "sourceForeign": "ETF en devise : rendement et risque convertis en XAF (cours BCE et parité fixe).",
+      "sourceEdited": "Chaque rendement attendu se modifie : la valeur saisie remplace l'estimation.",
+      "sourceShort": "Un titre avec moins d'un an d'historique est signalé ; sa volatilité doit être saisie.",
+      "pickPortfolio": "Portefeuille dont prendre les titres",
+      "pickWatchlist": "Liste de suivi dont prendre les titres",
+      "take": "Prendre",
+      "imported": "{{count}} titres pris de {{name}}",
+      "importNone": "{{name}} ne contient ni action, ni obligation, ni ETF.",
+      "importFailed": "Les titres n'ont pas été pris : {{message}}"
+    },
+    "objective": {
+      "title": "Objectif et contraintes",
+      "heading": "Objectif",
+      "target": {
+        "minRiskForReturn": "Rendement minimal visé",
+        "maxReturnForRisk": "Volatilité maximale acceptée"
+      },
+      "constraintsHeading": "Contraintes",
+      "totalInvested": "Total investi",
+      "shortSelling": "Vente à découvert",
+      "notAllowed": "Interdite",
+      "maxWeight": "Poids maximal par titre",
+      "securityMax": "{{code}} · poids maximal",
+      "securityMin": "{{code}} · poids minimal",
+      "groupMax": "{{group}} · total maximal",
+      "groupMin": "{{group}} · total minimal",
+      "addConstraint": "Ajouter une contrainte (titre, classe, pays, devise)",
+      "addTitle": "Nouvelle contrainte",
+      "scopeLabel": "Sur",
+      "keyLabel": "Lequel",
+      "boundLabel": "Limite",
+      "valueLabel": "Valeur %",
+      "scopes": {
+        "security": "Titre",
+        "assetClass": "Classe d'actifs",
+        "country": "Pays",
+        "currency": "Devise"
+      },
+      "bounds": {
+        "min": "Minimum",
+        "max": "Maximum"
+      },
+      "add": "Ajouter",
+      "cancel": "Annuler",
+      "removeConstraint": "Retirer : {{name}}",
+      "settingsHeading": "Paramètres",
+      "capital": "Capital à investir",
+      "history": "Historique d'estimation",
+      "histories": {
+        "1y": "1 an",
+        "3y": "3 ans",
+        "5y": "5 ans"
+      },
+      "frequency": "Fréquence des rendements",
+      "frequencies": {
+        "weekly": "hebdomadaires",
+        "daily": "quotidiennes"
+      },
+      "riskFree": "Taux sans risque",
+      "riskFreeDefault": "{{rate}} (BTA 52 semaines)",
+      "compare": "Comparer avec",
+      "compareNone": "Aucun portefeuille",
+      "optimise": "Optimiser",
+      "runFailed": "L'optimisation n'a pas tourné : {{message}}"
+    },
+    "correlations": {
+      "title": "Corrélations ({{history}})",
+      "editable": "Modifiable",
+      "caption": "Plus la case est claire, plus les deux titres évoluent ensemble.",
+      "entered": "Saisie ; l'estimation est {{value}}.",
+      "cell": "Corrélation de {{a}} et {{b}} : {{value}}",
+      "edit": "Corrélation de {{a}} et {{b}}, de -1 à 1",
+      "reset": "Revenir à l'estimation",
+      "shrinkage": "Rapprochée de {{value}} de la corrélation moyenne (Ledoit-Wolf).",
+      "empty": "Ajoutez deux titres pour voir leurs corrélations."
+    },
+    "checks": {
+      "title": "Contrôles avant calcul",
+      "waiting": "Ajoutez 2 à 20 titres et la cible de l'objectif.",
+      "constraintsOk": "Les contraintes sont compatibles",
+      "constraintsError": "Les contraintes se contredisent",
+      "involved": "En cause : {{list}}",
+      "targetReturnOk": "Le rendement minimal est atteignable",
+      "targetReturnError": "Le rendement minimal est hors d'atteinte",
+      "targetRiskOk": "Le risque maximal peut être tenu",
+      "targetRiskError": "Le risque maximal est sous le plus bas atteignable",
+      "returnRange": "entre {{min}} et {{max}}",
+      "riskRange": "volatilité de {{min}} à {{max}}",
+      "sharpeOk": "Des allocations battent le taux sans risque",
+      "sharpeError": "Aucune allocation ne bat le taux sans risque",
+      "historyOk": "Historique suffisant",
+      "historyError": "Estimations manquantes",
+      "historyCount": "{{count}} titres sur {{total}}",
+      "historyMissing": "Saisissez le rendement attendu et la volatilité de {{list}}",
+      "illiquidOk": "Aucun titre illiquide",
+      "illiquidWarning": "Titres illiquides",
+      "illiquidDetail": "{{list}} : le risque peut être sous-estimé",
+      "frequencyError": "Des rendements hebdomadaires sont nécessaires",
+      "frequencyDetail": "{{list}} : cotés trop rarement pour des rendements quotidiens",
+      "correlationsError": "Les corrélations saisies ne vont pas ensemble",
+      "correlationsDetail": "Aucun titre ne peut évoluer ainsi : modifiez-en une.",
+      "statuses": {
+        "ok": "Réussi",
+        "warning": "Attention",
+        "error": "Bloquant"
+      }
+    },
+    "constraintRefs": {
+      "targetReturn": "Rendement minimal de {{value}}",
+      "targetRisk": "Volatilité maximale de {{value}}",
+      "maxWeight": "{{code}} : {{value}} (maximum par titre)",
+      "maxWeightAll": "Maximum par titre : {{value}}",
+      "securityMin": "{{code}} : {{value}} (son minimum)",
+      "securityMax": "{{code}} : {{value}} (son maximum)",
+      "groupMin": "{{group}} : au moins {{value}}",
+      "groupMax": "{{group}} : au plus {{value}}",
+      "metExactly": "{{constraint}} : atteint exactement"
+    },
+    "result": {
+      "empty": "Pas encore de résultat : paramétrez l'optimisation, puis appuyez sur OPTIMISER.",
+      "toSetup": "Ouvrir le paramétrage",
+      "summary": "Objectif : {{objective}} · {{count}} titres · {{constraints}} contraintes · calculé en {{seconds}} s",
+      "stale": "Le paramétrage a changé depuis ce résultat : optimisez de nouveau.",
+      "dataOf": "Données du {{date}}"
+    },
+    "indicators": {
+      "label": "Indicateurs du portefeuille optimal",
+      "expectedReturn": "Rendement attendu",
+      "volatility": "Volatilité",
+      "sharpe": "Ratio de Sharpe",
+      "var": "VaR 95 % · 1 jour",
+      "varAmount": "{{amount}} du capital",
+      "duration": "Duration",
+      "bondYield": "Rendement obligataire"
+    },
+    "allocation": {
+      "title": "Allocation optimale",
+      "capital": "Capital XAF {{amount}}",
+      "columns": {
+        "security": "Titre",
+        "type": "Type",
+        "weight": "Poids",
+        "quantity": "Quantité",
+        "amount": "Montant XAF",
+        "riskShare": "Part du risque"
+      },
+      "total": "Total",
+      "cash": "Liquidités laissées par l'arrondi",
+      "max": "max",
+      "min": "min",
+      "caption": "« max » : le poids atteint sa limite. Montants en titres entiers ; part du risque : contribution du titre à la volatilité du portefeuille."
+    },
+    "frontier": {
+      "title": "Frontière efficiente",
+      "axes": "Rendement attendu / volatilité",
+      "yAxis": "Rendement attendu",
+      "xAxis": "Volatilité annualisée",
+      "optimal": "Portefeuille optimal {{ret}} / {{vol}}",
+      "equal": "Poids égaux {{ret}} / {{vol}}",
+      "portfolio": "{{name}} {{ret}} / {{vol}}",
+      "caption": "Courbe bleue : meilleur rendement possible pour chaque niveau de risque, sous vos contraintes. Clic : un autre portefeuille.",
+      "pick": "Un autre point de la frontière",
+      "pickPlaceholder": "Rendement / volatilité…",
+      "point": "{{ret}} / {{vol}}",
+      "failed": "Ce point n'a pas été calculé : {{message}}"
+    },
+    "breakdown": {
+      "title": "Répartition",
+      "byClass": "Par classe",
+      "byCountry": "Par pays",
+      "byCurrency": "Par devise",
+      "min": "min {{value}}",
+      "max": "max {{value}}"
+    },
+    "comparison": {
+      "title": "Contraintes et comparaison",
+      "binding": "Contraintes saturées",
+      "noBinding": "Aucune contrainte n'est saturée : l'optimum est à l'intérieur.",
+      "heading": "Comparaison",
+      "columns": {
+        "portfolio": "Portefeuille",
+        "return": "Rendement",
+        "risk": "Risque",
+        "sharpe": "Sharpe"
+      },
+      "optimal": "Portefeuille optimal",
+      "equal": "Poids égaux",
+      "current": "{{name}} (actuel)",
+      "noPortfolio": "Choisissez un portefeuille dans les paramètres d'OPT pour le comparer."
+    },
+    "nextSteps": {
+      "title": "Suites",
+      "saveModel": "Enregistrer en portefeuille modèle",
+      "createPortfolio": "Créer un portefeuille à partir de l'allocation",
+      "trades": "Opérations pour ajuster « {{name}} »",
+      "tradesAny": "Opérations pour ajuster un portefeuille",
+      "export": "Exporter (XLSX · PDF)",
+      "editSetup": "Modifier le paramétrage"
+    },
+    "toPortfolio": {
+      "modelTitle": "Enregistrer en portefeuille modèle",
+      "realTitle": "Créer un portefeuille à partir de l'allocation",
+      "modelHint": "Un portefeuille modèle détient les poids de l'allocation depuis la dernière séance, le capital comme notionnel.",
+      "realHint": "Un portefeuille réel : un dépôt du capital, puis les achats des titres entiers aux derniers cours.",
+      "studentOnly": "Un compte Étudiant enregistre l'allocation en portefeuille modèle uniquement.",
+      "name": "Nom du portefeuille",
+      "benchmark": "Indice de référence",
+      "scenarioName": "Nom du scénario",
+      "scenarioHint": "Le scénario est d'abord enregistré, avec son résultat.",
+      "create": "Créer",
+      "created": "Portefeuille {{name}} créé",
+      "open": "Ouvrir",
+      "failed": "Le portefeuille n'a pas été créé : {{message}}"
+    },
+    "rebalance": {
+      "title": "Opérations pour ajuster un portefeuille",
+      "portfolio": "Portefeuille",
+      "info": "À titre indicatif : CMarket ne transmet aucun ordre.",
+      "value": "Valeur du portefeuille : XAF {{value}}, aux cours du {{date}}",
+      "columns": {
+        "security": "Titre",
+        "side": "Opération",
+        "current": "Détenu",
+        "target": "Cible",
+        "quantity": "Quantité",
+        "amount": "Montant XAF"
+      },
+      "sides": {
+        "buy": "Achat",
+        "sell": "Vente",
+        "hold": "Conserver"
+      },
+      "totals": "Ventes XAF {{sells}} · achats XAF {{buys}} · liquidités après XAF {{cash}}",
+      "failed": "Les opérations n'ont pas été calculées : {{message}}",
+      "close": "Fermer"
+    },
+    "export": {
+      "title": "Exporter le scénario",
+      "xlsx": "Excel (XLSX)",
+      "pdf": "PDF",
+      "failed": "L'export a échoué : {{message}}"
+    },
+    "saveFirst": "Enregistré d'abord comme scénario : nommez-le.",
+    "optimiseFrom": "Optimiser"
+  }
+}

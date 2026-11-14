@@ -60,6 +60,7 @@ export const PERMISSIONS = [
   'portfolios:read',
   'portfolios:write',
   'portfolios:reports',
+  'portfolios:optimize',
   'alerts:write',
   'research:read',
   'research:buy',

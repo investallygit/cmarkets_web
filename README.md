@@ -82,7 +82,7 @@ before upload.
 | 26 · FX dashboard (FX)                                                    | Done; the ECB's rates each business day, MKT's on them too    |
 | 25 · Macroeconomic dashboard (ECO)                                        | Done; the World Bank's figures each month, a file fills gaps  |
 | 21 · Commodities (CMDTY, DES on a commodity)                              | Done; EODHD's 23 series twice a day, the CEMAC's by file      |
-| 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | To do, step 42                                                |
+| 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | Done; section 14.6's solver, scenarios computed again         |
 | SVT account type (fourth version), licensed SVTs, trader links            | Done; an SVT confirms each link on TRD, with a daily limit    |
 | 22 · Government securities RFQ (RFQ)                                      | To do, step 44                                                |
 | 27 · SVT approval (SVT)                                                   | To do, step 45                                                |
@@ -145,6 +145,7 @@ src/
               ETF's, screen 19, a commodity's, screen 21),
               equity-screener, etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which
               YAS opens), bond-screener (BS), rfq (RFQ), svt-traders (TRD), portfolio,
+              portfolio-optimisation (OPT and OPT RES),
               research-library, publishing-studio, news,
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
               network-profile (NET ME), public-profile (/p/{handle}), data-import (IMP),
@@ -162,12 +163,14 @@ src/
               bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
               etf-profile-panels, security-description-panel, description-editor-panel,
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
-              trader-links-panel...),
+              trader-links-panel, opt-setup-panels, opt-result-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
               screen-etfs, price-bond, manage-svt-links, decide-trader-link,
-              manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
+              manage-portfolios, record-transaction, generate-portfolio-report, import-opt-universe,
+              run-optimization, save-opt-scenario, create-portfolio-from-allocation,
+              rebalance-portfolio, export-opt-scenario, buy-publication,
               rate-publication, report-publication, follow-analyst, report-profile,
               start-conversation, send-message, share-news, report-conversation, block-user,
               create-publication, edit-publication, edit-news, import-news, report-news,
@@ -190,7 +193,7 @@ src/
               profile's history, ratings and payments), etf (ETFS's screener, an ETF's blocks,
               performance and distributions, the profile's history, holdings, allocation and
               calendar years, its labels), yield-curve, fundamentals,
-              screener, portfolio, publication,
+              screener, portfolio, optimizer (OPT's setup, result and scenarios), publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, macro (ECO's
               economies, indicators and figures), commodity (CMDTY's series, values and
               statistics), svt-link (a trader's links to the SVTs, a bank's requests and linked
@@ -395,7 +398,8 @@ Every UI string is in French and English, in `shared/i18n/locales/en/` and `fr/`
 per area of the app (`core` for the shell and the shared UI, `home`, `account` for the login and
 the settings, `monitoring`, `analysis`, `bonds`, `etfs`, `macro` (ECO, FX and their settings),
 `rfq` (RFQ, TRD and the RFQ's settings),
-`portfolio`, `research`, `network`, `messaging`, `newsStudio`, `newsAdmin`, `payments`,
+`portfolio`, `optimizer` (OPT and OPT RES), `research`, `network`, `messaging`, `newsStudio`,
+`newsAdmin`, `payments`,
 `dataAdmin`, `admin`), which `en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:
 `t('panels.indices')` is checked at compile time. A top-level key lives in one area file only, and
 `locales.test.ts` checks it as well as that both languages have the same keys. A new area file

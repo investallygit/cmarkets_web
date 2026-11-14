@@ -38,6 +38,10 @@ export const routes = {
   portfolio: '/port',
   /** A portfolio and one of its tabs: /port/{id} (positions), /port/{id}/risk... */
   portfolioTabs: '/port/:portfolioId?/:tab?',
+  /** OPT (screen 28): the optimisation's setup; ?portfolio=, ?watchlist= or ?scenario= fill it. */
+  optimizer: '/opt',
+  /** OPT RES (screen 29): the optimisation's result. */
+  optimizerResult: '/opt/result',
   library: '/pub',
   publishingStudio: '/pub/new',
   news: '/n',
@@ -278,4 +282,21 @@ export function safeNextPath(next: string | null): string {
 /** The sign-up page with an account type chosen, as the home page offers: /signup?type=analyst. */
 export function signUpPath(accountType?: ClientAccountType): string {
   return withQuery(routes.signUp, 'type', accountType)
+}
+
+/** What OPT opens with: a portfolio's or a watchlist's securities, or a saved scenario. */
+export interface OptimizerSource {
+  portfolio?: string
+  watchlist?: string
+  scenario?: string
+}
+
+/** OPT filled from a source: "/opt?portfolio={id}". */
+export function optimizerPath(source: OptimizerSource = {}): string {
+  const params = new URLSearchParams()
+  if (source.portfolio) params.set('portfolio', source.portfolio)
+  if (source.watchlist) params.set('watchlist', source.watchlist)
+  if (source.scenario) params.set('scenario', source.scenario)
+  const query = params.toString()
+  return query ? `${routes.optimizer}?${query}` : routes.optimizer
 }

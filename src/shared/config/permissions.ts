@@ -20,7 +20,13 @@ export const PERMISSION_GROUPS: readonly {
   {
     id: 'portfolios',
     label: 'permissions.groups.portfolios',
-    permissions: ['portfolios:read', 'portfolios:write', 'portfolios:reports', 'alerts:write'],
+    permissions: [
+      'portfolios:read',
+      'portfolios:write',
+      'portfolios:reports',
+      'portfolios:optimize',
+      'alerts:write',
+    ],
   },
   {
     id: 'research',
@@ -64,6 +70,7 @@ export const PERMISSION_LABELS: Record<Permission, TranslationKey> = {
   'portfolios:read': 'permissions.labels.portfoliosRead',
   'portfolios:write': 'permissions.labels.portfoliosWrite',
   'portfolios:reports': 'permissions.labels.portfoliosReports',
+  'portfolios:optimize': 'permissions.labels.portfoliosOptimize',
   'alerts:write': 'permissions.labels.alertsWrite',
   'research:read': 'permissions.labels.researchRead',
   'research:buy': 'permissions.labels.researchBuy',

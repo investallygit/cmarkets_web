@@ -1,9 +1,10 @@
 import type { TFunction } from 'i18next'
-import { ListPlus, Plus } from 'lucide-react'
+import { ChartScatter, ListPlus, Plus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { LiveChange, LiveChangePct, LivePrice, LiveVolume, priceDecimals } from '@/entities/quote'
+import { useHasPermission } from '@/entities/session'
 import { openWatchlistDialog, useWatchlists, WATCHLIST_COLUMNS } from '@/entities/watchlist'
 import {
   AddToWatchlistBox,
@@ -13,7 +14,7 @@ import {
 import { useSecurityMenu } from '@/features/security-actions'
 import type { WatchlistColumn, WatchlistDto, WatchlistItemDto } from '@/shared/api/contracts'
 import { useSymbolSubscription } from '@/shared/realtime'
-import { securityPath } from '@/shared/routes/paths'
+import { optimizerPath, securityPath } from '@/shared/routes/paths'
 import { createDataColumnHelper, type DataColumns } from '@/shared/ui/dataColumns'
 import { DataTable } from '@/shared/ui/DataTable'
 import { Button } from '@/shared/ui/form/Button'
@@ -107,6 +108,8 @@ export function WatchlistPanel() {
   const [activeId, setActiveId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
+  // OPT on the list's securities (spec screen 28: "Optimise" on a watchlist).
+  const canOptimize = useHasPermission('portfolios:optimize')
   // Each list has its own columns; building them per list keeps every column array stable.
   const columnsByList = useMemo(
     () => new Map(lists.map((list) => [list.id, buildColumns(t, list.columns)])),
@@ -141,6 +144,15 @@ export function WatchlistPanel() {
           )}
           {lists.length > 1 && active && (
             <PanelTabs value={active.id} options={tabs} onChange={selectList} />
+          )}
+          {active && canOptimize && active.items.length >= 2 && (
+            <Link
+              to={optimizerPath({ watchlist: active.id })}
+              className="panel-no-drag inline-flex items-center gap-1 uppercase hover:text-primary"
+            >
+              <ChartScatter aria-hidden className="size-3" />
+              {t('opt.optimiseFrom')}
+            </Link>
           )}
           <WatchlistMenu list={active} onCreated={(list) => selectList(list.id)} />
         </>

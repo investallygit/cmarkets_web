@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { ChevronDown, Plus, Settings, Trash2 } from 'lucide-react'
+import { ChartScatter, ChevronDown, Plus, Settings, Trash2 } from 'lucide-react'
 import { useCallback, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -13,6 +13,7 @@ import {
   withLiveDay,
 } from '@/entities/portfolio'
 import { useLiveIndex, useLivePrices } from '@/entities/quote'
+import { useHasPermission } from '@/entities/session'
 import {
   DeletePortfolioDialog,
   usePortfolioAccess,
@@ -20,6 +21,8 @@ import {
 } from '@/features/manage-portfolios'
 import type { PortfolioSummaryDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
+import { optimizerPath } from '@/shared/routes/paths'
+import { ButtonLink } from '@/shared/ui/form/Button'
 import { useMarketDay } from '@/shared/lib/useMarketDay'
 import { useSymbolSubscription } from '@/shared/realtime'
 import { Badge } from '@/shared/ui/Badge'
@@ -78,6 +81,8 @@ export function PortfolioHeader({ portfolios, portfolioId, onSelect }: Portfolio
         : withLiveDay(ytd.benchmarkPct, day.benchmarkPct, liveIndex?.changePct ?? day.benchmarkPct)
   const currency = current?.currency ?? ''
 
+  // OPT on the portfolio's lines, compared with it (spec screen 28: "Optimise" button on screen 5).
+  const canOptimize = useHasPermission('portfolios:optimize')
   const figures: Figure[] = [
     {
       label: t('portfolio.header.totalValue'),
@@ -140,6 +145,16 @@ export function PortfolioHeader({ portfolios, portfolioId, onSelect }: Portfolio
           </div>
         ))}
       </dl>
+      {current && canOptimize && (
+        <ButtonLink
+          to={optimizerPath({ portfolio: current.id })}
+          variant="outline"
+          size="sm"
+          icon={ChartScatter}
+        >
+          {t('opt.optimiseFrom')}
+        </ButtonLink>
+      )}
     </section>
   )
 }

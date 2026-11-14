@@ -547,4 +547,12 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   which the user changes for a run). "Create a portfolio from the allocation": with which
   transactions (the plan: buys at the last prices, dated today, the rest in cash)? The mockup's
   amounts are round and add up to the capital, while the rule rounds them to whole securities and
-  leaves the rest in cash.
+  leaves the rest in cash. Screen 28 lists "Total invested 100%" and "Short selling: Not allowed"
+  among the constraints: may a user invest less, or sell short (the plan: neither, as section
+  14.6's constraints, decision 25)? Its pre-run check reads "Minimum return is reachable between
+  7.05% and 9.50%" where the test case's constraints reach 9.02% at most: is the range the
+  efficient one, from the lowest-risk allocation (the plan: yes)? The comparison "with an existing
+  portfolio": with which return and risk for its cash and for the securities outside the universe
+  (the plan: the same estimates for its securities, its cash at the risk-free rate)? PORT values a
+  line quoted in dollars without its exchange rate: an allocation holding IWDA becomes a model
+  portfolio only, until PORT converts it (found in step 42).

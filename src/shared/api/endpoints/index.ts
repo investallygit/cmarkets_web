@@ -19,6 +19,7 @@ import { marketRoutes } from './market'
 import { meRoutes } from './me'
 import { messagingRoutes } from './messaging'
 import { networkRoutes } from './network'
+import { optimizerRoutes } from './optimizer'
 import { organizationRoutes } from './organization'
 import { portfoliosRoutes } from './portfolios'
 import { providerRoutes } from './provider'
@@ -63,6 +64,7 @@ export { marketApi, marketRoutes, type HistoryRange } from './market'
 export { meApi, meRoutes } from './me'
 export { messagingApi, messagingRoutes } from './messaging'
 export { networkApi, networkRoutes } from './network'
+export { optimizerApi, optimizerRoutes } from './optimizer'
 export { organizationApi, organizationRoutes } from './organization'
 export { portfoliosApi, portfoliosRoutes, type PerformanceQuery } from './portfolios'
 export { providerApi, providerRoutes, type ProviderNewsQuery } from './provider'
@@ -101,6 +103,7 @@ export const ROUTE_TABLES: Readonly<Record<string, RouteTable>> = {
   Me: meRoutes,
   Messaging: messagingRoutes,
   Network: networkRoutes,
+  Optimizer: optimizerRoutes,
   Organization: organizationRoutes,
   Portfolios: portfoliosRoutes,
   Provider: providerRoutes,

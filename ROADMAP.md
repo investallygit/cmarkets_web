@@ -32,7 +32,7 @@ relative: S < M < L < XL.
 | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | [Second version of the spec](roadmap/second-version.md) | What the spec of 2 November 2026 changed                                                                               |
 | [Third version of the spec](roadmap/third-version.md)   | What the spec of 10 November 2026 changed, the decisions taken where it is silent (1 to 13), the spec author's answers |
-| [Fourth version of the spec](roadmap/fourth-version.md) | What the spec of 13 November 2026 changes, the decisions taken (14 to 24)                                              |
+| [Fourth version of the spec](roadmap/fourth-version.md) | What the spec of 13 November 2026 changes, the decisions taken (from 14)                                               |
 | [Steps](roadmap/steps)                                  | A file per step from step 11, named after its number: what it built, checked, fixed and left to do                     |
 | [Client screens](roadmap/client-screens.md)             | Each screen of the terminal: what is built, by which step, what is still to do                                         |
 | [Back-office screens](roadmap/back-office-screens.md)   | The same for the screens of the Data admin and of the Admin                                                            |
@@ -42,7 +42,7 @@ relative: S < M < L < XL.
 
 The code's comments cite a step or a decision by its number ("ROADMAP step 27", "ROADMAP decision
 6"): a step is its file of [`roadmap/steps/`](roadmap/steps), decisions 1 to 13 are in the
-[third version](roadmap/third-version.md#decisions-taken) and decisions 14 to 24 in the
+[third version](roadmap/third-version.md#decisions-taken) and those from 14 in the
 [fourth](roadmap/fourth-version.md#decisions-taken).
 
 A step has its file from the day it is planned. When it is done, its title says so, and its line
@@ -93,7 +93,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 39   | [FX: the XAF's cross rates on the ECB's reference rates (screen 26)](roadmap/steps/step-39-fx-dashboard.md)          | Done          |
 | 40   | [ECO: macroeconomic dashboard (screen 25)](roadmap/steps/step-40-macro-dashboard.md)                                 | Done          |
 | 41   | [CMDTY: commodities, the profile of a commodity (screen 21)](roadmap/steps/step-41-commodities.md)                   | Done          |
-| 42   | [OPT, OPT RES: portfolio optimisation (screens 28 and 29)](roadmap/steps/step-42-portfolio-optimisation.md)          | To do, lane 3 |
+| 42   | [OPT, OPT RES: portfolio optimisation (screens 28 and 29)](roadmap/steps/step-42-portfolio-optimisation.md)          | Done          |
 | 43   | [SVT account type, licensed SVTs, trader links, `/hubs/rfq`](roadmap/steps/step-43-svt-accounts.md)                  | Done          |
 | 44   | [RFQ: requests for quotes on BTA and OTA (screen 22)](roadmap/steps/step-44-rfq-trading.md)                          | To do, lane 1 |
 | 45   | [SVT: approval of the agreements, tickets by e-mail (screen 27)](roadmap/steps/step-45-svt-approval.md)              | To do, lane 1 |
