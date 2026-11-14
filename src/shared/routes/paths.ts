@@ -12,6 +12,8 @@ export const routes = {
   /** The home screen of the user's account type: MKT, IMP or USER. */
   app: '/app',
   market: '/mkt',
+  /** CMDTY (screen 21): the commodities; it opens the profile of one, under /securities/{code}. */
+  commodities: '/cmdty',
   /** FX (screen 26): the CFA franc against the ECB's currencies; ?currency= picks the chart's. */
   eco: '/eco',
   fx: '/fx',
@@ -66,8 +68,8 @@ export const routes = {
 } as const
 
 /**
- * Tabs of the security profiles, each matching a command bar code (spec section 9, screens 2, 19
- * and 20); which profile has which tab: SECURITY_PROFILES (profiles.ts).
+ * Tabs of the security profiles, each matching a command bar code (spec section 9, screens 2, 19,
+ * 20 and 21); which profile has which tab: SECURITY_PROFILES (profiles.ts).
  */
 export const SECURITY_FUNCTIONS = [
   'des',
@@ -84,6 +86,7 @@ export const SECURITY_FUNCTIONS = [
   'hld',
   'perf',
   'dist',
+  'cmp',
 ] as const
 export type SecurityFunction = (typeof SECURITY_FUNCTIONS)[number]
 

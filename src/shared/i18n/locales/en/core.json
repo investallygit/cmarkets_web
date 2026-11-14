@@ -68,6 +68,7 @@
   "verifiedBadge": "Verified",
   "screens": {
     "MKT": { "title": "Market dashboard", "menu": "Market" },
+    "CMDTY": { "title": "Commodities", "menu": "Commod." },
     "ECO": { "title": "Macroeconomic dashboard", "menu": "Economy" },
     "FX": { "title": "FX dashboard — CFA franc (XAF)", "menu": "Forex" },
     "DES": { "title": "Security profile", "menu": "Profile" },
@@ -117,7 +118,8 @@
     "HLD": "ETF holdings",
     "PERF": "ETF performance",
     "DIST": "ETF distributions",
-    "YAS": "Bond pricing"
+    "YAS": "Bond pricing",
+    "CMP": "Commodity comparison"
   },
   "status": {
     "notFound": "This screen does not exist.",
@@ -282,7 +284,15 @@
     "professionals": "Professionals",
     "conversations": "Conversations",
     "thread": "Conversation",
-    "participant": "Participant"
+    "participant": "Participant",
+    "commodityList": "Commodities",
+    "commodityHistory": "History",
+    "commodityStatistics": "Statistics",
+    "commodityDescription": "Description",
+    "commodityData": "Data",
+    "commodityLinks": "CEMAC links",
+    "commodityCompare": "Compare",
+    "commodityCorrelations": "Correlations"
   },
   "columns": {
     "index": "Index",

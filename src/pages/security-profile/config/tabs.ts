@@ -16,4 +16,5 @@ export const TAB_CODES: Record<SecurityFunction, string> = {
   hld: 'HLD',
   perf: 'PERF',
   dist: 'DIST',
+  cmp: 'CMP',
 }

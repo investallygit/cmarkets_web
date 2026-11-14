@@ -81,7 +81,7 @@ before upload.
 | Rate series, CEMAC sovereign yields file (IMP), stale points on YCRV      | Done; EODHD's yields each day, a replaced point confirmed     |
 | 26 · FX dashboard (FX)                                                    | Done; the ECB's rates each business day, MKT's on them too    |
 | 25 · Macroeconomic dashboard (ECO)                                        | Done; the World Bank's figures each month, a file fills gaps  |
-| 21 · Commodities (CMDTY, DES on a commodity)                              | To do, step 41                                                |
+| 21 · Commodities (CMDTY, DES on a commodity)                              | Done; EODHD's 23 series twice a day, the CEMAC's by file      |
 | 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | To do, step 42                                                |
 | SVT account type (fourth version), licensed SVTs, trader links            | To do, step 43                                                |
 | 22 · Government securities RFQ (RFQ)                                      | To do, step 44                                                |
@@ -139,10 +139,10 @@ split into slices by business domain, each slice into segments (`ui`, `model`, `
 src/
   main.tsx    entry point: the hubs of CMarket.Api, then the app
   app/        providers, router, app shell layout, global styles
-  pages/      one slice per screen: market-dashboard, macro-dashboard (ECO), fx-dashboard (FX),
-              security-profile (the
+  pages/      one slice per screen: market-dashboard, commodities (CMDTY), macro-dashboard (ECO),
+              fx-dashboard (FX), security-profile (the
               profile of each security type: an equity's, screen 2, a bond's, screen 20, an
-              ETF's, screen 19),
+              ETF's, screen 19, a commodity's, screen 21),
               equity-screener, etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which
               YAS opens), bond-screener (BS), portfolio,
               research-library, publishing-studio, news,
@@ -161,7 +161,7 @@ src/
               bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
               bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
               etf-profile-panels, security-description-panel, description-editor-panel,
-              macro-dashboard-panels, fx-dashboard-panels...),
+              macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
@@ -177,7 +177,8 @@ src/
               dispute-statement, draw-on-chart,
               compare-securities, edit-profile, edit-network-profile, change-password,
               choose-plan, manage-members, upload-data-file, review-import, roll-back-import,
-              correct-price, describe-security, publish-content, create-account, manage-account,
+              correct-price, describe-security, describe-commodity, publish-content, create-account,
+              manage-account,
               review-analyst-request, moderate-publication, moderate-report, mark-payout-paid,
               edit-platform-settings, edit-permissions, switch-language, switch-account,
               workspace-layout
@@ -190,7 +191,8 @@ src/
               calendar years, its labels), yield-curve, fundamentals,
               screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, macro (ECO's
-              economies, indicators and figures), news, news-source
+              economies, indicators and figures), commodity (CMDTY's series, values and
+              statistics), news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
               (MPAY's statements, click anomalies and payment settings),
               calendar-event, notification, data-import, data-provider (EODHD), stored-price,

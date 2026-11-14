@@ -7,7 +7,7 @@ import type { SecurityFunction } from './paths'
  * DES in the command bar, a double-click in a list or a screener, a search result and a card
  * shared in MSG all lead to /securities/{id}/des, and the type that GET /securities/{id} answers
  * decides the profile, its tabs, its title and the menu entry it lights: screen 2 for an equity,
- * screen 20 for a bond, screen 19 for an ETF.
+ * screen 20 for a bond, screen 19 for an ETF, screen 21 for a commodity.
  */
 export interface SecurityProfileKind {
   /** Its tabs, in order, each a command bar code. */
@@ -40,6 +40,14 @@ export const SECURITY_PROFILES: Record<SecurityType, SecurityProfileKind> = {
     tabs: ['des', 'gp', 'hld', 'perf', 'dist', 'doc', 'n', 'ana'],
     titleKey: 'security.profiles.etf',
     menuParent: 'ETFS',
+  },
+  // Screen 21: the mockup's four tabs, GP its history; under CMDTY, whose list it shows on its left
+  // (ROADMAP decision 19: a commodity is a security, its profile the fourth).
+  commodity: {
+    tabs: ['des', 'gp', 'cmp', 'n'],
+    titleKey: 'security.profiles.commodity',
+    tabLabels: { gp: 'security.tabs.history' },
+    menuParent: 'CMDTY',
   },
 }
 

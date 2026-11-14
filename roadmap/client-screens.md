@@ -38,7 +38,8 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Built in step 31 (third version)**: DES opens the profile of the security's type, the bond
   profile (screen 20) for a bond, and screen 2 keeps the equities (the ETF profile, screen 19,
   comes in step 33).
-- **Fourth version (step 41)**: DES opens the commodity profile (screen 21) for a commodity.
+- **Built in step 41 (fourth version)**: DES opens the commodity profile (screen 21) for a
+  commodity; `BRENT DES` and `BRENT CMP` from the command bar, which finds "cacao" too.
 
 ## N · News (no mockup): done
 
@@ -93,7 +94,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   item's two tags.
 - **Still to do**: setting off the publication alerts (a followed analyst, a security or a country)
   when a publication goes out: the analysts are followed from PUB since step 6.
-- **Fourth version (step 41)**: an alert on a commodity goes off when a new value comes.
+- **Built in step 41 (fourth version)**: an alert on a commodity goes off when a new value comes,
+  from EODHD's load or the Data admin's file.
 
 ## EQS / FA · Equity screener and fundamental analysis (screen 3): done
 
@@ -413,9 +415,15 @@ what is still to do. The Data admin's and the Admin's screens are in
   [step 31](steps/step-31-bond-profile.md).
 - **Fourth version (step 44)**: "Request a price (RFQ)" on a BTA or an OTA.
 
-## CMDTY · Commodities (screen 21): to do
+## CMDTY · Commodities (screen 21): done
 
-- **Planned in step 41**: the list of the commodities and the profile of one, DES on a commodity.
+- **Built in step 41 (fourth version)**: CMDTY in the menu after MKT opens Brent's profile, with
+  the list of the 28 series on its left (by category, the last value yellow past 10 or 50 days,
+  the change, the badge D, W or M; a right click adds one to a list or sets an alert); the
+  header with the key figures; DES with the history (by day, week or month, the 50-value moving
+  average), the statistics, the Data admin's description, the data and the CEMAC links; GP the
+  history; CMP up to five series rebased to 100 with their correlations; N the news naming it.
+  See [step 41](steps/step-41-commodities.md).
 
 ## RFQ · Government securities RFQ (screen 22): to do
 

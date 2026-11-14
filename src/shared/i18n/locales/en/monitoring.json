@@ -33,7 +33,8 @@
     "types": {
       "equity": "Ordinary share",
       "bond": "Bond",
-      "etf": "ETF"
+      "etf": "ETF",
+      "commodity": "Commodity"
     },
     "tabsLabel": "Security functions",
     "tabs": {
@@ -51,11 +52,14 @@
       "hld": "Holdings",
       "perf": "Performance",
       "dist": "Distributions",
-      "priceYield": "Price and yield"
+      "priceYield": "Price and yield",
+      "cmp": "Compare",
+      "history": "History"
     },
     "profiles": {
       "bond": "Bond profile",
-      "etf": "ETF profile"
+      "etf": "ETF profile",
+      "commodity": "Commodities"
     },
     "figures": {
       "open": "Open",

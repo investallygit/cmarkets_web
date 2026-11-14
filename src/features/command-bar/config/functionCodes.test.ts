@@ -43,6 +43,17 @@ describe('function codes (spec section 8)', () => {
     expect(appliesToSecurity(byCode('DIST'), 'etf')).toBe(true)
   })
 
+  it('opens a commodity, its profile and its comparison (screen 21)', () => {
+    const byCode = (code: string) => availableFunctions(analyst).find((fn) => fn.code === code)!
+    expect(byCode('CMDTY').resolve()).toBe('/cmdty')
+    expect(byCode('DES').resolve('BRENT')).toBe('/securities/BRENT/des')
+    expect(byCode('CMP').resolve('BRENT')).toBe('/securities/BRENT/cmp')
+    expect(appliesToSecurity(byCode('CMP'), 'commodity')).toBe(true)
+    expect(appliesToSecurity(byCode('CMP'), 'equity')).toBe(false)
+    expect(appliesToSecurity(byCode('GP'), 'commodity')).toBe(true)
+    expect(appliesToSecurity(byCode('FA'), 'commodity')).toBe(false)
+  })
+
   it("opens a bond's schedule and ratings, tabs of its profile (screen 20)", () => {
     const byCode = (code: string) => availableFunctions(analyst).find((fn) => fn.code === code)!
     expect(byCode('CF').resolve('ECMR-6.25-2029')).toBe('/securities/ECMR-6.25-2029/cf')

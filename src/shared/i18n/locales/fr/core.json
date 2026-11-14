@@ -68,6 +68,7 @@
   "verifiedBadge": "Vérifié",
   "screens": {
     "MKT": { "title": "Tableau de bord du marché", "menu": "Marché" },
+    "CMDTY": { "title": "Matières premières", "menu": "Mat. prem." },
     "ECO": { "title": "Tableau de bord macroéconomique", "menu": "Économie" },
     "FX": { "title": "Tableau de bord des changes — franc CFA (XAF)", "menu": "Devises" },
     "DES": { "title": "Fiche valeur", "menu": "Fiche" },
@@ -117,7 +118,8 @@
     "HLD": "Composition de l'ETF",
     "PERF": "Performance de l'ETF",
     "DIST": "Distributions de l'ETF",
-    "YAS": "Valorisation obligataire"
+    "YAS": "Valorisation obligataire",
+    "CMP": "Comparaison de matières premières"
   },
   "status": {
     "notFound": "Cet écran n'existe pas.",
@@ -282,7 +284,15 @@
     "professionals": "Professionnels",
     "conversations": "Conversations",
     "thread": "Conversation",
-    "participant": "Participant"
+    "participant": "Participant",
+    "commodityList": "Matières premières",
+    "commodityHistory": "Historique",
+    "commodityStatistics": "Statistiques",
+    "commodityDescription": "Description",
+    "commodityData": "Données",
+    "commodityLinks": "Liens CEMAC",
+    "commodityCompare": "Comparaison",
+    "commodityCorrelations": "Corrélations"
   },
   "columns": {
     "index": "Indice",

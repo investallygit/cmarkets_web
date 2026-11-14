@@ -1,4 +1,6 @@
 import type {
+  CommodityProfileDto,
+  CommodityWriteDto,
   CoverageDto,
   DescriptionWriteDto,
   DocumentDto,
@@ -44,7 +46,8 @@ export interface UploadInput {
 /**
  * CMarket.Api/Controllers/DataAdmin: the Data admin's back-office (spec section 11): uploads and
  * their checks, the session's coverage, stored prices and their corrections, a security's
- * description, news and documents entered by hand, the EODHD connector.
+ * description, a commodity's names and links, news and documents entered by hand, the EODHD
+ * connector.
  */
 export const dataAdminRoutes = {
   importTypes: route('GET', '/data/import-types', answer<ImportTypeDto[]>()),
@@ -63,6 +66,7 @@ export const dataAdminRoutes = {
   corrections: route('GET', '/data/corrections', answer<Paged<PriceCorrectionDto>>()),
   description: route('GET', '/data/securities/{id}/description', answer<StoredDescriptionDto>()),
   describe: route('PUT', '/data/securities/{id}/description', answer<StoredDescriptionDto>()),
+  describeCommodity: route('PUT', '/data/commodities/{code}', answer<CommodityProfileDto>()),
   eodhdStatus: route('GET', '/data/providers/eodhd/status', answer<EodhdStatusDto>()),
   createNews: route('POST', '/data/news', answer<NewsArticleDto>()),
   updateNews: route('PUT', '/data/news/{id}', answer<NewsArticleDto>()),
@@ -130,6 +134,9 @@ export const dataAdminApi = {
   /** The Data admin's texts, an empty one removed (CORR). */
   describe: (id: string, description: DescriptionWriteDto) =>
     send(dataAdminRoutes.describe, { params: { id }, body: description }),
+  /** A commodity's names, texts, CEMAC countries and related securities (CORR). */
+  describeCommodity: (code: string, commodity: CommodityWriteDto) =>
+    send(dataAdminRoutes.describeCommodity, { params: { code }, body: commodity }),
   eodhdStatus: (signal?: AbortSignal) => send(dataAdminRoutes.eodhdStatus, { signal }),
   /** News entered by the Data admin: a new item, or an edit of one. */
   saveNews: (id: string | null, news: NewsWriteDto) =>

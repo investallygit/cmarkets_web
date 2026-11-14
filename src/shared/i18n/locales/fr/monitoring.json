@@ -33,7 +33,8 @@
     "types": {
       "equity": "Action ordinaire",
       "bond": "Obligation",
-      "etf": "ETF"
+      "etf": "ETF",
+      "commodity": "Matière première"
     },
     "tabsLabel": "Fonctions de la valeur",
     "tabs": {
@@ -51,11 +52,14 @@
       "hld": "Composition",
       "perf": "Performance",
       "dist": "Distributions",
-      "priceYield": "Prix et rendement"
+      "priceYield": "Prix et rendement",
+      "cmp": "Comparer",
+      "history": "Historique"
     },
     "profiles": {
       "bond": "Fiche obligataire",
-      "etf": "Fiche ETF"
+      "etf": "Fiche ETF",
+      "commodity": "Matières premières"
     },
     "figures": {
       "open": "Ouverture",

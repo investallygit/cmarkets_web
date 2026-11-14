@@ -3,6 +3,10 @@ import { clsx } from 'clsx'
 export interface PanelTabOption<T extends string> {
   value: T
   label: string
+  /** Greyed out and not chosen: an interval a series does not offer (spec section 9, screen 21). */
+  disabled?: boolean
+  /** Why it is greyed out, on hover. */
+  title?: string
 }
 
 interface PanelTabsProps<T extends string> {
@@ -29,11 +33,13 @@ export function PanelTabs<T extends string>({ value, options, onChange }: PanelT
             type="button"
             role="tab"
             aria-selected={active}
+            disabled={option.disabled}
+            title={option.title}
             onClick={() => onChange(option.value)}
             className={clsx(
               OPTION,
-              'px-1',
-              active ? 'text-primary' : 'text-secondary hover:text-primary',
+              'px-1 disabled:text-secondary/50',
+              active ? 'text-primary' : 'text-secondary enabled:hover:text-primary',
             )}
           >
             {active ? `[${option.label}]` : option.label}

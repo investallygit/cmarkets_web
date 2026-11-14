@@ -385,6 +385,8 @@ export const AUDIT_ACTIONS = [
   'subscription-reactivate',
   'invoice-resend',
   'security-describe',
+  /** A commodity's names, texts, CEMAC countries or related securities (CORR, screen 21). */
+  'commodity-describe',
 ] as const
 export type AuditAction = (typeof AUDIT_ACTIONS)[number]
 
@@ -481,6 +483,9 @@ export const AUDIT_FIELDS = [
   /** ECO's comparison countries ("NGA, FRA") and the indicators of its tiles ("gdpGrowth, inflation"). */
   'comparisonCountries',
   'tileIndicators',
+  /** A commodity's CEMAC countries ("GA, CG") and related securities ("SIAT, GAB-6.50-2028"). */
+  'countries',
+  'relatedSecurities',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

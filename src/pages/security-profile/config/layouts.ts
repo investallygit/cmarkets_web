@@ -138,6 +138,34 @@ const ETF_LAYOUTS: Layouts = {
   ],
 }
 
+/**
+ * A commodity's tabs (screen 21 mockup), beside the list of every series, which stays on the left
+ * of the page. DES:
+ *
+ *   history  history  | statistics
+ *   description | data
+ *   description | CEMAC links
+ *
+ * GP, the history alone; CMP, the comparison of up to five series beside their correlations and
+ * the statistics.
+ */
+// prettier-ignore
+const COMMODITY_LAYOUTS: Layouts = {
+  des: [
+    { i: 'history', name: 'commodityHistory', x: 0, y: 0, w: 8, h: 14, minW: 4, minH: 8 },
+    { i: 'statistics', name: 'commodityStatistics', x: 8, y: 0, w: 4, h: 14, minW: 3, minH: 6 },
+    { i: 'description', name: 'commodityDescription', x: 0, y: 14, w: 7, h: 12, minW: 3, minH: 5 },
+    { i: 'data', name: 'commodityData', x: 7, y: 14, w: 5, h: 5, minW: 3, minH: 4 },
+    { i: 'links', name: 'commodityLinks', x: 7, y: 19, w: 5, h: 7, minW: 3, minH: 4 },
+  ],
+  gp: [{ i: 'history', name: 'commodityHistory', x: 0, y: 0, w: 12, h: 26, minW: 6, minH: 10 }],
+  cmp: [
+    { i: 'compare', name: 'commodityCompare', x: 0, y: 0, w: 8, h: 26, minW: 4, minH: 10 },
+    { i: 'correlations', name: 'commodityCorrelations', x: 8, y: 0, w: 4, h: 11, minW: 3, minH: 5 },
+    { i: 'statistics', name: 'commodityStatistics', x: 8, y: 11, w: 4, h: 15, minW: 3, minH: 6 },
+  ],
+}
+
 /** The tabs every profile shows alike, which keep one layout across types. */
 const SHARED_TABS: ReadonlySet<SecurityFunction> = new Set(['n', 'doc', 'ana'])
 
@@ -145,6 +173,7 @@ const SHARED_TABS: ReadonlySet<SecurityFunction> = new Set(['n', 'doc', 'ana'])
 const OWN_LAYOUTS: Partial<Record<SecurityType, { prefix: string; layouts: Layouts }>> = {
   bond: { prefix: 'BOND', layouts: BOND_LAYOUTS },
   etf: { prefix: 'ETF', layouts: ETF_LAYOUTS },
+  commodity: { prefix: 'CMDTY', layouts: COMMODITY_LAYOUTS },
 }
 
 const ownLayouts = (fn: SecurityFunction, type: SecurityType) =>
@@ -157,7 +186,8 @@ export function defaultLayout(fn: SecurityFunction, type: SecurityType): readonl
 
 /**
  * Layout key of a tab for /me/layouts/{screen}: DES, DES-GP, DES-DVD... for an equity and the
- * shared tabs; BOND, BOND-GP, BOND-CF... for a bond's own; ETF, ETF-GP, ETF-HLD... for an ETF's.
+ * shared tabs; BOND, BOND-GP, BOND-CF... for a bond's own; ETF, ETF-GP, ETF-HLD... for an ETF's;
+ * CMDTY, CMDTY-GP, CMDTY-CMP for a commodity's.
  */
 export function layoutKey(fn: SecurityFunction, type: SecurityType): string {
   const prefix = ownLayouts(fn, type)?.prefix ?? 'DES'

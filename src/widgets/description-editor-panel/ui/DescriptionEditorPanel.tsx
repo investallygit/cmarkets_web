@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import { useCommodity, useCommodityRelated } from '@/entities/commodity'
 import { useSecurityProfile, useStoredDescription } from '@/entities/security'
+import { CommodityForm } from '@/features/describe-commodity'
 import { DescriptionForm } from '@/features/describe-security'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
@@ -12,9 +14,34 @@ interface DescriptionEditorPanelProps {
 
 /**
  * CORR: the description of the security picked for the price correction, in French and English,
- * as EQS shows it under its results (spec section 9, screen 3; ROADMAP decision 9).
+ * as EQS shows it under its results (spec section 9, screen 3; ROADMAP decision 9); on a commodity,
+ * its names, texts, CEMAC countries and related securities (screen 21).
  */
 export function DescriptionEditorPanel({ securityId }: DescriptionEditorPanelProps) {
+  const profile = useSecurityProfile(securityId ?? undefined)
+  if (securityId && profile.data?.type === 'commodity') return <CommodityEditor code={securityId} />
+  return <SecurityDescriptionEditor securityId={securityId} />
+}
+
+/** A commodity's names and links beside its texts (PUT /data/commodities/{code}). */
+function CommodityEditor({ code }: { code: string }) {
+  const { t } = useTranslation()
+  const commodity = useCommodity(code)
+  const related = useCommodityRelated(code)
+  return (
+    <Panel title={t('corrections.description.title', { code })} code="CORR">
+      <QueryView query={commodity}>
+        {(profile) => (
+          <QueryView query={related}>
+            {(links) => <CommodityForm key={profile.code} profile={profile} related={links} />}
+          </QueryView>
+        )}
+      </QueryView>
+    </Panel>
+  )
+}
+
+function SecurityDescriptionEditor({ securityId }: DescriptionEditorPanelProps) {
   const { t } = useTranslation()
   const profile = useSecurityProfile(securityId ?? undefined)
   const stored = useStoredDescription(securityId)

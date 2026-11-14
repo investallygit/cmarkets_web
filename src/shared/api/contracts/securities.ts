@@ -2,7 +2,8 @@ import type { CalendarEventType } from './calendar'
 import type { CurrencyCode, DataSource, IsoDate, IsoDateTime } from './common'
 import type { HistoryPointDto } from './market'
 
-export type SecurityType = 'equity' | 'bond' | 'etf'
+/** A commodity is a security too (ROADMAP decision 19): the search, DES, the lists and the alerts hold it. */
+export type SecurityType = 'equity' | 'bond' | 'etf' | 'commodity'
 
 export interface SecuritySearchItemDto {
   /** CMarket security code, e.g. "SEMC" or "AAPL.US". */

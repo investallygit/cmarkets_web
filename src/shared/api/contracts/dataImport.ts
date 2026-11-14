@@ -19,6 +19,8 @@ export type ImportType =
   | 'etf-nav'
   /** The yearly figures the World Bank does not publish for an economy, with their source (MACRO). */
   | 'macro'
+  /** The CEMAC complement of the commodities: cocoa, rubber, palm oil, gold, okoumé (COMMODITY_PRICES). */
+  | 'commodity-prices'
 
 /** How often a file is expected: each session, each auction, weekly, or when there is news. */
 export type ImportFrequency = 'session' | 'auction' | 'weekly' | 'onDemand' | 'periodic' | 'once'

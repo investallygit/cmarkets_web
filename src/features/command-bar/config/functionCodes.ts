@@ -34,7 +34,7 @@ interface SecurityTab {
 
 /**
  * Tabs of the security profiles; each one matches a command bar code (spec section 9, screens 2,
- * 19 and 20), offered on the types whose profile has it. BP stays screen 16's code.
+ * 19, 20 and 21), offered on the types whose profile has it. BP stays screen 16's code.
  */
 const SECURITY_TABS: readonly SecurityTab[] = [
   { code: 'DES', fn: 'des', labelKey: 'functions.DES' },
@@ -49,6 +49,7 @@ const SECURITY_TABS: readonly SecurityTab[] = [
   { code: 'HLD', fn: 'hld', labelKey: 'functions.HLD' },
   { code: 'PERF', fn: 'perf', labelKey: 'functions.PERF' },
   { code: 'DIST', fn: 'dist', labelKey: 'functions.DIST' },
+  { code: 'CMP', fn: 'cmp', labelKey: 'functions.CMP' },
 ]
 
 /** The screens whose code reads a security or a word beside it, listed apart below. */

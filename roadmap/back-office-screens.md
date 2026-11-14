@@ -71,6 +71,14 @@ by which step, and what is still to do. The terminal's screens are in
   value of 3.6"), is an alert to tick; the figure published stands with its source, which ECO
   shows, until the upload is rolled back, whatever EODHD's monthly load brings; the rollback
   puts back the figure it replaced.
+- **Built in step 41**: "Commodity prices" (`commodity-prices`: date; code, a series of the CEMAC
+  complement, `COCOA`, `RUBBER`, `PALM_OIL`, `GOLD`, `OKOUME`, in any case; value; unit, the
+  series', `USD/t`; source, its publisher), an on-demand file out of the session coverage; its
+  template, cocoa at the ICCO as the example. A monthly series' date becomes the first of its
+  month; a date in the future, another series or another unit is an error; a value that replaces
+  a stored one, or moves more than 15% from the one before, is an alert to tick. The values
+  published show in CMDTY with their source, and an alert on a new value goes off; the rollback
+  puts back what each row replaced.
 
 ## CORR · Data corrections (no mockup): done
 
@@ -85,8 +93,9 @@ by which step, and what is still to do. The terminal's screens are in
   English (2,000 characters each), who wrote each and when, what EQS shows of a language left
   empty, EODHD's English apart; an empty text removes that language. AUDT keeps each language
   changed, before and after.
-- **Fourth version (step 41)**: a commodity's name, description, exposed countries and related
-  securities.
+- **Built in step 41 (fourth version)**: on a commodity (`?security=BRENT`), its names in English
+  and French (the list's too), its texts, the CEMAC countries it weighs on and its related bonds
+  and equities, ten at most, in place of the description; AUDT keeps what changed.
 
 ## NEWS · News and documents (no mockup): done
 

@@ -137,6 +137,11 @@ GET /bonds/screener/facets
 GET /calendar
 GET /charts/{securityId}/drawings
 PUT /charts/{securityId}/drawings
+GET /commodities
+GET /commodities/{code}
+GET /commodities/{code}/history
+GET /commodities/{code}/related
+GET /commodities/compare
 GET /conversations
 POST /conversations
 GET /conversations/{id}
@@ -151,6 +156,7 @@ PUT /conversations/{id}/messages/{messageId}
 POST /conversations/{id}/mute
 POST /conversations/{id}/read
 POST /conversations/{id}/report
+PUT /data/commodities/{code}
 GET /data/corrections
 GET /data/coverage
 POST /data/documents

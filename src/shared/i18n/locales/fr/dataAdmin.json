@@ -15,7 +15,8 @@
       "news": "Actualités des émetteurs",
       "etf-profiles": "Profils d’ETF",
       "etf-nav": "VL et fourchettes des ETF",
-      "macro": "Indicateurs macroéconomiques"
+      "macro": "Indicateurs macroéconomiques",
+      "commodity-prices": "Cours des matières premières"
     },
     "frequencies": {
       "session": "Chaque séance",
@@ -248,7 +249,8 @@
       "bond-ratings": "le communiqué de l’agence",
       "etf-profiles": "la fiche du gestionnaire",
       "etf-nav": "les données du gestionnaire ou du teneur de marché",
-      "macro": "le rapport indiqué sur la ligne"
+      "macro": "le rapport indiqué sur la ligne",
+      "commodity-prices": "la source indiquée sur la ligne"
     },
     "selected": {
       "alert": "Ligne {{row}} sélectionnée : vérifiez {{field}} dans {{source}}, corrigez si besoin, puis cochez « Alerte vérifiée ».",
@@ -291,7 +293,8 @@
       "bond-ratings": "À la publication : les notes rejoignent leur historique et les notes composites de BS suivent ; un événement DataPublished est envoyé aux écrans ouverts.",
       "etf-profiles": "À la publication : les ETF sont référencés ou décrits à nouveau, leurs lignes et répartitions remplacées quand le fichier les donne, et leurs chiffres recalculés (ETFS, DES) ; un événement DataPublished est envoyé aux écrans ouverts.",
       "etf-nav": "À la publication : les primes, décotes et fourchettes des ETF sont recalculées (ETFS) ; un événement DataPublished est envoyé aux écrans ouverts.",
-      "macro": "À la publication : les indicateurs macroéconomiques d’ECO (tuiles, graphique, comparaison CEMAC) sont relus, la source affichée à côté de chaque chiffre ; un événement DataPublished est envoyé aux écrans ouverts."
+      "macro": "À la publication : les indicateurs macroéconomiques d’ECO (tuiles, graphique, comparaison CEMAC) sont relus, la source affichée à côté de chaque chiffre ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "commodity-prices": "À la publication : le complément CEMAC de CMDTY (liste, historique, statistiques) est relu, la source affichée dans ses données, et les alertes sur une nouvelle valeur se déclenchent ; un événement DataPublished est envoyé aux écrans ouverts."
     },
     "fix": {
       "title": "Corriger la ligne {{row}}",

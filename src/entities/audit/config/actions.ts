@@ -40,6 +40,7 @@ export const AUDIT_ACTION_GROUPS: readonly {
       'import-discard',
       'price-correct',
       'security-describe',
+      'commodity-describe',
     ],
   },
   {

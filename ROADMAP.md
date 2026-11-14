@@ -92,7 +92,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 38   | [Rate series, the CEMAC sovereign yields file, stale curve points](roadmap/steps/step-38-rate-series.md)             | Done          |
 | 39   | [FX: the XAF's cross rates on the ECB's reference rates (screen 26)](roadmap/steps/step-39-fx-dashboard.md)          | Done          |
 | 40   | [ECO: macroeconomic dashboard (screen 25)](roadmap/steps/step-40-macro-dashboard.md)                                 | Done          |
-| 41   | [CMDTY: commodities, the profile of a commodity (screen 21)](roadmap/steps/step-41-commodities.md)                   | To do, lane 2 |
+| 41   | [CMDTY: commodities, the profile of a commodity (screen 21)](roadmap/steps/step-41-commodities.md)                   | Done          |
 | 42   | [OPT, OPT RES: portfolio optimisation (screens 28 and 29)](roadmap/steps/step-42-portfolio-optimisation.md)          | To do, lane 3 |
 | 43   | [SVT account type, licensed SVTs, trader links, `/hubs/rfq`](roadmap/steps/step-43-svt-accounts.md)                  | To do, lane 1 |
 | 44   | [RFQ: requests for quotes on BTA and OTA (screen 22)](roadmap/steps/step-44-rfq-trading.md)                          | To do, lane 1 |

@@ -2,6 +2,7 @@ import account from './en/account.json'
 import admin from './en/admin.json'
 import analysis from './en/analysis.json'
 import bonds from './en/bonds.json'
+import commodities from './en/commodities.json'
 import core from './en/core.json'
 import dataAdmin from './en/dataAdmin.json'
 import etfs from './en/etfs.json'
@@ -31,6 +32,7 @@ const en = {
   ...bonds,
   ...etfs,
   ...macro,
+  ...commodities,
   ...portfolio,
   ...research,
   ...network,

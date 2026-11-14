@@ -1,0 +1,145 @@
+{
+  "commodities": {
+    "categories": {
+      "energy": "Énergie",
+      "metals": "Métaux",
+      "agriculture": "Agriculture",
+      "indices": "Indices",
+      "cemacComplement": "Complément CEMAC (fichier)"
+    },
+    "frequencies": {
+      "daily": "Quotidienne",
+      "weekly": "Hebdomadaire",
+      "monthly": "Mensuelle"
+    },
+    "units": {
+      "USD/bbl": "USD le baril",
+      "USD/MMBtu": "USD le million de BTU",
+      "USD/gal": "USD le gallon",
+      "USD/t": "USD la tonne",
+      "USD/lb": "USD la livre",
+      "USD/kg": "USD le kilogramme",
+      "USD/ozt": "USD l'once troy",
+      "USD/m3": "USD le mètre cube",
+      "USc/lb": "Cents US la livre",
+      "INDEX_2016": "Indice, 2016 = 100",
+      "INDEX_1982": "Indice, 1982 = 100"
+    },
+    "lags": {
+      "weeklyBatch": {
+        "frequency": "{{frequency}} (publication hebdomadaire)",
+        "lag": "jusqu'à ~1 semaine",
+        "warning": "Données publiées par lots hebdomadaires : la dernière valeur peut dater d'une semaine."
+      },
+      "nextDay": {
+        "frequency": "{{frequency}} (publiée le lendemain)",
+        "lag": "1 jour",
+        "warning": "Publiée le lendemain de sa semaine : la dernière valeur est celle de la semaine."
+      },
+      "afterMonth": {
+        "frequency": "{{frequency}} (publiée après le mois)",
+        "lag": "2 à 3 semaines après la fin du mois",
+        "warning": "Série mensuelle : la dernière valeur paraît 2 à 3 semaines après son mois."
+      },
+      "byFile": {
+        "frequency": "{{frequency}} (fichier du Data admin)",
+        "lag": "selon les envois du Data admin",
+        "warning": "Chargée par le Data admin : la dernière valeur est celle du dernier fichier."
+      }
+    },
+    "stale": "plus ancienne que la série ne le permet",
+    "list": {
+      "label": "Matières premières par catégorie",
+      "count_one": "{{count}} série",
+      "count_other": "{{count}} séries",
+      "asOf": "Valeur du {{date}}",
+      "legend": "D quotidienne · W hebdomadaire · M mensuelle"
+    },
+    "header": {
+      "last": "Dernière valeur",
+      "change": "Variation depuis la valeur précédente",
+      "asOf": "au {{date}}",
+      "source": "Source {{source}}",
+      "viaEodhd": "{{source}} via EODHD"
+    },
+    "figures": {
+      "month": "1 mois",
+      "ytd": "Depuis janv.",
+      "year": "1 an",
+      "high12m": "Plus haut 12 m",
+      "low12m": "Plus bas 12 m",
+      "volatility": "Vol. 1 an"
+    },
+    "periods": {
+      "1Y": "1 an",
+      "5Y": "5 ans",
+      "10Y": "10 ans",
+      "MAX": "Max"
+    },
+    "history": {
+      "average": "Moyenne mobile 50 périodes",
+      "averageToggle": "MM 50",
+      "notOffered": "Pas publiée à cet intervalle",
+      "summary": "{{name}} du {{from}} au {{to}} : de {{first}} à {{last}}",
+      "empty": "Aucune valeur pour cette série.",
+      "note": "Ni volume ni cours d'ouverture : la source publie une seule valeur par période."
+    },
+    "statistics": {
+      "last": "Dernière valeur",
+      "previous": "Valeur précédente",
+      "months": "Variation 1 mois · 3 mois",
+      "year": "Depuis janv. · 1 an",
+      "fiveYears": "5 ans (par an)",
+      "high12m": "Plus haut sur 12 mois",
+      "low12m": "Plus bas sur 12 mois",
+      "average5y": "Moyenne sur 5 ans",
+      "volatility": "Volatilité annualisée 1 an",
+      "correlation": "Corrélation 1 an",
+      "correlationWith": "Corrélation 1 an avec {{name}}"
+    },
+    "description": {
+      "none": "Le Data admin n'a pas encore décrit cette matière première.",
+      "facts": "Unité · fréquence · historique depuis : {{unit}} · {{frequency}} · {{since}}"
+    },
+    "data": {
+      "code": "Code",
+      "source": "Source primaire",
+      "updated": "Dernière mise à jour CMarket",
+      "lag": "Délai de publication",
+      "file": "fichier"
+    },
+    "links": {
+      "countries": "Pays exposés",
+      "securities": "Titres liés",
+      "news": "Dernières actualités",
+      "noNews": "Aucune actualité ne la cite encore."
+    },
+    "compare": {
+      "pick": "Séries comparées, {{count}} au plus",
+      "full": "{{count}} séries au plus : retirez-en une d'abord",
+      "empty": "Ces séries n'ont aucun mois en commun sur cette période.",
+      "summary": "{{series}}, base 100, du {{from}} au {{to}}",
+      "matrix": "Corrélations des variations mensuelles",
+      "series": "Série",
+      "note": "Corrélations des variations mensuelles sur la période ; un tiret sous six mois en commun."
+    },
+    "edit": {
+      "title": "Matière première",
+      "pick": "Matière première",
+      "nameEn": "Nom (anglais)",
+      "nameFr": "Nom (français)",
+      "shortNameEn": "Nom dans la liste (anglais)",
+      "shortNameFr": "Nom dans la liste (français)",
+      "descriptionEn": "Description (anglais)",
+      "descriptionFr": "Description (français)",
+      "countries": "Pays CEMAC exposés",
+      "securities": "Titres liés (obligations, actions), {{count}} au plus",
+      "save": "Enregistrer la matière première",
+      "saved": "{{code}} enregistrée.",
+      "failed": "Non enregistrée : {{message}}",
+      "required": "Obligatoire.",
+      "addSecurity": "Ajouter un titre",
+      "removeSecurity": "Retirer {{code}}"
+    }
+  }
+}

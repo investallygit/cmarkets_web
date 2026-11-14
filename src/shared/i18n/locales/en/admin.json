@@ -452,7 +452,8 @@
       "subscription-suspend": "Subscription suspended",
       "subscription-reactivate": "Subscription suspension lifted",
       "invoice-resend": "Invoice sent again",
-      "security-describe": "Security description"
+      "security-describe": "Security description",
+      "commodity-describe": "Commodity description"
     },
     "fields": {
       "accountType": "Type",
@@ -518,7 +519,9 @@
       "fxCurrencies": "FX currencies against XAF",
       "matrixCurrencies": "FX matrix currencies",
       "comparisonCountries": "ECO comparison countries",
-      "tileIndicators": "ECO tile indicators"
+      "tileIndicators": "ECO tile indicators",
+      "countries": "Commodity's CEMAC countries",
+      "relatedSecurities": "Commodity's related securities"
     },
     "targetTypes": {
       "user": "Account",

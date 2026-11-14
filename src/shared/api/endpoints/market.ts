@@ -1,5 +1,12 @@
 import type {
   CemacTableDto,
+  CommodityCategory,
+  CommodityComparisonDto,
+  CommodityFrequency,
+  CommodityHistoryDto,
+  CommodityListItemDto,
+  CommodityProfileDto,
+  CommodityRelatedDto,
   FxConversionDto,
   FxHistoryDto,
   FxInterval,
@@ -34,8 +41,8 @@ export interface HistoryRange {
 
 /**
  * CMarket.Api/Controllers/Market: the session, the dashboard's panels, indices, rates and FX, the
- * rate series (spec section 11), the rates of screens 25 and 26, screen 26's exchange rates and
- * screen 25's macro indicators.
+ * rate series (spec section 11), the rates of screens 25 and 26, screen 26's exchange rates,
+ * screen 25's macro indicators and screen 21's commodities.
  */
 export const marketRoutes = {
   status: route('GET', '/market/status', answer<MarketStatusDto>()),
@@ -58,6 +65,11 @@ export const marketRoutes = {
   macroIndicators: route('GET', '/macro/indicators', answer<MacroIndicatorInfoDto[]>()),
   macroCompare: route('GET', '/macro/compare', answer<MacroComparisonDto>()),
   cemacTable: route('GET', '/macro/cemac-table', answer<CemacTableDto>()),
+  commodities: route('GET', '/commodities', answer<CommodityListItemDto[]>()),
+  commodityCompare: route('GET', '/commodities/compare', answer<CommodityComparisonDto>()),
+  commodity: route('GET', '/commodities/{code}', answer<CommodityProfileDto>()),
+  commodityHistory: route('GET', '/commodities/{code}/history', answer<CommodityHistoryDto>()),
+  commodityRelated: route('GET', '/commodities/{code}/related', answer<CommodityRelatedDto>()),
 }
 
 export const marketApi = {
@@ -126,4 +138,28 @@ export const marketApi = {
   /** The CEMAC's six and Sub-Saharan Africa on the indicators given, or the mockup's seven. */
   cemacTable: (indicators: readonly string[] | undefined, signal?: AbortSignal) =>
     send(marketRoutes.cemacTable, { query: { indicators: indicators?.join(',') }, signal }),
+  /** Screen 21's list: every series, or a category's, in the list's order. */
+  commodities: (category: CommodityCategory | undefined, signal?: AbortSignal) =>
+    send(marketRoutes.commodities, { query: { category }, signal }),
+  /** A commodity's profile by its code ("BRENT"). */
+  commodity: (code: string, signal?: AbortSignal) =>
+    send(marketRoutes.commodity, { params: { code }, signal }),
+  /** A series' values of an interval it offers, oldest first; ISO dates, the whole history without. */
+  commodityHistory: (
+    code: string,
+    range: { interval: CommodityFrequency; from?: string; to?: string },
+    signal?: AbortSignal,
+  ) => send(marketRoutes.commodityHistory, { params: { code }, query: { ...range }, signal }),
+  /** Up to five series on their monthly values, rebased to 100, and their correlations. */
+  commodityCompare: (
+    input: { codes: readonly string[]; from?: string; to?: string },
+    signal?: AbortSignal,
+  ) =>
+    send(marketRoutes.commodityCompare, {
+      query: { codes: input.codes.join(','), from: input.from, to: input.to },
+      signal,
+    }),
+  /** The CEMAC countries exposed, the related securities and the latest news. */
+  commodityRelated: (code: string, signal?: AbortSignal) =>
+    send(marketRoutes.commodityRelated, { params: { code }, signal }),
 }

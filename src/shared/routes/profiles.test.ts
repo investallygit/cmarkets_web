@@ -22,7 +22,7 @@ describe('the profile of each security type (spec section 9)', () => {
   })
 
   it('offers a tab on the types whose profile has it', () => {
-    expect(securityFunctionTypes('des')).toEqual(['equity', 'bond', 'etf'])
+    expect(securityFunctionTypes('des')).toEqual(['equity', 'bond', 'etf', 'commodity'])
     expect(securityFunctionTypes('fa')).toEqual(['equity'])
     expect(securityFunctionTypes('cf')).toEqual(['bond'])
     expect(hasProfileTab('bond', 'dvd')).toBe(false)
@@ -54,5 +54,13 @@ describe('the profile of each security type (spec section 9)', () => {
     expect(profileTabLabelKey('etf', 'gp')).toBe('security.tabs.gp')
     expect(securityFunctionTypes('hld')).toEqual(['etf'])
     expect(hasProfileTab('equity', 'dist')).toBe(false)
+  })
+
+  it("gives a commodity screen 21's four tabs, GP its history, and lights CMDTY", () => {
+    expect(SECURITY_PROFILES.commodity.tabs).toEqual(['des', 'gp', 'cmp', 'n'])
+    expect(SECURITY_PROFILES.commodity.menuParent).toBe('CMDTY')
+    expect(profileTabLabelKey('commodity', 'gp')).toBe('security.tabs.history')
+    expect(securityFunctionTypes('cmp')).toEqual(['commodity'])
+    expect(hasProfileTab('commodity', 'doc')).toBe(false)
   })
 })

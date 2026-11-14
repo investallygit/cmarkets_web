@@ -1,0 +1,145 @@
+{
+  "commodities": {
+    "categories": {
+      "energy": "Energy",
+      "metals": "Metals",
+      "agriculture": "Agriculture",
+      "indices": "Indices",
+      "cemacComplement": "CEMAC complement (file)"
+    },
+    "frequencies": {
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly"
+    },
+    "units": {
+      "USD/bbl": "USD per barrel",
+      "USD/MMBtu": "USD per million BTU",
+      "USD/gal": "USD per gallon",
+      "USD/t": "USD per metric ton",
+      "USD/lb": "USD per pound",
+      "USD/kg": "USD per kilogram",
+      "USD/ozt": "USD per troy ounce",
+      "USD/m3": "USD per cubic metre",
+      "USc/lb": "US cents per pound",
+      "INDEX_2016": "Index, 2016 = 100",
+      "INDEX_1982": "Index, 1982 = 100"
+    },
+    "lags": {
+      "weeklyBatch": {
+        "frequency": "{{frequency}} (weekly publication)",
+        "lag": "up to ~1 week",
+        "warning": "Data published in weekly batches: the last value can be a week old."
+      },
+      "nextDay": {
+        "frequency": "{{frequency}} (published the next day)",
+        "lag": "1 day",
+        "warning": "Published a day after its week: the last value is the week's."
+      },
+      "afterMonth": {
+        "frequency": "{{frequency}} (published after the month)",
+        "lag": "2 to 3 weeks after month end",
+        "warning": "Monthly series: the last value comes 2 to 3 weeks after its month."
+      },
+      "byFile": {
+        "frequency": "{{frequency}} (Data admin's file)",
+        "lag": "as the Data admin uploads it",
+        "warning": "Uploaded by the Data admin: the last value is that of the latest file."
+      }
+    },
+    "stale": "older than the series allows",
+    "list": {
+      "label": "Commodities by category",
+      "count_one": "{{count}} series",
+      "count_other": "{{count}} series",
+      "asOf": "Value of {{date}}",
+      "legend": "D daily · W weekly · M monthly"
+    },
+    "header": {
+      "last": "Last value",
+      "change": "Change since the previous value",
+      "asOf": "as of {{date}}",
+      "source": "Source {{source}}",
+      "viaEodhd": "{{source}} via EODHD"
+    },
+    "figures": {
+      "month": "1 month",
+      "ytd": "YTD",
+      "year": "1Y",
+      "high12m": "12m high",
+      "low12m": "12m low",
+      "volatility": "Vol. 1Y"
+    },
+    "periods": {
+      "1Y": "1Y",
+      "5Y": "5Y",
+      "10Y": "10Y",
+      "MAX": "Max"
+    },
+    "history": {
+      "average": "50-period moving average",
+      "averageToggle": "MA 50",
+      "notOffered": "Not published at this interval",
+      "summary": "{{name}} from {{from}} to {{to}}: {{first}} to {{last}}",
+      "empty": "No value for this series yet.",
+      "note": "No volume or open price: the source publishes a single value per period."
+    },
+    "statistics": {
+      "last": "Last value",
+      "previous": "Previous value",
+      "months": "Change 1 month · 3 months",
+      "year": "YTD · 1Y",
+      "fiveYears": "5 years (p.a.)",
+      "high12m": "12-month high",
+      "low12m": "12-month low",
+      "average5y": "5-year average",
+      "volatility": "Annualized volatility 1Y",
+      "correlation": "1Y correlation",
+      "correlationWith": "1Y correlation with {{name}}"
+    },
+    "description": {
+      "none": "The Data admin has not described this commodity yet.",
+      "facts": "Unit · frequency · history since: {{unit}} · {{frequency}} · {{since}}"
+    },
+    "data": {
+      "code": "Code",
+      "source": "Primary source",
+      "updated": "Last CMarket update",
+      "lag": "Publication lag",
+      "file": "file"
+    },
+    "links": {
+      "countries": "Exposed countries",
+      "securities": "Related securities",
+      "news": "Latest news",
+      "noNews": "No news names it yet."
+    },
+    "compare": {
+      "pick": "Series compared, {{count}} at most",
+      "full": "{{count}} series at most: take one away first",
+      "empty": "These series have no month in common in this period.",
+      "summary": "{{series}}, rebased to 100, from {{from}} to {{to}}",
+      "matrix": "Correlations of the monthly changes",
+      "series": "Series",
+      "note": "Correlations of the monthly changes over the period; a dash under six months in common."
+    },
+    "edit": {
+      "title": "Commodity",
+      "pick": "Commodity",
+      "nameEn": "Name (English)",
+      "nameFr": "Name (French)",
+      "shortNameEn": "List name (English)",
+      "shortNameFr": "List name (French)",
+      "descriptionEn": "Description (English)",
+      "descriptionFr": "Description (French)",
+      "countries": "Exposed CEMAC countries",
+      "securities": "Related securities (bonds, equities), {{count}} at most",
+      "save": "Save the commodity",
+      "saved": "{{code}} saved.",
+      "failed": "Not saved: {{message}}",
+      "required": "Required.",
+      "addSecurity": "Add a security",
+      "removeSecurity": "Remove {{code}}"
+    }
+  }
+}

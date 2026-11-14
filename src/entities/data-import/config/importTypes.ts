@@ -15,6 +15,7 @@ export const IMPORT_TYPES: readonly ImportType[] = [
   'etf-profiles',
   'etf-nav',
   'macro',
+  'commodity-prices',
 ]
 
 /**

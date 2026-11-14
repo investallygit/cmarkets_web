@@ -452,7 +452,8 @@
       "subscription-suspend": "Abonnement suspendu",
       "subscription-reactivate": "Suspension d’abonnement levée",
       "invoice-resend": "Facture renvoyée",
-      "security-describe": "Description d'un titre"
+      "security-describe": "Description d'un titre",
+      "commodity-describe": "Description d'une matière première"
     },
     "fields": {
       "accountType": "Type",
@@ -518,7 +519,9 @@
       "fxCurrencies": "Devises de FX contre XAF",
       "matrixCurrencies": "Devises de la matrice de FX",
       "comparisonCountries": "Pays de comparaison d’ECO",
-      "tileIndicators": "Indicateurs des tuiles d’ECO"
+      "tileIndicators": "Indicateurs des tuiles d’ECO",
+      "countries": "Pays CEMAC d’une matière première",
+      "relatedSecurities": "Titres liés d’une matière première"
     },
     "targetTypes": {
       "user": "Compte",
