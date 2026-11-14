@@ -6,6 +6,9 @@ import type {
   MessageDto,
   NewsChannel,
   NewsType,
+  RfqAgreementStatus,
+  RfqRequestStatus,
+  RfqResponseStatus,
   SvtLinkStatus,
 } from '@/shared/api/contracts'
 
@@ -76,6 +79,20 @@ export interface RfqEventMap {
   SvtLinkChanged: { linkId: string; svtId: string; status: SvtLinkStatus }
   /** The server's clock, sent when the connection opens: the countdowns follow it. */
   ServerTime: { at: IsoDateTime }
+  /** A request came onto the board (ROADMAP step 44). */
+  RfqPublished: { rfqId: string }
+  /** A request left the board: confirmed, cancelled or expired. */
+  RfqClosed: { rfqId: string; status: RfqRequestStatus }
+  /** An answer to a request of the organisation (the requester's side). */
+  ResponseReceived: { rfqId: string; responseId: string }
+  /** An answer improved, withdrawn or expired. */
+  ResponseUpdated: { rfqId: string; responseId: string; status: RfqResponseStatus }
+  /** The selection of a request of the organisation has a new version. */
+  AllocationChanged: { rfqId: string; version: number }
+  /** The requester confirmed the selection: the responders read their outcome. */
+  RfqConfirmed: { rfqId: string; status: RfqRequestStatus; agreements: number }
+  /** An agreement made at a confirmation, awaiting its SVTs. */
+  AgreementCreated: { agreementId: string; rfqId: string; status: RfqAgreementStatus }
 }
 
 export type RfqEventName = keyof RfqEventMap

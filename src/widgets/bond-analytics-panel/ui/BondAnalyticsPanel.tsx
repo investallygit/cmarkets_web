@@ -3,9 +3,10 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { useBondAnalytics, useBondLabels, ytwDiffers } from '@/entities/bond'
+import { useHasPermission } from '@/entities/session'
 import type { BondAnalyticsDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
-import { bondPricingPath } from '@/shared/routes/paths'
+import { bondPricingPath, rfqPath } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 
@@ -32,6 +33,7 @@ interface BondAnalyticsPanelProps {
 export function BondAnalyticsPanel({ bondId }: BondAnalyticsPanelProps) {
   const { t } = useTranslation()
   const analytics = useBondAnalytics(bondId)
+  const trader = useHasPermission('rfq:trade')
   const identification = analytics.data?.identification
   return (
     <Panel
@@ -43,9 +45,20 @@ export function BondAnalyticsPanel({ bondId }: BondAnalyticsPanelProps) {
       code="BS"
       options={
         bondId && (
-          <Link to={bondPricingPath(bondId)} className="panel-no-drag uppercase hover:text-primary">
-            {t('bondScreener.openInBp')}
-          </Link>
+          <span className="flex items-center gap-3">
+            {/* A BTA or an OTA of the BEAC: its price asked on the RFQ (spec, screen 22). */}
+            {trader && identification?.market === 'beac' && (
+              <Link to={rfqPath(bondId)} className="panel-no-drag uppercase hover:text-primary">
+                {t('rfqTrading.requestPrice')}
+              </Link>
+            )}
+            <Link
+              to={bondPricingPath(bondId)}
+              className="panel-no-drag uppercase hover:text-primary"
+            >
+              {t('bondScreener.openInBp')}
+            </Link>
+          </span>
         )
       }
       bodyClassName="overflow-y-auto"

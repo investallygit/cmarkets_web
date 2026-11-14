@@ -165,6 +165,7 @@ export const adminRoutes = {
   saveMacroSettings: route('PUT', '/admin/macro/settings', answer<MacroSettingsDto>()),
   rfqSettings: route('GET', '/admin/rfq/svt', answer<RfqAdminSettingsDto>()),
   saveRfqSettings: route('PUT', '/admin/rfq/svt', answer<RfqAdminSettingsDto>()),
+  rfqAudit: route('GET', '/admin/rfq/audit', answer<Blob>()),
   specialties: route('GET', '/admin/specialties', answer<AdminSpecialtyDto[]>()),
   addSpecialty: route('POST', '/admin/specialties', answer<AdminSpecialtyDto>()),
   renameSpecialty: route('PUT', '/admin/specialties/{id}', answer<AdminSpecialtyDto>()),
@@ -413,6 +414,9 @@ export const adminApi = {
     send(adminRoutes.saveMacroSettings, { body: settings }),
   /** The RFQ's switch, its amounts and the licensed SVTs (ROADMAP step 43). */
   rfqSettings: (signal?: AbortSignal) => send(adminRoutes.rfqSettings, { signal }),
+  /** The RFQ's compliance export: every event of the days from `from` to `to` (Douala), as CSV. */
+  rfqAudit: (from: string, to: string) =>
+    sendBlob(adminRoutes.rfqAudit, { query: { from, to, format: 'csv' } }),
   /** The whole list in its order: a bank added by its name, none taken off (untick it instead). */
   saveRfqSettings: (settings: RfqAdminSettingsInput) =>
     send(adminRoutes.saveRfqSettings, { body: settings }),

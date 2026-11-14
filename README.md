@@ -84,7 +84,7 @@ before upload.
 | 21 · Commodities (CMDTY, DES on a commodity)                              | Done; EODHD's 23 series twice a day, the CEMAC's by file      |
 | 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | Done; section 14.6's solver, scenarios computed again         |
 | SVT account type (fourth version), licensed SVTs, trader links            | Done; an SVT confirms each link on TRD, with a daily limit    |
-| 22 · Government securities RFQ (RFQ)                                      | To do, step 44                                                |
+| 22 · Government securities RFQ (RFQ)                                      | Done; ranked answers, the selection confirmed at its version  |
 | 27 · SVT approval (SVT)                                                   | To do, step 45                                                |
 | 23 · Agreements (RFQ AGR)                                                 | To do, step 46                                                |
 | 24 · Daily reporting to the BEAC (RFQ REP)                                | To do, step 47                                                |
@@ -163,11 +163,13 @@ src/
               bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
               etf-profile-panels, security-description-panel, description-editor-panel,
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
-              trader-links-panel, opt-setup-panels, opt-result-panels...),
+              trader-links-panel, rfq-new-request, rfq-my-request, rfq-board, rfq-blotter,
+              rfq-tabs, opt-setup-panels, opt-result-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
-              screen-etfs, price-bond, manage-svt-links, decide-trader-link,
+              screen-etfs, price-bond, manage-svt-links, decide-trader-link, publish-rfq, answer-rfq,
+              confirm-rfq, export-rfq-audit,
               manage-portfolios, record-transaction, generate-portfolio-report, import-opt-universe,
               run-optimization, save-opt-scenario, create-portfolio-from-allocation,
               rebalance-portfolio, export-opt-scenario, buy-publication,
@@ -197,7 +199,8 @@ src/
               analyst, document, chart-drawing, watchlist, alert, auction, rate, macro (ECO's
               economies, indicators and figures), commodity (CMDTY's series, values and
               statistics), svt-link (a trader's links to the SVTs, a bank's requests and linked
-              traders, the RFQ's hub), news, news-source
+              traders, the RFQ's hub), rfq (the requests for quotes, the board, the answers and the
+              selection, the agreements of a request, the blotter), news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
               (MPAY's statements, click anomalies and payment settings),
               calendar-event, notification, data-import, data-provider (EODHD), stored-price,

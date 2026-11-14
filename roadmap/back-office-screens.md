@@ -194,7 +194,9 @@ by which step, and what is still to do. The terminal's screens are in
   after. USER's "View audit log" opens it on the account: what it did and what was done to it.
 - **Built in steps 12 and 18**: a status approved or rejected, with the account type; the reports
   dismissed, the reported conversations read, the specialties and the directory settings changed.
-- **Fourth version (step 44)**: the RFQ's compliance export, over a period.
+- **Built in step 44 (fourth version)**: under the entry, "RFQ compliance export" for the holder of
+  `rfq:report` (the Admin): every request, answer, selection, confirmation and agreement of the
+  RFQ between two days, to the millisecond, as CSV.
 
 ## PAY · Analyst payouts (no mockup): done
 

@@ -44,7 +44,11 @@ export const PERMISSION_GROUPS: readonly {
     permissions: ['news:write', 'news:stats', 'news:moderate', 'news:payments'],
   },
   // The RFQ of the fourth version (ROADMAP decision 18): taken away while it is off (decision 24).
-  { id: 'rfq', label: 'permissions.groups.rfq', permissions: ['rfq:trade', 'svt:approve'] },
+  {
+    id: 'rfq',
+    label: 'permissions.groups.rfq',
+    permissions: ['rfq:trade', 'svt:approve', 'rfq:read', 'rfq:report'],
+  },
   { id: 'data', label: 'permissions.groups.data', permissions: ['data:import', 'content:publish'] },
   {
     id: 'admin',
@@ -93,6 +97,8 @@ export const PERMISSION_LABELS: Record<Permission, TranslationKey> = {
   'payouts:manage': 'permissions.labels.payoutsManage',
   'rfq:trade': 'permissions.labels.rfqTrade',
   'svt:approve': 'permissions.labels.svtApprove',
+  'rfq:read': 'permissions.labels.rfqRead',
+  'rfq:report': 'permissions.labels.rfqReport',
 }
 
 /** The Admin keeps the settings: without them, nobody could give a permission back. */

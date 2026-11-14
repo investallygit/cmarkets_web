@@ -389,7 +389,9 @@
       "auditRead": "Journal d'audit",
       "payoutsManage": "Versements aux analystes",
       "rfqTrade": "Demander des liens aux SVT, puis traiter sur le RFQ",
-      "svtApprove": "Liens des traders et approbations d'un SVT"
+      "svtApprove": "Liens des traders et approbations d'un SVT",
+      "rfqRead": "Consulter les demandes et accords RFQ de l'organisation",
+      "rfqReport": "Export de conformité et reporting du RFQ"
     },
     "locked": "L'Admin garde les paramètres : sans eux, personne ne pourrait rendre une permission.",
     "hint": "Coché : le type de compte a la permission. Les utilisateurs reçoivent un changement au prochain chargement de page.",

@@ -3,6 +3,7 @@ export {
   useAddSpecialty,
   useAdminSpecialties,
   useDirectorySettings,
+  useExportRfqAudit,
   useMacroSettings,
   usePlatformSettings,
   useRemoveSpecialty,

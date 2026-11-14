@@ -389,7 +389,9 @@
       "auditRead": "Audit log",
       "payoutsManage": "Analyst payouts",
       "rfqTrade": "Ask SVTs for links, then trade on the RFQ",
-      "svtApprove": "An SVT's trader links and approvals"
+      "svtApprove": "An SVT's trader links and approvals",
+      "rfqRead": "Read the organisation's RFQ requests and agreements",
+      "rfqReport": "The RFQ's compliance export and reporting"
     },
     "locked": "The Admin keeps the settings: without them, nobody could give a permission back.",
     "hint": "Ticked: the account type has the permission. Users get a change at their next page load.",

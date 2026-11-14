@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { setServerTime } from '@/shared/lib/serverClock'
 import { useRfqConnection, useRfqEvent } from '@/shared/realtime'
 import { toast } from '@/shared/ui/toast'
-import { setServerTime } from '../model/serverClock'
 import { svtLinkKeys } from './queries'
 
 /**

@@ -122,6 +122,16 @@ export function useSaveRfqSettings() {
   })
 }
 
+/**
+ * GET /admin/rfq/audit: the RFQ's compliance export (ROADMAP step 44), every event of the days from
+ * `from` to `to` as CSV.
+ */
+export function useExportRfqAudit() {
+  return useMutation({
+    mutationFn: ({ from, to }: { from: string; to: string }) => adminApi.rfqAudit(from, to),
+  })
+}
+
 /** GET /admin/specialties, the prototype's: the closed list and the profiles listing each. */
 export function useAdminSpecialties() {
   return useQuery({

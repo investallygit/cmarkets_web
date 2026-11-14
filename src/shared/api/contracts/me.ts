@@ -82,9 +82,12 @@ export const PERMISSIONS = [
   'audit:read',
   'payouts:manage',
   // The RFQ (ROADMAP decision 18): a Trader's or a Manager's links to the SVTs, then its requests;
-  // the SVT's trader links, then its approvals. Taken away while the RFQ is off (decision 24).
+  // the SVT's trader links, then its approvals; the organisation's requests, read (its CEO too).
+  // Taken away while the RFQ is off (decision 24), but rfq:report, the Admin's compliance export.
   'rfq:trade',
   'svt:approve',
+  'rfq:read',
+  'rfq:report',
 ] as const
 export type Permission = (typeof PERMISSIONS)[number]
 

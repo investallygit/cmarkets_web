@@ -157,6 +157,14 @@ export function yieldCurvesPath(bondId: string): string {
   return `${routes.yieldCurves}/${encodeURIComponent(bondId)}`
 }
 
+/**
+ * RFQ (screen 22), its new request on a BTA or an OTA: "Request a price (RFQ)" on BS and on a bond's
+ * profile (ROADMAP step 44).
+ */
+export function rfqPath(securityId?: string): string {
+  return securityId ? `${routes.rfq}?security=${encodeURIComponent(securityId)}` : routes.rfq
+}
+
 /** BP, bond pricing: on a bond of the list, or on the first one. */
 export function bondPricingPath(bondId?: string): string {
   return bondId ? `${routes.bondPricing}/${encodeURIComponent(bondId)}` : routes.bondPricing

@@ -1,7 +1,10 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import { useBond, useBondAnalytics, ytwDiffers } from '@/entities/bond'
+import { useHasPermission } from '@/entities/session'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
+import { rfqPath } from '@/shared/routes/paths'
 import { ChangeText } from '@/shared/ui/ChangeText'
 import { DASH, useBondWords } from '../lib/words'
 
@@ -22,6 +25,7 @@ export function BondProfileHeader({ profile }: { profile: SecurityProfileDto }) 
   const format = useFormat()
   const words = useBondWords()
   const bond = useBond(profile.id).data
+  const trader = useHasPermission('rfq:trade')
   const analytics = useBondAnalytics(profile.id).data
   const pricing = analytics?.pricing
   const model = pricing?.priceSource === 'model'
@@ -95,6 +99,15 @@ export function BondProfileHeader({ profile }: { profile: SecurityProfileDto }) 
           <ChangeText value={change} showIcon className="font-mono text-label font-semibold" />
         )}
       </div>
+      {/* A BTA or an OTA of the BEAC: its price asked on the RFQ (spec, screen 22). */}
+      {trader && bond?.market === 'beac' && (
+        <Link
+          to={rfqPath(profile.id)}
+          className="inline-flex h-6 items-center border border-accent-amber/60 px-3 font-sans text-data text-accent-amber outline-none hover:bg-selected focus-visible:ring-1 focus-visible:ring-accent-amber"
+        >
+          {t('rfqTrading.requestPrice')}
+        </Link>
+      )}
       <dl className="ml-auto flex flex-wrap gap-x-8 gap-y-1">
         {figures.map((figure) => (
           <div key={figure.label} className="flex flex-col gap-0.5">

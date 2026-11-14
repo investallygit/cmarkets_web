@@ -32,7 +32,7 @@ const admin: Access = { accountType: 'admin', permissions: ['users:manage', 'set
 const svt: Access = { accountType: 'svt', permissions: ['market:read', 'svt:approve'] }
 const trader: Access = {
   accountType: 'trader',
-  permissions: ['market:read', 'analysis:read', 'portfolios:read', 'rfq:trade'],
+  permissions: ['market:read', 'analysis:read', 'portfolios:read', 'rfq:trade', 'rfq:read'],
 }
 
 describe('screen access (spec section 12)', () => {
@@ -73,7 +73,7 @@ describe('the SVT and the RFQ (ROADMAP decisions 15, 16 and 18)', () => {
     expect(canAccessScreen(svt, screenById('RFQ'))).toBe(false)
   })
 
-  it('puts RFQ after BS for a trader who holds its key, and nowhere without it', () => {
+  it('puts RFQ after BS for a trader who holds its keys, and nowhere without them', () => {
     expect(menuOf(trader)).toEqual([
       'MKT',
       'CMDTY',
@@ -90,9 +90,17 @@ describe('the SVT and the RFQ (ROADMAP decisions 15, 16 and 18)', () => {
       'CFG',
     ])
     expect(
-      menuOf({ ...trader, permissions: trader.permissions.filter((key) => key !== 'rfq:trade') }),
+      menuOf({
+        ...trader,
+        permissions: trader.permissions.filter((key) => !key.startsWith('rfq:')),
+      }),
     ).not.toContain('RFQ')
     expect(canAccessScreen(trader, screenById('TRD'))).toBe(false)
+  })
+
+  it("opens RFQ to a CEO, who reads its organisation's requests (ROADMAP step 44)", () => {
+    expect(menuOf({ ...ceo, permissions: [...ceo.permissions, 'rfq:read'] })).toContain('RFQ')
+    expect(menuOf(ceo)).not.toContain('RFQ')
   })
 })
 

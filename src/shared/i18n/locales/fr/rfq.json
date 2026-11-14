@@ -103,5 +103,231 @@
       "email": "Une adresse e-mail.",
       "name": "Le nom de la banque."
     }
+  },
+  "rfqTrading": {
+    "tabs": {
+      "label": "Écrans du RFQ",
+      "trading": "Négociation",
+      "agreements": "Accords",
+      "reporting": "Reporting BEAC"
+    },
+    "side": {
+      "buy": "Achat",
+      "sell": "Vente"
+    },
+    "sideUpper": {
+      "buy": "ACHAT",
+      "sell": "VENTE"
+    },
+    "quoteType": {
+      "rate": "Taux",
+      "price": "Prix pied de coupon",
+      "yield": "Rendement"
+    },
+    "requestStatus": {
+      "published": "Publiée",
+      "answersReceived": "Réponses reçues",
+      "confirmed": "Confirmée",
+      "partiallyFilled": "Partiellement servie",
+      "cancelled": "Annulée",
+      "expired": "Expirée"
+    },
+    "responseStatus": {
+      "sent": "Envoyée",
+      "improved": "Améliorée",
+      "withdrawn": "Retirée",
+      "selected": "Retenue",
+      "partiallySelected": "Partiellement retenue",
+      "notSelected": "Non retenue",
+      "expired": "Expirée"
+    },
+    "agreementStatus": {
+      "awaitingSvt": "En attente SVT",
+      "concluded": "Conclu",
+      "rejected": "Rejeté par un SVT",
+      "expired": "Expiré",
+      "cancelled": "Annulé"
+    },
+    "requestPrice": "Demander un prix (RFQ)",
+    "newRequest": {
+      "security": "Titre public (BTA / OTA)",
+      "side": "Sens",
+      "faceAmount": "Nominal demandé (XAF)",
+      "quoteType": "Cotation en",
+      "settlementDate": "Livraison contre paiement convenue",
+      "duration": "Durée de la demande",
+      "minutes_one": "{{count}} minute",
+      "minutes_other": "{{count}} minutes",
+      "svt": "Mon SVT pour cette opération",
+      "noSvtOption": "Aucun SVT confirmé",
+      "anonymous": "Demande anonyme",
+      "yes": "Oui",
+      "no": "Non",
+      "reference": "Référence courbe CMarket",
+      "noReference": "aucun point de courbe",
+      "note": "La demande est visible de tous les traders de la plateforme ayant au moins un SVT confirmé.",
+      "noSvt": "Seul un SVT confirmé est choisi pour une opération : demandez un lien dans Mes SVT pour publier et répondre.",
+      "publish": "Publier la demande",
+      "published": "{{number}} publiée : sur le tableau pour {{minutes}} min.",
+      "noSecurity": "Aucun BTA ni OTA n'est négocié aujourd'hui.",
+      "errors": {
+        "faceAmount": "À partir de {{minimum}} XAF, le montant minimum de négociation, en francs entiers."
+      }
+    },
+    "myRequest": {
+      "choose": "Demande",
+      "none": "Aucune demande aujourd'hui : publiez-en une depuis Nouvelle demande.",
+      "noneOrganization": "Votre organisation n'a publié aucune demande aujourd'hui.",
+      "anonymous": "Anonyme",
+      "svt": "SVT {{name}}",
+      "summary": "{{side}} · {{face}} XAF · {{security}} · LCP {{date}}",
+      "answers_one": "{{count}} réponse",
+      "answers_other": "{{count}} réponses",
+      "model": "Prix modèle CMarket {{price}} ({{rate}} %)",
+      "auction": "Adjudication BEAC du {{date}} : taux moyen {{rate}} %",
+      "by": "Publiée par {{name}}",
+      "timeLeft": "Temps restant",
+      "confirmBy": "À confirmer avant",
+      "closed": "{{status}} à {{time}}",
+      "columns": {
+        "rank": "Rang",
+        "trader": "Trader · organisation",
+        "svt": "SVT choisi",
+        "price": "Prix pied de coupon",
+        "rate": "Taux",
+        "yield": "Rendement",
+        "quantity": "Quantité",
+        "time": "Heure",
+        "allocation": "Allocation"
+      },
+      "noAnswer": "Aucune réponse pour l'instant.",
+      "selection": "Sélection automatique : {{total}} / {{face}} · {{agreements}} · prix moyen pondéré {{price}} ({{rate}} %)",
+      "noSelection": "Sélection automatique : aucune réponse en vigueur.",
+      "agreementsCount_one": "{{count}} accord",
+      "agreementsCount_other": "{{count}} accords",
+      "confirm_one": "Confirmer la sélection ({{count}} accord)",
+      "confirm_other": "Confirmer la sélection ({{count}} accords)",
+      "confirmed_one": "{{number}} confirmée : son accord attend les SVT.",
+      "confirmed_other": "{{number}} confirmée : ses {{count}} accords attendent les SVT.",
+      "changed": "Une réponse a changé entre-temps : la sélection est affichée à nouveau, confirmez-la une fois relue.",
+      "cancel": "Annuler la demande",
+      "cancelTitle": "Annuler cette demande ?",
+      "cancelConfirm": "{{number}} quitte le tableau sans accord ; ses réponses ne sont pas retenues.",
+      "cancelled": "{{number}} annulée.",
+      "note": "Classement : meilleur prix, puis plus grande quantité, puis heure. La dernière réponse retenue peut être servie en partie, pour au moins le montant minimum de négociation. Vous voyez les répondants ; ils ne voient ni votre identité, si anonyme, ni les autres réponses.",
+      "agreements": "Accords",
+      "agreementColumns": {
+        "number": "Accord",
+        "counterparty": "Contrepartie",
+        "svt": "Son SVT",
+        "face": "Nominal",
+        "price": "Prix",
+        "amount": "Montant XAF",
+        "status": "Statut"
+      }
+    },
+    "board": {
+      "open_one": "{{count}} ouverte",
+      "open_other": "{{count}} ouvertes",
+      "empty": "Aucune demande ouverte sur la plateforme.",
+      "anonymous": "Anonyme",
+      "columns": {
+        "request": "Demande",
+        "requester": "Demandeur",
+        "side": "Sens",
+        "security": "Titre",
+        "face": "Nominal",
+        "left": "Reste",
+        "mine": "Ma réponse"
+      },
+      "closed": "Close",
+      "ownOrganization": "Votre organisation",
+      "hint": "Sélectionnez une demande pour y répondre.",
+      "readOnly": "Sans SVT confirmé, vous consultez le tableau seulement : demandez un lien dans Mes SVT."
+    },
+    "answer": {
+      "formLabel": "Ma réponse à {{number}}",
+      "title": "Ma réponse à {{number}} (le demandeur {{side}} {{face}} {{security}})",
+      "requesterBuys": "achète",
+      "requesterSells": "vend",
+      "bid": "achat",
+      "offer": "vente",
+      "rate": "Taux ({{side}})",
+      "price": "Prix pied de coupon ({{side}})",
+      "yield": "Rendement ({{side}})",
+      "workedOut": "Calculé par CMarket",
+      "quantity": "Quantité ≤ {{face}}",
+      "svt": "Mon SVT pour cette opération",
+      "validity": "Validité",
+      "validityMinutes_one": "{{count}} min",
+      "validityMinutes_other": "{{count}} min",
+      "reference": "Référence courbe CMarket : {{value}}",
+      "convention": {
+        "rate": "BTA coté en taux ; le prix est recalculé (section 14).",
+        "price": "OTA coté en prix pied de coupon ; le rendement est recalculé (section 14).",
+        "yield": "OTA coté en rendement ; le prix pied de coupon est recalculé (section 14)."
+      },
+      "mine": "{{value}} pour {{quantity}}, ferme jusqu'à {{time}}",
+      "send": "Envoyer ma réponse",
+      "improve": "Améliorer",
+      "withdraw": "Retirer",
+      "sent": "Réponse envoyée à {{number}}.",
+      "improved": "Réponse à {{number}} améliorée.",
+      "withdrawn": "Réponse à {{number}} retirée.",
+      "withdrawTitle": "Retirer votre réponse ?",
+      "withdrawConfirm": "Votre réponse à {{number}} quitte le classement.",
+      "note": "Vous ne voyez ni les autres réponses ni leur nombre. Votre réponse peut être améliorée (le prix maintenu ou amélioré) ou retirée jusqu'à la confirmation du demandeur. Vous ne pouvez pas répondre aux demandes de votre propre organisation.",
+      "ownOrganization": "Demande de votre organisation : vous la consultez, vous ne pouvez pas y répondre.",
+      "closed": "Cette demande ne reçoit plus de réponses.",
+      "errors": {
+        "value": "Votre prix ou votre taux.",
+        "quantity": "De {{minimum}} à {{face}} XAF, en francs entiers."
+      }
+    },
+    "blotter": {
+      "requestsPublished": "Demandes publiées",
+      "answersSent": "Réponses envoyées",
+      "answersSelected": "Réponses retenues",
+      "agreements": "Accords passés",
+      "events": "Derniers événements",
+      "empty": "Rien encore aujourd'hui.",
+      "kinds": {
+        "requestConfirmed": "En attente SVT",
+        "requestPartiallyFilled": "Partiellement servie",
+        "requestCancelled": "Annulée",
+        "requestExpired": "Expirée",
+        "answerSelected": "Retenue",
+        "answerPartiallySelected": "Retenue en partie",
+        "answerNotSelected": "Non retenue",
+        "agreementConcluded": "Conclu",
+        "agreementRejected": "Rejeté",
+        "agreementExpired": "Expiré",
+        "agreementCancelled": "Annulé"
+      },
+      "text": {
+        "requestConfirmed_one": "{{number}} · {{count}} accord envoyé aux SVT",
+        "requestConfirmed_other": "{{number}} · {{count}} accords envoyés aux SVT",
+        "requestPartiallyFilled_one": "{{number}} · {{amount}} sur {{of}} servis, {{count}} accord",
+        "requestPartiallyFilled_other": "{{number}} · {{amount}} sur {{of}} servis, {{count}} accords",
+        "requestCancelled": "{{number}} · annulée sans accord",
+        "requestExpired": "{{number}} · non confirmée à temps",
+        "answerSelected": "Votre réponse à {{number}} : {{amount}} sur {{of}}",
+        "answerPartiallySelected": "Votre réponse à {{number}} : {{amount}} sur {{of}}",
+        "answerNotSelected": "{{number}} · votre réponse non retenue",
+        "agreementConcluded": "{{agreement}} · {{number}} · approuvé par les deux SVT",
+        "agreementRejected": "{{agreement}} · {{number}} · rejeté par un SVT",
+        "agreementExpired": "{{agreement}} · {{number}} · sans décision SVT à temps",
+        "agreementCancelled": "{{agreement}} · {{number}} · annulé"
+      }
+    },
+    "audit": {
+      "from": "Du",
+      "to": "Au",
+      "download": "Télécharger le CSV",
+      "hint": "Chaque demande, réponse, amélioration, sélection, confirmation et accord du RFQ, à la milliseconde, conservés cinq ans.",
+      "errors": {
+        "period": "D'un jour à un jour suivant, un an au plus."
+      }
+    }
   }
 }

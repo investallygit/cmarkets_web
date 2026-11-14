@@ -103,5 +103,231 @@
       "email": "An e-mail address.",
       "name": "The bank's name."
     }
+  },
+  "rfqTrading": {
+    "tabs": {
+      "label": "RFQ screens",
+      "trading": "Trading",
+      "agreements": "Agreements",
+      "reporting": "BEAC reporting"
+    },
+    "side": {
+      "buy": "Buy",
+      "sell": "Sell"
+    },
+    "sideUpper": {
+      "buy": "BUY",
+      "sell": "SELL"
+    },
+    "quoteType": {
+      "rate": "Rate",
+      "price": "Clean price",
+      "yield": "Yield"
+    },
+    "requestStatus": {
+      "published": "Published",
+      "answersReceived": "Answers received",
+      "confirmed": "Confirmed",
+      "partiallyFilled": "Partially filled",
+      "cancelled": "Cancelled",
+      "expired": "Expired"
+    },
+    "responseStatus": {
+      "sent": "Sent",
+      "improved": "Improved",
+      "withdrawn": "Withdrawn",
+      "selected": "Selected",
+      "partiallySelected": "Partially selected",
+      "notSelected": "Not selected",
+      "expired": "Expired"
+    },
+    "agreementStatus": {
+      "awaitingSvt": "Awaiting SVT",
+      "concluded": "Concluded",
+      "rejected": "Rejected by an SVT",
+      "expired": "Expired",
+      "cancelled": "Cancelled"
+    },
+    "requestPrice": "Request a price (RFQ)",
+    "newRequest": {
+      "security": "Government security (BTA / OTA)",
+      "side": "Side",
+      "faceAmount": "Face amount requested (XAF)",
+      "quoteType": "Quote in",
+      "settlementDate": "Agreed delivery-versus-payment",
+      "duration": "Request duration",
+      "minutes_one": "{{count}} minute",
+      "minutes_other": "{{count}} minutes",
+      "svt": "My SVT for this trade",
+      "noSvtOption": "No confirmed SVT",
+      "anonymous": "Anonymous request",
+      "yes": "Yes",
+      "no": "No",
+      "reference": "CMarket curve reference",
+      "noReference": "no curve point",
+      "note": "The request is visible to all traders on the platform with at least one confirmed SVT.",
+      "noSvt": "Only a confirmed SVT is chosen for a trade: ask one for a link in My SVTs to publish and answer.",
+      "publish": "Publish request",
+      "published": "{{number}} published: on the board for {{minutes}} min.",
+      "noSecurity": "No BTA or OTA is traded today.",
+      "errors": {
+        "faceAmount": "From XAF {{minimum}}, the minimum trading amount, in whole francs."
+      }
+    },
+    "myRequest": {
+      "choose": "Request",
+      "none": "No request today: publish one from New request.",
+      "noneOrganization": "Your organisation has published no request today.",
+      "anonymous": "Anonymous",
+      "svt": "SVT {{name}}",
+      "summary": "{{side}} · XAF {{face}} · {{security}} · DvP {{date}}",
+      "answers_one": "{{count}} answer",
+      "answers_other": "{{count}} answers",
+      "model": "CMarket model price {{price}} ({{rate}}%)",
+      "auction": "BEAC auction of {{date}}: average rate {{rate}}%",
+      "by": "Published by {{name}}",
+      "timeLeft": "Time left",
+      "confirmBy": "Confirm before",
+      "closed": "{{status}} at {{time}}",
+      "columns": {
+        "rank": "Rank",
+        "trader": "Trader · organisation",
+        "svt": "SVT chosen",
+        "price": "Clean price",
+        "rate": "Rate",
+        "yield": "Yield",
+        "quantity": "Quantity",
+        "time": "Time",
+        "allocation": "Allocation"
+      },
+      "noAnswer": "No answer yet.",
+      "selection": "Automatic selection: {{total}} / {{face}} · {{agreements}} · weighted average price {{price}} ({{rate}}%)",
+      "noSelection": "Automatic selection: no answer in force yet.",
+      "agreementsCount_one": "{{count}} agreement",
+      "agreementsCount_other": "{{count}} agreements",
+      "confirm_one": "Confirm selection ({{count}} agreement)",
+      "confirm_other": "Confirm selection ({{count}} agreements)",
+      "confirmed_one": "{{number}} confirmed: its agreement awaits the SVTs.",
+      "confirmed_other": "{{number}} confirmed: its {{count}} agreements await the SVTs.",
+      "changed": "An answer changed meanwhile: the selection is shown again, confirm it once read.",
+      "cancel": "Cancel request",
+      "cancelTitle": "Cancel this request?",
+      "cancelConfirm": "{{number}} leaves the board without an agreement; its answers are not selected.",
+      "cancelled": "{{number}} cancelled.",
+      "note": "Ranking: best price, then largest quantity, then time. The last answer selected may be filled in part, for the minimum trading amount at least. You see the responders; they see neither your identity, if anonymous, nor the other answers.",
+      "agreements": "Agreements",
+      "agreementColumns": {
+        "number": "Agreement",
+        "counterparty": "Counterparty",
+        "svt": "Its SVT",
+        "face": "Nominal",
+        "price": "Price",
+        "amount": "Amount XAF",
+        "status": "Status"
+      }
+    },
+    "board": {
+      "open_one": "{{count}} open",
+      "open_other": "{{count}} open",
+      "empty": "No open request on the platform.",
+      "anonymous": "Anonymous",
+      "columns": {
+        "request": "Request",
+        "requester": "Requester",
+        "side": "Side",
+        "security": "Security",
+        "face": "Nominal",
+        "left": "Left",
+        "mine": "My answer"
+      },
+      "closed": "Closed",
+      "ownOrganization": "Your organisation",
+      "hint": "Select a request to answer it.",
+      "readOnly": "Without a confirmed SVT you read the board only: ask one for a link in My SVTs."
+    },
+    "answer": {
+      "formLabel": "My answer to {{number}}",
+      "title": "My answer to {{number}} (requester {{side}} {{face}} {{security}})",
+      "requesterBuys": "buys",
+      "requesterSells": "sells",
+      "bid": "bid",
+      "offer": "offer",
+      "rate": "Rate ({{side}})",
+      "price": "Clean price ({{side}})",
+      "yield": "Yield ({{side}})",
+      "workedOut": "Worked out by CMarket",
+      "quantity": "Quantity ≤ {{face}}",
+      "svt": "My SVT for this trade",
+      "validity": "Validity",
+      "validityMinutes_one": "{{count}} min",
+      "validityMinutes_other": "{{count}} min",
+      "reference": "CMarket curve reference: {{value}}",
+      "convention": {
+        "rate": "BTA quoted in rate; the price is worked out (section 14).",
+        "price": "OTA quoted in clean price; the yield is worked out (section 14).",
+        "yield": "OTA quoted in yield; the clean price is worked out (section 14)."
+      },
+      "mine": "{{value}} for {{quantity}}, firm until {{time}}",
+      "send": "Send my answer",
+      "improve": "Improve",
+      "withdraw": "Withdraw",
+      "sent": "Answer sent to {{number}}.",
+      "improved": "Answer to {{number}} improved.",
+      "withdrawn": "Answer to {{number}} withdrawn.",
+      "withdrawTitle": "Withdraw your answer?",
+      "withdrawConfirm": "Your answer to {{number}} leaves the ranking.",
+      "note": "You see neither the other answers nor their number. Your answer can be improved (the price kept or bettered) or withdrawn until the requester confirms. You cannot answer your own organisation's requests.",
+      "ownOrganization": "Your organisation's request: you read it, you cannot answer it.",
+      "closed": "This request takes no more answers.",
+      "errors": {
+        "value": "Your price or rate.",
+        "quantity": "From XAF {{minimum}} to {{face}}, in whole francs."
+      }
+    },
+    "blotter": {
+      "requestsPublished": "Requests published",
+      "answersSent": "Answers sent",
+      "answersSelected": "Answers selected",
+      "agreements": "Agreements made",
+      "events": "Latest events",
+      "empty": "Nothing yet today.",
+      "kinds": {
+        "requestConfirmed": "Awaiting SVT",
+        "requestPartiallyFilled": "Partially filled",
+        "requestCancelled": "Cancelled",
+        "requestExpired": "Expired",
+        "answerSelected": "Selected",
+        "answerPartiallySelected": "Partly selected",
+        "answerNotSelected": "Not selected",
+        "agreementConcluded": "Concluded",
+        "agreementRejected": "Rejected",
+        "agreementExpired": "Expired",
+        "agreementCancelled": "Cancelled"
+      },
+      "text": {
+        "requestConfirmed_one": "{{number}} · {{count}} agreement sent to the SVTs",
+        "requestConfirmed_other": "{{number}} · {{count}} agreements sent to the SVTs",
+        "requestPartiallyFilled_one": "{{number}} · {{amount}} of {{of}} filled, {{count}} agreement",
+        "requestPartiallyFilled_other": "{{number}} · {{amount}} of {{of}} filled, {{count}} agreements",
+        "requestCancelled": "{{number}} · cancelled without an agreement",
+        "requestExpired": "{{number}} · not confirmed in time",
+        "answerSelected": "Your answer to {{number}}: {{amount}} of {{of}}",
+        "answerPartiallySelected": "Your answer to {{number}}: {{amount}} of {{of}}",
+        "answerNotSelected": "{{number}} · your answer not selected",
+        "agreementConcluded": "{{agreement}} · {{number}} · approved by both SVTs",
+        "agreementRejected": "{{agreement}} · {{number}} · rejected by an SVT",
+        "agreementExpired": "{{agreement}} · {{number}} · no SVT decision in time",
+        "agreementCancelled": "{{agreement}} · {{number}} · cancelled"
+      }
+    },
+    "audit": {
+      "from": "From",
+      "to": "To",
+      "download": "Download the CSV",
+      "hint": "Every request, answer, improvement, selection, confirmation and agreement of the RFQ, to the millisecond, kept five years.",
+      "errors": {
+        "period": "From a day to a later one, a year at most."
+      }
+    }
   }
 }

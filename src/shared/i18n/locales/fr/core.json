@@ -310,7 +310,13 @@
     "commodityCompare": "Comparaison",
     "commodityCorrelations": "Corrélations",
     "mySvts": "Mes SVT",
-    "traderLinks": "Liens des traders"
+    "traderLinks": "Liens des traders",
+    "rfqNewRequest": "Nouvelle demande",
+    "rfqMyRequest": "Ma demande",
+    "rfqBoard": "Demandes ouvertes sur la plateforme",
+    "rfqBlotter": "Blotter du jour",
+    "rfqOrganization": "Demandes de l'organisation",
+    "rfqAudit": "Export de conformité du RFQ"
   },
   "columns": {
     "index": "Indice",

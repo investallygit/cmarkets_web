@@ -399,7 +399,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   "Open in BP" opens BP since step 30.
 - **Changed on 12 November 2026**: its own entry in the menu, after BP, under YCRV, which the
   mockup lights ([the spec author's answers](third-version.md#the-spec-authors-answers)).
-- **Fourth version (step 44)**: "Request a price (RFQ)" on a BTA or an OTA.
+- **Built in step 44 (fourth version)**: "Request a price (RFQ)" beside "Open in BP" on a BTA or an
+  OTA of the BEAC, for a Trader or a Manager: RFQ opens with its new request on the security.
 
 ## DES on an ETF · ETF profile (screen 19): done
 
@@ -417,7 +418,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   menu (YCRV, as the mockup, until
   [the spec author's answers](third-version.md#the-spec-authors-answers)). See
   [step 31](steps/step-31-bond-profile.md).
-- **Fourth version (step 44)**: "Request a price (RFQ)" on a BTA or an OTA.
+- **Built in step 44 (fourth version)**: "Request a price (RFQ)" in the header of a BTA or an OTA
+  of the BEAC, for a Trader or a Manager.
 
 ## CMDTY · Commodities (screen 21): done
 
@@ -429,7 +431,7 @@ what is still to do. The Data admin's and the Admin's screens are in
   history; CMP up to five series rebased to 100 with their correlations; N the news naming it.
   See [step 41](steps/step-41-commodities.md).
 
-## RFQ · Government securities RFQ (screen 22): in progress
+## RFQ · Government securities RFQ (screen 22): done
 
 - **Built in step 43**: "My SVTs", alone on the screen for now: each SVT asked with its status and
   date, as the mockup ("Confirmed on 12/09/2026 · 1 Bn / day", "Request sent 28/10 · expires
@@ -437,7 +439,18 @@ what is still to do. The Data admin's and the Admin's screens are in
   another, which its bank's SVT accounts confirm on TRD; read again live through `/hubs/rfq`. An
   entry of the menu after BS (decision 15), for a Trader or a Manager of an organisation while
   the RFQ is on. See [step 43](steps/step-43-svt-accounts.md).
-- **Planned in step 44**: the requests, the answers, the automatic selection and the blotter.
+- **Built in step 44**: the mockup's four other panels under the tab bar of the RFQ's screens
+  (Trading; Agreements and BEAC reporting with steps 46 and 47). "New request": a BTA or an OTA,
+  buy or sell, the face amount, a BTA in rate or an OTA in clean price or yield, a settlement
+  among the BEAC's next ten days, 1 to 30 minutes, a confirmed SVT, anonymous or not, the CMarket
+  curve's reference. "My request": the day's requests, the countdown (then the 10 minutes of the
+  confirmation), the answers ranked with the responders, their SVTs and the face allocated, the
+  automatic selection and its weighted average price, "Confirm selection" at the version shown
+  and "Cancel request", then the agreements awaiting the SVTs. The board of the others' requests,
+  the anonymous requester hidden, its time left and the trader's answer; the answer form under it
+  (a price or a rate, the other worked out by CMarket, a quantity, an SVT, a validity; send,
+  improve, withdraw). Today's blotter. Everything read again live through `/hubs/rfq`; the CEO
+  reads its organisation's requests and blotter. See [step 44](steps/step-44-rfq-trading.md).
 
 ## RFQ AGR · Agreements (screen 23): to do
 
