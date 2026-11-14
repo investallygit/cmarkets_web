@@ -146,8 +146,9 @@ by which step, and what is still to do. The terminal's screens are in
   Journalist or CEO is approved with it.
 - **Third version (steps 24 and 27)**: nine counters, the News provider approved in ANLY;
   MOD's news panel (step 27).
-- **Fourth version (step 43)**: ten counters; the SVT accounts of a licensed bank, which an Admin
-  creates.
+- **Built in step 43**: ten counters, the SVT's in its own blue; "+ Create account" creates an SVT
+  for a bank of the licensed SVTs (its bank chosen in the list ADMCFG keeps; a code at every
+  login), the route section 10 names `/admin/svt-accounts`.
 
 ## ADMCFG · Platform settings (no mockup): done
 
@@ -175,10 +176,15 @@ by which step, and what is still to do. The terminal's screens are in
   and its six tiles, an indicator each of the 37; saved with FX's lists ("Save the settings"),
   each list changed audited ("ECO comparison countries: NGA, FRA → NGA, ZAF"). A country added
   gets its figures at once when CMarket loads them from EODHD.
-- **Fourth version (steps 38 to 47)**: the age past which a curve point is stale; ECO's comparison
-  countries and tiles, FX's currencies; the licensed SVTs with their back-office address, the
-  minimum trading amount, the validity of a link, the approval window and the RFQ's switch
-  (decision 24); the keys of the RFQ and of OPT in the matrix.
+- **Built in step 43**: "RFQ" beside "Macro and FX": the RFQ's switch (off until the BEAC confirms
+  its status, on in the demo; off, RFQ leaves the menus and its routes close, decision 24), the
+  minimum trading amount (XAF 10 million), how long a link's confirmation holds (12 months), the
+  licensed SVTs with their back office's address, their SVT accounts and links in force: a bank
+  added by its name, one unticked to take it off the list; saved together and audited ("RFQ
+  settings"). The matrix's row "RFQ (government securities)": `rfq:trade` and `svt:approve`, and
+  its SVT column.
+- **Fourth version (steps 42 to 47)**: the approval window (step 45) and the key of OPT in the
+  matrix (step 42).
 
 ## AUDT · Audit log (no mockup): done
 

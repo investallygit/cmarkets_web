@@ -31,6 +31,10 @@ export const routes = {
   bondScreener: '/bs',
   /** ETFS (screen 15): the ETF screener. */
   etfScreener: '/etfs',
+  /** RFQ (screen 22): requests for quotes on BTA and OTA; until ROADMAP step 44, "My SVTs". */
+  rfq: '/rfq',
+  /** TRD: an SVT's trader links, their requests and limits (ROADMAP decision 16). */
+  svtTraders: '/svt/traders',
   portfolio: '/port',
   /** A portfolio and one of its tabs: /port/{id} (positions), /port/{id}/risk... */
   portfolioTabs: '/port/:portfolioId?/:tab?',

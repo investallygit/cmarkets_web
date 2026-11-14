@@ -10,10 +10,15 @@ interface InputFrameProps {
   children: ReactNode
 }
 
-/** Border, background and focus ring shared by the single-line controls (28 px high). */
+/**
+ * Border, background and focus ring shared by the single-line controls (28 px high). Disabled, the
+ * frame is dimmed with its unit or icon and says so (aria-disabled): the text of an inactive
+ * control needs no contrast (WCAG 1.4.3).
+ */
 export function InputFrame({ highlight, invalid, disabled, className, children }: InputFrameProps) {
   return (
     <div
+      aria-disabled={disabled || undefined}
       className={clsx(
         'relative flex h-7 min-w-0 items-center gap-1.5 border bg-app px-2',
         'has-focus-visible:ring-1 has-focus-visible:ring-accent-amber/40',

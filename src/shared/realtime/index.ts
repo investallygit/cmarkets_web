@@ -1,4 +1,4 @@
-export type { ChatClient, ConnectionState, RealtimeClient } from './client'
+export type { ChatClient, ConnectionState, RealtimeClient, RfqClient } from './client'
 export type {
   ChatEventMap,
   ChatEventName,
@@ -6,6 +6,9 @@ export type {
   RealtimeEventMap,
   RealtimeEventName,
   RealtimeHandler,
+  RfqEventMap,
+  RfqEventName,
+  RfqHandler,
 } from './events'
 export {
   useChatClient,
@@ -21,4 +24,9 @@ export {
   useSymbolSubscription,
 } from './hooks'
 export { RealtimeProvider } from './RealtimeProvider'
-export { createSignalRChatClient, createSignalRRealtimeClient } from './signalr'
+export { useRfqClient, useRfqConnection, useRfqEvent } from './rfqHooks'
+export {
+  createSignalRChatClient,
+  createSignalRRealtimeClient,
+  createSignalRRfqClient,
+} from './signalr'

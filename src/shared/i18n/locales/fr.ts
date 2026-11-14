@@ -16,6 +16,7 @@ import newsStudio from './fr/newsStudio.json'
 import payments from './fr/payments.json'
 import portfolio from './fr/portfolio.json'
 import research from './fr/research.json'
+import rfq from './fr/rfq.json'
 import subscriptions from './fr/subscriptions.json'
 
 /** The French strings: the same area files as en.ts, in ./fr. */
@@ -31,6 +32,7 @@ const fr = {
   ...commodities,
   ...portfolio,
   ...research,
+  ...rfq,
   ...network,
   ...newsStudio,
   ...newsAdmin,

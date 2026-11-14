@@ -14,6 +14,7 @@ export const settingsKeys = {
   role: (role: AccountType) => [...settingsKeys.all, 'role', role] as const,
   directory: () => [...settingsKeys.all, 'directory'] as const,
   macro: () => [...settingsKeys.all, 'macro'] as const,
+  rfq: () => [...settingsKeys.all, 'rfq'] as const,
   specialties: () => [...settingsKeys.all, 'specialties'] as const,
 }
 
@@ -96,6 +97,27 @@ export function useSaveMacroSettings() {
   const refresh = useRefreshAdminData()
   return useMutation({
     mutationFn: adminApi.saveMacroSettings,
+    onSuccess: refresh,
+  })
+}
+
+/**
+ * GET /admin/rfq/svt: the RFQ's switch, its minimum trading amount, how long a link's confirmation
+ * holds, the licensed SVTs (ROADMAP step 43); ADMCFG, and USER for an SVT account's bank.
+ */
+export function useRfqSettings(enabled = true) {
+  return useQuery({
+    queryKey: settingsKeys.rfq(),
+    queryFn: ({ signal }) => adminApi.rfqSettings(signal),
+    enabled,
+  })
+}
+
+/** PUT /admin/rfq/svt: each value changed is written to the audit log; the switch reaches everyone. */
+export function useSaveRfqSettings() {
+  const refresh = useRefreshAdminData()
+  return useMutation({
+    mutationFn: adminApi.saveRfqSettings,
     onSuccess: refresh,
   })
 }

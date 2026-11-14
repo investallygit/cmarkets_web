@@ -9,6 +9,8 @@ const AUDIENCE: Record<AccountType, Audience> = {
   journalist: 'client',
   ceo: 'client',
   newsProvider: 'client',
+  // The SVT works in the terminal, on a menu of its own (ROADMAP decision 16).
+  svt: 'client',
   dataAdmin: 'backoffice',
   admin: 'backoffice',
 }

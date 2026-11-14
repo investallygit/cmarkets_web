@@ -12,10 +12,12 @@ import {
   FileText,
   Globe,
   HandCoins,
+  Handshake,
   History,
   IdCard,
   Layers,
   LayoutDashboard,
+  Link2,
   MessagesSquare,
   Newspaper,
   PenLine,
@@ -122,6 +124,10 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', module: 'analysis', inMenu: true, routePattern: routes.yieldCurvesBond }),
   screen('BP', 'BP', routes.bondPricing, 'client', Calculator, { permission: 'analysis:read', module: 'analysis', inMenu: true, routePattern: routes.bondPricingBond }),
   screen('BS', 'BS', routes.bondScreener, 'client', ScanLine, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
+  // RFQ (screen 22) after BS (ROADMAP decision 15), for the Traders and Managers of an organisation while the RFQ is on;
+  // TRD, an SVT's trader links, in the SVT's menu (decision 16).
+  screen('RFQ', 'RFQ', routes.rfq, 'client', Handshake, { permission: 'rfq:trade', inMenu: true }),
+  screen('TRD', 'TRD', routes.svtTraders, 'client', Link2, { permission: 'svt:approve', inMenu: true }),
   screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', module: 'portfolio', inMenu: true, routePattern: routes.portfolioTabs }),
   screen('PUB', 'PUB', routes.library, 'client', BookOpen, { permission: 'research:read', inMenu: true }),
   screen('NET', 'NET', routes.directory, 'client', BookUser, { permission: 'directory:list', inMenu: true }),

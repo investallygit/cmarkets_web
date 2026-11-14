@@ -83,7 +83,7 @@ before upload.
 | 25 · Macroeconomic dashboard (ECO)                                        | Done; the World Bank's figures each month, a file fills gaps  |
 | 21 · Commodities (CMDTY, DES on a commodity)                              | Done; EODHD's 23 series twice a day, the CEMAC's by file      |
 | 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | To do, step 42                                                |
-| SVT account type (fourth version), licensed SVTs, trader links            | To do, step 43                                                |
+| SVT account type (fourth version), licensed SVTs, trader links            | Done; an SVT confirms each link on TRD, with a daily limit    |
 | 22 · Government securities RFQ (RFQ)                                      | To do, step 44                                                |
 | 27 · SVT approval (SVT)                                                   | To do, step 45                                                |
 | 23 · Agreements (RFQ AGR)                                                 | To do, step 46                                                |
@@ -144,7 +144,7 @@ src/
               profile of each security type: an equity's, screen 2, a bond's, screen 20, an
               ETF's, screen 19, a commodity's, screen 21),
               equity-screener, etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which
-              YAS opens), bond-screener (BS), portfolio,
+              YAS opens), bond-screener (BS), rfq (RFQ), svt-traders (TRD), portfolio,
               research-library, publishing-studio, news,
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
               network-profile (NET ME), public-profile (/p/{handle}), data-import (IMP),
@@ -161,11 +161,12 @@ src/
               bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
               bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
               etf-profile-panels, security-description-panel, description-editor-panel,
-              macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels...),
+              macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
+              trader-links-panel...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
-              screen-etfs, price-bond,
+              screen-etfs, price-bond, manage-svt-links, decide-trader-link,
               manage-portfolios, record-transaction, generate-portfolio-report, buy-publication,
               rate-publication, report-publication, follow-analyst, report-profile,
               start-conversation, send-message, share-news, report-conversation, block-user,
@@ -192,7 +193,8 @@ src/
               screener, portfolio, publication,
               analyst, document, chart-drawing, watchlist, alert, auction, rate, macro (ECO's
               economies, indicators and figures), commodity (CMDTY's series, values and
-              statistics), news, news-source
+              statistics), svt-link (a trader's links to the SVTs, a bank's requests and linked
+              traders, the RFQ's hub), news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
               (MPAY's statements, click anomalies and payment settings),
               calendar-event, notification, data-import, data-provider (EODHD), stored-price,
@@ -251,11 +253,12 @@ ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
   checks every route of the module against the API's OpenAPI document (`openapi-routes.txt`,
   written by `npm run api:routes` from a running API).
 - **Addresses**: `.env` gives the API's origin (`VITE_API_URL`; empty, the site's own), from
-  which `shared/config/env.ts` derives the REST API and both hubs; see
+  which `shared/config/env.ts` derives the REST API and the three hubs; see
   [Connecting the back end](#connecting-the-back-end).
-- **Real time**: `shared/realtime` defines two hub clients with their SignalR implementations:
-  `RealtimeClient` for `/hubs/market`, with ref-counted symbol subscriptions, and `ChatClient`
-  for `/hubs/chat`, with the conversations joined while their thread shows. Each entity handles
+- **Real time**: `shared/realtime` defines three hub clients with their SignalR implementations:
+  `RealtimeClient` for `/hubs/market`, with ref-counted symbol subscriptions, `ChatClient` for
+  `/hubs/chat`, with the conversations joined while their thread shows, and `RfqClient` for
+  `/hubs/rfq`, open while the user holds a key of the RFQ. Each entity handles
   the hub events it owns (`use*RealtimeSync`, mounted once by `app/layouts/AppShell.tsx`). Live
   quotes go into a Zustand store (`entities/quote/model`), so a tick re-renders one table cell,
   which flashes for 400 ms. The order book and the latest trades have no hub event: they are
@@ -391,6 +394,7 @@ each other; the app shell mounts the form once.
 Every UI string is in French and English, in `shared/i18n/locales/en/` and `fr/`: one JSON file
 per area of the app (`core` for the shell and the shared UI, `home`, `account` for the login and
 the settings, `monitoring`, `analysis`, `bonds`, `etfs`, `macro` (ECO, FX and their settings),
+`rfq` (RFQ, TRD and the RFQ's settings),
 `portfolio`, `research`, `network`, `messaging`, `newsStudio`, `newsAdmin`, `payments`,
 `dataAdmin`, `admin`), which `en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:
 `t('panels.indices')` is checked at compile time. A top-level key lives in one area file only, and
@@ -433,10 +437,11 @@ accounts and the code come from the API's development tools. Another address: `D
 in `.env.development.local`. In general:
 
 1. Point `DEV_PROXY_TARGET` at `CMarket.Api` for local development, or set `VITE_API_URL` to
-   the origin of a deployed API (`https://api.cmarket.example`): the REST API and both hubs are
-   served under it, and the images the API names by its own path (`/api/v1/profile-photos/…`) are
-   shown from it. `VITE_API_BASE_URL`, `VITE_REALTIME_HUB_URL` and `VITE_CHAT_HUB_URL` replace one
-   address each. A malformed `VITE_API_URL` stops the dev server and the build.
+   the origin of a deployed API (`https://api.cmarket.example`): the REST API and the three hubs
+   are served under it, and the images the API names by its own path (`/api/v1/profile-photos/…`)
+   are shown from it. `VITE_API_BASE_URL`, `VITE_REALTIME_HUB_URL`, `VITE_CHAT_HUB_URL` and
+   `VITE_RFQ_HUB_URL` replace one address each. A malformed `VITE_API_URL` stops the dev server
+   and the build.
 2. Have `POST /auth/otp/verify` and `/auth/refresh` set the refresh token as an `HttpOnly`,
    `Secure` cookie on the `/auth` path. The login calls are sent with credentials; an API on
    another origin needs CORS with credentials for this site, and an API on another site

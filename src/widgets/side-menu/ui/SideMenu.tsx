@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { matchPath, NavLink, useLocation } from 'react-router'
 import { UnreadBadge } from '@/entities/conversation'
 import { useSecurityProfile } from '@/entities/security'
-import { canAccessScreen, lockedModule, mayWriteMessages, useCurrentUser } from '@/entities/session'
+import { isInMenuOf, lockedModule, mayWriteMessages, useCurrentUser } from '@/entities/session'
 import { routes } from '@/shared/routes/paths'
 import { SECURITY_PROFILES } from '@/shared/routes/profiles'
 import { SCREENS } from '@/shared/routes/screens'
@@ -24,7 +24,7 @@ export function SideMenu() {
   const user = useCurrentUser()
   const expanded = useUiPreferences((state) => state.menuExpanded)
   const toggleMenu = useUiPreferences((state) => state.toggleMenu)
-  const items = SCREENS.filter((screen) => screen.inMenu && canAccessScreen(user, screen))
+  const items = SCREENS.filter((screen) => isInMenuOf(user, screen))
   const { pathname } = useLocation()
   // A profile lights the entry of the screener that lists its type: a bond's BS, an ETF's ETFS.
   const profileType = useSecurityProfile(matchPath(routes.security, pathname)?.params.securityId)

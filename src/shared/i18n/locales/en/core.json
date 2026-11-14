@@ -51,6 +51,7 @@
     "journalist": "Journalist",
     "ceo": "CEO",
     "newsProvider": "News provider",
+    "svt": "SVT",
     "dataAdmin": "Data admin",
     "admin": "Admin"
   },
@@ -62,6 +63,7 @@
     "journalist": "Journalist",
     "ceo": "CEO",
     "newsProvider": "News provider",
+    "svt": "SVT",
     "dataAdmin": "Data admin",
     "admin": "Admin"
   },
@@ -76,6 +78,8 @@
     "YCRV": { "title": "Yield curves and bond calculator", "menu": "Rates" },
     "BP": { "title": "Bond pricing", "menu": "Pricing" },
     "BS": { "title": "Bond screener", "menu": "Bonds" },
+    "RFQ": { "title": "Government securities RFQ (BTA / OTA)", "menu": "RFQ" },
+    "TRD": { "title": "Trader links", "menu": "Traders" },
     "ETFS": { "title": "ETF screener", "menu": "ETFs" },
     "PORT": { "title": "Portfolio", "menu": "Portf." },
     "PUB": { "title": "Research library", "menu": "Research" },
@@ -138,6 +142,7 @@
     "fxMatrix": "Cross-rate matrix",
     "euroBenchmarks": "Euro area benchmarks",
     "macroSettings": "Macro and FX",
+    "rfqSettings": "RFQ",
     "indices": "Indices",
     "indexChart": "Index chart",
     "topMovers": "Top movers",
@@ -292,7 +297,9 @@
     "commodityData": "Data",
     "commodityLinks": "CEMAC links",
     "commodityCompare": "Compare",
-    "commodityCorrelations": "Correlations"
+    "commodityCorrelations": "Correlations",
+    "mySvts": "My SVTs",
+    "traderLinks": "Trader links"
   },
   "columns": {
     "index": "Index",

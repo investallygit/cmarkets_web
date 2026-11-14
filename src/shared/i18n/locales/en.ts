@@ -16,6 +16,7 @@ import newsStudio from './en/newsStudio.json'
 import payments from './en/payments.json'
 import portfolio from './en/portfolio.json'
 import research from './en/research.json'
+import rfq from './en/rfq.json'
 import subscriptions from './en/subscriptions.json'
 
 /**
@@ -35,6 +36,7 @@ const en = {
   ...commodities,
   ...portfolio,
   ...research,
+  ...rfq,
   ...network,
   ...newsStudio,
   ...newsAdmin,

@@ -1,6 +1,6 @@
 import { HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr'
 import { getAccessToken } from '@/shared/api'
-import type { ChatClient, ConnectionState, RealtimeClient } from './client'
+import type { ChatClient, ConnectionState, RealtimeClient, RfqClient } from './client'
 
 const RETRY_DELAYS_MS = [2_000, 5_000, 10_000, 30_000]
 
@@ -119,6 +119,19 @@ export function createSignalRChatClient(hubUrl: string): ChatClient {
     joinConversation: (conversationId) => hub.invoke('JoinConversation', conversationId),
     leaveConversation: (conversationId) => hub.invoke('LeaveConversation', conversationId),
     typing: (conversationId) => hub.invoke('Typing', conversationId),
+    on: (event, handler) => hub.on(event, handler),
+    onStateChange: hub.onStateChange,
+  }
+}
+
+export function createSignalRRfqClient(hubUrl: string): RfqClient {
+  const hub = connectHub(hubUrl)
+  return {
+    get state() {
+      return hub.state
+    },
+    start: hub.start,
+    stop: hub.stop,
     on: (event, handler) => hub.on(event, handler),
     onStateChange: hub.onStateChange,
   }

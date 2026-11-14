@@ -6,6 +6,7 @@ import {
   useCreateAccount,
   useOrganizations,
 } from '@/entities/account'
+import { useRfqSettings } from '@/entities/platform-settings'
 import { isEmailAddress } from '@/entities/session'
 import { isApiError } from '@/shared/api'
 import {
@@ -34,7 +35,8 @@ interface CreateAccountDialogProps {
 
 /**
  * "+ Create account" of screen 9 (POST /admin/users): any type, Data admin and Admin included,
- * which belong to CMarket and log in with a code every time (spec section 12).
+ * which belong to CMarket and log in with a code every time (spec section 12); an SVT for a bank
+ * of the licensed SVTs, its organisation (ROADMAP decision 16).
  */
 export function CreateAccountDialog({ open, onClose, onCreated }: CreateAccountDialogProps) {
   const { t } = useTranslation()
@@ -58,11 +60,14 @@ function CreateAccountForm({ onClose, onCreated }: Omit<CreateAccountDialogProps
   const [language, setLanguage] = useState<UserLanguage>('fr')
   const [submitted, setSubmitted] = useState(false)
   const employee = isEmployeeType(accountType)
+  const svt = accountType === 'svt'
+  const rfq = useRfqSettings(svt)
 
   const local: Record<string, string | null> = {
     displayName: displayName.trim().length < 2 ? t('accounts.create.errors.name') : null,
     email: isEmailAddress(email) ? null : t('auth.signUp.errors.email'),
     phone: phone.trim() && !isPhoneNumber(phone) ? t('auth.signUp.errors.phone') : null,
+    organizationId: svt && !organizationId ? t('accounts.create.chooseBank') : null,
   }
   const server = isApiError(create.error, 400) ? (create.error.problem.errors ?? {}) : {}
   const error = (field: string) => (submitted && local[field]) || server[field]?.[0]
@@ -71,12 +76,19 @@ function CreateAccountForm({ onClose, onCreated }: Omit<CreateAccountDialogProps
 
   const organizationOptions = employee
     ? [{ value: CMARKET, label: 'CMarket' }]
-    : [
-        { value: '', label: t('accounts.independent') },
-        ...(organizations.data ?? [])
-          .filter((organization) => organization.id !== CMARKET)
-          .map((organization) => ({ value: organization.id, label: organization.name })),
-      ]
+    : svt
+      ? [
+          { value: '', label: t('accounts.create.chooseBank') },
+          ...(rfq.data?.svts ?? [])
+            .filter((licensed) => licensed.active)
+            .map((licensed) => ({ value: licensed.organizationId, label: licensed.name })),
+        ]
+      : [
+          { value: '', label: t('accounts.independent') },
+          ...(organizations.data ?? [])
+            .filter((organization) => organization.id !== CMARKET)
+            .map((organization) => ({ value: organization.id, label: organization.name })),
+        ]
 
   return (
     <form
@@ -119,7 +131,11 @@ function CreateAccountForm({ onClose, onCreated }: Omit<CreateAccountDialogProps
                 value,
                 label: t(`accountTypes.${value}`),
               }))}
-              onChange={setAccountType}
+              onChange={(value) => {
+                setAccountType(value)
+                // An SVT's banks are not a client's organisations.
+                setOrganizationId('')
+              }}
               highlight
             />
           </Field>
@@ -152,6 +168,7 @@ function CreateAccountForm({ onClose, onCreated }: Omit<CreateAccountDialogProps
         </Field>
         <ul className="flex list-disc flex-col gap-1 pl-4 font-sans text-data text-secondary">
           {employee && <li>{t('accounts.create.employeeNote')}</li>}
+          {svt && <li>{t('accounts.create.svtNote')}</li>}
           {isVerifiedType(accountType) && (
             <li>{t('accounts.create.verifiedNote', { type: t(`accountTypes.${accountType}`) })}</li>
           )}

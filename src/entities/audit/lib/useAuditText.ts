@@ -89,6 +89,7 @@ export function useAuditText() {
       switch (change.field) {
         case 'minPrice':
         case 'maxPrice':
+        case 'minimumTradingAmount':
           return t('subscription.xaf', { amount: format.number(raw, 0) })
         case 'commissionPct':
         case 'riskFreeRatePct':
@@ -136,6 +137,8 @@ export function useAuditText() {
       if (target.id === 'directory') return t('audit.directorySettings')
       // FX's currencies (step 39), ECO's countries and tiles with them from step 40.
       if (target.id === 'macro') return t('audit.macroSettings')
+      // The RFQ's switch, amounts and licensed SVTs (step 43).
+      if (target.id === 'rfq') return t('audit.rfqSettings')
       return t('audit.platformSettings')
     },
     /** "Type: Trader → Analyst"; only the new value when there was none. */

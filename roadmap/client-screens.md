@@ -425,10 +425,15 @@ what is still to do. The Data admin's and the Admin's screens are in
   history; CMP up to five series rebased to 100 with their correlations; N the news naming it.
   See [step 41](steps/step-41-commodities.md).
 
-## RFQ · Government securities RFQ (screen 22): to do
+## RFQ · Government securities RFQ (screen 22): in progress
 
-- **Planned in steps 43 and 44**: "My SVTs" first, then the requests, the answers, the automatic
-  selection and the blotter.
+- **Built in step 43**: "My SVTs", alone on the screen for now: each SVT asked with its status and
+  date, as the mockup ("Confirmed on 12/09/2026 · 1 Bn / day", "Request sent 28/10 · expires
+  04/11", "Link withdrawn by the SVT on 15/10"), a link in force removed, "Add an SVT" asking
+  another, which its bank's SVT accounts confirm on TRD; read again live through `/hubs/rfq`. An
+  entry of the menu after BS (decision 15), for a Trader or a Manager of an organisation while
+  the RFQ is on. See [step 43](steps/step-43-svt-accounts.md).
+- **Planned in step 44**: the requests, the answers, the automatic selection and the blotter.
 
 ## RFQ AGR · Agreements (screen 23): to do
 
@@ -459,10 +464,17 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Still to do**: a currency the ECB lacks, such as the naira, "added by file or through the EODHD
   Forex API" (spec section 9), waits for the spec author (open questions, fourth version).
 
-## SVT · SVT approval (screen 27): to do
+## SVT · SVT approval (screen 27): in progress
 
-- **Planned in steps 43 and 45**: the SVT's account, menu and trader links first, then the
-  approval of the agreements.
+- **Built in step 43**: the SVT's account and menu (TRD, N, CFG for now; SVT, AGR and MSG with
+  steps 45 and 46), its home on TRD, the market screens a CEO reads open from the command bar
+  (decision 16). TRD, screen 27's "Trader links" on a screen of its own: the bank's requests,
+  oldest first, confirmed with the client's daily limit or declined, and its linked traders with
+  their limit and link date in a sortable, exportable table, the one picked getting its buttons
+  under it (its limit changed, its link removed); a colleague's decision and a new request arrive
+  live.
+- **Planned in step 45**: the approval of the agreements, the counters, the settings, the
+  messages with the linked traders.
 
 ## OPT / OPT RES · Portfolio optimisation (screens 28 and 29): to do
 

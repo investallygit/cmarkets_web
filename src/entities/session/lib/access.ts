@@ -48,14 +48,32 @@ const HOME_SCREEN: Record<AccountType, string> = {
   journalist: 'MKT',
   ceo: 'MKT',
   newsProvider: 'MKT',
+  // Its trader links until screen 27, SVT, comes (ROADMAP step 45).
+  svt: 'TRD',
   dataAdmin: 'IMP',
   admin: 'USER',
+}
+
+/**
+ * The SVT's menu, the screen 27 mockup's (SVT, TRD, AGR, N, CFG) with MSG for its linked traders
+ * (ROADMAP decision 16): the market screens a CEO reads stay open to it from the command bar, out
+ * of its menu. Each entry shows once its screen exists.
+ */
+const SVT_MENU: ReadonlySet<string> = new Set(['SVT', 'TRD', 'AGR', 'MSG', 'N', 'CFG'])
+
+/** The left menu's entries for the user: the screens it opens that the menu lists. */
+export function isInMenuOf(
+  user: UserAccess,
+  screen: Pick<ScreenDefinition, 'id' | 'inMenu' | 'audience' | 'permission'>,
+): boolean {
+  if (!screen.inMenu || !canAccessScreen(user, screen)) return false
+  return user.accountType !== 'svt' || SVT_MENU.has(screen.id)
 }
 
 /** Landing screen: market dashboard for clients, data import for the Data admin, accounts for the Admin. */
 export function homePathFor(user: UserAccess, screens: readonly ScreenDefinition[]): string {
   const home = screens.find((screen) => screen.id === HOME_SCREEN[user.accountType])
   if (home && canAccessScreen(user, home)) return home.path
-  const firstInMenu = screens.find((screen) => screen.inMenu && canAccessScreen(user, screen))
+  const firstInMenu = screens.find((screen) => isInMenuOf(user, screen))
   return firstInMenu?.path ?? routes.settings
 }

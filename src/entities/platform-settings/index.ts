@@ -7,9 +7,11 @@ export {
   usePlatformSettings,
   useRemoveSpecialty,
   useRenameSpecialty,
+  useRfqSettings,
   useRolePermissions,
   useSaveDirectorySettings,
   useSaveMacroSettings,
+  useSaveRfqSettings,
   useSavePlatformSettings,
   useSaveRolePermissions,
 } from './api/queries'

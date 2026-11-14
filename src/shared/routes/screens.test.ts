@@ -8,8 +8,9 @@ const menu = (audience: 'client' | 'backoffice') =>
   )
 
 describe('the left menu (spec section 9)', () => {
-  it('gives ETFS, BP, BS, CMDTY, ECO and FX entries of their own, after the screens their mockups light', () => {
-    // CMDTY (screen 21), ECO (screen 25) and FX (screen 26) after MKT, ROADMAP decision 15.
+  it('gives ETFS, BP, BS, CMDTY, ECO, FX and RFQ entries of their own, after the screens their mockups light', () => {
+    // CMDTY (screen 21), ECO (screen 25) and FX (screen 26) after MKT, RFQ (screen 22) after BS,
+    // ROADMAP decision 15; TRD, the SVT's trader links, in the SVT's own menu (decision 16).
     expect(menu('client')).toEqual([
       'MKT',
       'CMDTY',
@@ -20,6 +21,8 @@ describe('the left menu (spec section 9)', () => {
       'YCRV',
       'BP',
       'BS',
+      'RFQ',
+      'TRD',
       'PORT',
       'PUB',
       'NET',

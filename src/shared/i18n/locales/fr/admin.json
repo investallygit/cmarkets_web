@@ -63,6 +63,8 @@
       "title": "Créer un compte",
       "submit": "Créer le compte",
       "done": "{{name}} : compte créé, une invitation a été envoyée par e-mail.",
+      "chooseBank": "Choisir sa banque",
+      "svtNote": "Un SVT travaille pour une banque des SVT agréés (ADMCFG, RFQ) : choisissez sa banque. Son code arrive à chaque connexion.",
       "employeeNote": "Les comptes Admin données et Admin appartiennent à CMarket et se connectent chaque fois avec un code envoyé par e-mail.",
       "verifiedNote": "Créé par un Admin, le statut {{type}} n'a pas besoin d'une autre approbation.",
       "invitationNote": "Un e-mail invite l'utilisateur à choisir un mot de passe. Dans le prototype, le mot de passe de démonstration fonctionne.",
@@ -351,6 +353,7 @@
       "research": "Recherche",
       "network": "Annuaire et messagerie",
       "news": "Studio d'actualités",
+      "rfq": "RFQ (titres publics)",
       "data": "Back-office données",
       "admin": "Administration"
     },
@@ -383,7 +386,9 @@
       "moderationManage": "Approuver les statuts (Analyste, Journaliste, Dirigeant, Éditeur de presse), modérer",
       "settingsManage": "Paramètres et permissions",
       "auditRead": "Journal d'audit",
-      "payoutsManage": "Versements aux analystes"
+      "payoutsManage": "Versements aux analystes",
+      "rfqTrade": "Demander des liens aux SVT, puis traiter sur le RFQ",
+      "svtApprove": "Liens des traders et approbations d'un SVT"
     },
     "locked": "L'Admin garde les paramètres : sans eux, personne ne pourrait rendre une permission.",
     "hint": "Coché : le type de compte a la permission. Les utilisateurs reçoivent un changement au prochain chargement de page.",
@@ -521,7 +526,11 @@
       "comparisonCountries": "Pays de comparaison d’ECO",
       "tileIndicators": "Indicateurs des tuiles d’ECO",
       "countries": "Pays CEMAC d’une matière première",
-      "relatedSecurities": "Titres liés d’une matière première"
+      "relatedSecurities": "Titres liés d’une matière première",
+      "rfqEnabled": "RFQ ouvert",
+      "minimumTradingAmount": "Montant minimum de transaction du RFQ",
+      "linkValidity": "Validité d’un lien SVT (mois)",
+      "licensedSvts": "SVT agréés"
     },
     "targetTypes": {
       "user": "Compte",
@@ -557,6 +566,7 @@
     "platformSettings": "Paramètres de la plateforme",
     "directorySettings": "Réglages de l'annuaire et de la messagerie",
     "macroSettings": "Paramètres macro et changes",
+    "rfqSettings": "Réglages du RFQ",
     "unlimited": "illimité",
     "granted": "oui",
     "notGranted": "non",

@@ -51,6 +51,7 @@
     "journalist": "Journaliste",
     "ceo": "Dirigeant",
     "newsProvider": "Éditeur de presse",
+    "svt": "SVT",
     "dataAdmin": "Admin données",
     "admin": "Admin"
   },
@@ -62,6 +63,7 @@
     "journalist": "Journaliste",
     "ceo": "Dirigeant",
     "newsProvider": "Éditeur de presse",
+    "svt": "SVT",
     "dataAdmin": "Admin données",
     "admin": "Admin"
   },
@@ -76,6 +78,8 @@
     "YCRV": { "title": "Courbes de taux et calculateur obligataire", "menu": "Taux" },
     "BP": { "title": "Valorisation obligataire", "menu": "Valoris." },
     "BS": { "title": "Filtre obligataire", "menu": "Oblig." },
+    "RFQ": { "title": "RFQ sur titres publics (BTA / OTA)", "menu": "RFQ" },
+    "TRD": { "title": "Liens des traders", "menu": "Traders" },
     "ETFS": { "title": "Filtre ETF", "menu": "ETF" },
     "PORT": { "title": "Portefeuille", "menu": "Portef." },
     "PUB": { "title": "Bibliothèque de recherche", "menu": "Recherche" },
@@ -138,6 +142,7 @@
     "fxMatrix": "Matrice des cours croisés",
     "euroBenchmarks": "Références de la zone euro",
     "macroSettings": "Macro et changes",
+    "rfqSettings": "RFQ",
     "indices": "Indices",
     "indexChart": "Graphique d'indice",
     "topMovers": "Plus fortes variations",
@@ -292,7 +297,9 @@
     "commodityData": "Données",
     "commodityLinks": "Liens CEMAC",
     "commodityCompare": "Comparaison",
-    "commodityCorrelations": "Corrélations"
+    "commodityCorrelations": "Corrélations",
+    "mySvts": "Mes SVT",
+    "traderLinks": "Liens des traders"
   },
   "columns": {
     "index": "Indice",

@@ -62,6 +62,8 @@ PUT /admin/publishers
 DELETE /admin/publishers/{id}
 GET /admin/reports
 POST /admin/reports/{type}/{id}/dismiss
+GET /admin/rfq/svt
+PUT /admin/rfq/svt
 GET /admin/roles/{role}/permissions
 PUT /admin/roles/{role}/permissions
 GET /admin/settings
@@ -244,6 +246,9 @@ PUT /me/profile/privacy
 GET /me/publications
 GET /me/publications/stats
 GET /me/purchases
+GET /me/svt
+POST /me/svt
+DELETE /me/svt/{svtId}
 GET /messages/search
 GET /news
 GET /news-files/{id}
@@ -336,6 +341,11 @@ GET /securities/{id}/trades
 GET /subscription
 POST /subscription/checkout
 GET /subscription/plans
+GET /svt/links
+POST /svt/links/{linkId}/confirm
+POST /svt/links/{linkId}/decline
+PUT /svt/links/{linkId}/limit
+POST /svt/links/{linkId}/revoke
 GET /watchlists
 POST /watchlists
 DELETE /watchlists/{id}

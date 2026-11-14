@@ -1,0 +1,107 @@
+{
+  "rfq": {
+    "realtime": {
+      "linkRequested": "Un trader demande un lien à votre banque : la demande attend sur TRD."
+    },
+    "linkStatus": {
+      "pending": "En attente",
+      "confirmed": "Confirmé",
+      "declined": "Refusé",
+      "expired": "Expiré",
+      "withdrawn": "Retiré"
+    },
+    "mySvts": {
+      "svtName": "{{name}} (SVT)",
+      "add": "Ajouter un SVT (e-mail de confirmation)",
+      "addShort": "Ajouter",
+      "empty": "Aucun SVT pour l'instant : demandez un lien à l'un d'eux pour publier et répondre aux demandes.",
+      "note": "Le back-office du SVT confirme le lien dans son espace CMarket (profil SVT). Seuls les SVT confirmés peuvent être choisis.",
+      "confirmed": "Confirmé le {{date}}",
+      "confirmedLimit": "Confirmé le {{date}} · {{limit}} / jour",
+      "pending": "Demande envoyée le {{date}} · expire le {{expires}}",
+      "declined": "Refusé par le SVT le {{date}}",
+      "expired": "Expiré le {{date}}",
+      "withdrawnBySvt": "Lien retiré par le SVT le {{date}}",
+      "withdrawnByTrader": "Retiré le {{date}}",
+      "remove": "Retirer {{name}}",
+      "removeTitle": "Retirer ce SVT ?",
+      "removeConfirm": "Vous ne pourrez plus choisir {{name}} pour une transaction ; vous pourrez le lui redemander.",
+      "removed": "{{name}} retiré.",
+      "dialog": {
+        "title": "Ajouter un SVT",
+        "svt": "SVT",
+        "choose": "Choisir un SVT",
+        "none": "Chaque SVT de la liste vous est lié, ou attend votre demande.",
+        "note": "Les comptes SVT de la banque sont prévenus par e-mail et confirment le lien dans leur espace ; la demande attend 7 jours.",
+        "submit": "Envoyer la demande",
+        "sent": "Demande envoyée à {{name}}."
+      }
+    },
+    "links": {
+      "requests": "Demandes de lien",
+      "requestsCount_one": "{{count}} demande",
+      "requestsCount_other": "{{count}} demandes",
+      "linked": "Traders liés",
+      "noRequests": "Aucune demande en attente.",
+      "noLinked": "Aucun trader n'est encore lié à votre banque.",
+      "requested": "Demandé le {{date}} à {{time}} · expire le {{expires}}",
+      "columns": {
+        "trader": "Trader · organisation",
+        "limit": "Limite",
+        "since": "Depuis"
+      },
+      "noLimit": "sans limite",
+      "perDay": "{{amount}} / jour",
+      "confirm": "Confirmer",
+      "decline": "Refuser",
+      "changeLimit": "Modifier la limite de {{name}}",
+      "remove": "Retirer le lien de {{name}}",
+      "hint": "Sélectionnez un trader pour modifier sa limite ou retirer le lien ; Entrée modifie la limite.",
+      "declined": "Demande de {{name}} refusée.",
+      "removeTitle": "Retirer ce lien ?",
+      "removeConfirm": "{{name}} ne pourra plus choisir votre banque pour une transaction.",
+      "removed": "Lien de {{name}} retiré.",
+      "confirmDialog": {
+        "title": "Confirmer le lien de {{name}}",
+        "limit": "Limite quotidienne (XAF)",
+        "noLimit": "Sans limite",
+        "note": "Le client traite par votre banque jusqu'à ce montant par jour ; le lien vaut jusqu'à ce que sa confirmation soit à renouveler (un an par défaut).",
+        "submit": "Confirmer le lien",
+        "done": "Lien de {{name}} confirmé."
+      },
+      "limitDialog": {
+        "title": "Limite quotidienne de {{name}}",
+        "submit": "Enregistrer la limite",
+        "done": "Limite de {{name}} enregistrée."
+      },
+      "errors": {
+        "limit": "Un montant entier de francs supérieur à zéro."
+      }
+    }
+  },
+  "rfqSettings": {
+    "title": "Ouverture et montants",
+    "enabled": "Le RFQ est ouvert",
+    "enabledHint": "Fermé jusqu'à ce que la BEAC confirme le statut du module : RFQ quitte les menus et ses routes se ferment.",
+    "minimumTradingAmount": "Montant minimum de transaction (XAF)",
+    "minimumTradingAmountHint": "La dernière réponse d'une allocation n'est pas servie en dessous.",
+    "linkValidity": "Durée de validité d'une confirmation de lien (mois)",
+    "svts": "SVT agréés",
+    "svtsHint": "Les banques agréées Spécialistes en Valeurs du Trésor ; décochez-en une pour la retirer de la liste.",
+    "bank": "Banque",
+    "backOffice": "E-mail du back-office",
+    "active": "Sur la liste",
+    "accounts": "Comptes SVT",
+    "links": "Liens en vigueur",
+    "newBank": "Nouvelle banque",
+    "addBank": "Ajouter la banque",
+    "save": "Enregistrer les réglages du RFQ",
+    "saved": "Réglages du RFQ enregistrés.",
+    "errors": {
+      "amount": "De 1 million à 10 milliards de XAF, en francs entiers.",
+      "months": "De 1 à 36 mois.",
+      "email": "Une adresse e-mail.",
+      "name": "Le nom de la banque."
+    }
+  }
+}

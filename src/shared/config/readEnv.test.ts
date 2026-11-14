@@ -8,17 +8,19 @@ describe('readEnv', () => {
       apiBaseUrl: '/api/v1',
       realtimeHubUrl: '/hubs/market',
       chatHubUrl: '/hubs/chat',
+      rfqHubUrl: '/hubs/rfq',
       devTools: false,
     })
   })
 
-  it('puts the REST API and both hubs under VITE_API_URL', () => {
+  it('puts the REST API and the hubs under VITE_API_URL', () => {
     const env = readEnv({ VITE_API_URL: 'https://api.cmarket.example/', VITE_DEV_TOOLS: 'true' })
     expect(env).toEqual({
       apiOrigin: 'https://api.cmarket.example',
       apiBaseUrl: 'https://api.cmarket.example/api/v1',
       realtimeHubUrl: 'https://api.cmarket.example/hubs/market',
       chatHubUrl: 'https://api.cmarket.example/hubs/chat',
+      rfqHubUrl: 'https://api.cmarket.example/hubs/rfq',
       devTools: true,
     })
   })

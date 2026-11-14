@@ -6,6 +6,7 @@ import type {
   MessageDto,
   NewsChannel,
   NewsType,
+  SvtLinkStatus,
 } from '@/shared/api/contracts'
 
 /** Server → client messages of the /hubs/market SignalR hub (spec section 10). */
@@ -61,3 +62,21 @@ export interface ChatEventMap {
 
 export type ChatEventName = keyof ChatEventMap
 export type ChatHandler<E extends ChatEventName> = (payload: ChatEventMap[E]) => void
+
+/**
+ * Server → client messages of the /hubs/rfq SignalR hub of the RFQ (spec section 10), those of
+ * ROADMAP step 43: a trader's links to the SVTs, read again on each.
+ */
+export interface RfqEventMap {
+  /** A trader asked the user's bank for a link (TRD). */
+  LinkRequested: { linkId: string; svtId: string }
+  /** A link of the user's bank changed: confirmed, declined, its limit, removed, expired. */
+  LinkChanged: { linkId: string; svtId: string; status: SvtLinkStatus }
+  /** One of the user's links changed ("My SVTs"). */
+  SvtLinkChanged: { linkId: string; svtId: string; status: SvtLinkStatus }
+  /** The server's clock, sent when the connection opens: the countdowns follow it. */
+  ServerTime: { at: IsoDateTime }
+}
+
+export type RfqEventName = keyof RfqEventMap
+export type RfqHandler<E extends RfqEventName> = (payload: RfqEventMap[E]) => void

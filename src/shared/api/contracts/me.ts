@@ -2,7 +2,8 @@ import type { IsoDate } from './common'
 
 /**
  * Spec section 12. The first seven are clients, the News provider added by the third version;
- * Data admin and Admin are CMarket employees.
+ * the SVT, added by the fourth, approves the RFQ's agreements for its bank, created by an Admin
+ * (ROADMAP decision 16); Data admin and Admin are CMarket employees.
  */
 export const ACCOUNT_TYPES = [
   'student',
@@ -12,6 +13,7 @@ export const ACCOUNT_TYPES = [
   'journalist',
   'ceo',
   'newsProvider',
+  'svt',
   'dataAdmin',
   'admin',
 ] as const
@@ -78,6 +80,10 @@ export const PERMISSIONS = [
   'settings:manage',
   'audit:read',
   'payouts:manage',
+  // The RFQ (ROADMAP decision 18): a Trader's or a Manager's links to the SVTs, then its requests;
+  // the SVT's trader links, then its approvals. Taken away while the RFQ is off (decision 24).
+  'rfq:trade',
+  'svt:approve',
 ] as const
 export type Permission = (typeof PERMISSIONS)[number]
 

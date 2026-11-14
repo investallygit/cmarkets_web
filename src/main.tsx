@@ -15,22 +15,26 @@ import { env } from '@/shared/config/env'
 import {
   createSignalRChatClient,
   createSignalRRealtimeClient,
+  createSignalRRfqClient,
   type ChatClient,
   type RealtimeClient,
+  type RfqClient,
 } from '@/shared/realtime'
 
 // Composition root: the hubs of CMarket.Api.
-function createHubs(): { market: RealtimeClient; chat: ChatClient } {
+function createHubs(): { market: RealtimeClient; chat: ChatClient; rfq: RfqClient } {
   return {
     market: createSignalRRealtimeClient(env.realtimeHubUrl),
     chat: createSignalRChatClient(env.chatHubUrl),
+    rfq: createSignalRRfqClient(env.rfqHubUrl),
   }
 }
 
 async function bootstrap() {
-  const { market, chat } = createHubs()
+  const { market, chat, rfq } = createHubs()
   // The hubs serve logged-in users only: the market's connects with the session and closes with
-  // it; the app shell opens the chat's for the users who write to others.
+  // it; the app shell opens the chat's for the users who write to others, the RFQ's for those who
+  // hold one of its keys.
   onSessionChange(({ status }) => {
     if (status === 'authenticated') void market.start()
     else void market.stop()
@@ -38,7 +42,7 @@ async function bootstrap() {
 
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
-      <App realtime={market} chat={chat} />
+      <App realtime={market} chat={chat} rfq={rfq} />
     </StrictMode>,
   )
 }

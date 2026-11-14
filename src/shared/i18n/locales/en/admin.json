@@ -63,6 +63,8 @@
       "title": "Create an account",
       "submit": "Create the account",
       "done": "{{name}}: account created, an invitation was sent by e-mail.",
+      "chooseBank": "Choose its bank",
+      "svtNote": "An SVT works for a bank of the licensed SVTs (ADMCFG, RFQ): choose its bank. Its code comes at every login.",
       "employeeNote": "Data admin and Admin accounts belong to CMarket and log in with a code sent by e-mail every time.",
       "verifiedNote": "Created by an Admin, the {{type}} status needs no other approval.",
       "invitationNote": "An e-mail invites the user to choose a password. In the prototype, the demo password works.",
@@ -351,6 +353,7 @@
       "research": "Research",
       "network": "Directory and messaging",
       "news": "News studio",
+      "rfq": "RFQ (government securities)",
       "data": "Data back-office",
       "admin": "Administration"
     },
@@ -383,7 +386,9 @@
       "moderationManage": "Approve statuses (Analyst, Journalist, CEO, News provider), moderate",
       "settingsManage": "Settings and permissions",
       "auditRead": "Audit log",
-      "payoutsManage": "Analyst payouts"
+      "payoutsManage": "Analyst payouts",
+      "rfqTrade": "Ask SVTs for links, then trade on the RFQ",
+      "svtApprove": "An SVT's trader links and approvals"
     },
     "locked": "The Admin keeps the settings: without them, nobody could give a permission back.",
     "hint": "Ticked: the account type has the permission. Users get a change at their next page load.",
@@ -521,7 +526,11 @@
       "comparisonCountries": "ECO comparison countries",
       "tileIndicators": "ECO tile indicators",
       "countries": "Commodity's CEMAC countries",
-      "relatedSecurities": "Commodity's related securities"
+      "relatedSecurities": "Commodity's related securities",
+      "rfqEnabled": "RFQ open",
+      "minimumTradingAmount": "RFQ minimum trading amount",
+      "linkValidity": "SVT link validity (months)",
+      "licensedSvts": "Licensed SVTs"
     },
     "targetTypes": {
       "user": "Account",
@@ -557,6 +566,7 @@
     "platformSettings": "Platform settings",
     "directorySettings": "Directory and messaging settings",
     "macroSettings": "Macro and FX settings",
+    "rfqSettings": "RFQ settings",
     "unlimited": "unlimited",
     "granted": "yes",
     "notGranted": "no",

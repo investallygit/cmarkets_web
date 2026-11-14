@@ -4,6 +4,7 @@ export interface EnvVariables {
   VITE_API_BASE_URL?: string
   VITE_REALTIME_HUB_URL?: string
   VITE_CHAT_HUB_URL?: string
+  VITE_RFQ_HUB_URL?: string
   VITE_DEV_TOOLS?: string
 }
 
@@ -16,6 +17,8 @@ export interface AppEnv {
   realtimeHubUrl: string
   /** The hub of the messaging. */
   chatHubUrl: string
+  /** The hub of the RFQ: the links to the SVTs, then the requests and the approvals. */
+  rfqHubUrl: string
   /**
    * The development helpers: the demo accounts of the login page, the code filled in, the account
    * switch, /_kit. Served by CMarket.Api in development (/_prototype/*, DevTools).
@@ -47,8 +50,8 @@ function readOrigin(value: string | undefined): string {
 const override = (value: string | undefined) => value?.trim() || undefined
 
 /**
- * The addresses of the back end, from VITE_API_URL: the REST API and the two hubs sit under the
- * same origin, as CMarket.Api serves them. VITE_API_BASE_URL and the two hub variables replace
+ * The addresses of the back end, from VITE_API_URL: the REST API and the three hubs sit under
+ * the same origin, as CMarket.Api serves them. VITE_API_BASE_URL and the hub variables replace
  * one address each. Throws on a malformed VITE_API_URL, so that a build fails rather than a
  * page.
  */
@@ -59,6 +62,7 @@ export function readEnv(variables: EnvVariables): AppEnv {
     apiBaseUrl: override(variables.VITE_API_BASE_URL) ?? `${apiOrigin}${API_PREFIX}`,
     realtimeHubUrl: override(variables.VITE_REALTIME_HUB_URL) ?? `${apiOrigin}/hubs/market`,
     chatHubUrl: override(variables.VITE_CHAT_HUB_URL) ?? `${apiOrigin}/hubs/chat`,
+    rfqHubUrl: override(variables.VITE_RFQ_HUB_URL) ?? `${apiOrigin}/hubs/rfq`,
     devTools: variables.VITE_DEV_TOOLS?.trim() === 'true',
   }
 }

@@ -13,6 +13,7 @@ import { useNotificationRealtimeSync } from '@/entities/notification'
 import { useQuoteRealtimeSync } from '@/entities/quote'
 import { useSecurityRealtimeSync } from '@/entities/security'
 import { mayWriteMessages, useMe, useProfilePreferences } from '@/entities/session'
+import { holdsRfqKey, useRfqRealtimeSync } from '@/entities/svt-link'
 import { useYieldCurveRealtimeSync } from '@/entities/yield-curve'
 import { InactivityLogout } from '@/features/log-out'
 import { AlertDialogHost } from '@/features/manage-alerts'
@@ -48,6 +49,7 @@ export function AppShell() {
   useDataImportRealtimeSync()
   // The second hub, of the messaging, for the users who write to others.
   useChatRealtimeSync(me.data ? mayWriteMessages(me.data) : false, me.data?.id)
+  useRfqRealtimeSync(me.data ? holdsRfqKey(me.data) : false)
   // The terminal speaks French and English itself (spec section 7), and its live figures must not
   // freeze under a translation of the browser.
   useNoBrowserTranslation()

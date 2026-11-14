@@ -23,7 +23,7 @@ export function AccountCounters({ selected, onSelect }: AccountCountersProps) {
     <div
       role="group"
       aria-label={t('accounts.counters')}
-      className="grid grid-cols-3 gap-2 xl:grid-cols-9"
+      className="grid grid-cols-3 gap-2 xl:grid-cols-10"
     >
       {ACCOUNT_TYPES.map((type) => (
         <button

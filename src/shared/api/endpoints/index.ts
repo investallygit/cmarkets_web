@@ -23,6 +23,7 @@ import { organizationRoutes } from './organization'
 import { portfoliosRoutes } from './portfolios'
 import { providerRoutes } from './provider'
 import { researchRoutes } from './research'
+import { rfqRoutes } from './rfq'
 import { securitiesRoutes } from './securities'
 import { subscriptionsRoutes } from './subscriptions'
 import { watchlistsRoutes } from './watchlists'
@@ -66,6 +67,7 @@ export { organizationApi, organizationRoutes } from './organization'
 export { portfoliosApi, portfoliosRoutes, type PerformanceQuery } from './portfolios'
 export { providerApi, providerRoutes, type ProviderNewsQuery } from './provider'
 export { researchApi, researchRoutes, type LibraryFilters, type PublicationStep } from './research'
+export { rfqApi, rfqRoutes } from './rfq'
 export { securitiesApi, securitiesRoutes, type SecurityFilters } from './securities'
 export { subscriptionsApi, subscriptionsRoutes } from './subscriptions'
 export { watchlistsApi, watchlistsRoutes } from './watchlists'
@@ -103,6 +105,7 @@ export const ROUTE_TABLES: Readonly<Record<string, RouteTable>> = {
   Portfolios: portfoliosRoutes,
   Provider: providerRoutes,
   Research: researchRoutes,
+  Rfq: rfqRoutes,
   Securities: securitiesRoutes,
   Subscriptions: subscriptionsRoutes,
   Watchlists: watchlistsRoutes,

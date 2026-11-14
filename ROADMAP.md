@@ -94,7 +94,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 40   | [ECO: macroeconomic dashboard (screen 25)](roadmap/steps/step-40-macro-dashboard.md)                                 | Done          |
 | 41   | [CMDTY: commodities, the profile of a commodity (screen 21)](roadmap/steps/step-41-commodities.md)                   | Done          |
 | 42   | [OPT, OPT RES: portfolio optimisation (screens 28 and 29)](roadmap/steps/step-42-portfolio-optimisation.md)          | To do, lane 3 |
-| 43   | [SVT account type, licensed SVTs, trader links, `/hubs/rfq`](roadmap/steps/step-43-svt-accounts.md)                  | To do, lane 1 |
+| 43   | [SVT account type, licensed SVTs, trader links, `/hubs/rfq`](roadmap/steps/step-43-svt-accounts.md)                  | Done          |
 | 44   | [RFQ: requests for quotes on BTA and OTA (screen 22)](roadmap/steps/step-44-rfq-trading.md)                          | To do, lane 1 |
 | 45   | [SVT: approval of the agreements, tickets by e-mail (screen 27)](roadmap/steps/step-45-svt-approval.md)              | To do, lane 1 |
 | 46   | [RFQ AGR: agreements (screen 23)](roadmap/steps/step-46-rfq-agreements.md)                                           | To do, lane 2 |

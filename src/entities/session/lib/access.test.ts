@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { MeDto } from '@/shared/api/contracts'
 import { SCREENS, screenById } from '@/shared/routes/screens'
-import { canAccessScreen, homePathFor, lockedModule, mayWriteMessages } from './access'
+import { canAccessScreen, homePathFor, isInMenuOf, lockedModule, mayWriteMessages } from './access'
 
 type Access = Pick<MeDto, 'accountType' | 'permissions'>
 
@@ -29,6 +29,11 @@ const ceo: Access = {
 }
 const dataAdmin: Access = { accountType: 'dataAdmin', permissions: ['market:read', 'data:import'] }
 const admin: Access = { accountType: 'admin', permissions: ['users:manage', 'settings:manage'] }
+const svt: Access = { accountType: 'svt', permissions: ['market:read', 'svt:approve'] }
+const trader: Access = {
+  accountType: 'trader',
+  permissions: ['market:read', 'analysis:read', 'portfolios:read', 'rfq:trade'],
+}
 
 describe('screen access (spec section 12)', () => {
   it('requires the screen permission', () => {
@@ -54,6 +59,40 @@ describe('screen access (spec section 12)', () => {
     expect(homePathFor(journalist, SCREENS)).toBe('/mkt')
     expect(homePathFor(dataAdmin, SCREENS)).toBe('/imp')
     expect(homePathFor(admin, SCREENS)).toBe('/admin/users')
+    expect(homePathFor(svt, SCREENS)).toBe('/svt/traders')
+  })
+})
+
+describe('the SVT and the RFQ (ROADMAP decisions 15, 16 and 18)', () => {
+  const menuOf = (user: Access) =>
+    SCREENS.filter((screen) => isInMenuOf(user, screen)).map((screen) => screen.code)
+
+  it('gives the SVT its own menu, the market screens a CEO reads open from the command bar only', () => {
+    expect(menuOf(svt)).toEqual(['TRD', 'N', 'CFG'])
+    expect(canAccessScreen(svt, screenById('MKT'))).toBe(true)
+    expect(canAccessScreen(svt, screenById('RFQ'))).toBe(false)
+  })
+
+  it('puts RFQ after BS for a trader who holds its key, and nowhere without it', () => {
+    expect(menuOf(trader)).toEqual([
+      'MKT',
+      'CMDTY',
+      'ECO',
+      'FX',
+      'EQS',
+      'ETFS',
+      'YCRV',
+      'BP',
+      'BS',
+      'RFQ',
+      'PORT',
+      'N',
+      'CFG',
+    ])
+    expect(
+      menuOf({ ...trader, permissions: trader.permissions.filter((key) => key !== 'rfq:trade') }),
+    ).not.toContain('RFQ')
+    expect(canAccessScreen(trader, screenById('TRD'))).toBe(false)
   })
 })
 

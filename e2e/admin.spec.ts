@@ -47,6 +47,7 @@ test('USER counts the accounts by type, filters them and opens the audit log of 
     ['Journalist', '37'],
     ['CEO', '58'],
     ['News provider', '14'],
+    ['SVT', '3'],
     ['Data admin', '4'],
     ['Admin', '2'],
   ]) {

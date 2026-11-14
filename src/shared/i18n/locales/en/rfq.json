@@ -1,0 +1,107 @@
+{
+  "rfq": {
+    "realtime": {
+      "linkRequested": "A trader asks your bank for a link: the request waits on TRD."
+    },
+    "linkStatus": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "declined": "Declined",
+      "expired": "Expired",
+      "withdrawn": "Withdrawn"
+    },
+    "mySvts": {
+      "svtName": "{{name}} (SVT)",
+      "add": "Add an SVT (confirmation e-mail)",
+      "addShort": "Add",
+      "empty": "No SVT yet: ask one for a link to publish and answer requests.",
+      "note": "The SVT's back office confirms the link in its CMarket workspace (SVT profile). Only confirmed SVTs can be chosen.",
+      "confirmed": "Confirmed on {{date}}",
+      "confirmedLimit": "Confirmed on {{date}} · {{limit}} / day",
+      "pending": "Request sent {{date}} · expires {{expires}}",
+      "declined": "Declined by the SVT on {{date}}",
+      "expired": "Expired on {{date}}",
+      "withdrawnBySvt": "Link withdrawn by the SVT on {{date}}",
+      "withdrawnByTrader": "Removed on {{date}}",
+      "remove": "Remove {{name}}",
+      "removeTitle": "Remove this SVT?",
+      "removeConfirm": "You will no longer choose {{name}} for a trade; you may ask it again later.",
+      "removed": "{{name}} removed.",
+      "dialog": {
+        "title": "Add an SVT",
+        "svt": "SVT",
+        "choose": "Choose an SVT",
+        "none": "Every SVT of the list is linked to you, or waits for your request.",
+        "note": "The bank's SVT accounts are told by e-mail and confirm the link in their workspace; the request waits 7 days.",
+        "submit": "Send the request",
+        "sent": "Request sent to {{name}}."
+      }
+    },
+    "links": {
+      "requests": "Link requests",
+      "requestsCount_one": "{{count}} request",
+      "requestsCount_other": "{{count}} requests",
+      "linked": "Linked traders",
+      "noRequests": "No request waits.",
+      "noLinked": "No trader is linked to your bank yet.",
+      "requested": "Requested {{date}} {{time}} · expires {{expires}}",
+      "columns": {
+        "trader": "Trader · organisation",
+        "limit": "Limit",
+        "since": "Since"
+      },
+      "noLimit": "no limit",
+      "perDay": "{{amount}} / day",
+      "confirm": "Confirm",
+      "decline": "Decline",
+      "changeLimit": "Change {{name}}'s limit",
+      "remove": "Remove {{name}}'s link",
+      "hint": "Select a trader to change the limit or remove the link; Enter changes the limit.",
+      "declined": "{{name}}'s request declined.",
+      "removeTitle": "Remove this link?",
+      "removeConfirm": "{{name}} will no longer choose your bank for a trade.",
+      "removed": "{{name}}'s link removed.",
+      "confirmDialog": {
+        "title": "Confirm {{name}}'s link",
+        "limit": "Daily limit (XAF)",
+        "noLimit": "No limit",
+        "note": "The client trades through your bank up to this amount a day; the link holds until its confirmation is due again (a year by default).",
+        "submit": "Confirm the link",
+        "done": "{{name}}'s link confirmed."
+      },
+      "limitDialog": {
+        "title": "{{name}}'s daily limit",
+        "submit": "Save the limit",
+        "done": "{{name}}'s limit saved."
+      },
+      "errors": {
+        "limit": "A whole amount of francs above zero."
+      }
+    }
+  },
+  "rfqSettings": {
+    "title": "Opening and amounts",
+    "enabled": "The RFQ is open",
+    "enabledHint": "Off until the BEAC confirms the module's status: RFQ leaves the menus and its routes close.",
+    "minimumTradingAmount": "Minimum trading amount (XAF)",
+    "minimumTradingAmountHint": "The last answer of an allocation is not filled below it.",
+    "linkValidity": "A link's confirmation holds (months)",
+    "svts": "Licensed SVTs",
+    "svtsHint": "The banks licensed as Treasury Securities Specialists; untick one to take it off the list.",
+    "bank": "Bank",
+    "backOffice": "Back office's e-mail",
+    "active": "On the list",
+    "accounts": "SVT accounts",
+    "links": "Links in force",
+    "newBank": "New bank",
+    "addBank": "Add the bank",
+    "save": "Save the RFQ settings",
+    "saved": "RFQ settings saved.",
+    "errors": {
+      "amount": "From XAF 1 million to 10 billion, in whole francs.",
+      "months": "From 1 to 36 months.",
+      "email": "An e-mail address.",
+      "name": "The bank's name."
+    }
+  }
+}

@@ -236,8 +236,8 @@ export interface RiskFreeRateDto {
 
 /** GET / PUT /admin/settings: quotas, research pricing and moderation, risk-free rates, XAF curve. */
 export interface PlatformSettingsDto {
-  /** null means unlimited. */
-  quotas: Record<AccountType, QuotaDto>
+  /** null means unlimited. The SVT has none: no portfolio, no alert. */
+  quotas: Record<Exclude<AccountType, 'svt'>, QuotaDto>
   /** XAF. */
   minPrice: number
   maxPrice: number
@@ -486,6 +486,14 @@ export const AUDIT_FIELDS = [
   /** A commodity's CEMAC countries ("GA, CG") and related securities ("SIAT, GAB-6.50-2028"). */
   'countries',
   'relatedSecurities',
+  /**
+   * The RFQ's switch, its minimum trading amount (XAF), how long a link's confirmation holds
+   * (months), and the licensed SVTs ("Bank D (back-office@bank-d.example); Bank H (…, off)").
+   */
+  'rfqEnabled',
+  'minimumTradingAmount',
+  'linkValidity',
+  'licensedSvts',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

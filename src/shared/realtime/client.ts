@@ -1,4 +1,11 @@
-import type { ChatEventName, ChatHandler, RealtimeEventName, RealtimeHandler } from './events'
+import type {
+  ChatEventName,
+  ChatHandler,
+  RealtimeEventName,
+  RealtimeHandler,
+  RfqEventName,
+  RfqHandler,
+} from './events'
 
 export type ConnectionState = 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
 
@@ -35,5 +42,19 @@ export interface ChatClient {
   typing(conversationId: string): Promise<void>
   /** Returns a function that removes the handler. */
   on<E extends ChatEventName>(event: E, handler: ChatHandler<E>): () => void
+  onStateChange(listener: (state: ConnectionState) => void): () => void
+}
+
+/**
+ * The /hubs/rfq hub of the RFQ, a third connection, opened for the users who hold one of its keys
+ * (rfq:trade, svt:approve): the server pushes, the client calls nothing.
+ */
+export interface RfqClient {
+  readonly state: ConnectionState
+  /** Connects and keeps retrying in the background; never rejects. */
+  start(): Promise<void>
+  stop(): Promise<void>
+  /** Returns a function that removes the handler. */
+  on<E extends RfqEventName>(event: E, handler: RfqHandler<E>): () => void
   onStateChange(listener: (state: ConnectionState) => void): () => void
 }

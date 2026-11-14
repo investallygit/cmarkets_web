@@ -109,6 +109,10 @@ const MediaPaymentsPage = lazy(() =>
 const PayoutsPage = lazy(() =>
   import('@/pages/payouts').then((module) => ({ default: module.PayoutsPage })),
 )
+const RfqPage = lazy(() => import('@/pages/rfq').then((module) => ({ default: module.RfqPage })))
+const SvtTradersPage = lazy(() =>
+  import('@/pages/svt-traders').then((module) => ({ default: module.SvtTradersPage })),
+)
 const PlatformSettingsPage = lazy(() =>
   import('@/pages/platform-settings').then((module) => ({ default: module.PlatformSettingsPage })),
 )
@@ -126,6 +130,8 @@ const PAGES: Record<ScreenTextKey, Page> = {
   YCRV: YieldCurvesPage,
   BP: BondPricingPage,
   BS: BondScreenerPage,
+  RFQ: RfqPage,
+  TRD: SvtTradersPage,
   ETFS: EtfScreenerPage,
   PORT: PortfolioPage,
   PUB: ResearchLibraryPage,
