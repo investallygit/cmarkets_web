@@ -63,6 +63,8 @@ DELETE /admin/publishers/{id}
 GET /admin/reports
 POST /admin/reports/{type}/{id}/dismiss
 GET /admin/rfq/audit
+GET /admin/rfq/daily-report-settings
+PUT /admin/rfq/daily-report-settings
 GET /admin/rfq/svt
 PUT /admin/rfq/svt
 GET /admin/roles/{role}/permissions
@@ -350,6 +352,11 @@ DELETE /rfq/{id}/responses/{responseId}
 PUT /rfq/{id}/responses/{responseId}
 GET /rfq/blotter
 GET /rfq/board
+GET /rfq/daily-reports
+GET /rfq/daily-reports/{date}
+POST /rfq/daily-reports/{date}/send
+GET /rfq/daily-reports/{date}/summary.pdf
+GET /rfq/daily-reports/{date}/transactions.xlsx
 GET /rfq/mine
 GET /rfq/pricing
 GET /rfq/setup

@@ -107,6 +107,7 @@
     "MPAY": { "title": "Media payments", "menu": "Media pay" },
     "MOD": { "title": "Moderation", "menu": "Moderat." },
     "PAY": { "title": "Analyst payouts", "menu": "Payouts" },
+    "RFQREP": { "title": "Daily reporting to the BEAC", "menu": "RFQ" },
     "ADMCFG": { "title": "Platform settings", "menu": "Settings" },
     "AUDT": { "title": "Audit log", "menu": "Audit" }
   },
@@ -316,7 +317,10 @@
     "rfqBoard": "Open requests on the platform",
     "rfqBlotter": "Today's blotter",
     "rfqOrganization": "The organisation's requests",
-    "rfqAudit": "RFQ compliance export"
+    "rfqAudit": "RFQ compliance export",
+    "rfqReports": "Daily reports",
+    "rfqReportPreview": "PDF summary preview",
+    "rfqReportSend": "Send"
   },
   "columns": {
     "index": "Index",

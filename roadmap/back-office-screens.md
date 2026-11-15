@@ -229,7 +229,12 @@ by which step, and what is still to do. The terminal's screens are in
   CMarket AI's review mode and threshold, the views an hour, the ingestion clients (decision 6 of
   the third version).
 
-## RFQ REP · Daily reporting to the BEAC (screen 24): to do
+## RFQ REP · Daily reporting to the BEAC (screen 24): done
 
-- **Planned in step 47**, in the Admin's back-office with every organisation's agreements
-  (decision 17 of the fourth version).
+- **Built in step 47**, in the Admin's back-office under an RFQ entry (decision 17 of the fourth
+  version), `rfq:report`: the header of the automatic send, the month's reports by business day,
+  the PDF summary of the day picked as it was or will be sent, its send (Send now or Resend, the
+  files, the sends logged) and the settings (the send time, the BEAC's address, the copies, the
+  nil report). CMarket.Api's job makes and e-mails each report at the send time.
+- **To do**: the agreements concluded by the SVTs (step 45) and cancelled on AGR (step 46) reach
+  it with nothing more; the content and the BEAC's business days, once agreed with the BEAC.

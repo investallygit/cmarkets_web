@@ -533,7 +533,11 @@
       "rfqEnabled": "RFQ ouvert",
       "minimumTradingAmount": "Montant minimum de transaction du RFQ",
       "linkValidity": "Validité d’un lien SVT (mois)",
-      "licensedSvts": "SVT agréés"
+      "licensedSvts": "SVT agréés",
+      "reportSendTime": "Heure d’envoi du rapport BEAC",
+      "beacAddress": "Adresse BEAC",
+      "reportCopies": "Copies du rapport BEAC",
+      "nilReport": "Rapport néant BEAC"
     },
     "targetTypes": {
       "user": "Compte",

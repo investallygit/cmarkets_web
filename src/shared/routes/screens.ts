@@ -166,6 +166,9 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('ANLY', 'ANLY', routes.adminAnalysts, 'backoffice', UserCheck, { permission: 'moderation:manage', inMenu: true }),
   screen('MOD', 'MOD', routes.adminModeration, 'backoffice', ShieldCheck, { permission: 'moderation:manage', inMenu: true }),
   screen('PAY', 'PAY', routes.adminPayouts, 'backoffice', Wallet, { permission: 'payouts:manage', inMenu: true }),
+  // RFQ REP, the BEAC's daily reporting (screen 24, ROADMAP step 47): the Admin's RFQ entry (decision 17), the code RFQ in
+  // the menu; RFQ's tab bar holds it beside the agreements of step 46.
+  screen('RFQREP', 'RFQ REP', routes.adminRfqReports, 'backoffice', Handshake, { permission: 'rfq:report', inMenu: true, menuCode: 'RFQ' }),
   screen('ADMCFG', 'CFG', routes.adminSettings, 'backoffice', Settings, { permission: 'settings:manage', inMenu: true }),
   screen('AUDT', 'AUDT', routes.adminAudit, 'backoffice', ScrollText, { permission: 'audit:read', inMenu: true }),
 ]

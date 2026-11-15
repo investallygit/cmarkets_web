@@ -87,7 +87,7 @@ before upload.
 | 22 · Government securities RFQ (RFQ)                                      | Done; ranked answers, the selection confirmed at its version  |
 | 27 · SVT approval (SVT)                                                   | To do, step 45                                                |
 | 23 · Agreements (RFQ AGR)                                                 | To do, step 46                                                |
-| 24 · Daily reporting to the BEAC (RFQ REP)                                | To do, step 47                                                |
+| 24 · Daily reporting to the BEAC (RFQ REP)                                | Done; PDF and Excel at 18:00, every send logged, kept 5 years |
 
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
@@ -153,7 +153,8 @@ src/
               content (NEWS), admin-users (USER), subscription-management (SUBS), news-sources
               (SRC), media-payments (MPAY),
               analyst-requests (ANLY),
-              moderation (MOD), payouts (PAY), platform-settings (ADMCFG), audit-log (AUDT), home,
+              moderation (MOD), payouts (PAY), rfq-reporting (RFQ REP), platform-settings (ADMCFG),
+              audit-log (AUDT), home,
               auth (login, sign-up, password reset), status, ui-kit (/_kit)
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
               subscription-panel, current-upload-panel, messaging-panels, news-studio-panels,
@@ -164,12 +165,13 @@ src/
               etf-profile-panels, security-description-panel, description-editor-panel,
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
               trader-links-panel, rfq-new-request, rfq-my-request, rfq-board, rfq-blotter,
-              rfq-tabs, opt-setup-panels, opt-result-panels...),
+              rfq-tabs, rfq-report-panels, opt-setup-panels, opt-result-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
               screen-etfs, price-bond, manage-svt-links, decide-trader-link, publish-rfq, answer-rfq,
-              confirm-rfq, export-rfq-audit,
+              confirm-rfq, export-rfq-audit, send-daily-report,
+              download-daily-report, edit-daily-report-settings,
               manage-portfolios, record-transaction, generate-portfolio-report, import-opt-universe,
               run-optimization, save-opt-scenario, create-portfolio-from-allocation,
               rebalance-portfolio, export-opt-scenario, buy-publication,
@@ -200,7 +202,8 @@ src/
               economies, indicators and figures), commodity (CMDTY's series, values and
               statistics), svt-link (a trader's links to the SVTs, a bank's requests and linked
               traders, the RFQ's hub), rfq (the requests for quotes, the board, the answers and the
-              selection, the agreements of a request, the blotter), news, news-source
+              selection, the agreements of a request, the blotter), rfq-report (RFQ REP's daily
+              reports to the BEAC and their settings), news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
               (MPAY's statements, click anomalies and payment settings),
               calendar-event, notification, data-import, data-provider (EODHD), stored-price,
@@ -400,7 +403,7 @@ each other; the app shell mounts the form once.
 Every UI string is in French and English, in `shared/i18n/locales/en/` and `fr/`: one JSON file
 per area of the app (`core` for the shell and the shared UI, `home`, `account` for the login and
 the settings, `monitoring`, `analysis`, `bonds`, `etfs`, `macro` (ECO, FX and their settings),
-`rfq` (RFQ, TRD and the RFQ's settings),
+`rfq` (RFQ, TRD and the RFQ's settings), `rfqReports` (RFQ REP),
 `portfolio`, `optimizer` (OPT and OPT RES), `research`, `network`, `messaging`, `newsStudio`,
 `newsAdmin`, `payments`,
 `dataAdmin`, `admin`), which `en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:

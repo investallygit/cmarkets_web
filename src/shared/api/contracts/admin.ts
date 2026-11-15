@@ -494,6 +494,14 @@ export const AUDIT_FIELDS = [
   'minimumTradingAmount',
   'linkValidity',
   'licensedSvts',
+  /**
+   * The BEAC's daily report (ROADMAP step 47): its send time ("18:00"), the BEAC's address, the
+   * copies ("a@x.example; b@y.example") and the nil report.
+   */
+  'reportSendTime',
+  'beacAddress',
+  'reportCopies',
+  'nilReport',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

@@ -119,6 +119,9 @@ const PlatformSettingsPage = lazy(() =>
 const AuditLogPage = lazy(() =>
   import('@/pages/audit-log').then((module) => ({ default: module.AuditLogPage })),
 )
+const RfqReportingPage = lazy(() =>
+  import('@/pages/rfq-reporting').then((module) => ({ default: module.RfqReportingPage })),
+)
 const OptimisationSetupPage = lazy(() =>
   import('@/pages/portfolio-optimisation').then((module) => ({
     default: module.OptimisationSetupPage,
@@ -170,6 +173,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   MOD: ModerationPage,
   PAY: PayoutsPage,
   ADMCFG: PlatformSettingsPage,
+  RFQREP: RfqReportingPage,
   AUDT: AuditLogPage,
 }
 

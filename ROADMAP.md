@@ -98,7 +98,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 44   | [RFQ: requests for quotes on BTA and OTA (screen 22)](roadmap/steps/step-44-rfq-trading.md)                          | Done          |
 | 45   | [SVT: approval of the agreements, tickets by e-mail (screen 27)](roadmap/steps/step-45-svt-approval.md)              | To do, lane 1 |
 | 46   | [RFQ AGR: agreements (screen 23)](roadmap/steps/step-46-rfq-agreements.md)                                           | To do, lane 2 |
-| 47   | [RFQ REP: daily reporting to the BEAC (screen 24)](roadmap/steps/step-47-beac-reporting.md)                          | To do, lane 3 |
+| 47   | [RFQ REP: daily reporting to the BEAC (screen 24)](roadmap/steps/step-47-beac-reporting.md)                          | Done          |
 | 48   | [Fourth version done: README, accessibility, every flow](roadmap/steps/step-48-fourth-version-done.md)               | To do, lane 1 |
 
 Steps 41 to 48 run in three lanes at once, each with its own steps: see [Lanes](roadmap/lanes.md),

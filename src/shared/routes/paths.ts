@@ -71,6 +71,8 @@ export const routes = {
   adminAnalysts: '/admin/analysts',
   adminModeration: '/admin/moderation',
   adminPayouts: '/admin/payouts',
+  /** RFQ REP, the BEAC's daily reporting (screen 24, ROADMAP step 47): the Admin's RFQ entry. */
+  adminRfqReports: '/admin/rfq/reports',
   adminSettings: '/admin/settings',
   adminAudit: '/admin/audit',
 } as const

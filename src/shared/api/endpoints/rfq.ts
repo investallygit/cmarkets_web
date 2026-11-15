@@ -1,5 +1,7 @@
 import type {
   DailyLimitInput,
+  DailyReportDto,
+  DailyReportMonthDto,
   MySvtsDto,
   RfqAllocationDto,
   RfqAnswerInput,
@@ -19,7 +21,7 @@ import type {
   SvtLinksDto,
   TraderLinkDto,
 } from '../contracts'
-import { answer, route, send } from './define'
+import { answer, route, send, sendBlob } from './define'
 
 /** GET /rfq/board's filters. */
 export interface RfqBoardQuery {
@@ -59,6 +61,16 @@ export const rfqRoutes = {
   answer: route('POST', '/rfq/{id}/responses', answer<RfqMyResponseDto>()),
   improve: route('PUT', '/rfq/{id}/responses/{responseId}', answer<RfqMyResponseDto>()),
   withdraw: route('DELETE', '/rfq/{id}/responses/{responseId}'),
+  // RFQ REP, the daily reporting to the BEAC (screen 24, ROADMAP step 47): the Admin's.
+  dailyReports: route('GET', '/rfq/daily-reports', answer<DailyReportMonthDto>()),
+  dailyReport: route('GET', '/rfq/daily-reports/{date}', answer<DailyReportDto>()),
+  dailyReportSummary: route('GET', '/rfq/daily-reports/{date}/summary.pdf', answer<Blob>()),
+  dailyReportTransactions: route(
+    'GET',
+    '/rfq/daily-reports/{date}/transactions.xlsx',
+    answer<Blob>(),
+  ),
+  sendDailyReport: route('POST', '/rfq/daily-reports/{date}/send', answer<DailyReportDto>()),
 }
 
 export const rfqApi = {
@@ -104,4 +116,18 @@ export const rfqApi = {
     send(rfqRoutes.improve, { params: { id, responseId }, body: input }),
   withdraw: (id: string, responseId: string) =>
     send(rfqRoutes.withdraw, { params: { id, responseId } }),
+  /** The month's business days (yyyy-MM), newest first, with each one's send. */
+  dailyReports: (month: string, signal?: AbortSignal) =>
+    send(rfqRoutes.dailyReports, { query: { month }, signal }),
+  /** A day's figures and send panel; a day not made yet, a preview of its figures so far. */
+  dailyReport: (date: string, signal?: AbortSignal) =>
+    send(rfqRoutes.dailyReport, { params: { date }, signal }),
+  /** The one-page PDF summary, as sent (or the preview of a day not made yet). */
+  dailyReportSummary: (date: string, signal?: AbortSignal) =>
+    sendBlob(rfqRoutes.dailyReportSummary, { params: { date }, signal }),
+  /** The Excel list of the day's agreements, as sent. */
+  dailyReportTransactions: (date: string, signal?: AbortSignal) =>
+    sendBlob(rfqRoutes.dailyReportTransactions, { params: { date }, signal }),
+  /** Send now (a day not made yet, up to now) or Resend (the same files). */
+  sendDailyReport: (date: string) => send(rfqRoutes.sendDailyReport, { params: { date } }),
 }

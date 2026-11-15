@@ -107,6 +107,7 @@
     "MPAY": { "title": "Paiements aux médias", "menu": "Paiem. médias" },
     "MOD": { "title": "Modération", "menu": "Modérat." },
     "PAY": { "title": "Versements aux analystes", "menu": "Versem." },
+    "RFQREP": { "title": "Déclaration quotidienne à la BEAC", "menu": "RFQ" },
     "ADMCFG": { "title": "Paramètres de la plateforme", "menu": "Réglages" },
     "AUDT": { "title": "Journal d'audit", "menu": "Audit" }
   },
@@ -316,7 +317,10 @@
     "rfqBoard": "Demandes ouvertes sur la plateforme",
     "rfqBlotter": "Blotter du jour",
     "rfqOrganization": "Demandes de l'organisation",
-    "rfqAudit": "Export de conformité du RFQ"
+    "rfqAudit": "Export de conformité du RFQ",
+    "rfqReports": "Rapports quotidiens",
+    "rfqReportPreview": "Aperçu de la synthèse PDF",
+    "rfqReportSend": "Envoi"
   },
   "columns": {
     "index": "Indice",

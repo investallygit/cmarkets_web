@@ -36,6 +36,27 @@ describe('the left menu (spec section 9)', () => {
     ])
   })
 
+  it('gives the Admin an RFQ entry before its settings, RFQ REP its screen (ROADMAP decision 17)', () => {
+    expect(menu('backoffice')).toEqual([
+      'DATA',
+      'IMP',
+      'CORR',
+      'NEWS',
+      'EODH',
+      'HIST',
+      'USER',
+      'SUBS',
+      'MPAY',
+      'SRC',
+      'ANLY',
+      'MOD',
+      'PAY',
+      'RFQ',
+      'CFG',
+      'AUDT',
+    ])
+  })
+
   it('keeps the screens opened from another one out of it', () => {
     const outside = SCREENS.filter((screen) => !screen.inMenu).map((screen) => screen.id)
     expect(outside).toEqual(['DES', 'PUBNEW', 'CAL', 'NETME', 'OPTRES'])

@@ -533,7 +533,11 @@
       "rfqEnabled": "RFQ open",
       "minimumTradingAmount": "RFQ minimum trading amount",
       "linkValidity": "SVT link validity (months)",
-      "licensedSvts": "Licensed SVTs"
+      "licensedSvts": "Licensed SVTs",
+      "reportSendTime": "BEAC report send time",
+      "beacAddress": "BEAC address",
+      "reportCopies": "BEAC report copies",
+      "nilReport": "BEAC nil report"
     },
     "targetTypes": {
       "user": "Account",

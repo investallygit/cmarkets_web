@@ -490,6 +490,16 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   team", which is no account type; its mockup draws the client menu, RFQ lit, for a "CMARKET
   ADMIN" account without the BACK-OFFICE badge (the plan: the Admin, in the back-office, decision
   17). Its tab bar is the traders', who may not open it: the plan shows them two tabs.
+- **RFQ REP, fourth version (step 47)**: the Excel file's 17 columns hold no status, while a
+  cancellation appears "with the Cancelled status in the Excel file": the plan adds an 18th
+  column, the status, to every file, so that the BEAC reads one layout. A day without trades while
+  the nil report is off sends nothing: the plan lists it "Skipped", a status the spec's five do
+  not have. The PDF's footer has "a SHA-256 fingerprint" of no file named: a file cannot carry its
+  own, so the plan prints the Excel file's, and logs both. The mockup's PDF is in English for a
+  francophone regulator: the plan keeps it, with the e-mail's text in French then English, until
+  the BEAC says (the spec: "the content and the sending address must be agreed with the BEAC").
+  "Send now" before the send time: the plan ends the day's period then, the agreements after going
+  into the next business day's report, as an agreement concluded after the send does.
 - **Menu and codes, fourth version**: section 9's text of the client menu is unchanged and lacks
   RFQ, which the mockups of screens 22 to 24 draw after YCRV; the codes of section 8 name ECO, FX,
   SVT and OPT, not CMDTY, RFQ, RFQ AGR, RFQ REP nor OPT RES, which the mockups type (the plan: all

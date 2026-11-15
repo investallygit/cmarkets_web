@@ -21,6 +21,8 @@ import type {
   AuditAction,
   AuditEntryDto,
   ClickAnomalyDto,
+  DailyReportSettingsDto,
+  DailyReportSettingsInput,
   DirectorySettingsDto,
   DirectorySettingsUpdateDto,
   DisputeResolutionWriteDto,
@@ -166,6 +168,16 @@ export const adminRoutes = {
   rfqSettings: route('GET', '/admin/rfq/svt', answer<RfqAdminSettingsDto>()),
   saveRfqSettings: route('PUT', '/admin/rfq/svt', answer<RfqAdminSettingsDto>()),
   rfqAudit: route('GET', '/admin/rfq/audit', answer<Blob>()),
+  dailyReportSettings: route(
+    'GET',
+    '/admin/rfq/daily-report-settings',
+    answer<DailyReportSettingsDto>(),
+  ),
+  saveDailyReportSettings: route(
+    'PUT',
+    '/admin/rfq/daily-report-settings',
+    answer<DailyReportSettingsDto>(),
+  ),
   specialties: route('GET', '/admin/specialties', answer<AdminSpecialtyDto[]>()),
   addSpecialty: route('POST', '/admin/specialties', answer<AdminSpecialtyDto>()),
   renameSpecialty: route('PUT', '/admin/specialties/{id}', answer<AdminSpecialtyDto>()),
@@ -420,6 +432,10 @@ export const adminApi = {
   /** The whole list in its order: a bank added by its name, none taken off (untick it instead). */
   saveRfqSettings: (settings: RfqAdminSettingsInput) =>
     send(adminRoutes.saveRfqSettings, { body: settings }),
+  /** RFQ REP's send time, the BEAC's address, the copies and the nil report (ROADMAP step 47). */
+  dailyReportSettings: (signal?: AbortSignal) => send(adminRoutes.dailyReportSettings, { signal }),
+  saveDailyReportSettings: (settings: DailyReportSettingsInput) =>
+    send(adminRoutes.saveDailyReportSettings, { body: settings }),
   /** The closed list and the profiles listing each. */
   specialties: (signal?: AbortSignal) => send(adminRoutes.specialties, { signal }),
   addSpecialty: (input: SpecialtyInputDto) => send(adminRoutes.addSpecialty, { body: input }),

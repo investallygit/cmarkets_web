@@ -84,6 +84,8 @@ export function useAuditText() {
     if (raw === null || raw === '') {
       return oneOf(QUOTAS, change.field) ? t('audit.unlimited') : '—'
     }
+    if (typeof raw === 'boolean' && change.field === 'nilReport')
+      return raw ? t('rfqReports.settings.yes') : t('rfqReports.settings.no')
     if (typeof raw === 'boolean') return raw ? t('audit.granted') : t('audit.notGranted')
     if (typeof raw === 'number') {
       switch (change.field) {
