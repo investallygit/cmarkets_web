@@ -69,7 +69,14 @@ export { organizationApi, organizationRoutes } from './organization'
 export { portfoliosApi, portfoliosRoutes, type PerformanceQuery } from './portfolios'
 export { providerApi, providerRoutes, type ProviderNewsQuery } from './provider'
 export { researchApi, researchRoutes, type LibraryFilters, type PublicationStep } from './research'
-export { rfqApi, rfqRoutes, type RfqBoardQuery, type RfqScope, type SvtApprovalsQuery } from './rfq'
+export {
+  rfqApi,
+  rfqRoutes,
+  type RfqAgreementQuery,
+  type RfqBoardQuery,
+  type RfqScope,
+  type SvtApprovalsQuery,
+} from './rfq'
 export { securitiesApi, securitiesRoutes, type SecurityFilters } from './securities'
 export { subscriptionsApi, subscriptionsRoutes } from './subscriptions'
 export { watchlistsApi, watchlistsRoutes } from './watchlists'

@@ -97,7 +97,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 43   | [SVT account type, licensed SVTs, trader links, `/hubs/rfq`](roadmap/steps/step-43-svt-accounts.md)                  | Done          |
 | 44   | [RFQ: requests for quotes on BTA and OTA (screen 22)](roadmap/steps/step-44-rfq-trading.md)                          | Done          |
 | 45   | [SVT: approval of the agreements, tickets by e-mail (screen 27)](roadmap/steps/step-45-svt-approval.md)              | Done          |
-| 46   | [RFQ AGR: agreements (screen 23)](roadmap/steps/step-46-rfq-agreements.md)                                           | To do, lane 2 |
+| 46   | [RFQ AGR: agreements (screen 23)](roadmap/steps/step-46-rfq-agreements.md)                                           | Done          |
 | 47   | [RFQ REP: daily reporting to the BEAC (screen 24)](roadmap/steps/step-47-beac-reporting.md)                          | Done          |
 | 48   | [Fourth version done: README, accessibility, every flow](roadmap/steps/step-48-fourth-version-done.md)               | To do, lane 1 |
 

@@ -146,3 +146,17 @@ itself, steps 38 to 48 follow these; each is also an open question for the spec 
     shares, or bonds of their nominal at their dirty price. A real portfolio made from an
     allocation holds securities quoted in francs or euros only: PORT values a line in another
     currency without its exchange rate (an ETF in dollars is saved as a model portfolio).
+26. **The agreements' screen** (step 46): screen 23 is one page for three readers, the API
+    deciding what each reads: an organisation's Traders, Managers and CEO (`rfq:read`) open it
+    under RFQ's tabs, the agreements the organisation is party to; an SVT opens AGR in its menu,
+    those whose buyer or seller chose its bank; the Admin an RFQ entry of its menu (decision 17),
+    every agreement, RFQ REP beside it. A party reads each agreement from its side (its side, its
+    role, the counterparty and its SVT); an SVT from its client's, the requester's when both sides
+    chose it; the Admin reads the buyer and the seller, and filters neither side nor role. A
+    concluded agreement is cancelled by a Trader or a Manager of either party, or by the Admin,
+    with the reason and both parties' written requests (a PDF or a scan each, 10 MB at most, kept
+    with it); its ticket is sent again by the same (to the four recipients or to one, the same
+    document) and downloaded by every reader; a CEO and an SVT read. The free search reads the agreement's number, the security's
+    code or CRCT code and the counterparty's organisation or trader; the period is the agreement's
+    day in Douala; an export holds every agreement the filters keep, up to 10,000, with the
+    columns of the BEAC's trade file.

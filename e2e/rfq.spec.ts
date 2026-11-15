@@ -65,7 +65,7 @@ test(
     // P. Owona confirmed with a limit.
     await switchAccount(page, /trader/i, 'SVT', /svt/i)
     await expect(page).toHaveURL(/\/svt$/)
-    await expect(menu.getByRole('link')).toHaveText([/^SVT/, /^TRD/, /^N/, /^CFG/])
+    await expect(menu.getByRole('link')).toHaveText([/^SVT/, /^TRD/, /^AGR/, /^N/, /^CFG/])
     await menu.getByRole('link', { name: /^TRD/ }).click()
     await expect(page).toHaveURL(/\/svt\/traders$/)
     const links = panel(page, /^Trader links/)

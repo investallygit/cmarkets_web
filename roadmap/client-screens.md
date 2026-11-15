@@ -452,9 +452,17 @@ what is still to do. The Data admin's and the Admin's screens are in
   improve, withdraw). Today's blotter. Everything read again live through `/hubs/rfq`; the CEO
   reads its organisation's requests and blotter. See [step 44](steps/step-44-rfq-trading.md).
 
-## RFQ AGR · Agreements (screen 23): to do
+## RFQ AGR · Agreements (screen 23): done
 
-- **Planned in step 46**.
+- **Built in step 46**: under RFQ's tabs for an organisation's Traders, Managers and CEO, and from
+  AGR in an SVT's menu (decision 26): the filters of the mockup with the user's saved filters, the
+  list with its count and total face amount, sorted and paged by the API, XLSX and CSV of every
+  agreement kept, each read from the reader's side; the detail (the request and the rank, the
+  parties and their SVTs, the security and its CRCT code, the amounts, each SVT's approval, the
+  e-mails by recipient, the ticket and its fingerprint); the ticket's PDF for every reader; the
+  ticket sent again (to every recipient or to one) and a concluded agreement cancelled on both
+  parties' letters, by a Trader or a Manager of either party. See
+  [step 46](steps/step-46-rfq-agreements.md).
 
 ## ECO · Macroeconomic dashboard (screen 25): done
 

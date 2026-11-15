@@ -350,6 +350,16 @@ POST /rfq/{id}/confirm
 POST /rfq/{id}/responses
 DELETE /rfq/{id}/responses/{responseId}
 PUT /rfq/{id}/responses/{responseId}
+GET /rfq/agreement-filters
+POST /rfq/agreement-filters
+DELETE /rfq/agreement-filters/{id}
+GET /rfq/agreements
+GET /rfq/agreements/{id}
+POST /rfq/agreements/{id}/cancel
+POST /rfq/agreements/{id}/resend
+GET /rfq/agreements/{id}/ticket.pdf
+GET /rfq/agreements/export
+GET /rfq/agreements/options
 GET /rfq/blotter
 GET /rfq/board
 GET /rfq/daily-reports

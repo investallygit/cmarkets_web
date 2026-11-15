@@ -19,6 +19,7 @@ import portfolio from './fr/portfolio.json'
 import research from './fr/research.json'
 import rfq from './fr/rfq.json'
 import rfqReports from './fr/rfqReports.json'
+import rfqAgreements from './fr/rfqAgreements.json'
 import subscriptions from './fr/subscriptions.json'
 
 /** The French strings: the same area files as en.ts, in ./fr. */
@@ -37,6 +38,7 @@ const fr = {
   ...research,
   ...rfq,
   ...rfqReports,
+  ...rfqAgreements,
   ...network,
   ...newsStudio,
   ...newsAdmin,

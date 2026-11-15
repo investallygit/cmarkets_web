@@ -19,6 +19,7 @@ import portfolio from './en/portfolio.json'
 import research from './en/research.json'
 import rfq from './en/rfq.json'
 import rfqReports from './en/rfqReports.json'
+import rfqAgreements from './en/rfqAgreements.json'
 import subscriptions from './en/subscriptions.json'
 
 /**
@@ -41,6 +42,7 @@ const en = {
   ...research,
   ...rfq,
   ...rfqReports,
+  ...rfqAgreements,
   ...network,
   ...newsStudio,
   ...newsAdmin,

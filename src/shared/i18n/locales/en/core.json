@@ -81,6 +81,8 @@
     "RFQ": { "title": "Government securities RFQ (BTA / OTA)", "menu": "RFQ" },
     "SVT": { "title": "SVT approval", "menu": "Approval" },
     "TRD": { "title": "Trader links", "menu": "Traders" },
+    "RFQAGR": { "title": "RFQ agreements", "menu": "Agreements" },
+    "AGR": { "title": "Agreements naming the bank", "menu": "Agreements" },
     "ETFS": { "title": "ETF screener", "menu": "ETFs" },
     "PORT": { "title": "Portfolio", "menu": "Portf." },
     "OPT": { "title": "Portfolio optimisation — setup", "menu": "Optim." },
@@ -110,7 +112,8 @@
     "PAY": { "title": "Analyst payouts", "menu": "Payouts" },
     "RFQREP": { "title": "Daily reporting to the BEAC", "menu": "RFQ" },
     "ADMCFG": { "title": "Platform settings", "menu": "Settings" },
-    "AUDT": { "title": "Audit log", "menu": "Audit" }
+    "AUDT": { "title": "Audit log", "menu": "Audit" },
+    "ADMAGR": { "title": "RFQ agreements, every organisation", "menu": "RFQ" }
   },
   "functions": {
     "DES": "Security profile",
@@ -324,7 +327,10 @@
     "rfqAudit": "RFQ compliance export",
     "rfqReports": "Daily reports",
     "rfqReportPreview": "PDF summary preview",
-    "rfqReportSend": "Send"
+    "rfqReportSend": "Send",
+    "rfqAgreementFilters": "Filters",
+    "rfqAgreements": "Agreements",
+    "rfqAgreement": "Agreement"
   },
   "columns": {
     "index": "Index",

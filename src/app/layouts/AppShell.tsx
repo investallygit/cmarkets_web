@@ -12,6 +12,7 @@ import { usePublicationRealtimeSync } from '@/entities/publication'
 import { useNotificationRealtimeSync } from '@/entities/notification'
 import { useQuoteRealtimeSync } from '@/entities/quote'
 import { useRfqTradingSync } from '@/entities/rfq'
+import { useRfqAgreementSync } from '@/entities/rfq-agreement'
 import { useSecurityRealtimeSync } from '@/entities/security'
 import { mayWriteMessages, useMe, useProfilePreferences } from '@/entities/session'
 import { holdsRfqKey, useRfqRealtimeSync } from '@/entities/svt-link'
@@ -52,6 +53,7 @@ export function AppShell() {
   useChatRealtimeSync(me.data ? mayWriteMessages(me.data) : false, me.data?.id)
   useRfqRealtimeSync(me.data ? holdsRfqKey(me.data) : false)
   useRfqTradingSync()
+  useRfqAgreementSync()
   // The terminal speaks French and English itself (spec section 7), and its live figures must not
   // freeze under a translation of the browser.
   useNoBrowserTranslation()

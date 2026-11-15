@@ -113,6 +113,9 @@ const RfqPage = lazy(() => import('@/pages/rfq').then((module) => ({ default: mo
 const SvtApprovalPage = lazy(() =>
   import('@/pages/svt-approval').then((module) => ({ default: module.SvtApprovalPage })),
 )
+const RfqAgreementsPage = lazy(() =>
+  import('@/pages/rfq-agreements').then((module) => ({ default: module.RfqAgreementsPage })),
+)
 const SvtTradersPage = lazy(() =>
   import('@/pages/svt-traders').then((module) => ({ default: module.SvtTradersPage })),
 )
@@ -149,6 +152,10 @@ const PAGES: Record<ScreenTextKey, Page> = {
   RFQ: RfqPage,
   SVT: SvtApprovalPage,
   TRD: SvtTradersPage,
+  // Screen 23 for a party, an SVT and the Admin: one page, the API deciding what each reads.
+  RFQAGR: RfqAgreementsPage,
+  AGR: RfqAgreementsPage,
+  ADMAGR: RfqAgreementsPage,
   ETFS: EtfScreenerPage,
   PORT: PortfolioPage,
   OPT: OptimisationSetupPage,

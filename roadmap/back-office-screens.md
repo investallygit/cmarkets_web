@@ -232,12 +232,20 @@ by which step, and what is still to do. The terminal's screens are in
   CMarket AI's review mode and threshold, the views an hour, the ingestion clients (decision 6 of
   the third version).
 
+## RFQ · The Admin's agreements (screen 23): done
+
+- **Built in step 46**: the Admin's RFQ entry, before CFG (decision 17), on screen 23 for every
+  organisation's agreements: the buyer and the seller in the list, neither side nor role among the
+  filters, the mail server's answer to a failed e-mail in the detail, the ticket sent again and a
+  concluded agreement cancelled on both parties' letters (decision 26). RFQ REP (step 47) beside
+  it under the RFQ's tabs, the entry lit on both. See [step 46](steps/step-46-rfq-agreements.md).
+
 ## RFQ REP · Daily reporting to the BEAC (screen 24): done
 
-- **Built in step 47**, in the Admin's back-office under an RFQ entry (decision 17 of the fourth
-  version), `rfq:report`: the header of the automatic send, the month's reports by business day,
+- **Built in step 47**, in the Admin's back-office under the RFQ entry (decision 17 of the fourth
+  version), by its tab beside the agreements since step 46, `rfq:report`: the header of the automatic send, the month's reports by business day,
   the PDF summary of the day picked as it was or will be sent, its send (Send now or Resend, the
   files, the sends logged) and the settings (the send time, the BEAC's address, the copies, the
   nil report). CMarket.Api's job makes and e-mails each report at the send time.
-- **To do**: the agreements concluded by the SVTs (step 45) and cancelled on AGR (step 46) reach
-  it with nothing more; the content and the BEAC's business days, once agreed with the BEAC.
+- **To do**: the content and the BEAC's business days, once agreed with the BEAC. The agreements
+  concluded by the SVTs (step 45) and cancelled on RFQ AGR (step 46) reach it with nothing more.

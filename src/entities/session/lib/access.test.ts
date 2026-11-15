@@ -68,7 +68,8 @@ describe('the SVT and the RFQ (ROADMAP decisions 15, 16 and 18)', () => {
     SCREENS.filter((screen) => isInMenuOf(user, screen)).map((screen) => screen.code)
 
   it('gives the SVT its own menu, the market screens a CEO reads open from the command bar only', () => {
-    expect(menuOf(svt)).toEqual(['SVT', 'TRD', 'N', 'CFG'])
+    // SVT its home, TRD, and AGR, the agreements that name its bank, by the code each opens (ROADMAP steps 45, 46).
+    expect(menuOf(svt)).toEqual(['SVT', 'TRD', 'RFQ AGR', 'N', 'CFG'])
     expect(canAccessScreen(svt, screenById('MKT'))).toBe(true)
     expect(canAccessScreen(svt, screenById('RFQ'))).toBe(false)
   })

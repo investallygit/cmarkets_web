@@ -37,6 +37,10 @@ export const routes = {
   svt: '/svt',
   /** TRD: an SVT's trader links, their requests and limits (ROADMAP decision 16). */
   svtTraders: '/svt/traders',
+  /** RFQ AGR (screen 23): the organisation's agreements, under RFQ's tabs (ROADMAP step 46). */
+  rfqAgreements: '/rfq/agreements',
+  /** AGR: the agreements that name an SVT's bank, in its menu (ROADMAP decision 16). */
+  svtAgreements: '/svt/agreements',
   portfolio: '/port',
   /** A portfolio and one of its tabs: /port/{id} (positions), /port/{id}/risk... */
   portfolioTabs: '/port/:portfolioId?/:tab?',
@@ -77,6 +81,8 @@ export const routes = {
   adminRfqReports: '/admin/rfq/reports',
   adminSettings: '/admin/settings',
   adminAudit: '/admin/audit',
+  /** The Admin's RFQ (ROADMAP decision 17): every agreement; RFQ REP below it (step 47). */
+  adminRfq: '/admin/rfq',
 } as const
 
 /**

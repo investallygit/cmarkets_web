@@ -36,6 +36,7 @@ test('T. Bekale publishes, B. Ngoma answers on the board and improves, T. Bekale
   await openRfq(page)
   await expect(page.getByRole('navigation', { name: 'RFQ screens' }).getByRole('link')).toHaveText([
     /RFQ\s*Trading/,
+    /RFQ AGR\s*Agreements/,
   ])
 
   // A purchase of 300 million of the demo's OTA, quoted in clean price, open 10 minutes, anonymous.

@@ -473,6 +473,14 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   organisation, until the answer)? A security's "CRCT code", the mockup's `CMXXXXXXXXXX`, is not
   in the master list (the plan: its ISIN, which the Excel file allows). Section 10 keeps the
   tracking of the CRCT's settlement for a later phase, in a note placed under the commodities.
+- **Agreements, fourth version** (screen 23): "Cancellation of a concluded agreement: only on
+  written request from both parties, entered with a reason" names no one who enters it, while the
+  mockup gives the trader the button: who does (the plan: a Trader or a Manager of either party,
+  or the Admin, decision 26), and should the other party confirm on CMarket rather than by letter?
+  The list's "counterparty" means nothing to an SVT or the Admin, who are no party (the plan: an
+  SVT's client's counterparty; the Admin's buyer and seller). AGR, in the SVT's menu of the screen
+  27 mockup, has no mockup of its own (the plan: screen 23 on the agreements that name the bank).
+  Who may read the parties' letters, which the plan keeps without showing them?
 - **SVT, fourth version**: the matrix has no column for the SVT, whose rights a paragraph gives:
   which keys stand for them (the plan: `svt:approve`, with `market:read` and `messages:write`)?
   Its menu on the screen 27 mockup is SVT, TRD, AGR, N, CFG, without the markets "a CEO views" nor

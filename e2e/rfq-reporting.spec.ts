@@ -23,6 +23,12 @@ async function openReporting(page: Page) {
     .getByRole('navigation', { name: 'Main menu' })
     .getByRole('link', { name: /RFQ/ })
     .click()
+  // The Admin's RFQ entry opens every agreement (ROADMAP step 46), the reporting beside it.
+  await expect(page).toHaveURL(/\/admin\/rfq$/)
+  await page
+    .getByRole('navigation', { name: 'RFQ screens' })
+    .getByRole('link', { name: /BEAC reporting/ })
+    .click()
   await expect(page).toHaveURL(/\/admin\/rfq\/reports/)
 }
 
@@ -39,8 +45,9 @@ test('RFQ REP lists the reports by business day and shows one as it was sent, it
   page,
 }) => {
   await openReporting(page)
-  // The Admin opens the BEAC's reporting alone of the RFQ's screens.
+  // The Admin's RFQ screens: every agreement and the BEAC's reporting, not the trading.
   const tabs = page.getByRole('navigation', { name: 'RFQ screens' })
+  await expect(tabs.getByRole('link', { name: /Agreements/ })).toBeVisible()
   await expect(tabs.getByRole('link', { name: /BEAC reporting/ })).toBeVisible()
   await expect(tabs.getByRole('link', { name: /Trading/ })).toHaveCount(0)
   const header = page.getByRole('region', { name: 'Automatic send' })

@@ -81,6 +81,8 @@
     "RFQ": { "title": "RFQ sur titres publics (BTA / OTA)", "menu": "RFQ" },
     "SVT": { "title": "Approbation SVT", "menu": "Approb." },
     "TRD": { "title": "Liens des traders", "menu": "Traders" },
+    "RFQAGR": { "title": "Accords RFQ", "menu": "Accords" },
+    "AGR": { "title": "Accords nommant la banque", "menu": "Accords" },
     "ETFS": { "title": "Filtre ETF", "menu": "ETF" },
     "PORT": { "title": "Portefeuille", "menu": "Portef." },
     "OPT": { "title": "Optimisation de portefeuille — paramétrage", "menu": "Optim." },
@@ -110,7 +112,8 @@
     "PAY": { "title": "Versements aux analystes", "menu": "Versem." },
     "RFQREP": { "title": "Déclaration quotidienne à la BEAC", "menu": "RFQ" },
     "ADMCFG": { "title": "Paramètres de la plateforme", "menu": "Réglages" },
-    "AUDT": { "title": "Journal d'audit", "menu": "Audit" }
+    "AUDT": { "title": "Journal d'audit", "menu": "Audit" },
+    "ADMAGR": { "title": "Accords RFQ, toutes organisations", "menu": "RFQ" }
   },
   "functions": {
     "DES": "Fiche valeur",
@@ -324,7 +327,10 @@
     "rfqAudit": "Export de conformité du RFQ",
     "rfqReports": "Rapports quotidiens",
     "rfqReportPreview": "Aperçu de la synthèse PDF",
-    "rfqReportSend": "Envoi"
+    "rfqReportSend": "Envoi",
+    "rfqAgreementFilters": "Filtres",
+    "rfqAgreements": "Accords",
+    "rfqAgreement": "Accord"
   },
   "columns": {
     "index": "Indice",

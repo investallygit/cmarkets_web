@@ -11,6 +11,7 @@ import {
   ChartSpline,
   CreditCard,
   Database,
+  FileCheck2,
   FileText,
   Globe,
   HandCoins,
@@ -132,6 +133,10 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('RFQ', 'RFQ', routes.rfq, 'client', Handshake, { permission: 'rfq:read', inMenu: true }),
   screen('SVT', 'SVT', routes.svt, 'client', BadgeCheck, { permission: 'svt:approve', inMenu: true }),
   screen('TRD', 'TRD', routes.svtTraders, 'client', Link2, { permission: 'svt:approve', inMenu: true }),
+  // RFQ AGR (screen 23, ROADMAP step 46): the organisation's agreements under RFQ's tabs, which RFQ's entry lights; AGR in
+  // the SVT's menu, the agreements that name its bank (decision 16); the Admin's under its RFQ entry (decision 17).
+  screen('RFQAGR', 'RFQ AGR', routes.rfqAgreements, 'client', FileCheck2, { permission: 'rfq:read', menuCode: 'RFQ' }),
+  screen('AGR', 'RFQ AGR', routes.svtAgreements, 'client', FileCheck2, { permission: 'svt:approve', inMenu: true, menuCode: 'AGR' }),
   screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', module: 'portfolio', inMenu: true, routePattern: routes.portfolioTabs }),
   // OPT (screens 28 and 29) after PORT, which its mockups light: an entry of its own (ROADMAP decision 15).
   screen('OPT', 'OPT', routes.optimizer, 'client', ChartScatter, { permission: 'portfolios:optimize', module: 'portfolio', inMenu: true }),
@@ -168,9 +173,11 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('ANLY', 'ANLY', routes.adminAnalysts, 'backoffice', UserCheck, { permission: 'moderation:manage', inMenu: true }),
   screen('MOD', 'MOD', routes.adminModeration, 'backoffice', ShieldCheck, { permission: 'moderation:manage', inMenu: true }),
   screen('PAY', 'PAY', routes.adminPayouts, 'backoffice', Wallet, { permission: 'payouts:manage', inMenu: true }),
-  // RFQ REP, the BEAC's daily reporting (screen 24, ROADMAP step 47): the Admin's RFQ entry (decision 17), the code RFQ in
-  // the menu; RFQ's tab bar holds it beside the agreements of step 46.
-  screen('RFQREP', 'RFQ REP', routes.adminRfqReports, 'backoffice', Handshake, { permission: 'rfq:report', inMenu: true, menuCode: 'RFQ' }),
+  // The RFQ's back-office (ROADMAP decisions 17 and 26), one entry before CFG: every agreement (screen 23, step 46) at
+  // /admin/rfq; the BEAC's daily reporting (screen 24, step 47) at /admin/rfq/reports beside it under the RFQ's tabs, the
+  // entry lit on both.
+  screen('ADMAGR', 'RFQ AGR', routes.adminRfq, 'backoffice', Handshake, { permission: 'rfq:report', inMenu: true, menuCode: 'RFQ' }),
+  screen('RFQREP', 'RFQ REP', routes.adminRfqReports, 'backoffice', Handshake, { permission: 'rfq:report', menuCode: 'RFQ' }),
   screen('ADMCFG', 'CFG', routes.adminSettings, 'backoffice', Settings, { permission: 'settings:manage', inMenu: true }),
   screen('AUDT', 'AUDT', routes.adminAudit, 'backoffice', ScrollText, { permission: 'audit:read', inMenu: true }),
 ]
