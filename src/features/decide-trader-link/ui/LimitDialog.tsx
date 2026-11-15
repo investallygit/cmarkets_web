@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSvtSettings } from '@/entities/rfq'
 import { useChangeLinkLimit, useConfirmLink } from '@/entities/svt-link'
 import { isApiError } from '@/shared/api'
 import type { TraderLinkDto } from '@/shared/api/contracts'
@@ -20,11 +21,14 @@ interface LimitDialogProps {
 /**
  * The client's daily limit, XAF, or none (screen 22: "The SVT confirms (setting a daily limit for
  * this client if needed)"; screen 27: "change the limit"): POST /svt/links/{id}/confirm or PUT
- * /svt/links/{id}/limit.
+ * /svt/links/{id}/limit. A confirmation offers the bank's default client limit (ROADMAP step 45).
  */
 export function LimitDialog({ mode, link, onClose }: LimitDialogProps) {
   const { t } = useTranslation()
+  const settings = useSvtSettings(link !== null && mode === 'confirm')
   const name = link?.trader.name ?? ''
+  // The form starts from the bank's default: it waits for it, or for its failure.
+  const ready = mode !== 'confirm' || !settings.isPending
   return (
     <Dialog
       open={link !== null}
@@ -36,27 +40,37 @@ export function LimitDialog({ mode, link, onClose }: LimitDialogProps) {
       }
       width={420}
     >
-      {link && <LimitForm mode={mode} link={link} onClose={onClose} />}
+      {link && ready && (
+        <LimitForm
+          mode={mode}
+          link={link}
+          defaultLimit={settings.data?.defaultClientLimit ?? null}
+          onClose={onClose}
+        />
+      )}
     </Dialog>
   )
 }
 
-/** Mounted with each opening, from the link's own limit. */
+/** Mounted with each opening, from the link's own limit, or the bank's default for a confirmation. */
 function LimitForm({
   mode,
   link,
+  defaultLimit,
   onClose,
 }: {
   mode: LimitDialogProps['mode']
   link: TraderLinkDto
+  defaultLimit: number | null
   onClose: () => void
 }) {
   const { t } = useTranslation()
   const confirm = useConfirmLink()
   const change = useChangeLinkLimit()
   const mutation = mode === 'confirm' ? confirm : change
-  const [unlimited, setUnlimited] = useState(link.dailyLimit === null)
-  const [amount, setAmount] = useState<number | null>(link.dailyLimit)
+  const initial = mode === 'confirm' ? (link.dailyLimit ?? defaultLimit) : link.dailyLimit
+  const [unlimited, setUnlimited] = useState(initial === null)
+  const [amount, setAmount] = useState<number | null>(initial)
   const [submitted, setSubmitted] = useState(false)
   const invalid = !unlimited && (amount === null || amount <= 0 || !Number.isInteger(amount))
   const fieldError =

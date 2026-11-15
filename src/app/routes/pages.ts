@@ -110,6 +110,9 @@ const PayoutsPage = lazy(() =>
   import('@/pages/payouts').then((module) => ({ default: module.PayoutsPage })),
 )
 const RfqPage = lazy(() => import('@/pages/rfq').then((module) => ({ default: module.RfqPage })))
+const SvtApprovalPage = lazy(() =>
+  import('@/pages/svt-approval').then((module) => ({ default: module.SvtApprovalPage })),
+)
 const SvtTradersPage = lazy(() =>
   import('@/pages/svt-traders').then((module) => ({ default: module.SvtTradersPage })),
 )
@@ -144,6 +147,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   BP: BondPricingPage,
   BS: BondScreenerPage,
   RFQ: RfqPage,
+  SVT: SvtApprovalPage,
   TRD: SvtTradersPage,
   ETFS: EtfScreenerPage,
   PORT: PortfolioPage,

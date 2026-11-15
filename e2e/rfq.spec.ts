@@ -61,10 +61,13 @@ test(
       .click()
     await expect(svtRow(page, 'Bank F')).toContainText(/Removed on \d\d\/\d\d\s*Withdrawn/)
 
-    // B. Sima, Bank E's SVT: its menu, its two requests, P. Owona confirmed with a limit.
+    // B. Sima, Bank E's SVT: its menu, SVT its home (ROADMAP step 45), its two requests on TRD,
+    // P. Owona confirmed with a limit.
     await switchAccount(page, /trader/i, 'SVT', /svt/i)
+    await expect(page).toHaveURL(/\/svt$/)
+    await expect(menu.getByRole('link')).toHaveText([/^SVT/, /^TRD/, /^N/, /^CFG/])
+    await menu.getByRole('link', { name: /^TRD/ }).click()
     await expect(page).toHaveURL(/\/svt\/traders$/)
-    await expect(menu.getByRole('link')).toHaveText([/^TRD/, /^N/, /^CFG/])
     const links = panel(page, /^Trader links/)
     await expect(links.getByText('2 requests')).toBeVisible()
     const requests = links.getByRole('region', { name: 'Link requests' })
@@ -74,9 +77,11 @@ test(
     ])
     await requests.getByRole('button', { name: 'Confirm · P. Owona' }).click()
     const confirm = page.getByRole('dialog', { name: "Confirm P. Owona's link" })
-    // A request has no limit until the SVT sets one.
-    await confirm.getByRole('checkbox', { name: 'No limit' }).uncheck({ force: true })
-    await confirm.getByRole('textbox', { name: 'Daily limit (XAF)' }).fill('750000000')
+    // The bank's default client limit offered (screen 27's settings, XAF 500 million), set higher.
+    const dailyLimit = confirm.getByRole('textbox', { name: 'Daily limit (XAF)' })
+    await expect(confirm.getByRole('checkbox', { name: 'No limit' })).not.toBeChecked()
+    await expect(dailyLimit).toHaveValue(/^500.000.000$/)
+    await dailyLimit.fill('750000000')
     await confirm.getByRole('button', { name: 'Confirm the link' }).click()
     await expect(page.getByText("P. Owona's link confirmed.")).toBeVisible()
     await requests.getByRole('button', { name: 'Decline · L. Ella' }).click()
@@ -157,6 +162,10 @@ test(
       .fill('back-office@bank-k.example')
     await rfq.getByRole('button', { name: 'Add the bank' }).click()
     await rfq.getByRole('checkbox', { name: 'On the list · Bank H' }).uncheck({ force: true })
+    // The SVTs' window (ROADMAP step 45): 45 minutes, the cut-off at 15:30, 09:30 the next day.
+    await rfq.getByRole('textbox', { name: 'Window (minutes)' }).fill('45')
+    await rfq.getByLabel('Cut-off', { exact: true }).fill('15:30')
+    await rfq.getByLabel("Next business day's deadline").fill('09:30')
     await rfq.getByRole('button', { name: 'Save the RFQ settings' }).click()
     await expect(page.getByText('RFQ settings saved.')).toBeVisible()
     await expect(rfq.getByRole('textbox', { name: "Back office's e-mail · Bank K" })).toHaveValue(
@@ -177,5 +186,13 @@ test(
     await open.check({ force: true })
     await rfq.getByRole('button', { name: 'Save the RFQ settings' }).click()
     await expect(page.getByText('RFQ settings saved.')).toBeVisible()
+
+    // B. Sima reads the Admin's window beside her bank's settings.
+    await switchAccount(page, /^admin$/i, 'SVT', /svt/i)
+    const approval = panel(page, 'Approval settings')
+    await expect(approval).toContainText(/Approval window\s*45 minutes/)
+    await expect(approval).toContainText(
+      /Cut-off time\s*15:30 \(else 09:30 the next business day\)/,
+    )
   },
 )

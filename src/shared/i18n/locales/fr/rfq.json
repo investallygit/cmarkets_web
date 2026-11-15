@@ -86,6 +86,11 @@
     "minimumTradingAmount": "Montant minimum de transaction (XAF)",
     "minimumTradingAmountHint": "La dernière réponse d'une allocation n'est pas servie en dessous.",
     "linkValidity": "Durée de validité d'une confirmation de lien (mois)",
+    "window": "Fenêtre d'approbation des SVT",
+    "windowHint": "Chaque SVT décide dans la fenêtre, au plus tard à l'heure limite ; un accord confirmé après elle est approuvé avant l'échéance du jour ouvré suivant.",
+    "windowMinutes": "Fenêtre (minutes)",
+    "cutOffTime": "Heure limite",
+    "nextDayDeadline": "Échéance du jour ouvré suivant",
     "svts": "SVT agréés",
     "svtsHint": "Les banques agréées Spécialistes en Valeurs du Trésor ; décochez-en une pour la retirer de la liste.",
     "bank": "Banque",
@@ -101,7 +106,10 @@
       "amount": "De 1 million à 10 milliards de XAF, en francs entiers.",
       "months": "De 1 à 36 mois.",
       "email": "Une adresse e-mail.",
-      "name": "Le nom de la banque."
+      "name": "Le nom de la banque.",
+      "window": "De 15 à 240 minutes.",
+      "cutOff": "De 08:00 à 20:00.",
+      "nextDay": "À partir de 07:00, avant l'heure limite."
     }
   },
   "rfqTrading": {
@@ -327,6 +335,187 @@
       "hint": "Chaque demande, réponse, amélioration, sélection, confirmation et accord du RFQ, à la milliseconde, conservés cinq ans.",
       "errors": {
         "period": "D'un jour à un jour suivant, un an au plus."
+      }
+    }
+  },
+  "svt": {
+    "realtime": {
+      "requested": "Un accord attend l'approbation de votre banque sur SVT.",
+      "reminder": "Rappel : l'approbation d'un accord est due dans les 15 minutes."
+    },
+    "counters": {
+      "label": "Compteurs du SVT",
+      "toApprove": "À approuver",
+      "approvedToday": "Approuvés aujourd'hui",
+      "rejectedToday": "Rejetés aujourd'hui",
+      "amountApproved": "Montant approuvé",
+      "amount": "{{amount}} XAF",
+      "linkedTraders": "Traders rattachés",
+      "linkRequests": "Demandes de rattachement"
+    },
+    "window": "Fenêtre : {{minutes}} min · avant {{cutOff}}",
+    "approvals": {
+      "columns": {
+        "agreement": "Accord",
+        "confirmed": "Confirmé",
+        "left": "Reste",
+        "client": "Mon client",
+        "side": "Sens client",
+        "security": "Titre",
+        "face": "Nominal",
+        "quote": "Prix · taux",
+        "counterparty": "Contrepartie · SVT",
+        "checks": "Contrôles"
+      },
+      "empty": "Aucun accord n'attend l'approbation de votre banque.",
+      "note": "Sans décision à temps, l'accord expire. « Limite » : le nominal dépasse la limite journalière fixée pour ce client ; « Lien » : le rattachement du client n'est plus confirmé. Un accord n'est conclu qu'une fois approuvé par les deux SVT (celui de l'acheteur et celui du vendeur).",
+      "bothLegs": "les deux jambes",
+      "fourEyes": "Quatre yeux",
+      "firstApproved": "1re approbation par {{name}}"
+    },
+    "checks": {
+      "ok": "OK",
+      "limit": "Limite",
+      "link": "Lien"
+    },
+    "decisions": {
+      "title": "Dernières décisions",
+      "empty": "Aucune décision aujourd'hui.",
+      "approved": "{{number}} approuvé par {{name}}",
+      "concluded": "accord conclu, PDF envoyé",
+      "waiting": "en attente de l'autre SVT",
+      "rejected": "{{number}} rejeté par {{name}} · motif : {{reason}}",
+      "expired": "{{number}} expiré sans décision",
+      "otherRejected": "accord rejeté par l'autre SVT",
+      "otherExpired": "l'autre SVT n'a pas décidé à temps"
+    },
+    "side": {
+      "buyer": "SVT de l'acheteur",
+      "seller": "SVT du vendeur",
+      "both": "les deux jambes"
+    },
+    "approvalStatus": {
+      "pending": "En attente",
+      "approved": "Approuvé",
+      "rejected": "Rejeté",
+      "expired": "Expiré",
+      "none": "Plus de décision à prendre"
+    },
+    "reasons": {
+      "clientLimitExceeded": "Limite du client dépassée",
+      "securitiesNotAvailable": "Titres non disponibles",
+      "fundsNotAvailable": "Fonds non disponibles",
+      "unknownClientOrBlockedAccount": "Client inconnu ou compte bloqué",
+      "offMarketPrice": "Prix hors marché",
+      "other": "Autre (texte obligatoire)"
+    },
+    "detail": {
+      "empty": "Choisissez un accord dans la liste.",
+      "confirmed": "Confirmé à {{time}} par le demandeur",
+      "banner": {
+        "yours": "En attente de votre approbation",
+        "second": "En attente d'un second approbateur",
+        "other": "Approuvé · en attente de l'autre SVT",
+        "concluded": "Conclu",
+        "rejected": "Rejeté par un SVT",
+        "expired": "Expiré : aucune décision à temps",
+        "cancelled": "Annulé"
+      },
+      "request": "Demande",
+      "requestValue": "{{number}} · accord {{rank}} / {{count}}",
+      "buyer": "Acheteur",
+      "buyerClient": "Acheteur (votre client)",
+      "buyerSvt": "SVT de l'acheteur",
+      "seller": "Vendeur",
+      "sellerClient": "Vendeur (votre client)",
+      "sellerSvt": "SVT du vendeur",
+      "you": "{{name}} (vous)",
+      "security": "Titre · code CRCT",
+      "facePrice": "Nominal · prix",
+      "rate": "taux {{rate}} %",
+      "yield": "rendement {{rate}} %",
+      "settlementAmount": "Montant de règlement",
+      "dvpDate": "Date de DvP convenue",
+      "checks": "Contrôles sur votre client",
+      "checksOf": "Contrôles sur {{name}} ({{side}})",
+      "linkConfirmed": "Rattachement confirmé",
+      "linkSince": "depuis le {{date}}",
+      "noLink": "Aucun rattachement confirmé",
+      "dailyLimit": "Limite journalière",
+      "limitValue": "{{limit}} · utilisé {{used}} · reste {{left}}",
+      "overLimit": "{{limit}} · utilisé {{used}} · dépassée de {{over}}",
+      "noLimit": "Sans limite · utilisé {{used}}",
+      "todaysTrades": "Opérations du jour",
+      "tradesValue_one": "{{count}} accord · {{amount}}",
+      "tradesValue_other": "{{count}} accords · {{amount}}",
+      "approvals": "Approbations",
+      "approvalOf": "{{svt}} ({{side}})",
+      "approvalOfMine": "{{svt}} ({{side}}, vous)",
+      "pendingLeft": "En attente · reste {{left}}",
+      "decidedBy": "{{status}} à {{time}} · {{name}}",
+      "expiredAt": "Expiré à {{time}}",
+      "firstApproval": "1re approbation à {{time}} · {{name}}, en attente d'une seconde",
+      "note": "Après les deux approbations, l'accord est conclu et le PDF part aux deux traders et aux deux SVT. Un rejet annule l'accord et prévient les deux traders."
+    },
+    "decide": {
+      "approve": "Approuver l'accord",
+      "reject": "Rejeter (motif obligatoire)",
+      "approved": "{{number}} approuvé.",
+      "concluded": "{{number}} approuvé : l'accord est conclu, son ticket envoyé.",
+      "firstApproval": "{{number}} : votre approbation est enregistrée ; un autre approbateur de votre banque la complète.",
+      "secondEyes": "Quatre yeux : un autre approbateur de votre banque complète cette approbation.",
+      "notApprover": "Votre banque liste ses approbateurs : vous n'en faites pas partie.",
+      "rejected": "{{number}} rejeté : les deux traders en reçoivent le motif.",
+      "rejectTitle": "Rejeter {{number}}",
+      "rejectIntro": "L'accord est annulé et les deux traders reçoivent le motif.",
+      "reason": "Motif",
+      "comment": "Commentaire",
+      "commentHint": "Obligatoire pour « autre » ; 500 caractères au plus.",
+      "commentRequired": "Précisez : « autre » demande un texte.",
+      "confirmReject": "Rejeter l'accord",
+      "cancel": "Annuler"
+    },
+    "settings": {
+      "window": "Fenêtre d'approbation",
+      "windowValue": "{{minutes}} minutes",
+      "cutOff": "Heure limite",
+      "cutOffValue": "{{cutOff}} (sinon {{nextDay}} le jour ouvré suivant)",
+      "fourEyes": "Double approbation",
+      "fourEyesValue": "au-delà de {{amount}} XAF",
+      "approvers": "Approbateurs autorisés",
+      "allApprove_one": "tout compte SVT ({{count}} personne)",
+      "allApprove_other": "tout compte SVT ({{count}} personnes)",
+      "approversCount_one": "{{count}} personne",
+      "approversCount_other": "{{count}} personnes",
+      "defaultLimit": "Limite client par défaut",
+      "defaultLimitValue": "{{amount}} XAF / jour",
+      "noDefaultLimit": "Aucune",
+      "notifications": "Notifications",
+      "screen": "Écran",
+      "email": "e-mail",
+      "sms": "SMS",
+      "reasons": "Motifs de rejet proposés",
+      "adminWindow": "La fenêtre et l'heure limite sont celles de l'Admin (ADMCFG).",
+      "edit": "Modifier les réglages",
+      "threshold": "Quatre yeux au-delà de (XAF)",
+      "thresholdHint": "Au-delà de ce nominal, deux approbateurs différents de votre banque.",
+      "everyAccount": "Tout compte SVT de la banque approuve",
+      "listedOnly": "Seulement les comptes cochés",
+      "approverOf": "{{name}} approuve",
+      "noDefault": "Pas de limite par défaut",
+      "defaultLimitField": "Limite client par défaut (XAF par jour)",
+      "defaultLimitHint": "Proposée quand vous confirmez le rattachement d'un trader.",
+      "notifyByEmail": "Demandes d'approbation par e-mail",
+      "notifyBySms": "Demandes d'approbation par SMS",
+      "onScreen": "À l'écran, toujours.",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "saved": "Réglages d'approbation enregistrés.",
+      "updated": "Modifié le {{date}} par {{name}}",
+      "errors": {
+        "threshold": "De 1 million à 10 000 milliards de XAF, en francs entiers.",
+        "limit": "Un montant entier de francs supérieur à zéro, ou pas de limite par défaut.",
+        "approvers": "Cochez-vous avec les autres approbateurs, ou laissez tout compte approuver."
       }
     }
   }

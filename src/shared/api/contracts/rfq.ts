@@ -1,4 +1,4 @@
-import type { IsoDateTime } from './common'
+import type { IsoDateTime, TimeOfDay } from './common'
 import type { AccountType } from './me'
 
 /**
@@ -98,6 +98,10 @@ export interface RfqAdminSettingsDto {
   /** XAF. */
   minimumTradingAmount: number
   linkValidityMonths: number
+  /** The SVTs' approval window (ROADMAP step 45): minutes, the cut-off, the next business day's deadline. */
+  approvalWindowMinutes: number
+  cutOffTime: TimeOfDay
+  nextDayDeadline: TimeOfDay
   svts: AdminLicensedSvtDto[]
   updatedAt: IsoDateTime | null
   updatedBy: string | null
@@ -116,5 +120,8 @@ export interface RfqAdminSettingsInput {
   enabled: boolean
   minimumTradingAmount: number
   linkValidityMonths: number
+  approvalWindowMinutes: number
+  cutOffTime: TimeOfDay
+  nextDayDeadline: TimeOfDay
   svts: LicensedSvtInput[]
 }

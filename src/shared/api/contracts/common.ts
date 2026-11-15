@@ -4,6 +4,9 @@ export type IsoDateTime = string
 /** ISO 8601 calendar date, e.g. "2026-10-28". */
 export type IsoDate = string
 
+/** A time of day in Douala, as the API writes it: "16:00:00". */
+export type TimeOfDay = string
+
 /** ISO 4217 code: XAF, EUR, USD... */
 export type CurrencyCode = string
 

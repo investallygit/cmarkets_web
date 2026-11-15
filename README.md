@@ -85,7 +85,7 @@ before upload.
 | 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | Done; section 14.6's solver, scenarios computed again         |
 | SVT account type (fourth version), licensed SVTs, trader links            | Done; an SVT confirms each link on TRD, with a daily limit    |
 | 22 · Government securities RFQ (RFQ)                                      | Done; ranked answers, the selection confirmed at its version  |
-| 27 · SVT approval (SVT)                                                   | To do, step 45                                                |
+| 27 · SVT approval (SVT)                                                   | Done; both SVTs approve, the ticket e-mailed to four          |
 | 23 · Agreements (RFQ AGR)                                                 | To do, step 46                                                |
 | 24 · Daily reporting to the BEAC (RFQ REP)                                | Done; PDF and Excel at 18:00, every send logged, kept 5 years |
 
@@ -144,7 +144,8 @@ src/
               profile of each security type: an equity's, screen 2, a bond's, screen 20, an
               ETF's, screen 19, a commodity's, screen 21),
               equity-screener, etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which
-              YAS opens), bond-screener (BS), rfq (RFQ), svt-traders (TRD), portfolio,
+              YAS opens), bond-screener (BS), rfq (RFQ), svt-approval (SVT), svt-traders (TRD),
+              portfolio,
               portfolio-optimisation (OPT and OPT RES),
               research-library, publishing-studio, news,
               market-calendar, alerts, settings (CFG), network-directory (NET), messages (MSG),
@@ -165,13 +166,15 @@ src/
               etf-profile-panels, security-description-panel, description-editor-panel,
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
               trader-links-panel, rfq-new-request, rfq-my-request, rfq-board, rfq-blotter,
-              rfq-tabs, rfq-report-panels, opt-setup-panels, opt-result-panels...),
+              rfq-tabs, rfq-report-panels, svt-approval-panels, opt-setup-panels,
+              opt-result-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
               screen-etfs, price-bond, manage-svt-links, decide-trader-link, publish-rfq, answer-rfq,
               confirm-rfq, export-rfq-audit, send-daily-report,
-              download-daily-report, edit-daily-report-settings,
+              download-daily-report, edit-daily-report-settings, decide-svt-approval,
+              edit-svt-settings,
               manage-portfolios, record-transaction, generate-portfolio-report, import-opt-universe,
               run-optimization, save-opt-scenario, create-portfolio-from-allocation,
               rebalance-portfolio, export-opt-scenario, buy-publication,
@@ -202,8 +205,9 @@ src/
               economies, indicators and figures), commodity (CMDTY's series, values and
               statistics), svt-link (a trader's links to the SVTs, a bank's requests and linked
               traders, the RFQ's hub), rfq (the requests for quotes, the board, the answers and the
-              selection, the agreements of a request, the blotter), rfq-report (RFQ REP's daily
-              reports to the BEAC and their settings), news, news-source
+              selection, the agreements of a request, the blotter, the SVT's approvals and
+              settings), rfq-report (RFQ REP's daily reports to the BEAC and their settings),
+              news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
               (MPAY's statements, click anomalies and payment settings),
               calendar-event, notification, data-import, data-provider (EODHD), stored-price,
@@ -403,7 +407,7 @@ each other; the app shell mounts the form once.
 Every UI string is in French and English, in `shared/i18n/locales/en/` and `fr/`: one JSON file
 per area of the app (`core` for the shell and the shared UI, `home`, `account` for the login and
 the settings, `monitoring`, `analysis`, `bonds`, `etfs`, `macro` (ECO, FX and their settings),
-`rfq` (RFQ, TRD and the RFQ's settings), `rfqReports` (RFQ REP),
+`rfq` (RFQ, SVT, TRD and the RFQ's settings), `rfqReports` (RFQ REP),
 `portfolio`, `optimizer` (OPT and OPT RES), `research`, `network`, `messaging`, `newsStudio`,
 `newsAdmin`, `payments`,
 `dataAdmin`, `admin`), which `en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:

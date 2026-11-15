@@ -86,6 +86,11 @@
     "minimumTradingAmount": "Minimum trading amount (XAF)",
     "minimumTradingAmountHint": "The last answer of an allocation is not filled below it.",
     "linkValidity": "A link's confirmation holds (months)",
+    "window": "The SVTs' approval window",
+    "windowHint": "Each SVT decides within the window, no later than the cut-off; an agreement confirmed after it is approved by the next business day's deadline.",
+    "windowMinutes": "Window (minutes)",
+    "cutOffTime": "Cut-off",
+    "nextDayDeadline": "Next business day's deadline",
     "svts": "Licensed SVTs",
     "svtsHint": "The banks licensed as Treasury Securities Specialists; untick one to take it off the list.",
     "bank": "Bank",
@@ -101,7 +106,10 @@
       "amount": "From XAF 1 million to 10 billion, in whole francs.",
       "months": "From 1 to 36 months.",
       "email": "An e-mail address.",
-      "name": "The bank's name."
+      "name": "The bank's name.",
+      "window": "From 15 to 240 minutes.",
+      "cutOff": "From 08:00 to 20:00.",
+      "nextDay": "From 07:00, before the cut-off."
     }
   },
   "rfqTrading": {
@@ -327,6 +335,187 @@
       "hint": "Every request, answer, improvement, selection, confirmation and agreement of the RFQ, to the millisecond, kept five years.",
       "errors": {
         "period": "From a day to a later one, a year at most."
+      }
+    }
+  },
+  "svt": {
+    "realtime": {
+      "requested": "An agreement waits for your bank's approval on SVT.",
+      "reminder": "Reminder: an agreement's approval is due within 15 minutes."
+    },
+    "counters": {
+      "label": "The SVT's counters",
+      "toApprove": "To approve",
+      "approvedToday": "Approved today",
+      "rejectedToday": "Rejected today",
+      "amountApproved": "Amount approved",
+      "amount": "XAF {{amount}}",
+      "linkedTraders": "Linked traders",
+      "linkRequests": "Link requests"
+    },
+    "window": "Window: {{minutes}} min · before {{cutOff}}",
+    "approvals": {
+      "columns": {
+        "agreement": "Agreement",
+        "confirmed": "Confirmed",
+        "left": "Left",
+        "client": "My client",
+        "side": "Client side",
+        "security": "Security",
+        "face": "Nominal",
+        "quote": "Price · rate",
+        "counterparty": "Counterparty · SVT",
+        "checks": "Checks"
+      },
+      "empty": "No agreement waits for your bank's approval.",
+      "note": "Without a decision in time, the agreement expires. \"Limit\": the face amount exceeds the daily limit set for this client; \"Link\": the client's link is no longer confirmed. An agreement is only concluded once both SVTs (the buyer's and the seller's) have approved it.",
+      "bothLegs": "both legs",
+      "fourEyes": "Four eyes",
+      "firstApproved": "1st approval by {{name}}"
+    },
+    "checks": {
+      "ok": "OK",
+      "limit": "Limit",
+      "link": "Link"
+    },
+    "decisions": {
+      "title": "Latest decisions",
+      "empty": "No decision today.",
+      "approved": "{{number}} approved by {{name}}",
+      "concluded": "agreement concluded, PDF sent",
+      "waiting": "waiting for the other SVT",
+      "rejected": "{{number}} rejected by {{name}} · reason: {{reason}}",
+      "expired": "{{number}} expired without a decision",
+      "otherRejected": "agreement rejected by the other SVT",
+      "otherExpired": "the other SVT did not decide in time"
+    },
+    "side": {
+      "buyer": "buyer's SVT",
+      "seller": "seller's SVT",
+      "both": "both legs"
+    },
+    "approvalStatus": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "expired": "Expired",
+      "none": "No decision to take"
+    },
+    "reasons": {
+      "clientLimitExceeded": "Client limit exceeded",
+      "securitiesNotAvailable": "Securities not available",
+      "fundsNotAvailable": "Funds not available",
+      "unknownClientOrBlockedAccount": "Unknown client or blocked account",
+      "offMarketPrice": "Off-market price",
+      "other": "Other (text required)"
+    },
+    "detail": {
+      "empty": "Pick an agreement in the list.",
+      "confirmed": "Confirmed {{time}} by the requester",
+      "banner": {
+        "yours": "Awaiting your approval",
+        "second": "Awaiting a second approver",
+        "other": "Approved · awaiting the other SVT",
+        "concluded": "Concluded",
+        "rejected": "Rejected by an SVT",
+        "expired": "Expired: no decision in time",
+        "cancelled": "Cancelled"
+      },
+      "request": "Request",
+      "requestValue": "{{number}} · agreement {{rank}} / {{count}}",
+      "buyer": "Buyer",
+      "buyerClient": "Buyer (your client)",
+      "buyerSvt": "Buyer's SVT",
+      "seller": "Seller",
+      "sellerClient": "Seller (your client)",
+      "sellerSvt": "Seller's SVT",
+      "you": "{{name}} (you)",
+      "security": "Security · CRCT code",
+      "facePrice": "Face · price",
+      "rate": "rate {{rate}}%",
+      "yield": "yield {{rate}}%",
+      "settlementAmount": "Settlement amount",
+      "dvpDate": "Agreed DvP date",
+      "checks": "Checks on your client",
+      "checksOf": "Checks on {{name}} ({{side}})",
+      "linkConfirmed": "Link confirmed",
+      "linkSince": "since {{date}}",
+      "noLink": "No confirmed link",
+      "dailyLimit": "Daily limit",
+      "limitValue": "{{limit}} · used {{used}} · {{left}} left",
+      "overLimit": "{{limit}} · used {{used}} · over by {{over}}",
+      "noLimit": "No limit · used {{used}}",
+      "todaysTrades": "Today's trades",
+      "tradesValue_one": "{{count}} agreement · {{amount}}",
+      "tradesValue_other": "{{count}} agreements · {{amount}}",
+      "approvals": "Approvals",
+      "approvalOf": "{{svt}} ({{side}})",
+      "approvalOfMine": "{{svt}} ({{side}}, you)",
+      "pendingLeft": "Pending · {{left}} left",
+      "decidedBy": "{{status}} {{time}} · {{name}}",
+      "expiredAt": "Expired {{time}}",
+      "firstApproval": "1st approval {{time}} · {{name}}, awaiting a second",
+      "note": "After both approvals, the agreement is concluded and the PDF goes to both traders and both SVTs. A rejection cancels the agreement and notifies both traders."
+    },
+    "decide": {
+      "approve": "Approve agreement",
+      "reject": "Reject (reason required)",
+      "approved": "{{number}} approved.",
+      "concluded": "{{number}} approved: the agreement is concluded, its ticket sent.",
+      "firstApproval": "{{number}}: your approval is recorded; another approver of your bank completes it.",
+      "secondEyes": "Four eyes: another approver of your bank completes this approval.",
+      "notApprover": "Your bank lists its approvers: you are not among them.",
+      "rejected": "{{number}} rejected: both traders are told the reason.",
+      "rejectTitle": "Reject {{number}}",
+      "rejectIntro": "The agreement is cancelled and both traders receive the reason.",
+      "reason": "Reason",
+      "comment": "Comment",
+      "commentHint": "Required for \"other\"; 500 characters at most.",
+      "commentRequired": "Say why: \"other\" needs its text.",
+      "confirmReject": "Reject the agreement",
+      "cancel": "Cancel"
+    },
+    "settings": {
+      "window": "Approval window",
+      "windowValue": "{{minutes}} minutes",
+      "cutOff": "Cut-off time",
+      "cutOffValue": "{{cutOff}} (else {{nextDay}} the next business day)",
+      "fourEyes": "Four-eyes approval",
+      "fourEyesValue": "above XAF {{amount}}",
+      "approvers": "Authorised approvers",
+      "allApprove_one": "every SVT account ({{count}} person)",
+      "allApprove_other": "every SVT account ({{count}} people)",
+      "approversCount_one": "{{count}} person",
+      "approversCount_other": "{{count}} people",
+      "defaultLimit": "Default client limit",
+      "defaultLimitValue": "XAF {{amount}} / day",
+      "noDefaultLimit": "None",
+      "notifications": "Notifications",
+      "screen": "Screen",
+      "email": "e-mail",
+      "sms": "SMS",
+      "reasons": "Rejection reasons offered",
+      "adminWindow": "The window and the cut-off are the Admin's (ADMCFG).",
+      "edit": "Edit the settings",
+      "threshold": "Four eyes above (XAF)",
+      "thresholdHint": "Above this face amount, two different approvers of your bank.",
+      "everyAccount": "Every SVT account of the bank approves",
+      "listedOnly": "Only the accounts ticked",
+      "approverOf": "{{name}} approves",
+      "noDefault": "No default limit",
+      "defaultLimitField": "Default client limit (XAF a day)",
+      "defaultLimitHint": "Offered when you confirm a trader's link.",
+      "notifyByEmail": "Approval requests by e-mail",
+      "notifyBySms": "Approval requests by SMS",
+      "onScreen": "On screen, always.",
+      "save": "Save",
+      "cancel": "Cancel",
+      "saved": "Approval settings saved.",
+      "updated": "Updated {{date}} by {{name}}",
+      "errors": {
+        "threshold": "From XAF 1 million to 10 trillion, in whole francs.",
+        "limit": "A whole amount of francs above zero, or no default limit.",
+        "approvers": "Tick yourself and the other approvers, or let every account approve."
       }
     }
   }

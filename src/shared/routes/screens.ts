@@ -1,5 +1,6 @@
 import {
   ArrowRightLeft,
+  BadgeCheck,
   Bell,
   BookOpen,
   BookUser,
@@ -126,9 +127,10 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('BP', 'BP', routes.bondPricing, 'client', Calculator, { permission: 'analysis:read', module: 'analysis', inMenu: true, routePattern: routes.bondPricingBond }),
   screen('BS', 'BS', routes.bondScreener, 'client', ScanLine, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
   // RFQ (screen 22) after BS (ROADMAP decision 15), for the Traders, Managers and CEO of an organisation while the RFQ is
-  // on (its CEO reads the organisation's requests, ROADMAP step 44); TRD, an SVT's trader links, in the SVT's menu
-  // (decision 16).
+  // on (its CEO reads the organisation's requests, ROADMAP step 44); SVT (screen 27, step 45), the approvals, and TRD, an
+  // SVT's trader links, in the SVT's menu (decision 16).
   screen('RFQ', 'RFQ', routes.rfq, 'client', Handshake, { permission: 'rfq:read', inMenu: true }),
+  screen('SVT', 'SVT', routes.svt, 'client', BadgeCheck, { permission: 'svt:approve', inMenu: true }),
   screen('TRD', 'TRD', routes.svtTraders, 'client', Link2, { permission: 'svt:approve', inMenu: true }),
   screen('PORT', 'PORT', routes.portfolio, 'client', Briefcase, { permission: 'portfolios:read', module: 'portfolio', inMenu: true, routePattern: routes.portfolioTabs }),
   // OPT (screens 28 and 29) after PORT, which its mockups light: an entry of its own (ROADMAP decision 15).

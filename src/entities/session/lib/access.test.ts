@@ -59,7 +59,7 @@ describe('screen access (spec section 12)', () => {
     expect(homePathFor(journalist, SCREENS)).toBe('/mkt')
     expect(homePathFor(dataAdmin, SCREENS)).toBe('/imp')
     expect(homePathFor(admin, SCREENS)).toBe('/admin/users')
-    expect(homePathFor(svt, SCREENS)).toBe('/svt/traders')
+    expect(homePathFor(svt, SCREENS)).toBe('/svt')
   })
 })
 
@@ -68,7 +68,7 @@ describe('the SVT and the RFQ (ROADMAP decisions 15, 16 and 18)', () => {
     SCREENS.filter((screen) => isInMenuOf(user, screen)).map((screen) => screen.code)
 
   it('gives the SVT its own menu, the market screens a CEO reads open from the command bar only', () => {
-    expect(menuOf(svt)).toEqual(['TRD', 'N', 'CFG'])
+    expect(menuOf(svt)).toEqual(['SVT', 'TRD', 'N', 'CFG'])
     expect(canAccessScreen(svt, screenById('MKT'))).toBe(true)
     expect(canAccessScreen(svt, screenById('RFQ'))).toBe(false)
   })

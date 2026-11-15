@@ -23,6 +23,7 @@ describe('the left menu (spec section 9)', () => {
       'BP',
       'BS',
       'RFQ',
+      'SVT',
       'TRD',
       'PORT',
       'OPT',

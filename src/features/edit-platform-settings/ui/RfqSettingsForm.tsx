@@ -19,6 +19,12 @@ import { Section } from './Section'
 const MIN_AMOUNT = 1_000_000
 const MAX_AMOUNT = 10_000_000_000
 const MAX_MONTHS = 36
+/** The SVTs' window (RfqSettings.SetApprovalWindow): 15 to 240 minutes, a cut-off from 08:00 to 20:00. */
+const MIN_WINDOW = 15
+const MAX_WINDOW = 240
+
+/** "16:00:00" as the API writes a time, "16:00" as the time input does. */
+const hhmm = (time: string) => time.slice(0, 5)
 
 /** A row of the list as edited: its id once saved, the bank's name, the counts once saved. */
 interface SvtRow extends LicensedSvtInput {
@@ -30,7 +36,8 @@ interface SvtRow extends LicensedSvtInput {
 /**
  * ADMCFG, the RFQ (spec section 10, /admin/rfq/svt; ROADMAP step 43): its switch, off until the
  * BEAC confirms the module's status (decision 24), the minimum trading amount, how long a link's
- * confirmation holds, and the licensed SVTs with their back offices' addresses; a bank added by its
+ * confirmation holds, the SVTs' approval window with its cut-off and the next business day's
+ * deadline (step 45), and the licensed SVTs with their back offices' addresses; a bank added by its
  * name, none taken off (unticked instead). Saved together, each value changed in the audit log.
  */
 export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto }) {
@@ -50,6 +57,9 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
   const [enabled, setEnabled] = useState(settings.enabled)
   const [amount, setAmount] = useState<number | null>(settings.minimumTradingAmount)
   const [months, setMonths] = useState<number | null>(settings.linkValidityMonths)
+  const [windowMinutes, setWindowMinutes] = useState<number | null>(settings.approvalWindowMinutes)
+  const [cutOff, setCutOff] = useState(hhmm(settings.cutOffTime))
+  const [nextDay, setNextDay] = useState(hhmm(settings.nextDayDeadline))
   const [rows, setRows] = useState<SvtRow[]>(initial)
   const [newName, setNewName] = useState('')
   const [newEmail, setNewEmail] = useState('')
@@ -64,6 +74,21 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
       months === null || months < 1 || months > MAX_MONTHS || !Number.isInteger(months)
         ? t('rfqSettings.errors.months')
         : null,
+    approvalWindowMinutes:
+      windowMinutes === null ||
+      windowMinutes < MIN_WINDOW ||
+      windowMinutes > MAX_WINDOW ||
+      !Number.isInteger(windowMinutes)
+        ? t('rfqSettings.errors.window')
+        : null,
+    cutOffTime:
+      !/^\d\d:\d\d$/.test(cutOff) || cutOff < '08:00' || cutOff > '20:00'
+        ? t('rfqSettings.errors.cutOff')
+        : null,
+    nextDayDeadline:
+      !/^\d\d:\d\d$/.test(nextDay) || nextDay < '07:00' || nextDay >= cutOff
+        ? t('rfqSettings.errors.nextDay')
+        : null,
     svts: rows.some((row) => !isEmailAddress(row.backOfficeEmail))
       ? t('rfqSettings.errors.email')
       : null,
@@ -74,6 +99,9 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
     enabled !== settings.enabled ||
     amount !== settings.minimumTradingAmount ||
     months !== settings.linkValidityMonths ||
+    windowMinutes !== settings.approvalWindowMinutes ||
+    cutOff !== hhmm(settings.cutOffTime) ||
+    nextDay !== hhmm(settings.nextDayDeadline) ||
     JSON.stringify(rows.map(({ id, backOfficeEmail, active }) => [id, backOfficeEmail, active])) !==
       JSON.stringify(
         settings.svts.map(({ id, backOfficeEmail, active }) => [id, backOfficeEmail, active]),
@@ -105,6 +133,9 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
     setEnabled(settings.enabled)
     setAmount(settings.minimumTradingAmount)
     setMonths(settings.linkValidityMonths)
+    setWindowMinutes(settings.approvalWindowMinutes)
+    setCutOff(hhmm(settings.cutOffTime))
+    setNextDay(hhmm(settings.nextDayDeadline))
     setRows(initial())
   }
 
@@ -121,6 +152,9 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
             enabled,
             minimumTradingAmount: amount ?? 0,
             linkValidityMonths: months ?? 0,
+            approvalWindowMinutes: windowMinutes ?? 0,
+            cutOffTime: `${cutOff}:00`,
+            nextDayDeadline: `${nextDay}:00`,
             svts: rows.map(({ id, name, backOfficeEmail, active }) => ({
               id,
               name: id ? null : name,
@@ -161,6 +195,25 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
           <p className="font-sans text-data text-secondary">
             {t('rfqSettings.minimumTradingAmountHint')}
           </p>
+        </Section>
+        <Section title={t('rfqSettings.window')}>
+          <p className="font-sans text-data text-secondary">{t('rfqSettings.windowHint')}</p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <Field label={t('rfqSettings.windowMinutes')} error={error('approvalWindowMinutes')}>
+              <NumberInput
+                value={windowMinutes}
+                onChange={setWindowMinutes}
+                decimals={0}
+                highlight
+              />
+            </Field>
+            <Field label={t('rfqSettings.cutOffTime')} error={error('cutOffTime')}>
+              <TextInput type="time" value={cutOff} onChange={setCutOff} mono />
+            </Field>
+            <Field label={t('rfqSettings.nextDayDeadline')} error={error('nextDayDeadline')}>
+              <TextInput type="time" value={nextDay} onChange={setNextDay} mono />
+            </Field>
+          </div>
         </Section>
         <Section title={t('rfqSettings.svts')}>
           <p className="font-sans text-data text-secondary">{t('rfqSettings.svtsHint')}</p>

@@ -16,9 +16,15 @@ import type {
   RfqRequestSummaryDto,
   RfqSetupDto,
   RfqSide,
+  RejectAgreementInput,
+  SvtApprovalDetailDto,
+  SvtApprovalItemDto,
   SvtLinkDto,
   SvtLinkRequestInput,
   SvtLinksDto,
+  SvtSettingsDto,
+  SvtSettingsInput,
+  SvtSummaryDto,
   TraderLinkDto,
 } from '../contracts'
 import { answer, route, send, sendBlob } from './define'
@@ -34,10 +40,15 @@ export interface RfqBoardQuery {
 /** GET /rfq/mine and /rfq/blotter: the trader's own, or its organisation's (its CEO's view). */
 export type RfqScope = 'mine' | 'organization'
 
+/** GET /svt/approvals: waiting by time left, or decided between two days of Douala (today by default). */
+export type SvtApprovalsQuery =
+  { status: 'pending' } | { status: 'decided'; from?: string; to?: string }
+
 /**
  * CMarket.Api/Controllers/Rfq: the traders' links to the SVTs (ROADMAP step 43), "My SVTs" of a
  * Trader or a Manager (screen 22), the bank's trader links for its SVT accounts (TRD); the
- * trading of screen 22 (step 44): the requests, the board, the answers, the selection, the blotter.
+ * trading of screen 22 (step 44): the requests, the board, the answers, the selection, the
+ * blotter; the SVT's approvals and settings (screen 27, step 45).
  */
 export const rfqRoutes = {
   mySvts: route('GET', '/me/svt', answer<MySvtsDto>()),
@@ -48,6 +59,21 @@ export const rfqRoutes = {
   declineLink: route('POST', '/svt/links/{linkId}/decline', answer<TraderLinkDto>()),
   revokeLink: route('POST', '/svt/links/{linkId}/revoke', answer<TraderLinkDto>()),
   linkLimit: route('PUT', '/svt/links/{linkId}/limit', answer<TraderLinkDto>()),
+  svtSummary: route('GET', '/svt/summary', answer<SvtSummaryDto>()),
+  svtApprovals: route('GET', '/svt/approvals', answer<SvtApprovalItemDto[]>()),
+  svtApproval: route('GET', '/svt/approvals/{agreementId}', answer<SvtApprovalDetailDto>()),
+  approveAgreement: route(
+    'POST',
+    '/svt/approvals/{agreementId}/approve',
+    answer<SvtApprovalDetailDto>(),
+  ),
+  rejectAgreement: route(
+    'POST',
+    '/svt/approvals/{agreementId}/reject',
+    answer<SvtApprovalDetailDto>(),
+  ),
+  svtSettings: route('GET', '/svt/settings', answer<SvtSettingsDto>()),
+  saveSvtSettings: route('PUT', '/svt/settings', answer<SvtSettingsDto>()),
   setup: route('GET', '/rfq/setup', answer<RfqSetupDto>()),
   pricing: route('GET', '/rfq/pricing', answer<RfqPricingDto>()),
   publish: route('POST', '/rfq', answer<RfqRequestDto>()),
@@ -88,6 +114,22 @@ export const rfqApi = {
   revokeLink: (linkId: string) => send(rfqRoutes.revokeLink, { params: { linkId } }),
   changeLimit: (linkId: string, input: DailyLimitInput) =>
     send(rfqRoutes.linkLimit, { params: { linkId }, body: input }),
+  /** Screen 27's counters, with the Admin's window. */
+  svtSummary: (signal?: AbortSignal) => send(rfqRoutes.svtSummary, { signal }),
+  /** The bank's approvals waiting, by time left with their checks; or decided, newest first. */
+  svtApprovals: (query: SvtApprovalsQuery, signal?: AbortSignal) =>
+    send(rfqRoutes.svtApprovals, { query: { ...query }, signal }),
+  /** An agreement naming the bank, both approvals, what the reader may do. */
+  svtApproval: (agreementId: string, signal?: AbortSignal) =>
+    send(rfqRoutes.svtApproval, { params: { agreementId }, signal }),
+  /** Approves the bank's leg; above its four-eyes threshold, another approver completes it. */
+  approveAgreement: (agreementId: string) =>
+    send(rfqRoutes.approveAgreement, { params: { agreementId } }),
+  /** Rejects the agreement with its reason, passed to both traders. */
+  rejectAgreement: (agreementId: string, input: RejectAgreementInput) =>
+    send(rfqRoutes.rejectAgreement, { params: { agreementId }, body: input }),
+  svtSettings: (signal?: AbortSignal) => send(rfqRoutes.svtSettings, { signal }),
+  saveSvtSettings: (input: SvtSettingsInput) => send(rfqRoutes.saveSvtSettings, { body: input }),
   /** The BTA and OTA traded, the settlement dates, the minimum amount, the confirmed SVTs. */
   setup: (signal?: AbortSignal) => send(rfqRoutes.setup, { signal }),
   /** The curve's reference and the latest auction; with a value, the other side of the quote. */

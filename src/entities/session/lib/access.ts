@@ -48,8 +48,8 @@ const HOME_SCREEN: Record<AccountType, string> = {
   journalist: 'MKT',
   ceo: 'MKT',
   newsProvider: 'MKT',
-  // Its trader links until screen 27, SVT, comes (ROADMAP step 45).
-  svt: 'TRD',
+  // Screen 27, its approvals (ROADMAP step 45).
+  svt: 'SVT',
   dataAdmin: 'IMP',
   admin: 'USER',
 }

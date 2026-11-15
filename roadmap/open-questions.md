@@ -486,6 +486,18 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   e-mail": the plan confirms on screen 27. The mockup's buttons read Confirm and Reject for a link
   the text confirms or declines; a link the SVT removes and one the trader removes both read
   "Withdrawn".
+- **SVT approval, fourth version (step 45)**: "60 minutes (configurable by the Admin)": one window
+  for every bank, set in ADMCFG with the cut-off and the next business day's deadline (the plan);
+  an agreement confirmed on a day without a session waits for the next one's deadline. Who sets a
+  bank's four-eyes threshold, approvers and default client limit, which screen 27 shows (the
+  plan: any SVT account of the bank, each change kept with its author, the saver among the
+  approvers it lists)? When one SVT rejects, the other's approval is left without a decision to
+  take (shown so). The ticket's "fingerprint (SHA-256) verifiable on CMarket": where does one
+  verify it (the plan: AGR shows it, step 46; no public page)? The ticket is one English document
+  for its four recipients, the e-mails in each reader's language, the back offices' in French.
+  "Concluded agreements above XAF 250 million can feed the CMarket curve (Admin option)": as
+  points of which curve, in place of or beside the auctions and `.CMKT` series, and for how long
+  (moved to step 48 until the answer)?
 - **The compliance team, fourth version**: screen 24 is "reserved for the CMarket compliance
   team", which is no account type; its mockup draws the client menu, RFQ lit, for a "CMARKET
   ADMIN" account without the BACK-OFFICE badge (the plan: the Admin, in the back-office, decision

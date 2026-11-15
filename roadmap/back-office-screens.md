@@ -183,8 +183,11 @@ by which step, and what is still to do. The terminal's screens are in
   added by its name, one unticked to take it off the list; saved together and audited ("RFQ
   settings"). The matrix's row "RFQ (government securities)": `rfq:trade` and `svt:approve`, and
   its SVT column.
-- **Fourth version (steps 42 to 47)**: the approval window (step 45) and the key of OPT in the
-  matrix (step 42).
+- **Built in step 45**: under "RFQ", the SVTs' approval window: the minutes (60, from 15 to 240),
+  the cut-off (16:00, from 08:00 to 20:00) and the next business day's deadline (10:00, from 07:00,
+  before the cut-off), times of Douala, audited as one field ("SVT approval window: 60 min · 16:00
+  · 10:00").
+- **Fourth version (steps 42 to 47)**: the key of OPT in the matrix (step 42).
 
 ## AUDT · Audit log (no mockup): done
 

@@ -481,17 +481,25 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Still to do**: a currency the ECB lacks, such as the naira, "added by file or through the EODHD
   Forex API" (spec section 9), waits for the spec author (open questions, fourth version).
 
-## SVT · SVT approval (screen 27): in progress
+## SVT · SVT approval (screen 27): done
 
-- **Built in step 43**: the SVT's account and menu (TRD, N, CFG for now; SVT, AGR and MSG with
-  steps 45 and 46), its home on TRD, the market screens a CEO reads open from the command bar
-  (decision 16). TRD, screen 27's "Trader links" on a screen of its own: the bank's requests,
-  oldest first, confirmed with the client's daily limit or declined, and its linked traders with
-  their limit and link date in a sortable, exportable table, the one picked getting its buttons
-  under it (its limit changed, its link removed); a colleague's decision and a new request arrive
-  live.
-- **Planned in step 45**: the approval of the agreements, the counters, the settings, the
-  messages with the linked traders.
+- **Built in step 43**: the SVT's account and menu (TRD, N, CFG then; SVT, AGR and MSG with
+  steps 45, 46 and 48), the market screens a CEO reads open from the command bar (decision 16).
+  TRD, screen 27's "Trader links" on a screen of its own: the bank's requests, oldest first,
+  confirmed with the client's daily limit or declined, and its linked traders with their limit
+  and link date in a sortable, exportable table, the one picked getting its buttons under it (its
+  limit changed, its link removed); a colleague's decision and a new request arrive live.
+- **Built in step 45**: SVT, the SVT's home, first in its menu, as the mockup: the counters; the
+  agreements to approve by time left with the client, its side, the security, the face, the price
+  or rate, the counterparty and its SVT and the checks (OK, Limit, Link; four eyes), then the
+  day's decisions with their author and reason; the trader links; the approval settings (the
+  Admin's window and cut-off, the bank's four-eyes threshold, approvers, default client limit and
+  channels, edited in place; the reasons offered); the agreement picked on the right, "Awaiting
+  your approval", its parties and amounts, the checks on the client, both approvals with their
+  countdown or decision, Approve and Reject (one of six reasons, "other" with its text). A new
+  agreement to approve, a reminder 15 minutes before its deadline and each decision arrive live;
+  TRD's confirmation offers the bank's default limit. See [step 45](steps/step-45-svt-approval.md).
+- **Still to do**: the SVT's messages with its linked traders (step 48).
 
 ## OPT / OPT RES · Portfolio optimisation (screens 28 and 29): done
 

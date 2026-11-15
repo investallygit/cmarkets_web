@@ -9,6 +9,7 @@ import type {
   RfqAgreementStatus,
   RfqRequestStatus,
   RfqResponseStatus,
+  SvtApprovalStatus,
   SvtLinkStatus,
 } from '@/shared/api/contracts'
 
@@ -67,8 +68,9 @@ export type ChatEventName = keyof ChatEventMap
 export type ChatHandler<E extends ChatEventName> = (payload: ChatEventMap[E]) => void
 
 /**
- * Server → client messages of the /hubs/rfq SignalR hub of the RFQ (spec section 10), those of
- * ROADMAP step 43: a trader's links to the SVTs, read again on each.
+ * Server → client messages of the /hubs/rfq SignalR hub of the RFQ (spec section 10): a trader's
+ * links to the SVTs (ROADMAP step 43), the trading (step 44) and the SVTs' approvals (step 45),
+ * read again on each.
  */
 export interface RfqEventMap {
   /** A trader asked the user's bank for a link (TRD). */
@@ -93,6 +95,22 @@ export interface RfqEventMap {
   RfqConfirmed: { rfqId: string; status: RfqRequestStatus; agreements: number }
   /** An agreement made at a confirmation, awaiting its SVTs. */
   AgreementCreated: { agreementId: string; rfqId: string; status: RfqAgreementStatus }
+  /**
+   * An agreement waits for the user's bank (screen 27, ROADMAP step 45), or its deadline is 15
+   * minutes away (`reminder`).
+   */
+  ApprovalRequested: {
+    agreementId: string
+    svtId: string
+    deadline: IsoDateTime
+    reminder: boolean
+  }
+  /** An SVT decided on an agreement of the user's organisation or bank, or its approval expired. */
+  ApprovalDecided: { agreementId: string; svtId: string; status: SvtApprovalStatus }
+  /** Both SVTs approved: the agreement is concluded, its ticket e-mailed. */
+  AgreementConcluded: { agreementId: string; rfqId: string }
+  /** An SVT rejected the agreement, or no decision came in time (expired). */
+  AgreementRejected: { agreementId: string; rfqId: string; status: RfqAgreementStatus }
 }
 
 export type RfqEventName = keyof RfqEventMap

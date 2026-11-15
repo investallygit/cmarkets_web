@@ -9,3 +9,6 @@ and 47 are; each lane checks the screens it built as it goes.
 - axe at 1600, 390 and 320 px and the keyboard on every new screen, for each of the ten account
   types; every flow on a fresh database; the README and this roadmap; the new jobs (the rates, the
   exchange rates, the macro indicators, the commodities, the BEAC's report) on Azure.
+- **Left by step 45**: the SVT's messages with the traders linked to its bank (decision 16, MSG in
+  its menu, `messages:write` without a professional profile); "concluded agreements above XAF 250
+  million can feed the CMarket curve (Admin option)", once the open question is answered.

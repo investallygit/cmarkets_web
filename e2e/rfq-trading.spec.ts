@@ -124,12 +124,12 @@ test("the CEO reads its organisation's requests; BS asks a price; the Admin expo
   await expect(organization.getByRole('combobox', { name: 'Request' })).toContainText(
     /RFQ-\d{4} · C\. Abena · Sell 200\sM OTA CMR 3 yr \d{4} · Confirmed/,
   )
-  // Its answer, ranked first, and the agreement it made.
+  // Its answer, ranked first, and the agreement it made, which Bank E approved (ROADMAP step 45).
   await expect(organization.getByRole('row', { name: /^1 T\. Bekale · Bank C/ })).toContainText(
     /Bank E\s*\d+\.\d{2,4}\s*6\.06%\s*200\sM/,
   )
   await expect(organization.getByRole('row', { name: /^ACC-\d{4} T\. Bekale/ })).toContainText(
-    'Awaiting SVT',
+    'Concluded',
   )
   await expect(organization.getByRole('button', { name: /Confirm selection/ })).toHaveCount(0)
   await expect(panel(page, 'New request')).toHaveCount(0)
