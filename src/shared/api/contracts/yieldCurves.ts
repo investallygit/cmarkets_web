@@ -15,6 +15,11 @@ export interface CurveSeriesPointDto {
   /** A CRCT code or an ISIN. */
   referenceSecurity: string | null
   source: RatePointSource
+  /**
+   * The concluded RFQ agreements that gave the point, their yields averaged by face (ROADMAP step
+   * 49): a `secondary` point of `cmarket`, its security when they share one; 0 for a file's point.
+   */
+  agreements: number
 }
 
 export interface YieldCurvePointDto {

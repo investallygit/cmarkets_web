@@ -187,6 +187,10 @@ by which step, and what is still to do. The terminal's screens are in
   the cut-off (16:00, from 08:00 to 20:00) and the next business day's deadline (10:00, from 07:00,
   before the cut-off), times of Douala, audited as one field ("SVT approval window: 60 min · 16:00
   · 10:00").
+- **Built in step 49**: under "RFQ", "The CMarket curve": the switch "Concluded agreements feed
+  the curve" (off) and the face from which they do (XAF 250,000,000, from 1 million to 10
+  billion), audited as "RFQ agreements feed the curve: No → Yes" and "Curve feed from a face of"
+  (decision 27). The approval window's audit line gets its label, which step 45 had left out.
 - **Fourth version (steps 42 to 47)**: the key of OPT in the matrix (step 42).
 
 ## AUDT · Audit log (no mockup): done

@@ -157,6 +157,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   days": in the demo, the CAR's 7 and 10 years, last published 17 weeks before). The tooltip says
   what gave each point and when: "Auction", "BVMAC close", or the series' type, source and
   security ("Secondary market · CRCT · CM0000035002"), then the day, "stale" in amber.
+- **Built in step 49**: a series' point the concluded RFQ agreements gave (decision 27) names
+  them in place of its source: "Secondary market · RFQ agreement · CMOTA2610283", or "2 RFQ
+  agreements" without a security when theirs differ.
 
 ## PORT · Portfolio (screen 5): done
 

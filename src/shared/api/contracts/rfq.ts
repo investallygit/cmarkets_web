@@ -102,6 +102,13 @@ export interface RfqAdminSettingsDto {
   approvalWindowMinutes: number
   cutOffTime: TimeOfDay
   nextDayDeadline: TimeOfDay
+  /**
+   * The CMarket curve fed by the concluded agreements (ROADMAP step 49, decision 27): on, an
+   * agreement of at least `curveFeedMinimum` XAF of face gives its state's series a point. Off,
+   * from 250 million, by default.
+   */
+  curveFeedEnabled: boolean
+  curveFeedMinimum: number
   svts: AdminLicensedSvtDto[]
   updatedAt: IsoDateTime | null
   updatedBy: string | null
@@ -123,5 +130,7 @@ export interface RfqAdminSettingsInput {
   approvalWindowMinutes: number
   cutOffTime: TimeOfDay
   nextDayDeadline: TimeOfDay
+  curveFeedEnabled: boolean
+  curveFeedMinimum: number
   svts: LicensedSvtInput[]
 }

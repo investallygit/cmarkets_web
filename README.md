@@ -93,6 +93,7 @@ before upload.
 | 27 · SVT approval (SVT)                                                   | Done; both SVTs approve, the ticket e-mailed to four          |
 | 23 · Agreements (RFQ AGR)                                                 | Done; tickets downloaded and resent, cancelled on two letters |
 | 24 · Daily reporting to the BEAC (RFQ REP)                                | Done; PDF and Excel at 18:00, every send logged, kept 5 years |
+| The CMarket curve fed by the RFQ agreements (ADMCFG, YCRV)                | Done; an Admin option, off, from XAF 250 million of face      |
 
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the

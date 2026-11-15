@@ -1,7 +1,7 @@
 # Fourth version of the spec
 
-Planned as steps 37 to 48: see the [order of the roadmap](../ROADMAP.md#order) and the files of
-[`steps/`](steps).
+Planned as steps 37 to 48, then step 49: see the [order of the roadmap](../ROADMAP.md#order) and
+the files of [`steps/`](steps).
 
 The version of 13 November 2026 (132 pages, against 96), compared sentence by sentence and image by
 image with the third. Nothing of the third version is taken out: sections 1 to 5, 7, 13 and 15 to
@@ -162,3 +162,14 @@ itself, steps 38 to 48 follow these; each is also an open question for the spec 
     code or CRCT code and the counterparty's organisation or trader; the period is the agreement's
     day in Douala; an export holds every agreement the filters keep, up to 10,000, with the
     columns of the BEAC's trade file.
+27. **The curve fed by the agreements** (step 49; CMarket.Api's ADR-066): screen 22's "concluded
+    agreements above XAF 250 million can feed the CMarket curve (Admin option)" is a switch of
+    ADMCFG's RFQ panel, off by default, with its amount (from XAF 250 million of face, the amount
+    itself included). An agreement concluded while it is on gives the issuing state's `.CMKT`
+    series a point: at the standard tenor nearest the security's remaining maturity (a tie to the
+    shorter), on the conclusion's day in Douala, at the agreement's yield as the curve reads
+    yields, typed SECONDARY, source CMARKET, its security's ISIN for reference. A day's agreements
+    at a tenor make one point, averaged by face; the series' latest point stands, the Data
+    admin's on the same day (decision 20 keeps the auctions and the closes before the series). A
+    cancelled agreement leaves the curve; the option turned off feeds no new one and keeps the
+    points given; a point is stale as every series' point. The series' history stays the files'.

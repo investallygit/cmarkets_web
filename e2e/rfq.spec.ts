@@ -2,7 +2,8 @@ import { expect, test, type Page } from '@playwright/test'
 
 // The traders' links to the SVTs (screens 22 and 27), ROADMAP step 43, on the demo's links of the
 // mockups: T. Bekale's "My SVTs", the SVT B. Sima's trader links at Bank E (TRD), P. Owona's link
-// confirmed with a limit, the RFQ's switch and licensed SVTs in ADMCFG, an SVT account in USER.
+// confirmed with a limit, the RFQ's switch and licensed SVTs in ADMCFG, an SVT account in USER;
+// the curve fed by the concluded agreements from an amount (ROADMAP step 49).
 
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title }) })
@@ -196,3 +197,42 @@ test(
     )
   },
 )
+
+// The CMarket curve fed by the concluded agreements (ROADMAP step 49): off from 250 million as the
+// demo starts; the Admin turns it on from 300 million, which AUDT logs, then puts it back.
+test('the admin lets the concluded agreements feed the CMarket curve from an amount', async ({
+  page,
+}) => {
+  await page.goto('/mkt')
+  await switchAccount(page, /analyst/i, 'Admin', /^admin$/i)
+  await page.goto('/admin/settings')
+  const rfq = panel(page, /^RFQ$/)
+  const feeds = rfq.getByRole('switch', { name: 'Concluded agreements feed the curve' })
+  const amount = rfq.getByRole('textbox', { name: 'From a face amount of (XAF)' })
+  await expect(feeds).not.toBeChecked()
+  await expect(amount).toHaveValue('250,000,000')
+  await feeds.check({ force: true })
+  await amount.fill('300000000')
+  await rfq.getByRole('button', { name: 'Save the RFQ settings' }).click()
+  await expect(page.getByText('RFQ settings saved.')).toBeVisible()
+
+  await page.reload()
+  await expect(feeds).toBeChecked()
+  await expect(amount).toHaveValue('300,000,000')
+  await page.getByRole('link', { name: /AUDT/ }).click()
+  const entry = panel(page, 'Audit log').getByRole('row').nth(1)
+  await expect(entry).toContainText('RFQ settings')
+  await expect(entry).toContainText('RFQ agreements feed the curve: No → Yes')
+  await expect(entry).toContainText('Curve feed from a face of: XAF 250,000,000 → XAF 300,000,000')
+
+  // An amount out of bounds is refused; then the demo's settings again.
+  await page.goto('/admin/settings')
+  await amount.fill('500000')
+  await rfq.getByRole('button', { name: 'Save the RFQ settings' }).click()
+  await expect(rfq.getByText('From XAF 1 million to 10 billion, in whole francs.')).toBeVisible()
+  await amount.fill('250000000')
+  await feeds.uncheck({ force: true })
+  await rfq.getByRole('button', { name: 'Save the RFQ settings' }).click()
+  await expect(page.getByText('RFQ settings saved.')).toBeVisible()
+  await expect(feeds).not.toBeChecked()
+})

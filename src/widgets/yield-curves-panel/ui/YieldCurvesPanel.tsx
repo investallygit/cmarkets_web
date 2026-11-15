@@ -20,6 +20,7 @@ import { useChartTheme } from '@/shared/ui/charts/chartTheme'
 import { Panel } from '@/shared/ui/Panel'
 import { PanelSelect } from '@/shared/ui/PanelSelect'
 import { QueryView } from '@/shared/ui/QueryView'
+import { pointNote } from '../lib/pointNote'
 import { COMPARE_OFFSETS, compareDate, useCurveView } from '../model/curveView'
 
 /** Data key of the comparison curve in the chart rows. */
@@ -149,17 +150,9 @@ function CurvesChart({ curves, pastCurve, focusCountry, pastLabel }: CurvesChart
       ? t('curves.pastLegend', { country: format.country(past.country), offset: pastLabel })
       : format.country(code)
 
-  // What gave a point and when: an auction, a close, or the series' type, source and security.
-  const pointNote = (point: YieldCurvePointDto) => {
-    const origin = point.series
-      ? [
-          t(`curves.pointTypes.${point.series.pointType}`),
-          t(`curves.pointSources.${point.series.source}`),
-          point.series.referenceSecurity,
-        ]
-      : [t(`curves.sources.${point.source === 'quote' ? 'quote' : 'auction'}`)]
-    return [...origin, format.isoDate(point.asOf)].filter(Boolean).join(' · ')
-  }
+  // What gave a point and when: an auction, a close, the series' type, source and security, or
+  // the RFQ agreements that gave it (step 49).
+  const noteOf = (point: YieldCurvePointDto) => pointNote(t, point, format.isoDate)
 
   // Small squares at each maturity, as in the mockup; a stale point's square is hollow.
   const squareDot =
@@ -233,7 +226,7 @@ function CurvesChart({ curves, pastCurve, focusCountry, pastLabel }: CurvesChart
                             {format.percent(Number(entry.value), 2, false)}
                           </span>
                           <span className="col-span-2 col-start-2 font-sans text-secondary sm:col-span-1 sm:col-start-auto sm:truncate">
-                            {point && pointNote(point)}
+                            {point && noteOf(point)}
                             {point?.stale && (
                               <span className="text-warning"> · {t('curves.stale')}</span>
                             )}

@@ -92,6 +92,10 @@
     "windowMinutes": "Window (minutes)",
     "cutOffTime": "Cut-off",
     "nextDayDeadline": "Next business day's deadline",
+    "curve": "The CMarket curve",
+    "curveFeed": "Concluded agreements feed the curve",
+    "curveFeedHint": "While the option is on, each agreement concluded with at least this face gives its state's series a point at the tenor nearest its maturity (YCRV: a secondary point of CMarket). A day's agreements are averaged by face; the Data admin's point of the same day stands; a cancelled agreement leaves the curve.",
+    "curveFeedMinimum": "From a face amount of (XAF)",
     "svts": "Licensed SVTs",
     "svtsHint": "The banks licensed as Treasury Securities Specialists; untick one to take it off the list.",
     "bank": "Bank",
@@ -110,7 +114,8 @@
       "name": "The bank's name.",
       "window": "From 15 to 240 minutes.",
       "cutOff": "From 08:00 to 20:00.",
-      "nextDay": "From 07:00, before the cut-off."
+      "nextDay": "From 07:00, before the cut-off.",
+      "curveFeedMinimum": "From XAF 1 million to 10 billion, in whole francs."
     }
   },
   "rfqTrading": {

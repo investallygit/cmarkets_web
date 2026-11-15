@@ -193,6 +193,8 @@
       "bvmac": "BVMAC",
       "cmarket": "CMarket"
     },
+    "rfqAgreements_one": "Accord RFQ",
+    "rfqAgreements_other": "{{count}} accords RFQ",
     "stale": "ancien",
     "staleLegend_one": "Point ancien : plus de {{count}} jour",
     "staleLegend_other": "Point ancien : plus de {{count}} jours"

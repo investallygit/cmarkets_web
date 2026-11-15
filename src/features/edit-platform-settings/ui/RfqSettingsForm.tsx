@@ -23,6 +23,10 @@ const MAX_MONTHS = 36
 const MIN_WINDOW = 15
 const MAX_WINDOW = 240
 
+/** A face amount the API takes (RfqSettings): XAF 1 million to 10 billion, in whole francs. */
+const isAmount = (value: number | null) =>
+  value !== null && value >= MIN_AMOUNT && value <= MAX_AMOUNT && Number.isInteger(value)
+
 /** "16:00:00" as the API writes a time, "16:00" as the time input does. */
 const hhmm = (time: string) => time.slice(0, 5)
 
@@ -37,8 +41,9 @@ interface SvtRow extends LicensedSvtInput {
  * ADMCFG, the RFQ (spec section 10, /admin/rfq/svt; ROADMAP step 43): its switch, off until the
  * BEAC confirms the module's status (decision 24), the minimum trading amount, how long a link's
  * confirmation holds, the SVTs' approval window with its cut-off and the next business day's
- * deadline (step 45), and the licensed SVTs with their back offices' addresses; a bank added by its
- * name, none taken off (unticked instead). Saved together, each value changed in the audit log.
+ * deadline (step 45), the CMarket curve fed by the concluded agreements from a face amount (step 49,
+ * decision 27), and the licensed SVTs with their back offices' addresses; a bank added by its name,
+ * none taken off (unticked instead). Saved together, each value changed in the audit log.
  */
 export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto }) {
   const { t } = useTranslation()
@@ -60,16 +65,15 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
   const [windowMinutes, setWindowMinutes] = useState<number | null>(settings.approvalWindowMinutes)
   const [cutOff, setCutOff] = useState(hhmm(settings.cutOffTime))
   const [nextDay, setNextDay] = useState(hhmm(settings.nextDayDeadline))
+  const [feedsCurve, setFeedsCurve] = useState(settings.curveFeedEnabled)
+  const [curveMinimum, setCurveMinimum] = useState<number | null>(settings.curveFeedMinimum)
   const [rows, setRows] = useState<SvtRow[]>(initial)
   const [newName, setNewName] = useState('')
   const [newEmail, setNewEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
 
   const local = {
-    minimumTradingAmount:
-      amount === null || amount < MIN_AMOUNT || amount > MAX_AMOUNT || !Number.isInteger(amount)
-        ? t('rfqSettings.errors.amount')
-        : null,
+    minimumTradingAmount: isAmount(amount) ? null : t('rfqSettings.errors.amount'),
     linkValidityMonths:
       months === null || months < 1 || months > MAX_MONTHS || !Number.isInteger(months)
         ? t('rfqSettings.errors.months')
@@ -89,6 +93,7 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
       !/^\d\d:\d\d$/.test(nextDay) || nextDay < '07:00' || nextDay >= cutOff
         ? t('rfqSettings.errors.nextDay')
         : null,
+    curveFeedMinimum: isAmount(curveMinimum) ? null : t('rfqSettings.errors.curveFeedMinimum'),
     svts: rows.some((row) => !isEmailAddress(row.backOfficeEmail))
       ? t('rfqSettings.errors.email')
       : null,
@@ -102,6 +107,8 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
     windowMinutes !== settings.approvalWindowMinutes ||
     cutOff !== hhmm(settings.cutOffTime) ||
     nextDay !== hhmm(settings.nextDayDeadline) ||
+    feedsCurve !== settings.curveFeedEnabled ||
+    curveMinimum !== settings.curveFeedMinimum ||
     JSON.stringify(rows.map(({ id, backOfficeEmail, active }) => [id, backOfficeEmail, active])) !==
       JSON.stringify(
         settings.svts.map(({ id, backOfficeEmail, active }) => [id, backOfficeEmail, active]),
@@ -136,6 +143,8 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
     setWindowMinutes(settings.approvalWindowMinutes)
     setCutOff(hhmm(settings.cutOffTime))
     setNextDay(hhmm(settings.nextDayDeadline))
+    setFeedsCurve(settings.curveFeedEnabled)
+    setCurveMinimum(settings.curveFeedMinimum)
     setRows(initial())
   }
 
@@ -155,6 +164,8 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
             approvalWindowMinutes: windowMinutes ?? 0,
             cutOffTime: `${cutOff}:00`,
             nextDayDeadline: `${nextDay}:00`,
+            curveFeedEnabled: feedsCurve,
+            curveFeedMinimum: curveMinimum ?? 0,
             svts: rows.map(({ id, name, backOfficeEmail, active }) => ({
               id,
               name: id ? null : name,
@@ -214,6 +225,25 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
               <TextInput type="time" value={nextDay} onChange={setNextDay} mono />
             </Field>
           </div>
+        </Section>
+        <Section title={t('rfqSettings.curve')}>
+          <Switch
+            checked={feedsCurve}
+            onChange={setFeedsCurve}
+            label={t('rfqSettings.curveFeed')}
+          />
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <Field label={t('rfqSettings.curveFeedMinimum')} error={error('curveFeedMinimum')}>
+              <NumberInput
+                value={curveMinimum}
+                onChange={setCurveMinimum}
+                decimals={0}
+                suffix="XAF"
+                highlight
+              />
+            </Field>
+          </div>
+          <p className="font-sans text-data text-secondary">{t('rfqSettings.curveFeedHint')}</p>
         </Section>
         <Section title={t('rfqSettings.svts')}>
           <p className="font-sans text-data text-secondary">{t('rfqSettings.svtsHint')}</p>

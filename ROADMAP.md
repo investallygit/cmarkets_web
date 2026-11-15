@@ -19,7 +19,7 @@ version added a ninth account type, the News provider, a news feed rebuilt aroun
 newspapers paid per unique click, and eight screens (13 to 20): steps 23 to 36, under
 [Third version of the spec](roadmap/third-version.md). The fourth version adds a tenth account
 type, the SVT, requests for quotes on government securities, and nine screens (21 to 29): steps 37
-to 48, under [Fourth version of the spec](roadmap/fourth-version.md). What remains is listed
+to 49, under [Fourth version of the spec](roadmap/fourth-version.md). What remains is listed
 under "Still to do" for each screen and for the [shared groundwork](roadmap/shared-groundwork.md),
 in those steps and in the [open questions for the spec author](roadmap/open-questions.md).
 
@@ -100,9 +100,10 @@ in the order below, the screens it touched and the README's status are brought u
 | 46   | [RFQ AGR: agreements (screen 23)](roadmap/steps/step-46-rfq-agreements.md)                                           | Done   |
 | 47   | [RFQ REP: daily reporting to the BEAC (screen 24)](roadmap/steps/step-47-beac-reporting.md)                          | Done   |
 | 48   | [Fourth version done: README, accessibility, every flow](roadmap/steps/step-48-fourth-version-done.md)               | Done   |
+| 49   | [The CMarket curve fed by the RFQ agreements above an amount](roadmap/steps/step-49-rfq-curve-feed.md)               | Done   |
 
 Steps 41 to 48 run in three lanes at once, each with its own steps: see [Lanes](roadmap/lanes.md),
-which also says what waits for what.
+which also says what waits for what. Step 49 came after them, on a rule step 48 had left open.
 
 Steps 1 to 10 built the first version, screen by screen, and have no file of their own: their
 record is under each screen in [Client screens](roadmap/client-screens.md) and

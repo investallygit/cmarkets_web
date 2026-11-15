@@ -506,8 +506,13 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   verify it (the plan: AGR shows it, step 46; no public page)? The ticket is one English document
   for its four recipients, the e-mails in each reader's language, the back offices' in French.
   "Concluded agreements above XAF 250 million can feed the CMarket curve (Admin option)": as
-  points of which curve, in place of or beside the auctions and `.CMKT` series, and for how long
-  (moved to step 48 until the answer)?
+  points of which curve, in place of or beside the auctions and `.CMKT` series, and for how long?
+  The plan, built in step 49 (decision 27): an ADMCFG switch, off by default, from 250 million
+  of face included; a point of the state's `.CMKT` series at the tenor nearest the remaining
+  maturity, on the conclusion's day, a day's agreements averaged by face, the Data admin's point
+  of the same day first, the auctions and closes before the series as ever; a cancelled
+  agreement leaves the curve. Is the face the right measure, and may a single trade's yield be
+  shown to every subscriber while the RFQ's status waits for the BEAC (decision 24)?
 - **The compliance team, fourth version**: screen 24 is "reserved for the CMarket compliance
   team", which is no account type; its mockup draws the client menu, RFQ lit, for a "CMARKET
   ADMIN" account without the BACK-OFFICE badge (the plan: the Admin, in the back-office, decision

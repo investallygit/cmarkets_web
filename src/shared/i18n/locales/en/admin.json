@@ -537,7 +537,10 @@
       "reportSendTime": "BEAC report send time",
       "beacAddress": "BEAC address",
       "reportCopies": "BEAC report copies",
-      "nilReport": "BEAC nil report"
+      "nilReport": "BEAC nil report",
+      "approvalWindow": "SVT approval window",
+      "curveFeed": "RFQ agreements feed the curve",
+      "curveFeedMinimum": "Curve feed from a face of"
     },
     "targetTypes": {
       "user": "Account",

@@ -537,7 +537,10 @@
       "reportSendTime": "Heure d’envoi du rapport BEAC",
       "beacAddress": "Adresse BEAC",
       "reportCopies": "Copies du rapport BEAC",
-      "nilReport": "Rapport néant BEAC"
+      "nilReport": "Rapport néant BEAC",
+      "approvalWindow": "Fenêtre d'approbation des SVT",
+      "curveFeed": "Les accords RFQ alimentent la courbe",
+      "curveFeedMinimum": "Courbe alimentée à partir d'un nominal de"
     },
     "targetTypes": {
       "user": "Compte",

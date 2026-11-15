@@ -84,7 +84,7 @@ export function useAuditText() {
     if (raw === null || raw === '') {
       return oneOf(QUOTAS, change.field) ? t('audit.unlimited') : '—'
     }
-    if (typeof raw === 'boolean' && change.field === 'nilReport')
+    if (typeof raw === 'boolean' && (change.field === 'nilReport' || change.field === 'curveFeed'))
       return raw ? t('rfqReports.settings.yes') : t('rfqReports.settings.no')
     if (typeof raw === 'boolean') return raw ? t('audit.granted') : t('audit.notGranted')
     if (typeof raw === 'number') {
@@ -92,6 +92,7 @@ export function useAuditText() {
         case 'minPrice':
         case 'maxPrice':
         case 'minimumTradingAmount':
+        case 'curveFeedMinimum':
           return t('subscription.xaf', { amount: format.number(raw, 0) })
         case 'commissionPct':
         case 'riskFreeRatePct':

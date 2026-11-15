@@ -502,6 +502,11 @@ export const AUDIT_FIELDS = [
   'beacAddress',
   'reportCopies',
   'nilReport',
+  /** The SVTs' approval window, as "60 min · 16:00 · 10:00" (ROADMAP step 45). */
+  'approvalWindow',
+  /** The CMarket curve fed by the concluded agreements, and from which face in XAF (step 49). */
+  'curveFeed',
+  'curveFeedMinimum',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

@@ -92,6 +92,10 @@
     "windowMinutes": "Fenêtre (minutes)",
     "cutOffTime": "Heure limite",
     "nextDayDeadline": "Échéance du jour ouvré suivant",
+    "curve": "La courbe CMarket",
+    "curveFeed": "Les accords conclus alimentent la courbe",
+    "curveFeedHint": "Tant que l'option est active, chaque accord conclu d'au moins ce nominal donne à la série de son État un point à la maturité la plus proche de son échéance (YCRV : un point secondaire de CMarket). Les accords d'un jour sont moyennés par nominal ; le point de l'admin données du même jour prime ; un accord annulé quitte la courbe.",
+    "curveFeedMinimum": "À partir d'un nominal de (XAF)",
     "svts": "SVT agréés",
     "svtsHint": "Les banques agréées Spécialistes en Valeurs du Trésor ; décochez-en une pour la retirer de la liste.",
     "bank": "Banque",
@@ -110,7 +114,8 @@
       "name": "Le nom de la banque.",
       "window": "De 15 à 240 minutes.",
       "cutOff": "De 08:00 à 20:00.",
-      "nextDay": "À partir de 07:00, avant l'heure limite."
+      "nextDay": "À partir de 07:00, avant l'heure limite.",
+      "curveFeedMinimum": "De 1 million à 10 milliards de XAF, en francs entiers."
     }
   },
   "rfqTrading": {
