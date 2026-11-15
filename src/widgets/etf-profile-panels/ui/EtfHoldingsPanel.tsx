@@ -1,3 +1,4 @@
+import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { useEtfHoldings, useEtfLabels } from '@/entities/etf'
@@ -67,7 +68,10 @@ function HoldingsTable({ data, full }: { data: EtfHoldingsDto; full: boolean }) 
   const cell = full ? 'px-2 py-1' : 'px-2 py-0.5'
   return (
     <div>
-      <table className="w-full border-collapse">
+      {/* A cell does not shrink below its unbroken text, so on a phone HLD's sectors and countries
+          took the names' room ("NVI…" at 390 px): under 36rem the table scrolls sideways in its
+          panel instead, as the data tables do (ROADMAP step 48). */}
+      <table className={clsx('w-full border-collapse', full && 'min-w-[36rem]')}>
         <thead className={full ? undefined : 'sr-only'}>
           <tr>
             {full && (

@@ -414,6 +414,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   top 10 holdings, the allocation and the structure and costs; under ETFS in the menu (EQS, as the
   mockup, until [the spec author's answers](third-version.md#the-spec-authors-answers)). See
   [step 33](steps/step-33-etf-profile.md).
+- **After step 49's release**: on a phone HLD cut its names to their first letters; under 36rem
+  its table scrolls sideways in its panel instead. See
+  [step 49](steps/step-49-rfq-curve-feed.md#after-the-release).
 
 ## DES on a bond · Bond profile (screen 20): done
 

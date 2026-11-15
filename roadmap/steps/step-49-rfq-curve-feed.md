@@ -81,6 +81,28 @@ On `main` as step 48 left it (web ac0e6de, API e926fbe).
   may trade and wants one whose newest trade changed: 15 runs in a row, all passing. Committed
   on its own, before phase 40.
 
+## After the release
+
+The live site, read only, on 15 November 2026: this step's web from 19:34 UTC, CMarket.Api's
+phase 40 from 20:11 UTC.
+
+- The web reached the site 37 minutes before CMarket.Api. Meanwhile ADMCFG's RFQ panel read the
+  old API's settings, which had no curve amount ("NaN XAF"), and refused to save any change of
+  the panel. Since the API arrived it reads the option off from XAF 250 million (the migration
+  `RfqCurveFeed` ran at its start). A web change that reads a new field of the API is released
+  after the API.
+- Every account type's screens, twelve accounts and the visitor: 214 pages, 1,439 API answers,
+  axe at 1600 px, the widths at 1600 and 390 px, every write blocked. No 5xx, no page error, no
+  raw key; the only 4xx is the designed one (`GET /subscription`, 404 for an account awaiting
+  approval). The three hubs run on WebSockets. The calls the API's restart and a change of
+  network slowed to 9–25 s take 0.3 to 1.9 s again.
+- Fixed: on a phone HLD cut its names to their first letters ("NVI…", "Ama…" at 390 px). A cell
+  does not shrink below its unbroken text, so the sectors and countries took the names' room.
+  Under 36rem the table now scrolls sideways in its panel, as the data tables do since step 48.
+  Checked: type check, lint, the 451 unit tests; the ETF profile's five flows on CMarket.Api from
+  a fresh database, the HLD one now at 390 px too (on the old table it fails: 8 of the first 10
+  names cut).
+
 ## Open points
 
 - The spec author's answer (the [open questions](../open-questions.md#fourth-version)): until

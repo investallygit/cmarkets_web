@@ -113,6 +113,22 @@ test('HLD lists every line known; a fund of funds’ lines open the ETFs it hold
   )
   await expect(holdings).toContainText(/1,498 other holdings: 67\.3%/)
   await expect(holdings).toContainText(/As of \d{2}\/\d{2}\/\d{4} · EODHD/)
+  // On a phone the table scrolls sideways in its panel rather than cut the names to their first
+  // letters ("NVI…", "Ama…" at 390 px on the live site, 15 November 2026).
+  const desktop = page.viewportSize()
+  await page.setViewportSize({ width: 390, height: 844 })
+  await expect
+    .poll(() =>
+      holdings
+        .locator('tbody th')
+        .evaluateAll(
+          (names) =>
+            names.slice(0, 10).filter((name) => name.scrollWidth > name.clientWidth + 1).length,
+        ),
+    )
+    .toBe(0)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  if (desktop) await page.setViewportSize(desktop)
   await expect(panel(page, 'Allocation by sector').getByRole('listitem').first()).toHaveText(
     /Technology\s*26\.1%/,
   )
