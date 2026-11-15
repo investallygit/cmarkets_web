@@ -4,8 +4,9 @@ import { apiAs, expect, test } from './people.js'
 
 // Screen 27, SVT approval (ROADMAP step 45): T. Bekale (Bank C) buys through Bank D from B. Ngoma
 // and A. Tchakounté, who sell through Bank E; B. Sima, Bank E's SVT, approves the first agreement
-// and rejects the second for a reason of her own; A. Okala, Bank D's SVT (in French), completes the
-// first; each side reads it live; T. Bekale reads both outcomes; B. Sima edits her bank's settings.
+// and rejects the second for a reason written out; A. Okala, Bank D's SVT (in French), completes
+// the first; each side reads it live; T. Bekale reads both outcomes; B. Sima edits Bank E's
+// settings.
 // The flow makes agreements of its own: it counts none of the others'.
 
 const BEKALE = 't.bekale@bank.example'
@@ -70,7 +71,8 @@ test('B. Sima approves one agreement and rejects the other, A. Okala concludes t
   )
   const [first, second] = confirmed.agreements.map((agreement) => agreement.number)
 
-  // B. Sima on her home screen: both agreements to approve, the second within her client's limit.
+  // B. Sima on the SVT's home screen: both agreements to approve, the second within the client's
+  // limit.
   await page.goto('/mkt')
   await switchAccount(page, /analyst/i, 'SVT', /svt/i)
   await expect(page).toHaveURL(/\/svt$/)

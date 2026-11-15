@@ -1,6 +1,7 @@
 import type { CurrencyCode, IsoDateTime } from './common'
 import type { AccountType } from './me'
 import type { NewsItemSourceDto, NewsType } from './news'
+import type { ContactMode } from './profiles'
 import type { FrozenChartDto, FrozenChartPeriod, PublicationAccess } from './research'
 import type { SecurityType } from './securities'
 
@@ -35,6 +36,20 @@ export interface ConversationMemberDto {
    * their online status (spec section 15).
    */
   online: boolean | null
+}
+
+/**
+ * GET /conversations/contacts: someone a confirmed SVT link joins the user to, whom the directory
+ * does not list (ROADMAP decision 16): an SVT's linked trader, or a trader's SVT, with its
+ * organisation (an SVT's: its bank). An SVT writes to them one to one, never in a group.
+ */
+export interface MessagingContactDto {
+  userId: string
+  displayName: string
+  accountType: AccountType
+  organization: string
+  /** 'direct', or 'none' across a block. */
+  contactMode: ContactMode
 }
 
 /** What the list says of the last message: "T. Bekale: the Cameroon 5-yr OTA is very...". */

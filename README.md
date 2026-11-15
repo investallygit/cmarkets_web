@@ -1,10 +1,11 @@
 # CMarket web
 
 Front end of CMarket, built from `CMarket-developer-spec-EN.pdf` (fourth version, 13 November
-2026, whose additions are under way): the client terminal with its professional directory and
-messaging, the news of partner newspapers and the bond and ETF screens, and the back-office of the
-Data admin and of the Admin. It takes all its data from `CMarket.Api`: the REST API and the
-SignalR hubs.
+2026): the client terminal with its professional directory and messaging, the news of partner
+newspapers, the bond and ETF screens, the commodities, the macroeconomic and FX dashboards, the
+portfolio optimiser and the requests for quotes on government securities with their SVTs'
+approval, and the back-office of the Data admin and of the Admin. It takes all its data from
+`CMarket.Api`: the REST API and the SignalR hubs.
 
 - [Introduction](#introduction): what the app does, its stack, the status of each screen
 - [Installation](#installation): run it, log in, the scripts
@@ -28,7 +29,11 @@ off the alerts, applies the visibility and contact rules of spec section 15, run
 checks of spec section 11, the bond calculator of section 14.1 and the portfolio valuation of
 sections 14.2 and 14.3, computes each evening the bonds' and the ETFs' figures of sections 14.4
 and 14.5, renews the plans and takes the payments, and counts the unique clicks it pays the
-partner newspapers for. The front end only knows the API contract.
+partner newspapers for. Since the fourth version it also loads EODHD's rates, exchange rates,
+macro indicators and commodities, solves the optimiser's problems of section 14.6, ranks the
+answers to a request for quotes and allocates them, keeps each SVT's approval with its
+deadline, makes and sends the agreements' tickets, and reports each business day to the BEAC.
+The front end only knows the API contract.
 
 ### Stack (spec section 7)
 
@@ -83,7 +88,7 @@ before upload.
 | 25 · Macroeconomic dashboard (ECO)                                        | Done; the World Bank's figures each month, a file fills gaps  |
 | 21 · Commodities (CMDTY, DES on a commodity)                              | Done; EODHD's 23 series twice a day, the CEMAC's by file      |
 | 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | Done; section 14.6's solver, scenarios computed again         |
-| SVT account type (fourth version), licensed SVTs, trader links            | Done; an SVT confirms each link on TRD, with a daily limit    |
+| SVT account type (fourth version), licensed SVTs, trader links            | Done; links confirmed on TRD, the traders written to on MSG   |
 | 22 · Government securities RFQ (RFQ)                                      | Done; ranked answers, the selection confirmed at its version  |
 | 27 · SVT approval (SVT)                                                   | Done; both SVTs approve, the ticket e-mailed to four          |
 | 23 · Agreements (RFQ AGR)                                                 | Done; tickets downloaded and resent, cancelled on two letters |
@@ -92,7 +97,7 @@ before upload.
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
 third added (the News provider, the news rebuilt, screens 13 to 20 and what they change on
-screens 1, 3, 9, 10 and 12), the plan of the fourth (the SVT account type, requests for quotes on
+screens 1, 3, 9, 10 and 12), what the fourth added (the SVT account type, requests for quotes on
 government securities, screens 21 to 29) and the open questions for the spec author are in the
 roadmap: [ROADMAP.md](ROADMAP.md) gives the order of the steps and their status, and leads to the
 files of [`roadmap/`](roadmap): one per version of the spec, one per step, the state of each

@@ -11,7 +11,6 @@ import {
   useOnline,
   useTypingUsers,
 } from '@/entities/conversation'
-import { useContactPermission, useProfile } from '@/entities/profile'
 import { useCurrentUser } from '@/entities/session'
 import { Composer } from '@/features/send-message'
 import { isApiError } from '@/shared/api'
@@ -24,6 +23,7 @@ import { Button } from '@/shared/ui/form/Button'
 import { Panel } from '@/shared/ui/Panel'
 import { PanelEmpty, PanelError, PanelLoading } from '@/shared/ui/StatusViews'
 import { toast } from '@/shared/ui/toast'
+import { useRecipient } from '../model/useRecipient'
 import { MessageBubble } from './MessageBubble'
 
 interface ThreadPanelProps {
@@ -252,15 +252,18 @@ function Conversation({
   )
 }
 
-/** A conversation not started yet: the rule of the person says what the first message is. */
+/**
+ * A conversation not started yet: the rule of the person, or the SVT link, says what the first
+ * message is.
+ */
 function NewConversation({ to, onStarted }: { to: string; onStarted: (id: string) => void }) {
   const { t } = useTranslation()
-  const profile = useProfile(to)
-  const permission = useContactPermission(to)
-  if (profile.isError) return <PanelError error={profile.error} />
-  if (!profile.data || !permission.data) return <PanelLoading />
-  const name = profile.data.displayName
-  const mode = permission.data.mode
+  const recipient = useRecipient(to)
+  if (recipient.status === 'error') return <PanelError error={recipient.error} />
+  if (recipient.status === 'unknown') return <PanelEmpty message={t('messaging.thread.unknown')} />
+  if (recipient.status === 'loading') return <PanelLoading />
+  const name = recipient.person.displayName
+  const mode = recipient.mode
   return (
     <>
       <p className={`${NOTE} ${mode === 'none' ? 'text-down' : 'text-secondary'}`}>
@@ -289,7 +292,7 @@ export function ThreadPanel({
 }: ThreadPanelProps) {
   const { t } = useTranslation()
   const details = useConversation(conversationId)
-  const target = useProfile(conversationId ? null : to)
+  const target = useRecipient(conversationId ? null : to)
   const conversation = details.data
   const counterpart = conversation?.counterpart
   const online = useOnline(counterpart?.userId, counterpart?.online)
@@ -301,8 +304,8 @@ export function ThreadPanel({
           t(`accountBadge.${counterpart?.accountType ?? 'student'}`),
           ...(online ? [t('messaging.thread.online')] : []),
         ].join(' · ')
-    : target.data
-      ? t('messaging.thread.newTo', { name: target.data.displayName })
+    : target.status === 'ready'
+      ? t('messaging.thread.newTo', { name: target.person.displayName })
       : t('panels.thread')
 
   return (

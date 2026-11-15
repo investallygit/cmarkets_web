@@ -493,7 +493,9 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   e-mail "opens screen 27 after signing in" while the screen 22 mockup reads "Confirmed by
   e-mail": the plan confirms on screen 27. The mockup's buttons read Confirm and Reject for a link
   the text confirms or declines; a link the SVT removes and one the trader removes both read
-  "Withdrawn".
+  "Withdrawn". The messages "with linked traders": may an SVT talk in a group, and does a
+  conversation end with the link (step 48: one to one, never a group; the conversation stays,
+  as any other once the rules change)?
 - **SVT approval, fourth version (step 45)**: "60 minutes (configurable by the Admin)": one window
   for every bank, set in ADMCFG with the cut-off and the next business day's deadline (the plan);
   an agreement confirmed on a day without a session waits for the next one's deadline. Who sets a

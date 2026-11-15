@@ -123,13 +123,13 @@ which report the agreements they conclude.
 - Every Playwright flow on CMarket.Api from a fresh database: 153, all passing (134 in the usual
   run, the 19 `@fresh-db` ones on a fresh database per spec). New: T. Bekale buys 500 million of
   the OTA through Bank D from B. Ngoma and A. Tchakounté, who sell through Bank E; B. Sima approves
-  the first, which waits for Bank D, and rejects the second for a reason of her own, which the
+  the first, which waits for Bank D, and rejects the second for a reason written out, which the
   latest decisions show; A. Okala (in French) reads Bank E's approval and concludes the first; B.
   Sima reads it at once, T. Bekale both outcomes on RFQ; Bank E's four eyes set above XAF 2
-  billion. Changed: SVT is B. Sima's home and the first of her menu; TRD offers the bank's default
-  limit (XAF 500 million) when a link is confirmed; ADMCFG's window (45 minutes, 15:30, 09:30)
-  read back in B. Sima's settings; the CEO reads C. Abena's sale concluded. The API answered no
-  5xx.
+  billion. Changed: SVT is B. Sima's home and the first of the SVT's menu; TRD offers the bank's
+  default limit (XAF 500 million) when a link is confirmed; ADMCFG's window (45 minutes, 15:30,
+  09:30) read back in B. Sima's settings; the CEO reads C. Abena's sale concluded. The API answered
+  no 5xx.
 - axe (WCAG 2.2 AA) at 1600, 390 and 320 px, in English and French, once T. Bekale's purchase made
   two agreements for Bank E: SVT with an agreement open, its reject dialog, the settings edited,
   TRD's confirm dialog with the default limit, as B. Sima; ADMCFG with the window as the Admin;

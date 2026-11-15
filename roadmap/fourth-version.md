@@ -102,7 +102,9 @@ itself, steps 38 to 48 follow these; each is also an open question for the spec 
     request, its licence and an employer letter, for a bank of the licensed SVTs; the bank is its
     organisation, as a media is a News provider's (decision 12). Its menu is the mockup's (SVT,
     TRD, AGR, N, CFG) with MSG, for its messages with the traders linked to it; the market
-    screens a CEO reads stay open to it from the command bar, out of the menu.
+    screens a CEO reads stay open to it from the command bar, out of the menu. Step 48 builds
+    MSG: a confirmed link opens a conversation at once, both ways, one to one; no group takes an
+    SVT, and a conversation stays open once the link ends, as a client's once the rules change.
 17. **The compliance team**: the Admin. RFQ REP (screen 24), every organisation's agreements and
     the compliance export are back-office screens, under an RFQ entry of the Admin's menu; the
     screen 24 mockup draws the client menu for a "CMARKET ADMIN" account.

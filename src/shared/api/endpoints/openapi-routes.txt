@@ -161,6 +161,7 @@ PUT /conversations/{id}/messages/{messageId}
 POST /conversations/{id}/mute
 POST /conversations/{id}/read
 POST /conversations/{id}/report
+GET /conversations/contacts
 PUT /data/commodities/{code}
 GET /data/corrections
 GET /data/coverage

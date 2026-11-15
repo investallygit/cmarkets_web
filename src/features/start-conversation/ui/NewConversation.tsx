@@ -5,24 +5,27 @@ import {
   GROUP_MAX_MEMBERS,
   GROUP_TITLE_MAX_LENGTH,
   MESSAGE_MAX_LENGTH,
+  useMessagingContacts,
   useStartConversation,
 } from '@/entities/conversation'
 import { AccountTypeBadge, useDirectory } from '@/entities/profile'
 import { useCurrentUser } from '@/entities/session'
-import type { DirectoryEntryDto } from '@/shared/api/contracts'
 import { Dialog, DialogBody, DialogFooter } from '@/shared/ui/Dialog'
 import { Button } from '@/shared/ui/form/Button'
 import { Field } from '@/shared/ui/form/Field'
 import { Textarea } from '@/shared/ui/form/Textarea'
 import { TextInput } from '@/shared/ui/form/TextInput'
 import { toast } from '@/shared/ui/toast'
+import { candidatesOf, mayAdd, type Candidate } from '../lib/candidates'
 
 /** Where the dialog leads: a new direct conversation to write, or the group it created. */
 export type NewConversationTarget = { to: string } | { conversationId: string }
 
 /**
  * "+ NEW" of the conversations (screen 11): one person opens a conversation with them; several
- * make a group, named, of the people the user may write to at once (spec section 15).
+ * make a group, named, of the people the user may write to at once (spec section 15). The people
+ * an SVT link joins the user to come first (ROADMAP decision 16): an SVT's linked traders, whom it
+ * writes to one to one, having no directory; a trader's SVTs, whom the directory does not list.
  */
 export function NewConversation({ onOpen }: { onOpen: (target: NewConversationTarget) => void }) {
   const { t } = useTranslation()
@@ -68,15 +71,24 @@ function NewConversationForm({
   const { t } = useTranslation()
   const user = useCurrentUser()
   const [q, setQ] = useState('')
-  const [chosen, setChosen] = useState<DirectoryEntryDto[]>([])
+  const [chosen, setChosen] = useState<Candidate[]>([])
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const start = useStartConversation()
-  const found = useDirectory({ q: q.trim() || undefined, contactable: true, page: 1, pageSize: 8 })
-  const people = (found.data?.items ?? []).filter(
+  const found = useDirectory(
+    { q: q.trim() || undefined, contactable: true, page: 1, pageSize: 8 },
+    { enabled: user.permissions.includes('directory:list') },
+  )
+  const contacts = useMessagingContacts()
+  const people = candidatesOf(contacts.data ?? [], found.data?.items ?? [], q).filter(
     (entry) => entry.userId !== user.id && !chosen.some((person) => person.userId === entry.userId),
   )
+  // Why some are not offered: an SVT talks one to one, chosen or listed (ROADMAP decision 16).
+  const oneToOne =
+    chosen.length > 0 &&
+    (user.accountType === 'svt' ||
+      [...chosen, ...people].some((person) => person.accountType === 'svt'))
   const group = chosen.length > 1
   const needRequest = group && chosen.some((person) => person.contactMode !== 'direct')
   const titleError =
@@ -155,13 +167,13 @@ function NewConversationForm({
                 <button
                   type="button"
                   aria-label={t('messaging.newConversation.add', { name: person.displayName })}
-                  disabled={chosen.length + 1 >= GROUP_MAX_MEMBERS}
+                  disabled={!mayAdd(chosen, person, user, GROUP_MAX_MEMBERS)}
                   onClick={() => setChosen((current) => [...current, person])}
                   className="flex w-full items-center gap-2 px-2 py-1.5 text-left hover:bg-panel-header disabled:opacity-50"
                 >
                   <span className="min-w-0 flex-1 truncate font-sans text-label">
                     {person.displayName}
-                    <span className="ml-2 text-data text-secondary">{person.jobTitle}</span>
+                    <span className="ml-2 text-data text-secondary">{person.detail}</span>
                   </span>
                   {person.contactMode === 'request' && (
                     <span className="font-sans text-title text-accent-amber">
@@ -174,6 +186,11 @@ function NewConversationForm({
             ))
           )}
         </ul>
+        {oneToOne && (
+          <p className="font-sans text-data text-secondary">
+            {t('messaging.newConversation.svtOneToOne')}
+          </p>
+        )}
         {group && (
           <>
             <p className="font-sans text-data text-secondary">

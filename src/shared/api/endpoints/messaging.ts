@@ -7,6 +7,7 @@ import type {
   MessageDto,
   MessagePageDto,
   MessageSearchHitDto,
+  MessagingContactDto,
   NewConversationDto,
   SendMessageDto,
 } from '../contracts'
@@ -19,6 +20,7 @@ import { answer, route, send, sendBlob, sendForm } from './define'
  */
 export const messagingRoutes = {
   conversations: route('GET', '/conversations', answer<ConversationSummaryDto[]>()),
+  contacts: route('GET', '/conversations/contacts', answer<MessagingContactDto[]>()),
   start: route('POST', '/conversations', answer<ConversationDto>()),
   conversation: route('GET', '/conversations/{id}', answer<ConversationDto>()),
   messages: route('GET', '/conversations/{id}/messages', answer<MessagePageDto>()),
@@ -43,6 +45,11 @@ export const messagingApi = {
   /** The rows of a tab, the latest first. */
   conversations: (filter: ConversationFilter, signal?: AbortSignal) =>
     send(messagingRoutes.conversations, { query: { filter }, signal }),
+  /**
+   * The people an SVT link joins the user to, out of the directory: an SVT's traders, a
+   * trader's SVTs.
+   */
+  contacts: (signal?: AbortSignal) => send(messagingRoutes.contacts, { signal }),
   /** A direct conversation or a group, with its first message. */
   start: (input: NewConversationDto) => send(messagingRoutes.start, { body: input }),
   /** Details, members and the files shared. */

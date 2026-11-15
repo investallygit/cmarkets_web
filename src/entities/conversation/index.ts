@@ -12,6 +12,7 @@ export {
   useMarkRead,
   useMessages,
   useMessageSearch,
+  useMessagingContacts,
   useMuteConversation,
   useReportConversation,
   useSendMessage,

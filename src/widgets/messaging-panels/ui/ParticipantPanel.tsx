@@ -8,13 +8,7 @@ import {
   useGroupMember,
   useMuteConversation,
 } from '@/entities/conversation'
-import {
-  AccountTypeBadge,
-  initialsOf,
-  ProfileAvatar,
-  useDirectory,
-  useProfile,
-} from '@/entities/profile'
+import { AccountTypeBadge, initialsOf, ProfileAvatar, useDirectory } from '@/entities/profile'
 import { useCurrentUser } from '@/entities/session'
 import { BlockButton } from '@/features/block-user'
 import { ReportConversation } from '@/features/report-conversation'
@@ -24,8 +18,9 @@ import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
 import { Button, ButtonLink } from '@/shared/ui/form/Button'
 import { TextInput } from '@/shared/ui/form/TextInput'
 import { Panel } from '@/shared/ui/Panel'
-import { PanelEmpty, PanelLoading } from '@/shared/ui/StatusViews'
+import { PanelEmpty, PanelError, PanelLoading } from '@/shared/ui/StatusViews'
 import { toast } from '@/shared/ui/toast'
+import { useRecipient } from '../model/useRecipient'
 import { AttachmentLink } from './AttachmentLink'
 
 const SECTION_TITLE =
@@ -45,9 +40,14 @@ type Person = Pick<
   | 'analystId'
 >
 
-/** The person written to, as screen 11 sums them up, and the links to their profile and notes. */
+/**
+ * The person written to, as screen 11 sums them up, and the links to their profile and notes: an
+ * SVT has no profile, and an SVT reads none (ROADMAP decision 16).
+ */
 function MiniProfile({ person }: { person: Person }) {
   const { t } = useTranslation()
+  const user = useCurrentUser()
+  const profile = person.accountType !== 'svt' && user.permissions.includes('directory:profile')
   return (
     <div className="flex flex-col items-center gap-2 text-center">
       <ProfileAvatar
@@ -68,9 +68,11 @@ function MiniProfile({ person }: { person: Person }) {
           .join(' · ')}
       </p>
       <div className="mt-2 flex w-full flex-col gap-2">
-        <ButtonLink to={directoryPath(person.userId)} variant="secondary" size="lg">
-          {t('messaging.participant.viewProfile')}
-        </ButtonLink>
+        {profile && (
+          <ButtonLink to={directoryPath(person.userId)} variant="secondary" size="lg">
+            {t('messaging.participant.viewProfile')}
+          </ButtonLink>
+        )}
         {person.analystId && (
           <ButtonLink to={analystPublicationsPath(person.analystId)} variant="info" size="lg">
             {t('messaging.participant.publications')}
@@ -291,19 +293,24 @@ function GroupDetails({
 }
 
 function DirectDetails({ conversation }: { conversation: ConversationDto }) {
+  const user = useCurrentUser()
   const person = conversation.counterpart
   if (!person) return null
+  // Blocking is the directory's (NET ME lists the people blocked): an SVT reports a conversation.
+  const blocks = user.permissions.includes('directory:profile')
   return (
     <>
       <MiniProfile person={person} />
       <div className="flex flex-col gap-2">
         <MuteButton conversation={conversation} />
-        <BlockButton
-          userId={person.userId}
-          displayName={person.displayName}
-          blocked={conversation.blocked === 'byMe'}
-          className="w-full"
-        />
+        {blocks && (
+          <BlockButton
+            userId={person.userId}
+            displayName={person.displayName}
+            blocked={conversation.blocked === 'byMe'}
+            className="w-full"
+          />
+        )}
         <ReportConversation conversationId={conversation.id} className="w-full" />
       </div>
       <Files conversation={conversation} />
@@ -313,9 +320,12 @@ function DirectDetails({ conversation }: { conversation: ConversationDto }) {
 
 /** The person a new conversation starts with, before its first message. */
 function Recipient({ userId }: { userId: string }) {
-  const profile = useProfile(userId)
-  if (!profile.data) return <PanelLoading />
-  return <MiniProfile person={{ ...profile.data, analystId: profile.data.analystId }} />
+  const { t } = useTranslation()
+  const recipient = useRecipient(userId)
+  if (recipient.status === 'error') return <PanelError error={recipient.error} />
+  if (recipient.status === 'unknown') return <PanelEmpty message={t('messaging.thread.unknown')} />
+  if (recipient.status === 'loading') return <PanelLoading />
+  return <MiniProfile person={recipient.person} />
 }
 
 /**

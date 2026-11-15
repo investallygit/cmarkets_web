@@ -6,6 +6,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type KeyboardEvent,
@@ -20,6 +21,7 @@ import { ContextMenu } from './ContextMenu'
 import {
   columnTrack,
   dataTableFeatures,
+  isFigure,
   type DataColumns,
   type DataTableFeatures,
 } from './dataColumns'
@@ -35,6 +37,52 @@ const VIRTUALIZE_FROM = 60
 
 /** Exports the rows as shown, sorting included. */
 export type TableExporter = (format: 'csv' | 'xlsx') => void
+
+/** A header's sort button holds its label and, the column sorted, an arrow beside it. */
+const SORT_ARROW_WIDTH = 14
+
+/**
+ * The width a cell's content takes, its padding included: its text laid out whole, which a cut
+ * cell clips but does not shorten (a range's rectangles are its text's, not the clip's). 0 where
+ * nothing is laid out (a test's document, a hidden panel).
+ */
+function contentWidth(cell: HTMLElement): number {
+  const range = document.createRange()
+  range.selectNodeContents(cell)
+  if (typeof range.getBoundingClientRect !== 'function') return 0
+  const { width } = range.getBoundingClientRect()
+  if (!width) return 0
+  const style = getComputedStyle(cell)
+  return Math.ceil(width + parseFloat(style.paddingLeft) + parseFloat(style.paddingRight))
+}
+
+/** What each column needs on the rows shown: its header whole, and its figures whole. */
+function measureColumns(element: HTMLElement, ids: readonly string[]): Record<string, number> {
+  const fitted: Record<string, number> = {}
+  const rows = [...element.querySelectorAll<HTMLElement>('tbody > tr, tfoot > tr')]
+  const headers = [...element.querySelectorAll<HTMLElement>('thead > tr')]
+  ids.forEach((id, index) => {
+    let need = 0
+    for (const row of headers) {
+      const header = row.children.item(index)
+      if (header instanceof HTMLElement)
+        need = Math.max(
+          need,
+          contentWidth(header) + (header.querySelector('button') ? SORT_ARROW_WIDTH : 0),
+        )
+    }
+    for (const row of rows) {
+      const cell = row.children.item(index)
+      if (cell instanceof HTMLElement && isFigure(cell.textContent?.trim() ?? ''))
+        need = Math.max(need, contentWidth(cell))
+    }
+    if (need > 0) fitted[id] = need
+  })
+  return fitted
+}
+
+const sameWidths = (a: Record<string, number>, b: Record<string, number>) =>
+  Object.keys(a).length === Object.keys(b).length && Object.keys(a).every((id) => a[id] === b[id])
 
 export interface DataTableProps<TRow extends RowData> {
   data: TRow[]
@@ -99,7 +147,7 @@ export function DataTable<TRow extends RowData>({
   exportRef,
   footer,
 }: DataTableProps<TRow>) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const canExport = useContext(TableExportContext)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [menu, setMenu] = useState<MenuState | null>(null)
@@ -136,8 +184,18 @@ export function DataTable<TRow extends RowData>({
   })
 
   const leafColumns = table.getAllLeafColumns()
+  // What its header and its figures need, measured on the rows shown when the data, the columns or
+  // the language change: a column narrower than that widens, and the table scrolls sideways in its
+  // panel rather than cut a figure (WCAG 1.4.10 lets a data table do so; ROADMAP step 48).
+  const [fitted, setFitted] = useState<Record<string, number>>({})
+  const columnIds = JSON.stringify(leafColumns.map((column) => column.id))
+  useLayoutEffect(() => {
+    if (!scrollRef.current) return
+    const next = measureColumns(scrollRef.current, JSON.parse(columnIds) as string[])
+    setFitted((current) => (sameWidths(current, next) ? current : next))
+  }, [data, columns, columnIds, i18n.language])
   const gridTemplateColumns = leafColumns
-    .map((column) => columnTrack(column.columnDef.meta?.width))
+    .map((column) => columnTrack(column.columnDef.meta?.width, fitted[column.id]))
     .join(' ')
 
   /** The rows as shown, sorting included. */

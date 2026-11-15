@@ -29,7 +29,10 @@ const ceo: Access = {
 }
 const dataAdmin: Access = { accountType: 'dataAdmin', permissions: ['market:read', 'data:import'] }
 const admin: Access = { accountType: 'admin', permissions: ['users:manage', 'settings:manage'] }
-const svt: Access = { accountType: 'svt', permissions: ['market:read', 'svt:approve'] }
+const svt: Access = {
+  accountType: 'svt',
+  permissions: ['market:read', 'messages:write', 'svt:approve'],
+}
 const trader: Access = {
   accountType: 'trader',
   permissions: ['market:read', 'analysis:read', 'portfolios:read', 'rfq:trade', 'rfq:read'],
@@ -68,8 +71,9 @@ describe('the SVT and the RFQ (ROADMAP decisions 15, 16 and 18)', () => {
     SCREENS.filter((screen) => isInMenuOf(user, screen)).map((screen) => screen.code)
 
   it('gives the SVT its own menu, the market screens a CEO reads open from the command bar only', () => {
-    // SVT its home, TRD, and AGR, the agreements that name its bank, by the code each opens (ROADMAP steps 45, 46).
-    expect(menuOf(svt)).toEqual(['SVT', 'TRD', 'RFQ AGR', 'N', 'CFG'])
+    // SVT its home, TRD, AGR, the agreements that name its bank, by the code each opens (ROADMAP
+    // steps 45, 46), and MSG, its messages with its linked traders (step 48).
+    expect(menuOf(svt)).toEqual(['SVT', 'TRD', 'RFQ AGR', 'MSG', 'N', 'CFG'])
     expect(canAccessScreen(svt, screenById('MKT'))).toBe(true)
     expect(canAccessScreen(svt, screenById('RFQ'))).toBe(false)
   })

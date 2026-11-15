@@ -3,12 +3,19 @@ import type { DirectoryQuery, ProfileReportDto } from '@/shared/api/contracts'
 import { networkApi } from '@/shared/api/endpoints'
 import { profileKeys } from './queries'
 
-/** GET /directory: a page of cards; the page before stays on screen while the next one loads. */
-export function useDirectory(query: DirectoryQuery) {
+/**
+ * GET /directory: a page of cards; the page before stays on screen while the next one loads. Off
+ * for a user the directory refuses (an SVT, which writes to its linked traders only).
+ */
+export function useDirectory(
+  query: DirectoryQuery,
+  { enabled = true }: { enabled?: boolean } = {},
+) {
   return useQuery({
     queryKey: profileKeys.directory(query),
     queryFn: ({ signal }) => networkApi.directory(query, signal),
     placeholderData: keepPreviousData,
+    enabled,
   })
 }
 

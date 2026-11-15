@@ -20,6 +20,14 @@ export function audienceOf(accountType: AccountType): Audience {
   return AUDIENCE[accountType]
 }
 
+/**
+ * Opens its modules through a plan or a trial (spec section 6): the clients. The SVT pays none
+ * (ROADMAP decision 16): its permissions bound what it opens, and CFG shows it no plan to choose.
+ */
+export function hasPlan(accountType: AccountType): boolean {
+  return audienceOf(accountType) === 'client' && accountType !== 'svt'
+}
+
 /** "Kevin Atangana" -> "K.", for the user badge of the top bar. */
 export function initialOf(displayName: string): string {
   const first = displayName.trim().charAt(0)

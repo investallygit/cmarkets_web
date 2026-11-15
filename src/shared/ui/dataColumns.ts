@@ -28,9 +28,26 @@ export interface DataColumnMeta {
  */
 export const MIN_COLUMN_WIDTH = 56
 
-/** The grid track of a column (DataColumnMeta.width). */
-export function columnTrack(width = '1fr'): string {
-  return /^\d*\.?\d+fr$/.test(width) ? `minmax(${MIN_COLUMN_WIDTH}px, ${width})` : width
+/**
+ * The grid track of a column (DataColumnMeta.width), widened to `fitted` px, what its header and
+ * its widest figure need (`DataTable` measures it), so that neither is ever cut (ROADMAP step 48).
+ */
+export function columnTrack(width = '1fr', fitted = 0): string {
+  if (/^\d*\.?\d+fr$/.test(width))
+    return `minmax(${Math.max(MIN_COLUMN_WIDTH, fitted)}px, ${width})`
+  const fixed = /^(\d*\.?\d+)px$/.exec(width)
+  if (fixed) return `${Math.max(Number(fixed[1]), fitted)}px`
+  const share = /^minmax\((\d*\.?\d+)px,\s*(.+)\)$/.exec(width)
+  if (share) return `minmax(${Math.max(Number(share[1]), fitted)}px, ${share[2]})`
+  return width
+}
+
+/**
+ * A figure: digits with their signs, separators and units, a date or a time ("1 282,84", "+0.30%",
+ * "15/11 17:13", "XAF 2.2 Bn"). A table never cuts one; a text may end in an ellipsis.
+ */
+export function isFigure(text: string): boolean {
+  return /\d/.test(text) && /^[\s\d.,:;%+\-–−/()×xMBnkXAF€$]+$/u.test(text)
 }
 
 /** Features shared by every data table: sorting by clicking a column header (spec section 9). */

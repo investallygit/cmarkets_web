@@ -264,7 +264,9 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Built in step 25 (third version)**: a news card shows its tags and subject.
 - **Built in step 31 (third version)**: a security card opens the profile of its type, a
   bond's the bond profile (it opened BP since step 30).
-- **Fourth version (step 43)**: an SVT writes to the traders linked to its bank.
+- **Built in step 48 (fourth version)**: an SVT and the traders a confirmed link joins to its
+  bank write to each other at once, one to one, out of the directory: "+ NEW" offers them first,
+  an SVT's card gives its bank; a trader may block an SVT, which reports a conversation instead.
 
 ## NET ME · My profile, visibility and contact (screen 12): done
 
@@ -507,7 +509,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   countdown or decision, Approve and Reject (one of six reasons, "other" with its text). A new
   agreement to approve, a reminder 15 minutes before its deadline and each decision arrive live;
   TRD's confirmation offers the bank's default limit. See [step 45](steps/step-45-svt-approval.md).
-- **Still to do**: the SVT's messages with its linked traders (step 48).
+- **Built in step 48**: MSG in its menu, its messages with the traders linked to its bank, one to
+  one (decision 16): MSG's "+ NEW" offers them, TRD's "Write to" opens a conversation with the
+  trader picked. See [step 48](steps/step-48-fourth-version-done.md).
 
 ## OPT / OPT RES · Portfolio optimisation (screens 28 and 29): done
 

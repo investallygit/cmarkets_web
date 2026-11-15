@@ -23,7 +23,7 @@ export {
   lockedModule,
   mayWriteMessages,
 } from './lib/access'
-export { audienceOf, initialOf } from './lib/accountTypes'
+export { audienceOf, hasPlan, initialOf } from './lib/accountTypes'
 export {
   isEmailAddress,
   PASSWORD_MIN_LENGTH,

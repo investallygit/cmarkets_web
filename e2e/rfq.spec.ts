@@ -61,11 +61,11 @@ test(
       .click()
     await expect(svtRow(page, 'Bank F')).toContainText(/Removed on \d\d\/\d\d\s*Withdrawn/)
 
-    // B. Sima, Bank E's SVT: its menu, SVT its home (ROADMAP step 45), its two requests on TRD,
-    // P. Owona confirmed with a limit.
+    // B. Sima, Bank E's SVT: its menu, SVT its home (ROADMAP step 45), MSG with its linked traders
+    // (step 48), its two requests on TRD, P. Owona confirmed with a limit.
     await switchAccount(page, /trader/i, 'SVT', /svt/i)
     await expect(page).toHaveURL(/\/svt$/)
-    await expect(menu.getByRole('link')).toHaveText([/^SVT/, /^TRD/, /^AGR/, /^N/, /^CFG/])
+    await expect(menu.getByRole('link')).toHaveText([/^SVT/, /^TRD/, /^AGR/, /^MSG/, /^N/, /^CFG/])
     await menu.getByRole('link', { name: /^TRD/ }).click()
     await expect(page).toHaveURL(/\/svt\/traders$/)
     const links = panel(page, /^Trader links/)

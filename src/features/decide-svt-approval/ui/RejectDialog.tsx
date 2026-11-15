@@ -66,15 +66,21 @@ function RejectForm({
         event.preventDefault()
         setSubmitted(true)
         if (missing) return
-        reject.mutate(
-          { agreementId, input: { reasonCode: reason, comment: comment.trim() || null } },
-          {
-            onSuccess: () => {
+        // The rejection's hub event may read the detail again before the answer comes, which
+        // takes this dialog off the screen with mutate's own callbacks: the request's promise
+        // still tells (an error shows from the mutation's state while the dialog is open).
+        void reject
+          .mutateAsync({
+            agreementId,
+            input: { reasonCode: reason, comment: comment.trim() || null },
+          })
+          .then(
+            () => {
               toast.success(t('svt.decide.rejected', { number }))
               onClose()
             },
-          },
-        )
+            () => undefined,
+          )
       }}
     >
       <DialogBody>

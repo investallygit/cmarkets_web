@@ -55,6 +55,7 @@
       "confirm": "Confirm",
       "decline": "Decline",
       "changeLimit": "Change {{name}}'s limit",
+      "write": "Write to {{name}}",
       "remove": "Remove {{name}}'s link",
       "hint": "Select a trader to change the limit or remove the link; Enter changes the limit.",
       "declined": "{{name}}'s request declined.",

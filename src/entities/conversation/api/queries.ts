@@ -17,6 +17,7 @@ export const conversationKeys = {
   detail: (id: string) => [...conversationKeys.all, 'detail', id] as const,
   messages: (id: string) => [...conversationKeys.all, 'messages', id] as const,
   search: (q: string) => [...conversationKeys.all, 'search', q] as const,
+  contacts: () => [...conversationKeys.all, 'contacts'] as const,
 }
 
 /**
@@ -33,6 +34,18 @@ export function useConversations(
   return useQuery({
     queryKey: conversationKeys.list(filter),
     queryFn: ({ signal }) => messagingApi.conversations(filter, signal),
+    enabled,
+  })
+}
+
+/**
+ * GET /conversations/contacts: the people a confirmed SVT link joins the user to, out of the
+ * directory (ROADMAP decision 16): an SVT's linked traders, a trader's SVTs; none for the others.
+ */
+export function useMessagingContacts({ enabled = true }: { enabled?: boolean } = {}) {
+  return useQuery({
+    queryKey: conversationKeys.contacts(),
+    queryFn: ({ signal }) => messagingApi.contacts(signal),
     enabled,
   })
 }

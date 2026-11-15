@@ -185,7 +185,10 @@ Done in step 10, with the home page:
     system colours, which keep no background or box shadow.
   - Narrow windows (a tablet, a zoomed page, down to 320 px): the top bar drops its least needed
     items, a title bar's options go to the next line, the tabs scroll, the security header wraps;
-    no page scrolls sideways. A table's sr-only text no longer widened the page.
+    no page scrolls sideways. A table's sr-only text no longer widened the page. A `DataTable`
+    column is at least as wide as its header and its widest figure (a number, an amount, a date,
+    a time), measured on the rows shown: the table scrolls sideways in its panel rather than cut
+    one; a text may end in an ellipsis (step 48).
   - Links inside a sentence are underlined; the sign-up form's pairs of fields stack on a phone;
     the FR / EN buttons are named Français and English.
 - **Mock session**: a logout no longer takes the user away from the requests already let through

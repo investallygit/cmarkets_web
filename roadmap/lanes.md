@@ -2,7 +2,8 @@
 
 Since 14 November 2026 the steps left of the [fourth version](fourth-version.md) run in three
 lanes at once, each a working session of its own on both projects (this one and CMarket.Api).
-Back to the [order of the roadmap](../ROADMAP.md#order).
+Back to the [order of the roadmap](../ROADMAP.md#order). The three lanes ended on 15 November
+2026, step 48 last: every step is on `main`.
 
 ## The lanes
 

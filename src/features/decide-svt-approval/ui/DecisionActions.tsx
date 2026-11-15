@@ -29,8 +29,11 @@ export function DecisionActions({ detail }: { detail: SvtApprovalDetailDto }) {
         disabled={!detail.canApprove}
         busy={approve.isPending}
         onClick={() =>
-          approve.mutate(detail.agreement.id, {
-            onSuccess: (decided) =>
+          // The decision's hub event may read the detail again before the answer comes: these
+          // buttons then leave the screen, and mutate's own callbacks with them. The request's
+          // promise still says how it went.
+          void approve.mutateAsync(detail.agreement.id).then(
+            (decided) =>
               toast.success(
                 t(
                   decided.agreement.status === 'concluded'
@@ -41,8 +44,8 @@ export function DecisionActions({ detail }: { detail: SvtApprovalDetailDto }) {
                   { number },
                 ),
               ),
-            onError: (error) => toast.error(error.message),
-          })
+            (error: Error) => toast.error(error.message),
+          )
         }
       >
         {t('svt.decide.approve')}

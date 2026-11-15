@@ -1,13 +1,15 @@
-import { Pencil } from 'lucide-react'
+import { MessageSquare, Pencil } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { mayWriteMessages, useCurrentUser } from '@/entities/session'
 import { formatDailyLimit, useSvtLinks } from '@/entities/svt-link'
 import { DeclineLinkButton, LimitDialog, RevokeLinkButton } from '@/features/decide-trader-link'
 import type { TraderLinkDto } from '@/shared/api/contracts'
 import { useFormat, useLocale } from '@/shared/i18n'
+import { messagesPath } from '@/shared/routes/paths'
 import { DataTable } from '@/shared/ui/DataTable'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
-import { Button } from '@/shared/ui/form/Button'
+import { Button, ButtonLink } from '@/shared/ui/form/Button'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 
@@ -125,6 +127,7 @@ function LinkedTraders({
   const { t } = useTranslation()
   const format = useFormat()
   const locale = useLocale()
+  const writes = mayWriteMessages(useCurrentUser())
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const selected = links.find((link) => link.id === selectedId) ?? null
   const columns = useMemo(
@@ -196,6 +199,16 @@ function LinkedTraders({
           <span className="mr-auto font-sans text-data text-primary">
             {[selected.trader.name, selected.trader.organization].filter(Boolean).join(' · ')}
           </span>
+          {writes && (
+            // MSG with the trader, one to one (ROADMAP decision 16).
+            <ButtonLink
+              to={messagesPath({ to: selected.trader.id })}
+              size="sm"
+              icon={MessageSquare}
+            >
+              {t('rfq.links.write', { name: selected.trader.name })}
+            </ButtonLink>
+          )}
           <Button size="sm" icon={Pencil} onClick={() => onChangeLimit(selected)}>
             {t('rfq.links.changeLimit', { name: selected.trader.name })}
           </Button>
