@@ -428,7 +428,9 @@
       "trendlineHint": "Click two points on the chart",
       "horizontalHint": "Click a price on the chart",
       "unavailable": "Drawings show on daily and weekly bars, without comparison",
-      "saveFailed": "Drawings not saved: {{message}}"
+      "saveFailed": "Drawings not saved: {{message}}",
+      "loadFailed": "Your lines could not be loaded: drawing waits until they are, so that none is lost.",
+      "notLoaded": "Drawing waits for your saved lines to load"
     },
     "priceOf": "{{code}} price",
     "label": {

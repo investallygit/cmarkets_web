@@ -19,7 +19,7 @@ const LOGO = Buffer.from(
 async function switchAccount(page: Page, from: RegExp, account: string, badge: RegExp) {
   const topBar = page.getByRole('banner')
   await topBar.getByRole('button', { name: from }).click()
-  await page.getByRole('menuitem', { name: account, exact: true }).click()
+  await page.getByRole('menuitemradio', { name: account, exact: true }).click()
   await expect(topBar.getByRole('button', { name: badge })).toBeVisible()
 }
 

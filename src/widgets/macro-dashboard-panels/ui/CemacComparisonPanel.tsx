@@ -1,7 +1,12 @@
 import { clsx } from 'clsx'
 import { useContext, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { formatMacroFigure, useCemacTable, useMacroNames } from '@/entities/macro'
+import {
+  formatMacroFigure,
+  macroFigureInUnit,
+  useCemacTable,
+  useMacroNames,
+} from '@/entities/macro'
 import type { CemacTableCellDto, CemacTableRowDto } from '@/shared/api/contracts'
 import { useLocale } from '@/shared/i18n'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
@@ -41,7 +46,8 @@ export function CemacComparisonPanel() {
           cell: ({ getValue }) => <span className="font-mono text-primary">{getValue()}</span>,
         }),
         ...(countries ?? []).map((country, index) =>
-          helper.accessor((row) => shown(row.values[index])?.value, {
+          // Sorted and exported in the unit the row names, as shown (B45).
+          helper.accessor((row) => macroFigureInUnit(shown(row.values[index])?.value, row.unit), {
             id: country.code,
             header: names.economy(country, true),
             meta: { align: 'right', width: 'minmax(84px, 1fr)' },

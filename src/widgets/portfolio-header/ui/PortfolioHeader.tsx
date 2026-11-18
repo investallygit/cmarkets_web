@@ -193,6 +193,7 @@ function PortfolioSelector({
       .filter(Boolean)
       .join(' · '),
     checked: portfolio.id === current?.id,
+    radio: true,
     onSelect: () => onSelect(portfolio.id),
   })
   const items: MenuItem[] = [

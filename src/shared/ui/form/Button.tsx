@@ -17,7 +17,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
   size?: ButtonSize
   icon?: LucideIcon
-  /** Waiting for the server: shows a spinner and blocks a second click. */
+  /**
+   * Waiting for the server: shows a spinner and blocks a second click. Given (true or false), it
+   * makes the button a request's, as a submit button is: the second click of a double click, which
+   * comes before the request has turned it busy, neither submits nor acts again (B76).
+   */
   busy?: boolean
 }
 
@@ -49,19 +53,28 @@ export function Button({
   variant = 'secondary',
   size = 'md',
   icon: Icon,
-  busy = false,
+  busy,
   type = 'button',
   disabled,
   className,
   children,
+  onClick,
   ...rest
 }: ButtonProps) {
+  const once = type === 'submit' || busy !== undefined
   return (
     <button
       {...rest}
       type={type}
       disabled={disabled || busy}
       aria-busy={busy || undefined}
+      onClick={(event) => {
+        if (once && event.detail > 1) {
+          event.preventDefault()
+          return
+        }
+        onClick?.(event)
+      }}
       className={clsx(
         BASE,
         VARIANTS[variant],

@@ -65,7 +65,7 @@ export const SecurityCard = Node.create({
  * quotes, tables, images with their credit, links and CMarket security cards. What is pasted from
  * elsewhere comes down to them, and the reader of N draws exactly these.
  */
-export function newsExtensions(placeholder: string) {
+export function newsExtensions(placeholder: string, onForeignImage?: () => void) {
   return [
     StarterKit.configure({
       heading: { levels: [2] },
@@ -82,7 +82,7 @@ export function newsExtensions(placeholder: string) {
       },
     }),
     TableKit.configure({ table: { resizable: false } }),
-    NewsImage.configure({ inline: false, allowBase64: false }),
+    NewsImage.configure({ inline: false, allowBase64: false, onForeignImage }),
     Placeholder.configure({ placeholder }),
     SecurityCard,
   ]

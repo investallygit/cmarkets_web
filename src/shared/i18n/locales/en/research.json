@@ -85,6 +85,7 @@
     "pay": "Pay {{price}}",
     "retry": "Try again",
     "failed": "The payment failed.",
+    "failedTitle": "The payment of {{title}} failed: the note is not bought.",
     "approveOnPhone": "Approve the payment of {{price}} on your phone. The publication opens as soon as your operator confirms it.",
     "confirmingCard": "Confirming the card payment of {{price}}…",
     "continueReading": "Close and wait",
@@ -201,7 +202,8 @@
       "title": "Title",
       "summary": "Summary (always visible for free)",
       "body": "Text of the publication",
-      "placeholder": "Write the publication: sections as H2 headings, tables, images and CMarket charts."
+      "placeholder": "Write the publication: sections as H2 headings, tables, images and CMarket charts.",
+      "foreignImages": "Pictures pasted from another program were left out: insert each one with the image button."
     },
     "toolbar": {
       "imageHint": "Insert an image: PNG, JPEG, WebP or GIF, 2 MB at most",

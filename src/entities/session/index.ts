@@ -15,6 +15,7 @@ export {
   useHasPermission,
   useMe,
   useUpdateProfile,
+  useUpdateProfileFields,
 } from './api/queries'
 export {
   canAccessScreen,

@@ -19,7 +19,7 @@ const OWONA_FUND = cemacPortfolioId('user-manager')
 async function switchAccount(page: Page, account: string, badge: RegExp, from = /analyst/i) {
   await page.goto('/mkt')
   await page.getByRole('button', { name: from }).click()
-  await page.getByRole('menuitem', { name: account, exact: true }).click()
+  await page.getByRole('menuitemradio', { name: account, exact: true }).click()
   await expect(page.getByRole('button', { name: badge })).toBeVisible()
 }
 
@@ -87,7 +87,9 @@ test('a CEO exports, and reads the fund P. Owona shares without changing it', as
 
   // The selector lists the fund, and nothing to create, set or delete.
   await selector.click()
-  await expect(page.getByRole('menuitem', { name: 'CEMAC Equity Fund · P. Owona' })).toBeVisible()
+  await expect(
+    page.getByRole('menuitemradio', { name: 'CEMAC Equity Fund · P. Owona' }),
+  ).toBeVisible()
   await expect(page.getByRole('menuitem', { name: /New portfolio|settings|Delete/ })).toHaveCount(0)
   await page.keyboard.press('Escape')
 

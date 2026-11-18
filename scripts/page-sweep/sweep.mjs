@@ -156,7 +156,7 @@ async function setLanguage(page, language) {
   if (current.startsWith(language)) return
   await page.getByRole('banner').locator('button[aria-haspopup="menu"]').last().click()
   await page
-    .getByRole('menuitem', { name: language === 'fr' ? 'Français' : 'English' })
+    .getByRole('menuitemradio', { name: language === 'fr' ? 'Français' : 'English' })
     .click()
   await page.waitForFunction((code) => document.documentElement.lang.startsWith(code), language)
   await page.waitForTimeout(500)

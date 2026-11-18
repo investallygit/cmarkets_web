@@ -44,4 +44,11 @@ describe('isFigure', () => {
     for (const text of ['OTA CMR 3 yr 2029', 'Bank D', 'ACC-0011', '—', 'Awaiting SVTs', ''])
       expect(isFigure(text)).toBe(false)
   })
+
+  it('takes a figure with its unit of a few letters after it (B24)', () => {
+    for (const figure of ['+0.51 pts', '+21.34 pts', '-12 pb', '35 bp', '12 ans', '3 yr'])
+      expect(isFigure(figure)).toBe(true)
+    for (const text of ['3 years', 'Month to date', 'GAB 6.50% 28', 'pts'])
+      expect(isFigure(text)).toBe(false)
+  })
 })

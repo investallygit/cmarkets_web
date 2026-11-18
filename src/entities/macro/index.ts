@@ -6,7 +6,12 @@ export {
   useMacroIndicators,
   useMacroSummary,
 } from './api/queries'
-export { formatMacroAxis, formatMacroFigure, type MacroFigureStyle } from './lib/macroFigures'
+export {
+  formatMacroAxis,
+  formatMacroFigure,
+  macroFigureInUnit,
+  type MacroFigureStyle,
+} from './lib/macroFigures'
 export {
   FIRST_MACRO_YEAR,
   MACRO_PERIODS,

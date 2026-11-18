@@ -16,7 +16,7 @@ const DISCLOSURES = [
 async function switchAccount(page: Page, account: string, badge: RegExp) {
   await page.goto('/mkt')
   await page.getByRole('button', { name: /analyst/i }).click()
-  await page.getByRole('menuitem', { name: account }).click()
+  await page.getByRole('menuitemradio', { name: account }).click()
   await expect(page.getByRole('button', { name: badge })).toBeVisible()
 }
 
@@ -85,6 +85,31 @@ test(
     await dialog.getByRole('textbox', { name: 'Mobile money number' }).fill('+237 6 99 99 00 00')
     await dialog.getByRole('button', { name: 'Pay XAF 25,000' }).click()
     await expect(dialog.getByText(/declined the payment/)).toBeVisible({ timeout: 10_000 })
+  },
+)
+
+// @fresh-db: the library as seeded, newest first: the moderation flow publishes another.
+test(
+  'a payment is followed while the reader opens another note (B65)',
+  { tag: '@fresh-db' },
+  async ({ page }) => {
+    await switchAccount(page, 'Portfolio manager', /manager/i)
+    await page.goto('/pub')
+    const list = panel(page, 'Publications: 128 results')
+    const preview = panel(page, 'Preview')
+    await preview.getByRole('button', { name: 'Buy this report — XAF 15,000' }).click()
+    const dialog = page.getByRole('dialog')
+    await dialog.getByRole('textbox', { name: 'Mobile money number' }).fill('+237 6 70 12 34 56')
+    await dialog.getByRole('button', { name: 'Pay XAF 15,000' }).click()
+    await dialog.getByRole('button', { name: 'Close and wait' }).click()
+    // Another note at once: the first one's purchase form is gone, its payment still followed.
+    await list.getByRole('button', { name: /Cameroon: debt trajectory/ }).click()
+    await expect(page.getByText(/^Payment confirmed: SEMC: volume growth/)).toBeVisible({
+      timeout: 10_000,
+    })
+    await expect(list.getByRole('listitem').first()).toContainText('Bought')
+    await list.getByRole('button', { name: /SEMC: volume growth/ }).click()
+    await expect(preview.getByText('Purchased')).toBeVisible()
   },
 )
 

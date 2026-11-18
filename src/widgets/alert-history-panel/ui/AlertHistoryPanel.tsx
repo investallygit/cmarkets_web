@@ -56,7 +56,9 @@ export function AlertHistoryPanel({ onSelectAlert }: AlertHistoryPanelProps) {
         }),
         helper.accessor('subject', {
           header: t('columns.subject'),
-          // A news alert starts with the item's two tags (spec section 16).
+          // A news alert starts with the item's two tags (spec section 16): the column holds
+          // them and a code, and where it cannot, the tags give way to the subject (B23).
+          meta: { width: 'minmax(200px, 1fr)' },
           cell: ({ row, getValue }) => (
             <span className="flex min-w-0 items-center gap-1.5">
               {row.original.news && (
@@ -64,6 +66,7 @@ export function AlertHistoryPanel({ onSelectAlert }: AlertHistoryPanelProps) {
                   type={row.original.news.type}
                   source={row.original.news.source}
                   mode="none"
+                  className="min-w-0 shrink-[4] overflow-hidden"
                 />
               )}
               <span className="truncate font-semibold text-accent-amber">{getValue()}</span>

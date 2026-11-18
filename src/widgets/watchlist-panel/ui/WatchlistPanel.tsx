@@ -3,7 +3,15 @@ import { ChartScatter, ListPlus, Plus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
-import { LiveChange, LiveChangePct, LivePrice, LiveVolume, priceDecimals } from '@/entities/quote'
+import {
+  LiveChange,
+  LiveChangePct,
+  LivePrice,
+  LiveVolume,
+  priceDecimals,
+  useLiveQuoteRows,
+  type LiveQuote,
+} from '@/entities/quote'
 import { useHasPermission } from '@/entities/session'
 import { openWatchlistDialog, useWatchlists, WATCHLIST_COLUMNS } from '@/entities/watchlist'
 import {
@@ -28,6 +36,14 @@ const NO_LISTS: WatchlistDto[] = []
 const NO_COLUMNS: DataColumns<WatchlistItemDto> = []
 const getItemId = (item: WatchlistItemDto) => item.securityId
 const decimalsOf = (item: WatchlistItemDto) => priceDecimals(item.type, item.currency)
+/** An item as its live cells show it: a sorted column follows that (B42). */
+const liveItem = (item: WatchlistItemDto, quote: LiveQuote): WatchlistItemDto => ({
+  ...item,
+  last: quote.last,
+  change: quote.change,
+  changePct: quote.changePct,
+  volume: quote.volume,
+})
 
 function buildColumns(
   t: TFunction,
@@ -119,6 +135,7 @@ export function WatchlistPanel() {
   const columns = (active && columnsByList.get(active.id)) ?? NO_COLUMNS
   const itemMenu = useWatchlistItemMenu(active)
   useSymbolSubscription(active?.items.map((item) => item.securityId) ?? [])
+  const items = useLiveQuoteRows(active?.items, getItemId, liveItem)
 
   const tabs = lists.map((list) => ({ value: list.id, label: list.code }))
   const selectList = (id: string) => {
@@ -167,7 +184,7 @@ export function WatchlistPanel() {
           {() =>
             active ? (
               <DataTable
-                data={active.items}
+                data={items}
                 columns={columns}
                 getRowId={getItemId}
                 selectedRowId={selectedId}

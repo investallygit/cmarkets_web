@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SECURITY_CARD_NODE, type RichTextDoc } from '@/shared/api/contracts'
 import { LinkDialog } from '@/shared/ui/rich-text/LinkDialog'
+import { toast } from '@/shared/ui/toast'
 import { useNewsDraftStore } from '../model/newsDraftStore'
 import { ImageDialog } from './ImageDialog'
 import { newsExtensions } from './newsExtensions'
@@ -32,7 +33,14 @@ export function NewsRichTextEditor({
 }: NewsRichTextEditorProps) {
   const { t } = useTranslation()
   const [dialog, setDialog] = useState<'image' | 'security' | 'link' | null>(null)
-  const extensions = useMemo(() => newsExtensions(t('newsStudio.editor.placeholder')), [t])
+  // A picture pasted from another program is left out, and the toast says why (B77).
+  const extensions = useMemo(
+    () =>
+      newsExtensions(t('newsStudio.editor.placeholder'), () =>
+        toast.info(t('studio.editor.foreignImages')),
+      ),
+    [t],
+  )
   const editor = useEditor({
     extensions,
     content: content ?? undefined,

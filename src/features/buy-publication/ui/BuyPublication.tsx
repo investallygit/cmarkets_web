@@ -1,30 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PAYMENT_METHODS, usePayment } from '@/entities/publication'
+import { PAYMENT_METHODS, usePayment, usePendingPurchases } from '@/entities/publication'
 import type { LibraryPublicationDto, PaymentDto, PaymentMethod } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { Button } from '@/shared/ui/form/Button'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
-import { toast } from '@/shared/ui/toast'
 import { PaymentDialog } from './PaymentDialog'
 
 /**
  * Under the locked contents of a paid publication (screen 8): the price, the student price for a
- * Student, mobile money or card, and the buy button. The payment is followed here, the dialog
- * closed or not: once confirmed, the full content replaces the preview. Accounts that only read
- * free research see why.
+ * Student, mobile money or card, and the buy button. The payment is followed above the screens
+ * (`usePurchaseFollowUp`), the dialog closed or another note opened: once confirmed, the full
+ * content replaces the preview (B65). Back on the note, the payment in progress shows again.
+ * Accounts that only read free research see why.
  */
 export function BuyPublication({ publication }: { publication: LibraryPublicationDto }) {
   const { t } = useTranslation()
   const format = useFormat()
   const [method, setMethod] = useState<PaymentMethod>('mobileMoney')
   const [paying, setPaying] = useState(false)
-  const [started, setStarted] = useState<PaymentDto | null>(null)
+  const followed = usePendingPurchases((state) => state.purchases[publication.id]?.payment)
+  const startPurchase = usePendingPurchases((state) => state.start)
+  const [started, setStarted] = useState<PaymentDto | null>(followed ?? null)
   const payment = usePayment(started).data ?? started
-  const confirmed = payment?.status === 'confirmed'
-  useEffect(() => {
-    if (confirmed) toast.success(t('purchase.confirmed', { title: publication.title }))
-  }, [confirmed, publication.title, t])
   const amount = publication.priceToPay
   if (amount === null) return null
   const studentPrice = publication.price !== null && amount < publication.price
@@ -77,7 +75,10 @@ export function BuyPublication({ publication }: { publication: LibraryPublicatio
         method={payment?.method ?? method}
         amount={payment?.amount ?? amount}
         payment={payment}
-        onStarted={setStarted}
+        onStarted={(next) => {
+          setStarted(next)
+          startPurchase(publication.id, { payment: next, title: publication.title })
+        }}
       />
     </section>
   )

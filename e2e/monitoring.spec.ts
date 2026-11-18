@@ -11,7 +11,7 @@ test('a watchlist is created from the right-click menu with the security in it',
   await page.goto('/mkt')
   const movers = panel(page, 'Top movers')
   await movers.getByRole('row', { name: /BANGE/ }).click({ button: 'right' })
-  await expect(page.getByRole('menuitem', { name: 'W1 · My picks' })).toBeVisible()
+  await expect(page.getByRole('menuitemcheckbox', { name: 'W1 · My picks' })).toBeVisible()
   await page.getByRole('menuitem', { name: 'New list…' }).click()
   const dialog = page.getByRole('dialog')
   await dialog.getByRole('textbox', { name: 'Name' }).fill('Banks')
@@ -174,3 +174,29 @@ test(
     await expect(page).toHaveURL(/\/cal\?view=day$/)
   },
 )
+
+test('GP draws nothing over the lines it could not read, and draws once they are (B48)', async ({
+  page,
+}) => {
+  let failing = true
+  const saves: string[] = []
+  await page.route('**/api/v1/charts/SEMC/drawings', async (route) => {
+    if (route.request().method() === 'PUT') saves.push(route.request().postData() ?? '')
+    if (route.request().method() === 'GET' && failing)
+      return route.fulfill({ status: 500, contentType: 'application/problem+json', body: '{}' })
+    return route.fallback()
+  })
+  await page.goto('/securities/SEMC/gp')
+  const chart = panel(page, 'Price chart')
+  // Read three times (a 5xx is retried twice), then said.
+  await expect(chart.getByRole('alert')).toContainText('Your lines could not be loaded', {
+    timeout: 10_000,
+  })
+  await expect(chart.getByRole('button', { name: 'Level', exact: true })).toBeDisabled()
+
+  failing = false
+  await chart.getByRole('button', { name: 'Retry' }).click()
+  await expect(chart.getByRole('alert')).toHaveCount(0)
+  await expect(chart.getByRole('button', { name: 'Level', exact: true })).toBeEnabled()
+  expect(saves).toEqual([])
+})

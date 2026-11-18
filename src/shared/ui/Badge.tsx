@@ -12,10 +12,14 @@ const TONES: Record<BadgeTone, string> = {
   down: 'border-down/50 bg-down/10 text-down',
 }
 
-/** Short upper-case label in a box: document type, price, status (spec section 9). */
+/**
+ * Short upper-case label in a box: document type, price, status (spec section 9). `data-tag`: a
+ * table widens its column to a cell of tags, as to a figure, rather than cut one (B30).
+ */
 export function Badge({ tone = 'neutral', children }: { tone?: BadgeTone; children: ReactNode }) {
   return (
     <span
+      data-tag
       className={clsx(
         'inline-flex h-4.5 shrink-0 items-center justify-center border px-1.5 font-mono text-caption font-semibold uppercase',
         TONES[tone],

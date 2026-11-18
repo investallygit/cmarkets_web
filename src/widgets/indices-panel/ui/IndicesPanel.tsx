@@ -1,7 +1,12 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMarketSummary } from '@/entities/market'
-import { LiveIndexChange, LiveIndexChangePct, LiveIndexValue } from '@/entities/quote'
+import {
+  LiveIndexChange,
+  LiveIndexChangePct,
+  LiveIndexValue,
+  useLiveIndexRows,
+} from '@/entities/quote'
 import type { IndexQuoteDto } from '@/shared/api/contracts'
 import { useSymbolSubscription } from '@/shared/realtime'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
@@ -24,6 +29,8 @@ export function IndicesPanel({ selectedCode = null, onSelect }: IndicesPanelProp
   const summary = useMarketSummary()
   // IndexUpdated reaches only the screens that follow the index.
   useSymbolSubscription(summary.data?.indices.map((index) => index.code) ?? [])
+  // The values shown, so that a sorted column follows them (B42).
+  const indices = useLiveIndexRows(summary.data?.indices)
 
   const columns = useMemo(
     () =>
@@ -51,7 +58,7 @@ export function IndicesPanel({ selectedCode = null, onSelect }: IndicesPanelProp
   return (
     <Panel title={t('panels.indices')} code="MKT">
       <QueryView query={summary}>
-        {({ indices }) => (
+        {() => (
           <DataTable
             data={indices}
             columns={columns}

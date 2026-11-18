@@ -11,6 +11,8 @@ interface DrawingToolsProps {
   onClear: () => void
   /** Intraday bars or a comparison: no drawing. */
   disabled?: boolean
+  /** Why the tools are off, when it is not the bars nor a comparison. */
+  disabledReason?: string
 }
 
 const TOOLS: readonly DrawingTool[] = ['trendline', 'horizontal']
@@ -23,6 +25,7 @@ export function DrawingTools({
   onUndo,
   onClear,
   disabled = false,
+  disabledReason,
 }: DrawingToolsProps) {
   const { t } = useTranslation()
   const option =
@@ -30,7 +33,7 @@ export function DrawingTools({
   return (
     <div
       className="flex items-center gap-2"
-      title={disabled ? t('chart.draw.unavailable') : undefined}
+      title={disabled ? (disabledReason ?? t('chart.draw.unavailable')) : undefined}
     >
       {TOOLS.map((candidate) => {
         const active = tool === candidate && !disabled

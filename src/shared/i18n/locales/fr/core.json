@@ -428,7 +428,9 @@
       "trendlineHint": "Cliquez deux points du graphique",
       "horizontalHint": "Cliquez un cours du graphique",
       "unavailable": "Les tracés s'affichent en barres journalières et hebdomadaires, sans comparaison",
-      "saveFailed": "Tracés non enregistrés : {{message}}"
+      "saveFailed": "Tracés non enregistrés : {{message}}",
+      "loadFailed": "Vos tracés n'ont pas pu être chargés : le dessin attend qu'ils le soient, pour n'en perdre aucun.",
+      "notLoaded": "Le dessin attend le chargement de vos tracés"
     },
     "priceOf": "Cours de {{code}}",
     "label": {

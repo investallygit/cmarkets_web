@@ -21,6 +21,7 @@ export function useAccountMenuItems(): MenuItem[] {
       label: t(`accountTypes.${accountType}`),
       icon: UserRound,
       checked: user.accountType === accountType,
+      radio: true,
       onSelect: () => switchAccount.mutate(accountType),
     })),
   ]

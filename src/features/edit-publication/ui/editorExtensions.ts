@@ -10,7 +10,7 @@ import { ChartBlock } from './chartBlock'
  * CMarket charts): what is pasted from elsewhere comes down to them, and the reader of the
  * library draws exactly these.
  */
-export function editorExtensions(placeholder: string) {
+export function editorExtensions(placeholder: string, onForeignImage?: () => void) {
   return [
     StarterKit.configure({
       heading: { levels: [2, 3] },
@@ -28,7 +28,7 @@ export function editorExtensions(placeholder: string) {
       },
     }),
     TableKit.configure({ table: { resizable: false } }),
-    ApiImage.configure({ inline: false, allowBase64: true }),
+    ApiImage.configure({ inline: false, allowBase64: true, onForeignImage }),
     Placeholder.configure({ placeholder }),
     ChartBlock,
   ]

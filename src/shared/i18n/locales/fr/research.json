@@ -85,6 +85,7 @@
     "pay": "Payer {{price}}",
     "retry": "Réessayer",
     "failed": "Le paiement a échoué.",
+    "failedTitle": "Le paiement de {{title}} a échoué : la note n'est pas achetée.",
     "approveOnPhone": "Validez le paiement de {{price}} sur votre téléphone. La publication s'ouvre dès que votre opérateur le confirme.",
     "confirmingCard": "Confirmation du paiement par carte de {{price}}…",
     "continueReading": "Fermer et patienter",
@@ -201,7 +202,8 @@
       "title": "Titre",
       "summary": "Résumé (toujours visible gratuitement)",
       "body": "Texte de la publication",
-      "placeholder": "Rédigez la publication : sections en titres H2, tableaux, images et graphiques CMarket."
+      "placeholder": "Rédigez la publication : sections en titres H2, tableaux, images et graphiques CMarket.",
+      "foreignImages": "Les images collées depuis un autre programme ont été écartées : insérez-les avec le bouton image."
     },
     "toolbar": {
       "imageHint": "Insérer une image : PNG, JPEG, WebP ou GIF, 2 Mo au plus",

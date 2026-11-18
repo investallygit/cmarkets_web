@@ -91,9 +91,11 @@ export function PriceChartPanel({
   const rsi = useIndicator(securityId, 'RSI', 14, period, rsiOn).data
   const macd = useIndicator(securityId, 'MACD', 26, period, macdOn).data
   const comparisons = useComparisonLines(full ? compared : NOTHING_COMPARED, period)
-  const { drawings, add, undo, clear } = useDrawings(securityId)
+  const lines = useDrawings(securityId)
+  const { drawings, add, undo, clear } = lines
   const livePrice = useLiveQuote(securityId)?.last
-  const drawingTool = full && canDraw && daily && !comparing ? tool : null
+  // Lines not read yet are not drawn over: each edit saves the whole list (B48).
+  const drawingTool = full && canDraw && daily && !comparing && lines.ready ? tool : null
   const decimals = priceDecimals(securityType, currency)
   const label = useChartLabel(
     t('chart.priceOf', { code }),
@@ -251,7 +253,10 @@ export function PriceChartPanel({
                 count={drawings.length}
                 onUndo={undo}
                 onClear={clear}
-                disabled={!daily || comparing}
+                disabled={!daily || comparing || !lines.ready}
+                disabledReason={
+                  daily && !comparing && !lines.ready ? t('chart.draw.notLoaded') : undefined
+                }
               />
             </>
           )}
@@ -289,6 +294,21 @@ export function PriceChartPanel({
           {drawingTool && (
             <p className="pointer-events-none absolute bottom-10 left-1/2 z-10 -translate-x-1/2 border bg-panel-header px-2 py-0.5 font-sans text-data text-secondary">
               {t(`chart.draw.${drawingTool}Hint`)}
+            </p>
+          )}
+          {full && canDraw && lines.failed && (
+            <p
+              role="alert"
+              className="absolute bottom-10 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 border bg-panel-header px-2 py-0.5 font-sans text-data text-warning"
+            >
+              {t('chart.draw.loadFailed')}
+              <button
+                type="button"
+                onClick={lines.retry}
+                className="min-h-6 text-info uppercase hover:underline"
+              >
+                {t('common.retry')}
+              </button>
             </p>
           )}
         </div>

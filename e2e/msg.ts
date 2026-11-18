@@ -17,6 +17,6 @@ export const msgLink = (page: Page) =>
 export async function switchAccount(page: Page, account: string, badge: RegExp) {
   await page.goto('/mkt')
   await page.getByRole('button', { name: /analyst/i }).click()
-  await page.getByRole('menuitem', { name: account, exact: true }).click()
+  await page.getByRole('menuitemradio', { name: account, exact: true }).click()
   await expect(page.getByRole('button', { name: badge })).toBeVisible()
 }

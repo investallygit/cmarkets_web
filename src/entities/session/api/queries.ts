@@ -38,6 +38,31 @@ export function useUpdateProfile() {
   })
 }
 
+/**
+ * PUT /me with some fields changed (the language from the user menu, the codes' channel): the
+ * rest of the profile is read from the server just before, not taken from this tab's /me, which
+ * a tab opened earlier keeps for five minutes and would put back (B100). Nothing is sent when the
+ * server holds these values already.
+ */
+export function useUpdateProfileFields() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (changes: Partial<MeUpdateDto>) => {
+      const current = await queryClient.fetchQuery({
+        queryKey: sessionKeys.me,
+        queryFn: ({ signal }) => meApi.get(signal),
+        staleTime: 0,
+      })
+      const profile = profileOf(current)
+      const changed = (Object.keys(changes) as (keyof MeUpdateDto)[]).some(
+        (key) => changes[key] !== profile[key],
+      )
+      return changed ? meApi.update({ ...profile, ...changes }) : current
+    },
+    onSuccess: (me) => queryClient.setQueryData(sessionKeys.me, me),
+  })
+}
+
 /** PUT /me/password: the current password, then the new one. */
 export function useChangePassword() {
   return useMutation({

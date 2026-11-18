@@ -25,7 +25,9 @@ interface DialogProps {
  * Modal dialog on the native <dialog>: focus stays inside, Escape closes, the rest of the page is
  * inert. The content is mounted only while open, so a form starts empty each time. It is rendered
  * in <body>, so a dialog opened from a panel title bar neither inherits its upper-case text nor
- * sits inside its drag handle.
+ * sits inside its drag handle. React still passes a portal's events up the tree it was rendered
+ * in: a dialog's submit stops at the dialog, or a dialog opened inside a form would submit that
+ * form too (B79).
  */
 export function Dialog({
   open,
@@ -79,6 +81,7 @@ export function Dialog({
         openerRef.current = null
         if (open) onClose()
       }}
+      onSubmit={(event) => event.stopPropagation()}
       style={{ width: `min(${width}px, calc(100vw - 32px))` }}
       className={clsx(
         'flex-col border bg-panel p-0 text-primary open:flex backdrop:bg-[rgb(0_0_0/0.7)]',

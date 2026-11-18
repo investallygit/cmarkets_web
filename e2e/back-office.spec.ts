@@ -9,7 +9,7 @@ const panel = (page: Page, title: string | RegExp) =>
 /** The prototype's account switch reloads the app: wait for the new account's badge. */
 async function switchAccount(page: Page, from: RegExp, account: string, badge: RegExp) {
   await page.getByRole('button', { name: from }).click()
-  await page.getByRole('menuitem', { name: account }).click()
+  await page.getByRole('menuitemradio', { name: account }).click()
   await expect(page.getByRole('button', { name: badge })).toBeVisible()
 }
 

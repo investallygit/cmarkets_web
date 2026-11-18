@@ -1,20 +1,19 @@
 import { useTranslation } from 'react-i18next'
-import { profileOf, useCurrentUser, useUpdateProfile } from '@/entities/session'
+import { useCurrentUser, useUpdateProfileFields } from '@/entities/session'
 import type { OtpChannel } from '@/shared/api/contracts'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
 
 /**
  * Two-factor authentication (spec section 6): always on, the user only chooses where the login
- * codes go. SMS needs the phone number of the profile.
+ * codes go. SMS needs the phone number of the profile. The rest of the profile is sent as the
+ * server holds it, not as this tab read it (B100).
  */
 export function TwoFactorForm() {
   const { t } = useTranslation()
   const user = useCurrentUser()
-  const update = useUpdateProfile()
+  const update = useUpdateProfileFields()
   const choose = (twoFactorChannel: OtpChannel) => {
-    if (twoFactorChannel !== user.twoFactorChannel) {
-      update.mutate({ ...profileOf(user), twoFactorChannel })
-    }
+    if (twoFactorChannel !== user.twoFactorChannel) update.mutate({ twoFactorChannel })
   }
 
   return (

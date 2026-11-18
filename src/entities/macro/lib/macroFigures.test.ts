@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatMacroAxis, formatMacroFigure } from './macroFigures'
+import { formatMacroAxis, formatMacroFigure, macroFigureInUnit } from './macroFigures'
 import { macroPeriodRange } from './macroPeriods'
 
 const NBSP = ' '
@@ -50,5 +50,15 @@ describe('macroPeriodRange', () => {
     expect(macroPeriodRange('10Y', 2025)).toEqual({ from: 2015, to: 2025 })
     expect(macroPeriodRange('MAX', 2025)).toEqual({ from: 1960, to: 2025 })
     expect(macroPeriodRange('30Y', 1980)).toEqual({ from: 1960, to: 1980 })
+  })
+})
+
+describe('macroFigureInUnit (B45)', () => {
+  it('gives people in millions, as "Population (M)" says, and the other figures as they come', () => {
+    expect(macroFigureInUnit(29_100_000, 'people')).toBeCloseTo(29.1, 6)
+    expect(macroFigureInUnit(2_500_000, 'people')).toBeCloseTo(2.5, 6)
+    expect(macroFigureInUnit(3.6, 'percent')).toBe(3.6)
+    expect(macroFigureInUnit(51_300_000_000, 'usd')).toBe(51_300_000_000)
+    expect(macroFigureInUnit(undefined, 'people')).toBeUndefined()
   })
 })

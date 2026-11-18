@@ -9,7 +9,10 @@ import { HoverCard } from '@/shared/ui/HoverCard'
 import { CHANNEL_TAG, TYPE_TAG } from '../config/tags'
 import { displayUrl, initials } from '../lib/sourceText'
 
-/** 18 px high, Inter 10.5 px bold, 1 px border, the colour at 15% (spec section 16). */
+/**
+ * 18 px high, Inter 10.5 px bold, 1 px border, the colour at 15% (spec section 16). Each tag is
+ * marked `data-tag`: a table widens its column to a cell of tags rather than cut one (B30).
+ */
 const TAG =
   'news-tag inline-flex h-4.5 shrink-0 items-center border px-1 font-sans text-tag font-bold uppercase'
 
@@ -30,9 +33,15 @@ export function NewsTypeTag({ type, mode = 'tab', className }: TagProps & { type
   const { t } = useTranslation()
   const label = t(`news.types.${type}`)
   const classes = clsx(TAG, TYPE_TAG[type], className)
-  if (mode === 'none') return <span className={classes}>{label}</span>
+  if (mode === 'none')
+    return (
+      <span data-tag className={classes}>
+        {label}
+      </span>
+    )
   return (
     <Link
+      data-tag
       to={newsFilterPath({ type })}
       tabIndex={mode === 'pointer' ? -1 : undefined}
       aria-label={t('news.filterType', { type: label })}
@@ -58,9 +67,12 @@ export function NewsSourceTag({
     <HoverCard content={<SourceCard source={source} />}>
       {(describedBy) =>
         mode === 'none' ? (
-          <span className={classes}>{source.shortName}</span>
+          <span data-tag className={classes}>
+            {source.shortName}
+          </span>
         ) : (
           <Link
+            data-tag
             to={newsFilterPath({ source: source.id })}
             tabIndex={mode === 'pointer' ? -1 : undefined}
             aria-label={t('news.filterSource', { name: source.shortName })}
@@ -75,18 +87,23 @@ export function NewsSourceTag({
   )
 }
 
-/** Both tags, after the time and before the subject, wherever an item appears. */
+/**
+ * Both tags, after the time and before the subject, wherever an item appears. `className` lets a
+ * narrow row give them way before the subject (B23).
+ */
 export function NewsTags({
   type,
   source,
   mode,
+  className = 'shrink-0',
 }: {
   type: NewsType
   source: NewsSourceDto | NewsItemSourceDto
   mode?: NewsTagMode
+  className?: string
 }) {
   return (
-    <span className="inline-flex shrink-0 items-center gap-1">
+    <span className={clsx('inline-flex items-center gap-1', className)}>
       <NewsTypeTag type={type} mode={mode} />
       <NewsSourceTag source={source} mode={mode} />
     </span>

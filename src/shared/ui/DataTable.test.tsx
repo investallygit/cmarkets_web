@@ -195,4 +195,61 @@ describe('DataTable', () => {
     await user.keyboard('{ContextMenu}')
     expect(screen.getByRole('menuitem', { name: 'Export to Excel' })).toHaveFocus()
   })
+
+  it('reads its cells again when the columns change, the data the same (B41, B80)', () => {
+    const labelled = (label: string) =>
+      helper.columns([
+        helper.accessor('code', { header: 'Security' }),
+        helper.accessor((quote) => `${label} ${quote.last}`, { id: 'label', header: 'Label' }),
+      ])
+    const { rerender } = render(
+      <DataTable data={data} columns={labelled('Real')} getRowId={getRowId} />,
+    )
+    expect(screen.getByRole('cell', { name: 'Real 52500' })).toBeInTheDocument()
+    // The language switched, or the clock ticked: the columns change, the rows do not.
+    rerender(<DataTable data={data} columns={labelled('Réel')} getRowId={getRowId} />)
+    expect(screen.getByRole('cell', { name: 'Réel 52500' })).toBeInTheDocument()
+    expect(screen.queryByRole('cell', { name: 'Real 52500' })).not.toBeInTheDocument()
+  })
+
+  it('tells screen readers the column sorted and which way (B43)', async () => {
+    const user = userEvent.setup()
+    render(<DataTable data={data} columns={columns} getRowId={getRowId} />)
+    const security = screen.getByRole('columnheader', { name: 'Security' })
+    expect(security).toHaveAttribute('aria-sort', 'none')
+    await user.click(screen.getByRole('button', { name: 'Security' }))
+    expect(security).toHaveAttribute('aria-sort', 'ascending')
+    expect(screen.getByRole('columnheader', { name: 'Last' })).toHaveAttribute('aria-sort', 'none')
+    await user.click(screen.getByRole('button', { name: 'Security' }))
+    expect(security).toHaveAttribute('aria-sort', 'descending')
+  })
+
+  it('sorts words as a dictionary does, accents and case aside (B94)', async () => {
+    const user = userEvent.setup()
+    const papers: Quote[] = [
+      { code: 'TCHAD MATIN', last: 1 },
+      { code: 'ÉCO HEBDO', last: 2 },
+      { code: 'cameroon tribune', last: 3 },
+      { code: 'DAILY K', last: 4 },
+    ]
+    render(<DataTable data={papers} columns={columns} getRowId={getRowId} />)
+    await user.click(screen.getByRole('button', { name: 'Security' }))
+    expect(bodyCodes()).toEqual(['cameroon tribune', 'DAILY K', 'ÉCO HEBDO', 'TCHAD MATIN'])
+  })
+
+  it('turns a server order back on the third click, never asking for none (B81)', async () => {
+    const user = userEvent.setup()
+    const onSortingChange = vi.fn()
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        getRowId={getRowId}
+        sorting={[{ id: 'code', desc: true }]}
+        onSortingChange={onSortingChange}
+      />,
+    )
+    await user.click(screen.getByRole('button', { name: 'Security' }))
+    expect(onSortingChange).toHaveBeenCalledWith([{ id: 'code', desc: false }])
+  })
 })

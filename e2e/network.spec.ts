@@ -79,7 +79,7 @@ test('an experience is added to the profile, then deleted', async ({ page }) => 
 test('the CMarket employees have no professional profile', async ({ page }) => {
   await page.goto('/cfg')
   await page.getByRole('button', { name: /analyst/i }).click()
-  await page.getByRole('menuitem', { name: 'Admin', exact: true }).click()
+  await page.getByRole('menuitemradio', { name: 'Admin', exact: true }).click()
   await expect(page.getByRole('button', { name: /^admin$/i })).toBeVisible()
   await page.goto('/net/me')
   await expect(page.getByText('This screen is not available for your account type.')).toBeVisible()

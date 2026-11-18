@@ -37,8 +37,9 @@ function buildColumns(
     helper.accessor('code', {
       header: t('columns.security'),
       meta: { width: '1.4fr' },
+      // The cell's width bounds the code, which ends in an ellipsis where it is cut (B16).
       cell: ({ row, getValue }) => (
-        <span className="inline-flex items-center gap-1.5">
+        <span className="flex min-w-0 items-center gap-1.5">
           <span className="truncate text-accent-amber" title={row.original.name}>
             {getValue()}
           </span>

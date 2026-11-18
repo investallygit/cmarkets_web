@@ -23,7 +23,8 @@ interface PanelProps {
  * where a grip and the pointer say so and the code opens the panel's layout menu, the same moves
  * without dragging. Stacked below 1280 px, only that menu moves it; a locked layout shows a
  * padlock instead of the grip. On a phone the options that do not fit go to the next line of the
- * bar rather than past its edge.
+ * bar rather than past its edge; from 768 px the title gives way first, then the options wrap
+ * onto more lines of the bar (B13). Options wider than the bar keep their start in view (B28).
  * A body that scrolls with nothing to focus in it takes the focus itself (ScrollArea).
  */
 export function Panel({ title, code, options, children, className, bodyClassName }: PanelProps) {
@@ -37,7 +38,7 @@ export function Panel({ title, code, options, children, className, bodyClassName
     <section className={clsx('flex h-full min-h-0 flex-col border bg-panel', className)}>
       <header
         className={clsx(
-          'panel-drag-handle group/bar flex min-h-bar shrink-0 flex-wrap items-center gap-x-3 border-b bg-panel-header px-2 select-none md:h-bar md:flex-nowrap',
+          'panel-drag-handle group/bar flex min-h-bar shrink-0 flex-wrap items-center gap-x-3 border-b bg-panel-header px-2 select-none md:flex-nowrap',
           movable && 'cursor-move',
         )}
       >
@@ -61,14 +62,15 @@ export function Panel({ title, code, options, children, className, bodyClassName
             <Lock className="size-3" />
           </span>
         )}
+        {/* It gives way before the options do (B13). */}
         <h2
           id={titleId}
-          className="truncate font-sans text-title font-semibold tracking-title text-accent-amber uppercase"
+          className="shrink-[1000] truncate font-sans text-title font-semibold tracking-title text-accent-amber uppercase"
         >
           {title}
         </h2>
         {/* Its buttons are 24 px targets (WCAG 2.5.8), as tall as the bar. */}
-        <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-x-3 font-mono text-title text-secondary uppercase md:shrink-0 md:flex-nowrap [&_button]:min-h-6 [&_button]:min-w-6">
+        <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end-safe gap-x-3 font-mono text-title text-secondary uppercase [&_button]:min-h-6 [&_button]:min-w-6">
           {options}
           <PanelLayoutMenu code={code} titleId={titleId} />
         </div>

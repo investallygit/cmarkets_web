@@ -103,7 +103,7 @@ test('the client menu gives ETFS, BP, BS, CMDTY, ECO, FX and OPT entries of thei
 test('the back-office menu replaces the client menu for a Data admin', async ({ page }) => {
   await page.goto('/mkt')
   await page.getByRole('button', { name: /analyst/i }).click()
-  await page.getByRole('menuitem', { name: 'Data admin' }).click()
+  await page.getByRole('menuitemradio', { name: 'Data admin' }).click()
   // IMP opens the upload waiting in its preview.
   await expect(page).toHaveURL(/\/imp(\?import=|$)/)
   await expect(page.getByText('Back-office', { exact: true })).toBeVisible()

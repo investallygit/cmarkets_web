@@ -6,6 +6,7 @@ export {
   usePublicationAttachment,
   usePublicationPdf,
   usePurchase,
+  usePurchaseFollowUp,
   useRatePublication,
   useReportPublication,
   type LibraryQuery,
@@ -42,6 +43,7 @@ export {
   type LibraryTab,
 } from './config/research'
 export { isRecommendation, ratingTone, upsidePct } from './lib/rating'
+export { usePendingPurchases } from './model/pendingPurchases'
 export { FrozenChart } from './ui/FrozenChart'
 export { PublicationBody } from './ui/PublicationBody'
 export { PublicationReader } from './ui/PublicationReader'

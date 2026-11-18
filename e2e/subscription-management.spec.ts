@@ -15,7 +15,7 @@ async function asAdmin(page: Page) {
   await page.goto('/cfg')
   const topBar = page.getByRole('banner')
   await topBar.getByRole('button', { name: /analyst/i }).click()
-  await page.getByRole('menuitem', { name: 'Admin', exact: true }).click()
+  await page.getByRole('menuitemradio', { name: 'Admin', exact: true }).click()
   await expect(topBar.getByRole('button', { name: /^admin$/i })).toBeVisible()
 }
 

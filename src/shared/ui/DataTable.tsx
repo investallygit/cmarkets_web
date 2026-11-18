@@ -7,6 +7,7 @@ import {
   useContext,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type KeyboardEvent,
@@ -44,11 +45,12 @@ const SORT_ARROW_WIDTH = 14
 /**
  * The width a cell's content takes, its padding included: its text laid out whole, which a cut
  * cell clips but does not shorten (a range's rectangles are its text's, not the clip's). 0 where
- * nothing is laid out (a test's document, a hidden panel).
+ * nothing is laid out (a test's document, a hidden panel). `content` is the part to measure when
+ * the cell holds a box as wide as itself (a header's sort button): its label.
  */
-function contentWidth(cell: HTMLElement): number {
+function contentWidth(cell: HTMLElement, content: HTMLElement = cell): number {
   const range = document.createRange()
-  range.selectNodeContents(cell)
+  range.selectNodeContents(content)
   if (typeof range.getBoundingClientRect !== 'function') return 0
   const { width } = range.getBoundingClientRect()
   if (!width) return 0
@@ -56,7 +58,23 @@ function contentWidth(cell: HTMLElement): number {
   return Math.ceil(width + parseFloat(style.paddingLeft) + parseFloat(style.paddingRight))
 }
 
-/** What each column needs on the rows shown: its header whole, and its figures whole. */
+/** The letters of a text, without its spaces and separators. */
+const letterCount = (text: string | null) => (text ?? '').replace(/[\s·,/|]/g, '').length
+
+/**
+ * A cell that holds tags only (a status, a newspaper, `data-tag`): a table never cuts one either,
+ * since a tag has no ellipsis (B30).
+ */
+function holdsTagsOnly(cell: HTMLElement): boolean {
+  const tags = [...cell.querySelectorAll('[data-tag]')]
+  return (
+    tags.length > 0 &&
+    tags.reduce((count, tag) => count + letterCount(tag.textContent), 0) >=
+      letterCount(cell.textContent)
+  )
+}
+
+/** What each column needs on the rows shown: its header whole, its figures and tags whole. */
 function measureColumns(element: HTMLElement, ids: readonly string[]): Record<string, number> {
   const fitted: Record<string, number> = {}
   const rows = [...element.querySelectorAll<HTMLElement>('tbody > tr, tfoot > tr')]
@@ -65,15 +83,19 @@ function measureColumns(element: HTMLElement, ids: readonly string[]): Record<st
     let need = 0
     for (const row of headers) {
       const header = row.children.item(index)
-      if (header instanceof HTMLElement)
-        need = Math.max(
-          need,
-          contentWidth(header) + (header.querySelector('button') ? SORT_ARROW_WIDTH : 0),
-        )
+      if (!(header instanceof HTMLElement)) continue
+      const label = header.querySelector<HTMLElement>('[data-sort-label]')
+      need = Math.max(
+        need,
+        label ? contentWidth(header, label) + SORT_ARROW_WIDTH : contentWidth(header),
+      )
     }
     for (const row of rows) {
       const cell = row.children.item(index)
-      if (cell instanceof HTMLElement && isFigure(cell.textContent?.trim() ?? ''))
+      if (
+        cell instanceof HTMLElement &&
+        (isFigure(cell.textContent?.trim() ?? '') || holdsTagsOnly(cell))
+      )
         need = Math.max(need, contentWidth(cell))
     }
     if (need > 0) fitted[id] = need
@@ -156,14 +178,22 @@ export function DataTable<TRow extends RowData>({
   const [cursorId, setCursorId] = useState<string | null>(null)
   const [announcement, setAnnouncement] = useState('')
 
+  // table-core keeps each row's accessor values until the data change (`row._valuesCache`): the
+  // rows are built again when the columns change (the language, a clock), or a cell, the sorting
+  // and the export would keep the former words and times (B41, B80).
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- new columns are the reason for a copy
+  const rowData = useMemo(() => data.slice(), [data, columns])
   const table = useTable({
     features: dataTableFeatures,
     columns,
-    data,
+    data: rowData,
     getRowId,
     enableSorting,
     ...(onSortingChange && {
       manualSorting: true,
+      // The server has an order for every column, both ways: a third click turns it back, it
+      // never asks for no order (B81).
+      enableSortingRemoval: false,
       state: { sorting: sorting ?? [] },
       onSortingChange: (updater) =>
         onSortingChange(typeof updater === 'function' ? updater(sorting ?? []) : updater),
@@ -393,6 +423,16 @@ export function DataTable<TRow extends RowData>({
                   <th
                     key={header.id}
                     scope="col"
+                    // Screen readers hear the column sorted and which way (WCAG 1.3.1; B43).
+                    aria-sort={
+                      !sortable
+                        ? undefined
+                        : sorted === 'asc'
+                          ? 'ascending'
+                          : sorted === 'desc'
+                            ? 'descending'
+                            : 'none'
+                    }
                     className={clsx(
                       'px-2 font-sans text-data font-normal text-secondary',
                       // A sort button is a 24 px target (WCAG 2.5.8) past the 22 px row, which
@@ -402,15 +442,16 @@ export function DataTable<TRow extends RowData>({
                     )}
                   >
                     {header.isPlaceholder ? null : sortable ? (
+                      // The whole header sorts, not only its label (B81).
                       <button
                         type="button"
                         onClick={header.column.getToggleSortingHandler()}
                         className={clsx(
-                          '-my-px inline-flex h-6 max-w-full min-w-6 items-center gap-0.5 align-middle hover:text-primary',
+                          '-my-px flex h-6 w-full min-w-6 items-center gap-0.5 align-middle hover:text-primary',
                           align === 'right' && 'flex-row-reverse',
                         )}
                       >
-                        <span className="truncate">
+                        <span data-sort-label className="truncate">
                           <table.FlexRender header={header} />
                         </span>
                         {sorted === 'asc' && <ChevronUp aria-hidden className="size-3 shrink-0" />}

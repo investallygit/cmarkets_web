@@ -48,6 +48,11 @@
   /* On --bg-selected, the Trader's purple is 3.9:1: this lighter one keeps 4.5:1 (5.0:1). */
   --type-trader-selected: #bf98ff;
   /*
+   * The employees (the Data admin, the Admin) in the secondary grey, which a selected row lightens
+   * as it does the grey text (3.4:1 on --bg-selected otherwise; B22).
+   */
+  --type-employee: var(--text-secondary);
+  /*
    * The two tags of a news item (spec section 16): its type, FLASH red or ARTICLE blue, and its
    * newspaper by channel: a partner newspaper teal, the international API grey, CMarket's AI and
    * CMarket green.
@@ -571,6 +576,7 @@
   /* The type colours are set inline from their properties, which the selection changes. */
   :where(.bg-selected, .hover\:bg-selected:hover) {
     --type-trader: var(--type-trader-selected);
+    --type-employee: var(--text-secondary-selected);
   }
 }
 

@@ -4,7 +4,7 @@ import { useCallback, useContext, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { useFormatRatio } from '@/entities/fundamentals'
-import { LiveChangePct, LivePrice, priceDecimals } from '@/entities/quote'
+import { LiveChangePct, LivePrice, priceDecimals, useLiveQuoteRows } from '@/entities/quote'
 import { useScreener } from '@/entities/screener'
 import { useSecurityMenu } from '@/features/security-actions'
 import type { RatioKey, ScreenerCriterionDto, ScreenerRowDto } from '@/shared/api/contracts'
@@ -18,6 +18,7 @@ import { DataTable, type TableExporter } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { TableExportContext } from '@/shared/ui/tableExport'
+import { liveRow } from '../lib/liveRow'
 import { RESULT_COLUMNS, useResultColumns, type ResultColumn } from '../model/columns'
 
 const helper = createDataColumnHelper<ScreenerRowDto>()
@@ -141,6 +142,7 @@ export function ScreenerResultsPanel({
   const results = useScreener({ criteria })
   const items = results.data?.items
   useSymbolSubscription(items?.map((item) => item.securityId) ?? [])
+  const rows = useLiveQuoteRows(items, getSecurityId, liveRow)
 
   const columns = useMemo(
     () => buildColumns(t, format, formatRatio, visible),
@@ -187,9 +189,9 @@ export function ScreenerResultsPanel({
     >
       <div className="min-h-0 flex-1">
         <QueryView query={results}>
-          {(data) => (
+          {() => (
             <DataTable
-              data={data.items}
+              data={rows}
               columns={columns}
               getRowId={getSecurityId}
               selectedRowId={selectedId}

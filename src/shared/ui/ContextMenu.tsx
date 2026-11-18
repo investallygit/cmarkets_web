@@ -23,9 +23,9 @@ interface ContextMenuProps {
   ignoreRef?: RefObject<HTMLElement | null>
 }
 
-/** The entries the arrows go through: the disabled ones cannot take the focus. */
+/** The entries the arrows go through (ticked or not): the disabled ones cannot take the focus. */
 function entriesOf(menu: HTMLElement): HTMLElement[] {
-  return [...menu.querySelectorAll<HTMLElement>('[role="menuitem"]:not(:disabled)')]
+  return [...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]:not(:disabled)')]
 }
 
 /**
@@ -144,7 +144,14 @@ export function ContextMenu({
           <button
             key={item.id}
             type="button"
-            role="menuitem"
+            role={
+              item.checked === undefined
+                ? 'menuitem'
+                : item.radio
+                  ? 'menuitemradio'
+                  : 'menuitemcheckbox'
+            }
+            aria-checked={item.checked}
             tabIndex={-1}
             disabled={item.disabled}
             aria-keyshortcuts={item.shortcut}

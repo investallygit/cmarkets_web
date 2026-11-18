@@ -12,7 +12,7 @@ const panel = (page: Page, title: string) =>
 async function asMediaI(page: Page) {
   await page.goto('/mkt')
   await page.getByRole('button', { name: /analyst/i }).click()
-  await page.getByRole('menuitem', { name: 'News provider', exact: true }).click()
+  await page.getByRole('menuitemradio', { name: 'News provider', exact: true }).click()
   await expect(page.getByRole('button', { name: /news provider/i })).toBeVisible()
 }
 

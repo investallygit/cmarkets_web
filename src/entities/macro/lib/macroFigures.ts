@@ -58,6 +58,16 @@ export function formatMacroFigure(
   }
 }
 
+/**
+ * A figure in the unit its row names, for a table's sorting and export: people in millions, as
+ * "Population (M)" says (the export wrote 29100000 under it; B45); the others as they come.
+ */
+export function macroFigureInUnit(value: number, unit: MacroUnit): number
+export function macroFigureInUnit(value: number | undefined, unit: MacroUnit): number | undefined
+export function macroFigureInUnit(value: number | undefined, unit: MacroUnit) {
+  return value !== undefined && unit === 'people' ? value / MILLION : value
+}
+
 /** A tick of the chart's value axis: short, the unit in the title. */
 export function formatMacroAxis(value: number, unit: MacroUnit, locale: Locale): string {
   if (unit === 'people') return formatCompact(value, locale, 1)

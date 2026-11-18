@@ -58,4 +58,25 @@ describe('ConfirmDialog', () => {
     rerender(<ConfirmDialog open requireReason {...props} />)
     expect(screen.getByRole('textbox', { name: 'Reason' })).toHaveValue('')
   })
+
+  it('submits only itself when rendered inside a form (B79)', async () => {
+    const user = userEvent.setup()
+    const outer = vi.fn((event: { preventDefault: () => void }) => event.preventDefault())
+    const onConfirm = vi.fn()
+    render(
+      <form onSubmit={outer}>
+        <input aria-label="Price" defaultValue="99.5" />
+        <ConfirmDialog
+          open
+          onClose={() => {}}
+          onConfirm={onConfirm}
+          title="Withdraw the answer"
+          confirmLabel="Withdraw"
+        />
+      </form>,
+    )
+    await user.click(screen.getByRole('button', { name: 'Withdraw' }))
+    expect(onConfirm).toHaveBeenCalledOnce()
+    expect(outer).not.toHaveBeenCalled()
+  })
 })

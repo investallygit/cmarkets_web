@@ -46,7 +46,14 @@ export function RichTextEditor({
   const upload = useUploadAttachment(publicationId)
   const imageInput = useRef<HTMLInputElement>(null)
   const [dialog, setDialog] = useState<'chart' | 'link' | null>(null)
-  const extensions = useMemo(() => editorExtensions(t('studio.editor.placeholder')), [t])
+  // A picture pasted from another program is left out, and the toast says why (B77).
+  const extensions = useMemo(
+    () =>
+      editorExtensions(t('studio.editor.placeholder'), () =>
+        toast.info(t('studio.editor.foreignImages')),
+      ),
+    [t],
+  )
   const editor = useEditor({
     extensions,
     content,

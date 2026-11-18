@@ -62,4 +62,27 @@ describe('ContextMenu', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next' })).toHaveFocus()
   })
+
+  it('says which entries are ticked: checkboxes, or the choice of a group (B44)', async () => {
+    const user = userEvent.setup()
+    const items: MenuItem[] = [
+      { id: 'w1', label: 'W1 · My picks', checked: true },
+      { id: 'w2', label: 'W2 · Banks', checked: false },
+      { id: 'fr', label: 'Français', checked: false, radio: true },
+      { id: 'en', label: 'English', checked: true, radio: true },
+      { id: 'logout', label: 'Log out' },
+    ]
+    render(<ContextMenu x={0} y={0} items={items} onClose={() => {}} />)
+    expect(screen.getByRole('menuitemcheckbox', { name: 'W1 · My picks' })).toBeChecked()
+    expect(screen.getByRole('menuitemcheckbox', { name: 'W2 · Banks' })).not.toBeChecked()
+    expect(screen.getByRole('menuitemradio', { name: 'English' })).toBeChecked()
+    expect(screen.getByRole('menuitemradio', { name: 'Français' })).not.toBeChecked()
+    expect(screen.getByRole('menuitem', { name: 'Log out' })).not.toHaveAttribute('aria-checked')
+    // The arrows go through all of them.
+    expect(screen.getByRole('menuitemcheckbox', { name: 'W1 · My picks' })).toHaveFocus()
+    await user.keyboard('{End}')
+    expect(screen.getByRole('menuitem', { name: 'Log out' })).toHaveFocus()
+    await user.keyboard('{ArrowUp}')
+    expect(screen.getByRole('menuitemradio', { name: 'English' })).toHaveFocus()
+  })
 })

@@ -2,7 +2,14 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { useMarketMovers } from '@/entities/market'
-import { LiveChangePct, LivePrice, LiveVolume, priceDecimals } from '@/entities/quote'
+import {
+  LiveChangePct,
+  LivePrice,
+  LiveVolume,
+  priceDecimals,
+  useLiveQuoteRows,
+  type LiveQuote,
+} from '@/entities/quote'
 import { useSecurityMenu } from '@/features/security-actions'
 import type { MoverDto, MoversType } from '@/shared/api/contracts'
 import { useSymbolSubscription } from '@/shared/realtime'
@@ -16,6 +23,13 @@ import { QueryView } from '@/shared/ui/QueryView'
 const helper = createDataColumnHelper<MoverDto>()
 const MOVERS_TYPES: readonly MoversType[] = ['gainers', 'losers', 'volume']
 const getMoverId = (mover: MoverDto) => mover.securityId
+/** A mover as its live cells show it: the table sorts on that (B42). */
+const liveMover = (mover: MoverDto, quote: LiveQuote): MoverDto => ({
+  ...mover,
+  last: quote.last,
+  changePct: quote.changePct,
+  volume: quote.volume,
+})
 
 /** Screen 1, Top movers: tabs Gainers / Losers / Volume. API /market/movers. */
 export function TopMoversPanel() {
@@ -26,6 +40,7 @@ export function TopMoversPanel() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const movers = useMarketMovers(type)
   useSymbolSubscription(movers.data?.map((mover) => mover.securityId) ?? [])
+  const rows = useLiveQuoteRows(movers.data, getMoverId, liveMover)
 
   const tabs = useMemo(
     () => MOVERS_TYPES.map((value) => ({ value, label: t(`market.movers.${value}`) })),
@@ -76,12 +91,12 @@ export function TopMoversPanel() {
       options={<PanelTabs value={type} options={tabs} onChange={setType} />}
     >
       <QueryView query={movers}>
-        {(data) => (
+        {() => (
           <DataTable
-            data={data}
+            data={rows}
             columns={columns}
             getRowId={getMoverId}
-            selectedRowId={selectedId ?? data.at(0)?.securityId}
+            selectedRowId={selectedId ?? rows.at(0)?.securityId}
             onRowClick={(mover) => setSelectedId(mover.securityId)}
             onRowDoubleClick={(mover) => void navigate(securityPath(mover.securityId))}
             rowMenu={(mover) => securityMenu({ id: mover.securityId, code: mover.code })}
