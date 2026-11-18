@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { isApiError } from '@/shared/api'
-import type { PaymentDto } from '@/shared/api/contracts'
+import type { BillingCycle, PaymentDto } from '@/shared/api/contracts'
 import { subscriptionsApi } from '@/shared/api/endpoints'
 
 export const subscriptionKeys = {
@@ -9,6 +9,8 @@ export const subscriptionKeys = {
   plans: () => [...subscriptionKeys.all, 'plans'] as const,
   publicPlans: () => [...subscriptionKeys.all, 'plans', 'public'] as const,
   payment: (id: string) => [...subscriptionKeys.all, 'payment', id] as const,
+  proration: (planId: string, billingCycle: BillingCycle) =>
+    [...subscriptionKeys.all, 'proration', planId, billingCycle] as const,
   invoices: ['invoices'] as const,
 }
 
@@ -48,6 +50,18 @@ export function usePublicPlans() {
     queryKey: subscriptionKeys.publicPlans(),
     queryFn: ({ signal }) => subscriptionsApi.publicPlans(signal),
     staleTime: Infinity,
+  })
+}
+
+/**
+ * GET /subscription/proration: what the checkout of the plan does today, read again each time the
+ * dialog opens (B99 and B73 of ROADMAP step 50).
+ */
+export function useCheckoutProration(planId: string, billingCycle: BillingCycle) {
+  return useQuery({
+    queryKey: subscriptionKeys.proration(planId, billingCycle),
+    queryFn: ({ signal }) => subscriptionsApi.proration(planId, billingCycle, signal),
+    staleTime: 0,
   })
 }
 

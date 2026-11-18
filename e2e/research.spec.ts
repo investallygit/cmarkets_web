@@ -61,8 +61,14 @@ test(
     await preview.getByRole('button', { name: 'Buy this report — XAF 15,000' }).click()
     const dialog = page.getByRole('dialog')
     await dialog.getByRole('button', { name: 'Pay XAF 15,000' }).click()
-    await expect(dialog.getByText('A mobile money number, e.g. +237 6 70 12 34 56.')).toBeVisible()
-    await dialog.getByRole('textbox', { name: 'Mobile money number' }).fill('+237 6 70 12 34 56')
+    const invalid = 'A CEMAC mobile money number with its country code, e.g. +237 6 70 12 34 56.'
+    await expect(dialog.getByText(invalid)).toBeVisible()
+    // A number of another country pays nothing (B71): the operators are the CEMAC's.
+    const number = dialog.getByRole('textbox', { name: 'Mobile money number' })
+    await number.fill('+33 6 12 34 56 78')
+    await dialog.getByRole('button', { name: 'Pay XAF 15,000' }).click()
+    await expect(dialog.getByText(invalid)).toBeVisible()
+    await number.fill('+237 6 70 12 34 56')
     await dialog.getByRole('button', { name: 'Pay XAF 15,000' }).click()
     await expect(dialog.getByText(/^Approve the payment of XAF 15,000 on your phone/)).toBeVisible()
     // The payment is followed with the dialog closed; once confirmed, the content opens.

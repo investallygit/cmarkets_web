@@ -2,19 +2,27 @@ import { useQueryClient } from '@tanstack/react-query'
 import { CircleCheck, LoaderCircle, TriangleAlert } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { usePlanName } from '@/entities/subscription'
 import { sessionKeys } from '@/entities/session'
-import { CHECKOUT_METHODS, useCheckout, useSubscriptionPayment } from '@/entities/subscription'
+import {
+  CHECKOUT_METHODS,
+  useCheckout,
+  useCheckoutProration,
+  useSubscription,
+  useSubscriptionPayment,
+} from '@/entities/subscription'
 import { isApiError } from '@/shared/api'
 import type {
   BillingCycle,
   CheckoutMethod,
   InvoiceDto,
   PaymentDto,
+  PlanChangeProrationDto,
   PlanDto,
 } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { amountsFromNet } from '@/shared/lib/billing'
-import { isPhoneNumber } from '@/shared/lib/phone'
+import { isMobileMoneyNumber } from '@/shared/lib/phone'
 import { Dialog, DialogBody, DialogFooter } from '@/shared/ui/Dialog'
 import { Button } from '@/shared/ui/form/Button'
 import { Field } from '@/shared/ui/form/Field'
@@ -31,12 +39,15 @@ interface PlanCheckoutProps {
 }
 
 /**
- * Checkout of a plan (POST /subscription/checkout): card or mobile money, followed until the
- * provider confirms, the dialog closed or not; or a bank transfer against the invoice, the plan
- * applying at once. The screens of the new modules then open.
+ * Checkout of a plan (POST /subscription/checkout). The days left of the plan in force buy days of
+ * the new one, which applies at once with nothing to pay (ROADMAP decision 7, as SUBS prorates; B99
+ * and B73 of ROADMAP step 50: a new period at full price, the days paid lost). Otherwise card or
+ * mobile money, followed until the provider confirms, the dialog closed or not; or a bank transfer
+ * against the invoice, the plan applying at once. The screens of the new modules then open.
  */
 export function PlanCheckout({ plan, billingCycle, seats, onClose }: PlanCheckoutProps) {
   const { t } = useTranslation()
+  const planName = usePlanName()
   const queryClient = useQueryClient()
   const [started, setStarted] = useState<PaymentDto | null>(null)
   const [invoice, setInvoice] = useState<InvoiceDto | null>(null)
@@ -60,7 +71,7 @@ export function PlanCheckout({ plan, billingCycle, seats, onClose }: PlanCheckou
     <Dialog
       open={plan !== null}
       onClose={close}
-      title={plan ? t('subscription.checkout.title', { plan: plan.name }) : ''}
+      title={plan ? t('subscription.checkout.title', { plan: planName(plan) }) : ''}
       width={460}
     >
       {plan &&
@@ -80,6 +91,10 @@ export function PlanCheckout({ plan, billingCycle, seats, onClose }: PlanCheckou
               setInvoice(issued)
               void queryClient.invalidateQueries({ queryKey: sessionKeys.me })
             }}
+            onChanged={() => {
+              void queryClient.invalidateQueries({ queryKey: sessionKeys.me })
+              close()
+            }}
           />
         ))}
     </Dialog>
@@ -95,6 +110,8 @@ interface CheckoutFormProps {
   onClose: () => void
   onPayment: (payment: PaymentDto) => void
   onInvoice: (invoice: InvoiceDto) => void
+  /** The days left paid for the new plan: it applies at once. */
+  onChanged: () => void
 }
 
 function CheckoutForm({
@@ -105,10 +122,16 @@ function CheckoutForm({
   onClose,
   onPayment,
   onInvoice,
+  onChanged,
 }: CheckoutFormProps) {
   const { t } = useTranslation()
   const format = useFormat()
   const checkout = useCheckout()
+  const planName = usePlanName()
+  const current = useSubscription().data
+  const proration = useCheckoutProration(plan.id, billingCycle)
+  // The plan in force pays for the new one: no method, nothing charged.
+  const prorated = proration.data?.chargeNow === 0 && Boolean(current) ? proration.data : null
   const [method, setMethod] = useState<CheckoutMethod>('card')
   const [phone, setPhone] = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -119,7 +142,7 @@ function CheckoutForm({
   const phoneError =
     (submitted &&
       method === 'mobileMoney' &&
-      !isPhoneNumber(phone) &&
+      !isMobileMoneyNumber(phone) &&
       t('purchase.phoneInvalid')) ||
     (isApiError(checkout.error, 400) && checkout.error.problem.errors?.phone?.[0]) ||
     null
@@ -131,70 +154,79 @@ function CheckoutForm({
       onSubmit={(event) => {
         event.preventDefault()
         setSubmitted(true)
-        if (method === 'mobileMoney' && !isPhoneNumber(phone)) return
+        if (!prorated && method === 'mobileMoney' && !isMobileMoneyNumber(phone)) return
         checkout.mutate(
           {
             planId: plan.id,
             billingCycle,
-            method,
-            phone: method === 'mobileMoney' ? phone.trim() : null,
+            // Nothing is charged: the API keeps the plan's own method for the renewal.
+            method: prorated ? 'card' : method,
+            phone: !prorated && method === 'mobileMoney' ? phone.trim() : null,
           },
           {
             onSuccess: (result) => {
               if (result.payment) onPayment(result.payment)
               else if (result.invoice) onInvoice(result.invoice)
+              else {
+                const changed = result.subscription
+                toast.success(
+                  t('subscription.checkout.proration.changed', {
+                    plan: planName(plan),
+                    date: changed ? format.isoDate(changed.periodEnd) : '',
+                  }),
+                )
+                onChanged()
+              }
             },
           },
         )
       }}
     >
       <DialogBody>
-        <dl className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1 font-sans text-data">
-          <dt className="text-secondary">
-            {t('subscription.checkout.perUser', {
-              count: seats,
-              price: xaf(unitPrice),
-              cycle: t(`subscription.cycles.${billingCycle}`),
-            })}
-          </dt>
-          <dd className="text-right font-mono">{xaf(amounts.amount)}</dd>
-          <dt className="text-secondary">
-            {t('subscription.checkout.vat', { rate: format.number(plan.taxRatePct, 2) })}
-          </dt>
-          <dd className="text-right font-mono">{xaf(amounts.taxAmount)}</dd>
-          <dt className="font-semibold">{t('subscription.checkout.total')}</dt>
-          <dd className="text-right font-mono font-semibold text-accent-amber">
-            {xaf(amounts.total)}
-          </dd>
-        </dl>
-        <Field label={t('purchase.payment')} group>
-          <SegmentedControl
-            value={method}
-            options={CHECKOUT_METHODS.map((value) => ({
-              value,
-              label: t(`subscription.methods.${value}`),
-            }))}
-            onChange={(value) => {
-              checkout.reset()
-              setMethod(value)
-            }}
+        {proration.isPending ? (
+          <p role="status" className="font-sans text-data text-secondary">
+            {t('subscription.checkout.proration.loading')}
+          </p>
+        ) : prorated ? (
+          <Proration
+            preview={prorated}
+            current={current ? planName({ id: current.planId, name: current.planName }) : ''}
           />
-        </Field>
-        {method === 'mobileMoney' && (
-          <Field label={t('purchase.phone')} hint={t('purchase.phoneHint')} error={phoneError}>
-            <TextInput
-              value={phone}
-              onChange={setPhone}
-              type="tel"
-              autoComplete="tel"
-              placeholder="+237 6 70 12 34 56"
-              mono
-            />
-          </Field>
+        ) : (
+          <FullPeriod plan={plan} billingCycle={billingCycle} seats={seats} />
         )}
-        <p className="font-sans text-data text-secondary">
-          {t(`subscription.checkout.hints.${method}`)}
-        </p>
+        {!prorated && !proration.isPending && (
+          <>
+            <Field label={t('purchase.payment')} group>
+              <SegmentedControl
+                value={method}
+                options={CHECKOUT_METHODS.map((value) => ({
+                  value,
+                  label: t(`subscription.methods.${value}`),
+                }))}
+                onChange={(value) => {
+                  checkout.reset()
+                  setMethod(value)
+                }}
+              />
+            </Field>
+            {method === 'mobileMoney' && (
+              <Field label={t('purchase.phone')} hint={t('purchase.phoneHint')} error={phoneError}>
+                <TextInput
+                  value={phone}
+                  onChange={setPhone}
+                  type="tel"
+                  autoComplete="tel"
+                  placeholder="+237 6 70 12 34 56"
+                  mono
+                />
+              </Field>
+            )}
+            <p className="font-sans text-data text-secondary">
+              {t(`subscription.checkout.hints.${method}`)}
+            </p>
+          </>
+        )}
         {failed?.status === 'failed' && (
           <p role="alert" className="flex items-start gap-1.5 font-sans text-label text-down">
             <TriangleAlert aria-hidden className="mt-0.5 size-3.5 shrink-0" />
@@ -209,13 +241,82 @@ function CheckoutForm({
       </DialogBody>
       <DialogFooter>
         <Button onClick={onClose}>{t('common.cancel')}</Button>
-        <Button type="submit" variant="primary" busy={checkout.isPending}>
-          {method === 'transfer'
-            ? t('subscription.checkout.getInvoice')
-            : t('subscription.checkout.pay', { amount: xaf(amounts.total) })}
+        <Button
+          type="submit"
+          variant="primary"
+          busy={checkout.isPending}
+          disabled={proration.isPending}
+        >
+          {prorated
+            ? t('subscription.checkout.proration.change')
+            : method === 'transfer'
+              ? t('subscription.checkout.getInvoice')
+              : t('subscription.checkout.pay', { amount: xaf(amounts.total) })}
         </Button>
       </DialogFooter>
     </form>
+  )
+}
+
+/** A full period of the plan from today, charged at once: no plan in force carries over. */
+function FullPeriod({
+  plan,
+  billingCycle,
+  seats,
+}: Pick<CheckoutFormProps, 'plan' | 'billingCycle' | 'seats'>) {
+  const { t } = useTranslation()
+  const format = useFormat()
+  const unitPrice = billingCycle === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice
+  const amounts = amountsFromNet(unitPrice, seats, plan.taxRatePct)
+  const xaf = (value: number) => t('subscription.xaf', { amount: format.number(value, 0) })
+  return (
+    <dl className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1 font-sans text-data">
+      <dt className="text-secondary">
+        {t('subscription.checkout.perUser', {
+          count: seats,
+          price: xaf(unitPrice),
+          cycle: t(`subscription.cycles.${billingCycle}`),
+        })}
+      </dt>
+      <dd className="text-right font-mono">{xaf(amounts.amount)}</dd>
+      <dt className="text-secondary">
+        {t('subscription.checkout.vat', { rate: format.number(plan.taxRatePct, 2) })}
+      </dt>
+      <dd className="text-right font-mono">{xaf(amounts.taxAmount)}</dd>
+      <dt className="font-semibold">{t('subscription.checkout.total')}</dt>
+      <dd className="text-right font-mono font-semibold text-accent-amber">{xaf(amounts.total)}</dd>
+    </dl>
+  )
+}
+
+/** The days left of the plan in force and the days of the new plan they buy: nothing to pay. */
+function Proration({ preview, current }: { preview: PlanChangeProrationDto; current: string }) {
+  const { t } = useTranslation()
+  const format = useFormat()
+  const plan = usePlanName()({ id: preview.planId, name: preview.planName })
+  const date = format.isoDate(preview.expiresOn)
+  return (
+    <div className="flex flex-col gap-1 font-sans text-data">
+      {preview.daysLeft > 0 && (
+        <p className="text-secondary">
+          {t('subscription.checkout.proration.daysLeft', {
+            days: preview.daysLeft,
+            plan: current,
+            currency: preview.currency,
+            value: format.number(preview.valueLeft, 0),
+          })}
+        </p>
+      )}
+      <p className="text-primary">
+        {preview.free
+          ? t('subscription.checkout.proration.free', { plan, date })
+          : t('subscription.checkout.proration.buys', {
+              days: preview.newDays,
+              plan,
+              date,
+            })}
+      </p>
+    </div>
   )
 }
 

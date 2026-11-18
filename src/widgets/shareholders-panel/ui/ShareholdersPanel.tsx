@@ -10,6 +10,9 @@ import { QueryView } from '@/shared/ui/QueryView'
 
 const helper = createDataColumnHelper<ShareholderDto>()
 
+/** The holder CMarket.Api gives the shares no one keeps (Shareholding.FreeFloatName). */
+const FREE_FLOAT = 'Free float'
+
 /** Screen 2, HDS tab: holders of the capital. API /securities/{id}/shareholders. */
 export function ShareholdersPanel({ securityId }: { securityId: string }) {
   const { t } = useTranslation()
@@ -19,7 +22,14 @@ export function ShareholdersPanel({ securityId }: { securityId: string }) {
   const columns = useMemo(
     () =>
       helper.columns([
-        helper.accessor('name', { header: t('columns.holder') }),
+        // CMarket.Api names the shares no holder keeps "Free float" (B17: on a French page too).
+        helper.accessor(
+          (holder) => (holder.name === FREE_FLOAT ? t('keyData.freeFloat') : holder.name),
+          {
+            id: 'name',
+            header: t('columns.holder'),
+          },
+        ),
         helper.accessor('shares', {
           header: t('columns.shares'),
           meta: { align: 'right', width: '120px' },

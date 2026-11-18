@@ -179,6 +179,9 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('ADMAGR', 'RFQ AGR', routes.adminRfq, 'backoffice', Handshake, { permission: 'rfq:report', inMenu: true, menuCode: 'RFQ' }),
   screen('RFQREP', 'RFQ REP', routes.adminRfqReports, 'backoffice', Handshake, { permission: 'rfq:report', menuCode: 'RFQ' }),
   screen('ADMCFG', 'CFG', routes.adminSettings, 'backoffice', Settings, { permission: 'settings:manage', inMenu: true }),
+  // An employee's own profile and security, CFG's two panels (B72 of ROADMAP step 50: the Data admin and the Admin had none):
+  // from the user menu and the command bar, as NET ME.
+  screen('MYCFG', 'ME', routes.account, 'backoffice', IdCard),
   screen('AUDT', 'AUDT', routes.adminAudit, 'backoffice', ScrollText, { permission: 'audit:read', inMenu: true }),
 ]
 

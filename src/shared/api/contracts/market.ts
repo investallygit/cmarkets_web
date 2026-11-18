@@ -67,3 +67,10 @@ export interface HistoryPointDto {
   time: IsoDateTime
   value: number
 }
+
+/** GET /market/sectors: an issuers' sector by its name in each language; the lists send `name`. */
+export interface SectorDto {
+  code: string
+  name: string
+  nameFr: string
+}

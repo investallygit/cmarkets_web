@@ -8,10 +8,10 @@ import { Panel } from '@/shared/ui/Panel'
  * CFG, security (spec section 6): the password, where the login codes go, and the automatic
  * logout after inactivity.
  */
-export function AccountSecurityPanel() {
+export function AccountSecurityPanel({ code = 'CFG' }: { code?: string }) {
   const { t } = useTranslation()
   return (
-    <Panel title={t('panels.security')} code="CFG">
+    <Panel title={t('panels.security')} code={code}>
       <div className="flex flex-col gap-4 p-3">
         <PasswordForm />
         <div className="border-t pt-3">

@@ -205,7 +205,22 @@
       "confirmingCard": "Confirmation du paiement par carte de {{amount}}…",
       "confirmed": "Paiement confirmé : votre nouvelle formule est active.",
       "closeAndWait": "Fermer et patienter",
-      "transferIssued": "Votre formule est active. Réglez la facture par virement, avec sa référence :"
+      "transferIssued": "Votre formule est active. Réglez la facture par virement, avec sa référence :",
+      "proration": {
+        "loading": "Calcul de la valeur de vos jours restants…",
+        "daysLeft": "{{days}} jours restants de {{plan}}, d’une valeur de {{currency}} {{value}} HT.",
+        "buys": "Ils achètent {{days}} jours de {{plan}} : rien à payer aujourd’hui ; renouvellement le {{date}}, au plein tarif.",
+        "free": "{{plan}} est gratuite par convention : une période complète à partir d’aujourd’hui, jusqu’au {{date}}.",
+        "change": "Changer de formule",
+        "changed": "Formule changée : {{plan}} jusqu’au {{date}}."
+      }
+    },
+    "planNames": {
+      "monitoring": "Suivi",
+      "analysis": "Analyse",
+      "professional": "Professionnel",
+      "student": "Étudiant",
+      "mediaSource": "Source média"
     }
   },
   "organization": {

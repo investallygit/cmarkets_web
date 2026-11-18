@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSectorName } from '@/entities/market'
 import { useAllocation } from '@/entities/portfolio'
 import type { AllocationBy, AllocationItemDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
@@ -61,6 +62,7 @@ function AllocationBar({ items, by }: { items: AllocationItemDto[]; by: Allocati
   const { t } = useTranslation()
   const format = useFormat()
   const theme = useChartTheme()
+  const sectorName = useSectorName()
 
   const cash = items.find((item) => item.key === CASH)
   const named = items.filter((item) => item.key !== CASH)
@@ -104,7 +106,8 @@ function AllocationBar({ items, by }: { items: AllocationItemDto[]; by: Allocati
         ? t(`portfolio.allocation.maturities.${key as '0-1' | '1-3' | '3-5' | '5-10' | '10+'}`)
         : t('portfolio.allocation.noMaturity')
     }
-    return key
+    // A sector by its name in the page's language (B17).
+    return sectorName(key)
   }
   // The maturity view reads short to long; the others largest first, cash last.
   const ordered = by === 'maturity' ? [...rows].sort((a, b) => order(a.key) - order(b.key)) : rows

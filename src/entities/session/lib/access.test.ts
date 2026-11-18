@@ -57,6 +57,13 @@ describe('screen access (spec section 12)', () => {
     expect(canAccessScreen(analyst, screenById('IMP'))).toBe(false)
   })
 
+  it("gives each employee settings of their own, ME, as a client's CFG (B72)", () => {
+    expect(canAccessScreen(dataAdmin, screenById('MYCFG'))).toBe(true)
+    expect(canAccessScreen(admin, screenById('MYCFG'))).toBe(true)
+    expect(canAccessScreen(analyst, screenById('MYCFG'))).toBe(false)
+    expect(canAccessScreen(dataAdmin, screenById('CFG'))).toBe(false)
+  })
+
   it('lands each account type on its home screen', () => {
     expect(homePathFor(student, SCREENS)).toBe('/mkt')
     expect(homePathFor(journalist, SCREENS)).toBe('/mkt')

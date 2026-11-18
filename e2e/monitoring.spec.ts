@@ -24,6 +24,9 @@ test('a watchlist is created from the right-click menu with the security in it',
   await watchlist.getByRole('tab', { name: 'W3' }).click()
   await expect(watchlist.getByRole('heading')).toHaveText('Watchlist: Banks')
   await expect(watchlist.getByRole('row', { name: /BANGE/ })).toBeVisible()
+  // A reload shows the list worked on, not the first (B46).
+  await page.reload()
+  await expect(watchlist.getByRole('heading')).toHaveText('Watchlist: Banks')
 })
 
 test('an alert set from the right-click menu is listed on the ALRT screen', async ({ page }) => {

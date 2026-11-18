@@ -3,7 +3,7 @@ import { Check, Minus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useVisitorStatus } from '@/entities/session'
-import { BILLING_CYCLES, usePublicPlans } from '@/entities/subscription'
+import { usePlanName, BILLING_CYCLES, usePublicPlans } from '@/entities/subscription'
 import { MODULES, type BillingCycle, type PlanDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { yearlySavingPct } from '@/shared/lib/billing'
@@ -96,6 +96,7 @@ export function PlansSection() {
 /** The price glides to the other cycle's; the card's border lights up under the pointer. */
 function PlanCard({ plan, cycle }: { plan: PlanDto; cycle: BillingCycle }) {
   const { t } = useTranslation()
+  const name = usePlanName()(plan)
   const format = useFormat()
   const visitor = useVisitorStatus()
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
@@ -112,11 +113,11 @@ function PlanCard({ plan, cycle }: { plan: PlanDto; cycle: BillingCycle }) {
 
   return (
     <article
-      aria-label={plan.name}
+      aria-label={name}
       className="flex h-full flex-col gap-5 border bg-panel p-6 transition-colors duration-200 hover:border-brand-green/50"
     >
       <header className="flex flex-col gap-1">
-        <h3 className="font-sans text-figure font-semibold">{plan.name}</h3>
+        <h3 className="font-sans text-figure font-semibold">{name}</h3>
         {/* Two lines kept for the account types, so the prices line up. */}
         <p className="font-sans text-data text-secondary sm:min-h-8">
           {t('home.plans.for', { types })}

@@ -16,6 +16,7 @@ import {
   type AdminSubscriptionRowDto,
   type SubscriptionListStatus,
 } from '@/shared/api/contracts'
+import { planNameOf } from '@/entities/subscription'
 import { useFormat } from '@/shared/i18n'
 import { saveBlob } from '@/shared/lib/download'
 import { useDebouncedValue } from '@/shared/lib/useDebouncedValue'
@@ -164,7 +165,7 @@ export function SubscriptionsPanel({ selectedId, onSelect }: SubscriptionsPanelP
           aria-label={t('subscriptionAdmin.columns.plan')}
           options={[
             { value: '', label: t('subscriptionAdmin.all') },
-            ...(plans.data ?? []).map((plan) => ({ value: plan.id, label: plan.name })),
+            ...(plans.data ?? []).map((plan) => ({ value: plan.id, label: planNameOf(t, plan) })),
           ]}
           onChange={(value) => setFilter({ plan: value })}
           className="w-44"

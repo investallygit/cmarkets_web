@@ -8,6 +8,7 @@ import {
   priceDecimals,
   useQuote,
 } from '@/entities/quote'
+import { useSectorName } from '@/entities/market'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { Badge } from '@/shared/ui/Badge'
@@ -24,6 +25,7 @@ interface Figure {
 export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
   const { t } = useTranslation()
   const format = useFormat()
+  const sectorName = useSectorName()
   const quote = useQuote(profile.id).data
   const decimals = priceDecimals(profile.type, profile.currency)
   const missing = '—'
@@ -55,7 +57,7 @@ export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
     t(`security.types.${profile.type}`),
     profile.exchange,
     format.country(profile.country),
-    profile.sector,
+    sectorName(profile.sector),
     profile.currency,
   ]
 

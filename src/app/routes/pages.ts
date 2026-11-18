@@ -119,6 +119,9 @@ const RfqAgreementsPage = lazy(() =>
 const SvtTradersPage = lazy(() =>
   import('@/pages/svt-traders').then((module) => ({ default: module.SvtTradersPage })),
 )
+const AccountSettingsPage = lazy(() =>
+  import('@/pages/account-settings').then((module) => ({ default: module.AccountSettingsPage })),
+)
 const PlatformSettingsPage = lazy(() =>
   import('@/pages/platform-settings').then((module) => ({ default: module.PlatformSettingsPage })),
 )
@@ -184,6 +187,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   MOD: ModerationPage,
   PAY: PayoutsPage,
   ADMCFG: PlatformSettingsPage,
+  MYCFG: AccountSettingsPage,
   RFQREP: RfqReportingPage,
   AUDT: AuditLogPage,
 }

@@ -3,7 +3,7 @@ import { Check, Minus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PlanCheckout } from '@/features/choose-plan'
-import { BILLING_CYCLES, usePlans, useSubscription } from '@/entities/subscription'
+import { usePlanName, BILLING_CYCLES, usePlans, useSubscription } from '@/entities/subscription'
 import {
   MODULES,
   type BillingCycle,
@@ -84,10 +84,11 @@ export function SubscriptionPanel() {
 function CurrentPlan({ subscription }: { subscription: SubscriptionDto | null }) {
   const { t } = useTranslation()
   const format = useFormat()
+  const planName = usePlanName()
   if (!subscription) {
     return <p className="font-sans text-label text-secondary">{t('subscription.none')}</p>
   }
-  const name = subscription.planName
+  const name = planName({ id: subscription.planId, name: subscription.planName })
   const end = format.isoDate(subscription.periodEnd)
   const status =
     subscription.status === 'trial'
@@ -152,6 +153,7 @@ interface PlanTableProps {
 function PlanTable({ plans, subscription, cycle, onChoose }: PlanTableProps) {
   const { t } = useTranslation()
   const format = useFormat()
+  const planName = usePlanName()
   const canManage = subscription?.canManage ?? true
   const cell = 'h-row border-b px-2'
 
@@ -186,7 +188,7 @@ function PlanTable({ plans, subscription, cycle, onChoose }: PlanTableProps) {
           return (
             <tr key={plan.id} className={current ? 'bg-selected' : undefined}>
               <th scope="row" className={clsx(cell, 'text-left font-semibold')}>
-                {plan.name}
+                {planName(plan)}
               </th>
               {MODULES.map((module) => (
                 <td key={module} className={clsx(cell, 'text-center')}>
@@ -216,7 +218,7 @@ function PlanTable({ plans, subscription, cycle, onChoose }: PlanTableProps) {
                     size="sm"
                     onClick={() => onChoose(plan)}
                     disabled={!canManage}
-                    aria-label={t('subscription.chooseNamed', { plan: plan.name })}
+                    aria-label={t('subscription.chooseNamed', { plan: planName(plan) })}
                   >
                     {t('subscription.choose')}
                   </Button>

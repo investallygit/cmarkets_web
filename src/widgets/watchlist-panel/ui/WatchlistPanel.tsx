@@ -12,7 +12,7 @@ import {
   useLiveQuoteRows,
   type LiveQuote,
 } from '@/entities/quote'
-import { useHasPermission } from '@/entities/session'
+import { useCurrentUser, useHasPermission } from '@/entities/session'
 import { openWatchlistDialog, useWatchlists, WATCHLIST_COLUMNS } from '@/entities/watchlist'
 import {
   AddToWatchlistBox,
@@ -21,6 +21,7 @@ import {
 } from '@/features/manage-watchlists'
 import { useSecurityMenu } from '@/features/security-actions'
 import type { WatchlistColumn, WatchlistDto, WatchlistItemDto } from '@/shared/api/contracts'
+import { readStored, writeStored } from '@/shared/lib/storedValue'
 import { useSymbolSubscription } from '@/shared/realtime'
 import { optimizerPath, securityPath } from '@/shared/routes/paths'
 import { createDataColumnHelper, type DataColumns } from '@/shared/ui/dataColumns'
@@ -121,7 +122,9 @@ export function WatchlistPanel() {
   const securityMenu = useSecurityMenu()
   const watchlists = useWatchlists()
   const lists = watchlists.data ?? NO_LISTS
-  const [activeId, setActiveId] = useState<string | null>(null)
+  // The list worked on is the one a reload shows again, in this browser (B46: the first came back).
+  const storageKey = `cmarket.watchlist.${useCurrentUser().id}`
+  const [activeId, setActiveId] = useState<string | null>(() => readStored(storageKey))
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
   // OPT on the list's securities (spec screen 28: "Optimise" on a watchlist).
@@ -141,6 +144,7 @@ export function WatchlistPanel() {
   const selectList = (id: string) => {
     setActiveId(id)
     setSelectedId(null)
+    writeStored(storageKey, id)
   }
 
   return (

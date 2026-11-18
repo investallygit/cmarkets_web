@@ -17,6 +17,7 @@ export {
 export {
   subscriptionKeys,
   useCheckout,
+  useCheckoutProration,
   useInvoicePdf,
   useInvoices,
   usePlans,
@@ -25,6 +26,7 @@ export {
   useSubscriptionPayment,
 } from './api/queries'
 export { BILLING_CYCLES, CHECKOUT_METHODS } from './config/subscription'
+export { planNameOf, planNameOfLabel, usePlanName } from './lib/planName'
 export {
   PAYMENT_LINE_COLORS,
   SUBSCRIPTION_STATUS_COLORS,

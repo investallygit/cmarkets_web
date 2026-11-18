@@ -1,6 +1,7 @@
 import { Search } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSectorName } from '@/entities/market'
 import { LIBRARY_SORTS, OUTLOOKS, RECOMMENDATIONS } from '@/entities/publication'
 import { useSecurities } from '@/entities/security'
 import type {
@@ -42,6 +43,7 @@ export function LibraryFilters({ values, onChange }: LibraryFiltersProps) {
   const timer = useRef<number | undefined>(undefined)
   useEffect(() => () => window.clearTimeout(timer.current), [])
   const equities = useSecurities({ type: 'equity' })
+  const sectorName = useSectorName()
   const sectors = [...new Set((equities.data ?? []).map((security) => security.sector))].sort()
   const all = t('library.filters.all')
 
@@ -75,7 +77,7 @@ export function LibraryFilters({ values, onChange }: LibraryFiltersProps) {
           value={values.sector}
           options={[
             { value: '', label: all },
-            ...sectors.map((sector) => ({ value: sector, label: sector })),
+            ...sectors.map((sector) => ({ value: sector, label: sectorName(sector) })),
           ]}
           onChange={(sector) => onChange({ sector })}
           highlight={Boolean(values.sector)}

@@ -70,7 +70,9 @@ export function Panel({ title, code, options, children, className, bodyClassName
           {title}
         </h2>
         {/* Its buttons are 24 px targets (WCAG 2.5.8), as tall as the bar. */}
-        <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end-safe gap-x-3 font-mono text-title text-secondary uppercase [&_button]:min-h-6 [&_button]:min-w-6">
+        {/* On a phone they keep their width, on a line of their own when the title leaves no
+            room; from 768 px they wrap inside it, the bar on one line. */}
+        <div className="ml-auto flex max-w-full flex-wrap items-center justify-end-safe gap-x-3 font-mono text-title text-secondary uppercase md:min-w-0 [&_button]:min-h-6 [&_button]:min-w-6">
           {options}
           <PanelLayoutMenu code={code} titleId={titleId} />
         </div>

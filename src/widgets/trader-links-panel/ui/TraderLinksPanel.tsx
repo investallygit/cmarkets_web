@@ -1,5 +1,5 @@
 import { MessageSquare, Pencil } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { mayWriteMessages, useCurrentUser } from '@/entities/session'
 import { formatDailyLimit, useSvtLinks } from '@/entities/svt-link'
@@ -7,11 +7,12 @@ import { DeclineLinkButton, LimitDialog, RevokeLinkButton } from '@/features/dec
 import type { TraderLinkDto } from '@/shared/api/contracts'
 import { useFormat, useLocale } from '@/shared/i18n'
 import { messagesPath } from '@/shared/routes/paths'
-import { DataTable } from '@/shared/ui/DataTable'
+import { DataTable, type TableExporter } from '@/shared/ui/DataTable'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { Button, ButtonLink } from '@/shared/ui/form/Button'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
+import { TableExportContext } from '@/shared/ui/tableExport'
 
 const helper = createDataColumnHelper<TraderLinkDto>()
 
@@ -130,6 +131,7 @@ function LinkedTraders({
   const writes = mayWriteMessages(useCurrentUser())
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const selected = links.find((link) => link.id === selectedId) ?? null
+  const exportRef = useRef<TableExporter | null>(null)
   const columns = useMemo(
     () =>
       helper.columns([
@@ -169,30 +171,50 @@ function LinkedTraders({
   )
   return (
     <section aria-labelledby="linked-traders" className="flex min-h-40 flex-1 flex-col">
-      <h3
-        id="linked-traders"
-        className="px-1 pb-1 font-sans text-label font-semibold tracking-title text-accent-amber uppercase"
-      >
-        {t('rfq.links.linked')}
-      </h3>
+      <div className="flex flex-wrap items-center gap-x-3 px-1 pb-1">
+        <h3
+          id="linked-traders"
+          className="mr-auto font-sans text-label font-semibold tracking-title text-accent-amber uppercase"
+        >
+          {t('rfq.links.linked')}
+        </h3>
+        {/* The SVT exports its linked traders as RFQ AGR its agreements, without the analysis
+            permission of the data tables (B86). */}
+        <span className="flex items-center gap-2 font-sans text-label uppercase">
+          <span className="text-secondary">{t('rfq.links.export')}</span>
+          {(['xlsx', 'csv'] as const).map((kind) => (
+            <button
+              key={kind}
+              type="button"
+              onClick={() => exportRef.current?.(kind)}
+              className="inline-flex h-6 items-center hover:text-primary"
+            >
+              {kind}
+            </button>
+          ))}
+        </span>
+      </div>
       <div className="min-h-0 flex-1">
-        <DataTable
-          data={links}
-          columns={columns}
-          getRowId={(link) => link.id}
-          selectedRowId={selected?.id ?? null}
-          onRowClick={(link) => setSelectedId(link.id)}
-          onRowDoubleClick={onChangeLimit}
-          exportName="cmarket-trader-links"
-          emptyMessage={t('rfq.links.noLinked')}
-          rowMenu={(link) => [
-            {
-              id: 'limit',
-              label: t('rfq.links.changeLimit', { name: link.trader.name }),
-              onSelect: () => onChangeLimit(link),
-            },
-          ]}
-        />
+        <TableExportContext.Provider value>
+          <DataTable
+            data={links}
+            columns={columns}
+            getRowId={(link) => link.id}
+            selectedRowId={selected?.id ?? null}
+            onRowClick={(link) => setSelectedId(link.id)}
+            onRowDoubleClick={onChangeLimit}
+            exportName="cmarket-trader-links"
+            exportRef={exportRef}
+            emptyMessage={t('rfq.links.noLinked')}
+            rowMenu={(link) => [
+              {
+                id: 'limit',
+                label: t('rfq.links.changeLimit', { name: link.trader.name }),
+                onSelect: () => onChangeLimit(link),
+              },
+            ]}
+          />
+        </TableExportContext.Provider>
       </div>
       {selected ? (
         <div className="flex flex-wrap items-center gap-2 border-t px-1 pt-2">

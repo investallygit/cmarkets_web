@@ -33,6 +33,7 @@
     "expandMenu": "Déplier le menu",
     "collapseMenu": "Replier le menu",
     "mainMenu": "Menu principal",
+    "tickerTape": "Bandeau des cours",
     "realtime": {
       "connecting": "Connexion",
       "connected": "Temps réel connecté",
@@ -113,6 +114,7 @@
     "PAY": { "title": "Versements aux analystes", "menu": "Versem." },
     "RFQREP": { "title": "Déclaration quotidienne à la BEAC", "menu": "RFQ" },
     "ADMCFG": { "title": "Paramètres de la plateforme", "menu": "Réglages" },
+    "MYCFG": { "title": "Mes paramètres", "menu": "Mes paramètres" },
     "AUDT": { "title": "Journal d'audit", "menu": "Audit" },
     "ADMAGR": { "title": "Accords RFQ, toutes organisations", "menu": "RFQ" }
   },

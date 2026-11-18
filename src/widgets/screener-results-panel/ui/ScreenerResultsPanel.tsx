@@ -3,6 +3,7 @@ import { Columns3 } from 'lucide-react'
 import { useCallback, useContext, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
+import { useSectorName } from '@/entities/market'
 import { useFormatRatio } from '@/entities/fundamentals'
 import { LiveChangePct, LivePrice, priceDecimals, useLiveQuoteRows } from '@/entities/quote'
 import { useScreener } from '@/entities/screener'
@@ -29,6 +30,7 @@ function buildColumns(
   t: TFunction,
   format: ReturnType<typeof useFormat>,
   formatRatio: ReturnType<typeof useFormatRatio>,
+  sectorName: (name: string) => string,
   visible: readonly ResultColumn[],
 ): DataColumns<ScreenerRowDto> {
   const ratio = (key: Extract<RatioKey, ResultColumn>): Column =>
@@ -56,7 +58,9 @@ function buildColumns(
       meta: { width: '2fr' },
       cell: ({ getValue }) => <span className="font-sans text-secondary">{getValue()}</span>,
     }),
-    sector: helper.accessor('sector', {
+    // Sorted and exported by its name in the page's language (B17).
+    sector: helper.accessor((row) => sectorName(row.sector), {
+      id: 'sector',
       header: t('screener.columns.sector'),
       meta: { width: '1.3fr' },
       cell: ({ getValue }) => <span className="font-sans">{getValue()}</span>,
@@ -143,10 +147,11 @@ export function ScreenerResultsPanel({
   const items = results.data?.items
   useSymbolSubscription(items?.map((item) => item.securityId) ?? [])
   const rows = useLiveQuoteRows(items, getSecurityId, liveRow)
+  const sectorName = useSectorName()
 
   const columns = useMemo(
-    () => buildColumns(t, format, formatRatio, visible),
-    [t, format, formatRatio, visible],
+    () => buildColumns(t, format, formatRatio, sectorName, visible),
+    [t, format, formatRatio, sectorName, visible],
   )
 
   return (

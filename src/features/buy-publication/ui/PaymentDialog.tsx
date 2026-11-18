@@ -5,7 +5,7 @@ import { usePurchase } from '@/entities/publication'
 import { isApiError } from '@/shared/api'
 import type { LibraryPublicationDto, PaymentDto, PaymentMethod } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
-import { isPhoneNumber } from '@/shared/lib/phone'
+import { isMobileMoneyNumber } from '@/shared/lib/phone'
 import { Dialog, DialogBody, DialogFooter } from '@/shared/ui/Dialog'
 import { Button } from '@/shared/ui/form/Button'
 import { Field } from '@/shared/ui/form/Field'
@@ -53,7 +53,7 @@ function PaymentSteps({
   const phoneError =
     (submitted &&
       method === 'mobileMoney' &&
-      !isPhoneNumber(phone) &&
+      !isMobileMoneyNumber(phone) &&
       t('purchase.phoneInvalid')) ||
     (isApiError(purchase.error, 400) && purchase.error.problem.errors?.phone?.[0]) ||
     null
@@ -94,7 +94,7 @@ function PaymentSteps({
       onSubmit={(event) => {
         event.preventDefault()
         setSubmitted(true)
-        if (method === 'mobileMoney' && !isPhoneNumber(phone)) return
+        if (method === 'mobileMoney' && !isMobileMoneyNumber(phone)) return
         purchase.mutate(
           { method, phone: method === 'mobileMoney' ? phone.trim() : null },
           { onSuccess: onStarted },

@@ -64,6 +64,13 @@ test('a purchase is recorded and a sale of more than held is refused', async ({ 
   await form.getByRole('textbox', { name: 'Quantity' }).fill('5000')
   await form.getByRole('button', { name: 'Record' }).click()
   await expect(form.getByText(/^4,100 held on/)).toBeVisible()
+
+  // A withdrawal above the cash is refused too, with the cash of the day: a portfolio has no
+  // overdraft (B57: a hundred billion was taken, every weight 0.0 %).
+  await form.getByRole('combobox', { name: 'Type' }).selectOption('withdrawal')
+  await form.getByRole('textbox', { name: /^Amount/ }).fill('99999999999')
+  await form.getByRole('button', { name: 'Record' }).click()
+  await expect(form.getByText(/^[\d,.]+ XAF of cash on \d\d\/\d\d\/\d{4}\.$/)).toBeVisible()
 })
 
 test('transactions are imported from the template, all rows or none', async ({ page }) => {

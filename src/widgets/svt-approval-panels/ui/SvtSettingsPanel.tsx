@@ -54,6 +54,8 @@ function SettingsView({ settings }: { settings: SvtSettingsDto }) {
   const format = useFormat()
   const { window: approvalWindow } = settings
   const authorised = settings.approvers.filter((approver) => approver.authorised).length
+  // One account that may approve: its approval is the bank's, whatever the amount (B84).
+  const approvers = settings.allApprove ? settings.approvers.length : authorised
   const channels = [
     t('svt.settings.screen'),
     ...(settings.notifyByEmail ? [t('svt.settings.email')] : []),
@@ -76,6 +78,9 @@ function SettingsView({ settings }: { settings: SvtSettingsDto }) {
           {t('svt.settings.fourEyesValue', {
             amount: format.compact(settings.fourEyesThreshold, 0),
           })}
+          {approvers < 2 && (
+            <span className="block text-secondary">{t('svt.settings.oneApprover')}</span>
+          )}
         </Row>
         <Row label={t('svt.settings.approvers')}>
           {settings.allApprove

@@ -9,9 +9,19 @@ export const marketKeys = {
   summary: () => [...marketKeys.all, 'summary'] as const,
   movers: (type: MoversType) => [...marketKeys.all, 'movers', type] as const,
   ticker: () => [...marketKeys.all, 'ticker'] as const,
+  sectors: () => [...marketKeys.all, 'sectors'] as const,
   indices: () => [...marketKeys.all, 'indices'] as const,
   indexHistory: (code: string, period: ChartPeriod) =>
     [...marketKeys.all, 'indices', code, 'history', period] as const,
+}
+
+/** GET /market/sectors: the issuers' sectors in English and French, read once a session. */
+export function useSectors() {
+  return useQuery({
+    queryKey: marketKeys.sectors(),
+    queryFn: ({ signal }) => marketApi.sectors(signal),
+    staleTime: Infinity,
+  })
 }
 
 export function useMarketStatus() {

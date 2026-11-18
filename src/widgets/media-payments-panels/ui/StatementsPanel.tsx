@@ -120,8 +120,9 @@ export function StatementsPanel({ month, selectedId, onSelect }: StatementsPanel
         toast.error(error instanceof Error ? error.message : String(error)),
       )
 
+  // The links wrap on a phone: in one row they passed the bar's edge at 320 px (B28, "CSV").
   const links = (
-    <span className="panel-no-drag flex items-center gap-1.5">
+    <span className="panel-no-drag flex max-w-full flex-wrap items-center justify-end gap-x-1.5">
       <button
         type="button"
         className="uppercase hover:text-primary"

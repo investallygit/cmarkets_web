@@ -24,7 +24,8 @@ const OPTION = 'inline-flex h-6 min-w-6 items-center justify-center uppercase'
 /** Panel options with the active one in square brackets (spec section 9). */
 export function PanelTabs<T extends string>({ value, options, onChange }: PanelTabsProps<T>) {
   return (
-    <div role="tablist" className="panel-no-drag flex items-center">
+    // Its tabs wrap rather than run past the panel's edge on a phone (SRC's five sources).
+    <div role="tablist" className="panel-no-drag flex flex-wrap items-center">
       {options.map((option) => {
         const active = option.value === value
         return (

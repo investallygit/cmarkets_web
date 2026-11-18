@@ -117,7 +117,7 @@ export function SessionCoveragePanel({
       bodyClassName="flex flex-col"
     >
       {onDateChange && shown && (
-        <div className="flex items-center gap-1 border-b p-2">
+        <div className="flex flex-wrap items-center gap-1 border-b p-2">
           <span className="mr-1 font-sans text-data text-secondary">
             {t('dataImport.coverage.session')}
           </span>
@@ -131,7 +131,7 @@ export function SessionCoveragePanel({
             value={shown}
             onChange={(value) => value && onDateChange(value)}
             aria-label={t('dataImport.coverage.session')}
-            className="w-28"
+            className="w-28 shrink-0"
           />
           <Button
             size="sm"

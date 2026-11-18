@@ -11,6 +11,7 @@ import type {
   BillingCycle,
   PlanChangeProrationDto,
 } from '@/shared/api/contracts'
+import { planNameOf } from '@/entities/subscription'
 import { useFormat } from '@/shared/i18n'
 import { Dialog, DialogBody, DialogFooter } from '@/shared/ui/Dialog'
 import { Button } from '@/shared/ui/form/Button'
@@ -107,7 +108,7 @@ function ChangePlanForm({
         <Field label={t('subscriptionAdmin.actions.newPlan')}>
           <Select
             value={planId}
-            options={allowed.map((plan) => ({ value: plan.id, label: plan.name }))}
+            options={allowed.map((plan) => ({ value: plan.id, label: planNameOf(t, plan) }))}
             onChange={setPlanId}
             highlight
           />

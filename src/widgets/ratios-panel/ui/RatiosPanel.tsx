@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSectorName } from '@/entities/market'
 import { RATIO_KEYS, useFormatRatio, useRatios } from '@/entities/fundamentals'
 import type { RatioKey, RatiosDto } from '@/shared/api/contracts'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
@@ -36,7 +37,8 @@ export function RatiosPanel({ securityId, code }: RatiosPanelProps) {
   const { t } = useTranslation()
   const formatRatio = useFormatRatio()
   const ratios = useRatios(securityId)
-  const sector = ratios.data?.sector
+  const sectorName = useSectorName()
+  const sector = ratios.data?.sector && sectorName(ratios.data.sector)
 
   const columns = useMemo(
     () =>

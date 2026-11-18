@@ -73,7 +73,8 @@ function Tile({
   return (
     <div
       className={clsx(
-        'flex min-w-0 flex-col justify-center gap-1 bg-panel px-3 py-2',
+        // Narrower padding at 320 px, where an amount wanted 2 px more.
+        'flex min-w-0 flex-col justify-center gap-1 bg-panel px-3 py-2 max-sm:px-2',
         highlight && 'outline outline-1 -outline-offset-1 outline-accent-amber',
       )}
     >

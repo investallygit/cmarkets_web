@@ -1,7 +1,7 @@
 import { FileDown } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useInvoicePdf, useInvoices } from '@/entities/subscription'
+import { planNameOfLabel, useInvoicePdf, useInvoices } from '@/entities/subscription'
 import type { InvoiceDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { saveBlob } from '@/shared/lib/download'
@@ -48,11 +48,14 @@ export function InvoicesPanel() {
           meta: { width: '1.4fr' },
           cell: ({ row }) => {
             const invoice = row.original
+            // A plan in the page's language (B17), or the publication's title.
+            const label =
+              invoice.kind === 'subscription' ? planNameOfLabel(t, invoice.label) : invoice.label
             // The plan or the publication; the cycle and the period in the tooltip.
             const detail =
               invoice.kind === 'subscription' && invoice.billingCycle && invoice.periodStart
                 ? t('invoices.plan', {
-                    plan: invoice.label,
+                    plan: label,
                     cycle: t(`subscription.cycles.${invoice.billingCycle}`),
                     from: format.isoDate(invoice.periodStart),
                     to: format.isoDate(invoice.periodEnd ?? invoice.periodStart),
@@ -60,7 +63,7 @@ export function InvoicesPanel() {
                 : t('invoices.publication', { title: invoice.label })
             return (
               <span title={detail} className="font-sans">
-                {invoice.label}
+                {label}
               </span>
             )
           },

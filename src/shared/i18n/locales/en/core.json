@@ -33,6 +33,7 @@
     "expandMenu": "Expand menu",
     "collapseMenu": "Collapse menu",
     "mainMenu": "Main menu",
+    "tickerTape": "Ticker tape",
     "realtime": {
       "connecting": "Connecting",
       "connected": "Real-time connected",
@@ -113,6 +114,7 @@
     "PAY": { "title": "Analyst payouts", "menu": "Payouts" },
     "RFQREP": { "title": "Daily reporting to the BEAC", "menu": "RFQ" },
     "ADMCFG": { "title": "Platform settings", "menu": "Settings" },
+    "MYCFG": { "title": "My settings", "menu": "My settings" },
     "AUDT": { "title": "Audit log", "menu": "Audit" },
     "ADMAGR": { "title": "RFQ agreements, every organisation", "menu": "RFQ" }
   },

@@ -6,20 +6,24 @@ import { ConfirmDialog } from './ConfirmDialog'
 /**
  * Changes not saved are not dropped unasked (B68): while `dirty`, closing or reloading the tab asks
  * the browser's question, and leaving the screen in the app asks whether to leave without saving.
+ * The router's blocker exists only while there is something to lose: an idle one still heard every
+ * history change made outside the router, and warned of each in the console.
  */
 export function LeaveGuard({ dirty }: { dirty: boolean }) {
+  return dirty ? <UnsavedGuard /> : null
+}
+
+function UnsavedGuard() {
   const { t } = useTranslation()
   const blocker = useBlocker(
-    ({ currentLocation, nextLocation }) =>
-      dirty && currentLocation.pathname !== nextLocation.pathname,
+    ({ currentLocation, nextLocation }) => currentLocation.pathname !== nextLocation.pathname,
   )
 
   useEffect(() => {
-    if (!dirty) return
     const warn = (event: BeforeUnloadEvent) => event.preventDefault()
     window.addEventListener('beforeunload', warn)
     return () => window.removeEventListener('beforeunload', warn)
-  }, [dirty])
+  }, [])
 
   return (
     <ConfirmDialog

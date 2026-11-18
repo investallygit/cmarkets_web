@@ -1,8 +1,10 @@
 import type {
+  BillingCycle,
   CheckoutDto,
   CheckoutRequestDto,
   InvoiceDto,
   PaymentDto,
+  PlanChangeProrationDto,
   PlanDto,
   SubscriptionDto,
 } from '../contracts'
@@ -12,6 +14,7 @@ import { answer, route, send, sendBlob } from './define'
 export const subscriptionsRoutes = {
   current: route('GET', '/subscription', answer<SubscriptionDto>()),
   plans: route('GET', '/subscription/plans', answer<PlanDto[]>()),
+  proration: route('GET', '/subscription/proration', answer<PlanChangeProrationDto>()),
   checkout: route('POST', '/subscription/checkout', answer<CheckoutDto>()),
   payment: route('GET', '/payments/{id}', answer<PaymentDto>()),
   invoices: route('GET', '/invoices', answer<InvoiceDto[]>()),
@@ -26,7 +29,16 @@ export const subscriptionsApi = {
   /** Every plan, without the session: the home page shows the same to everyone. */
   publicPlans: (signal?: AbortSignal) =>
     send(subscriptionsRoutes.plans, { signal, anonymous: true }),
-  /** A bank transfer changes the plan at once; a card or mobile money payment is followed. */
+  /**
+   * What choosing the plan does today (ROADMAP decision 7): the days left of the plan in force buy
+   * days of it, or a full period is paid at once.
+   */
+  proration: (planId: string, billingCycle: BillingCycle, signal?: AbortSignal) =>
+    send(subscriptionsRoutes.proration, { query: { planId, billingCycle }, signal }),
+  /**
+   * The days left of the plan in force pay for the new one, which applies at once; otherwise a
+   * bank transfer changes the plan at once, a card or mobile money payment is followed.
+   */
   checkout: (request: CheckoutRequestDto) => send(subscriptionsRoutes.checkout, { body: request }),
   /** A payment's status, asked again while pending (a plan's, a publication's). */
   payment: (id: string, signal?: AbortSignal) =>

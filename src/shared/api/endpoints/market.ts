@@ -27,6 +27,7 @@ import type {
   RateHistoryDto,
   RateOrigin,
   RateSeriesDto,
+  SectorDto,
   TickerItemDto,
   XafCrossesDto,
 } from '../contracts'
@@ -49,6 +50,7 @@ export const marketRoutes = {
   summary: route('GET', '/market/summary', answer<MarketSummaryDto>()),
   movers: route('GET', '/market/movers', answer<MoverDto[]>()),
   ticker: route('GET', '/market/ticker', answer<TickerItemDto[]>()),
+  sectors: route('GET', '/market/sectors', answer<SectorDto[]>()),
   indices: route('GET', '/indices', answer<IndexQuoteDto[]>()),
   indexHistory: route('GET', '/indices/{code}/history', answer<HistoryPointDto[]>()),
   policyRates: route('GET', '/rates/policy', answer<PolicyRateDto[]>()),
@@ -78,6 +80,8 @@ export const marketApi = {
   movers: (type: MoversType, signal?: AbortSignal) =>
     send(marketRoutes.movers, { query: { type }, signal }),
   ticker: (signal?: AbortSignal) => send(marketRoutes.ticker, { signal }),
+  /** The issuers' sectors by their names in English and French (B17 of ROADMAP step 50). */
+  sectors: (signal?: AbortSignal) => send(marketRoutes.sectors, { signal }),
   /** The indices CMarket computes or receives, e.g. for a portfolio's benchmark. */
   indices: (signal?: AbortSignal) => send(marketRoutes.indices, { signal }),
   indexHistory: (code: string, range: HistoryRange, signal?: AbortSignal) =>

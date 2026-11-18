@@ -16,7 +16,7 @@ export function TriggeredAlertsPanel() {
   const { query, items } = useTodayNotifications()
 
   return (
-    <Panel title={t('panels.alertsToday')} code="ALRT">
+    <Panel title={t('panels.alertsToday')} code="ALRT" bodyClassName="@container">
       <QueryView
         query={query}
         isEmpty={() => !items?.length}
@@ -31,14 +31,16 @@ export function TriggeredAlertsPanel() {
               >
                 <span className="text-secondary">{format.time(notification.triggeredAt)}</span>
                 <span className="flex min-w-0 items-center gap-1.5">
-                  {/* In a narrow panel the tags give way to the subject (B23). */}
+                  {/* The tags give way to the subject (B23), and leave a panel too narrow for both
+                      rather than show their buttons cut. */}
                   {notification.news && (
-                    <NewsTags
-                      type={notification.news.type}
-                      source={notification.news.source}
-                      mode="pointer"
-                      className="min-w-0 shrink-[4] overflow-hidden"
-                    />
+                    <span className="hidden min-w-0 shrink-[4] overflow-hidden @lg:inline-flex">
+                      <NewsTags
+                        type={notification.news.type}
+                        source={notification.news.source}
+                        mode="pointer"
+                      />
+                    </span>
                   )}
                   <span className="truncate font-semibold text-accent-amber">
                     {notification.subject}

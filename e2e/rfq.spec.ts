@@ -108,6 +108,10 @@ test(
       .click()
     await expect(page.getByText("C. Abena's link removed.")).toBeVisible()
     await expect(linked.getByRole('row', { name: /C\. Abena/ })).toHaveCount(0)
+    // The SVT exports the table, as AGR its agreements, without the analysis permission (B86).
+    const download = page.waitForEvent('download')
+    await linked.getByRole('button', { name: 'csv' }).click()
+    expect((await download).suggestedFilename()).toMatch(/^cmarket-trader-links.*\.csv$/)
 
     // P. Owona, the demo's Portfolio manager, reads Bank E confirmed.
     await switchAccount(page, /svt/i, 'Portfolio manager', /manager/i)

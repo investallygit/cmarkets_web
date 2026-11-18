@@ -205,7 +205,22 @@
       "confirmingCard": "Confirming the card payment of {{amount}}…",
       "confirmed": "Payment confirmed: your new plan is active.",
       "closeAndWait": "Close and wait",
-      "transferIssued": "Your plan is active. Pay the invoice by transfer, with its reference:"
+      "transferIssued": "Your plan is active. Pay the invoice by transfer, with its reference:",
+      "proration": {
+        "loading": "Working out what your days left are worth…",
+        "daysLeft": "{{days}} days left of {{plan}}, worth {{currency}} {{value}} excluding VAT.",
+        "buys": "They buy {{days}} days of {{plan}}: nothing to pay today; it renews on {{date}}, at its full price.",
+        "free": "{{plan}} is free by agreement: a full period from today, to {{date}}.",
+        "change": "Change the plan",
+        "changed": "Plan changed: {{plan}} until {{date}}."
+      }
+    },
+    "planNames": {
+      "monitoring": "Monitoring",
+      "analysis": "Analysis",
+      "professional": "Professional",
+      "student": "Student",
+      "mediaSource": "Media source"
     }
   },
   "organization": {

@@ -150,4 +150,8 @@ test('B. Sima approves one agreement and rejects the other, A. Okala concludes t
   await settings.getByRole('button', { name: 'Save' }).click()
   await expect(page.getByText('Approval settings saved.')).toBeVisible()
   await expect(settings).toContainText(/Four-eyes approval\s*above XAF 2\sBn/)
+  // Bank E has one SVT account: its approval is the bank's, whatever the amount (B84).
+  await expect(settings).toContainText(
+    "With one account that approves, its approval is the bank's: no second one is asked.",
+  )
 })

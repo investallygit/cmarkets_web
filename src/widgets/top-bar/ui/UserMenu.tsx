@@ -24,7 +24,10 @@ export function UserMenu() {
   const accountItems = useAccountMenuItems()
   const logoutItems = useLogoutMenuItems()
   const navigate = useNavigate()
-  const settings = screenById('CFG')
+  // A client's CFG, or an employee's own settings (B72).
+  const settings = [screenById('CFG'), screenById('MYCFG')].find((screen) =>
+    canAccessScreen(user, screen),
+  )
   const profile = screenById('NETME')
 
   const badge = t(`accountBadge.${user.accountType}`)
@@ -43,7 +46,7 @@ export function UserMenu() {
           },
         ]
       : []),
-    ...(canAccessScreen(user, settings)
+    ...(settings
       ? [
           {
             id: 'settings',

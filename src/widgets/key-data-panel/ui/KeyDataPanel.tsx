@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSectorName } from '@/entities/market'
 import { priceDecimals } from '@/entities/quote'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
@@ -40,6 +41,7 @@ function KeyValues({ rows }: { rows: readonly Row[] }) {
 export function KeyDataPanel({ profile }: { profile: SecurityProfileDto }) {
   const { t } = useTranslation()
   const format = useFormat()
+  const sectorName = useSectorName()
   const decimals = priceDecimals(profile.type, profile.currency)
   const nextEvent = profile.nextEvent
     ? `${profile.nextEvent.title} · ${format.isoDate(profile.nextEvent.date)}`
@@ -47,7 +49,7 @@ export function KeyDataPanel({ profile }: { profile: SecurityProfileDto }) {
 
   const equityRows: Row[] = [
     [t('keyData.isin'), profile.isin],
-    [t('keyData.sector'), profile.sector],
+    [t('keyData.sector'), sectorName(profile.sector)],
     [
       t('keyData.shares'),
       profile.sharesOutstanding === null ? MISSING : format.number(profile.sharesOutstanding, 0),

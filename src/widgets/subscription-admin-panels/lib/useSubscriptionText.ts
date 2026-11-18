@@ -6,6 +6,7 @@ import type {
   LastPaymentDto,
   PlanPaymentMethod,
 } from '@/shared/api/contracts'
+import { planNameOf } from '@/entities/subscription'
 import { useFormat } from '@/shared/i18n'
 import { membersLine } from './subscriptionText'
 
@@ -28,10 +29,12 @@ export function useSubscriptionText(plans: readonly AdminPlanDto[] | undefined) 
     const method = (value: PlanPaymentMethod | null) =>
       value ? t(`subscriptionAdmin.methods.${value}`) : none
     const planName = (row: Omit<PlanOfRow, 'viaOrganization'>) => {
-      if (!row.billingCycle) return t('subscriptionAdmin.planTrial', { plan: row.planName })
-      if (byAgreement.has(row.planId)) return row.planName
+      // In the page's language (B17).
+      const name = planNameOf(t, { id: row.planId, name: row.planName })
+      if (!row.billingCycle) return t('subscriptionAdmin.planTrial', { plan: name })
+      if (byAgreement.has(row.planId)) return name
       return t('subscriptionAdmin.planCycle', {
-        plan: row.planName,
+        plan: name,
         cycle: t(`subscriptionAdmin.cycles.${row.billingCycle}`),
       })
     }

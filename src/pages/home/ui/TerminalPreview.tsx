@@ -126,24 +126,37 @@ function Quotes({ rows }: { rows: readonly LiveQuote[] }) {
   )
 }
 
-/** The tape holds its items twice and slides by one copy, so it loops without a jump. */
+/**
+ * The tape holds its items twice and slides by one copy, so it loops without a jump: a marquee,
+ * its entries out of view by design. Without motion it stands still, one copy whose entries that
+ * do not fit whole go to a second line, out of view, as the terminal's own tape (B14).
+ */
 function TickerTape({ rows, running }: { rows: readonly LiveQuote[]; running: boolean }) {
   const items = rows.map((row) => (
-    <span key={row.quote.code} className="flex gap-1.5">
+    <span key={row.quote.code} className="flex h-full items-center gap-1.5">
       <span className="text-secondary">{row.quote.code}</span>
       <Price {...row} />
       <Change {...row} />
     </span>
   ))
   return (
-    <div className="h-6 overflow-hidden border-b bg-panel font-mono text-caption whitespace-nowrap">
+    <div
+      role="marquee"
+      className="h-6 overflow-hidden border-b bg-panel font-mono text-caption whitespace-nowrap"
+    >
       <div
         // Inline, so the animation shorthand of the class cannot set it back to running.
         style={{ animationPlayState: running ? 'running' : 'paused' }}
-        className="flex h-full w-max motion-safe:animate-ticker"
+        className="flex h-full w-max motion-safe:animate-ticker motion-reduce:w-full"
       >
         {[0, 1].map((copy) => (
-          <div key={copy} className="flex shrink-0 items-center gap-4 px-2">
+          <div
+            key={copy}
+            className={clsx(
+              'flex shrink-0 gap-x-4 px-2 motion-reduce:shrink motion-reduce:flex-wrap',
+              copy === 1 && 'motion-reduce:hidden',
+            )}
+          >
             {items}
           </div>
         ))}

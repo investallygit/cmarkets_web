@@ -57,7 +57,9 @@ test('codes by SMS go to the phone of the profile', async ({ page }) => {
   await expect(page.getByText('A code was sent by SMS to +237 ••• ••• 18.')).toBeVisible()
 })
 
-test('a Trader without the Portfolio module upgrades by mobile money', async ({ page }) => {
+test("a Trader without the Portfolio module upgrades with the days left of the bank's plan", async ({
+  page,
+}) => {
   await switchAccount(page, 'Trader', /trader/i)
   await page.getByRole('link', { name: /PORT/ }).click()
   await expect(page.getByText('The Portfolio module is not in your plan.')).toBeVisible()
@@ -67,24 +69,19 @@ test('a Trader without the Portfolio module upgrades by mobile money', async ({ 
   await expect(subscription).toContainText('Paid by your organisation for 3 users')
   await subscription.getByRole('button', { name: 'Choose Professional' }).click()
   const dialog = page.getByRole('dialog', { name: 'Professional plan' })
-  await expect(dialog).toContainText('3 users × XAF 700,000, yearly')
-  await expect(dialog).toContainText('XAF 2,504,250')
-  await dialog.getByText('Mobile money', { exact: true }).click()
-  await dialog.getByLabel('Mobile money number').fill('+241 06 12 34 56')
-  await dialog.getByRole('button', { name: 'Pay XAF 2,504,250' }).click()
-  await expect(dialog.getByRole('status')).toContainText('Approve the payment of XAF 2,504,250')
-  await expect(dialog.getByRole('status')).toHaveText(
-    'Payment confirmed: your new plan is active.',
-    { timeout: 10_000 },
+  // Bank C's Analysis year buys days of Professional, as SUBS prorates (ROADMAP decision 7; B73:
+  // a full year was charged, the days paid lost).
+  await expect(dialog).toContainText(/\d+ days left of Analysis, worth XAF [\d,]+ excluding VAT\./)
+  await expect(dialog).toContainText(
+    /They buy \d+ days of Professional: nothing to pay today; it renews on \d\d\/\d\d\/\d{4}/,
   )
-  // The footer's Close, after the title bar's.
-  await dialog.getByRole('button', { name: 'Close' }).last().click()
-  await expect(subscription.getByRole('row', { name: /Professional/ })).toContainText('Current')
+  await expect(dialog.getByText('Mobile money', { exact: true })).toHaveCount(0)
+  await dialog.getByRole('button', { name: 'Change the plan' }).click()
   await expect(
-    panel(page, 'Invoices')
-      .getByRole('row', { name: /Professional/ })
-      .first(),
-  ).toContainText('Paid')
+    page.getByText(/^Plan changed: Professional until \d\d\/\d\d\/\d{4}\.$/),
+  ).toBeVisible()
+  await expect(dialog).toBeHidden()
+  await expect(subscription.getByRole('row', { name: /Professional/ })).toContainText('Current')
 
   await page.getByRole('link', { name: /PORT/ }).click()
   await expect(page.getByText('The Portfolio module is not in your plan.')).toHaveCount(0)
@@ -96,27 +93,22 @@ test('a Trader without the Portfolio module upgrades by mobile money', async ({ 
   ).toBeVisible()
 })
 
-test('a bank transfer gives the invoice to pay, and the new plan at once', async ({ page }) => {
+test('a smaller plan takes the days left of the plan in force, nothing to pay', async ({
+  page,
+}) => {
   await page.goto('/cfg')
   const subscription = panel(page, 'Subscription')
   await subscription.getByRole('tab', { name: 'Monthly' }).click()
   await subscription.getByRole('button', { name: 'Choose Analysis' }).click()
   const dialog = page.getByRole('dialog', { name: 'Analysis plan' })
-  await dialog.getByText('Bank transfer', { exact: true }).click()
-  await dialog.getByRole('button', { name: 'Get the invoice' }).click()
-  await expect(dialog).toContainText('Pay the invoice by transfer, with its reference')
-  await expect(dialog).toContainText('CM21 10005 00001 01234567890 12')
-  // The footer's Close, after the title bar's.
-  await dialog.getByRole('button', { name: 'Close' }).last().click()
+  // K. Atangana's Professional year buys months of Analysis (B99: a new period at full price, the
+  // year just paid replaced at once).
+  await expect(dialog).toContainText(/\d+ days left of Professional, worth XAF [\d,]+/)
+  await expect(dialog).toContainText(/They buy \d+ days of Analysis: nothing to pay today/)
+  await dialog.getByRole('button', { name: 'Change the plan' }).click()
+  await expect(page.getByText(/^Plan changed: Analysis until \d\d\/\d\d\/\d{4}\.$/)).toBeVisible()
 
-  await expect(subscription).toContainText('An invoice is due by bank transfer')
   await expect(subscription).toContainText('Monitoring, Analysis')
-  // The newest first: the demo's Analysis months of 2025 and 2026 follow (SUBS, step 34).
-  await expect(
-    panel(page, 'Invoices')
-      .getByRole('row', { name: /Analysis/ })
-      .first(),
-  ).toContainText(/Due \d{2}\/\d{2}/)
   // The plan has no Portfolio module any more.
   await expect(page.getByRole('link', { name: /PORT/ })).toHaveAttribute(
     'title',
@@ -197,4 +189,23 @@ test('a new Analyst gets the trial and waits for the approval to publish', async
   await expect(page.getByText(/approv/i).first()).toBeVisible()
   await page.goto('/cfg')
   await expect(panel(page, 'Profile')).toContainText('Analyst · awaiting approval')
+
+  // A trial carries nothing over: a full month of Analysis, against an invoice to pay by transfer.
+  const subscription = panel(page, 'Subscription')
+  await subscription.getByRole('tab', { name: 'Monthly' }).click()
+  await subscription.getByRole('button', { name: 'Choose Analysis' }).click()
+  const dialog = page.getByRole('dialog', { name: 'Analysis plan' })
+  await expect(dialog).toContainText('1 user × XAF')
+  await dialog.getByText('Bank transfer', { exact: true }).click()
+  await dialog.getByRole('button', { name: 'Get the invoice' }).click()
+  await expect(dialog).toContainText('Pay the invoice by transfer, with its reference')
+  await expect(dialog).toContainText('CM21 10005 00001 01234567890 12')
+  // The footer's Close, after the title bar's.
+  await dialog.getByRole('button', { name: 'Close' }).last().click()
+  await expect(subscription).toContainText('An invoice is due by bank transfer')
+  await expect(
+    panel(page, 'Invoices')
+      .getByRole('row', { name: /Analysis/ })
+      .first(),
+  ).toContainText(/Due \d{2}\/\d{2}/)
 })

@@ -86,7 +86,8 @@ interface CounterProps {
 
 function Counter({ label, tone, pressed, onClick, children }: CounterProps) {
   const className = clsx(
-    'flex min-w-0 flex-col gap-0.5 border px-3 py-1.5 text-left',
+    // Narrower padding at 320 px, where "SUBSCRIPTIONS" wanted 2 px more.
+    'flex min-w-0 flex-col gap-0.5 border px-3 py-1.5 text-left max-sm:px-2',
     pressed ? 'bg-selected' : 'bg-panel',
     onClick && 'hover:bg-panel-header',
   )

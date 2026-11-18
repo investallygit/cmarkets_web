@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useTicker } from '@/entities/market'
 import { priceDecimals, useLiveIndex, useLiveQuote } from '@/entities/quote'
 import type { TickerItemDto } from '@/shared/api/contracts'
@@ -8,15 +9,21 @@ import { Flash } from '@/shared/ui/Flash'
 
 /**
  * Ticker tape under the top bar: indices and main securities with coloured change. The entries
- * that do not fit whole go to a second line, out of view: none is cut mid-word (B14).
+ * that do not fit whole go to a second line, out of view: none is cut mid-word (B14). A marquee,
+ * ARIA's role for a stock ticker, whose entries screen readers still read in full.
  */
 export function TickerTape() {
+  const { t } = useTranslation()
   const { data } = useTicker()
   // Indices too: the hub sends each value only to the screens that follow its symbol.
   useSymbolSubscription(data?.map((item) => item.symbol) ?? [])
 
   return (
-    <div className="flex h-full flex-wrap gap-x-8 overflow-hidden px-4 font-mono text-data whitespace-nowrap">
+    <div
+      role="marquee"
+      aria-label={t('shell.tickerTape')}
+      className="flex h-full flex-wrap gap-x-8 overflow-hidden px-4 font-mono text-data whitespace-nowrap"
+    >
       {data?.map((item) => (
         <TickerEntry key={item.symbol} item={item} />
       ))}

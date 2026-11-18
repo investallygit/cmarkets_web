@@ -229,6 +229,7 @@ GET /macro/countries/{iso3}/summary
 GET /macro/global-rates
 GET /macro/indicators
 GET /market/movers
+GET /market/sectors
 GET /market/status
 GET /market/summary
 GET /market/ticker
@@ -385,6 +386,7 @@ GET /securities/{id}/trades
 GET /subscription
 POST /subscription/checkout
 GET /subscription/plans
+GET /subscription/proration
 GET /svt/approvals
 GET /svt/approvals/{agreementId}
 POST /svt/approvals/{agreementId}/approve

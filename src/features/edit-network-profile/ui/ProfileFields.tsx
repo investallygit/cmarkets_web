@@ -113,7 +113,9 @@ export function ProfileFields({ editor }: { editor: ProfileEditor }) {
       <section className="flex flex-col gap-2">
         <SectionTitle>{t('network.profile.contact')}</SectionTitle>
         <p className="font-sans text-title text-secondary">{t('network.profile.contactHint')}</p>
-        <Field label={t('network.profile.workEmail')} inline error={error('workEmail')}>
+        {/* Each label above its field: an address or a number takes the panel's width, whole at
+            320 px. */}
+        <Field label={t('network.profile.workEmail')} error={error('workEmail')}>
           <TextInput
             type="email"
             value={form.workEmail}
@@ -122,7 +124,7 @@ export function ProfileFields({ editor }: { editor: ProfileEditor }) {
             mono
           />
         </Field>
-        <Field label={t('network.profile.phone')} inline error={error('phone')}>
+        <Field label={t('network.profile.phone')} error={error('phone')}>
           <TextInput
             type="tel"
             value={form.phone}
@@ -131,7 +133,7 @@ export function ProfileFields({ editor }: { editor: ProfileEditor }) {
             mono
           />
         </Field>
-        <Field label={t('network.profile.linkedIn')} inline error={error('linkedIn')}>
+        <Field label={t('network.profile.linkedIn')} error={error('linkedIn')}>
           <TextInput
             value={form.linkedIn}
             onChange={(linkedIn) => set({ linkedIn })}
