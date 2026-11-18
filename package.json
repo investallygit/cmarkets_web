@@ -14,7 +14,8 @@
     "test:run": "vitest run",
     "test:api": "vitest run --config vitest.api.config.ts",
     "api:routes": "node scripts/api-routes.mjs",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "sweep": "node scripts/page-sweep/sweep.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
@@ -58,6 +59,7 @@
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^6.1.2",
+    "axe-core": "^4.14.0",
     "eslint": "^10.13.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",

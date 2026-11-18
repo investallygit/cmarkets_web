@@ -101,9 +101,11 @@ in the order below, the screens it touched and the README's status are brought u
 | 47   | [RFQ REP: daily reporting to the BEAC (screen 24)](roadmap/steps/step-47-beac-reporting.md)                          | Done   |
 | 48   | [Fourth version done: README, accessibility, every flow](roadmap/steps/step-48-fourth-version-done.md)               | Done   |
 | 49   | [The CMarket curve fed by the RFQ agreements above an amount](roadmap/steps/step-49-rfq-curve-feed.md)               | Done   |
+| 50   | [Every page checked for bugs, then the bugs fixed](roadmap/steps/step-50-page-bug-sweep.md)                          | To do  |
 
 Steps 41 to 48 run in three lanes at once, each with its own steps: see [Lanes](roadmap/lanes.md),
 which also says what waits for what. Step 49 came after them, on a rule step 48 had left open.
+Step 50 then uses every page as each account type, to find the bugs before fixing them.
 
 Steps 1 to 10 built the first version, screen by screen, and have no file of their own: their
 record is under each screen in [Client screens](roadmap/client-screens.md) and
