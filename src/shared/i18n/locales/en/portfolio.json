@@ -1,5 +1,6 @@
 {
   "portfolio": {
+    "notReadable": "The portfolio asked for does not exist or is no longer shared with you: {{name}} is shown.",
     "tabsLabel": "Portfolio tabs",
     "tabs": {
       "positions": "Positions",

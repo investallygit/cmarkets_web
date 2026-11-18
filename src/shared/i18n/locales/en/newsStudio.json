@@ -166,6 +166,7 @@
       "uploaded": "{{file}} is checked.",
       "last": "Last import",
       "none": "No import yet.",
+      "lastFailed": "The last import could not be read.",
       "checking": "Checking {{file}}…",
       "failed": "{{file}} cannot be checked: {{error}}",
       "read": "Rows read",

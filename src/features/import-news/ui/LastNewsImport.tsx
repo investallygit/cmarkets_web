@@ -14,6 +14,7 @@ import { toast } from '@/shared/ui/toast'
 import { issueText } from '../lib/issueText'
 import { FixNewsRowDialog } from './FixNewsRowDialog'
 import { NewsImportRowsDialog } from './NewsImportRowsDialog'
+import { InlineError } from '@/shared/ui/StatusViews'
 
 /** The rows in error listed under the summary; View details shows them all. */
 const ERRORS_SHOWN = 3
@@ -29,6 +30,16 @@ export function LastNewsImport() {
   const live = useNewsImport(last.data?.id ?? null)
   const upload = live.data ?? last.data ?? null
   if (!upload) {
+    // The last import that could not be read is said, not taken for none (B63).
+    if (last.isError)
+      return (
+        <p className="font-sans text-data">
+          <InlineError
+            message={t('newsStudio.import.lastFailed')}
+            onRetry={() => void last.refetch()}
+          />
+        </p>
+      )
     return last.isPending ? null : (
       <p className="font-sans text-data text-secondary">{t('newsStudio.import.none')}</p>
     )

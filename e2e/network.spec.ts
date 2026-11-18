@@ -24,6 +24,21 @@ test('the Analyst opens NET ME from the command bar on the profile of the mockup
   await expect(preview).toContainText('42 publications · ★ 4.4 · 412 followers')
   await expect(preview.getByText('Contact', { exact: true })).toBeVisible()
   await expect(preview.getByRole('button', { name: 'Save' })).toBeDisabled()
+
+  // A change not saved: leaving the screen asks first (B68).
+  const directory = page
+    .getByRole('navigation', { name: 'Main menu' })
+    .getByRole('link', { name: /Directory/ })
+  await profile.getByLabel('Job title').fill('Sovereign analyst')
+  await directory.click()
+  const leave = page.getByRole('dialog', { name: 'Leave without saving?' })
+  await expect(leave).toBeVisible()
+  await leave.getByRole('button', { name: 'Cancel' }).click()
+  await expect(page).toHaveURL(/\/net\/me$/)
+  await expect(profile.getByLabel('Job title')).toHaveValue('Sovereign analyst')
+  await directory.click()
+  await leave.getByRole('button', { name: 'Leave' }).click()
+  await expect(page).toHaveURL(/\/net$/)
 })
 
 test('a contact rule shows in the preview, and SAVE keeps it with the new job', async ({
@@ -82,5 +97,5 @@ test('the CMarket employees have no professional profile', async ({ page }) => {
   await page.getByRole('menuitemradio', { name: 'Admin', exact: true }).click()
   await expect(page.getByRole('button', { name: /^admin$/i })).toBeVisible()
   await page.goto('/net/me')
-  await expect(page.getByText('This screen is not available for your account type.')).toBeVisible()
+  await expect(page.getByText(/^This screen is not open to your account/)).toBeVisible()
 })

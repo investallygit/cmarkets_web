@@ -42,7 +42,7 @@ function Tile({ tile }: { tile: MacroTileDto }) {
     <li className="flex min-h-24 flex-col gap-1 border bg-panel px-3 py-2">
       <h3
         title={names.name(tile)}
-        className="line-clamp-2 font-sans text-label font-semibold tracking-wide text-secondary uppercase"
+        className="line-clamp-2 font-sans text-label font-semibold tracking-wide text-secondary uppercase hyphens-auto [overflow-wrap:anywhere]"
       >
         {names.name(tile)}
       </h3>

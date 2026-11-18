@@ -33,6 +33,9 @@ export function useColumnLabel() {
 }
 
 /** A cell of an upload as the screen shows it: dates and figures in the user's format. */
+/** The templates' year columns: the macro file's "year", the financial statements' "fiscal_year". */
+export const isYearColumn = (name: string) => /(^|_)year$/.test(name)
+
 export function useImportCell() {
   const format = useFormat()
   return useCallback(
@@ -44,6 +47,8 @@ export function useImportCell() {
         return value
       }
       if (column.kind === 'rate') return format.percent(value, 2, false)
+      // A year is no amount: "2025", not "2,025" (B87).
+      if (isYearColumn(column.name)) return String(value)
       if (column.kind === 'integer') return format.number(value, 0)
       return format.number(value, Number.isInteger(value) ? 0 : 2)
     },

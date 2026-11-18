@@ -3,6 +3,7 @@
     "counters": "Compteurs des abonnements",
     "active": "Abonnements actifs",
     "expiringSoon": "Échéance sous 30 jours",
+    "countersCaption": "Comptés en comptes, chaque membre d'une organisation compris ; la liste ajoute une ligne par organisation.",
     "expiredNotRenewed": "Expirés, non renouvelés",
     "failedPayments": "Paiements échoués (30 j)",
     "collected": "Encaissé ce mois",

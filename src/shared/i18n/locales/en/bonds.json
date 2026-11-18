@@ -201,6 +201,12 @@
     "calculate": "Calculate",
     "changed": "The inputs changed: calculate to update the results.",
     "incomplete": "Complete the inputs to calculate.",
+    "outOfRange": "Correct the inputs in red to calculate.",
+    "ranges": {
+      "faceValue": "Above 0%.",
+      "couponRate": "Between 0% and 100%.",
+      "ytm": "Between -50% and 100%."
+    },
     "required": "Required.",
     "dateRequired": "Enter a date DD/MM/YYYY.",
     "positiveAmount": "Enter an amount above 0.",

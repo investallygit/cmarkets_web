@@ -34,6 +34,7 @@
       "label": "Scénario",
       "unsaved": "Nouveau paramétrage",
       "listFailed": "Vos scénarios n'ont pas pu être lus.",
+      "notFound": "aucun de vos scénarios n'a cette adresse",
       "new": "Nouveau",
       "save": "Enregistrer",
       "saveAs": "Enregistrer une copie",
@@ -93,7 +94,8 @@
       "take": "Prendre",
       "imported": "{{count}} titres pris de {{name}}",
       "importNone": "{{name}} ne contient ni action, ni obligation, ni ETF.",
-      "importFailed": "Les titres n'ont pas été pris : {{message}}"
+      "importFailed": "Les titres n'ont pas été pris : {{message}}",
+      "noWatchlist": "Cette liste de suivi n'est pas l'une des vôtres : le paramétrage est inchangé."
     },
     "objective": {
       "title": "Objectif et contraintes",
@@ -164,6 +166,12 @@
     "checks": {
       "title": "Contrôles avant calcul",
       "waiting": "Ajoutez 2 à 20 titres et la cible de l'objectif.",
+      "blocked": {
+        "universe": "Ajoutez 2 à 20 titres : l'univers en compte {{count}}.",
+        "capital": "Saisissez un capital supérieur à 0.",
+        "target": "Saisissez la cible de l'objectif."
+      },
+      "failed": "Les contrôles n'ont pas pu s'exécuter : {{message}}",
       "constraintsOk": "Les contraintes sont compatibles",
       "constraintsError": "Les contraintes se contredisent",
       "involved": "En cause : {{list}}",
@@ -233,6 +241,7 @@
       },
       "total": "Total",
       "cash": "Liquidités laissées par l'arrondi",
+      "nothingBought": "{{amount}} XAF n'achète aucun titre entier aux cours du jour : les poids et les indicateurs sont ceux de l'allocation ; augmentez le capital pour voir les quantités.",
       "max": "max",
       "min": "min",
       "caption": "« max » : le poids atteint sa limite. Montants en titres entiers ; part du risque : contribution du titre à la volatilité du portefeuille."

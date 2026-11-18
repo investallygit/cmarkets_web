@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   addSecurities,
+  checkBlocker,
   constraintCount,
   emptySetup,
   enteredCorrelation,
@@ -65,6 +66,15 @@ describe('optimisation setup', () => {
     expect(
       isCheckable({ ...addSecurities(setup, ['B']), objective: 'minRisk', targetPct: null }),
     ).toBe(true)
+  })
+
+  it('says what keeps a setup from its checks (B36)', () => {
+    const two = addSecurities(emptySetup(), ['A', 'B'])
+    expect(checkBlocker(two)).toBeNull()
+    expect(checkBlocker(emptySetup())).toBe('universe')
+    expect(checkBlocker({ ...two, capital: 0 })).toBe('capital')
+    expect(checkBlocker({ ...two, capital: -5 })).toBe('capital')
+    expect(checkBlocker({ ...two, targetPct: null })).toBe('target')
   })
 
   it('shortens the codes of the correlation grid', () => {

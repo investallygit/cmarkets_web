@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import type { ReactNode } from 'react'
+import { useId, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSubscriptionStats } from '@/entities/subscription'
 import type { SubscriptionListStatus } from '@/shared/api/contracts'
@@ -23,46 +23,54 @@ export function SubscriptionCounters({ status, onStatus }: SubscriptionCountersP
   const figure = (value: number | undefined) =>
     value === undefined ? '—' : format.number(value, 0)
   const toggle = (value: SubscriptionListStatus) => onStatus(status === value ? null : value)
+  const captionId = useId()
 
   return (
-    <div
-      role="group"
-      aria-label={t('subscriptionAdmin.counters')}
-      className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5"
-    >
-      <Counter label={t('subscriptionAdmin.active')}>{figure(stats.data?.active)}</Counter>
-      <Counter
-        label={t('subscriptionAdmin.expiringSoon')}
-        tone="text-warning"
-        pressed={status === 'expiringSoon'}
-        onClick={() => toggle('expiringSoon')}
+    <div className="flex flex-col gap-1">
+      <div
+        role="group"
+        aria-label={t('subscriptionAdmin.counters')}
+        aria-describedby={captionId}
+        className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5"
       >
-        {figure(stats.data?.expiringSoon)}
-      </Counter>
-      <Counter
-        label={t('subscriptionAdmin.expiredNotRenewed')}
-        tone="text-down"
-        pressed={status === 'expired'}
-        onClick={() => toggle('expired')}
-      >
-        {figure(stats.data?.expiredNotRenewed)}
-      </Counter>
-      <Counter
-        label={t('subscriptionAdmin.failedPayments')}
-        tone="text-down"
-        pressed={status === 'paymentFailed'}
-        onClick={() => toggle('paymentFailed')}
-      >
-        {figure(stats.data?.failedPayments)}
-      </Counter>
-      <Counter label={t('subscriptionAdmin.collected')} tone="text-up">
-        {stats.data
-          ? t('subscriptionAdmin.collectedAmount', {
-              amount: format.compact(stats.data.collectedThisMonth),
-              currency: stats.data.currency,
-            })
-          : '—'}
-      </Counter>
+        <Counter label={t('subscriptionAdmin.active')}>{figure(stats.data?.active)}</Counter>
+        <Counter
+          label={t('subscriptionAdmin.expiringSoon')}
+          tone="text-warning"
+          pressed={status === 'expiringSoon'}
+          onClick={() => toggle('expiringSoon')}
+        >
+          {figure(stats.data?.expiringSoon)}
+        </Counter>
+        <Counter
+          label={t('subscriptionAdmin.expiredNotRenewed')}
+          tone="text-down"
+          pressed={status === 'expired'}
+          onClick={() => toggle('expired')}
+        >
+          {figure(stats.data?.expiredNotRenewed)}
+        </Counter>
+        <Counter
+          label={t('subscriptionAdmin.failedPayments')}
+          tone="text-down"
+          pressed={status === 'paymentFailed'}
+          onClick={() => toggle('paymentFailed')}
+        >
+          {figure(stats.data?.failedPayments)}
+        </Counter>
+        <Counter label={t('subscriptionAdmin.collected')} tone="text-up">
+          {stats.data
+            ? t('subscriptionAdmin.collectedAmount', {
+                amount: format.compact(stats.data.collectedThisMonth),
+                currency: stats.data.currency,
+              })
+            : '—'}
+        </Counter>
+      </div>
+      {/* The counters count accounts; the list adds a line for each organisation (B93: 143, 146). */}
+      <p id={captionId} className="font-sans text-title text-secondary">
+        {t('subscriptionAdmin.countersCaption')}
+      </p>
     </div>
   )
 }
@@ -84,7 +92,8 @@ function Counter({ label, tone, pressed, onClick, children }: CounterProps) {
   )
   const content = (
     <>
-      <span className="truncate font-sans text-title font-semibold tracking-title text-secondary uppercase">
+      {/* Two lines for a long name rather than cut it (B29). */}
+      <span className="line-clamp-2 font-sans text-title font-semibold tracking-title text-secondary uppercase">
         {label}
       </span>
       <span className={clsx('truncate font-mono text-figure font-semibold', tone)}>{children}</span>

@@ -97,8 +97,12 @@ export function EodhdPanel({ detailed = false }: { detailed?: boolean }) {
                       index % 2 === 1 && 'bg-row-alt',
                     )}
                   >
-                    <dt className="truncate font-sans text-label text-secondary">{label}</dt>
-                    <dd className="ml-auto truncate font-mono text-data">{value}</dd>
+                    <dt className="min-w-0 truncate font-sans text-label text-secondary">
+                      {label}
+                    </dt>
+                    <dd className="ml-auto shrink-0 font-mono text-data whitespace-nowrap">
+                      {value}
+                    </dd>
                   </div>
                 ))}
               </dl>

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router'
 import { useImportUniverse } from '@/features/import-opt-universe'
 import { openScenario, useOptimizer, useOptScenario } from '@/entities/optimizer'
+import { isApiError } from '@/shared/api'
 import { toast } from '@/shared/ui/toast'
 
 /**
@@ -43,7 +44,11 @@ export function useOptimizerSource() {
   }, [scenario.data])
 
   useEffect(() => {
-    if (scenario.error)
-      toast.error(t('opt.scenario.openFailed', { message: scenario.error.message }))
+    if (!scenario.error) return
+    // An unknown id is said in the user's words, not as the problem's title "Not Found" (B61).
+    const message = isApiError(scenario.error, 404)
+      ? t('opt.scenario.notFound')
+      : scenario.error.message
+    toast.error(t('opt.scenario.openFailed', { message }))
   }, [scenario.error, t])
 }

@@ -13,7 +13,7 @@ import { analystPublicationsPath, libraryPath, messagesPath, routes } from '@/sh
 import { Button, ButtonLink } from '@/shared/ui/form/Button'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
-import { PanelEmpty } from '@/shared/ui/StatusViews'
+import { InlineError, PanelEmpty } from '@/shared/ui/StatusViews'
 import { ProfileDetails } from './ProfileDetails'
 
 const SECTION_TITLE =
@@ -24,6 +24,19 @@ function LatestPublications({ analystId }: { analystId: string }) {
   const { t } = useTranslation()
   const format = useFormat()
   const library = useLibrary({ tab: 'all', analystId, sort: 'recent', page: 1, pageSize: 3 })
+  // Publications that could not be read are said, not left out (B63).
+  if (library.isError)
+    return (
+      <section className="flex flex-col gap-1.5">
+        <h4 className={SECTION_TITLE}>{t('network.view.latestPublications')}</h4>
+        <p className="font-sans text-data">
+          <InlineError
+            message={t('network.view.publicationsFailed')}
+            onRetry={() => void library.refetch()}
+          />
+        </p>
+      </section>
+    )
   if (!library.data) return null
   return (
     <section className="flex flex-col gap-1.5">

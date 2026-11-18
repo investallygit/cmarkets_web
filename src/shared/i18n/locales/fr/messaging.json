@@ -69,6 +69,7 @@
       "newClosed": "{{name}} n'accepte pas les messages de votre type de compte.",
       "notFound": "Cette conversation n'existe plus, ou vous l'avez quittée.",
       "unknown": "Cette personne ne fait pas partie de celles à qui vous pouvez écrire.",
+      "toSelf": "C'est votre propre adresse : choisissez quelqu'un d'autre à qui écrire.",
       "editLabel": "Modifier le message",
       "typingOne": "{{name}} écrit…",
       "typingTwo": "{{first}} et {{second}} écrivent…",
@@ -179,6 +180,7 @@
       "title": "Personnes bloquées",
       "hint": "Elles ne voient plus votre profil et ne peuvent plus vous écrire.",
       "none": "Vous n'avez bloqué personne.",
+      "failed": "Les personnes que vous avez bloquées n'ont pas pu être lues.",
       "since": "depuis le {{date}}"
     },
     "realtime": {

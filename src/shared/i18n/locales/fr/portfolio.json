@@ -1,5 +1,6 @@
 {
   "portfolio": {
+    "notReadable": "Le portefeuille demandé n'existe pas ou ne vous est plus partagé : {{name}} est affiché.",
     "tabsLabel": "Onglets du portefeuille",
     "tabs": {
       "positions": "Positions",

@@ -4,6 +4,7 @@ import {
   formOf,
   hasChanged,
   nextRepayment,
+  rangeErrors,
   redemptionsOf,
   scheduleAddsUp,
   toRequest,
@@ -126,6 +127,17 @@ describe('the inputs of bond pricing (spec screen 16)', () => {
     expect(scheduleAddsUp(short)).toBe(false)
     expect(toRequest({ ...CASE_A, redemption: 'amortizing', schedule: short })).toBeNull()
     expect(toRequest({ ...CASE_A, redemption: 'amortizing', schedule: [] })).toBeNull()
+  })
+
+  it('names each input typed out of range (B54)', () => {
+    expect([...rangeErrors(CASE_A)]).toEqual([])
+    expect([...rangeErrors({ ...CASE_A, couponRate: -1 })]).toEqual(['couponRate'])
+    expect([...rangeErrors({ ...CASE_A, couponRate: 150 })]).toEqual(['couponRate'])
+    expect([...rangeErrors({ ...CASE_A, faceValue: 0 })]).toEqual(['faceValue'])
+    expect([...rangeErrors({ ...CASE_A, ytm: -80 })]).toEqual(['ytm'])
+    expect(toRequest({ ...CASE_A, couponRate: 150 })).toBeNull()
+    // A bond of the list keeps its own terms: only the yield is the user's.
+    expect([...rangeErrors({ ...formOf(ECMR, MARKET), faceValue: 0 })]).toEqual([])
   })
 
   it('adds a repayment at maturity first, then a year after the last', () => {

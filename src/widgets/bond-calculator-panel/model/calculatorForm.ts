@@ -42,8 +42,24 @@ export function toRequest(form: CalculatorForm): BondCalculationRequestDto | nul
   if (form.driver === 'price') {
     return cleanPrice !== null && cleanPrice > 0 ? { settlementDate, faceAmount, cleanPrice } : null
   }
-  return yieldPct !== null && yieldPct > -50 && yieldPct < 100
+  return yieldPct !== null && yieldPct > YIELD_RANGE.min && yieldPct < YIELD_RANGE.max
     ? { settlementDate, faceAmount, yieldPct }
+    : null
+}
+
+/** The yield the API prices: between -50 % and 100 %, both excluded. */
+const YIELD_RANGE = { min: -50, max: 100 }
+
+/**
+ * The input typed out of range, said on its field: a price of 0 or below, a yield past -50 % or
+ * 100 % (B52). The face amount and the date have their own messages.
+ */
+export function inputError(form: CalculatorForm): 'cleanPrice' | 'yieldPct' | null {
+  if (form.driver === 'price')
+    return form.cleanPrice !== null && form.cleanPrice <= 0 ? 'cleanPrice' : null
+  return form.yieldPct !== null &&
+    (form.yieldPct <= YIELD_RANGE.min || form.yieldPct >= YIELD_RANGE.max)
+    ? 'yieldPct'
     : null
 }
 

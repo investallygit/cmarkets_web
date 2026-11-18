@@ -48,6 +48,8 @@ interface AgreementFiltersPanelProps {
  */
 export function AgreementFiltersPanel({ applied, onApply, reader }: AgreementFiltersPanelProps) {
   const { t } = useTranslation()
+  // Reset empties the fields even when nothing was applied yet (B83).
+  const [resets, setResets] = useState(0)
   return (
     <Panel
       title={t('panels.rfqAgreementFilters')}
@@ -55,7 +57,10 @@ export function AgreementFiltersPanel({ applied, onApply, reader }: AgreementFil
       options={
         <button
           type="button"
-          onClick={() => onApply({})}
+          onClick={() => {
+            setResets((count) => count + 1)
+            onApply({})
+          }}
           className="panel-no-drag inline-flex h-6 items-center uppercase hover:text-primary"
         >
           {t('rfqAgreements.filters.reset')}
@@ -64,9 +69,9 @@ export function AgreementFiltersPanel({ applied, onApply, reader }: AgreementFil
       bodyClassName="flex flex-col"
     >
       <SavedFilters onLoad={onApply} />
-      {/* A new draft whenever the applied filters change: a saved filter loaded, a reset. */}
+      {/* A new draft whenever the applied filters change, or Reset is pressed. */}
       <FiltersForm
-        key={JSON.stringify(applied)}
+        key={`${JSON.stringify(applied)}:${resets}`}
         applied={applied}
         onApply={onApply}
         reader={reader}

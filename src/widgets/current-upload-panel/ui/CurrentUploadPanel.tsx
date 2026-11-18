@@ -1,6 +1,7 @@
 import { LoaderCircle, Plus, Undo2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isApiError } from '@/shared/api'
 import {
   isChangeField,
   isChecking,
@@ -61,6 +62,14 @@ export function CurrentUploadPanel({ importId, sessionDate, onOpen }: CurrentUpl
             onOpenPending={onOpen}
           />
         </>
+      ) : isApiError(upload.error, 404) || isApiError(upload.error, 400) ? (
+        // An address that names no upload says so, with the way to a new one (B07).
+        <div className="flex flex-col items-center gap-2 p-4 font-sans text-data text-secondary">
+          <p>{t('dataImport.unknownUpload')}</p>
+          <Button size="sm" onClick={() => onOpen(null)}>
+            {t('panels.newUpload')}
+          </Button>
+        </div>
       ) : (
         <QueryView query={upload}>
           {(data) => <UploadView key={data.id} upload={data} onOpen={onOpen} />}

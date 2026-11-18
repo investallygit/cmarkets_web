@@ -97,6 +97,16 @@ export function AgreementListPanel({
           </span>
         ),
       }),
+      // The status first after the time: a table wider than its panel scrolls, and the status
+      // was its last column, cut at the edge (B31).
+      helper.accessor(status, {
+        id: 'status',
+        header: t('rfqAgreements.list.columns.status'),
+        meta: { width: 'minmax(96px, 1fr)' },
+        cell: ({ row, getValue }) => (
+          <span className={TONE_TEXT[AGREEMENT_TONES[row.original.status]]}>{getValue()}</span>
+        ),
+      }),
       ...(bothParties
         ? []
         : [
@@ -156,14 +166,6 @@ export function AgreementListPanel({
         meta: { width: '48px' },
         cell: ({ getValue }) => (
           <span className="text-secondary tabular-nums">{format.dayMonth(getValue())}</span>
-        ),
-      }),
-      helper.accessor(status, {
-        id: 'status',
-        header: t('rfqAgreements.list.columns.status'),
-        meta: { width: 'minmax(96px, 1fr)' },
-        cell: ({ row, getValue }) => (
-          <span className={TONE_TEXT[AGREEMENT_TONES[row.original.status]]}>{getValue()}</span>
         ),
       }),
       helper.accessor(

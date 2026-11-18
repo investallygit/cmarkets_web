@@ -201,6 +201,12 @@
     "calculate": "Calculer",
     "changed": "La saisie a changé : calculez pour mettre à jour les résultats.",
     "incomplete": "Complétez la saisie pour calculer.",
+    "outOfRange": "Corrigez les champs en rouge pour calculer.",
+    "ranges": {
+      "faceValue": "Au-dessus de 0 %.",
+      "couponRate": "Entre 0 % et 100 %.",
+      "ytm": "Entre -50 % et 100 %."
+    },
     "required": "Obligatoire.",
     "dateRequired": "Saisissez une date JJ/MM/AAAA.",
     "positiveAmount": "Saisissez un montant supérieur à 0.",

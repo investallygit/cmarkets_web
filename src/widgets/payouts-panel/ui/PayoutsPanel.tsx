@@ -60,7 +60,8 @@ export function PayoutsPanel() {
         helper.accessor((payout) => payout.analyst.displayName, {
           id: 'analyst',
           header: t('payouts.analyst'),
-          meta: { width: '1fr' },
+          // A name read whole enough on a phone: "K. Atan…" before (B34).
+          meta: { width: 'minmax(104px, 1fr)' },
         }),
         helper.accessor('sales', {
           header: t('payouts.sales'),

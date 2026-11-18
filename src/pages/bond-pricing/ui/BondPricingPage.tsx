@@ -28,8 +28,12 @@ export function BondPricingPage() {
   const navigate = useNavigate()
   const bonds = useBonds()
   const current = bondId ?? bonds.data?.at(0)?.id ?? null
-  const submitted = useBondPricingStore((state) => state.submitted)
+  const calculated = useBondPricingStore((state) => state.submitted)
+  const seededFrom = useBondPricingStore((state) => state.seededFrom)
   const currency = useBondPricingStore((state) => state.form?.currency ?? XAF)
+  // The figures of the bond the inputs hold: not the last bond's beside a bond the address names
+  // and the API does not know (B56).
+  const submitted = seededFrom === current ? calculated : null
 
   const panels = {
     inputs:

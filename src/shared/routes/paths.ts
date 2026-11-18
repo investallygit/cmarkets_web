@@ -309,6 +309,14 @@ export interface OptimizerSource {
   scenario?: string
 }
 
+/**
+ * OPT RES; with a saved scenario, its id, so that a reload opens it with its result again (B60):
+ * "/opt/result?scenario={id}".
+ */
+export function optimizerResultPath(scenario?: string): string {
+  return withQuery(routes.optimizerResult, 'scenario', scenario)
+}
+
 /** OPT filled from a source: "/opt?portfolio={id}". */
 export function optimizerPath(source: OptimizerSource = {}): string {
   const params = new URLSearchParams()

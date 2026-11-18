@@ -34,6 +34,7 @@
       "label": "Scenario",
       "unsaved": "New setup",
       "listFailed": "Your scenarios could not be read.",
+      "notFound": "no scenario of yours has this address",
       "new": "New",
       "save": "Save",
       "saveAs": "Save a copy",
@@ -93,7 +94,8 @@
       "take": "Take",
       "imported": "{{count}} securities taken from {{name}}",
       "importNone": "{{name}} holds no equity, bond or ETF.",
-      "importFailed": "The securities were not taken: {{message}}"
+      "importFailed": "The securities were not taken: {{message}}",
+      "noWatchlist": "This watchlist is not one of yours: the setup is unchanged."
     },
     "objective": {
       "title": "Objective and constraints",
@@ -164,6 +166,12 @@
     "checks": {
       "title": "Pre-run checks",
       "waiting": "Add 2 to 20 securities and the objective's target.",
+      "blocked": {
+        "universe": "Add 2 to 20 securities: the universe holds {{count}}.",
+        "capital": "Enter a capital above 0.",
+        "target": "Enter the objective's target."
+      },
+      "failed": "The checks did not run: {{message}}",
       "constraintsOk": "Constraints are compatible",
       "constraintsError": "Constraints conflict",
       "involved": "Involved: {{list}}",
@@ -233,6 +241,7 @@
       },
       "total": "Total",
       "cash": "Cash left by the rounding",
+      "nothingBought": "XAF {{amount}} buys no whole security at today's prices: the weights and indicators are those of the allocation; raise the capital to see the quantities.",
       "max": "max",
       "min": "min",
       "caption": "\"max\": the weight hits its limit. Amounts in whole securities; risk share: the security's contribution to portfolio volatility."

@@ -97,10 +97,11 @@ export function PublicationListPanel({
                         </span>
                       </span>
                       <span className="text-right font-sans text-data text-secondary">
-                        {item.purchasedAt
-                          ? t('library.bought')
-                          : item.updatedAt
-                            ? t('library.updated')
+                        {/* A note updated since its purchase says so to its buyer (B78). */}
+                        {item.updatedAt && (!item.purchasedAt || item.updatedAt > item.purchasedAt)
+                          ? t('library.updated')
+                          : item.purchasedAt
+                            ? t('library.bought')
                             : item.isRead
                               ? t('library.read')
                               : ''}

@@ -70,7 +70,8 @@ export function ResearchLibraryPage() {
   const list = useLibrary(query)
   const selectedId = params.get('id') ?? list.data?.items.at(0)?.id ?? null
   const analystId = useLibraryPublication(selectedId).data?.analyst.id ?? null
-  const byAnalyst = useAnalyst(query.analystId).data
+  const analyst = useAnalyst(query.analystId)
+  const byAnalyst = analyst.data
 
   // A new filter, tab or page starts from its first publication.
   const restart = { page: '', id: '' }
@@ -94,7 +95,10 @@ export function ResearchLibraryPage() {
         {query.analystId && (
           <div className="flex items-center justify-between gap-3 border border-accent-amber/60 bg-panel px-3 py-1.5">
             <span className="truncate font-sans text-label">
-              {t('library.byAnalyst', { name: byAnalyst?.displayName ?? '…' })}
+              {/* An analyst the directory does not have says so, as NET does (B67). */}
+              {analyst.isError
+                ? t('library.unknownAnalyst')
+                : t('library.byAnalyst', { name: byAnalyst?.displayName ?? '…' })}
             </span>
             <Button size="sm" icon={X} onClick={() => patch({ ...restart, analyst: '' })}>
               {t('library.allAnalysts')}

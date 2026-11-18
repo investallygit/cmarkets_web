@@ -35,6 +35,8 @@
     "volatility": "1-year volatility",
     "chartHint": "Click a currency in the table to change the chart.",
     "amount": "Amount",
+    "amountHint": "Enter an amount above 0, up to {{max}}.",
+    "unknownCurrency": "No currency {{code}} in the table: {{currency}} is shown.",
     "fromCurrency": "Currency converted",
     "toCurrency": "Currency of the result",
     "result": "Converted amount",

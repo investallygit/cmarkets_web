@@ -5,6 +5,7 @@ import { openScenario, useOptimizer, useSaveScenario } from '@/entities/optimize
 import { optimizerPath } from '@/shared/routes/paths'
 import { Dialog, DialogBody, DialogFooter } from '@/shared/ui/Dialog'
 import { Button } from '@/shared/ui/form/Button'
+import { isApiError } from '@/shared/api'
 import { Field } from '@/shared/ui/form/Field'
 import { TextInput } from '@/shared/ui/form/TextInput'
 import { toast } from '@/shared/ui/toast'
@@ -38,10 +39,15 @@ export function SaveScenarioDialog({ copy, onClose }: { copy: boolean; onClose: 
           void navigate(optimizerPath({ scenario: saved.id }), { replace: true })
           onClose()
         },
-        onError: (error) => toast.error(t('opt.scenario.failed', { message: error.message })),
+        // A name taken is said on the name (409, B59); anything else in a toast.
+        onError: (error) => {
+          if (!isApiError(error, 409))
+            toast.error(t('opt.scenario.failed', { message: error.message }))
+        },
       },
     )
   }
+  const nameError = isApiError(save.error, 409) ? save.error.message : undefined
 
   return (
     <Dialog
@@ -57,7 +63,7 @@ export function SaveScenarioDialog({ copy, onClose }: { copy: boolean; onClose: 
         }}
       >
         <DialogBody>
-          <Field label={t('opt.scenario.name')} hint={t('opt.scenario.saveHint')}>
+          <Field label={t('opt.scenario.name')} hint={t('opt.scenario.saveHint')} error={nameError}>
             <TextInput value={name} onChange={setName} maxLength={NAME_MAX} autoFocus />
           </Field>
         </DialogBody>

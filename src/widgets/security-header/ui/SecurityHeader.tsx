@@ -71,8 +71,9 @@ export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
         </div>
         <p className="truncate font-sans text-data text-secondary">{details.join(' · ')}</p>
       </div>
+      {/* The price, its change and the delay wrap rather than cut the badge (B27). */}
       {quote && (
-        <div className="flex items-baseline gap-4">
+        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
           <span className="font-mono text-price font-semibold">
             <LivePrice
               symbol={profile.id}

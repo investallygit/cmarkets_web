@@ -115,9 +115,11 @@ export function AnalystRequestsPanel({
   const columns = useMemo(
     () =>
       helper.columns([
+        // A name and an organisation keep enough to be read on a phone, the table scrolling
+        // sideways rather than leave "R. E…" (B34).
         helper.accessor('displayName', {
           header: t('settings.profile.name'),
-          meta: { width: '1fr' },
+          meta: { width: 'minmax(104px, 1fr)' },
         }),
         helper.accessor((request) => t(`accountBadge.${request.accountType}`), {
           id: 'type',
@@ -128,7 +130,7 @@ export function AnalystRequestsPanel({
         helper.accessor((request) => request.organization ?? t('accounts.independent'), {
           id: 'organization',
           header: t('settings.profile.organization'),
-          meta: { width: '1.1fr' },
+          meta: { width: 'minmax(112px, 1.1fr)' },
         }),
         helper.accessor((request) => request.documents.length, {
           id: 'documents',
@@ -152,7 +154,7 @@ export function AnalystRequestsPanel({
               helper.accessor((request) => request.decision?.by ?? '', {
                 id: 'by',
                 header: t('analystRequests.byColumn'),
-                meta: { width: '0.8fr' },
+                meta: { width: 'minmax(96px, 0.8fr)' },
               }),
             ]),
       ]),

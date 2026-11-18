@@ -21,6 +21,7 @@
     "commandPlaceholder": "Valeur + fonction, ex. SEMC DES",
     "go": "<GO>",
     "unknownFunction": "Code fonction inconnu : {{code}}",
+    "notInAccount": "{{code}} ne fait pas partie de votre compte",
     "unknownSecurity": "Aucune valeur ne correspond à {{query}}",
     "needsSecurity": "{{code}} s'applique à une valeur, ex. SEMC {{code}}",
     "notApplicable": "{{code}} ne s'applique pas à {{security}}",
@@ -134,7 +135,7 @@
   },
   "status": {
     "notFound": "Cet écran n'existe pas.",
-    "forbidden": "Cet écran n'est pas disponible pour votre type de compte.",
+    "forbidden": "Cet écran n'est pas ouvert à votre compte : son type, ou un réglage de CMarket, le tient fermé.",
     "unexpected": "Une erreur est survenue sur cet écran.",
     "backHome": "Retour à l'accueil",
     "notFoundTitle": "Écran introuvable"
@@ -566,5 +567,10 @@
       "apply": "Appliquer",
       "remove": "Retirer le lien"
     }
+  },
+  "leave": {
+    "title": "Quitter sans enregistrer ?",
+    "message": "Les modifications de cet écran ne sont pas enregistrées : les quitter les abandonne.",
+    "confirm": "Quitter"
   }
 }

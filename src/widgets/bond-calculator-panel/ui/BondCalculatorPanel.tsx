@@ -3,7 +3,7 @@ import { LoaderCircle } from 'lucide-react'
 import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
-import { useBond, useBondCalculation, useBonds } from '@/entities/bond'
+import { useBond, useBondCalculation, useBonds, useMarketYield } from '@/entities/bond'
 import { useQuote } from '@/entities/quote'
 import { isApiError } from '@/shared/api'
 import type { BondCalculationDto, BondDto } from '@/shared/api/contracts'
@@ -18,7 +18,13 @@ import { NumberInput } from '@/shared/ui/form/NumberInput'
 import { Panel } from '@/shared/ui/Panel'
 import { PanelSelect } from '@/shared/ui/PanelSelect'
 import { PanelError, PanelLoading } from '@/shared/ui/StatusViews'
-import { initialForm, shownFigures, toRequest, type CalculatorForm } from '../model/calculatorForm'
+import {
+  initialForm,
+  inputError,
+  shownFigures,
+  toRequest,
+  type CalculatorForm,
+} from '../model/calculatorForm'
 
 /**
  * Typing pauses this long before a calculation, so a price typed digit by digit sends one
@@ -73,14 +79,23 @@ export function BondCalculatorPanel({ bondId, onBondChange }: BondCalculatorPane
 function Calculator({ bond, lastPrice }: { bond: BondDto; lastPrice: number | null }) {
   const { t } = useTranslation()
   const format = useFormat()
-  const [form, setForm] = useState(() => initialForm(toMarketDay(Date.now()), lastPrice))
-  const request = useDebouncedValue(
-    useMemo(() => toRequest(form), [form]),
-    RECALCULATE_DELAY_MS,
+  const [typedForm, setForm] = useState(() => initialForm(toMarketDay(Date.now()), lastPrice))
+  // The settlement of today's trade on the bond's market, on its calendar of sessions (T+2 that
+  // skips Christmas as BP's does), until a date is typed (B51).
+  const market = useMarketYield(bond.id).data
+  const [dateTyped, setDateTyped] = useState(false)
+  const form = useMemo(
+    () =>
+      dateTyped || !market ? typedForm : { ...typedForm, settlementDate: market.settlementDate },
+    [typedForm, dateTyped, market],
   )
+  const typed = useMemo(() => toRequest(form), [form])
+  const request = useDebouncedValue(typed, RECALCULATE_DELAY_MS)
   const calculation = useBondCalculation(bond.id, request)
-  const result = calculation.data
+  // Inputs out of range show no result: not the last one beside them, faded (B52).
+  const result = typed ? calculation.data : undefined
   const shown = shownFigures(form, result)
+  const outOfRange = inputError(form)
   const fieldErrors = isApiError(calculation.error, 400)
     ? (calculation.error.problem.errors ?? {})
     : {}
@@ -107,9 +122,15 @@ function Calculator({ bond, lastPrice }: { bond: BondDto; lastPrice: number | nu
       <div className="shrink-0 px-3 pt-2">
         <p className="truncate font-mono text-label font-semibold text-accent-amber">{bond.name}</p>
         <p className="truncate font-sans text-data text-secondary">
-          {[amortization, t('calculator.coupon', { frequency }), bond.dayCount, bond.currency].join(
-            ' · ',
-          )}
+          {[
+            amortization,
+            // A zero-coupon bill has no coupon to describe (B53).
+            bond.couponType === 'zero'
+              ? t('calculator.zeroCoupon')
+              : t('calculator.coupon', { frequency }),
+            bond.dayCount,
+            bond.currency,
+          ].join(' · ')}
         </p>
       </div>
       <div className="flex shrink-0 flex-col gap-1.5 px-3 py-2">
@@ -124,11 +145,22 @@ function Calculator({ bond, lastPrice }: { bond: BondDto; lastPrice: number | nu
         >
           <DateInput
             value={form.settlementDate}
-            onChange={(settlementDate) => set({ settlementDate })}
+            onChange={(settlementDate) => {
+              setDateTyped(true)
+              set({ settlementDate })
+            }}
             highlight
           />
         </Field>
-        <Field label={t('calculator.cleanPrice')} inline error={fieldErrors.cleanPrice?.at(0)}>
+        <Field
+          label={t('calculator.cleanPrice')}
+          inline
+          error={
+            outOfRange === 'cleanPrice'
+              ? t('calculator.positivePrice')
+              : fieldErrors.cleanPrice?.at(0)
+          }
+        >
           <NumberInput
             value={shown.cleanPrice}
             onChange={(cleanPrice) => set({ driver: 'price', cleanPrice })}
@@ -136,7 +168,13 @@ function Calculator({ bond, lastPrice }: { bond: BondDto; lastPrice: number | nu
             highlight
           />
         </Field>
-        <Field label={t('calculator.yield')} inline error={fieldErrors.yieldPct?.at(0)}>
+        <Field
+          label={t('calculator.yield')}
+          inline
+          error={
+            outOfRange === 'yieldPct' ? t('calculator.yieldRange') : fieldErrors.yieldPct?.at(0)
+          }
+        >
           <NumberInput
             value={shown.yieldPct}
             onChange={(yieldPct) => set({ driver: 'yield', yieldPct })}
@@ -252,8 +290,8 @@ function CalculationResults({
           title={title}
           className={clsx('flex h-row items-center gap-3 px-3', index % 2 === 1 && 'bg-row-alt')}
         >
-          <dt className="truncate font-sans text-data text-secondary">{label}</dt>
-          <dd className="ml-auto truncate font-mono text-data">{value}</dd>
+          <dt className="min-w-0 truncate font-sans text-data text-secondary">{label}</dt>
+          <dd className="ml-auto shrink-0 font-mono text-data whitespace-nowrap">{value}</dd>
         </div>
       ))}
     </dl>

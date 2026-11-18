@@ -3,8 +3,9 @@ import { useContext, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { useEtfLabels, useEtfScreener } from '@/entities/etf'
+import { useXafCrosses } from '@/entities/rate'
 import { useSecurityMenu } from '@/features/security-actions'
-import type { EtfScreenerQuery, EtfScreenerRowDto } from '@/shared/api/contracts'
+import type { EtfScreenerQuery, EtfScreenerRowDto, XafCrossesDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { securityPath } from '@/shared/routes/paths'
 import { ChangeText } from '@/shared/ui/ChangeText'
@@ -14,6 +15,7 @@ import { DataTable, type TableExporter } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { TableExportContext } from '@/shared/ui/tableExport'
+import { aumInFrancs } from '../lib/aumInFrancs'
 
 const helper = createDataColumnHelper<EtfScreenerRowDto>()
 const getEtfId = (row: EtfScreenerRowDto) => row.etfId
@@ -22,6 +24,7 @@ function buildColumns(
   t: TFunction,
   format: ReturnType<typeof useFormat>,
   labels: ReturnType<typeof useEtfLabels>,
+  crosses: XafCrossesDto | undefined,
 ): DataColumns<EtfScreenerRowDto> {
   const change = (key: 'ytdPct' | 'oneYearPct', header: string) =>
     helper.accessor((row) => row[key] ?? undefined, {
@@ -73,15 +76,14 @@ function buildColumns(
       meta: { align: 'right', width: '0.7fr' },
       cell: ({ getValue }) => format.percent(getValue(), 2, false),
     }),
-    helper.accessor((row) => row.aum ?? undefined, {
+    // Sorted in francs, shown in the fund's currency (B64).
+    helper.accessor((row) => aumInFrancs(row.aum, row.currency, crosses), {
       id: 'aum',
       header: t('etfScreener.columns.aum'),
       meta: { align: 'right', width: '0.95fr' },
       sortUndefined: 'last',
-      cell: ({ row, getValue }) => {
-        const value = getValue()
-        return value === undefined ? '—' : labels.size(value, row.original.currency)
-      },
+      cell: ({ row }) =>
+        row.original.aum === null ? '—' : labels.size(row.original.aum, row.original.currency),
     }),
     change('ytdPct', t('etfScreener.columns.ytd')),
     change('oneYearPct', t('etfScreener.columns.oneYear')),
@@ -133,7 +135,11 @@ export function EtfScreenerResultsPanel({
   const canExport = useContext(TableExportContext)
   const exportRef = useRef<TableExporter | null>(null)
   const results = useEtfScreener(query)
-  const columns = useMemo(() => buildColumns(t, format, labels), [t, format, labels])
+  const crosses = useXafCrosses().data
+  const columns = useMemo(
+    () => buildColumns(t, format, labels, crosses),
+    [t, format, labels, crosses],
+  )
   const computedAt = results.data?.computedAt
 
   return (

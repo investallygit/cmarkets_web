@@ -21,6 +21,7 @@
     "commandPlaceholder": "Security + function, e.g. SEMC DES",
     "go": "<GO>",
     "unknownFunction": "Unknown function code {{code}}",
+    "notInAccount": "{{code}} is not part of your account",
     "unknownSecurity": "No security matches {{query}}",
     "needsSecurity": "{{code}} applies to a security, e.g. SEMC {{code}}",
     "notApplicable": "{{code}} does not apply to {{security}}",
@@ -134,7 +135,7 @@
   },
   "status": {
     "notFound": "This screen does not exist.",
-    "forbidden": "This screen is not available for your account type.",
+    "forbidden": "This screen is not open to your account: its type, or a setting of CMarket's, keeps it closed.",
     "unexpected": "Something went wrong on this screen.",
     "backHome": "Back to home",
     "notFoundTitle": "Screen not found"
@@ -566,5 +567,10 @@
       "apply": "Apply",
       "remove": "Remove the link"
     }
+  },
+  "leave": {
+    "title": "Leave without saving?",
+    "message": "The changes on this screen are not saved: leaving drops them.",
+    "confirm": "Leave"
   }
 }

@@ -1,6 +1,7 @@
 import { RefreshCw } from 'lucide-react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import {
   editSetup,
@@ -46,6 +47,13 @@ export function OptimisationResultPage() {
   const stale = useOptimizer(isResultStale)
   const point = useFrontierPoint()
   const recompute = useSaveScenario()
+  // A saved scenario's result keeps its id in the address: a reload opens it again (B60).
+  const [params, setParams] = useSearchParams()
+  const savedId = scenario && resultSaved ? scenario.id : null
+  useEffect(() => {
+    if (savedId && params.get('scenario') !== savedId)
+      setParams({ scenario: savedId }, { replace: true })
+  }, [savedId, params, setParams])
 
   if (!result || !resultSetup)
     return (

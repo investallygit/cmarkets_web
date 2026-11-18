@@ -1,24 +1,45 @@
 import { AlertTriangle, CircleCheck, CircleX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useCurrentCheck, useOptimizer, useOptimizerTexts } from '@/entities/optimizer'
+import {
+  checkBlocker,
+  useCurrentCheck,
+  useOptimizer,
+  useOptimizerTexts,
+} from '@/entities/optimizer'
 import type { OptCheckItemDto } from '@/shared/api/contracts'
 import { Panel } from '@/shared/ui/Panel'
+import { mayRetry } from '@/shared/ui/retry'
 import { ScrollArea } from '@/shared/ui/ScrollArea'
+import { InlineError } from '@/shared/ui/StatusViews'
 
 /**
  * Screen 28's pre-run checks (POST /optimizer/check): the constraints compatible or those in
  * conflict, the target within the reachable range, the estimates, the illiquid securities. An
- * error stops OPTIMISE (spec: "the calculation does not run").
+ * error stops OPTIMISE (spec: "the calculation does not run"). A setup that cannot be checked says
+ * why, not the last setup's answer (B36); a check the API refuses or that fails says so (B58).
  */
 export function PreRunChecksPanel() {
   const { t } = useTranslation()
   const { check } = useCurrentCheck()
-  const total = useOptimizer((state) => state.setup.universe.length)
+  const setup = useOptimizer((state) => state.setup)
+  const total = setup.universe.length
+  const blocker = checkBlocker(setup)
   return (
     <Panel title={t('opt.checks.title')} code="OPT">
       <div className="flex h-full flex-col">
         <ScrollArea className="min-h-0 flex-1">
-          {!check.data ? (
+          {blocker ? (
+            <p className="p-3 font-sans text-data text-secondary">
+              {t(`opt.checks.blocked.${blocker}`, { count: total })}
+            </p>
+          ) : check.isError ? (
+            <p className="p-3 font-sans text-data">
+              <InlineError
+                message={t('opt.checks.failed', { message: check.error.message })}
+                onRetry={mayRetry(check.error) ? () => void check.refetch() : undefined}
+              />
+            </p>
+          ) : !check.data ? (
             <p className="p-3 font-sans text-data text-secondary">{t('opt.checks.waiting')}</p>
           ) : (
             <ul className="space-y-3 p-3 font-sans text-data" aria-live="polite">

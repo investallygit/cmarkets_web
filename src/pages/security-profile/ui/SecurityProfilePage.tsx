@@ -12,7 +12,7 @@ import { BondProfileHeader } from '@/widgets/bond-profile-panels'
 import { CommodityListPanel, CommodityProfileHeader } from '@/widgets/commodity-profile-panels'
 import { EtfProfileHeader } from '@/widgets/etf-profile-panels'
 import { SecurityHeader } from '@/widgets/security-header'
-import { TAB_CODES } from '../config/tabs'
+import { TAB_CODES, TAB_PERMISSIONS } from '../config/tabs'
 import { BondTab, type BondFunction } from './BondTab'
 import { CommodityTab, type CommodityFunction } from './CommodityTab'
 import { EquityTab, type EquityFunction } from './EquityTab'
@@ -124,6 +124,11 @@ function ProfileTab({
   }
   if (ANALYSIS_TABS.has(fn) && !user.modules.includes('analysis')) {
     return <ModuleLocked module="analysis" />
+  }
+  // A tab whose figures the account type may not read, opened by its address (B21).
+  const needed = TAB_PERMISSIONS[fn]
+  if (needed && !user.permissions.includes(needed)) {
+    return <PanelEmpty message={t('security.notAllowed', { code: TAB_CODES[fn] })} />
   }
   if (isShared(fn)) return <SharedTab fn={fn} security={security} />
   if (security.type === 'commodity') {

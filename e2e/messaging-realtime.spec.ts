@@ -139,7 +139,8 @@ test('a member taken out of a group reads it closed at once, and nobody typing a
   await composer(page).fill('The desk meets on Monday.')
   await expect(ndong.getByText('K. Atangana is typing…')).toBeVisible()
   await composer(page).press('Enter')
-  await expect(ndong.getByText('The desk meets on Monday.')).toBeVisible()
+  // The thread's message, not the list's preview of it.
+  await expect(ndong.getByText('The desk meets on Monday.', { exact: true })).toBeVisible()
 
   // Taken out: their open thread closes at once, without a reload.
   await panel(page, 'Participant')

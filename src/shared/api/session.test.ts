@@ -69,6 +69,21 @@ describe('session of the API client', () => {
     expect(session.getSessionState()).toEqual({ status: 'anonymous', endReason: 'expired' })
   })
 
+  it('says the account is suspended when the refresh is refused for it (B98)', async () => {
+    const session = await load()
+    session.startSession(token('old'))
+    fetchMock.mockImplementation(async (url) =>
+      String(url).endsWith('/auth/refresh')
+        ? json(
+            { title: 'Account suspended', status: 403, detail: 'This account is suspended.' },
+            403,
+          )
+        : json({ title: 'Unauthorized', status: 401 }, 401),
+    )
+    await expect(session.apiClient.get('/me')).rejects.toMatchObject({ status: 401 })
+    expect(session.getSessionState()).toEqual({ status: 'anonymous', endReason: 'suspended' })
+  })
+
   it('opens the login page at start-up without a cookie, without saying a session expired', async () => {
     const session = await load()
     fetchMock.mockResolvedValueOnce(json({ title: 'No session', status: 401 }, 401))

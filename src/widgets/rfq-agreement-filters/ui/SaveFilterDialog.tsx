@@ -37,14 +37,17 @@ function SaveForm({ criteria, onClose }: { criteria: RfqAgreementCriteria; onClo
   const save = useSaveAgreementFilter()
   const [name, setName] = useState('')
   const [submitted, setSubmitted] = useState(false)
-  // A name taken (409) or refused (400): the API's words.
-  const serverError =
-    isApiError(save.error, 409) || isApiError(save.error, 400)
-      ? (save.error.problem.errors?.name?.[0] ?? save.error.problem.detail)
-      : save.error?.message
+  // A name taken (409) or refused (400): the API's words on the name. Criteria it refuses (an
+  // inverted period) are said above the name, where they were left unsaid (B82).
+  const nameError = isApiError(save.error, 409)
+    ? save.error.message
+    : isApiError(save.error, 400)
+      ? save.error.problem.errors?.name?.[0]
+      : undefined
+  const otherError = save.error && !nameError ? save.error.message : undefined
   const error =
     (submitted && name.trim() === '' ? t('rfqAgreements.filters.nameRequired') : undefined) ??
-    serverError
+    nameError
 
   return (
     <form
@@ -66,6 +69,11 @@ function SaveForm({ criteria, onClose }: { criteria: RfqAgreementCriteria; onClo
       }}
     >
       <DialogBody>
+        {otherError && (
+          <p role="alert" className="font-sans text-label text-down">
+            {otherError}
+          </p>
+        )}
         <Field label={t('rfqAgreements.filters.saveName')} error={error}>
           <TextInput value={name} onChange={setName} maxLength={NAME_MAX_LENGTH} autoFocus />
         </Field>

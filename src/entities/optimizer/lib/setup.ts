@@ -158,12 +158,22 @@ export function constraintCount(setup: OptSetupDto): number {
 
 /** Enough securities, the target the objective needs, a capital: the check may run. */
 export function isCheckable(setup: OptSetupDto): boolean {
-  return (
-    setup.universe.length >= OPT_MIN_SECURITIES &&
-    setup.universe.length <= OPT_MAX_SECURITIES &&
-    setup.capital > 0 &&
-    (!hasTarget(setup.objective) || setup.targetPct !== null)
-  )
+  return checkBlocker(setup) === null
+}
+
+/** What keeps a setup from its checks: the universe's size, the capital, the objective's target. */
+export type CheckBlocker = 'universe' | 'capital' | 'target'
+
+/**
+ * Why a setup cannot be checked, or null: the checks panel says it rather than keep the last
+ * setup's answer ("Passed" for an emptied universe; B36).
+ */
+export function checkBlocker(setup: OptSetupDto): CheckBlocker | null {
+  if (setup.universe.length < OPT_MIN_SECURITIES || setup.universe.length > OPT_MAX_SECURITIES)
+    return 'universe'
+  if (!(setup.capital > 0)) return 'capital'
+  if (hasTarget(setup.objective) && setup.targetPct === null) return 'target'
+  return null
 }
 
 /** The short code of a security in the correlation grid's headers: "SEMC", "SAFA", "ECMR". */

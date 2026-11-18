@@ -13,7 +13,7 @@ import { ApiError, readProblem } from './problem'
 export type SessionStatus = 'unknown' | 'authenticated' | 'anonymous'
 
 /** Why the last session ended, for the login page to say so. */
-export type SessionEndReason = 'logout' | 'expired' | 'inactivity'
+export type SessionEndReason = 'logout' | 'expired' | 'inactivity' | 'suspended'
 
 export interface SessionState {
   status: SessionStatus
@@ -98,7 +98,16 @@ async function requestRefresh(): Promise<string | null> {
     return null
   }
   // Server down or unreachable: the session may still be valid, so it is kept.
-  if (!response.ok) throw new ApiError(await readProblem(response))
+  if (!response.ok) {
+    const problem = await readProblem(response)
+    // A suspension ended the session: the login says so, not "your session has expired" (B98).
+    if (response.status === 403 && problem.title === 'Account suspended') {
+      token = null
+      setState({ status: 'anonymous', endReason: 'suspended' })
+      return null
+    }
+    throw new ApiError(problem)
+  }
   const dto = (await response.json()) as AccessTokenDto
   keep(dto)
   setState({ status: 'authenticated', endReason: null })

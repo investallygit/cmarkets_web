@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next'
+import { useCurrentUser } from '@/entities/session'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
 import { securityPath } from '@/shared/routes/paths'
 import { profileTabLabelKey, SECURITY_PROFILES } from '@/shared/routes/profiles'
 import { ScreenTabs } from '@/shared/ui/ScreenTabs'
-import { TAB_CODES } from '../config/tabs'
+import { TAB_CODES, TAB_PERMISSIONS } from '../config/tabs'
 
 /**
  * The tabs of the security's profile (spec section 9): DES, GP, FA, DVD, N, DOC, HDS, ANA for an
@@ -12,7 +13,12 @@ import { TAB_CODES } from '../config/tabs'
  */
 export function SecurityTabs({ security }: { security: SecurityProfileDto }) {
   const { t } = useTranslation()
-  const tabs = SECURITY_PROFILES[security.type].tabs.map((fn) => ({
+  const { permissions } = useCurrentUser()
+  const allowed = (fn: keyof typeof TAB_CODES) => {
+    const needed = TAB_PERMISSIONS[fn]
+    return needed === undefined || permissions.includes(needed)
+  }
+  const tabs = SECURITY_PROFILES[security.type].tabs.filter(allowed).map((fn) => ({
     to: securityPath(security.id, fn),
     code: TAB_CODES[fn],
     label: t(profileTabLabelKey(security.type, fn)),

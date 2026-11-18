@@ -75,7 +75,7 @@
     "actions": {
       "changeType": "Changer de type",
       "changeTypeTitle": "Changer le type de compte",
-      "changeTypeMessage": "{{name}} reçoit les permissions et les quotas du nouveau type au prochain chargement de page. Un client reste client, un employé reste employé.",
+      "changeTypeMessage": "{{name}} reçoit les permissions et les quotas du nouveau type au prochain chargement de page. Un client reste client, un SVT reste SVT, un employé reste employé.",
       "toVerifiedNote": "Le statut {{type}} est approuvé avec le changement, avec le badge VÉRIFIÉ.",
       "typeChanged": "{{name}} : désormais {{type}}.",
       "resetMfa": "Réinitialiser la double authentification",

@@ -35,6 +35,8 @@
     "volatility": "Volatilité 1 an",
     "chartHint": "Cliquez sur une devise du tableau pour changer le graphique.",
     "amount": "Montant",
+    "amountHint": "Saisissez un montant supérieur à 0, jusqu'à {{max}}.",
+    "unknownCurrency": "Pas de devise {{code}} dans le tableau : {{currency}} est affichée.",
     "fromCurrency": "Devise convertie",
     "toCurrency": "Devise du résultat",
     "result": "Montant converti",

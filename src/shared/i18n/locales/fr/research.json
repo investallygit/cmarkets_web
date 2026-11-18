@@ -168,6 +168,7 @@
       "search": "Rechercher un titre, un pays, un analyste"
     },
     "byAnalyst": "Publications de {{name}}",
+    "unknownAnalyst": "Cet analyste n'est plus dans l'annuaire : aucune de ses publications à afficher.",
     "allAnalysts": "Tous les analystes"
   },
   "studio": {

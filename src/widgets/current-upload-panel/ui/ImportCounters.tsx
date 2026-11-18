@@ -26,7 +26,10 @@ const COUNTERS: readonly Counter[] = [
   },
 ]
 
-/** Rows read, new, changed, unchanged, alerts, errors; a click shows those rows only. */
+/**
+ * Rows read, new, changed, unchanged, alerts, errors; a click shows those rows only. As many to a
+ * line as the panel holds whole, three on a phone (B32).
+ */
 export function ImportCounters({
   counts,
   filter,
@@ -39,7 +42,7 @@ export function ImportCounters({
   const { t } = useTranslation()
   const format = useFormat()
   return (
-    <div className="grid grid-cols-6 gap-2 px-3 pb-2">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] gap-2 px-3 pb-2">
       {COUNTERS.map((counter) => {
         const active = counter.filter !== null && counter.filter === filter
         return (

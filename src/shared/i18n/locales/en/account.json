@@ -8,7 +8,8 @@
     "ended": {
       "logout": "You are logged out.",
       "expired": "Your session has expired: log in again.",
-      "inactivity": "You were logged out after 30 minutes without activity."
+      "inactivity": "You were logged out after 30 minutes without activity.",
+      "suspended": "This account is suspended. Contact CMarket."
     },
     "login": {
       "title": "Log in to CMarket",

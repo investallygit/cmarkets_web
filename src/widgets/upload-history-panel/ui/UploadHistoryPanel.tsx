@@ -89,6 +89,8 @@ export function UploadHistoryPanel({
     page: variant === 'full' ? page : 1,
     pageSize: PAGE_SIZE,
   })
+  // A period that ends before it starts lists nothing: said where the dates are (B90).
+  const inverted = Boolean(filters.from && filters.to && filters.from > filters.to)
   const setFilter = (values: Record<string, string>) => {
     setPage(1)
     updateParams((current) => withParams(current, values))
@@ -219,6 +221,11 @@ export function UploadHistoryPanel({
             aria-label={t('dataImport.history.to')}
             className="w-28"
           />
+          {inverted && (
+            <span role="alert" className="font-sans text-data text-down">
+              {t('dataImport.history.periodInOrder')}
+            </span>
+          )}
         </div>
       )}
       <div className="min-h-0 flex-1">
@@ -232,7 +239,9 @@ export function UploadHistoryPanel({
               onRowClick={onOpen}
               rowMenu={rowMenu}
               exportName="cmarket-uploads"
-              emptyMessage={t('dataImport.history.none')}
+              emptyMessage={
+                inverted ? t('dataImport.history.periodInOrder') : t('dataImport.history.none')
+              }
             />
           )}
         </QueryView>

@@ -1,5 +1,6 @@
 {
   "dataImport": {
+    "unknownUpload": "No upload has this address.",
     "types": {
       "daily-prices": "BVMAC daily prices",
       "indices": "BVMAC indices",
@@ -313,6 +314,7 @@
     },
     "history": {
       "lastDays": "Last {{count}} days",
+      "periodInOrder": "The period ends on or after its first day.",
       "file": "File",
       "session": "Session",
       "rows": "Rows",

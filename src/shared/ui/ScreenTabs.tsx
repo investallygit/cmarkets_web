@@ -1,5 +1,6 @@
 import { clsx } from 'clsx'
-import { NavLink } from 'react-router'
+import { useEffect, useRef, useState } from 'react'
+import { NavLink, useLocation } from 'react-router'
 
 export interface ScreenTab {
   to: string
@@ -14,10 +15,64 @@ interface ScreenTabsProps {
   label: string
 }
 
-/** Tabs under a screen header, each one a route of its own (spec section 9, screen 2). */
+/** The strip fades out at an edge beyond which tabs are hidden. */
+function edgeMask(start: boolean, end: boolean): string | undefined {
+  if (!start && !end) return undefined
+  return `linear-gradient(to right, ${start ? 'transparent, black 1.5rem' : 'black'}, ${
+    end ? 'black calc(100% - 1.5rem), transparent' : 'black'
+  })`
+}
+
+/**
+ * Tabs under a screen header, each one a route of its own (spec section 9, screen 2). A strip
+ * narrower than its tabs scrolls: the tab shown is brought into view, and the strip fades out at
+ * an edge beyond which tabs are hidden (B15).
+ */
 export function ScreenTabs({ tabs, label }: ScreenTabsProps) {
+  const strip = useRef<HTMLElement>(null)
+  const { pathname } = useLocation()
+  const [edges, setEdges] = useState({ start: false, end: false })
+  const measure = () => {
+    const element = strip.current
+    if (!element) return
+    const start = element.scrollLeft > 0
+    const end = element.scrollLeft + element.clientWidth < element.scrollWidth - 1
+    setEdges((current) =>
+      current.start === start && current.end === end ? current : { start, end },
+    )
+  }
+
+  useEffect(() => {
+    const element = strip.current
+    const active = element?.querySelector<HTMLElement>('[aria-current="page"]')
+    if (element && active) {
+      // Within the strip only: the page itself does not move.
+      const left = active.offsetLeft - element.offsetLeft
+      const right = left + active.offsetWidth
+      if (left < element.scrollLeft || right > element.scrollLeft + element.clientWidth)
+        element.scrollLeft = left - (element.clientWidth - active.offsetWidth) / 2
+    }
+    measure()
+  }, [pathname])
+
+  useEffect(() => {
+    const element = strip.current
+    if (!element || typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(() => measure())
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
+
+  const mask = edgeMask(edges.start, edges.end)
   return (
-    <nav aria-label={label} className="flex min-w-0 shrink-0 gap-1 overflow-x-auto">
+    <nav
+      ref={strip}
+      aria-label={label}
+      onScroll={measure}
+      style={mask ? { maskImage: mask, WebkitMaskImage: mask } : undefined}
+      // Never wider than its line: in a row that wraps (OPT's, B26), the strip scrolls instead.
+      className="flex max-w-full min-w-0 shrink-0 gap-1 overflow-x-auto"
+    >
       {tabs.map((tab) => (
         <NavLink
           key={tab.to}

@@ -23,8 +23,10 @@ import {
   frequencyOf,
   hasChanged,
   nextRepayment,
+  rangeErrors,
   toRequest,
   type PricingForm,
+  type RangeError,
   type RedemptionKind,
 } from '../model/pricingForm'
 import { RedemptionScheduleEditor } from './RedemptionScheduleEditor'
@@ -106,6 +108,9 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
   const serverError = (field: string) => serverErrors[field]?.at(0)
   const request = toRequest(form)
   const changed = hasChanged(form, submitted)
+  const outOfRange = rangeErrors(form)
+  const rangeError = (field: RangeError, message: string) =>
+    outOfRange.has(field) ? message : serverError(field)
 
   const bondOptions = [
     { value: BY_HAND, label: t('bondPricing.byHand') },
@@ -141,7 +146,7 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
         <Field
           label={t('bondPricing.fields.faceValue')}
           hint={t('bondPricing.fields.faceValueHint')}
-          error={serverError('faceValue')}
+          error={rangeError('faceValue', t('bondPricing.ranges.faceValue'))}
         >
           <NumberInput
             value={form.faceValue}
@@ -150,7 +155,10 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
             suffix="%"
           />
         </Field>
-        <Field label={t('bondPricing.fields.couponRate')} error={serverError('couponRate')}>
+        <Field
+          label={t('bondPricing.fields.couponRate')}
+          error={rangeError('couponRate', t('bondPricing.ranges.couponRate'))}
+        >
           <NumberInput
             value={form.couponRate}
             onChange={(couponRate) => editCharacteristics({ couponRate })}
@@ -228,7 +236,11 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
         <Field
           label={t('bondPricing.fields.ytm')}
           hint={<YieldSource form={form} bond={bond} market={market} />}
-          error={form.ytm === null ? t('bondPricing.required') : serverError('ytm')}
+          error={
+            form.ytm === null
+              ? t('bondPricing.required')
+              : rangeError('ytm', t('bondPricing.ranges.ytm'))
+          }
         >
           <NumberInput
             value={form.ytm}
@@ -264,7 +276,9 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
           {t('bondPricing.calculate')}
         </Button>
         {request === null ? (
-          <p className="font-sans text-title text-warning">{t('bondPricing.incomplete')}</p>
+          <p className="font-sans text-title text-warning">
+            {outOfRange.size > 0 ? t('bondPricing.outOfRange') : t('bondPricing.incomplete')}
+          </p>
         ) : (
           changed && <p className="font-sans text-title text-warning">{t('bondPricing.changed')}</p>
         )}

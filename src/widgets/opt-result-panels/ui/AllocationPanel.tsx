@@ -14,6 +14,9 @@ export function AllocationPanel({ result }: { result: OptResultDto }) {
   const { t } = useTranslation()
   const format = useFormat()
   const widest = Math.max(...result.lines.map((line) => line.weightPct), 1)
+  // A capital that buys no whole security: said, its weights and indicators being those of a
+  // portfolio nothing holds (B62).
+  const nothingBought = result.lines.length > 0 && result.lines.every((line) => line.quantity === 0)
   return (
     <Panel
       title={t('opt.allocation.title')}
@@ -25,6 +28,11 @@ export function AllocationPanel({ result }: { result: OptResultDto }) {
       }
     >
       <ScrollArea className="h-full">
+        {nothingBought && (
+          <p role="status" className="border-b px-2 py-1.5 font-sans text-data text-warning">
+            {t('opt.allocation.nothingBought', { amount: format.number(result.capital, 0) })}
+          </p>
+        )}
         <table className="w-full border-collapse font-mono text-data tabular-nums">
           <thead className="sticky top-0 bg-panel-header font-sans text-secondary">
             <tr>

@@ -72,7 +72,8 @@
     },
     "delayed": "Différé",
     "notFound": "Aucune valeur {{id}}.",
-    "notApplicable": "{{code}} ne s'applique pas à {{security}}."
+    "notApplicable": "{{code}} ne s'applique pas à {{security}}.",
+    "notAllowed": "{{code}} ne fait pas partie de votre compte."
   },
   "keyData": {
     "isin": "Code ISIN",

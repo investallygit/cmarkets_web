@@ -6,14 +6,17 @@ import { useSymbolSubscription } from '@/shared/realtime'
 import { ChangeText } from '@/shared/ui/ChangeText'
 import { Flash } from '@/shared/ui/Flash'
 
-/** Ticker tape under the top bar: indices and main securities with coloured change. */
+/**
+ * Ticker tape under the top bar: indices and main securities with coloured change. The entries
+ * that do not fit whole go to a second line, out of view: none is cut mid-word (B14).
+ */
 export function TickerTape() {
   const { data } = useTicker()
   // Indices too: the hub sends each value only to the screens that follow its symbol.
   useSymbolSubscription(data?.map((item) => item.symbol) ?? [])
 
   return (
-    <div className="flex h-full items-center gap-8 overflow-hidden px-4 font-mono text-data whitespace-nowrap">
+    <div className="flex h-full flex-wrap gap-x-8 overflow-hidden px-4 font-mono text-data whitespace-nowrap">
       {data?.map((item) => (
         <TickerEntry key={item.symbol} item={item} />
       ))}
@@ -31,7 +34,7 @@ function TickerEntry({ item }: { item: TickerItemDto }) {
   const changePct = live?.changePct ?? item.changePct
 
   return (
-    <span className="inline-flex items-center gap-2">
+    <span className="inline-flex h-full items-center gap-2">
       <span className="font-semibold text-accent-amber">{item.label}</span>
       <Flash value={last}>{format.number(last, priceDecimals(item.type, item.currency))}</Flash>
       <ChangeText value={changePct} percent showIcon />

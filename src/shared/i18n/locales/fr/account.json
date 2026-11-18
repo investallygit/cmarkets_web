@@ -8,7 +8,8 @@
     "ended": {
       "logout": "Vous êtes déconnecté.",
       "expired": "Votre session a expiré : reconnectez-vous.",
-      "inactivity": "Vous avez été déconnecté après 30 minutes sans activité."
+      "inactivity": "Vous avez été déconnecté après 30 minutes sans activité.",
+      "suspended": "Ce compte est suspendu. Contactez CMarket."
     },
     "login": {
       "title": "Connexion à CMarket",

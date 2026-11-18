@@ -96,7 +96,8 @@ export function PriceCorrectionForm({
         )
       }}
     >
-      <div className="grid grid-cols-5 gap-2">
+      {/* As many fields to a line as hold a price in francs whole (B33). */}
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(7.5rem,1fr))] gap-2">
         {FIELDS.map((field) => (
           <Field
             key={field}

@@ -80,8 +80,12 @@ function Tile({
       <span className="font-sans text-caption font-semibold uppercase tracking-title text-secondary">
         {label}
       </span>
+      {/* Two tiles to a line on a phone: the amounts a size smaller there, whole (B25). */}
       <span
-        className={clsx('truncate font-mono text-figure font-semibold', tone ?? 'text-primary')}
+        className={clsx(
+          'truncate font-mono text-figure font-semibold max-sm:text-label',
+          tone ?? 'text-primary',
+        )}
       >
         {children}
       </span>

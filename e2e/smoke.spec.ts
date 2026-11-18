@@ -31,6 +31,32 @@ test('the command bar opens a security profile', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Price chart' })).toBeVisible()
 })
 
+test('the command bar says an unknown function and a code the account may not run', async ({
+  page,
+}) => {
+  await page.goto('/mkt')
+  const bar = page.getByRole('combobox', { name: 'Command bar' })
+  // A security's code, then a word that is no code: said, nothing opened (B40).
+  await bar.fill('SEMC XYZ')
+  await bar.press('Enter')
+  await expect(page.getByRole('listbox')).toContainText('Unknown function code XYZ')
+  await expect(page).toHaveURL(/\/mkt$/)
+  // The functions offered after an equity are an equity's: no ETF holdings (B40).
+  await bar.fill('SEMC H')
+  await expect(page.getByRole('option', { name: /SEMC HDS/ })).toBeVisible()
+  await expect(page.getByRole('option', { name: /SEMC HLD/ })).toHaveCount(0)
+  await bar.press('Escape')
+
+  // The Student has no NEWS NEW, the News provider's studio: it is said, not searched as a name
+  // (B39).
+  await page.getByRole('button', { name: /analyst/i }).click()
+  await page.getByRole('menuitemradio', { name: 'Student' }).click()
+  await expect(page.getByRole('button', { name: /student/i })).toBeVisible()
+  await bar.fill('NEWS NEW')
+  await bar.press('Enter')
+  await expect(page.getByRole('listbox')).toContainText('NEWS NEW is not part of your account')
+})
+
 test('the security profile follows the mockup and opens a document', async ({ page }) => {
   await page.goto('/securities/SEMC/des')
   for (const title of [

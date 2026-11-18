@@ -1,5 +1,6 @@
 import { useProfileEditor } from '@/features/edit-network-profile'
 import { ScreenWorkspace } from '@/features/workspace-layout'
+import { LeaveGuard } from '@/shared/ui/LeaveGuard'
 import { PanelError, PanelLoading } from '@/shared/ui/StatusViews'
 import { CardPreviewPanel, MyProfilePanel, VisibilityPanel } from '@/widgets/network-profile-panels'
 import { NETWORK_PROFILE_LAYOUT } from '../config/layout'
@@ -7,7 +8,7 @@ import { NETWORK_PROFILE_LAYOUT } from '../config/layout'
 /**
  * NET ME, my profile, visibility and contact (spec sections 9 and 15, screen 12): the profile
  * the directory lists, who sees it and who may write, and the card as others see it. The three
- * panels share the changes, which one SAVE sends.
+ * panels share the changes, which one SAVE sends; leaving with changes not saved asks first (B68).
  */
 export function NetworkProfilePage() {
   const { editor, error, retry } = useProfileEditor()
@@ -17,5 +18,10 @@ export function NetworkProfilePage() {
     visibility: <VisibilityPanel editor={editor} />,
     preview: <CardPreviewPanel editor={editor} />,
   }
-  return <ScreenWorkspace screenId="NETME" defaultLayout={NETWORK_PROFILE_LAYOUT} panels={panels} />
+  return (
+    <>
+      <ScreenWorkspace screenId="NETME" defaultLayout={NETWORK_PROFILE_LAYOUT} panels={panels} />
+      <LeaveGuard dirty={editor.dirty} />
+    </>
+  )
 }

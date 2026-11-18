@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFormat } from '@/shared/i18n'
 
@@ -9,12 +10,18 @@ interface PagerProps {
   onChange: (page: number) => void
 }
 
-/** Pages of a server list, `{ items, page, pageSize, totalCount }` (spec section 10). */
+/**
+ * Pages of a server list, `{ items, page, pageSize, totalCount }` (spec section 10). A page past the
+ * last one (an old address, `?page=99`) gives way to the last (B66).
+ */
 export function Pager({ page, pageSize, totalCount, onChange }: PagerProps) {
   const { t } = useTranslation()
   const format = useFormat()
   const pages = Math.max(1, Math.ceil(totalCount / pageSize))
-  if (pages <= 1) return null
+  useEffect(() => {
+    if (page > pages) onChange(pages)
+  }, [page, pages, onChange])
+  if (pages <= 1 || page > pages) return null
   const first = (page - 1) * pageSize + 1
   const last = Math.min(page * pageSize, totalCount)
   // 24 px targets (WCAG 2.5.8), as tall as the bar.

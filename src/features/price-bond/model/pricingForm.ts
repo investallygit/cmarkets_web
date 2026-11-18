@@ -111,14 +111,33 @@ export function nextRepayment(form: PricingForm): RedemptionRow {
  * POST /bonds/price for the form: a bond of the list by its id, else its characteristics; null
  * while a field it needs is missing or out of range.
  */
+/** An input typed out of the range the API takes. */
+export type RangeError = 'faceValue' | 'couponRate' | 'ytm'
+
+/**
+ * The inputs typed out of range, each said on its field (B54): a face value of 0 or below, a
+ * coupon below 0 % or above 100 %, a yield past -50 % or 100 %. Calculate waited with
+ * "Complete the inputs" and no field named.
+ */
+export function rangeErrors(form: PricingForm): ReadonlySet<RangeError> {
+  const errors = new Set<RangeError>()
+  if (form.ytm !== null && (form.ytm <= YIELD_RANGE[0] || form.ytm >= YIELD_RANGE[1]))
+    errors.add('ytm')
+  if (form.bondId) return errors
+  if (form.faceValue !== null && form.faceValue <= 0) errors.add('faceValue')
+  if (form.couponRate !== null && (form.couponRate < 0 || form.couponRate > 100))
+    errors.add('couponRate')
+  return errors
+}
+
 export function toRequest(form: PricingForm): BondPriceRequestDto | null {
   const { settlementDate, ytm, faceAmount } = form
   if (!settlementDate || faceAmount === null || faceAmount <= 0) return null
-  if (ytm === null || ytm <= YIELD_RANGE[0] || ytm >= YIELD_RANGE[1]) return null
+  if (ytm === null || rangeErrors(form).size > 0) return null
   if (form.bondId) return { bondId: form.bondId, settlementDate, ytm, faceAmount }
 
   const { faceValue, couponRate, maturityDate } = form
-  if (faceValue === null || faceValue <= 0 || couponRate === null || couponRate < 0) return null
+  if (faceValue === null || couponRate === null) return null
   if (!maturityDate) return null
   const request: BondPriceRequestDto = {
     faceValue,

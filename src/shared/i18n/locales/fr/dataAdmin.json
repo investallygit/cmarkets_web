@@ -1,5 +1,6 @@
 {
   "dataImport": {
+    "unknownUpload": "Aucun import n'a cette adresse.",
     "types": {
       "daily-prices": "Cours quotidiens BVMAC",
       "indices": "Indices BVMAC",
@@ -313,6 +314,7 @@
     },
     "history": {
       "lastDays": "{{count}} derniers jours",
+      "periodInOrder": "La période finit le jour même ou après son premier jour.",
       "file": "Fichier",
       "session": "Séance",
       "rows": "Lignes",

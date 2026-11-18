@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import type { BondCalculationDto } from '@/shared/api/contracts'
-import { initialForm, settlementDateAfter, shownFigures, toRequest } from './calculatorForm'
+import {
+  initialForm,
+  inputError,
+  settlementDateAfter,
+  shownFigures,
+  toRequest,
+} from './calculatorForm'
 
 describe('bond calculator form', () => {
   it('settles two business days after the trade', () => {
@@ -38,5 +44,15 @@ describe('bond calculator form', () => {
       cleanPrice: 99.8,
       yieldPct: 6,
     })
+  })
+
+  it('names the input typed out of range (B52)', () => {
+    const form = initialForm('2026-11-16', 101.4)
+    expect(inputError(form)).toBeNull()
+    expect(inputError({ ...form, cleanPrice: -5 })).toBe('cleanPrice')
+    expect(inputError({ ...form, cleanPrice: 0 })).toBe('cleanPrice')
+    expect(inputError({ ...form, driver: 'yield', yieldPct: 150 })).toBe('yieldPct')
+    expect(inputError({ ...form, driver: 'yield', yieldPct: -80 })).toBe('yieldPct')
+    expect(inputError({ ...form, driver: 'yield', yieldPct: 5.24 })).toBeNull()
   })
 })

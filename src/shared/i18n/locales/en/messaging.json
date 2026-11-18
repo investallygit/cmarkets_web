@@ -69,6 +69,7 @@
       "newClosed": "{{name}} does not take messages from your account type.",
       "notFound": "This conversation no longer exists, or you left it.",
       "unknown": "This person is not among the people you may write to.",
+      "toSelf": "This is your own address: choose someone else to write to.",
       "editLabel": "Edit the message",
       "typingOne": "{{name}} is typing…",
       "typingTwo": "{{first}} and {{second}} are typing…",
@@ -179,6 +180,7 @@
       "title": "Blocked people",
       "hint": "They no longer see your profile and cannot write to you.",
       "none": "You blocked nobody.",
+      "failed": "The people you blocked could not be read.",
       "since": "since {{date}}"
     },
     "realtime": {

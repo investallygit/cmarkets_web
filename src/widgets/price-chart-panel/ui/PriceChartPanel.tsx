@@ -60,13 +60,16 @@ export function PriceChartPanel({
   const intradayAllowed = useHasPermission('market:orderbook')
   // "Read" accounts (Journalist, CEO) view the chart without saving drawings (spec section 12).
   const canDraw = useHasPermission('analysis:save')
+  // The indicators come from the analysis (GET /indicators): an account without it (the SVT)
+  // has none, rather than averages on that draw no line (B21).
+  const canAnalyse = useHasPermission('analysis:read')
   const periods = (full ? FULL_PERIODS : COMPACT_PERIODS).filter(
     (candidate) => intradayAllowed || !isIntraday(candidate),
   )
   const [period, setPeriod] = useState<ChartPeriod>(full ? '1Y' : '6M')
   const [chartType, setChartType] = useState<PriceChartType>('candles')
   const [indicators, setIndicators] = useState<ReadonlySet<Indicator>>(
-    () => new Set(['ma20', 'ma50']),
+    () => new Set(canAnalyse ? ['ma20', 'ma50'] : []),
   )
   const [showVolume, setShowVolume] = useState(true)
   const [compareOpen, setCompareOpen] = useState(false)
@@ -77,7 +80,8 @@ export function PriceChartPanel({
   const daily = !isIntraday(period)
   const comparing = full && compared.length > 0
   // Moving averages and bands would be rebased too: they step aside during a comparison.
-  const shows = (indicator: Indicator) => indicators.has(indicator) && daily && !comparing
+  const shows = (indicator: Indicator) =>
+    canAnalyse && indicators.has(indicator) && daily && !comparing
   const [ma20On, ma50On, bandsOn, rsiOn, macdOn] = [
     shows('ma20'),
     shows('ma50'),
@@ -228,8 +232,8 @@ export function PriceChartPanel({
       {(full ? FULL_INDICATORS : COMPACT_INDICATORS).map((indicator) => (
         <PanelToggle
           key={indicator}
-          active={indicators.has(indicator)}
-          disabled={!daily || comparing}
+          active={canAnalyse && indicators.has(indicator)}
+          disabled={!canAnalyse || !daily || comparing}
           onChange={(on) => toggle(indicator, on)}
         >
           {t(`chart.indicators.${indicator}`)}

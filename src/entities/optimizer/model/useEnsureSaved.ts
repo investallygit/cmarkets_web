@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSaveScenario } from '../api/queries'
 import { openScenario, useOptimizer } from './optimizerStore'
 
@@ -8,6 +9,7 @@ import { openScenario, useOptimizer } from './optimizerStore'
  * scenario under the name given; an open scenario is never saved over without being asked.
  */
 export function useEnsureSaved() {
+  const { t } = useTranslation()
   const save = useSaveScenario()
   const scenario = useOptimizer((state) => state.scenario)
   const resultSaved = useOptimizer((state) => state.resultSaved)
@@ -24,7 +26,13 @@ export function useEnsureSaved() {
   )
   return {
     needsSave: !resultSaved || !scenario,
-    defaultName: scenario?.name ?? '',
+    // A result other than the open scenario's is a new scenario: named as its copy, not as it
+    // (two "CEMAC balanced" could not be told apart; B59).
+    defaultName: scenario
+      ? resultSaved
+        ? scenario.name
+        : t('opt.scenario.copyName', { name: scenario.name })
+      : '',
     ensure,
     saving: save.isPending,
   }

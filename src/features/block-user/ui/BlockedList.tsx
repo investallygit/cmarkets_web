@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { AccountTypeBadge, useBlocks } from '@/entities/profile'
 import { useFormat } from '@/shared/i18n'
+import { InlineError } from '@/shared/ui/StatusViews'
 import { BlockButton } from './BlockButton'
 
 /** NET ME: the people the user blocked, each to unblock (spec sections 10 and 15). */
@@ -16,6 +17,15 @@ export function BlockedList() {
       <p className="font-sans text-title text-secondary">{t('messaging.blocked.hint')}</p>
       {blocks.data?.length === 0 && (
         <p className="font-sans text-data text-secondary">{t('messaging.blocked.none')}</p>
+      )}
+      {/* The list that could not be read is said, not left empty (B63). */}
+      {blocks.isError && (
+        <p className="font-sans text-data">
+          <InlineError
+            message={t('messaging.blocked.failed')}
+            onRetry={() => void blocks.refetch()}
+          />
+        </p>
       )}
       <ul className="flex flex-col gap-1.5">
         {blocks.data?.map((person) => (

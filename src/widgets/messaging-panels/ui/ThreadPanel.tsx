@@ -151,7 +151,9 @@ function Conversation({
   const framed = useRef<string | null>(null)
   const today = format.day(useNow(60_000))
   const visible = usePageVisible()
-  useJoinConversation(conversationId)
+  // Joined once the conversation is known: an unknown one (MSG?c=…) is not asked of the hub, which
+  // refused it and logged an error (B08).
+  useJoinConversation(details.isSuccess ? conversationId : null)
 
   const ready = Boolean(conversation) && !history.isPending
   const { hasNextPage, isFetchingNextPage, fetchNextPage } = history
@@ -199,8 +201,9 @@ function Conversation({
       <PanelError error={details.error} onRetry={() => void details.refetch()} />
     )
   }
-  // The messages that could not be read are said, not shown as an empty thread (B74).
-  if (history.isError)
+  // The messages that could not be read are said, not shown as an empty thread (B74); once read, a
+  // later failure (a member taken out reads them no more) leaves the thread and its notice.
+  if (history.isError && !history.data)
     return <PanelError error={history.error} onRetry={() => void history.refetch()} />
   if (!conversation || history.isPending) return <PanelLoading />
 
@@ -261,7 +264,11 @@ function Conversation({
  */
 function NewConversation({ to, onStarted }: { to: string; onStarted: (id: string) => void }) {
   const { t } = useTranslation()
-  const recipient = useRecipient(to)
+  const user = useCurrentUser()
+  const recipient = useRecipient(user.id === to ? null : to)
+  // One's own address: there is nobody else to write to (B69: it read that the user takes no
+  // messages from their own account type).
+  if (user.id === to) return <PanelEmpty message={t('messaging.thread.toSelf')} />
   if (recipient.status === 'error') return <PanelError error={recipient.error} />
   if (recipient.status === 'unknown') return <PanelEmpty message={t('messaging.thread.unknown')} />
   if (recipient.status === 'loading') return <PanelLoading />
@@ -294,8 +301,9 @@ export function ThreadPanel({
   onClosed,
 }: ThreadPanelProps) {
   const { t } = useTranslation()
+  const user = useCurrentUser()
   const details = useConversation(conversationId)
-  const target = useRecipient(conversationId ? null : to)
+  const target = useRecipient(conversationId || to === user.id ? null : to)
   const conversation = details.data
   const counterpart = conversation?.counterpart
   const online = useOnline(counterpart?.userId, counterpart?.online)

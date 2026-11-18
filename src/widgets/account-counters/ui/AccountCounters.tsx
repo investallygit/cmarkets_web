@@ -23,7 +23,8 @@ export function AccountCounters({ selected, onSelect }: AccountCountersProps) {
     <div
       role="group"
       aria-label={t('accounts.counters')}
-      className="grid grid-cols-3 gap-2 xl:grid-cols-10"
+      // Two tiles a line on a phone, three from 640 px: a type's name and "active" whole (B29).
+      className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-10"
     >
       {ACCOUNT_TYPES.map((type) => (
         <button
@@ -40,7 +41,7 @@ export function AccountCounters({ selected, onSelect }: AccountCountersProps) {
           <span className="truncate font-sans text-title font-semibold tracking-title text-secondary uppercase">
             {t(`accountTypes.${type}`)}
           </span>
-          <span className="flex items-baseline justify-between gap-2">
+          <span className="flex flex-wrap items-baseline justify-between gap-x-2">
             <span className="font-mono text-figure font-semibold">
               {counts.data ? format.number(counts.data[type], 0) : '—'}
             </span>

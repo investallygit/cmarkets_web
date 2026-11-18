@@ -13,6 +13,7 @@ import { Field } from '@/shared/ui/form/Field'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
 import { Select } from '@/shared/ui/form/Select'
 import { TextInput } from '@/shared/ui/form/TextInput'
+import { LeaveGuard } from '@/shared/ui/LeaveGuard'
 
 const LANGUAGE_NAMES: Record<UserLanguage, string> = { fr: 'Français', en: 'English' }
 
@@ -57,6 +58,8 @@ export function ProfileForm() {
         update.mutate({ ...form, displayName: form.displayName.trim(), phone: phone || null })
       }}
     >
+      {/* Changes not saved: leaving asks first (B68). */}
+      <LeaveGuard dirty={changed && !update.isPending} />
       <dl className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] gap-x-3 gap-y-1 font-sans text-data">
         <dt className="text-secondary">{t('settings.profile.email')}</dt>
         <dd className="truncate font-mono">{user.email}</dd>

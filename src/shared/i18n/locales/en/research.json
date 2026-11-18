@@ -168,6 +168,7 @@
       "search": "Search a security, a country, an analyst"
     },
     "byAnalyst": "Publications of {{name}}",
+    "unknownAnalyst": "This analyst is no longer in the directory: no publication of theirs to show.",
     "allAnalysts": "All the analysts"
   },
   "studio": {

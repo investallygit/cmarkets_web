@@ -173,6 +173,7 @@
       "specialties": "Spécialités",
       "experience": "Expérience",
       "latestPublications": "Dernières publications",
+      "publicationsFailed": "Ses publications n'ont pas pu être lues.",
       "noPublication": "Aucune publication pour le moment.",
       "contact": "Contact",
       "acceptsFrom": "Accepte les messages de : {{types}}",

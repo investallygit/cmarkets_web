@@ -60,10 +60,12 @@ export function ImportSteps({ status }: { status: ImportStatus | null }) {
                   index + 1
                 )}
               </span>
+              {/* On a phone the step under way alone shows its name; the others are read (B32). */}
               <span
                 className={clsx(
                   'font-sans text-label',
                   active ? 'font-semibold text-primary' : done ? 'text-primary' : 'text-secondary',
+                  !active && 'max-sm:sr-only',
                 )}
               >
                 {t(`dataImport.steps.${step}`)}

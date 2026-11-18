@@ -7,6 +7,7 @@ import { useDebouncedValue } from '@/shared/lib/useDebouncedValue'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
 import { Select } from '@/shared/ui/form/Select'
 import { Panel } from '@/shared/ui/Panel'
+import { isConvertible, MAX_AMOUNT } from '../lib/amount'
 
 /** The mockup's: 10,000,000 XAF into dollars. */
 const DEFAULT_AMOUNT = 10_000_000
@@ -35,8 +36,10 @@ export function FxConverterPanel() {
   // The dollar as the mockup, or the table's first currency when the Admin left it out.
   const to = chosenTarget ?? crosses.data?.crosses.at(0)?.currency ?? EURO
   const options = codes.map((code) => ({ value: code, label: code }))
-  const conversion = useFxConversion(useDebouncedValue(amount, 300), from, to)
-  const result = conversion.data
+  // A negative, a zero or a figure out of range is said, not converted to 0.00 (B49).
+  const convertible = isConvertible(amount)
+  const conversion = useFxConversion(useDebouncedValue(convertible ? amount : null, 300), from, to)
+  const result = convertible ? conversion.data : undefined
 
   return (
     <Panel title={t('panels.fxConverter')} code="FX">
@@ -69,7 +72,7 @@ export function FxConverterPanel() {
             aria-label={t('fx.result')}
             className="flex h-7 items-center justify-end border bg-app px-2 font-mono text-data font-semibold text-up tabular-nums"
           >
-            {amount === null || !result ? MISSING : format.number(result.result, 2)}
+            {!result ? MISSING : format.number(result.result, 2)}
           </output>
           <Select
             value={to}
@@ -78,7 +81,11 @@ export function FxConverterPanel() {
             aria-label={t('fx.toCurrency')}
           />
         </div>
-        {conversion.isError ? (
+        {!convertible ? (
+          <p role="alert" className="text-down">
+            {t('fx.amountHint', { max: format.number(MAX_AMOUNT, 0) })}
+          </p>
+        ) : conversion.isError ? (
           <p role="alert" className="text-down">
             {conversion.error.message}
           </p>

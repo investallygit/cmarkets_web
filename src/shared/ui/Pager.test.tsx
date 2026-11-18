@@ -22,4 +22,11 @@ describe('Pager', () => {
     rerender(<Pager page={1} pageSize={20} totalCount={12} onChange={vi.fn()} />)
     expect(screen.queryByRole('navigation')).toBeNull()
   })
+
+  it('gives way to the last page from a page past it (B66)', () => {
+    const onChange = vi.fn()
+    render(<Pager page={99} pageSize={20} totalCount={128} onChange={onChange} />)
+    expect(onChange).toHaveBeenCalledWith(7)
+    expect(screen.queryByText(/1,961/)).toBeNull()
+  })
 })

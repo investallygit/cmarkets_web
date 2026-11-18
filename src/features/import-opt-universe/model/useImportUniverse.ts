@@ -97,7 +97,11 @@ export function useImportUniverse() {
           queryFn: ({ signal }) => watchlistsApi.list(signal),
         })
         const list = lists.find((candidate) => candidate.id === watchlistId)
-        if (!list) return
+        // A list that is not the user's is said, as an unknown portfolio is (B61).
+        if (!list) {
+          toast.error(t('opt.universe.noWatchlist'))
+          return
+        }
         if (fresh) newSetup()
         take(list.items, list.name)
       } catch (error) {

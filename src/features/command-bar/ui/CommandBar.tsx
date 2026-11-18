@@ -8,7 +8,12 @@ import { findSecurity, useSecuritySearch } from '@/entities/security'
 import { useCurrentUser } from '@/entities/session'
 import type { SecuritySearchItemDto } from '@/shared/api/contracts'
 import { useCurrentRoute } from '@/shared/routes/useCurrentRoute'
-import { appliesToSecurity, availableFunctions, type FunctionCode } from '../config/functionCodes'
+import {
+  appliesToSecurity,
+  availableFunctions,
+  FUNCTION_CODES,
+  type FunctionCode,
+} from '../config/functionCodes'
 import { commandOf } from '../lib/currentCommand'
 import { parseCommand } from '../lib/parseCommand'
 
@@ -17,6 +22,11 @@ type Suggestion =
   | { kind: 'security'; key: string; security: SecuritySearchItemDto }
 
 const MAX_SUGGESTIONS = 8
+/** Every code of the terminal, the account's or not: one it may not run is said so (B39). */
+const ALL_CODES: ReadonlySet<string> = new Set(FUNCTION_CODES.map((fn) => fn.code))
+const ALL_ARGUMENT_CODES: ReadonlySet<string> = new Set(
+  FUNCTION_CODES.filter((fn) => fn.target === 'argument').map((fn) => fn.code),
+)
 
 /**
  * Command bar (spec section 8): a security code followed by a function code, then Enter.
@@ -52,6 +62,14 @@ export function CommandBar() {
   const securityPart = typingFirstWord
     ? ''
     : (endsWithSpace ? tokens : tokens.slice(0, -1)).join(' ')
+  // A security typed rather than picked: its type, once its code is found, chooses the functions
+  // offered after it, as a picked one does ("SEMC HLD" was offered for an equity; B40).
+  const typedSearch = useSecuritySearch(editing && !picked && securityPart ? securityPart : '')
+  const typedSecurity = picked
+    ? picked
+    : typedSearch.data?.securities.find(
+        (security) => security.code.toUpperCase() === securityPart.toUpperCase(),
+      )
 
   // First word: screens such as EQS or N. After a security: functions that apply to it.
   const functionMatches = editing
@@ -59,7 +77,7 @@ export function CommandBar() {
         (fn) =>
           fn.code.startsWith(lastWord) &&
           (typingFirstWord ? fn.target !== 'security' : fn.target !== 'none') &&
-          (!picked || appliesToSecurity(fn, picked.type)),
+          (!typedSecurity || appliesToSecurity(fn, typedSecurity.type)),
       )
     : []
   const searchText = !editing
@@ -111,6 +129,12 @@ export function CommandBar() {
   }
 
   async function execute(command: string) {
+    // A code of the terminal the account may not run is said, not searched as a name: the
+    // Student's "N NEW" opened New York heating oil (B39).
+    const known = parseCommand(command, ALL_CODES, ALL_ARGUMENT_CODES)
+    if (known.functionCode && !codes.has(known.functionCode)) {
+      return setError(t('shell.notInAccount', { code: known.functionCode }))
+    }
     const { securityQuery, functionCode, argument } = parseCommand(command, codes, argumentCodes)
     if (!securityQuery && !functionCode) return
     // A security alone opens its profile.
@@ -124,6 +148,14 @@ export function CommandBar() {
     }
     if (!securityQuery) return setError(t('shell.needsSecurity', { code }))
     try {
+      // "SEMC XYZ": a security's code then a word that is no code of the terminal (B40).
+      const words = securityQuery.split(' ')
+      if (!functionCode && words.length > 1) {
+        const head = words.slice(0, -1).join(' ')
+        const before = await findSecurity(queryClient, head)
+        if (before && before.code.toUpperCase() === head)
+          return setError(t('shell.unknownFunction', { code: words.at(-1) ?? '' }))
+      }
       const security =
         picked && picked.code.toUpperCase() === securityQuery
           ? picked

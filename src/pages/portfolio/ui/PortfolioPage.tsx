@@ -1,7 +1,7 @@
 import { Briefcase, Plus, SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router'
 import {
   openPortfolioDialog,
   openTransactionDialog,
@@ -66,7 +66,10 @@ export function PortfolioPage() {
   const list = portfolios.data
   const current = list.find((portfolio) => portfolio.id === portfolioId)
   if (list.length === 0) return <NoPortfolio />
-  if (!current) return <Navigate to={portfolioPath(list[0].id, tab)} replace />
+  // One the user may not read (unknown, or no longer shared) gives way to the first, and says so
+  // (B11).
+  if (!current)
+    return <Navigate to={portfolioPath(list[0].id, tab)} replace state={{ missing: portfolioId }} />
   return <PortfolioScreen portfolios={list} current={current} tab={tab} />
 }
 
@@ -81,6 +84,7 @@ function PortfolioScreen({
 }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const missing = (useLocation().state as { missing?: string } | null)?.missing
   const { canWrite } = usePortfolioAccess(current.id)
   const details = usePortfolio(current.id).data
   const [importing, setImporting] = useState(false)
@@ -97,13 +101,18 @@ function PortfolioScreen({
   return (
     <div className="flex h-full flex-col">
       <div className="flex shrink-0 flex-col gap-2 px-2 pt-2">
+        {missing && (
+          <p role="status" className="font-sans text-data text-warning">
+            {t('portfolio.notReadable', { name: current.name })}
+          </p>
+        )}
         <PortfolioHeader
           portfolios={portfolios}
           portfolioId={current.id}
           onSelect={(id) => void navigate(portfolioPath(id, tab))}
         />
-        <div className="flex items-center justify-between gap-2">
-          {/* On a narrow window the tabs scroll, the button beside them stays. */}
+        {/* On a phone the tabs take the line and scroll, the button goes below them (B15). */}
+        <div className="flex items-center justify-between gap-2 max-sm:flex-col max-sm:items-stretch">
           <div className="min-w-0">
             <ScreenTabs tabs={tabs} label={t('portfolio.tabsLabel')} />
           </div>

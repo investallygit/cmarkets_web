@@ -68,9 +68,13 @@ test('a point of the frontier is computed, then saved as a model portfolio that 
 }) => {
   await openDemoScenario(page)
   await page.getByRole('link', { name: /OPT RES/ }).click()
-  await expect(page).toHaveURL(/\/opt\/result$/)
-
+  // The saved scenario's id stays in the address: a reload shows its result again (B60).
+  await expect(page).toHaveURL(/\/opt\/result\?scenario=/)
+  await page.reload()
   const frontier = panel(page, 'Efficient frontier')
+  await expect(frontier).toBeVisible()
+  await expect(page.getByText('No result yet')).toHaveCount(0)
+
   const points = frontier.getByRole('combobox', { name: 'Another point of the frontier' })
   const last = points.getByRole('option').last()
   const label = (await last.textContent()) ?? ''

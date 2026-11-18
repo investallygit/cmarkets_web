@@ -6,6 +6,7 @@ import { useCoverage } from '@/entities/data-import'
 import type { CoverageItemDto, CoverageStatus } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { addDays, isWeekend } from '@/shared/lib/isoDate'
+import { useMarketDay } from '@/shared/lib/useMarketDay'
 import { Button } from '@/shared/ui/form/Button'
 import { DateInput } from '@/shared/ui/form/DateInput'
 import { Panel } from '@/shared/ui/Panel'
@@ -66,6 +67,7 @@ export function SessionCoveragePanel({
   const { t } = useTranslation()
   const format = useFormat()
   const coverage = useCoverage(date)
+  const marketToday = useMarketDay()
   const [templatesOpen, setTemplatesOpen] = useState(false)
   const shown = coverage.data?.date ?? date
 
@@ -79,7 +81,8 @@ export function SessionCoveragePanel({
       case 'checking':
         return t('dataImport.coverage.checking')
       case 'expected': {
-        const today = !item.dueOn || item.dueOn === session
+        // Today is the market's day, not the session shown: a session ahead names its day (B89).
+        const today = (item.dueOn ?? session) === marketToday
         // A file due at a time of Douala (UTC+1 all year), shown in the user's time zone: the CEMAC
         // sovereign yields at 17:30, as the screen 6 mockup expects them.
         if (item.dueOn && item.dueTime) {

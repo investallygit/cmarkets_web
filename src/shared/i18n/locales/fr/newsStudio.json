@@ -166,6 +166,7 @@
       "uploaded": "{{file}} est en contrôle.",
       "last": "Dernier import",
       "none": "Aucun import pour l'instant.",
+      "lastFailed": "Le dernier import n'a pas pu être lu.",
       "checking": "Contrôle de {{file}}…",
       "failed": "{{file}} ne peut pas être contrôlé : {{error}}",
       "read": "Lignes lues",

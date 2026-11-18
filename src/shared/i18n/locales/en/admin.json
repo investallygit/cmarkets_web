@@ -75,7 +75,7 @@
     "actions": {
       "changeType": "Change type",
       "changeTypeTitle": "Change the account type",
-      "changeTypeMessage": "{{name}} gets the permissions and quotas of the new type at the next page load. A client stays a client, an employee an employee.",
+      "changeTypeMessage": "{{name}} gets the permissions and quotas of the new type at the next page load. A client stays a client, an SVT an SVT, an employee an employee.",
       "toVerifiedNote": "The {{type}} status is approved with the change, with the VERIFIED badge.",
       "typeChanged": "{{name}} is now {{type}}.",
       "resetMfa": "Reset two-factor authentication",

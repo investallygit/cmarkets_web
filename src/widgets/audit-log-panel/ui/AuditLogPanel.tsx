@@ -39,6 +39,8 @@ export function AuditLogPanel({ selectedId, onSelect }: AuditLogPanelProps) {
   const action = isAuditAction(actionParam) ? actionParam : undefined
   const from = params.get('from') ?? undefined
   const to = params.get('to') ?? undefined
+  // A period that ends before it starts lists nothing: said where the dates are (B90).
+  const inverted = Boolean(from && to && from > to)
   const user = useAccount(userId)
   const log = useAuditLog({ userId: userId ?? undefined, action, from, to, page })
   const setFilter = (values: Record<string, string>) => {
@@ -57,17 +59,18 @@ export function AuditLogPanel({ selectedId, onSelect }: AuditLogPanelProps) {
         helper.accessor((entry) => entry.actor.displayName, {
           id: 'who',
           header: t('audit.who'),
-          meta: { width: '0.8fr' },
+          // Enough of each text to be read on a phone (B34): "A. M…", "Fich…" before.
+          meta: { width: 'minmax(96px, 0.8fr)' },
         }),
         helper.accessor((entry) => text.action(entry.action), {
           id: 'action',
           header: t('audit.action'),
-          meta: { width: '1.1fr' },
+          meta: { width: 'minmax(128px, 1.1fr)' },
         }),
         helper.accessor((entry) => text.target(entry.target), {
           id: 'target',
           header: t('audit.target'),
-          meta: { width: '1.3fr' },
+          meta: { width: 'minmax(128px, 1.3fr)' },
           cell: ({ getValue }) => <span title={getValue()}>{getValue()}</span>,
         }),
         helper.accessor((entry) => entry.changes.map(text.change).join(' ; '), {
@@ -132,6 +135,11 @@ export function AuditLogPanel({ selectedId, onSelect }: AuditLogPanelProps) {
           aria-label={t('dataImport.history.to')}
           className="w-28"
         />
+        {inverted && (
+          <span role="alert" className="font-sans text-data text-down">
+            {t('dataImport.history.periodInOrder')}
+          </span>
+        )}
       </div>
       <div className="min-h-0 flex-1">
         <QueryView query={log}>
@@ -144,7 +152,7 @@ export function AuditLogPanel({ selectedId, onSelect }: AuditLogPanelProps) {
               onRowClick={onSelect}
               enableSorting={false}
               exportName="cmarket-audit-log"
-              emptyMessage={t('audit.none')}
+              emptyMessage={inverted ? t('dataImport.history.periodInOrder') : t('audit.none')}
             />
           )}
         </QueryView>

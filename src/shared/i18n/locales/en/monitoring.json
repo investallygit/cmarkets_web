@@ -72,7 +72,8 @@
     },
     "delayed": "Delayed",
     "notFound": "No security {{id}}.",
-    "notApplicable": "{{code}} does not apply to {{security}}."
+    "notApplicable": "{{code}} does not apply to {{security}}.",
+    "notAllowed": "{{code}} is not part of your account."
   },
   "keyData": {
     "isin": "ISIN code",

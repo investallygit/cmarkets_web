@@ -24,8 +24,9 @@ function KeyValues({ rows }: { rows: readonly Row[] }) {
               : 'flex h-row items-center gap-3 px-2'
           }
         >
-          <dt className="truncate font-sans text-data text-secondary">{label}</dt>
-          <dd className="ml-auto truncate font-mono text-data">{value}</dd>
+          {/* The label gives way: a figure keeps its digits (B25). */}
+          <dt className="min-w-0 truncate font-sans text-data text-secondary">{label}</dt>
+          <dd className="ml-auto shrink-0 font-mono text-data whitespace-nowrap">{value}</dd>
         </div>
       ))}
     </dl>

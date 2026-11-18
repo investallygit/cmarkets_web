@@ -55,9 +55,10 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
   const [submitted, setSubmitted] = useState(false)
 
   const local: Record<string, string | null> = {
+    // A whole number from 0, as the API takes it: -1 and 2.5 were sent and refused unsaid (B91).
     quotas: CLIENT_ACCOUNT_TYPES.some((type) =>
       [quotas[type].portfolios, quotas[type].alerts].some(
-        (quota) => quota !== null && quota > MAX_QUOTA,
+        (quota) => quota !== null && (!Number.isInteger(quota) || quota < 0 || quota > MAX_QUOTA),
       ),
     )
       ? t('platformSettings.errors.quota', { max: format.number(MAX_QUOTA, 0) })
@@ -86,10 +87,13 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
         : null,
   }
   const server = isApiError(save.error, 400) ? (save.error.problem.errors ?? {}) : {}
-  // A rate's error comes under riskFreeRates[0].ratePct: the list's own field shows it.
+  // A rate's error comes under riskFreeRates[0].ratePct, a quota's under quotas.student: the
+  // list's own field shows it.
   const serverError = (field: string) =>
     server[field]?.[0] ??
-    Object.entries(server).find(([key]) => key.startsWith(`${field}[`))?.[1]?.[0]
+    Object.entries(server).find(
+      ([key]) => key.startsWith(`${field}[`) || key.startsWith(`${field}.`),
+    )?.[1]?.[0]
   const error = (field: string) => (submitted && local[field]) || serverError(field)
 
   const update = {
@@ -141,7 +145,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
       placeholder={t('platformSettings.unlimited')}
       aria-label={`${t(`accountTypes.${type}`)}, ${t(`platformSettings.quotas.${quota}`)}`}
       highlight
-      className="w-28"
+      className="w-24 sm:w-28"
     />
   )
 
@@ -163,32 +167,36 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     >
       <div className="min-h-0 flex-1 overflow-auto">
         <Section title={t('platformSettings.quotas.title')}>
-          <table className="w-fit font-sans text-data">
-            <thead>
-              <tr className="text-secondary">
-                <th scope="col" className="pr-6 text-left font-normal">
-                  {t('settings.profile.accountType')}
-                </th>
-                <th scope="col" className="pr-3 text-left font-normal">
-                  {t('platformSettings.quotas.portfolios')}
-                </th>
-                <th scope="col" className="text-left font-normal">
-                  {t('platformSettings.quotas.alerts')}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {CLIENT_ACCOUNT_TYPES.map((type) => (
-                <tr key={type}>
-                  <th scope="row" className="pr-6 text-left font-normal">
-                    {t(`accountTypes.${type}`)}
+          {/* On a phone the inputs narrow, and the table scrolls rather than run past the
+              panel's edge (B35). */}
+          <div className="max-w-full overflow-x-auto">
+            <table className="w-fit font-sans text-data">
+              <thead>
+                <tr className="text-secondary">
+                  <th scope="col" className="pr-3 text-left font-normal sm:pr-6">
+                    {t('settings.profile.accountType')}
                   </th>
-                  <td className="py-0.5 pr-3">{quotaInput(type, 'portfolios')}</td>
-                  <td className="py-0.5">{quotaInput(type, 'alerts')}</td>
+                  <th scope="col" className="pr-3 text-left font-normal">
+                    {t('platformSettings.quotas.portfolios')}
+                  </th>
+                  <th scope="col" className="text-left font-normal">
+                    {t('platformSettings.quotas.alerts')}
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {CLIENT_ACCOUNT_TYPES.map((type) => (
+                  <tr key={type}>
+                    <th scope="row" className="pr-3 text-left font-normal sm:pr-6">
+                      {t(`accountTypes.${type}`)}
+                    </th>
+                    <td className="py-0.5 pr-3">{quotaInput(type, 'portfolios')}</td>
+                    <td className="py-0.5">{quotaInput(type, 'alerts')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           <p className="font-sans text-data text-secondary">{t('platformSettings.quotas.hint')}</p>
           {error('quotas') && (
             <p role="alert" className="font-sans text-data text-down">

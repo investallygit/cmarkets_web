@@ -3,6 +3,7 @@
     "counters": "Subscription counters",
     "active": "Active subscriptions",
     "expiringSoon": "Expiring within 30 days",
+    "countersCaption": "Counted in accounts, an organisation's members each; the list adds a line for each organisation.",
     "expiredNotRenewed": "Expired, not renewed",
     "failedPayments": "Failed payments (30 d)",
     "collected": "Collected this month",
