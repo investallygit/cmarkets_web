@@ -22,7 +22,7 @@ import { DateInput } from '@/shared/ui/form/DateInput'
 import { Field } from '@/shared/ui/form/Field'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
-import { PanelLoading } from '@/shared/ui/StatusViews'
+import { PanelError, PanelLoading } from '@/shared/ui/StatusViews'
 import { toast } from '@/shared/ui/toast'
 import {
   allDisclosed,
@@ -50,9 +50,11 @@ const SECTION_TITLE =
  */
 export function PublicationSettings({ publication }: { publication: PublicationDto }) {
   const draft = useDraftStore((state) => state.draft)
-  const rules = usePublicationRules().data
-  if (draft?.publicationId !== publication.id || !rules) return <PanelLoading />
-  return <SettingsForm publication={publication} draft={draft} rules={rules} />
+  const rules = usePublicationRules()
+  // The price rules that could not be read are said, with Retry: Submit waits for them (B75).
+  if (rules.isError) return <PanelError error={rules.error} onRetry={() => void rules.refetch()} />
+  if (draft?.publicationId !== publication.id || !rules.data) return <PanelLoading />
+  return <SettingsForm publication={publication} draft={draft} rules={rules.data} />
 }
 
 interface SettingsFormProps {

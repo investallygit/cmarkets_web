@@ -108,7 +108,7 @@
     "indicator": "Indicateur",
     "year": "Année",
     "periodsLabel": "Années du graphique",
-    "exportChart": "Exporter les chiffres du graphique vers Excel",
+    "exportChart": "XLSX : exporter les chiffres du graphique vers Excel",
     "chartLabel": "{{indicator}} de {{countries}} de {{from}} à {{to}}",
     "chartCountries": "Économies du graphique",
     "chartHint": "Jusqu’à {{count}} pays par graphique.",
@@ -131,7 +131,7 @@
       "year": "Année"
     },
     "export": "Exporter",
-    "exportTable": "Exporter la comparaison CEMAC vers Excel",
+    "exportTable": "XLSX : exporter la comparaison CEMAC vers Excel",
     "tableNote": "« n.d. » : série non publiée pour ce pays par la Banque mondiale, ou pas depuis dix ans. Séries actualisées chaque mois ; la dernière année disponible est en général l’année précédente."
   }
 }

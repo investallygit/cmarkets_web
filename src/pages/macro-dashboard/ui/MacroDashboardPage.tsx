@@ -42,6 +42,11 @@ export function MacroDashboardPage() {
           latestYear={
             summary.data?.country.code === selected ? summary.data?.latestYear : undefined
           }
+          failure={
+            countries.isError
+              ? { message: countries.error.message, retry: () => void countries.refetch() }
+              : undefined
+          }
         />
         {asked && list && !known && (
           <p role="status" className="font-sans text-data text-warning">

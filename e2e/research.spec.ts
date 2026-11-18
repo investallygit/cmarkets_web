@@ -97,18 +97,22 @@ test(
     await page.goto('/pub')
     const list = panel(page, 'Publications: 128 results')
     const preview = panel(page, 'Preview')
-    await preview.getByRole('button', { name: 'Buy this report — XAF 15,000' }).click()
+    // Not bought by the flow before, whose payment of it was declined.
+    await list.getByRole('button', { name: /Cameroon: debt trajectory/ }).click()
+    await preview.getByRole('button', { name: 'Buy this report — XAF 25,000' }).click()
     const dialog = page.getByRole('dialog')
     await dialog.getByRole('textbox', { name: 'Mobile money number' }).fill('+237 6 70 12 34 56')
-    await dialog.getByRole('button', { name: 'Pay XAF 15,000' }).click()
+    await dialog.getByRole('button', { name: 'Pay XAF 25,000' }).click()
     await dialog.getByRole('button', { name: 'Close and wait' }).click()
     // Another note at once: the first one's purchase form is gone, its payment still followed.
-    await list.getByRole('button', { name: /Cameroon: debt trajectory/ }).click()
-    await expect(page.getByText(/^Payment confirmed: SEMC: volume growth/)).toBeVisible({
+    await list.getByRole('button', { name: /SEMC: volume growth/ }).click()
+    await expect(page.getByText(/^Payment confirmed: Cameroon: debt trajectory/)).toBeVisible({
       timeout: 10_000,
     })
-    await expect(list.getByRole('listitem').first()).toContainText('Bought')
-    await list.getByRole('button', { name: /SEMC: volume growth/ }).click()
+    await expect(
+      list.getByRole('listitem').filter({ hasText: 'Cameroon: debt trajectory' }),
+    ).toContainText('Bought')
+    await list.getByRole('button', { name: /Cameroon: debt trajectory/ }).click()
     await expect(preview.getByText('Purchased')).toBeVisible()
   },
 )

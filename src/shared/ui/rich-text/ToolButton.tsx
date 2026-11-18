@@ -1,5 +1,6 @@
 import { clsx } from 'clsx'
 import type { ReactNode } from 'react'
+import { toolName } from './toolName'
 
 interface ToolButtonProps {
   label: ReactNode
@@ -24,7 +25,7 @@ export function ToolButton({
     <button
       type="button"
       title={title}
-      aria-label={title}
+      aria-label={toolName(label, title)}
       aria-pressed={active}
       disabled={disabled}
       // The selection stays in the text while a button is pressed.

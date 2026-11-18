@@ -25,6 +25,7 @@ export {
   useStatementsSummary,
   type SecondAdminAnswer,
 } from './api/queries'
+export { useStatementRealtimeSync } from './api/useStatementRealtimeSync'
 export { anomalyItems, anomalySignal, anomalyToHandle } from './lib/anomalies'
 export { STATEMENT_CYCLE, STATEMENT_TEXT, STATEMENT_TONES } from './config/statuses'
 export { isMonth, monthOf, monthsUpTo, previousMonth, shiftMonth } from './lib/months'

@@ -28,6 +28,7 @@ import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs } from '@/shared/ui/PanelTabs'
 import { QueryView } from '@/shared/ui/QueryView'
 import { comparisonRows, toggleCode } from '../lib/comparisonRows'
+import { timeTicks } from '../lib/timeTicks'
 
 /** A colour a series, in the order chosen: the commodity's own in amber. */
 const COMPARE_TOKENS = [
@@ -75,6 +76,8 @@ export function CommodityComparePanel({ code, choice, onChange }: CommodityCompa
     () => (comparison.data ? comparisonRows(comparison.data) : []),
     [comparison.data],
   )
+  // Each year once, or each quarter over a year (B10).
+  const axis = useMemo(() => timeTicks(rows.map((row) => row.date)), [rows])
 
   return (
     <Panel
@@ -118,8 +121,12 @@ export function CommodityComparePanel({ code, choice, onChange }: CommodityCompa
                     dataKey="date"
                     tick={theme.tick}
                     stroke={theme.grid}
-                    minTickGap={32}
-                    tickFormatter={(date: string) => date.slice(0, 4)}
+                    ticks={axis.ticks}
+                    interval="preserveStartEnd"
+                    minTickGap={16}
+                    tickFormatter={(date: string) =>
+                      axis.byMonth ? format.shortMonth(date) : date.slice(0, 4)
+                    }
                   />
                   <YAxis
                     domain={['auto', 'auto']}

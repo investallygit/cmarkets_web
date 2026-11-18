@@ -15,8 +15,9 @@ export function LanguageSwitch() {
           key={language}
           type="button"
           lang={language}
-          // "fr" and "en" are spelt out; the language's own name is read instead.
-          aria-label={LANGUAGE_NAMES[language]}
+          // "FR" and "EN" with the language's own name, as spoken: what shows starts the name, for
+          // voice control (WCAG 2.5.3; B05).
+          aria-label={`${language.toUpperCase()} · ${LANGUAGE_NAMES[language]}`}
           aria-pressed={i18n.resolvedLanguage === language}
           onClick={() => void i18n.changeLanguage(language)}
           className={clsx(

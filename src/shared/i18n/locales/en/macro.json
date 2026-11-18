@@ -108,7 +108,7 @@
     "indicator": "Indicator",
     "year": "Year",
     "periodsLabel": "Years of the chart",
-    "exportChart": "Export the chart's figures to Excel",
+    "exportChart": "XLSX: export the chart's figures to Excel",
     "chartLabel": "{{indicator}} of {{countries}} from {{from}} to {{to}}",
     "chartCountries": "Economies of the chart",
     "chartHint": "Up to {{count}} countries per chart.",
@@ -131,7 +131,7 @@
       "year": "Year"
     },
     "export": "Export",
-    "exportTable": "Export the CEMAC comparison to Excel",
+    "exportTable": "XLSX: export the CEMAC comparison to Excel",
     "tableNote": "“n/a”: series not published for this country by the World Bank, or not for ten years. Series refreshed monthly; the latest year available is usually the previous year."
   }
 }

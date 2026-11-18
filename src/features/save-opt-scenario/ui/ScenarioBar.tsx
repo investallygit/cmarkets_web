@@ -13,6 +13,7 @@ import { optimizerPath } from '@/shared/routes/paths'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
 import { Button } from '@/shared/ui/form/Button'
 import { Select } from '@/shared/ui/form/Select'
+import { InlineError } from '@/shared/ui/StatusViews'
 import { toast } from '@/shared/ui/toast'
 import { SaveScenarioDialog } from './SaveScenarioDialog'
 
@@ -69,6 +70,12 @@ export function ScenarioBar() {
             {t('opt.scenario.delete')}
           </Button>
         </>
+      )}
+      {scenarios.isError && (
+        <InlineError
+          message={t('opt.scenario.listFailed')}
+          onRetry={() => void scenarios.refetch()}
+        />
       )}
       <Button
         variant="secondary"

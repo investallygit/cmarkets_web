@@ -13,6 +13,8 @@ import { Sparkline } from '@/shared/ui/Sparkline'
 export function KeyIndicatorTiles({ country }: { country: string | undefined }) {
   const { t } = useTranslation()
   const summary = useMacroSummary(country)
+  // No economy yet (the country bar loads, or says it could not): no tiles that wait for ever (B50).
+  if (country === undefined) return null
 
   return (
     <section aria-label={t('eco.tiles')}>

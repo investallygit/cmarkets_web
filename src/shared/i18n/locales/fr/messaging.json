@@ -5,7 +5,7 @@
     "unreadTotal_other": "{{count}} messages ou demandes non lus",
     "conversations": {
       "search": "Rechercher dans les messages",
-      "new": "Nouveau",
+      "new": "Nouvelle",
       "newLabel": "Nouvelle conversation",
       "tabs": {
         "all": "Tous",

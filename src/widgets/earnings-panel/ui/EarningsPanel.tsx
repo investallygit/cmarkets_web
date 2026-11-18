@@ -62,7 +62,8 @@ function Earnings({ stats }: { stats: PublicationStatsDto }) {
     { key: 'reads', value: format.number(stats.reads, 0) },
     { key: 'sales', value: format.number(stats.sales, 0) },
     { key: 'revenue', value: xaf(stats.revenue) },
-    { key: 'commission', value: `- ${xaf(stats.commission)}` },
+    // A deduction shows its sign only when there is one (B09).
+    { key: 'commission', value: stats.commission > 0 ? `- ${xaf(stats.commission)}` : xaf(0) },
     { key: 'net', value: xaf(stats.net), className: 'font-semibold text-up' },
     {
       key: 'score',

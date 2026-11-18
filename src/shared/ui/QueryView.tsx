@@ -1,5 +1,6 @@
 import type { UseQueryResult } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
+import { mayRetry } from './retry'
 import { PanelEmpty, PanelError, PanelLoading } from './StatusViews'
 
 interface QueryViewProps<T> {
@@ -12,7 +13,13 @@ interface QueryViewProps<T> {
 /** Loading, error and empty states of a panel body, so panels only render data. */
 export function QueryView<T>({ query, children, isEmpty, emptyMessage }: QueryViewProps<T>) {
   if (query.isPending) return <PanelLoading />
-  if (query.isError) return <PanelError error={query.error} onRetry={() => void query.refetch()} />
+  if (query.isError)
+    return (
+      <PanelError
+        error={query.error}
+        onRetry={mayRetry(query.error) ? () => void query.refetch() : undefined}
+      />
+    )
   if (isEmpty?.(query.data)) return <PanelEmpty message={emptyMessage} />
   return <>{children(query.data)}</>
 }

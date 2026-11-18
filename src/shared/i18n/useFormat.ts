@@ -13,6 +13,7 @@ import {
   formatMonth,
   formatNumber,
   formatPercent,
+  formatShortMonth,
   formatSigned,
   formatTime,
   formatWeekday,
@@ -51,6 +52,8 @@ export function useFormat() {
       isoDate: (isoDate: string) => formatIsoDate(isoDate),
       weekday: (isoDate: string, style?: 'short' | 'long') => formatWeekday(isoDate, locale, style),
       month: (month: string) => formatMonth(month, locale),
+      /** "Jan 26", "janv. 26": a chart's axis. */
+      shortMonth: (month: string) => formatShortMonth(month, locale),
       date: (value: Date | string | number) => formatDate(value, timeZone),
       dayMonth: (value: Date | string | number) => formatDayMonth(value, timeZone),
       time: (value: Date | string | number, withSeconds = false) =>

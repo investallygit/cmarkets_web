@@ -33,6 +33,7 @@
     "scenario": {
       "label": "Scénario",
       "unsaved": "Nouveau paramétrage",
+      "listFailed": "Vos scénarios n'ont pas pu être lus.",
       "new": "Nouveau",
       "save": "Enregistrer",
       "saveAs": "Enregistrer une copie",

@@ -1,4 +1,5 @@
 import { clsx } from 'clsx'
+import { LoaderCircle, RefreshCw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useMacroNames } from '@/entities/macro'
 import type { MacroCountryDto } from '@/shared/api/contracts'
@@ -10,6 +11,8 @@ interface CountrySelectorProps {
   onSelect: (code: string) => void
   /** The latest year of the economy shown, for the note at the end of the bar. */
   latestYear: number | null | undefined
+  /** The countries could not be read: said, with Retry (B50). */
+  failure?: { message: string; retry: () => void }
 }
 
 /**
@@ -22,6 +25,7 @@ export function CountrySelector({
   selected,
   onSelect,
   latestYear,
+  failure,
 }: CountrySelectorProps) {
   const { t } = useTranslation()
   const names = useMacroNames()
@@ -33,6 +37,26 @@ export function CountrySelector({
       className="flex flex-wrap items-center gap-1 border bg-panel px-2 py-1"
     >
       <span className="pr-1 font-sans text-data text-secondary">{t('eco.country')}</span>
+      {failure ? (
+        <span role="alert" className="inline-flex items-center gap-2 font-sans text-data text-down">
+          {failure.message}
+          <button
+            type="button"
+            onClick={failure.retry}
+            className="inline-flex min-h-6 items-center gap-1 border px-2 text-secondary hover:text-primary"
+          >
+            <RefreshCw aria-hidden className="size-3" />
+            {t('common.retry')}
+          </button>
+        </span>
+      ) : (
+        !countries && (
+          <span className="inline-flex items-center gap-1.5 font-sans text-data text-secondary">
+            <LoaderCircle aria-hidden className="size-3.5 animate-spin" />
+            {t('common.loading')}
+          </span>
+        )
+      )}
       {countries?.map((country) => {
         const pressed = country.code === selected
         return (

@@ -8,6 +8,7 @@ import {
   formatMonth,
   formatNumber,
   formatPercent,
+  formatShortMonth,
   formatSigned,
   formatTime,
   formatUtcOffset,
@@ -100,5 +101,10 @@ describe('month names', () => {
   it('names a month in the user language', () => {
     expect(formatMonth('2026-10', 'en')).toBe('October 2026')
     expect(formatMonth('2026-02', 'fr')).toBe('février 2026')
+  })
+
+  it("writes a chart axis's month short, from a month or a day", () => {
+    expect(formatShortMonth('2026-01', 'en')).toBe('Jan 26')
+    expect(formatShortMonth('2026-01-16', 'fr')).toBe('janv. 26')
   })
 })

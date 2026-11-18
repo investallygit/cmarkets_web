@@ -33,6 +33,7 @@
     "scenario": {
       "label": "Scenario",
       "unsaved": "New setup",
+      "listFailed": "Your scenarios could not be read.",
       "new": "New",
       "save": "Save",
       "saveAs": "Save a copy",

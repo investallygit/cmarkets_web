@@ -41,6 +41,7 @@
     "notRun": "Criteria changed: Run to update the results.",
     "savedScreens": "Saved screens:",
     "noSavedScreen": "none yet",
+    "savedFailed": "could not be read.",
     "deleteScreen": "Delete {{name}}",
     "deleteTitle": "Delete the saved screen",
     "deleteMessage": "Delete the saved screen “{{name}}”?",

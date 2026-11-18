@@ -199,6 +199,9 @@ function Conversation({
       <PanelError error={details.error} onRetry={() => void details.refetch()} />
     )
   }
+  // The messages that could not be read are said, not shown as an empty thread (B74).
+  if (history.isError)
+    return <PanelError error={history.error} onRetry={() => void history.refetch()} />
   if (!conversation || history.isPending) return <PanelLoading />
 
   return (

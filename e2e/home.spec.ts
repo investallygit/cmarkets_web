@@ -85,6 +85,10 @@ test('a user already logged in opens the terminal, whose logo leads to the home 
   const header = page.getByRole('banner')
   await expect(header.getByRole('link', { name: 'Open the terminal' })).toBeVisible()
   await expect(header.getByRole('link', { name: 'Log in' })).toHaveCount(0)
+  // The footer as well (B37).
+  const footer = page.getByRole('navigation', { name: 'Links' })
+  await expect(footer.getByRole('link', { name: 'Open the terminal' })).toBeVisible()
+  await expect(footer.getByRole('link', { name: 'Log in' })).toHaveCount(0)
   await expect(
     page
       .locator('#plans')

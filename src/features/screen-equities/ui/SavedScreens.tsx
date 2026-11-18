@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useDeleteScreen, useSavedScreens } from '@/entities/screener'
 import type { SavedScreenDto } from '@/shared/api/contracts'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
+import { InlineError } from '@/shared/ui/StatusViews'
 import { toast } from '@/shared/ui/toast'
 
 interface SavedScreensProps {
@@ -24,6 +25,9 @@ export function SavedScreens({ loadedId, onLoad }: SavedScreensProps) {
     <div className="font-sans text-data text-secondary">
       <span>{t('screener.savedScreens')}</span>{' '}
       {screens.data?.length === 0 && <span>{t('screener.noSavedScreen')}</span>}
+      {screens.isError && (
+        <InlineError message={t('screener.savedFailed')} onRetry={() => void screens.refetch()} />
+      )}
       {screens.data?.map((screen, index) => (
         <Fragment key={screen.id}>
           {index > 0 && <span aria-hidden> · </span>}

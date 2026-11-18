@@ -8,6 +8,7 @@ import { useChatRealtimeSync } from '@/entities/conversation'
 import { useDataImportRealtimeSync } from '@/entities/data-import'
 import { useMarketRealtimeSync } from '@/entities/market'
 import { useNewsRealtimeSync } from '@/entities/news'
+import { useStatementRealtimeSync } from '@/entities/news-statement'
 import { usePublicationRealtimeSync, usePurchaseFollowUp } from '@/entities/publication'
 import { useNotificationRealtimeSync } from '@/entities/notification'
 import { useQuoteRealtimeSync } from '@/entities/quote'
@@ -43,6 +44,7 @@ export function AppShell() {
   usePublicationRealtimeSync()
   usePurchaseFollowUp()
   useNotificationRealtimeSync()
+  useStatementRealtimeSync()
   useAlertRealtimeSync()
   useSecurityRealtimeSync()
   useAuctionRealtimeSync()

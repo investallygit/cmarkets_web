@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useDeleteBondScreen, useSavedBondScreens } from '@/entities/bond'
 import type { SavedBondScreenDto } from '@/shared/api/contracts'
 import { ConfirmDialog } from '@/shared/ui/ConfirmDialog'
+import { InlineError } from '@/shared/ui/StatusViews'
 import { toast } from '@/shared/ui/toast'
 
 interface SavedBondScreensProps {
@@ -24,6 +25,9 @@ export function SavedBondScreens({ loadedId, onLoad }: SavedBondScreensProps) {
     <div className="font-sans text-data text-secondary">
       <span>{t('screener.savedScreens')}</span>{' '}
       {screens.data?.length === 0 && <span>{t('screener.noSavedScreen')}</span>}
+      {screens.isError && (
+        <InlineError message={t('screener.savedFailed')} onRetry={() => void screens.refetch()} />
+      )}
       {screens.data?.map((screen, index) => (
         <Fragment key={screen.id}>
           {index > 0 && <span aria-hidden> · </span>}

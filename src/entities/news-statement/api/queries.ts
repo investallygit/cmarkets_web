@@ -34,11 +34,18 @@ export const statementKeys = {
 /** The newspaper's own statements, in its studio. */
 export const providerStatementKeys = { all: ['provider', 'statements'] as const }
 
+/**
+ * A newspaper approves or disputes on its side, which no event tells the back-office: MPAY reads
+ * its statements again this often while it shows them (B97).
+ */
+const ADMIN_REFRESH_MS = 60_000
+
 /** GET /admin/news-statements?month=: one row per newspaper, the largest amount due first. */
 export function useStatements(month: string, status: StatementStatus | null = null) {
   return useQuery({
     queryKey: statementKeys.list(month, status),
     queryFn: ({ signal }) => adminApi.statements(month, status, signal),
+    refetchInterval: ADMIN_REFRESH_MS,
   })
 }
 
@@ -47,6 +54,7 @@ export function useStatementsSummary(month: string) {
   return useQuery({
     queryKey: statementKeys.summary(month),
     queryFn: ({ signal }) => adminApi.statementsSummary(month, signal),
+    refetchInterval: ADMIN_REFRESH_MS,
   })
 }
 
@@ -55,6 +63,7 @@ export function useStatement(id: string | null) {
     queryKey: statementKeys.statement(id ?? ''),
     queryFn: ({ signal }) => adminApi.statement(id ?? '', signal),
     enabled: id !== null,
+    refetchInterval: ADMIN_REFRESH_MS,
   })
 }
 
@@ -71,6 +80,7 @@ export function useStatementHistory(id: string | null) {
     queryKey: statementKeys.history(id ?? ''),
     queryFn: ({ signal }) => adminApi.statementHistory(id ?? '', signal),
     enabled: id !== null,
+    refetchInterval: ADMIN_REFRESH_MS,
   })
 }
 

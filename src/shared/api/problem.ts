@@ -12,11 +12,23 @@ export interface ProblemDetails {
   [extension: string]: unknown
 }
 
+/**
+ * What a problem says to the user: its detail, or else its first field's error ("10 MB at most.",
+ * "Between 0% and 100%."), or else its title. A refused form has field errors and no detail: its
+ * title alone ("Invalid request") said nothing of what to change (B49, B55, B58, B69).
+ */
+export function problemMessage(problem: ProblemDetails): string {
+  const firstError = Object.values(problem.errors ?? {})
+    .flat()
+    .find((message) => message.trim() !== '')
+  return problem.detail ?? firstError ?? problem.title
+}
+
 export class ApiError extends Error {
   readonly problem: ProblemDetails
 
   constructor(problem: ProblemDetails) {
-    super(problem.detail ?? problem.title)
+    super(problemMessage(problem))
     this.name = 'ApiError'
     this.problem = problem
   }

@@ -41,6 +41,7 @@
     "notRun": "Critères modifiés : lancez pour mettre à jour les résultats.",
     "savedScreens": "Filtres enregistrés :",
     "noSavedScreen": "aucun pour l'instant",
+    "savedFailed": "n'ont pas pu être lus.",
     "deleteScreen": "Supprimer {{name}}",
     "deleteTitle": "Supprimer le filtre enregistré",
     "deleteMessage": "Supprimer le filtre « {{name}} » ?",

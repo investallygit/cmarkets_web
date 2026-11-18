@@ -199,6 +199,22 @@ export function formatMonth(month: string, locale: Locale): string {
   return format.format(new Date(`${month}-01T12:00:00Z`))
 }
 
+const shortMonthFormats = new Map<Locale, Intl.DateTimeFormat>()
+
+/** A month such as "2026-01" short, for a chart's axis: "Jan 26", "janv. 26". */
+export function formatShortMonth(month: string, locale: Locale): string {
+  let format = shortMonthFormats.get(locale)
+  if (!format) {
+    format = new Intl.DateTimeFormat(INTL_LOCALE[locale], {
+      month: 'short',
+      year: '2-digit',
+      timeZone: 'UTC',
+    })
+    shortMonthFormats.set(locale, format)
+  }
+  return format.format(new Date(`${month.slice(0, 7)}-01T12:00:00Z`))
+}
+
 /** A calendar date such as "2026-10-30" as DD/MM/YYYY, with no time zone conversion. */
 export function formatIsoDate(isoDate: string): string {
   const [year, month, day] = isoDate.split('-')
