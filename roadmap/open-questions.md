@@ -593,4 +593,12 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   portfolio": with which return and risk for its cash and for the securities outside the universe
   (the plan: the same estimates for its securities, its cash at the risk-free rate)? PORT values a
   line quoted in dollars without its exchange rate: an allocation holding IWDA becomes a model
-  portfolio only, until PORT converts it (found in step 42).
+  portfolio only, until PORT converts it (found in step 42; PORT converts it since step 50,
+  decision 36).
+- **Step 50's rules** (decisions 28 to 32), where the spec says nothing: may a portfolio's cash go
+  below zero (the plan: no, decision 28; the prototype let it)? Is a client's own change of plan
+  prorated by the day as an Admin's in SUBS (the plan: yes, the days left buy days of the new
+  plan, decision 29)? Does a declined contact request hold its sender's next one back (the plan:
+  for 30 days, untold, decision 30)? Which numbers does mobile money take (the plan: those of the
+  six CEMAC countries, decision 31)? With one SVT account, may a bank approve above its four-eyes
+  threshold (the plan: yes, that account alone, decision 32)?

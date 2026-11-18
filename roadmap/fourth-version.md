@@ -173,3 +173,35 @@ itself, steps 38 to 48 follow these; each is also an open question for the spec 
     admin's on the same day (decision 20 keeps the auctions and the closes before the series). A
     cancelled agreement leaves the curve; the option turned off feeds no new one and keeps the
     points given; a point is stale as every series' point. The series' history stays the files'.
+28. **A portfolio's cash** (step 50, B57): no overdraft. A change of the ledger is refused when a
+    day's cash would end below zero and lower than before the change (a ledger already below zero
+    takes a deposit); a day's transactions count together, in whatever order they were recorded.
+    A redemption repays at most the principal of the bonds held the day before it. The prototype
+    let the cash go below zero.
+29. **A client's change of plan** (step 50, B99 and B73): decision 7 applies to CFG's checkout as
+    to SUBS. The value of the days left of the plan in force (excluding VAT, every seat) buys days
+    of the new plan, which applies at once and renews at its full price on the plan's own method;
+    a full period is charged at once when that value buys less than a day or no plan is in force
+    (a trial, an expired or a suspended plan). `GET /subscription/proration` shows it beforehand.
+30. **A declined contact request** (step 50, B70): its sender's next request to the same person
+    waits 30 days from the first, refused as a request still waiting, so that the decline stays
+    untold (spec section 15).
+31. **Mobile money numbers** (step 50, B71): those of the six CEMAC countries with their code
+    (+237 Cameroon, +241 Gabon, +242 Congo, +235 Chad, +236 Central African Republic, +240
+    Equatorial Guinea) and 8 or 9 digits; the profile's phone, for the codes by SMS, any number.
+32. **The SVT's four eyes** (step 50, B84): above the bank's threshold, two different approvers
+    when two of the bank's accounts may approve; with one, its approval is the bank's, which its
+    settings say.
+33. **The employees' settings** (step 50, B72): ME, a back-office screen of the user menu and the
+    command bar, gives the Data admin and the Admin CFG's profile and security; the back-office's
+    CFG stays the platform's settings.
+34. **The SVT's linked traders** (step 50, B86): TRD exports them in XLSX and CSV, as AGR exports
+    the agreements, without `analysis:export`.
+35. **Reference data in French** (step 50, B17): the issuers' sectors by the French names
+    CMarket.Api keeps (`GET /market/sectors`); the catalogue's plans by their ids (Suivi, Analyse,
+    Professionnel, Étudiant, Source média); the free float "Flottant". The names of the indices,
+    the bonds and the securities stay the market's.
+36. **A line in another currency** (step 50, B01): PORT settles and values it at the ECB's
+    reference rate of each day (the last one before a day without, the first before its first),
+    as OPT and FX do. Decision 25's real portfolios made from an allocation keep to francs and
+    euros meanwhile.

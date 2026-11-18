@@ -12,7 +12,8 @@ tabs, EQS, ETFS, YCRV, BP, BS, PORT, PUB, PUB NEW, NET, MSG, NET ME, N, NEWS NEW
 CFG, DES opening the equity, bond or ETF profile) with the public profile page and the login,
 sign-up and password reset pages, the back-office of the Data admin (IMP with DATA, HIST and EODH,
 then CORR and NEWS) and that of the Admin (USER with ANLY and MOD, SUBS, MPAY, SRC, ADMCFG, AUDT
-and PAY), and the home page that visitors see before login. The second version added the
+and PAY), each employee's own settings (ME, step 50), and the home page that visitors see before
+login. The second version added the
 Journalist and CEO account types and the professional directory with its messaging (screens 10
 to 12): steps 11 to 19, under [Second version of the spec](roadmap/second-version.md). The third
 version added a ninth account type, the News provider, a news feed rebuilt around partner
@@ -101,11 +102,13 @@ in the order below, the screens it touched and the README's status are brought u
 | 47   | [RFQ REP: daily reporting to the BEAC (screen 24)](roadmap/steps/step-47-beac-reporting.md)                          | Done   |
 | 48   | [Fourth version done: README, accessibility, every flow](roadmap/steps/step-48-fourth-version-done.md)               | Done   |
 | 49   | [The CMarket curve fed by the RFQ agreements above an amount](roadmap/steps/step-49-rfq-curve-feed.md)               | Done   |
-| 50   | [Every page checked for bugs, then the bugs fixed](roadmap/steps/step-50-page-bug-sweep.md)                          | To do  |
+| 50   | [Every page checked for bugs, then the bugs fixed](roadmap/steps/step-50-page-bug-sweep.md)                          | Done   |
+| 51   | [CMarket.Api's messages in the user's language](roadmap/steps/step-51-api-messages-by-language.md)                   | To do  |
 
 Steps 41 to 48 run in three lanes at once, each with its own steps: see [Lanes](roadmap/lanes.md),
 which also says what waits for what. Step 49 came after them, on a rule step 48 had left open.
-Step 50 then uses every page as each account type, to find the bugs before fixing them.
+Step 50 then uses every page as each account type, to find the bugs before fixing them; step 51
+translates CMarket.Api's messages, which step 50 found in English on French pages (B18).
 
 Steps 1 to 10 built the first version, screen by screen, and have no file of their own: their
 record is under each screen in [Client screens](roadmap/client-screens.md) and

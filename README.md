@@ -57,11 +57,11 @@ before upload.
 | 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done; DES opens the profile of the security's type            |
 | 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done, saved screens; each security's description              |
 | 4 · Yield curves and bond calculator (YCRV)                               | Done; the API computes spec section 14.1                      |
-| 5 · Portfolio (PORT)                                                      | Done; the API values portfolios with sections 14.2 and 14.3   |
+| 5 · Portfolio (PORT)                                                      | Done; sections 14.2 and 14.3, other currencies at the ECB's   |
 | 7 · Publishing studio (PUB NEW)                                           | Done, autosave, versions, frozen charts                       |
 | 8 · Research library (PUB)                                                | Done; mobile money and card payments                          |
 | News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done; each news item has a link to share                      |
-| Settings (CFG): profile, security, subscription, organisation, invoices   | Done; plans paid by card, mobile money or transfer            |
+| Settings (CFG): profile, security, subscription, organisation, invoices   | Done; a change of plan prorated by the day, as in SUBS        |
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
 | Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
 | 10 · Professional directory (NET), public profile page                    | Done; the demo data lists 1,177 profiles                      |
@@ -71,6 +71,7 @@ before upload.
 | Data corrections (CORR), news and documents (NEWS): no mockup             | Done; NEWS moderates the news and names the publishers        |
 | 9 · Account administration (USER) with ANLY and MOD                       | Done; MOD reviews the directory reports and the news too      |
 | Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged  |
+| An employee's own settings (ME): profile and security, no mockup          | Done; the Data admin's and the Admin's, from the user menu    |
 | News provider account type (third version)                                | Done; it writes in its studio, NEWS NEW                       |
 | News rebuilt: ARTICLE and FLASH, newspapers, tags, unique clicks          | Done; the content shown 3 seconds counts a unique click       |
 | 13 · News studio (NEWS NEW)                                               | Done; drafts, schedule, withdrawal, file import, earnings     |
@@ -161,7 +162,7 @@ src/
               (SRC), media-payments (MPAY),
               analyst-requests (ANLY),
               moderation (MOD), payouts (PAY), rfq-reporting (RFQ REP), platform-settings (ADMCFG),
-              audit-log (AUDT), home,
+              audit-log (AUDT), account-settings (ME), home,
               auth (login, sign-up, password reset), status, ui-kit (/_kit)
   widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
               subscription-panel, current-upload-panel, messaging-panels, news-studio-panels,

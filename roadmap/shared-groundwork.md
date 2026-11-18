@@ -229,6 +229,24 @@ Done in step 10, with the home page:
 - **PAY flow**: the sample sales follow the date (a new month draws more of them), so the
   amount to pay is read from the row instead of a figure that held in October only.
 
+Done in step 50, the shared causes of its bugs ([step 50](steps/step-50-page-bug-sweep.md)):
+
+- **Data tables** read their cells again when the language or the clock changes (B41, B80), sort
+  on the live values shown (B42, B95), say their order to screen readers (`aria-sort`, B43), sort
+  words as a dictionary (B94), let a server's order go both ways (B81), and keep figures with
+  units and tags whole (B24, B30). TRD exports its own (B86).
+- **Panels** wrap their options rather than push them out (B13, B28); the **ticker** wraps its
+  last entry (B14); **screen tabs** bring the active tab into view (B15, B26).
+- **Menus**: a ticked entry is a checkbox or a radio for screen readers (B44).
+- **Dialogs** submit only themselves (B79); a **button** that sends takes one click of a double
+  click (B76).
+- **Errors**: an API error says its field's message, not "Invalid request" (B49, B55, B58, B69);
+  an item that does not exist offers no Retry (B07); a part that could not be read says so, with
+  Retry (B50, B63, B74, B75); `LeaveGuard` asks before leaving unsaved changes (B68).
+- **Names**: a button's visible text starts its accessible name (B05); the sectors and the plans
+  in the page's language (B17); a small `storedValue` keeps what a panel shows in the browser
+  (B46).
+
 Still to do, with the first screen that needs it:
 
 - **PNG and PDF export of charts** (spec section 3), for the price chart, the comparison bars and

@@ -1,4 +1,4 @@
-# Step 50 · Every page checked for bugs, then fixed (XL): to do
+# Step 50 · Every page checked for bugs, then fixed (XL): done
 
 Step 50 of the [roadmap](../../ROADMAP.md#order), after the fourth version (steps 37 to 49).
 
@@ -1259,13 +1259,97 @@ English, which a French page shows: a step of its own, to translate them by the 
 B01 (PORT values a dollar line at 1, a "Still to do" of step 42); B99 with B73 (a client's change
 of plan is not prorated: to decide); the "To decide" rows; B03 and B04.
 
+### Phase 6, part 7: the rows decided with the user, 18 November 2026
+
+On the user's word ("đồng ý với đề xuất"), every recommendation of the part's report: ten rows
+fixed, B18 a step of its own ([step 51](step-51-api-messages-by-language.md)), B12 and B101 left
+as they are, B04 the user's setting on Azure (`Market__AlwaysOpen=false` for the market's hours),
+B03 closed, never seen again in this step's runs. The rules where the spec says nothing are
+decisions 28 to 36 of the [fourth version](../fourth-version.md#decisions-taken), and their
+questions are for the spec author. Each fix came with a test that failed before it, each run on a
+copy of the code of the commits before, with the new tests:
+
+- **PORT's dollars (B01)**: a line in another currency is settled and valued at the ECB's
+  reference rate of its day, as OPT and FX read them (`PortfolioMarket.Fx`, `FxHistory`). Ten
+  IWDA at $100 now take XAF 604,680 of cash, not 1,000 (`TransactionTests`, `LedgerTests`).
+- **PORT's cash (B57)**: no day of the ledger ends below zero, nor lower than before a change
+  when it already did, so an older ledger still takes a deposit. A withdrawal or a purchase above
+  the cash reads "6,400,000 XAF of cash on 30/10/2026."; a redemption above the principal held
+  "16,000 XAF of principal held on 30/10/2026."; the deposit a purchase needs cannot be deleted
+  (`TransactionTests`, `PortfolioTests`, `LedgerTests`, `PortfolioEndpointsTests`,
+  `portfolio.spec.ts`). The tests that bought without a deposit now make one first.
+- **CFG's change of plan (B99, B73)**: the days left of the plan in force buy days of the new
+  one, as SUBS prorates: nothing to pay, the plan changed at once; a full period is charged when
+  they buy less than a day or no plan is in force. `GET /subscription/proration` shows it before
+  the user confirms: "283 days left of Analysis, worth XAF 348,904 excluding VAT", "They buy 181
+  days of Professional: nothing to pay today" (`CheckoutTests`, `BillingEndpointsTests`,
+  `settings.spec.ts`, whose payment by transfer moved to a new Analyst's trial).
+- **MSG's declined requests (B70)**: for 30 days from a declined request, its sender's next one is
+  refused as a request still waiting, the decline untold (`ConversationsTests`).
+- **Mobile money (B71)**: PUB's and CFG's payments take a number of the six CEMAC countries with
+  its code, in the web and CMarket.Api alike; the profile's phone any number (`phone.test.ts`,
+  `CheckoutTests`, `research.spec.ts`).
+- **The employees' settings (B72)**: ME, a back-office screen of the user menu and the command
+  bar, CFG's profile and security for the Data admin and the Admin (`access.test.ts`,
+  `screens.test.ts`).
+- **One SVT account (B84)**: four eyes need two accounts that may approve; with one, the bank
+  approves alone, which its settings say (`SvtApprovalsTests`, `SvtApprovalTests`,
+  `svt-approval.spec.ts`).
+- **TRD's export (B86)**: XLSX and CSV of the linked traders, as AGR's, without the analysis
+  permission (`rfq.spec.ts`).
+- **The watchlist shown (B46)**: kept in the browser for each user; a reload opens it again
+  (`storedValue.test.ts`, `monitoring.spec.ts`).
+- **Reference data in French (B17)**: the sectors by the French names that CMarket.Api keeps
+  and sends at `GET /market/sectors`, on PORT, EQS, DES and PUB; the catalogue's plans by their
+  ids on CFG, its checkout, the home page and SUBS (USER's DTO gives no plan id); HDS's
+  "Flottant". The names of the indices and the bonds stay the market's (`sectorName.test.ts`,
+  `planName.test.ts`, `MarketTests`).
+
+Checked at the end, each run on a fresh SQLite database from copies of both repositories
+(CMarket.Api's suites from its checkout, as Testing): the type check, the lint, 503 unit tests;
+every Playwright flow, the 139 usual ones and the 34 of the ten `@fresh-db` specs, each spec on a
+database of its own; CMarket.Api's suites, 1,832 tests, of which 39 skipped (the SQL Server suite,
+for a migration: none here); the phase 1 sweep of every account, then of the accounts its findings
+named. Found by those checks, and fixed:
+
+- **The sweep of every account** (2,863 visits; 2,026 findings in 40 groups, against 2,586 in 35
+  at phase 1): the groups part 7 fixed are gone (B05 and B22's axe findings, B07 and B21's 403 and
+  404, B13's toolbar, B17's names); its new ones came from part 7's fixes. `LeaveGuard`'s blocker,
+  idle, still heard every history change made outside the router and warned of each in the
+  console (302 warnings): it now exists only while something is unsaved (B68). The ticker tape's
+  entries out of view, by design, are a marquee's (`role="marquee"`, B14). MKT's alerts of the day
+  show their tags where the panel has room, and hide them rather than cut them (B23). A panel's
+  options keep their width on a phone and wrap, its tabs too (B13, B28). NET ME's contact fields,
+  DATA's date, MPAY's and SUBS's tiles fit at 320 px; CFG's invoices name the plans in French
+  (B17).
+- **The sweep again, on those accounts** (the Analyst, the News provider, the Data admin, the
+  Admin and a visitor at 1600, 390 and 320 px; 870 visits, 103 findings in 28 groups): those
+  groups are gone but three. EODH's "All loads" is a native select, as wide as its longest option:
+  `PanelSelect` now gives way to the bar, its label cut, rather than pass the panel's edge (B28).
+  MPAY's links were a row that never wrapped: they wrap (B28). The home page's picture of the
+  terminal slides a tape of its own: a marquee too, which stands still without motion, no entry
+  cut (B14). What stays is known: English that is content or a name, as phase 1 found it (the demo
+  publication's table, SEMC's document titles, "CMarket AI", the Admin's specialties side by side,
+  the names of the indices and the bonds: decision 35); the polls of a minute (the market's
+  status, the ticker, the notifications) heard during a visit, and CMDTY's first load, its modules
+  compiled late by Vite on a busy machine. A third sweep of the Data admin, the Admin and a
+  visitor (305 visits, 32 findings in 13 groups) found nothing cut or out of reach.
+- **The flows' last run**: RFQ's Confirm selection and Cancel request lost their toast when the
+  hub's event read the request again before the answer came, the button gone and `mutate`'s
+  callbacks with it; the toast now follows the request's promise, as the SVTs' decisions do
+  (`RequestActions.test.tsx`, failing before). `messaging-realtime.spec.ts` once missed a presence
+  in a busy run, and passed when run again and in the last run.
+
+Still open after step 50: step 51 (B18); decision 25's real portfolios made from an allocation keep
+to francs and euros, though PORT now values the other currencies.
+
 ## Bug log
 
 | #    | Page                                                 | Who · language · width                   | Sev. | What happens                                                                                                  | Status      |
 | ---- | ---------------------------------------------------- | ---------------------------------------- | ---- | ------------------------------------------------------------------------------------------------------------- | ----------- |
-| B01  | PORT                                                 | any                                      | S2   | A line quoted in dollars (IWDA) is valued at a rate of 1 to the franc                                         | Known, open |
+| B01  | PORT                                                 | any                                      | S2   | A line quoted in dollars (IWDA) is valued at a rate of 1 to the franc                                         | Fixed       |
 | B02  | Every page (CMarket.Api)                             | any                                      | S4   | `ChatHub.OnConnectedAsync`'s `TaskCanceledException` logged as an error when a page reloads                   | Fixed       |
-| B03  | RFQ's flows                                          | —                                        | S3   | `rfq.spec.ts`'s `@fresh-db` flows failed once at step 48                                                      | Not seen    |
+| B03  | RFQ's flows                                          | —                                        | S3   | `rfq.spec.ts`'s `@fresh-db` flows failed once at step 48                                                      | Closed      |
 | B04  | Top bar, live site                                   | any                                      | S3   | "MARKET OPEN" at night: Azure runs the API as Development, `Market:AlwaysOpen` on                             | User's call |
 | B05  | Home, login pages, `/p`, ECO, PUB NEW, NEWS NEW, MSG | visitor; K. Atangana; L. Mballa · en, fr | S3   | A button's visible text is not in its accessible name (WCAG 2.5.3, level A)                                   | Fixed       |
 | B06  | MKT                                                  | any                                      | S3   | Session summary and Top movers lag the live quotes by up to a minute, so their counts disagree                | Fixed       |
@@ -1274,13 +1358,13 @@ of plan is not prorated: to decide); the "To decide" rows; B03 and B04.
 | B09  | PUB NEW                                              | K. Atangana · en · 1600                  | S4   | The month's earnings read "CMarket commission − 0 XAF"                                                        | Fixed       |
 | B10  | CMDTY's CMP                                          | K. Atangana · en · 1600                  | S3   | The chart's time axis repeats its years: 2022, 2022, 2023, 2023, 2023…                                        | Fixed       |
 | B11  | PORT, FX with an unknown id; PORT not shared         | K. Atangana · en · 1600                  | S4   | An unknown or no longer readable portfolio, an unknown currency, is replaced without a word                   | Fixed       |
-| B12  | OPT from a portfolio                                 | K. Atangana · en · 1600                  | S4   | Every correlation of the nine securities reads −0.03: the demo's prices move independently                    | To decide   |
+| B12  | OPT from a portfolio                                 | K. Atangana · en · 1600                  | S4   | Every correlation of the nine securities reads −0.03: the demo's prices move independently                    | Left as is  |
 | B13  | DES's GP                                             | M. Ngono · en · 1024, 768                | S3   | The chart's toolbar runs out of its panel: the drawing tools, UNDO and CLEAR out of reach                     | Fixed       |
 | B14  | Ticker tape, every screen                            | any · below 1600                         | S4   | The last entry in view is cut mid-word ("SA" at 390 px), the rest hidden                                      | Fixed       |
 | B15  | PORT                                                 | K. Atangana · fr · 390                   | S3   | The tabs scroll in a strip one tab wide beside "+ New transaction", no sign of the other five                 | Fixed       |
 | B16  | PORT's positions                                     | K. Atangana · fr · 390                   | S3   | Security names cut short with no ellipsis: "REGIONAL", "GAB 6.50", "ECMR 6.2"                                 | Fixed       |
-| B17  | PORT, MKT, CFG, DES, home                            | K. Atangana; visitor · fr                | S3   | Reference data in English on French pages: sectors, index names, plan names, "Free float"                     | To decide   |
-| B18  | OPT, RFQ, SUBS and every toast                       | K. Atangana · fr · 390                   | S3   | The API's English detail inside a French message: "Le scénario ne s'est pas ouvert : No scenario …"           | Open        |
+| B17  | PORT, MKT, CFG, DES, home                            | K. Atangana; visitor · fr                | S3   | Reference data in English on French pages: sectors, index names, plan names, "Free float"                     | Fixed       |
+| B18  | OPT, RFQ, SUBS and every toast                       | K. Atangana · fr · 390                   | S3   | The API's English detail inside a French message: "Le scénario ne s'est pas ouvert : No scenario …"           | Step 51     |
 | B19  | Every screen (`/hubs/chat`)                          | K. Atangana · en, fr                     | —    | The chat hub connected 118 times in a session where the market hub connected 109                              | Not a bug   |
 | B20  | ECO                                                  | K. Atangana · en, fr · 320               | S4   | Tile titles cut: "GOVERNMENT DEBT / GDP" by 2 px, "EXPORTATIONS / PIB" loses its S (10 px)                    | Fixed       |
 | B21  | A security's profile, its tabs                       | B. Sima (SVT) · en, fr · any             | S3   | Every tab offered, the analysis refused: FA and ANA say "not allowed", MA20/MA50 on with no line              | Fixed       |
@@ -1308,7 +1392,7 @@ of plan is not prorated: to decide); the "To decide" rows; B03 and B04.
 | B43  | Every table (`DataTable`)                            | any                                      | S3   | The sort shows by an `aria-hidden` chevron only, no `aria-sort`: a screen reader hears neither column nor way | Fixed       |
 | B44  | MKT's right-click menu, EQS's COLUMNS                | P. Owona · en · 1600                     | S3   | The lists that hold the security are marked by an icon only, no `aria-checked`: unheard by screen readers     | Fixed       |
 | B45  | ECO's CEMAC comparison, XLSX                         | K. Atangana · en · 1600                  | S2   | The export writes persons under "Population (M)": 29100000 for Cameroon, 29.1 M on the screen                 | Fixed       |
-| B46  | MKT's watchlist                                      | P. Owona · en · 1600                     | S4   | After a reload the panel shows the first list, not the one being worked on                                    | To decide   |
+| B46  | MKT's watchlist                                      | P. Owona · en · 1600                     | S4   | After a reload the panel shows the first list, not the one being worked on                                    | Fixed       |
 | B47  | ALRT's New alert form                                | R. Tamba · en · 1600                     | S4   | The form, a dialog of the app shell, stays open over the page Back leads to                                   | Fixed       |
 | B48  | GP's drawings                                        | P. Owona · en · 1600                     | S1   | When the saved drawings fail to load, a new line saves over them: two kept lines lost, unsaid                 | Fixed       |
 | B49  | FX's converter                                       | P. Owona · en · 1600                     | S3   | Letters or a negative convert to 0.00 unsaid; 20 digits show the API's "Invalid request"; a 500 a "—"         | Fixed       |
@@ -1319,7 +1403,7 @@ of plan is not prorated: to decide); the "To decide" rows; B03 and B04.
 | B54  | BP's inputs                                          | P. Owona · en · 1600                     | S3   | A coupon of −1 %, a face of 0, a yield of −80 %: Calculate off, "Complete the inputs", no field named         | Fixed       |
 | B55  | BP's result panels                                   | P. Owona · en · 1600                     | S4   | The API's 400 said on its field, and in four panels as "Invalid request" with a Retry that cannot help        | Fixed       |
 | B56  | BP with an unknown bond                              | P. Owona · en · 1600                     | S4   | `/bp/NOPE`: the inputs say "No bond NOPE.", the results still show the last bond's figures                    | Fixed       |
-| B57  | PORT's transactions                                  | P. Owona · en · 1600                     | S3   | A withdrawal or a purchase above the cash is taken: cash −100 bn, total negative, every weight 0.0 %          | To decide   |
+| B57  | PORT's transactions                                  | P. Owona · en · 1600                     | S3   | A withdrawal or a purchase above the cash is taken: cash −100 bn, total negative, every weight 0.0 %          | Fixed       |
 | B58  | OPT's pre-run checks, scenarios                      | K. Atangana · en · 1600                  | S3   | A bound the API refuses (min above max…) reads "Add 2 to 20 securities…"; a save "Invalid request"            | Fixed       |
 | B59  | OPT's scenarios, OPT RES                             | K. Atangana · en · 1600                  | S3   | A name used twice is saved; Export from a frontier point saves a second "CEMAC balanced"                      | Fixed       |
 | B60  | OPT RES                                              | K. Atangana · en · 1600                  | S3   | A reload loses the result and the setup: "No result yet", then an empty New setup                             | Fixed       |
@@ -1332,10 +1416,10 @@ of plan is not prorated: to decide); the "To decide" rows; B03 and B04.
 | B67  | PUB with an unknown `?analyst=`                      | P. Owona · en · 1600                     | S4   | The banner reads "Publications of …" for good, the list "No publication for these filters."                   | Fixed       |
 | B68  | NET ME, CFG's profile                                | T. Bekale, R. Tamba · en · 1600          | S3   | A change not saved is dropped unasked on leaving the screen or closing the tab                                | Fixed       |
 | B69  | MSG's and PUB NEW's uploads, MSG's `?to=`            | K. Atangana · en · 1600                  | S4   | A file the API refuses reads "Invalid request", not its reason; one's own `?to=` gives a wrong one            | Fixed       |
-| B70  | MSG's contact requests                               | B. Eyinga, K. Atangana · en · 1600       | S3   | Declined, a request is followed at once by a new one from the same person, the first still "Request sent"     | To decide   |
-| B71  | PUB's and CFG's mobile money                         | P. Owona · en · 1600                     | S4   | Any phone of 8 to 15 digits is taken: +33 6 12 34 56 78, a French number, paid a note                         | To decide   |
-| B72  | CFG for the Data admin and the Admin                 | A. Mbarga, L. Mvogo · en · 1600          | S3   | No settings of their own: no password change, no time zone, no SMS codes; `/cfg` "not available"              | To decide   |
-| B73  | CFG's plan change                                    | R. Tamba · en · 1600                     | S3   | Analysis paid to 09/08/2027, Professional chosen on 17/11/2026: a full year charged, nothing credited         | To decide   |
+| B70  | MSG's contact requests                               | B. Eyinga, K. Atangana · en · 1600       | S3   | Declined, a request is followed at once by a new one from the same person, the first still "Request sent"     | Fixed       |
+| B71  | PUB's and CFG's mobile money                         | P. Owona · en · 1600                     | S4   | Any phone of 8 to 15 digits is taken: +33 6 12 34 56 78, a French number, paid a note                         | Fixed       |
+| B72  | CFG for the Data admin and the Admin                 | A. Mbarga, L. Mvogo · en · 1600          | S3   | No settings of their own: no password change, no time zone, no SMS codes; `/cfg` "not available"              | Fixed       |
+| B73  | CFG's plan change                                    | R. Tamba · en · 1600                     | S3   | Analysis paid to 09/08/2027, Professional chosen on 17/11/2026: a full year charged, nothing credited         | Fixed       |
 | B74  | MSG's thread                                         | K. Atangana · en · 1600                  | S3   | When the messages fail to load, the conversation shows empty: no message, no error, no Retry                  | Fixed       |
 | B75  | PUB NEW's settings                                   | K. Atangana · en · 1600                  | S3   | When the price rules fail to load, the panel reads "Loading" for good, no Retry: nothing submits              | Fixed       |
 | B76  | Create and send buttons (PUB NEW, NEWS…)             | K. Atangana, L. Mballa · en · 1600       | S3   | A double click acts twice: two drafts, two news items, tickets e-mailed twice; a 409 toast                    | Fixed       |
@@ -1346,9 +1430,9 @@ of plan is not prorated: to decide); the "To decide" rows; B03 and B04.
 | B81  | RFQ AGR, USER (sorted by the API)                    | T. Bekale, L. Mvogo · en · 1600          | S3   | A third click is dropped: RFQ AGR's Date and USER's Last login never sort oldest first                        | Fixed       |
 | B82  | RFQ AGR's Save filter                                | T. Bekale · en · 1600                    | S3   | A filter the API refuses (an inverted period) leaves the dialog open, nothing said                            | Fixed       |
 | B83  | RFQ AGR's filters                                    | T. Bekale · en · 1600                    | S4   | Reset leaves the values typed, and their error, while no filter was applied                                   | Fixed       |
-| B84  | SVT, four eyes                                       | B. Sima · en · 1600                      | S3   | A bank with one SVT account cannot approve above the threshold: "another approver" never comes                | To decide   |
+| B84  | SVT, four eyes                                       | B. Sima · en · 1600                      | S3   | A bank with one SVT account cannot approve above the threshold: "another approver" never comes                | Fixed       |
 | B85  | RFQ, RFQ AGR with the RFQ off; MSG unpermitted       | T. Bekale · en · 1600                    | S4   | "This screen is not available for your account type.": the account type is not the cause                      | Fixed       |
-| B86  | TRD's linked traders                                 | B. Sima · en · 1600                      | S4   | No export: the SVT has no `analysis:export`, though the table is meant to be exportable                       | To decide   |
+| B86  | TRD's linked traders                                 | B. Sima · en · 1600                      | S4   | No export: the SVT has no `analysis:export`, though the table is meant to be exportable                       | Fixed       |
 | B87  | IMP's rows                                           | A. Mbarga · en · 1600                    | S4   | A year shown as a figure: "2,025" for the macro year and the fiscal year                                      | Fixed       |
 | B88  | IMP, two templates                                   | A. Mbarga · en · 1600                    | S4   | The bond list's and bond ratings' example lines fail their own checks                                         | Fixed       |
 | B89  | DATA, a session ahead                                | A. Mbarga · en · 1600                    | S4   | Tomorrow's session reads "Expected today"                                                                     | Fixed       |
@@ -1361,9 +1445,9 @@ of plan is not prorated: to decide); the "To decide" rows; B03 and B04.
 | B96  | IMP, a session whose file was rolled back            | A. Mbarga · en · 1600                    | S4   | A new file is refused as "… is being checked for this session": that file was rolled back                     | Fixed       |
 | B97  | NEWS NEW's Statements, MPAY's statement              | L. Mballa, L. Mvogo · en · 1600          | S3   | A statement does not follow the other side: "Disputed" while the answer is notified                           | Fixed       |
 | B98  | A page open when its user is suspended               | K. Atangana, L. Mvogo · en · 1600        | S4   | The next click reads "Your session has expired: log in again.", not the suspension                            | Fixed       |
-| B99  | CFG's plans (`/subscription/checkout`)               | T. Bekale · en · 1600                    | S2   | A change of plan starts a new period at full price: the days left of the plan paid are lost                   | To decide   |
+| B99  | CFG's plans (`/subscription/checkout`)               | T. Bekale · en · 1600                    | S2   | A change of plan starts a new period at full price: the days left of the plan paid are lost                   | Fixed       |
 | B100 | The user menu's language                             | K. Atangana · en → fr · 1600             | S2   | A tab opened before a change sends the old profile back: name, phone, two-factor channel                      | Fixed       |
-| B101 | ALRT's alert form, CFG's profile                     | K. Atangana · en · 1600                  | S4   | No version: a second tab's save replaces the first's without a 409                                            | To decide   |
+| B101 | ALRT's alert form, CFG's profile                     | K. Atangana · en · 1600                  | S4   | No version: a second tab's save replaces the first's without a 409                                            | Left as is  |
 | B102 | Uploads of PUB NEW, NEWS NEW, RFQ AGR's letters      | K. Atangana, L. Mballa, T. Bekale · API  | S2   | No virus scan: the EICAR test file is taken and served back                                                   | Fixed       |
 
 ### Notes

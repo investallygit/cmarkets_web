@@ -21,6 +21,10 @@ what is still to do. The Data admin's and the Admin's screens are in
   the ECB's reference rates (decision 22).
 - **Built in step 42 (fourth version)**: a watchlist of two securities or more gets "Optimise" in
   its title bar, which opens OPT on its equities, bonds and ETFs.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the session summary and the top
+  movers follow the live prices (B06), live columns sort on the values shown (B42), a news alert's
+  tags give way to its subject (B23), the lists holding a security are ticked for screen readers
+  (B44), a reload shows the watchlist worked on (B46).
 
 ## DES · Security profile (screen 2): done
 
@@ -41,6 +45,11 @@ what is still to do. The Data admin's and the Admin's screens are in
   comes in step 33).
 - **Built in step 41 (fourth version)**: DES opens the commodity profile (screen 21) for a
   commodity; `BRENT DES` and `BRENT CMP` from the command bar, which finds "cacao" too.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): GP's toolbar wraps in its panel
+  (B13) and never saves over drawings it could not read (B48); the tabs and indicators follow the
+  account's permissions (B21); the key data keeps its figures whole (B25) and the header its
+  "Delayed" badge (B27); the sector reads in French on a French page (B17); an unknown security
+  offers no Retry (B07).
 
 ## N · News (no mockup): done
 
@@ -97,6 +106,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   when a publication goes out: the analysts are followed from PUB since step 6.
 - **Built in step 41 (fourth version)**: an alert on a commodity goes off when a new value comes,
   from EODHD's load or the Data admin's file.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the history gives a news
+  alert's subject the room (B23); the New alert form closes when the screen changes (B47). The form
+  keeps no version: the later save of two tabs stands (B101, left as is).
 
 ## EQS / FA · Equity screener and fundamental analysis (screen 3): done
 
@@ -126,6 +138,10 @@ what is still to do. The Data admin's and the Admin's screens are in
   as the redrawn mockup: its text in the screen's language, its source (the Data admin, EODHD) and
   FR / EN when both languages are written; a language without text shows the other one, marked.
   The results keep seven rows of the grid, the description four, the panels below fifteen.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the results sort on the live
+  values (B42), their ratios follow the live price (B95), the sector reads in French (B17); COLUMNS
+  ticks its entries for screen readers (B44); the saved screens say when they could not be read
+  (B63).
 
 ## YCRV / YAS · Yield curves and bond calculator (screen 4): done
 
@@ -160,6 +176,9 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Built in step 49**: a series' point the concluded RFQ agreements gave (decision 27) names
   them in place of its source: "Secondary market · RFQ agreement · CMOTA2610283", or "2 RFQ
   agreements" without a security when theirs differ.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the calculator settles on the
+  market's calendar, T+2 skipping Christmas as BP's does (B51), says an input out of range rather
+  than keep the last result (B52), and describes a BTA as a zero-coupon bill (B53).
 
 ## PORT · Portfolio (screen 5): done
 
@@ -198,6 +217,11 @@ what is still to do. The Data admin's and the Admin's screens are in
   portfolio (francs and euros only, decision 25), or the trades that adjust an existing one.
 - **Still to do (found in step 42)**: a line quoted in dollars (IWDA) is valued without its
   exchange rate, as the PORT valuation converts only the euro at the peg.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): a line in another currency is
+  settled and valued at the ECB's rate of its day (B01, decision 36); no day's cash ends below zero
+  and a redemption repays at most the principal held (B57, decision 28); the tabs show their number
+  (B15), the lines end their names in an ellipsis (B16), the outperformance keeps its unit (B24),
+  the sectors read in French (B17); a portfolio unknown or no longer shared is said (B11).
 
 ## PUB · Research library (screen 8): done
 
@@ -223,6 +247,10 @@ what is still to do. The Data admin's and the Admin's screens are in
   subject (the hub sends `PublicationPublished`, alerts of type "publication" are not set off
   yet); card payment through the provider's page (3-D Secure) and its return. Employees read free
   research through the moderation queue (MOD, step 9): the library is a client screen.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): a purchase is followed to its
+  end, the note opened elsewhere (B65); mobile money takes the CEMAC's numbers only (B71, decision
+  31); a page past the last goes to the last (B66), an unknown analyst is said (B67), a buyer's list
+  reads "Updated" and a notice tells each buyer of a new version (B78).
 
 ## PUB NEW · Publishing studio (screen 7): done
 
@@ -244,6 +272,10 @@ what is still to do. The Data admin's and the Admin's screens are in
   sources to tick again) and its chart frozen on 28/10/2026; October gives the mockup's earnings.
 - **Still to do**: ratio and yield curve charts in a publication (price charts only); a version
   history readers can open (the library shows the latest version and its date).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): a nil commission is left out
+  (B09), the price rules that could not be read are said with Retry (B75), a double click sends once
+  (B76), a paste from Word leaves its pictures out (B77), an upload refused says why (B69) and every
+  file is scanned (B102).
 
 ## NET · Professional directory (screen 10): done
 
@@ -253,6 +285,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   (step 18). See [step 15](steps/step-15-net-directory.md).
 - **Third version (step 24)**: the News provider among the types, with its teal badge.
 - **Fourth version (step 43)**: the SVT, a tenth type, has no profile and is not listed.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the lists say when they could
+  not be read (B63), a page past the last goes to the last (B66).
 
 ## MSG · Messaging (screen 11): done
 
@@ -270,6 +304,9 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Built in step 48 (fourth version)**: an SVT and the traders a confirmed link joins to its
   bank write to each other at once, one to one, out of the directory: "+ NEW" offers them first,
   an SVT's card gives its bank; a trader may block an SVT, which reports a conversation instead.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): a conversation is joined once
+  known (B08), one's own address is said (B69), messages that could not be read are said with Retry
+  (B74); a declined request holds its sender's next one 30 days, untold (B70, decision 30).
 
 ## NET ME · My profile, visibility and contact (screen 12): done
 
@@ -278,6 +315,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   See [step 14](steps/step-14-net-me-profile.md).
 - **Still to do**: choosing the square of the photo (the mock keeps its centre).
 - **Third version (step 24)**: a seventh row, the News provider, in "Who can contact me".
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): a change not saved is kept from
+  a careless exit (B68); the lists say when they could not be read (B63).
 
 ## CFG · Settings (no mockup): done
 
@@ -302,6 +341,11 @@ what is still to do. The Data admin's and the Admin's screens are in
   user menu opens NET ME since step 14.
 - **Still to do**: accepting an invitation (the e-mail link and its sign-up); the status of a
   Student's proof of enrolment.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): a change of the plan in force
+  is prorated by the day as in SUBS, nothing to pay while the days left buy the new plan (B99, B73,
+  decision 29); mobile money takes the CEMAC's numbers (B71); the language switch no longer writes
+  an old profile back (B100); the profile asks before leaving unsaved changes (B68); the plans read
+  in French (B17).
 
 ## Home page (no mockup): done
 
@@ -324,6 +368,9 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Built in step 12**: the six client account types, in two rows of three, with two more photos.
 - **Still to do**: the texts are the prototype's, to be checked by the spec author.
 - **Third version (step 24)**: seven client types, the News provider among them.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the footer follows the session
+  (B37), a button's text starts its accessible name (B05), the plans read in French (B17), the
+  picture's ticker tape stands still without motion, no entry cut (B14).
 
 ## Login, OTP, sign-up, password reset: done
 
@@ -348,6 +395,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   and the signed content agreement.
 - **Fourth version (step 43)**: the SVT is not among the types of the sign-up: an Admin creates
   it, and it logs in with a code every time.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): a suspended account's next
+  click says the suspension (B98, with CMarket.Api's 403); the sign-up's documents are scanned
+  (B38).
 
 ## NEWS NEW · News studio (screen 13): done
 
@@ -363,6 +413,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   RATES" shows rates, which no security holds: a card names a security of the master list, its
   live price shown. The withdrawal, which section 16 asks for, has no control on the mockup: it
   sits in the publishing panel's title bar.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the statements follow the other
+  side's answer (B97), their tags stay whole (B30), a double click sends once (B76), every file is
+  scanned (B102).
 
 ## ETFS · ETF screener (screen 15): done
 
@@ -377,6 +430,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   Its "30-day" averages are read as the last 30 sessions.
 - **Changed on 12 November 2026**: its own entry in the menu, after EQS, which the mockup lights
   ([the spec author's answers](third-version.md#the-spec-authors-answers)).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): AUM sorts in francs whatever
+  the currency (B64); the saved screens say when they could not be read (B63).
 
 ## BP · Bond pricing (screen 16): done
 
@@ -392,6 +447,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   unrounded yield). The demo's ECMR is the amortizing bond of case B.
 - **Changed on 12 November 2026**: its own entry in the menu, after YCRV, which the mockup lights
   ([the spec author's answers](third-version.md#the-spec-authors-answers)).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): an input out of range is said
+  on its field (B54), the API's refusals on theirs (B55), an unknown bond shows no other bond's
+  figures (B56), and no Retry (B07).
 
 ## BS · Bond screener (screen 17): done
 
@@ -438,6 +496,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   average), the statistics, the Data admin's description, the data and the CEMAC links; GP the
   history; CMP up to five series rebased to 100 with their correlations; N the news naming it.
   See [step 41](steps/step-41-commodities.md).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): CMP's time axis names each year
+  once (B10).
 
 ## RFQ · Government securities RFQ (screen 22): done
 
@@ -459,6 +519,10 @@ what is still to do. The Data admin's and the Admin's screens are in
   (a price or a rate, the other worked out by CMarket, a quantity, an SVT, a validity; send,
   improve, withdraw). Today's blotter. Everything read again live through `/hubs/rfq`; the CEO
   reads its organisation's requests and blotter. See [step 44](steps/step-44-rfq-trading.md).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): Withdraw's confirmation submits
+  only itself (B79); a screen closed to the account says it is not open to it (B85); Confirm
+  selection and Cancel request say how they went though the hub's event takes their button away
+  before the answer comes.
 
 ## RFQ AGR · Agreements (screen 23): done
 
@@ -471,6 +535,10 @@ what is still to do. The Data admin's and the Admin's screens are in
   ticket sent again (to every recipient or to one) and a concluded agreement cancelled on both
   parties' letters, by a Trader or a Manager of either party. See
   [step 46](steps/step-46-rfq-agreements.md).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the status stays in view (B31),
+  a third click on a sorted column sorts the other way (B81), a filter refused is said (B82), Reset
+  clears what was typed (B83), a page past the last goes to the last (B66); the cancellation's
+  letters are scanned (B102).
 
 ## ECO · Macroeconomic dashboard (screen 25): done
 
@@ -484,6 +552,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   comparison (a figure's year beside it when not its row's; XLSX). An entry of the menu after
   MKT, before FX (decision 15); `ECO CMR` (or `CMR ECO`) opens an economy, `?country=CMR` keeps it.
   See [step 40](steps/step-40-macro-dashboard.md).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the tile titles wrap (B20), the
+  country bar says a failure with Retry (B50), the CEMAC comparison exports in its units (B45).
 
 ## FX · FX dashboard (screen 26): done
 
@@ -496,6 +566,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   rates panel opens it.
 - **Still to do**: a currency the ECB lacks, such as the naira, "added by file or through the EODHD
   Forex API" (spec section 9), waits for the spec author (open questions, fourth version).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the converter says letters, a
+  negative or too many digits (B49); an unknown currency is said (B11).
 
 ## SVT · SVT approval (screen 27): done
 
@@ -518,6 +590,9 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Built in step 48**: MSG in its menu, its messages with the traders linked to its bank, one to
   one (decision 16): MSG's "+ NEW" offers them, TRD's "Write to" opens a conversation with the
   trader picked. See [step 48](steps/step-48-fourth-version-done.md).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the time left ticks between
+  reloads (B80); with one SVT account the bank approves alone, which its settings say (B84, decision
+  32); TRD exports its linked traders in XLSX and CSV (B86, decision 34).
 
 ## OPT / OPT RES · Portfolio optimisation (screens 28 and 29): done
 
@@ -544,3 +619,8 @@ what is still to do. The Data admin's and the Admin's screens are in
 - OPT in the menu after PORT (decision 15), `OPT` and `OPT RES` in the command bar; open to the
   Student, the Analyst, the Manager and the Trader (`portfolios:optimize`, decision 18), a Student
   making model portfolios only.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the tabs fit (B26); the checks
+  follow the universe (B36) and say a bound the API refuses (B58); a scenario's name is the user's
+  once (B59); OPT RES keeps its saved scenario in its address (B60); an unknown list or id is said
+  (B61), a capital that buys nothing too (B62). The demo's prices move independently, their
+  correlations near zero (B12, left as is).

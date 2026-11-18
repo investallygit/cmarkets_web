@@ -79,6 +79,10 @@ by which step, and what is still to do. The terminal's screens are in
   a stored one, or moves more than 15% from the one before, is an alert to tick. The values
   published show in CMDTY with their source, and an alert on a new value goes off; the rollback
   puts back what each row replaced.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the counters keep their labels
+  (B32), the years read as years (B87), the templates pass their own checks (B88), a file rolled
+  back is named so (B96), an unknown upload is said (B07), EODHD's figures stay whole (B25),
+  EODH's filters stay in the title bar (B28).
 
 ## CORR · Data corrections (no mockup): done
 
@@ -96,6 +100,8 @@ by which step, and what is still to do. The terminal's screens are in
 - **Built in step 41 (fourth version)**: on a commodity (`?security=BRENT`), its names in English
   and French (the list's too), its texts, the CEMAC countries it weighs on and its related bonds
   and equities, ten at most, in place of the description; AUDT keeps what changed.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): each price field holds its
+  value (B33).
 
 ## NEWS · News and documents (no mockup): done
 
@@ -114,6 +120,8 @@ by which step, and what is still to do. The terminal's screens are in
 - **Built in step 27 (third version)**: the Moderation tab (the items reported, then those
   waiting; approve or keep, take down, retype) and the Publishers tab (the domains of the feeds'
   newspapers).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the Publishers' confirmation
+  submits only itself (B79), the panel's actions stay in its title bar (B28).
 
 ## USER · Account administration (screen 9): done, with ANLY and MOD
 
@@ -149,6 +157,9 @@ by which step, and what is still to do. The terminal's screens are in
 - **Built in step 43**: ten counters, the SVT's in its own blue; "+ Create account" creates an SVT
   for a bank of the licensed SVTs (its bank chosen in the list ADMCFG keeps; a code at every
   login), the route section 10 names `/admin/svt-accounts`.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): an employee's type stays
+  readable on a selected row (B22), the counters keep their names (B29), Last login sorts both ways
+  (B81), Change type offers the account's family only (B92); ANLY's columns keep their text (B34).
 
 ## ADMCFG · Platform settings (no mockup): done
 
@@ -192,6 +203,8 @@ by which step, and what is still to do. The terminal's screens are in
   billion), audited as "RFQ agreements feed the curve: No → Yes" and "Curve feed from a face of"
   (decision 27). The approval window's audit line gets its label, which step 45 had left out.
 - **Fourth version (steps 42 to 47)**: the key of OPT in the matrix (step 42).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the quotas fit their panel
+  (B35) and a quota refused is said (B91).
 
 ## AUDT · Audit log (no mockup): done
 
@@ -204,6 +217,8 @@ by which step, and what is still to do. The terminal's screens are in
 - **Built in step 44 (fourth version)**: under the entry, "RFQ compliance export" for the holder of
   `rfq:report` (the Admin): every request, answer, selection, confirmation and agreement of the
   RFQ between two days, to the millisecond, as CSV.
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the columns keep their text
+  (B34), an inverted period is said (B90).
 
 ## PAY · Analyst payouts (no mockup): done
 
@@ -221,6 +236,8 @@ by which step, and what is still to do. The terminal's screens are in
   (search, plan, status and expiry filters, sorted by expiry, CSV), the account's subscription
   with its payments and invoices (each invoice's PDF), Extend, Change plan, Resend last invoice and
   Suspend; "via organisation" for a member. See [step 34](steps/step-34-subscription-management.md).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the tiles keep their names
+  (B29) and say they count accounts, the list adding its organisations' lines (B93).
 
 ## MPAY · Media payments (screen 18): done
 
@@ -229,12 +246,17 @@ by which step, and what is still to do. The terminal's screens are in
   the statement with its status, a change a second Admin confirms, the newspaper's dispute, Release,
   Recalculate and the PDF; the newspaper's payment settings by month. NEWS NEW shows the newspaper
   its statements and lets it dispute one. See [step 28](steps/step-28-media-payments.md).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the actions stay in the title
+  bar (B28), the tags and statuses whole (B30), the newspapers sort as a dictionary (B94), a
+  statement follows the other side's answer (B97).
 
 ## SRC · News sources (no mockup): done
 
 - **Built in step 27**: the newspapers by channel (contract, review mode, logo, News providers),
   CMarket AI's review mode and threshold, the views an hour, the ingestion clients (decision 6 of
   the third version).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the actions stay in the title
+  bar (B28), the newspapers sort as a dictionary (B94).
 
 ## RFQ · The Admin's agreements (screen 23): done
 
@@ -243,6 +265,8 @@ by which step, and what is still to do. The terminal's screens are in
   filters, the mail server's answer to a failed e-mail in the detail, the ticket sent again and a
   concluded agreement cancelled on both parties' letters (decision 26). RFQ REP (step 47) beside
   it under the RFQ's tabs, the entry lit on both. See [step 46](steps/step-46-rfq-agreements.md).
+- **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the agreements sort both ways
+  on a third click (B81).
 
 ## RFQ REP · Daily reporting to the BEAC (screen 24): done
 
@@ -253,3 +277,11 @@ by which step, and what is still to do. The terminal's screens are in
   nil report). CMarket.Api's job makes and e-mails each report at the send time.
 - **To do**: the content and the BEAC's business days, once agreed with the BEAC. The agreements
   concluded by the SVTs (step 45) and cancelled on RFQ AGR (step 46) reach it with nothing more.
+
+## ME · An employee's own settings (no mockup): done
+
+- **Built in step 50** ([step 50](steps/step-50-page-bug-sweep.md), B72, decision 33): the Data
+  admin and the Admin change their own profile (name, phone, language, time zone) and security
+  (password, where the login codes go) on ME, CFG's two panels, from the user menu's "My settings"
+  and the command bar. Until then they changed their password only through "Forgot your password?",
+  and nothing else. CMarket.Api's `/me` routes needed no change.
