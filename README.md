@@ -95,6 +95,7 @@ before upload.
 | 23 · Agreements (RFQ AGR)                                                 | Done; tickets downloaded and resent, cancelled on two letters |
 | 24 · Daily reporting to the BEAC (RFQ REP)                                | Done; PDF and Excel at 18:00, every send logged, kept 5 years |
 | The CMarket curve fed by the RFQ agreements (ADMCFG, YCRV)                | Done; an Admin option, off, from XAF 250 million of face      |
+| CMarket.Api's messages in the page's language                             | Done; its errors in French on a French page, dates day first  |
 
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
@@ -267,7 +268,8 @@ ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
   per controller folder of `CMarket.Api` (`auth.ts`, `market.ts`, `portfolios.ts`...): a route
   table (method, path as the OpenAPI document writes it, type of the answer) and its calls
   (`portfoliosApi.positions(id, signal)`). The calls go through `shared/api/client.ts`, which adds
-  the session, renews it on a 401 and turns errors into RFC 7807 `ApiError`s; ESLint lets no other
+  the session and the page's language (`Accept-Language`, which CMarket.Api writes its errors
+  in), renews it on a 401 and turns errors into RFC 7807 `ApiError`s; ESLint lets no other
   code reach the client. Each entity wraps the calls in TanStack Query hooks
   (`entities/*/api/queries.ts`), which keep the query keys and the cache. DTOs live in
   `shared/api/contracts`: they mirror spec section 10 and `CMarket.Api` follows them. A test

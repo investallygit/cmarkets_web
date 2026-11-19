@@ -205,3 +205,7 @@ itself, steps 38 to 48 follow these; each is also an open question for the spec 
     reference rate of each day (the last one before a day without, the first before its first),
     as OPT and FX do. Decision 25's real portfolios made from an allocation keep to francs and
     euros meanwhile.
+37. **CMarket.Api's language** (step 51, B18): the page's. The web sends `Accept-Language` with
+    the language it shows; CMarket.Api writes its problems in French for `fr`, in English
+    otherwise, its dates dd/mm/yyyy and its numbers as the web writes them. The business rules'
+    codes stay as they are.

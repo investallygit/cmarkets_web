@@ -103,7 +103,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 48   | [Fourth version done: README, accessibility, every flow](roadmap/steps/step-48-fourth-version-done.md)               | Done   |
 | 49   | [The CMarket curve fed by the RFQ agreements above an amount](roadmap/steps/step-49-rfq-curve-feed.md)               | Done   |
 | 50   | [Every page checked for bugs, then the bugs fixed](roadmap/steps/step-50-page-bug-sweep.md)                          | Done   |
-| 51   | [CMarket.Api's messages in the user's language](roadmap/steps/step-51-api-messages-by-language.md)                   | To do  |
+| 51   | [CMarket.Api's messages in the user's language](roadmap/steps/step-51-api-messages-by-language.md)                   | Done   |
 
 Steps 41 to 48 run in three lanes at once, each with its own steps: see [Lanes](roadmap/lanes.md),
 which also says what waits for what. Step 49 came after them, on a rule step 48 had left open.
