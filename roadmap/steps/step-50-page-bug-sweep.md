@@ -1343,6 +1343,36 @@ named. Found by those checks, and fixed:
 Still open after step 50: step 51 (B18); decision 25's real portfolios made from an allocation keep
 to francs and euros, though PORT now values the other currencies.
 
+## After the release
+
+The live site, read only, on 19 November 2026: this step's web since 21:40 UTC the evening before,
+CMarket.Api's since 21:45 UTC (no migration).
+
+- Every account type's screens, eleven accounts and the visitor, with this step's sweep in its
+  read-only mode: 1,035 visits at 1600, 390 and 320 px, axe on 524 pages, every write blocked; 27
+  pages opened by their address kept the session. No 5xx, no page error, no raw key, nothing wider
+  than the screen, cut or out of reach. What stays is known: the names of the indices and the
+  bonds, document titles, the Admin's specialties, and calls of 2 to 3.5 s (the API's region).
+  The API module's reads (`npm run test:api`): 663 right, and the four refusals designed for an
+  account awaiting approval, as after step 49.
+- This step's rows on the live data, read only: the days left of a plan pay the new one (B73, B99:
+  three accounts, in English and in French), the names in French (B17), the watchlist kept by a
+  reload (B46), another country's mobile money number refused before anything is sent (B71), the
+  Data admin's and the Admin's ME (B72), TRD's CSV (B86), the panels' bars and the tapes from 320
+  to 1024 px (B13, B14, B28). B01 waits for a line in another currency, which no portfolio of the
+  live site holds. The market still shows open before 09:00 in Douala: B04, the site's setting.
+- Fixed: IMP showed "Loading" for ever on an upload of "Curves and rates" (6 November). Since
+  step 38 GET /data/import-types lists only the files uploaded today, and the panel waited for that
+  file's template. A retired file's template is now the screen's (`RETIRED_IMPORT_COLUMNS`, as
+  CMarket.Api's `CurvesFile` reads it), and a file no template describes is read as text
+  (`uploadColumns`; `CurrentUploadPanel.test.tsx`, failing before).
+- Fixed: the French of a plan change read "102 jours restants de Analyse, d’une valeur de XAF
+  377 260 HT". CFG's and SUBS's sentences now say "la formule Analyse" ("de Analyse" missed its
+  elision, "Professionnel est gratuite" its agreement) and put the amount before XAF, as every
+  other French string does; `locales.test.ts` holds both rules (failing before).
+- Checked: type check, lint, the 508 unit tests; IMP's and CFG's flows (`back-office.spec.ts`,
+  `settings.spec.ts`) and SUBS's (`@fresh-db`) on CMarket.Api from a fresh database.
+
 ## Bug log
 
 | #    | Page                                                 | Who · language · width                   | Sev. | What happens                                                                                                  | Status      |

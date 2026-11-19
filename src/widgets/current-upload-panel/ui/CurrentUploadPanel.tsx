@@ -5,6 +5,7 @@ import { isApiError } from '@/shared/api'
 import {
   isChangeField,
   isChecking,
+  uploadColumns,
   useImport,
   useImportRows,
   useImportTypes,
@@ -102,8 +103,8 @@ function UploadView({
   const rows = useImportRows(upload.id, filter, 1, !checking)
   const editable = upload.status === 'ready' || upload.status === 'rolledBack'
 
-  const definition = types.data?.find((candidate) => candidate.type === upload.type)
-  const columns = definition?.columns.filter((column) => upload.columns.includes(column.name)) ?? []
+  // Today's template, or the one a retired file had: an old upload's rows show all the same.
+  const columns = types.data ? uploadColumns(upload, types.data) : []
   const items = rows.data?.items ?? []
   // The first row to look at is selected until the Data admin picks another.
   const selected: ImportRowDto | null =
@@ -141,19 +142,23 @@ function UploadView({
         </p>
       )}
       <div className="min-h-24 flex-1 border-y">
-        {checking || !definition ? (
+        {checking ? (
           <PanelLoading />
         ) : (
-          <QueryView query={rows}>
-            {(page) => (
-              <ImportRowsTable
-                rows={page.items}
-                columns={columns}
-                selectedId={selected?.id ?? null}
-                onSelect={(row) => setSelectedId(row.id)}
-                exportName={upload.fileName.replace(/\.\w+$/, '')}
-                emptyMessage={t('dataImport.noRows')}
-              />
+          <QueryView query={types}>
+            {() => (
+              <QueryView query={rows}>
+                {(page) => (
+                  <ImportRowsTable
+                    rows={page.items}
+                    columns={columns}
+                    selectedId={selected?.id ?? null}
+                    onSelect={(row) => setSelectedId(row.id)}
+                    exportName={upload.fileName.replace(/\.\w+$/, '')}
+                    emptyMessage={t('dataImport.noRows')}
+                  />
+                )}
+              </QueryView>
             )}
           </QueryView>
         )}

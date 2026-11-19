@@ -1,4 +1,4 @@
-import type { ImportDto, ImportType } from '@/shared/api/contracts'
+import type { ImportColumnDto, ImportDto, ImportType } from '@/shared/api/contracts'
 
 /** File types the Data admin uploads, in the order of the session coverage of the screen 6 mockup. */
 export const IMPORT_TYPES: readonly ImportType[] = [
@@ -23,6 +23,20 @@ export const IMPORT_TYPES: readonly ImportType[] = [
  * which the CEMAC sovereign yields replaced. Their uploads stay in the history.
  */
 export const RETIRED_IMPORT_TYPES: readonly ImportType[] = ['curves']
+
+/**
+ * The templates of the retired files, as CMarket.Api's definitions still read them: GET
+ * /data/import-types lists only the files uploaded today, and an old upload's rows are shown with
+ * its own template's columns.
+ */
+export const RETIRED_IMPORT_COLUMNS: Readonly<Partial<Record<ImportType, ImportColumnDto[]>>> = {
+  curves: [
+    { name: 'date', kind: 'date', required: true },
+    { name: 'country', kind: 'text', required: true },
+    { name: 'maturity', kind: 'text', required: true },
+    { name: 'rate', kind: 'rate', required: true },
+  ],
+}
 
 export function isImportType(value: string): value is ImportType {
   return [...IMPORT_TYPES, ...RETIRED_IMPORT_TYPES].some((type) => type === value)

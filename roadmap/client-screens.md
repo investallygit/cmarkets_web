@@ -346,6 +346,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   decision 29); mobile money takes the CEMAC's numbers (B71); the language switch no longer writes
   an old profile back (B100); the profile asks before leaving unsaved changes (B68); the plans read
   in French (B17).
+- **After step 50's release**: the French of a plan change says "la formule Analyse", no longer
+  "de Analyse", and puts the amount before XAF. See
+  [step 50](steps/step-50-page-bug-sweep.md#after-the-release).
 
 ## Home page (no mockup): done
 

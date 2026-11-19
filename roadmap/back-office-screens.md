@@ -83,6 +83,9 @@ by which step, and what is still to do. The terminal's screens are in
   (B32), the years read as years (B87), the templates pass their own checks (B88), a file rolled
   back is named so (B96), an unknown upload is said (B07), EODHD's figures stay whole (B25),
   EODH's filters stay in the title bar (B28).
+- **After step 50's release**: an upload of a retired file ("Curves and rates") shows its rows with
+  the template it had, where IMP showed "Loading" for ever. See
+  [step 50](steps/step-50-page-bug-sweep.md#after-the-release).
 
 ## CORR · Data corrections (no mockup): done
 
@@ -238,6 +241,9 @@ by which step, and what is still to do. The terminal's screens are in
   Suspend; "via organisation" for a member. See [step 34](steps/step-34-subscription-management.md).
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the tiles keep their names
   (B29) and say they count accounts, the list adding its organisations' lines (B93).
+- **After step 50's release**: the French of a plan change and of a price says "la formule
+  Analyse", no longer "de Analyse", and puts the amount before XAF. See
+  [step 50](steps/step-50-page-bug-sweep.md#after-the-release).
 
 ## MPAY · Media payments (screen 18): done
 

@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest'
+import i18n from 'i18next'
+import { afterEach, describe, expect, it } from 'vitest'
 import en from './locales/en'
 import fr from './locales/fr'
 
@@ -11,6 +12,15 @@ function keysOf(value: unknown, prefix = ''): string[] {
   if (typeof value !== 'object' || value === null) return [prefix]
   return Object.entries(value).flatMap(([key, child]) =>
     keysOf(child, prefix ? `${prefix}.${key}` : key),
+  )
+}
+
+/** Each string with its key: [['common.loading', 'Loading'], ...]. */
+function stringsOf(value: unknown, prefix = ''): [string, string][] {
+  if (typeof value === 'string') return [[prefix, value]]
+  if (typeof value !== 'object' || value === null) return []
+  return Object.entries(value).flatMap(([key, child]) =>
+    stringsOf(child, prefix ? `${prefix}.${key}` : key),
   )
 }
 
@@ -35,5 +45,34 @@ describe('translation files', () => {
     expect(french).toEqual(english)
     const keys = Object.values(english).flat()
     expect(new Set(keys).size).toBe(keys.length)
+  })
+})
+
+describe('the French of a plan and its price', () => {
+  afterEach(() => i18n.changeLanguage('en'))
+
+  // The live site read "102 jours restants de Analyse, d’une valeur de XAF 377 260 HT" (19 November
+  // 2026): "de" before a vowel, the currency before the amount, as no other French string has it.
+  it('says "la formule" before a plan and writes an amount before its currency', async () => {
+    await i18n.changeLanguage('fr')
+    expect(
+      i18n.t('subscription.checkout.proration.daysLeft', {
+        days: 102,
+        plan: 'Analyse',
+        currency: 'XAF',
+        value: '377 260',
+      }),
+    ).toBe('102 jours restants de la formule Analyse, d’une valeur de 377 260 XAF HT.')
+    expect(
+      i18n.t('subscriptionAdmin.proration.free', { plan: 'Professionnel', date: '01/12/2026' }),
+    ).toBe(
+      'La formule Professionnel est gratuite par convention : une période complète à partir d’aujourd’hui, jusqu’au 01/12/2026.',
+    )
+    const french = stringsOf(fr)
+    expect(french.filter(([, text]) => /\bde \{\{plan\}\}/.test(text))).toEqual([])
+    expect(french.filter(([, text]) => /^\{\{plan\}\} est /.test(text))).toEqual([])
+    expect(
+      french.filter(([, text]) => /\{\{currency\}\} \{\{(amount|value)\}\}/.test(text)),
+    ).toEqual([])
   })
 })
