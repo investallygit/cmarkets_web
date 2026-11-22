@@ -1,4 +1,4 @@
-# Step 55 · BP from a curve, custom curves (screen 16) (M–L): part 1 done, part 2 to do
+# Step 55 · BP from a curve, custom curves (screen 16) (M–L): done
 
 Step 55 of the [roadmap](../../ROADMAP.md#order), for the
 [fifth version of the spec](../fifth-version.md).
@@ -61,25 +61,36 @@ CMarket.Api's phase 43 (ADR-069).
   demo's figures from the curve are not the mockup's 4.600 to 5.850, which cases B and C enter by
   hand. The Download button comes with step 57.
 
-## Part 2: the client's entry panel (S–M): to do
+## Part 2: the client's entry panel (S–M): done
 
 Added on 22 November 2026 from [the client's answer](../fifth-version.md#the-clients-answer-of-22-november)
-(decision 46). Comes before step 56.
+(decision 46), built the same day.
 
-- **The table of block B** (`RateTable`, `TenorTable`): with a curve or rates entered, the columns
-  date (or tenor), t, reference %, rate %, spread bp; the spread green above the reference and red
-  below, recomputed at each keystroke; with a single yield, the table greyed as now, without the
-  two new columns.
-- **The helpers**, a row of buttons above the table: "Start from a curve" (the curves of the list;
-  its rates fill every row and it becomes the reference), "Shift all rows" (± bp, applied once),
-  "Paste from Excel" (from the clipboard into the row in focus and down, or matched by date;
-  `shared/lib/parse.ts` reads the numbers in both languages; a line it cannot read is named, nothing
-  changed), "Clear" (every row emptied, the reference kept). In curve mode a helper switches to
-  rates entered, as an edited rate does.
-- **CMarket.Api**: `POST /bonds/{id}/calculate` takes `discount` (`yield`, `curve`, `rates`,
-  `tenors`) and answers `discount`, `comparison` and the cash flows' `zeroRatePct` as
-  `/bonds/price` does (ADR-069 extended); the French of any new sentence.
-- **Checks**: Vitest for the spread, the shift, the paste's parsing (tabs, semicolons, `4,60`,
-  `4.60`, dates) and the reference chosen; the BP flow: case C entered as a +20 bp shift of case
-  B's rates, then pasted from a two-column clipboard, the spreads shown; the calculate route's
-  integration test on curve case B; axe in both languages.
+- **Built**:
+  - Block B's table, with a curve or rates entered: the date, t, "Ref. %" (the reference curve
+    read at the date), the rate and "Spread bp" (rate − reference, one decimal, green above and
+    red below, recomputed at each keystroke), at set column widths so that the five fit the inputs
+    panel; the tenors in a table of their own with the same columns. The reference is the curve
+    chosen, the curve the rates started from (a curve's rate edited, or "Start from a curve"),
+    else the CMarket curve of the country on the settlement date, named under the table.
+  - The helpers above it (`RateHelpers`): "Start from a curve" (a curve of the list, read on the
+    settlement date for CMarket's), "Shift all rows" (± bp), "Paste from Excel" (a text area: a
+    rate a line, or a date and a rate, tabs or semicolons, `4,60` or `4.60`, a header skipped),
+    "Clear"; Enter applies a helper, not Calculate. Several cells pasted into a rate fill the
+    table from that row down. A line unread or unmatched (a date the bond does not pay on, past
+    the last row) changes nothing and is said under the table. From a curve, a helper makes the
+    rates entered, as an edited rate does.
+  - `model/rateEntry.ts` (`referenceOf`, `referenceRates`, `spreadBp`, `shiftRates`,
+    `clearRates`, `startFromCurve`, `parsePasted`, `pasteRates`, `cellsPasted`); the form's
+    `referenceId`; `SpreadCell`.
+- **CMarket.Api** (phase 43, part 2): `POST /bonds/{id}/calculate` takes `discount` in place of
+  the price and the yield (400 with both), priced by BP's query: the clean price, the equivalent
+  yield as its yield, `discount`, `comparison` and `zeroRates` (date, years, rate), which a single
+  yield leaves out of the answer.
+- **Checked**: web typecheck, lint, 530 unit tests; Playwright, the five flows of
+  `bond-pricing.spec.ts` (the new one: case B pasted from Excel, started from the CMarket curve at
+  a spread of 0.0, shifted by +20.0 bp, case C pasted as four cells into the first rate, a line
+  unmatched, cleared) and the flows that open BP; axe clean on the table with spreads, each helper
+  open and the tenors, in English and in French. CMarket.Api: the calculate route's application
+  and integration tests (curve case B from the calculator equals BP's; the refusal), the
+  application, integration and architecture suites.

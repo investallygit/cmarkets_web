@@ -97,7 +97,7 @@ before upload.
 | The CMarket curve fed by the RFQ agreements (ADMCFG, YCRV)                | Done; an Admin option, off, from XAF 250 million of face      |
 | CMarket.Api's messages in the page's language                             | Done; its errors in French on a French page, dates day first  |
 | 2 · Security profile at the BVMAC fixing (fifth version), descriptions    | Done; recent sessions, descriptions in versions, DES's Edit   |
-| 16 · Bond pricing from a yield curve, custom curves                       | Done but the client's entry panel (step 55, part 2)           |
+| 16 · Bond pricing from a yield curve, custom curves                       | Done; spreads to a reference, paste from Excel, saved curves  |
 | 31 · Index profile (DES on an index)                                      | To do, step 56                                                |
 | 30 · Data download (DL), the Download buttons                             | To do, step 57                                                |
 

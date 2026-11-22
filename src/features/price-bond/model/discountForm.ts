@@ -31,6 +31,11 @@ export interface DiscountForm {
   rates: Record<string, number | null>
   /** The rates entered by standard tenor, in percent; those left empty are not sent. */
   tenors: Record<StandardTenor, number | null>
+  /**
+   * The curve the rates entered are compared with (decision 46): the one they started from; null
+   * for CMarket's of the bond's country.
+   */
+  referenceId: string | null
 }
 
 /** The rates the server takes, in percent, bounds included. */
@@ -56,6 +61,7 @@ export function defaultDiscount(): DiscountForm {
     entry: 'dates',
     rates: {},
     tenors: emptyTenors(),
+    referenceId: null,
   }
 }
 
@@ -94,11 +100,11 @@ export function shownRates(
 }
 
 /** Rates entered by date that cover each row: the table before, carried over. */
-function ratesByDate(rows: readonly ScheduleRow[], shown: readonly (number | null)[]) {
+export function ratesByDate(rows: readonly ScheduleRow[], shown: readonly (number | null)[]) {
   return Object.fromEntries(rows.map((row, index) => [row.date, shown[index] ?? null]))
 }
 
-const roundRate = (rate: number) => Math.round(rate * 1000) / 1000
+export const roundRate = (rate: number) => Math.round(rate * 1000) / 1000
 
 /**
  * Block B switched to another mode: rates entered start from the table shown before (the curve's,
@@ -117,6 +123,8 @@ export function switchDiscount(
 ): DiscountForm {
   const next = { ...discount, mode: change.mode, entry: change.entry ?? discount.entry }
   if (next.mode !== 'rates') return next
+  // From a curve, the rates entered are compared with it.
+  if (discount.mode === 'curve') next.referenceId = discount.curveId
   const covered =
     context.rows.length > 0 &&
     context.rows.every((row) => (discount.rates[row.date] ?? null) !== null)
@@ -151,9 +159,15 @@ export function editRate(
   rate: number | null,
   context: { rows: readonly ScheduleRow[]; shown: readonly (number | null)[] },
 ): DiscountForm {
-  const rates =
-    discount.mode === 'curve' ? ratesByDate(context.rows, context.shown) : discount.rates
-  return { ...discount, mode: 'rates', entry: 'dates', rates: { ...rates, [date]: rate } }
+  const fromCurve = discount.mode === 'curve'
+  const rates = fromCurve ? ratesByDate(context.rows, context.shown) : discount.rates
+  return {
+    ...discount,
+    mode: 'rates',
+    entry: 'dates',
+    rates: { ...rates, [date]: rate },
+    referenceId: fromCurve ? discount.curveId : discount.referenceId,
+  }
 }
 
 /**

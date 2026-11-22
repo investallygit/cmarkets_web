@@ -1,5 +1,5 @@
 import type { BondPriceSource } from './bondScreener'
-import type { DayCount } from './bonds'
+import type { BondCalculationDto, BondCalculationRequestDto, DayCount } from './bonds'
 import type { IsoDate } from './common'
 
 // BP, bond pricing (spec screen 16; section 10, "Bond pricing").
@@ -230,4 +230,23 @@ export interface PriceYieldCurveDto {
   /** The market yield the range is centred on, when no range was given. */
   ytmPct: number | null
   points: PriceYieldPointDto[]
+}
+
+/**
+ * POST /bonds/{id}/calculate from discount rates in place of the price and the yield (fifth
+ * version; ROADMAP decision 46): priced as POST /bonds/price prices them, the yield being their
+ * equivalent yield. YAS sends a price or a yield; BP calls /bonds/price.
+ */
+export interface BondCalculationFromRatesRequestDto extends Omit<
+  BondCalculationRequestDto,
+  'cleanPrice' | 'yieldPct'
+> {
+  discount: BondDiscountDto
+}
+
+/** The calculator's answer from discount rates: how they were taken, the comparison, each rate. */
+export interface BondCalculationFromRatesDto extends BondCalculationDto {
+  discount: BondPriceDto['discount']
+  comparison: BondPriceDto['comparison']
+  zeroRates: { date: IsoDate; years: number; zeroRatePct: number }[]
 }

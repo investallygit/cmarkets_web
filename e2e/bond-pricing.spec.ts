@@ -238,3 +238,68 @@ test('rates entered by date give cases B and C, saved as a curve, reused and del
   await expect(page.getByText(`Curve “${name}” deleted.`)).toBeVisible()
   await expect(curves.locator('option', { hasText: name })).toHaveCount(0)
 })
+
+test('the entry panel pastes, starts from a curve, shifts and clears the rates', async ({
+  page,
+}) => {
+  await page.goto('/bp/ECMR-6.25-2029')
+  const form = inputs(page)
+  await expect(form.getByRole('combobox', { name: 'Redemption' })).toHaveValue('amortizing')
+  await form.getByRole('combobox', { name: 'Redemption' }).selectOption('bullet')
+  await form.getByRole('textbox', { name: /^Settlement date/ }).fill('30/10/2026')
+  await form.getByRole('textbox', { name: 'Face amount (XAF)' }).fill('100000000')
+  await form.getByRole('radio', { name: 'Rates entered by maturity' }).check()
+  const rate = (date: string) => form.getByRole('textbox', { name: `Rate on ${date}, %` })
+  const dates = ['04/11/2026', '04/11/2027', '04/11/2028', '04/11/2029']
+  const table = form.getByRole('table', { name: 'Discount rate of each remaining cash-flow date' })
+  const results = panel(page, 'Results')
+  const calculate = form.getByRole('button', { name: 'Calculate' })
+  await expect(rate(dates[3]!)).toBeVisible()
+
+  // Case B pasted from Excel, a header, French decimals, a date and a rate a line.
+  const helpers = form.getByRole('group', { name: 'Rate helpers' })
+  await helpers.getByRole('button', { name: 'Paste from Excel' }).click()
+  await form
+    .getByRole('textbox', { name: 'Rates copied from Excel' })
+    .fill('Date\tRate\n04/11/2026\t4,6\n04/11/2027\t5,1\n04/11/2028\t5,55\n04/11/2029\t5,85')
+  await form.getByRole('button', { name: 'Apply' }).click()
+  await expect(rate(dates[2]!)).toHaveValue('5.550')
+  await calculate.click()
+  await expect(results.getByRole('region', { name: 'A. Pricing' })).toContainText(
+    /Clean price\s*101\.1499%/,
+  )
+
+  // Started from the CMarket curve: each rate is its reference, a spread of 0.0.
+  await helpers.getByRole('button', { name: 'Start from a curve' }).click()
+  await form.getByRole('button', { name: 'Apply' }).click()
+  await expect(table.getByRole('row', { name: dates[0] })).toContainText(/0\.0$/)
+  // Shifted by 20 bp: each spread +20.0.
+  await helpers.getByRole('button', { name: 'Shift all rows' }).click()
+  await form.getByRole('textbox', { name: 'Shift (bp)' }).fill('20')
+  await form.getByRole('textbox', { name: 'Shift (bp)' }).press('Enter')
+  for (const date of dates) {
+    await expect(table.getByRole('row', { name: date })).toContainText('+20.0')
+  }
+
+  // Case C pasted as four cells into the first rate: the table fills from it down.
+  await rate(dates[0]!).evaluate((input) => {
+    const data = new DataTransfer()
+    data.setData('text/plain', '4.8\n5.3\n5.7\n6')
+    input.dispatchEvent(new ClipboardEvent('paste', { clipboardData: data, bubbles: true }))
+  })
+  await expect(rate(dates[3]!)).toHaveValue('6.000')
+  await calculate.click()
+  await expect(results.getByRole('region', { name: 'A. Pricing' })).toContainText(
+    /Clean price\s*100\.7410%/,
+  )
+
+  // A line the bond does not pay on changes nothing; Clear empties the rows.
+  await helpers.getByRole('button', { name: 'Paste from Excel' }).click()
+  await form.getByRole('textbox', { name: 'Rates copied from Excel' }).fill('04/12/2029\t6')
+  await form.getByRole('button', { name: 'Apply' }).click()
+  await expect(form.getByRole('alert')).toContainText('Some lines match no row of the table')
+  await expect(rate(dates[3]!)).toHaveValue('6.000')
+  await helpers.getByRole('button', { name: 'Clear' }).click()
+  await expect(rate(dates[0]!)).toHaveValue('')
+  await expect(calculate).toBeDisabled()
+})

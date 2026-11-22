@@ -177,12 +177,30 @@
       "columns": {
         "date": "Date de flux",
         "years": "t (années)",
-        "rate": "Taux %"
+        "rate": "Taux %",
+        "tenor": "Maturité",
+        "reference": "Réf. %",
+        "spread": "Écart pb"
       },
       "rateOn": "Taux au {{date}}, %",
       "rateAt": "Taux à {{tenor}} ({{years}} ans), %",
       "noDates": "Les dates de flux de l'obligation s'affichent une fois ses caractéristiques complètes.",
       "tableCaption": "Taux d'actualisation de chaque date de flux restante",
+      "referenceNote": "Référence : {{curve}}. Écart = taux − référence, en pb.",
+      "helpers": {
+        "label": "Outils de saisie des taux",
+        "start": "Partir d'une courbe",
+        "shift": "Décaler toutes les lignes",
+        "paste": "Coller depuis Excel",
+        "clear": "Effacer",
+        "apply": "Appliquer",
+        "shiftBy": "Décalage (pb)",
+        "pasteLabel": "Taux copiés depuis Excel",
+        "pasteHint": "Un taux par ligne, ou une date et un taux. Coller plusieurs cellules dans un taux remplit le tableau à partir de cette ligne.",
+        "badLines": "Ligne {{lines}} illisible : rien n'a changé.",
+        "nothing": "Rien à coller.",
+        "unmatched": "Des lignes ne correspondent à aucune ligne du tableau (une date sans paiement de l'obligation, ou au-delà de la dernière ligne) : rien n'a changé."
+      },
       "notes": {
         "yield": "Même taux pour toutes les dates de flux (grisé). Prérempli avec le dernier YTM calculé ; modifiable.",
         "curve": "Un taux par date de flux, lu sur la courbe choisie (interpolation linéaire). Chaque taux reste modifiable : les taux deviennent alors des taux saisis, enregistrables comme courbe personnalisée.",

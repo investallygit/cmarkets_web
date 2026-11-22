@@ -473,8 +473,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   saved, renamed, shared and deleted (decision 45), the equivalent yield and the Z-spread, the
   zero rate of each cash flow, the curve used or the rates used, the sensitivity to them with a
   shock by tenor on a custom curve, the calculation method; section 14.1's curve cases B and C
-  (see [step 55](steps/step-55-bond-pricing-from-a-curve.md)). Step 55's part 2 adds the
-  client's entry panel (decision 46); the Download button in step 57.
+  (see [step 55](steps/step-55-bond-pricing-from-a-curve.md)). Its part 2, the client's entry
+  panel (decision 46): each rate beside its reference and the spread in bp, start from a curve,
+  shift all rows, paste from Excel, clear. The Download button in step 57.
 
 ## BS · Bond screener (screen 17): done
 

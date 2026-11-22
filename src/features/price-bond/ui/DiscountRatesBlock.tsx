@@ -20,8 +20,18 @@ import {
   type ScheduleRow,
 } from '../model/discountForm'
 import type { PricingForm, RangeError } from '../model/pricingForm'
+import {
+  clearRates,
+  parsePasted,
+  pasteRates,
+  referenceOf,
+  referenceRates,
+  shiftRates,
+  startFromCurve,
+} from '../model/rateEntry'
 import { BlockHeading } from './BlockHeading'
 import { CurveActions } from './CurveActions'
+import { RateHelpers } from './RateHelpers'
 import { RateTable } from './RateTable'
 import { SaveCurveForm } from './SaveCurveForm'
 import { TenorTable } from './TenorTable'
@@ -45,7 +55,8 @@ interface DiscountRatesBlockProps {
  * price, whose yield is computed), a curve of the list (CMarket's of the bond's country, the
  * custom curves), or rates entered by cash-flow date or by standard tenor. The table lists the
  * bond's remaining cash-flow dates with the rate of each; a curve's rate changed makes the rates
- * entered. The rates shown may be saved as a custom curve.
+ * entered. With a curve or rates entered, each rate beside its reference and the spread, and the
+ * helpers above the table (decision 46). The rates shown may be saved as a custom curve.
  */
 export function DiscountRatesBlock({
   form,
@@ -63,11 +74,12 @@ export function DiscountRatesBlock({
   const priced = useBondPrice(submitted)
   const canSave = useHasPermission('analysis:save')
   const [saving, setSaving] = useState(false)
+  const [pasteError, setPasteError] = useState<string | null>(null)
   const { discount } = form
 
   const cmarketId = cmarketCurveId(form.country)
   const curveId = discount.mode === 'curve' ? (discount.curveId ?? cmarketId) : null
-  const curves = useCurves(form.country, discount.mode === 'curve')
+  const curves = useCurves(form.country, discount.mode !== 'yield')
   // CMarket's curve on the settlement date: the tenors start from it, a curve saved takes its date.
   const cmarket = useCurve(cmarketId, form.settlementDate)
   const chosen = useCurve(curveId === cmarketId ? null : curveId)
@@ -78,7 +90,10 @@ export function DiscountRatesBlock({
   const ytm = discount.byPrice ? pricedYield : form.ytm
   const allRows = rows ?? []
   const shown = shownRates(discount, allRows, { ytm, curve: curve?.points ?? null })
-  const setDiscount = (next: DiscountForm) => edit({ discount: next })
+  const setDiscount = (next: DiscountForm) => {
+    setPasteError(null)
+    edit({ discount: next })
+  }
   const switchTo = (change: { mode: DiscountChoice; entry?: RateEntry }) => {
     setSaving(false)
     setDiscount(
@@ -116,9 +131,38 @@ export function DiscountRatesBlock({
     })
   }
 
+  // Decision 46: each row beside the reference curve (the curve chosen, the one the rates started
+  // from, else CMarket's) and the spread to it.
+  const referenceId = referenceOf(discount, cmarketId)
+  const otherReference = useCurve(
+    discount.mode === 'rates' && referenceId !== cmarketId ? referenceId : null,
+  )
+  const reference =
+    referenceId === curveId ? curve : referenceId === cmarketId ? cmarket.data : otherReference.data
+  const references =
+    discount.mode === 'yield' ? null : referenceRates(reference?.points ?? null, allRows)
+  const table = { rows: allRows, shown }
+  const paste = (text: string, from = 0) => {
+    const { lines, bad } = parsePasted(text)
+    const error =
+      bad.length > 0
+        ? t('bondPricing.discount.helpers.badLines', { lines: bad.join(', ') })
+        : lines.length === 0
+          ? t('bondPricing.discount.helpers.nothing')
+          : null
+    const result = error ? null : pasteRates(discount, lines, { ...table, from })
+    if (result && result.unmatched === 0) {
+      setDiscount(result.discount)
+      return true
+    }
+    setPasteError(error ?? t('bondPricing.discount.helpers.unmatched'))
+    return false
+  }
+
   const ratesEditable =
     discount.mode === 'curve' || (discount.mode === 'rates' && discount.entry === 'dates')
   const tableError =
+    pasteError ??
     (outOfRange.has('rates') ? t('bondPricing.ranges.rates') : undefined) ??
     serverError('discount.rates') ??
     serverError('discount.tenors') ??
@@ -241,18 +285,34 @@ export function DiscountRatesBlock({
         </Field>
       )}
 
-      {discount.mode === 'rates' && discount.entry === 'tenors' && (
+      {discount.mode !== 'yield' && rows !== null && (
+        <RateHelpers
+          curves={curveOptions}
+          cmarketId={cmarketId}
+          date={form.settlementDate}
+          onStart={(started) => setDiscount(startFromCurve(discount, started, allRows))}
+          onShift={(bp) => setDiscount(shiftRates(discount, bp, table))}
+          onPaste={(text) => paste(text)}
+          onClear={() => setDiscount(clearRates(discount, table))}
+        />
+      )}
+
+      {discount.mode === 'rates' && discount.entry === 'tenors' && references && (
         <TenorTable
           tenors={discount.tenors}
+          references={references.tenors}
           onEdit={(tenor, rate) =>
             setDiscount({ ...discount, tenors: { ...discount.tenors, [tenor]: rate } })
           }
+          onPasteAt={(index, text) => void paste(text, index)}
         />
       )}
 
       <RateTable
         rows={rows}
         rates={shown}
+        references={references?.rows}
+        onPasteAt={ratesEditable ? (index, text) => void paste(text, index) : undefined}
         caption={t('bondPricing.discount.tableCaption')}
         onEdit={
           ratesEditable
@@ -263,6 +323,11 @@ export function DiscountRatesBlock({
       {tableError && (
         <p role="alert" className="font-sans text-title text-down">
           {tableError}
+        </p>
+      )}
+      {discount.mode === 'rates' && reference && (
+        <p className="font-sans text-title text-secondary">
+          {t('bondPricing.discount.referenceNote', { curve: curveLabel(reference) })}
         </p>
       )}
       <p className="font-sans text-title text-secondary">

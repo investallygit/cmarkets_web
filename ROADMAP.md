@@ -112,7 +112,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 52   | [MSG and N on the live site, the client's report](roadmap/steps/step-52-msg-and-n-on-the-live-site.md)               | Done   |
 | 53   | [Fifth version of the spec: the plan, its decisions, questions](roadmap/steps/step-53-fifth-version-plan.md)         | Done   |
 | 54   | [DES at the BVMAC fixing, the descriptions (screen 2)](roadmap/steps/step-54-security-profile-at-the-fixing.md)      | Done   |
-| 55   | [BP from a curve, custom curves (screen 16)](roadmap/steps/step-55-bond-pricing-from-a-curve.md)                     | Part 2 |
+| 55   | [BP from a curve, custom curves (screen 16)](roadmap/steps/step-55-bond-pricing-from-a-curve.md)                     | Done   |
 | 56   | [DES on an index: the index profile (screen 31)](roadmap/steps/step-56-index-profile.md)                             | To do  |
 | 57   | [DL: data download (screen 30), the Download buttons](roadmap/steps/step-57-data-download.md)                        | To do  |
 | 58   | [Fifth version done: README, accessibility, every flow](roadmap/steps/step-58-fifth-version-done.md)                 | To do  |

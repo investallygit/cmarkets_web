@@ -177,12 +177,30 @@
       "columns": {
         "date": "Cash-flow date",
         "years": "t (years)",
-        "rate": "Rate %"
+        "rate": "Rate %",
+        "tenor": "Tenor",
+        "reference": "Ref. %",
+        "spread": "Spread bp"
       },
       "rateOn": "Rate on {{date}}, %",
       "rateAt": "Rate at {{tenor}} ({{years}} yrs), %",
       "noDates": "The bond's cash-flow dates show once its characteristics are complete.",
       "tableCaption": "Discount rate of each remaining cash-flow date",
+      "referenceNote": "Reference: {{curve}}. Spread = rate − reference, in bp.",
+      "helpers": {
+        "label": "Rate helpers",
+        "start": "Start from a curve",
+        "shift": "Shift all rows",
+        "paste": "Paste from Excel",
+        "clear": "Clear",
+        "apply": "Apply",
+        "shiftBy": "Shift (bp)",
+        "pasteLabel": "Rates copied from Excel",
+        "pasteHint": "One rate a line, or a date and a rate. Pasting several cells into a rate fills the table from that row down.",
+        "badLines": "Line {{lines}} cannot be read: nothing changed.",
+        "nothing": "Nothing to paste.",
+        "unmatched": "Some lines match no row of the table (a date the bond does not pay on, or past the last row): nothing changed."
+      },
       "notes": {
         "yield": "Same rate for every cash-flow date (greyed). Pre-filled with the last computed YTM; editable.",
         "curve": "One rate per cash-flow date, read on the chosen curve (linear interpolation). Each rate can still be edited: the rates then become rates entered, which can be saved as a custom curve.",
