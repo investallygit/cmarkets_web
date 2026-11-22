@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useCommodity, useCommodityRelated } from '@/entities/commodity'
-import { useSecurityProfile, useStoredDescription } from '@/entities/security'
+import { useDescriptionVersions, useSecurityProfile } from '@/entities/security'
 import { CommodityForm } from '@/features/describe-commodity'
 import { DescriptionForm } from '@/features/describe-security'
 import { Panel } from '@/shared/ui/Panel'
@@ -14,8 +14,8 @@ interface DescriptionEditorPanelProps {
 
 /**
  * CORR: the description of the security picked for the price correction, in French and English,
- * as EQS shows it under its results (spec section 9, screen 3; ROADMAP decision 9); on a commodity,
- * its names, texts, CEMAC countries and related securities (screen 21).
+ * as DES and EQS show it (spec section 9, screens 2 and 3; ROADMAP decisions 9 and 40), with its
+ * versions; on a commodity, its names, texts, CEMAC countries and related securities (screen 21).
  */
 export function DescriptionEditorPanel({ securityId }: DescriptionEditorPanelProps) {
   const profile = useSecurityProfile(securityId ?? undefined)
@@ -44,7 +44,7 @@ function CommodityEditor({ code }: { code: string }) {
 function SecurityDescriptionEditor({ securityId }: DescriptionEditorPanelProps) {
   const { t } = useTranslation()
   const profile = useSecurityProfile(securityId ?? undefined)
-  const stored = useStoredDescription(securityId)
+  const versions = useDescriptionVersions('security', securityId)
   const code = profile.data?.code ?? securityId ?? ''
 
   return (
@@ -57,12 +57,12 @@ function SecurityDescriptionEditor({ securityId }: DescriptionEditorPanelProps) 
       {!securityId ? (
         <PanelEmpty message={t('corrections.description.pick')} />
       ) : (
-        <QueryView query={stored}>
+        <QueryView query={versions}>
           {(data) => (
             <DescriptionForm
               // A new form for each security; a save keeps it, so that its confirmation shows.
-              key={data.securityId}
-              stored={data}
+              key={data.objectId}
+              versions={data}
               code={code}
             />
           )}

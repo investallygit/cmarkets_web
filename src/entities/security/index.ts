@@ -4,16 +4,20 @@ export {
   securityKeys,
   useDividends,
   useIndicator,
-  useOrderBook,
   useSecurities,
   useSecurityHistory,
   useSecurityProfile,
   useSecuritySearch,
+  useSecuritySessions,
   useShareholders,
-  useTrades,
   type SecurityFilters,
 } from './api/queries'
-export { useDescribeSecurity, useStoredDescription } from './api/descriptionQueries'
+export {
+  descriptionKeys,
+  useDescribe,
+  useDescription,
+  useDescriptionVersions,
+} from './api/descriptionQueries'
 export { useSecurityRealtimeSync } from './api/useSecurityRealtimeSync'
 export {
   DESCRIPTION_LANGUAGES,
@@ -21,5 +25,6 @@ export {
   type DescriptionLanguage,
   type ShownDescription,
 } from './lib/description'
+export { tradesAtFixing } from './lib/fixing'
 export { SecurityListField } from './ui/SecurityListField'
 export { SecurityPicker } from './ui/SecurityPicker'

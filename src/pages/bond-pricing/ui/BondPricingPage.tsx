@@ -7,7 +7,9 @@ import { bondPricingPath } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import {
+  CalculationMethodPanel,
   CashFlowSchedulePanel,
+  CurveUsedPanel,
   PriceYieldPanel,
   PricingResultsPanel,
   RateSensitivityPanel,
@@ -20,7 +22,8 @@ const XAF = 'XAF'
 /**
  * Screen 16, bond pricing (BP): "ECMR 6.25 2029 BP" (/bp/{bondId}) opens it on that bond, BP and
  * YAS alone on the first of the master list. The inputs on the left; the results, the cash-flow
- * schedule, the price-yield curve and the rate sensitivity of the last calculation.
+ * schedule, the calculation method, the price-yield curve (or the curve used, fifth version) and
+ * the rate sensitivity of the last calculation.
  */
 export function BondPricingPage() {
   const { t } = useTranslation()
@@ -31,6 +34,7 @@ export function BondPricingPage() {
   const calculated = useBondPricingStore((state) => state.submitted)
   const seededFrom = useBondPricingStore((state) => state.seededFrom)
   const currency = useBondPricingStore((state) => state.form?.currency ?? XAF)
+  const country = useBondPricingStore((state) => state.form?.country ?? null)
   // The figures of the bond the inputs hold: not the last bond's beside a bond the address names
   // and the API does not know (B56).
   const submitted = seededFrom === current ? calculated : null
@@ -55,8 +59,14 @@ export function BondPricingPage() {
       ),
     results: <PricingResultsPanel request={submitted} currency={currency} />,
     cashFlows: <CashFlowSchedulePanel request={submitted} />,
-    priceYield: <PriceYieldPanel request={submitted} />,
+    // From a curve or rates entered, the curve used in place of the price-yield relationship.
+    priceYield: submitted?.discount ? (
+      <CurveUsedPanel request={submitted} country={country} />
+    ) : (
+      <PriceYieldPanel request={submitted} />
+    ),
     sensitivity: <RateSensitivityPanel request={submitted} />,
+    method: <CalculationMethodPanel request={submitted} />,
   }
   return <ScreenWorkspace screenId="BP" defaultLayout={BOND_PRICING_LAYOUT} panels={panels} />
 }

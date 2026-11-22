@@ -17,7 +17,8 @@
       "etf-profiles": "Profils d’ETF",
       "etf-nav": "VL et fourchettes des ETF",
       "macro": "Indicateurs macroéconomiques",
-      "commodity-prices": "Cours des matières premières"
+      "commodity-prices": "Cours des matières premières",
+      "descriptions": "Descriptions"
     },
     "frequencies": {
       "session": "Chaque séance",
@@ -251,7 +252,8 @@
       "etf-profiles": "la fiche du gestionnaire",
       "etf-nav": "les données du gestionnaire ou du teneur de marché",
       "macro": "le rapport indiqué sur la ligne",
-      "commodity-prices": "la source indiquée sur la ligne"
+      "commodity-prices": "la source indiquée sur la ligne",
+      "descriptions": "la source indiquée sur la ligne"
     },
     "selected": {
       "alert": "Ligne {{row}} sélectionnée : vérifiez {{field}} dans {{source}}, corrigez si besoin, puis cochez « Alerte vérifiée ».",
@@ -295,7 +297,8 @@
       "etf-profiles": "À la publication : les ETF sont référencés ou décrits à nouveau, leurs lignes et répartitions remplacées quand le fichier les donne, et leurs chiffres recalculés (ETFS, DES) ; un événement DataPublished est envoyé aux écrans ouverts.",
       "etf-nav": "À la publication : les primes, décotes et fourchettes des ETF sont recalculées (ETFS) ; un événement DataPublished est envoyé aux écrans ouverts.",
       "macro": "À la publication : les indicateurs macroéconomiques d’ECO (tuiles, graphique, comparaison CEMAC) sont relus, la source affichée à côté de chaque chiffre ; un événement DataPublished est envoyé aux écrans ouverts.",
-      "commodity-prices": "À la publication : le complément CEMAC de CMDTY (liste, historique, statistiques) est relu, la source affichée dans ses données, et les alertes sur une nouvelle valeur se déclenchent ; un événement DataPublished est envoyé aux écrans ouverts."
+      "commodity-prices": "À la publication : le complément CEMAC de CMDTY (liste, historique, statistiques) est relu, la source affichée dans ses données, et les alertes sur une nouvelle valeur se déclenchent ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "descriptions": "À la publication : chaque ligne est une nouvelle version de la description de sa valeur, affichée aussitôt sur DES et EQS ; une annulation retire les versions qu'elle a ajoutées."
     },
     "fix": {
       "title": "Corriger la ligne {{row}}",
@@ -409,7 +412,7 @@
     "description": {
       "title": "{{code}} — Description",
       "pick": "Choisissez un titre dans la correction de cours pour rédiger sa description.",
-      "intro": "Activité, marchés, historique de cotation : ce qu'EQS affiche sous ses résultats, 2 000 caractères par langue.",
+      "intro": "Activité, marchés, actionnaires, stratégie, dates clés : ce qu'affichent DES et EQS, 1 500 caractères par langue, avec les documents dont le texte est tiré. Chaque enregistrement est une nouvelle version.",
       "languages": {
         "fr": "Français",
         "en": "Anglais"
@@ -419,17 +422,27 @@
         "en": "anglais"
       },
       "count": "{{count}} / {{max}} caractères",
-      "written": "rédigée par {{who}} le {{when}}",
+      "written": "version {{version}}, rédigée par {{who}} le {{when}}",
       "empty": {
-        "eodhd": "vide : EQS affiche l'anglais d'EODHD, ci-dessous",
-        "other": "vide : EQS affiche le texte en {{other}}, signalé",
-        "none": "vide : EQS n'affiche aucune description"
+        "eodhd": "vide : DES et EQS affichent l'anglais d'EODHD, ci-dessous",
+        "other": "vide : DES et EQS affichent le texte en {{other}}, signalé",
+        "none": "vide : DES et EQS n'affichent aucune description"
       },
       "eodhd": "Anglais d'EODHD, chargé le {{when}}",
       "tooLong": "{{max}} caractères au plus.",
       "submit": "Enregistrer la description",
       "unchanged": "Modifiez un texte pour l'enregistrer.",
-      "saved": "{{code}} : description enregistrée."
+      "saved": "{{code}} : description enregistrée.",
+      "sources": {
+        "fr": "Source du texte français",
+        "en": "Source du texte anglais"
+      },
+      "sourceHint": "Les documents dont il est tiré, par exemple le rapport annuel 2025 de l'émetteur.",
+      "history_one": "Une version antérieure",
+      "history_other": "{{count}} versions antérieures",
+      "versionLine": "Version {{version}}, {{who}}, {{when}}",
+      "fromFile": "fichier DESCRIPTIONS",
+      "removed": "Langue retirée."
     }
   },
   "content": {

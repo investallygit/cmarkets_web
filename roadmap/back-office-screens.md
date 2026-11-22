@@ -86,6 +86,10 @@ by which step, and what is still to do. The terminal's screens are in
 - **After step 50's release**: an upload of a retired file ("Curves and rates") shows its rows with
   the template it had, where IMP showed "Loading" for ever. See
   [step 50](steps/step-50-page-bug-sweep.md#after-the-release).
+- **Built in step 54 (fifth version)**: the `DESCRIPTIONS` file, each row a new version of a
+  description (decision 40), rolled back with its upload.
+- **Fifth version (step 56)**: the `INDEX_CONSTITUENTS` file, BVMAC-A's members and weights
+  (decision 42).
 
 ## CORR · Data corrections (no mockup): done
 
@@ -105,6 +109,8 @@ by which step, and what is still to do. The terminal's screens are in
   and equities, ten at most, in place of the description; AUDT keeps what changed.
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): each price field holds its
   value (B33).
+- **Built in step 54 (fifth version)**: a description's versions, each language with its source,
+  1,500 characters, on the spec's routes (decision 40); an index's description in step 56.
 
 ## NEWS · News and documents (no mockup): done
 
@@ -125,6 +131,8 @@ by which step, and what is still to do. The terminal's screens are in
   newspapers).
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the Publishers' confirmation
   submits only itself (B79), the panel's actions stay in its title bar (B28).
+- **Fifth version (step 56)**: an index as a document's subject: its methodology, notices,
+  factsheets and constituents' history (decision 44).
 
 ## USER · Account administration (screen 9): done, with ANLY and MOD
 
@@ -163,6 +171,8 @@ by which step, and what is still to do. The terminal's screens are in
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): an employee's type stays
   readable on a selected row (B22), the counters keep their names (B29), Last login sorts both ways
   (B81), Change type offers the account's family only (B92); ANLY's columns keep their text (B34).
+- **Fifth version (step 57)**: the download log, by period and dataset, for the data licences
+  (`GET /admin/exports/log`).
 
 ## ADMCFG · Platform settings (no mockup): done
 
@@ -208,6 +218,8 @@ by which step, and what is still to do. The terminal's screens are in
 - **Fourth version (steps 42 to 47)**: the key of OPT in the matrix (step 42).
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the quotas fit their panel
   (B35) and a quota refused is said (B91).
+- **Fifth version (step 57)**: the sources whose data may be downloaded and each profile's
+  download limits (decision 41).
 
 ## AUDT · Audit log (no mockup): done
 

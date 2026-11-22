@@ -38,7 +38,7 @@ function ScreenerResults() {
 
 function ScreenerDescription() {
   const { selected } = useSelectedRow()
-  return <SecurityDescriptionPanel securityId={selected?.securityId} code={selected?.code} />
+  return <SecurityDescriptionPanel id={selected?.securityId} code={selected?.code} screen="EQS" />
 }
 
 // The selected security against the other results.

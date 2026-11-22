@@ -51,16 +51,18 @@ test("the selected security's description shows under the results, in English or
   await results.getByRole('row', { name: /SEMC/ }).click()
   // The Data admin's text of the screen 3 mockup, in the screen's language first.
   const description = panel(page, 'SEMC — Description')
-  await expect(description).toContainText('Source: Data admin')
+  await expect(description).toContainText(
+    "Source: Issuer's 2025 annual report · written by CMarket · updated",
+  )
   await expect(description.getByRole('tab', { name: '[EN]' })).toHaveAttribute(
     'aria-selected',
     'true',
   )
   await expect(description).toContainText(
-    'Société des Eaux Minérales du Cameroun produces and distributes mineral water',
+    'Société des Eaux Minérales du Cameroun (SEMC) produces and distributes mineral water',
   )
   await description.getByRole('tab', { name: 'FR' }).click()
-  await expect(description.getByText(/produit et distribue des eaux minérales/)).toHaveAttribute(
+  await expect(description.getByText(/produit et distribue de l'eau minérale/)).toHaveAttribute(
     'lang',
     'fr',
   )

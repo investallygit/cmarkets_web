@@ -10,7 +10,7 @@ export const PERMISSION_GROUPS: readonly {
   {
     id: 'market',
     label: 'permissions.groups.market',
-    permissions: ['market:read', 'market:realtime', 'market:orderbook'],
+    permissions: ['market:read', 'market:realtime', 'market:intraday'],
   },
   {
     id: 'analysis',
@@ -49,7 +49,11 @@ export const PERMISSION_GROUPS: readonly {
     label: 'permissions.groups.rfq',
     permissions: ['rfq:trade', 'svt:approve', 'rfq:read', 'rfq:report'],
   },
-  { id: 'data', label: 'permissions.groups.data', permissions: ['data:import', 'content:publish'] },
+  {
+    id: 'data',
+    label: 'permissions.groups.data',
+    permissions: ['data:import', 'content:publish', 'descriptions:write'],
+  },
   {
     id: 'admin',
     label: 'permissions.groups.admin',
@@ -67,7 +71,7 @@ export const PERMISSION_GROUPS: readonly {
 export const PERMISSION_LABELS: Record<Permission, TranslationKey> = {
   'market:read': 'permissions.labels.marketRead',
   'market:realtime': 'permissions.labels.marketRealtime',
-  'market:orderbook': 'permissions.labels.marketOrderbook',
+  'market:intraday': 'permissions.labels.marketIntraday',
   'analysis:read': 'permissions.labels.analysisRead',
   'analysis:export': 'permissions.labels.analysisExport',
   'analysis:save': 'permissions.labels.analysisSave',
@@ -89,6 +93,7 @@ export const PERMISSION_LABELS: Record<Permission, TranslationKey> = {
   'news:payments': 'permissions.labels.newsPayments',
   'data:import': 'permissions.labels.dataImport',
   'content:publish': 'permissions.labels.contentPublish',
+  'descriptions:write': 'permissions.labels.descriptionsWrite',
   'users:manage': 'permissions.labels.usersManage',
   'subscriptions:manage': 'permissions.labels.subscriptionsManage',
   'moderation:manage': 'permissions.labels.moderationManage',

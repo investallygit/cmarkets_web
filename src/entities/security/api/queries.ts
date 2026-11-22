@@ -3,20 +3,14 @@ import type { IndicatorType, SearchResultsDto, SecuritySearchItemDto } from '@/s
 import { analysisApi, securitiesApi, type SecurityFilters } from '@/shared/api/endpoints'
 import { periodRange, type ChartPeriod } from '@/shared/lib/chartPeriods'
 
-/** The order book and the trades have no real-time event (spec section 10): they are polled. */
-const INTRADAY_POLL_MS = 5_000
-
 export const securityKeys = {
   all: ['securities'] as const,
   search: (query: string) => ['search', query] as const,
   of: (id: string) => [...securityKeys.all, id] as const,
   profile: (id: string) => [...securityKeys.of(id), 'profile'] as const,
-  /** The texts stored, as CORR shows them; the profile carries the ones the screens show. */
-  description: (id: string) => [...securityKeys.of(id), 'description'] as const,
   history: (id: string, period: ChartPeriod) =>
     [...securityKeys.of(id), 'history', period] as const,
-  orderBook: (id: string) => [...securityKeys.of(id), 'orderbook'] as const,
-  trades: (id: string) => [...securityKeys.of(id), 'trades'] as const,
+  sessions: (id: string, last: number) => [...securityKeys.of(id), 'sessions', last] as const,
   dividends: (id: string) => [...securityKeys.of(id), 'dividends'] as const,
   shareholders: (id: string) => [...securityKeys.of(id), 'shareholders'] as const,
   indicator: (id: string, type: IndicatorType, length: number, period: ChartPeriod) =>
@@ -96,22 +90,15 @@ export function useSecurityHistory(id: string, period: ChartPeriod) {
   return useQuery({ ...securityHistoryQuery(id, period), placeholderData: keepPreviousData })
 }
 
-/** Best limits; not part of a Student account (spec section 12). */
-export function useOrderBook(id: string, enabled = true) {
+/**
+ * The latest sessions with trades, newest first (spec section 9, screen 2, fifth version): BVMAC
+ * trades at a fixing, so the list moves once a session; a fixing's QuoteUpdated refreshes it.
+ */
+export function useSecuritySessions(id: string, last: number) {
   return useQuery({
-    queryKey: securityKeys.orderBook(id),
-    queryFn: ({ signal }) => securitiesApi.orderBook(id, signal),
-    refetchInterval: INTRADAY_POLL_MS,
-    enabled,
-  })
-}
-
-export function useTrades(id: string, enabled = true) {
-  return useQuery({
-    queryKey: securityKeys.trades(id),
-    queryFn: ({ signal }) => securitiesApi.trades(id, signal),
-    refetchInterval: INTRADAY_POLL_MS,
-    enabled,
+    queryKey: securityKeys.sessions(id, last),
+    queryFn: ({ signal }) => securitiesApi.sessions(id, last, signal),
+    placeholderData: keepPreviousData,
   })
 }
 

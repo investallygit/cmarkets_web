@@ -602,3 +602,43 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   for 30 days, untold, decision 30)? Which numbers does mobile money take (the plan: those of the
   six CEMAC countries, decision 31)? With one SVT account, may a bank approve above its four-eyes
   threshold (the plan: yes, that account alone, decision 32)?
+
+## Fifth version
+
+- **BVMAC at the fixing, fifth version**: at what time is the fixing published (the plan: the
+  session's close, 14:00 in Douala, decision 38), and what does "Market open" mean before it? The
+  European and US prices: intraday under which licence (the plan: their closes, as before)? Which
+  screens may still say "real-time" once BVMAC's prices change once a session?
+- **Screen 2, fifth version**: the tabs leave out ANA, which screen 8 still places "in the ANA tab
+  of the security profile" (the plan: ANA stays, decision 39). "12 sessions shown, choice of 10,
+  20 or 60": the plan reads 12 as the panel's height and loads 20 first. A description "written
+  by the Data admin or a CMarket analyst", with "Edit" on DES: the Data admin sees no client
+  screen, and "CMarket analyst" is no account type (the plan: an Analyst of CMarket's own
+  organisation, decision 40). May readers see a description's earlier versions (the plan: CORR
+  only)? It holds 1,500 characters, where step 35 took 2,000 from the earlier text.
+- **BP, fifth version**: the CEMAC curves are yields of coupon-paying securities, read as
+  zero-coupon rates as the spec names them (decision 45): should CMarket bootstrap zero rates
+  from them? The Z-spread is "against the market price": a bond entered by hand has none, and a
+  bond priced by the model (section 14.4)? What may colleagues do with a custom curve shared with
+  the organisation (the plan: use it, not change it)? The new test cases B and C share their
+  letters with the amortizing case B of the same section (the code: "curve case B", "curve case
+  C").
+- **DL, fifth version**: the spec's own point, downloading EODHD's data under its licence (the
+  plan: a switch per source in ADMCFG, EODHD's off by default, decision 41). The table of limits
+  has no row for the News provider and the Data admin (the plan: the Journalist's and the
+  Admin's, decision 43). The CEO's row leaves out the RFQ, while screen 23 lets the CEO read and
+  export its organisation's agreements (the plan: the CEO downloads them). The Admin's "All": the
+  plan keeps the clients' portfolios out, as the scope rule says. A scheduled export "e-mailed if
+  requested": the file attached, or a link to "My downloads" (the plan: the link, the file kept 7
+  days)? Prices "adjusted for dividends and splits": the plan adjusts with the corporate actions
+  CMarket keeps. JSON has no sheets: "one sheet per security" makes one object per security (the
+  plan).
+- **Index profile, fifth version**: where do BVMAC's published weights come from (the plan: an
+  `INDEX_CONSTITUENTS` file, decision 42)? The mockup's description names a total-return
+  BVMAC-A TR, which no screen lists (the plan: not built). MKT's MCAP row is no index (the plan:
+  no profile, decision 44). An index's dividend yield: its members' yields weighted (the plan)?
+  The Bonds index's constituents are bonds: their contribution on the clean price (the plan)?
+- **BP's entry panel, the client's answer of 22 November**: the reference curve's rate, the spread
+  in bp and the helpers (start from a curve, shift all rows, paste from Excel, clear) are not in the
+  spec. Which curve is the reference when the rates were typed from nothing (the plan: the CMarket
+  curve of the bond's country, decision 46), and is the spread in bp to one decimal?

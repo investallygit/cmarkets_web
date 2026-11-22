@@ -18,7 +18,14 @@ function buildColumns(
   format: ReturnType<typeof useFormat>,
 ): DataColumns<BondPriceCashFlowDto> {
   const figure = (
-    key: 'years' | 'coupon' | 'principal' | 'cashFlow' | 'discountFactor' | 'presentValue',
+    key:
+      | 'years'
+      | 'coupon'
+      | 'principal'
+      | 'cashFlow'
+      | 'zeroRatePct'
+      | 'discountFactor'
+      | 'presentValue',
     decimals: number,
     width: string,
     className?: string,
@@ -40,6 +47,7 @@ function buildColumns(
     figure('coupon', 4, '0.9fr'),
     figure('principal', 4, '0.9fr'),
     figure('cashFlow', 4, '1.1fr'),
+    figure('zeroRatePct', 3, '0.9fr', 'text-accent-amber'),
     figure('discountFactor', 6, '1.1fr', 'text-secondary'),
     figure('presentValue', 4, '1fr'),
   ]
@@ -51,7 +59,8 @@ interface CashFlowSchedulePanelProps {
 
 /**
  * Screen 16, cash-flow schedule: each payment still to come per 100 of the principal outstanding,
- * its time in years, its discount factor and present value; the total is the dirty price. XLSX for
+ * its time in years, the zero rate it is discounted at (the yield on every row with one yield,
+ * fifth version), its discount factor and present value; the total is the dirty price. XLSX for
  * the accounts that export.
  */
 export function CashFlowSchedulePanel({ request }: CashFlowSchedulePanelProps) {

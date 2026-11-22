@@ -172,8 +172,7 @@
     "alertsToday": "Mes alertes déclenchées aujourd'hui",
     "sessionSummary": "Résumé de séance",
     "priceChart": "Graphique de cours",
-    "orderBook": "Carnet d'ordres",
-    "latestTrades": "Dernières transactions",
+    "recentSessions": "Cours des dernières séances",
     "keyData": "Données clés",
     "dividends": "Dividendes",
     "documentsNews": "Documents et actualités",
@@ -289,6 +288,7 @@
     "cashFlowSchedule": "Échéancier des flux",
     "priceYield": "Relation prix-rendement",
     "rateSensitivity": "Sensibilité aux taux",
+    "calculationMethod": "Méthode de calcul",
     "priceYieldHistory": "Historique prix et rendement",
     "todaysAnalytics": "Analyse du jour",
     "bondRatings": "Notations",
@@ -449,7 +449,8 @@
       "1Y": "1 an",
       "5Y": "5 ans",
       "10Y": "10 ans"
-    }
+    },
+    "closingFixing": "Cours de clôture (fixing)"
   },
   "countries": {
     "CM": "Cameroun",

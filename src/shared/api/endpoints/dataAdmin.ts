@@ -2,6 +2,8 @@ import type {
   CommodityProfileDto,
   CommodityWriteDto,
   CoverageDto,
+  DescribedObject,
+  DescriptionVersionsDto,
   DescriptionWriteDto,
   DocumentDto,
   DocumentWriteDto,
@@ -18,7 +20,6 @@ import type {
   Paged,
   PriceCorrectionDto,
   PriceCorrectionRequestDto,
-  StoredDescriptionDto,
   StoredPriceDto,
 } from '../contracts'
 import { answer, route, send, sendBlob, sendForm } from './define'
@@ -64,8 +65,8 @@ export const dataAdminRoutes = {
   storedPrices: route('GET', '/data/securities/{id}/prices', answer<StoredPriceDto[]>()),
   correctPrice: route('PUT', '/data/securities/{id}/prices/{date}', answer<PriceCorrectionDto>()),
   corrections: route('GET', '/data/corrections', answer<Paged<PriceCorrectionDto>>()),
-  description: route('GET', '/data/securities/{id}/description', answer<StoredDescriptionDto>()),
-  describe: route('PUT', '/data/securities/{id}/description', answer<StoredDescriptionDto>()),
+  descriptions: route('GET', '/admin/descriptions/{type}/{id}', answer<DescriptionVersionsDto>()),
+  describe: route('PUT', '/admin/descriptions/{type}/{id}', answer<DescriptionVersionsDto>()),
   describeCommodity: route('PUT', '/data/commodities/{code}', answer<CommodityProfileDto>()),
   eodhdStatus: route('GET', '/data/providers/eodhd/status', answer<EodhdStatusDto>()),
   createNews: route('POST', '/data/news', answer<NewsArticleDto>()),
@@ -128,12 +129,12 @@ export const dataAdminApi = {
     query: { securityId: string | null; page: number; pageSize: number },
     signal?: AbortSignal,
   ) => send(dataAdminRoutes.corrections, { query, signal }),
-  /** A security's description as stored: the Data admin's French and English, EODHD's apart. */
-  description: (id: string, signal?: AbortSignal) =>
-    send(dataAdminRoutes.description, of(id, signal)),
-  /** The Data admin's texts, an empty one removed (CORR). */
-  describe: (id: string, description: DescriptionWriteDto) =>
-    send(dataAdminRoutes.describe, { params: { id }, body: description }),
+  /** Every version CMarket wrote of a description, EODHD's English apart (CORR, DES's Edit). */
+  descriptions: (type: DescribedObject, id: string, signal?: AbortSignal) =>
+    send(dataAdminRoutes.descriptions, { params: { type, id }, signal }),
+  /** A new version of one language, an empty text removing it (`descriptions:write`). */
+  describe: (type: DescribedObject, id: string, description: DescriptionWriteDto) =>
+    send(dataAdminRoutes.describe, { params: { type, id }, body: description }),
   /** A commodity's names, texts, CEMAC countries and related securities (CORR). */
   describeCommodity: (code: string, commodity: CommodityWriteDto) =>
     send(dataAdminRoutes.describeCommodity, { params: { code }, body: commodity }),

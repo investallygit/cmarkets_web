@@ -7,6 +7,7 @@ import {
   rangeErrors,
   redemptionsOf,
   scheduleAddsUp,
+  scheduleRequest,
   toRequest,
   type PricingForm,
 } from './pricingForm'
@@ -155,5 +156,47 @@ describe('the inputs of bond pricing (spec screen 16)', () => {
     expect(hasChanged(form, submitted)).toBe(false)
     expect(hasChanged({ ...form, ytm: 6 }, submitted)).toBe(true)
     expect(hasChanged({ ...form, bondId: null }, submitted)).toBe(true)
+  })
+
+  it('prices at a clean price, a curve or the rates entered in place of the yield', () => {
+    const list = formOf(ECMR, MARKET)
+    const byPrice = {
+      ...CASE_A,
+      discount: { ...CASE_A.discount, byPrice: true, cleanPrice: 101.4 },
+    }
+    const curve = { ...list, ytm: null, discount: { ...list.discount, mode: 'curve' as const } }
+    const rates = {
+      ...list,
+      discount: { ...list.discount, mode: 'rates' as const, rates: { '2026-11-04': 4.8 } },
+    }
+
+    expect(toRequest(byPrice)).toMatchObject({ cleanPrice: 101.4 })
+    expect(toRequest(byPrice)).not.toHaveProperty('ytm')
+    // The yield is not block B's in curve mode: none needed, none sent.
+    expect(toRequest(curve)).toEqual({
+      bondId: ECMR.id,
+      settlementDate: '2026-10-30',
+      discount: { mode: 'curve', curveId: 'cmkt-CM' },
+      faceAmount: 100_000_000,
+    })
+    expect(toRequest(rates, ['2026-11-04'])?.discount).toEqual({
+      mode: 'rates',
+      rates: [{ date: '2026-11-04', ratePct: 4.8 }],
+    })
+    expect(toRequest(rates, ['2026-11-04', '2027-11-04'])).toBeNull()
+  })
+
+  it('names a clean price or a rate out of range, and reads the dates at any yield', () => {
+    const byPrice = { ...CASE_A, discount: { ...CASE_A.discount, byPrice: true, cleanPrice: 0 } }
+    const rates = {
+      ...CASE_A,
+      ytm: 500,
+      discount: { ...CASE_A.discount, mode: 'rates' as const, rates: { '2026-11-04': -6 } },
+    }
+
+    expect([...rangeErrors(byPrice)]).toEqual(['cleanPrice'])
+    expect([...rangeErrors(rates)]).toEqual(['rates'])
+    expect(scheduleRequest(rates)).toMatchObject({ ytm: 5, maturityDate: '2029-11-04' })
+    expect(scheduleRequest({ ...CASE_A, faceAmount: 0 })).toEqual(toRequest({ ...CASE_A, ytm: 5 }))
   })
 })

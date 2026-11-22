@@ -267,19 +267,25 @@ test("CORR writes a security's French description, which EQS shows", async ({ pa
   await asDataAdmin(page)
   await page.goto('/data/corrections?security=SCG-RE')
   const editor = panel(page, 'SCG-RE — Description')
-  const french = editor.getByRole('textbox', { name: 'French' })
+  const french = editor.getByRole('textbox', { name: 'French', exact: true })
   // The demo's: English only, which EQS shows in French too, marked.
   await expect(french).toHaveValue('')
-  await expect(editor).toContainText('empty: EQS shows the English text, marked')
-  await expect(editor.getByRole('textbox', { name: 'English' })).toHaveValue(
+  await expect(editor).toContainText('empty: DES and EQS show the English text, marked')
+  await expect(editor.getByRole('textbox', { name: 'English', exact: true })).toHaveValue(
     /reinsures insurance companies/,
   )
   await french.fill(
     "La SCG-Ré réassure les compagnies d'assurances du Gabon et d'ailleurs en Afrique.",
   )
+  await editor
+    .getByRole('textbox', { name: 'Source of the French text' })
+    .fill('Rapport annuel 2025')
   await editor.getByRole('button', { name: 'Save the description' }).click()
   await expect(page.getByText('SCG-RE: description saved.')).toBeVisible()
-  await expect(editor.getByText(/^\d+ \/ 2,000 characters · written by /)).toHaveCount(2)
+  // Each language's latest version, with who wrote it (ROADMAP decision 40).
+  await expect(editor.getByText(/^\d+ \/ 1,500 characters · version \d+, written by /)).toHaveCount(
+    2,
+  )
 
   await switchAccount(page, /data admin/i, 'Analyst', /analyst/i)
   await page.goto('/eqs')
@@ -289,11 +295,15 @@ test("CORR writes a security's French description, which EQS shows", async ({ pa
   const description = panel(page, 'SCG-RE — Description')
   await description.getByRole('tab', { name: 'FR' }).click()
   await expect(description).toContainText('La SCG-Ré réassure les compagnies')
+  await expect(description).toContainText('Source: Rapport annuel 2025 · written by CMarket')
 
-  // Back to the demo's: the French removed, EQS shows the English again.
+  // Back to the demo's: a version that removes the French, the earlier ones listed; EQS shows the
+  // English again.
   await switchAccount(page, /analyst/i, 'Data admin', /data admin/i)
   await page.goto('/data/corrections?security=SCG-RE')
-  await panel(page, 'SCG-RE — Description').getByRole('textbox', { name: 'French' }).fill('')
+  await panel(page, 'SCG-RE — Description')
+    .getByRole('textbox', { name: 'French', exact: true })
+    .fill('')
   await panel(page, 'SCG-RE — Description')
     .getByRole('button', { name: 'Save the description' })
     .click()

@@ -14,6 +14,8 @@ import type {
   BondScreenerQuery,
   BondScreenerResultDto,
   BondSummaryDto,
+  CurveDto,
+  CurveSummaryDto,
   MarketYieldDto,
   PriceYieldCurveDto,
   YieldCurveDto,
@@ -32,6 +34,14 @@ export interface PriceYieldQuery {
   /** In points: 0.25 by default. */
   step?: number
   settlementDate?: string
+}
+
+/** BP's curves (fifth version): CMarket's of each country on the session, and the custom curves. */
+export interface CurveQuery {
+  /** Every CEMAC country when absent. */
+  country?: string
+  /** The latest session when absent. */
+  date?: string
 }
 
 export interface YieldCurveQuery {
@@ -63,6 +73,8 @@ export const bondsRoutes = {
   analyticsHistory: route('GET', '/bonds/{id}/analytics/history', answer<BondAnalyticsDayDto[]>()),
   ratings: route('GET', '/bonds/{id}/ratings', answer<BondRatingsDto>()),
   cashFlows: route('GET', '/bonds/{id}/cashflows', answer<BondCashFlowsDto>()),
+  curves: route('GET', '/curves', answer<CurveSummaryDto[]>()),
+  curve: route('GET', '/curves/{id}/points', answer<CurveDto>()),
 }
 
 export const bondsApi = {
@@ -105,4 +117,10 @@ export const bondsApi = {
   /** The payments from today and the days to the next coupon (screen 20). */
   cashFlows: (id: string, signal?: AbortSignal) =>
     send(bondsRoutes.cashFlows, { params: { id }, signal }),
+  /** BP's curves: CMarket's of the country, then the custom curves the user may use (ROADMAP decision 45). */
+  curves: (query: CurveQuery, signal?: AbortSignal) =>
+    send(bondsRoutes.curves, { query: { ...query }, signal }),
+  /** A curve and its points by time: "cmkt-CM" for CMarket's curve of Cameroon, else a custom curve's id. */
+  curve: (id: string, date?: string, signal?: AbortSignal) =>
+    send(bondsRoutes.curve, { params: { id }, query: { date }, signal }),
 }

@@ -360,7 +360,7 @@
     "labels": {
       "marketRead": "Cours et indices",
       "marketRealtime": "Cours en temps réel",
-      "marketOrderbook": "Carnet d'ordres, intraday",
+      "marketIntraday": "Intraday Europe et États-Unis (licence EODHD)",
       "analysisRead": "Analyse technique et fondamentale, courbes",
       "analysisExport": "Exports XLSX / CSV",
       "analysisSave": "Enregistrer des filtres et des tracés",
@@ -382,6 +382,7 @@
       "newsPayments": "Journaux, IA de CMarket, clients d'ingestion (SRC) ; paiements des médias",
       "dataImport": "Charger les fichiers, corriger les données",
       "contentPublish": "Publier actualités et documents d'émetteurs",
+      "descriptionsWrite": "Rédiger les descriptions des valeurs et des indices",
       "usersManage": "Créer, suspendre, changer le type d'un compte",
       "subscriptionsManage": "Abonnements, leurs paiements et factures (SUBS)",
       "moderationManage": "Approuver les statuts (Analyste, Journaliste, Dirigeant, Éditeur de presse), modérer",
@@ -461,7 +462,8 @@
       "subscription-reactivate": "Suspension d’abonnement levée",
       "invoice-resend": "Facture renvoyée",
       "security-describe": "Description d'un titre",
-      "commodity-describe": "Description d'une matière première"
+      "commodity-describe": "Description d'une matière première",
+      "index-describe": "Description d'un indice"
     },
     "fields": {
       "accountType": "Type",
@@ -562,7 +564,8 @@
       "clickAnomaly": "Anomalie de clics",
       "subscription": "Abonnement",
       "invoice": "Facture",
-      "security": "Titre"
+      "security": "Titre",
+      "index": "Indice"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",

@@ -20,3 +20,34 @@ export function priceTicks(
   for (let index = 0; low + index * step <= high + 1e-9; index += 1) ticks.push(low + index * step)
   return { low, high, ticks }
 }
+
+interface RatePoint {
+  years: number
+  ratePct: number
+}
+
+/**
+ * The years a curve chart shows and the curve's points in them: from 0 to a whole year past the
+ * last cash flow, half as far again (two years at least) where the curve goes on; the curve cut at
+ * that year at its interpolated rate, so that its line reaches the edge.
+ */
+export function curveWindow(
+  curve: readonly RatePoint[],
+  flowYears: readonly number[],
+): { high: number; points: RatePoint[] } {
+  const sorted = [...curve].sort((left, right) => left.years - right.years)
+  const lastFlow = Math.max(0, ...flowYears)
+  const lastNode = sorted.at(-1)?.years ?? 0
+  const reach = Math.max(lastFlow * 1.5, lastFlow + 2)
+  const high = Math.max(1, Math.ceil(Math.min(Math.max(lastNode, lastFlow), reach)))
+  const points = sorted.filter((point) => point.years <= high)
+  const after = sorted.find((point) => point.years > high)
+  const before = points.at(-1)
+  if (after && before && before.years < high) {
+    const ratePct =
+      before.ratePct +
+      ((after.ratePct - before.ratePct) * (high - before.years)) / (after.years - before.years)
+    points.push({ years: high, ratePct })
+  }
+  return { high, points }
+}

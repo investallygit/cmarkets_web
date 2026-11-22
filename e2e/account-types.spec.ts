@@ -41,7 +41,7 @@ test('a Journalist reads the analysis without portfolios, saved screens, drawing
   await expect(results.getByRole('button', { name: 'XLSX' })).toHaveCount(0)
 
   await page.goto('/securities/SEMC/gp')
-  const chart = panel(page, 'Price chart')
+  const chart = panel(page, 'Closing price (fixing)')
   await expect(chart.getByRole('button', { name: 'Compare' })).toBeVisible()
   await expect(chart.getByRole('button', { name: 'Trend line' })).toHaveCount(0)
 })

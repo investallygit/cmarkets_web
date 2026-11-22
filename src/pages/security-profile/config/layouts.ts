@@ -7,11 +7,11 @@ type Layouts = Partial<Record<SecurityFunction, readonly ScreenPanel[]>>
 /**
  * Default panels of each tab of an equity's profile and of the tabs every profile shares (N, DOC,
  * ANA), in grid units (12 columns x 26 rows). The DES tab follows the screen 2 mockup (spec
- * section 9):
+ * section 9, fifth version):
  *
- *   chart    chart    | orderbook
- *   chart    chart    | trades
- *   keydata | income  | documents
+ *   chart        chart   | sessions
+ *   description          | sessions
+ *   keydata | income     | documents
  *
  * "income" holds the dividends. FA shows the comparison and the statements of the screen 3
  * mockup, with the ratios and the price chart.
@@ -19,12 +19,12 @@ type Layouts = Partial<Record<SecurityFunction, readonly ScreenPanel[]>>
 // prettier-ignore
 const PROFILE_LAYOUTS: Layouts = {
   des: [
-    { i: 'chart', name: 'priceChart', x: 0, y: 0, w: 8, h: 16, minW: 4, minH: 8 },
-    { i: 'orderbook', name: 'orderBook', x: 8, y: 0, w: 4, h: 8, minW: 3, minH: 5 },
-    { i: 'trades', name: 'latestTrades', x: 8, y: 8, w: 4, h: 8, minW: 3, minH: 4 },
-    { i: 'keydata', name: 'keyData', x: 0, y: 16, w: 4, h: 10, minW: 3, minH: 5 },
-    { i: 'income', name: 'securityIncome', x: 4, y: 16, w: 4, h: 10, minW: 3, minH: 4 },
-    { i: 'documents', name: 'documentsNews', x: 8, y: 16, w: 4, h: 10, minW: 3, minH: 4 },
+    { i: 'chart', name: 'priceChart', x: 0, y: 0, w: 8, h: 12, minW: 4, minH: 8 },
+    { i: 'description', name: 'securityDescription', x: 0, y: 12, w: 8, h: 5, minW: 4, minH: 3 },
+    { i: 'sessions', name: 'recentSessions', x: 8, y: 0, w: 4, h: 17, minW: 3, minH: 6 },
+    { i: 'keydata', name: 'keyData', x: 0, y: 17, w: 4, h: 9, minW: 3, minH: 5 },
+    { i: 'income', name: 'securityIncome', x: 4, y: 17, w: 4, h: 9, minW: 3, minH: 4 },
+    { i: 'documents', name: 'documentsNews', x: 8, y: 17, w: 4, h: 9, minW: 3, minH: 4 },
   ],
   gp: [{ i: 'chart', name: 'priceChart', x: 0, y: 0, w: 12, h: 26, minW: 6, minH: 10 }],
   fa: [

@@ -21,6 +21,8 @@ export type ImportType =
   | 'macro'
   /** The CEMAC complement of the commodities: cocoa, rubber, palm oil, gold, okoumé (COMMODITY_PRICES). */
   | 'commodity-prices'
+  /** The securities' descriptions in bulk, a new version a row (DESCRIPTIONS, fifth version). */
+  | 'descriptions'
 
 /** How often a file is expected: each session, each auction, weekly, or when there is news. */
 export type ImportFrequency = 'session' | 'auction' | 'weekly' | 'onDemand' | 'periodic' | 'once'
@@ -245,26 +247,35 @@ export interface PriceCorrectionDto {
   correctedBy: string
 }
 
-/** A text the Data admin wrote: when, and by whom, last. */
-export interface WrittenDescriptionDto {
-  text: string
-  updatedAt: IsoDateTime
-  updatedBy: string
+/** What a description describes: a security (a commodity is one) or an index. */
+export type DescribedObject = 'security' | 'index'
+
+/** A version CMarket wrote: its text (null when it removed the language), its source, its author. */
+export interface DescriptionVersionDto {
+  version: number
+  text: string | null
+  source: string | null
+  author: string
+  /** Loaded by the DESCRIPTIONS file of IMP, whose rollback removes it. */
+  fromFile: boolean
+  writtenAt: IsoDateTime
 }
 
 /**
- * GET and PUT /data/securities/{id}/description (CORR): the Data admin's French and English, and
- * EODHD's English kept apart, which the screens show where the Data admin wrote no English.
+ * GET and PUT /admin/descriptions/{type}/{id} (CORR, DES's Edit; fifth version): every version
+ * CMarket wrote in each language, newest first, and EODHD's English apart.
  */
-export interface StoredDescriptionDto {
-  securityId: string
-  fr: WrittenDescriptionDto | null
-  en: WrittenDescriptionDto | null
+export interface DescriptionVersionsDto {
+  objectType: DescribedObject
+  objectId: string
+  fr: DescriptionVersionDto[]
+  en: DescriptionVersionDto[]
   eodhd: { text: string; updatedAt: IsoDateTime } | null
 }
 
-/** PUT /data/securities/{id}/description: each language's text, empty or null to remove it. */
+/** PUT /admin/descriptions/{type}/{id}: a new version of one language; an empty text removes it. */
 export interface DescriptionWriteDto {
-  fr: string | null
-  en: string | null
+  language: 'fr' | 'en'
+  text: string | null
+  source: string | null
 }

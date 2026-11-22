@@ -15,13 +15,7 @@ const analyst: Access = {
 }
 const journalist: Access = {
   accountType: 'journalist',
-  permissions: [
-    'market:read',
-    'market:orderbook',
-    'analysis:read',
-    'alerts:write',
-    'research:read',
-  ],
+  permissions: ['market:read', 'market:intraday', 'analysis:read', 'alerts:write', 'research:read'],
 }
 const ceo: Access = {
   accountType: 'ceo',

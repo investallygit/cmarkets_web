@@ -96,17 +96,22 @@ before upload.
 | 24 · Daily reporting to the BEAC (RFQ REP)                                | Done; PDF and Excel at 18:00, every send logged, kept 5 years |
 | The CMarket curve fed by the RFQ agreements (ADMCFG, YCRV)                | Done; an Admin option, off, from XAF 250 million of face      |
 | CMarket.Api's messages in the page's language                             | Done; its errors in French on a French page, dates day first  |
+| 2 · Security profile at the BVMAC fixing (fifth version), descriptions    | Done; recent sessions, descriptions in versions, DES's Edit   |
+| 16 · Bond pricing from a yield curve, custom curves                       | Done but the client's entry panel (step 55, part 2)           |
+| 31 · Index profile (DES on an index)                                      | To do, step 56                                                |
+| 30 · Data download (DL), the Download buttons                             | To do, step 57                                                |
 
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
 third added (the News provider, the news rebuilt, screens 13 to 20 and what they change on
 screens 1, 3, 9, 10 and 12), what the fourth added (the SVT account type, requests for quotes on
-government securities, screens 21 to 29) and the open questions for the spec author are in the
-roadmap: [ROADMAP.md](ROADMAP.md) gives the order of the steps and their status, and leads to the
-files of [`roadmap/`](roadmap): one per version of the spec, one per step, the state of each
-screen and the open questions. The screens follow WCAG 2.2 AA:
-axe finds nothing on any of them for any account type, and each works from the keyboard and in a
-window down to 320 px wide.
+government securities, screens 21 to 29), what the fifth changes (the BVMAC equities at their
+fixing, screen 2 redrawn, bonds priced from a yield curve, screens 30 and 31) and the open
+questions for the spec author are in the roadmap: [ROADMAP.md](ROADMAP.md) gives the order of
+the steps and their status, and leads to the files of [`roadmap/`](roadmap): one per version of
+the spec, one per step, the state of each screen and the open questions. The screens follow WCAG
+2.2 AA: axe finds nothing on any of them for any account type, and each works from the keyboard
+and in a window down to 320 px wide.
 
 ## Installation
 
@@ -165,7 +170,7 @@ src/
               moderation (MOD), payouts (PAY), rfq-reporting (RFQ REP), platform-settings (ADMCFG),
               audit-log (AUDT), account-settings (ME), home,
               auth (login, sign-up, password reset), status, ui-kit (/_kit)
-  widgets/    self-contained blocks: the panels (indices-panel, order-book-panel, news-panel,
+  widgets/    self-contained blocks: the panels (indices-panel, recent-sessions-panel, news-panel,
               subscription-panel, current-upload-panel, messaging-panels, news-studio-panels,
               news-moderation-panels, news-sources-panels, media-payments-panels,
               subscription-admin-panels,
@@ -284,10 +289,11 @@ ESLint (`no-restricted-imports` in `eslint.config.js`) enforces the FSD rules:
   `/hubs/rfq`, open while the user holds a key of the RFQ. Each entity handles
   the hub events it owns (`use*RealtimeSync`, mounted once by `app/layouts/AppShell.tsx`). Live
   quotes go into a Zustand store (`entities/quote/model`), so a tick re-renders one table cell,
-  which flashes for 400 ms. The order book and the latest trades have no hub event: they are
-  polled every 5 seconds. `ImportStatusChanged` moves an upload through its checks, and
-  `DataPublished` (a file published or rolled back, a price corrected) refreshes the quotes,
-  histories, indices, auctions and curves the open screens show. The chat hub connects for the
+  which flashes for 400 ms. BVMAC trades at a fixing, once a session (ROADMAP decision 38): a
+  fixing's `QuoteUpdated` also reads a profile's recent sessions again. `ImportStatusChanged`
+  moves an upload through its checks, and `DataPublished` (a file published or rolled back, a
+  price corrected) refreshes the quotes, histories, indices, auctions and curves the open screens
+  show. The chat hub connects for the
   users who write to others: a new message joins its thread and the count on MSG in the menu,
   "typing…" of an open thread and the online status go to a store of `entities/conversation`,
   `ConversationUpdated` (a CMarket.Api event beyond the spec: a request accepted, a member added

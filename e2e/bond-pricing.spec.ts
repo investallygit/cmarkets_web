@@ -2,7 +2,9 @@ import { expect, test, type Page } from '@playwright/test'
 
 // BP, bond pricing of ROADMAP step 30 (spec screen 16): a bond of the list at the yield of the
 // daily calculation (BS), YAS opening BP; then case A of section 14.1 entered by hand, the
-// mockup's figures, its cash flows, its rate sensitivity and its curve.
+// mockup's figures, its cash flows, its rate sensitivity and its curve. Step 55 (fifth version):
+// block B's discount rates, the CMarket curve, cases B and C entered by date, a custom curve
+// saved, reused on another bond and deleted.
 
 const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title }) })
@@ -39,7 +41,7 @@ test('BP prices a bond of the list at the yield BS computed, and YAS opens it', 
   await expect(results).toContainText(/As of \d{2}\/\d{2}\/\d{4}/)
   const cashFlows = panel(page, 'Cash flow schedule')
   await expect(cashFlows.getByRole('row', { name: /04\/11\/2029/ })).toContainText('33.3333')
-  await expect(panel(page, 'Rate sensitivity').getByRole('row')).toHaveCount(8)
+  await expect(panel(page, 'Yield sensitivity').getByRole('row')).toHaveCount(8)
 
   const download = page.waitForEvent('download')
   await cashFlows.getByRole('button', { name: 'Export XLSX' }).click()
@@ -88,14 +90,14 @@ test('a bond entered by hand gives the figures of case A, the mockup of screen 1
 
   const cashFlows = panel(page, 'Cash flow schedule')
   await expect(cashFlows.getByRole('row', { name: /04\/11\/2026/ })).toHaveText(
-    /04\/11\/2026\s*0\.0137\s*6\.2500\s*0\.0000\s*6\.2500\s*0\.999237\s*6\.2452/,
+    /04\/11\/2026\s*0\.0137\s*6\.2500\s*0\.0000\s*6\.2500\s*5\.730\s*0\.999237\s*6\.2452/,
   )
   await expect(cashFlows.getByRole('row', { name: /04\/11\/2029/ })).toHaveText(
-    /04\/11\/2029\s*3\.0137\s*6\.2500\s*100\.0000\s*106\.2500\s*0\.845418\s*89\.8256/,
+    /04\/11\/2029\s*3\.0137\s*6\.2500\s*100\.0000\s*106\.2500\s*5\.730\s*0\.845418\s*89\.8256/,
   )
   await expect(cashFlows.getByRole('row', { name: /^Total/ })).toContainText('107.5643')
 
-  const sensitivity = panel(page, 'Rate sensitivity')
+  const sensitivity = panel(page, 'Yield sensitivity')
   await expect(sensitivity.getByRole('row', { name: /^-100 bp/ })).toHaveText(
     /-100 bp\s*104\.1755\s*\+2\.776\s*\+2\.58%/,
   )
@@ -105,6 +107,18 @@ test('a bond entered by hand gives the figures of case A, the mockup of screen 1
   await expect(panel(page, 'Price-yield relationship')).toContainText(
     '101.40 at the yield of 5.73%',
   )
+  await expect(panel(page, 'Calculation method').locator('[aria-current="true"]')).toContainText(
+    'Single yield (YTM)',
+  )
+
+  // The clean price in place of the yield: the yield is computed from it.
+  await form.getByRole('button', { name: 'Enter the clean price instead of the yield' }).click()
+  await form.getByRole('textbox', { name: 'Clean price (%)' }).fill('101.4')
+  await form.getByRole('button', { name: 'Calculate' }).click()
+  await expect(results.getByRole('region', { name: 'A. Pricing' })).toContainText(
+    /Clean price\s*101\.4000%/,
+  )
+  await form.getByRole('button', { name: 'Enter the yield instead of the clean price' }).click()
 
   // ECMR's repayments come back; one moved off the payment dates, the server says so.
   await form.getByRole('combobox', { name: 'Redemption' }).selectOption('amortizing')
@@ -112,4 +126,115 @@ test('a bond entered by hand gives the figures of case A, the mockup of screen 1
   await form.getByRole('textbox', { name: 'Repayment 1: date' }).fill('04/05/2026')
   await form.getByRole('button', { name: 'Calculate' }).click()
   await expect(form.getByRole('alert')).toHaveText('The principal is repaid on payment dates.')
+})
+
+test("the CMarket curve of the bond's country discounts each cash flow at its own rate", async ({
+  page,
+}) => {
+  await page.goto('/bp/ECMR-6.25-2029')
+  const form = inputs(page)
+  await expect(form.getByRole('combobox', { name: 'Redemption' })).toHaveValue('amortizing')
+  await form.getByRole('radio', { name: 'Yield curve' }).check()
+  await expect(form.getByRole('combobox', { name: 'Curve' })).toHaveValue('cmkt-CM')
+  // The rates of the curve, read at the bond's dates, fill the table.
+  await expect(form.getByRole('textbox', { name: /^Rate on / }).first()).not.toHaveValue('')
+  await form.getByRole('button', { name: 'Calculate' }).click()
+
+  const results = panel(page, 'Results')
+  await expect(results).toContainText(/As of \d{2}\/\d{2}\/\d{4} · From the curve/)
+  await expect(results.getByRole('region', { name: 'B. Yield and risk' })).toContainText(
+    /Equivalent yield \(YTM\)\s*\d+\.\d{4}%/,
+  )
+  await expect(results.getByRole('region', { name: 'C. Comparison' })).toContainText(
+    'Spread to curve (Z-spread)',
+  )
+  const curve = panel(page, 'Curve used')
+  await expect(curve).toContainText('Zero-coupon · Cameroon')
+  await expect(curve).toContainText(/Rate used at each cash-flow date: 04\/11\/\d{4} \d\.\d{3}%/)
+  await expect(panel(page, 'Sensitivity to the curve')).toContainText(
+    'The same shock is applied to every rate on the curve.',
+  )
+  await expect(panel(page, 'Calculation method').locator('[aria-current="true"]')).toContainText(
+    'Yield curve',
+  )
+})
+
+test('rates entered by date give cases B and C, saved as a curve, reused and deleted', async ({
+  page,
+}) => {
+  await page.goto('/bp/ECMR-6.25-2029')
+  const form = inputs(page)
+  await expect(form.getByRole('combobox', { name: 'Redemption' })).toHaveValue('amortizing')
+  // Case A's bond: ECMR bullet, settled on 30/10/2026.
+  await form.getByRole('combobox', { name: 'Redemption' }).selectOption('bullet')
+  await form.getByRole('textbox', { name: /^Settlement date/ }).fill('30/10/2026')
+  await form.getByRole('textbox', { name: 'Face amount (XAF)' }).fill('100000000')
+  await form.getByRole('radio', { name: 'Rates entered by maturity' }).check()
+
+  const rate = (date: string) => form.getByRole('textbox', { name: `Rate on ${date}, %` })
+  const enter = async (rates: string[]) => {
+    for (const [index, value] of rates.entries()) await rate(`04/11/${2026 + index}`).fill(value)
+    await form.getByRole('button', { name: 'Calculate' }).click()
+  }
+  await expect(form.getByRole('textbox', { name: /^Rate on / })).toHaveCount(4)
+
+  // Case B of section 14.1: the CMarket curve's rates at the four dates.
+  await enter(['4.6', '5.1', '5.55', '5.85'])
+  const results = panel(page, 'Results')
+  await expect(results).toContainText('As of 30/10/2026 · Rates entered')
+  await expect(results.getByRole('region', { name: 'A. Pricing' })).toContainText(
+    /Dirty price\s*107\.3143%\s*Accrued interest\s*6\.1644%\s*Clean price\s*101\.1499%/,
+  )
+  await expect(results.getByRole('region', { name: 'B. Yield and risk' })).toContainText(
+    /Equivalent yield \(YTM\)\s*5\.8221%\s*Modified duration\s*2\.5299%/,
+  )
+  const cashFlows = panel(page, 'Cash flow schedule')
+  await expect(cashFlows.getByRole('row', { name: /04\/11\/2028/ })).toContainText('5.550')
+  await expect(panel(page, 'Rates used')).toContainText('Entered · comparison')
+  await expect(panel(page, 'Sensitivity to rates entered')).toContainText(
+    'Once saved, shocks by tenor are possible.',
+  )
+
+  // Case C: 15 to 20 bp higher, the mockup's rate-rise scenario.
+  await enter(['4.8', '5.3', '5.7', '6'])
+  await expect(results.getByRole('region', { name: 'A. Pricing' })).toContainText(
+    /Clean price\s*100\.7410%/,
+  )
+  await expect(results.getByRole('region', { name: 'B. Yield and risk' })).toContainText(
+    /Equivalent yield \(YTM\)\s*5\.9731%\s*Modified duration\s*2\.5253%/,
+  )
+
+  // Saved as a custom curve, which becomes the curve priced at: a shock by tenor is offered.
+  const name = `E2E rate rise ${Date.now()}`
+  await form.getByRole('button', { name: 'Save as custom curve' }).click()
+  await form.getByRole('textbox', { name: 'Curve name' }).fill(name)
+  await form.getByRole('button', { name: 'Save', exact: true }).click()
+  await expect(page.getByText(`Curve “${name}” saved.`)).toBeVisible()
+  await expect(form.getByRole('radio', { name: 'Yield curve' })).toBeChecked()
+  await form.getByRole('button', { name: 'Calculate' }).click()
+  await expect(results.getByRole('region', { name: 'A. Pricing' })).toContainText(
+    /Clean price\s*100\.7410%/,
+  )
+  const sensitivity = panel(page, 'Sensitivity to the curve')
+  await sensitivity.getByRole('combobox', { name: 'Shock' }).selectOption('2Y')
+  await expect(sensitivity).toContainText('The shock moves the 2Y rate alone')
+  await expect(panel(page, 'Curve used')).toContainText(`Custom · ${name}`)
+
+  // Reused on another bond, then deleted.
+  await form.getByRole('combobox', { name: 'Bond' }).selectOption('GAB-6.50-2028')
+  await expect(page).toHaveURL(/\/bp\/GAB-6\.50-2028$/)
+  const other = inputs(page)
+  await other.getByRole('radio', { name: 'Yield curve' }).check()
+  const curves = other.getByRole('combobox', { name: 'Curve' })
+  const id = await curves.locator('option', { hasText: name }).getAttribute('value')
+  await curves.selectOption(id ?? '')
+  await expect(other.getByText('Your curve, private.')).toBeVisible()
+  await other.getByRole('button', { name: 'Calculate' }).click()
+  await expect(panel(page, 'Results')).toContainText('From the curve')
+  await expect(panel(page, 'Curve used')).toContainText(`Custom · ${name}`)
+
+  await other.getByRole('button', { name: 'Delete' }).click()
+  await page.getByRole('dialog').getByRole('button', { name: 'Delete' }).click()
+  await expect(page.getByText(`Curve “${name}” deleted.`)).toBeVisible()
+  await expect(curves.locator('option', { hasText: name })).toHaveCount(0)
 })

@@ -68,12 +68,17 @@
       "volume": "Volume",
       "marketCap": "Market cap",
       "pe": "P/E",
-      "yield": "Yield"
+      "yield": "Yield",
+      "previous": "Previous price",
+      "valueTraded": "Value traded"
     },
     "delayed": "Delayed",
     "notFound": "No security {{id}}.",
     "notApplicable": "{{code}} does not apply to {{security}}.",
-    "notAllowed": "{{code}} is not part of your account."
+    "notAllowed": "{{code}} is not part of your account.",
+    "fixingAuction": "fixing auction",
+    "fixingOf": "Fixing of {{date}}",
+    "closeOf": "Close of {{date}}"
   },
   "keyData": {
     "isin": "ISIN code",
@@ -89,15 +94,27 @@
       "halfYearly": "half-yearly",
       "quarterly": "quarterly"
     },
-    "insufficientData": "Insufficient data"
+    "insufficientData": "Insufficient data",
+    "sessionsTraded": "Sessions with trades (3 months)",
+    "sessionsOf": "{{traded}} of {{held}}",
+    "dividendOn": "{{amount}} ({{month}})"
   },
-  "orderBook": {
-    "bestLimits": "Best 5 limits",
-    "bidQty": "Bid qty",
-    "bid": "Bid",
-    "ask": "Ask",
-    "askQty": "Ask qty",
-    "notIncluded": "The order book and the trades of the session are not part of a {{type}} account."
+  "sessions": {
+    "label": "Recent sessions",
+    "session": "Session",
+    "price": "Price",
+    "change": "Chg.",
+    "changePct": "Chg. %",
+    "volume": "Volume",
+    "value": "Value M",
+    "last": "Last {{count}} sessions",
+    "count": "{{count}}",
+    "fixingNote": "One price per session, set by BVMAC.",
+    "untraded": "Sessions without trades (e.g. {{date}}) have no price and are not listed.",
+    "allTraded": "Every session listed had trades.",
+    "closeNote": "One close per session.",
+    "history": "Full history in GP",
+    "none": "No session with trades yet."
   },
   "dividendKinds": {
     "final": "Final",

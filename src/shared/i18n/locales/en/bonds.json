@@ -150,7 +150,74 @@
   "bondPricing": {
     "inputs": "Inputs",
     "characteristics": "A. Bond characteristics",
-    "marketInput": "B. Market input (internal)",
+    "discount": {
+      "title": "B. Discount rates",
+      "mode": "How the cash flows are discounted",
+      "modes": {
+        "yield": "Single yield (YTM)",
+        "curve": "Yield curve",
+        "rates": "Rates entered by maturity"
+      },
+      "enterBy": "Enter by",
+      "entries": {
+        "dates": "Cash-flow date",
+        "tenors": "Standard tenor"
+      },
+      "byTenor": "Rates of the standard tenors",
+      "tenors": {
+        "3M": "3M",
+        "6M": "6M",
+        "1Y": "1Y",
+        "2Y": "2Y",
+        "3Y": "3Y",
+        "5Y": "5Y",
+        "7Y": "7Y",
+        "10Y": "10Y"
+      },
+      "columns": {
+        "date": "Cash-flow date",
+        "years": "t (years)",
+        "rate": "Rate %"
+      },
+      "rateOn": "Rate on {{date}}, %",
+      "rateAt": "Rate at {{tenor}} ({{years}} yrs), %",
+      "noDates": "The bond's cash-flow dates show once its characteristics are complete.",
+      "tableCaption": "Discount rate of each remaining cash-flow date",
+      "notes": {
+        "yield": "Same rate for every cash-flow date (greyed). Pre-filled with the last computed YTM; editable.",
+        "curve": "One rate per cash-flow date, read on the chosen curve (linear interpolation). Each rate can still be edited: the rates then become rates entered, which can be saved as a custom curve.",
+        "rates": "One row per remaining cash-flow date of the bond.",
+        "dates": "One row per remaining cash-flow date of the bond, pre-filled with the rates shown before.",
+        "tenors": "Rates of the standard tenors, interpolated to the bond's cash-flow dates (linear, flat beyond the first and last tenor)."
+      },
+      "byPrice": "Enter the clean price instead of the yield",
+      "byYield": "Enter the yield instead of the clean price",
+      "priceHint": "The yield is computed from the price.",
+      "priceYield": "Yield at this price: {{value}}"
+    },
+    "curves": {
+      "label": "Curve",
+      "cmarket": "CMarket {{country}} · zero · {{date}}",
+      "cmarketOf": "CMarket {{country}} · zero",
+      "custom": "{{name}} · {{date}}",
+      "ofColleague": "{{name}} · {{date}} · {{owner}}",
+      "save": "Save as custom curve",
+      "saveButton": "Save",
+      "cancel": "Cancel",
+      "name": "Curve name",
+      "nameRequired": "Enter a name.",
+      "share": "Share with my organisation",
+      "saved": "Curve “{{name}}” saved.",
+      "renamed": "Curve updated.",
+      "rename": "Rename or share",
+      "delete": "Delete",
+      "deleteTitle": "Delete the curve “{{name}}”?",
+      "deleteMessage": "It will no longer be offered to you or to your organisation. Calculations already shown are not affected.",
+      "deleted": "Curve “{{name}}” deleted.",
+      "sharedBy": "Custom curve shared by {{owner}}.",
+      "sharedMine": "Your curve, shared with your organisation.",
+      "private": "Your curve, private."
+    },
     "bond": "Bond",
     "ofTheList": "{{code}} (master list)",
     "byHand": "Characteristics entered by hand",
@@ -166,7 +233,8 @@
       "dayCount": "Day count convention",
       "redemption": "Redemption",
       "ytm": "Target yield to maturity (YTM)",
-      "faceAmount": "Face amount ({{currency}})"
+      "faceAmount": "Face amount ({{currency}})",
+      "cleanPrice": "Clean price (%)"
     },
     "frequencies": {
       "1": "Annual (1)",
@@ -205,7 +273,9 @@
     "ranges": {
       "faceValue": "Above 0%.",
       "couponRate": "Between 0% and 100%.",
-      "ytm": "Between -50% and 100%."
+      "ytm": "Between -50% and 100%.",
+      "cleanPrice": "Between 0 and 1,000.",
+      "rates": "Each rate between -5% and 50%."
     },
     "required": "Required.",
     "dateRequired": "Enter a date DD/MM/YYYY.",
@@ -235,11 +305,12 @@
       "coupon": "Coupon",
       "principal": "Principal",
       "cashFlow": "Total cash flow",
+      "zeroRatePct": "Zero rate %",
       "discountFactor": "Discount factor",
       "presentValue": "Present value"
     },
     "total": "Total",
-    "cashFlowsNote": "Amounts per 100 of face value outstanding at settlement. For an amortizing bond, the Principal column follows the redemption schedule.",
+    "cashFlowsNote": "Discount factor = 1 / (1 + zero rate)^t. Amounts per 100 of face value outstanding at settlement; for an amortizing bond, the Principal column follows the redemption schedule. With a single yield, the Zero rate column shows the same rate on every row.",
     "priceYield": "Price-yield relationship",
     "cleanPriceCurve": "Clean price",
     "priceAxis": "Price (%)",
@@ -254,7 +325,73 @@
       "dirtyChange": "Dirty chg. %"
     },
     "shift": "{{value}} bp",
-    "sensitivityNote": "Dirty price % change: compare with −Dmod × Δy (first-order approximation)."
+    "sensitivityNote": "Dirty price % change: compare with −Dmod × Δy (first-order approximation).",
+    "asOfMode": "As of {{date}} · {{mode}}",
+    "modes": {
+      "yield": "Single yield",
+      "curve": "From the curve",
+      "rates": "Rates entered"
+    },
+    "yieldAndRisk": "B. Yield and risk",
+    "comparison": "C. Comparison",
+    "equivalentYield": "Equivalent yield (YTM)",
+    "marketPrice": "Market price (last)",
+    "zSpread": {
+      "yield": "Spread (Z-spread)",
+      "curve": "Spread to curve (Z-spread)",
+      "rates": "Spread to rates entered (Z-spread)"
+    },
+    "sensitivityTitles": {
+      "yield": "Yield sensitivity",
+      "curve": "Sensitivity to the curve",
+      "rates": "Sensitivity to rates entered"
+    },
+    "shockOnYield": "Shock on the yield",
+    "shockAt": "Shock at {{tenor}}",
+    "shockLabel": "Shock",
+    "sensitivityNotes": {
+      "curve": "The same shock is applied to every rate on the curve.",
+      "rates": "The same shock is applied to every rate entered.",
+      "tenor": "The shock moves the {{tenor}} rate alone, fading to the neighbouring tenors.",
+      "byTenor": "Custom curve: shocks by tenor possible.",
+      "onceSaved": "Once saved, shocks by tenor are possible."
+    },
+    "curveUsed": {
+      "title": "Curve used",
+      "ratesTitle": "Rates used",
+      "options": "Zero-coupon · {{country}}",
+      "customOptions": "Custom · {{name}}",
+      "ratesOptions": "Entered · comparison",
+      "nodes": "curve nodes",
+      "flowDates": "bond cash-flow dates",
+      "cmarketCurve": "CMarket {{country}} curve",
+      "ratesEntered": "rates entered",
+      "yearTick": "{{value}} y",
+      "point": "{{years}} yrs · {{rate}}",
+      "summary": "Rate used at each cash-flow date: {{rates}}.",
+      "note": "Curve of {{date}}, built from the uploaded CEMAC yields.",
+      "customNote": "Custom curve “{{name}}” of {{date}}.",
+      "ratesNote": "Dashed: CMarket curve of {{date}}, shown for comparison."
+    },
+    "methods": {
+      "title": "Calculation method",
+      "yield": {
+        "title": "Single yield (YTM)",
+        "text": "All cash flows discounted at one rate; price ↔ yield (test case A)."
+      },
+      "curve": {
+        "title": "Yield curve",
+        "text": "Each cash flow discounted at the curve rate for its date; equivalent yield recomputed."
+      },
+      "rates": {
+        "title": "Rates entered by maturity",
+        "text": "Same calculation, with the rates entered by the user for each cash-flow date."
+      },
+      "zSpread": {
+        "title": "Z-spread",
+        "text": "Constant spread added to the curve that reproduces the bond's market price."
+      }
+    }
   },
   "bondProfile": {
     "categories": {

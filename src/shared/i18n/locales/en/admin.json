@@ -360,7 +360,7 @@
     "labels": {
       "marketRead": "Prices and indices",
       "marketRealtime": "Real-time prices",
-      "marketOrderbook": "Order book, intraday",
+      "marketIntraday": "Intraday Europe and US (EODHD licence)",
       "analysisRead": "Technical and fundamental analysis, curves",
       "analysisExport": "XLSX / CSV exports",
       "analysisSave": "Save screens and chart drawings",
@@ -382,6 +382,7 @@
       "newsPayments": "Newspapers, CMarket AI, ingestion clients (SRC); media payments",
       "dataImport": "Upload data files, correct data",
       "contentPublish": "Publish news and issuer documents",
+      "descriptionsWrite": "Write the descriptions of securities and indices",
       "usersManage": "Create, suspend, change an account's type",
       "subscriptionsManage": "Subscriptions, their payments and invoices (SUBS)",
       "moderationManage": "Approve statuses (Analyst, Journalist, CEO, News provider), moderate",
@@ -461,7 +462,8 @@
       "subscription-reactivate": "Subscription suspension lifted",
       "invoice-resend": "Invoice sent again",
       "security-describe": "Security description",
-      "commodity-describe": "Commodity description"
+      "commodity-describe": "Commodity description",
+      "index-describe": "Index description"
     },
     "fields": {
       "accountType": "Type",
@@ -562,7 +564,8 @@
       "clickAnomaly": "Click anomaly",
       "subscription": "Subscription",
       "invoice": "Invoice",
-      "security": "Security"
+      "security": "Security",
+      "index": "Index"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",

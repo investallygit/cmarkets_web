@@ -9,6 +9,7 @@ import {
   useQuote,
 } from '@/entities/quote'
 import { useSectorName } from '@/entities/market'
+import { tradesAtFixing } from '@/entities/security'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { Badge } from '@/shared/ui/Badge'
@@ -19,8 +20,11 @@ interface Figure {
 }
 
 /**
- * Screen 2 header: code, name, last price at 26 px and change in real time, then 7 key figures
- * (spec section 9). A bond's and an ETF's profiles have their own (screens 20 and 19).
+ * Screen 2 header (spec section 9, fifth version): code, name, type and "fixing auction" for a
+ * BVMAC security, the last fixing at 26 px with its date and its change from the previous fixing in
+ * real time, then the previous price, the volume, the value traded, the market cap, the P/E and the
+ * yield. A European or US security says its close and shows the session's open, high and low. A
+ * bond's and an ETF's profiles have their own (screens 20 and 19).
  */
 export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
   const { t } = useTranslation()
@@ -32,14 +36,28 @@ export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
   const price = (value: number | undefined) =>
     value === undefined ? missing : format.number(value, decimals)
 
+  const fixing = tradesAtFixing(profile)
+  const session: Figure[] = fixing
+    ? [{ label: t('security.figures.previous'), value: price(quote?.previousClose) }]
+    : [
+        { label: t('security.figures.open'), value: price(quote?.open) },
+        { label: t('security.figures.high'), value: price(quote?.high) },
+        { label: t('security.figures.low'), value: price(quote?.low) },
+      ]
   const figures: Figure[] = [
-    { label: t('security.figures.open'), value: price(quote?.open) },
-    { label: t('security.figures.high'), value: price(quote?.high) },
-    { label: t('security.figures.low'), value: price(quote?.low) },
+    ...session,
     {
       label: t('security.figures.volume'),
       value: quote ? <LiveVolume symbol={profile.id} value={quote.volume} /> : missing,
     },
+    ...(fixing
+      ? [
+          {
+            label: t('security.figures.valueTraded'),
+            value: quote ? format.compact(quote.value) : missing,
+          },
+        ]
+      : []),
     {
       label: t('security.figures.marketCap'),
       value: quote ? format.compact(quote.marketCap) : missing,
@@ -59,6 +77,7 @@ export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
     format.country(profile.country),
     sectorName(profile.sector),
     profile.currency,
+    ...(fixing ? [t('security.fixingAuction')] : []),
   ]
 
   return (
@@ -76,13 +95,20 @@ export function SecurityHeader({ profile }: { profile: SecurityProfileDto }) {
       {/* The price, its change and the delay wrap rather than cut the badge (B27). */}
       {quote && (
         <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <span className="font-mono text-price font-semibold">
-            <LivePrice
-              symbol={profile.id}
-              value={quote.last}
-              decimals={decimals}
-              isDelayed={quote.isDelayed}
-            />
+          <span className="flex flex-col">
+            <span className="font-mono text-price font-semibold">
+              <LivePrice
+                symbol={profile.id}
+                value={quote.last}
+                decimals={decimals}
+                isDelayed={quote.isDelayed}
+              />
+            </span>
+            <span className="font-sans text-caption text-secondary">
+              {fixing
+                ? t('security.fixingOf', { date: format.date(quote.fixingDate) })
+                : t('security.closeOf', { date: format.date(quote.fixingDate) })}
+            </span>
           </span>
           <span className="flex items-baseline gap-3 font-mono text-label font-semibold">
             <LiveChange symbol={profile.id} value={quote.change} decimals={decimals} />

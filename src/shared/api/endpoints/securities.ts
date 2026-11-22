@@ -1,14 +1,15 @@
 import type {
+  DescriptionDto,
+  DescriptionLanguage,
   DividendDto,
-  OrderBookDto,
   PriceBarDto,
   QuoteDto,
   SearchResultsDto,
   SecurityListItemDto,
   SecurityProfileDto,
+  SecuritySessionsDto,
   SecurityType,
   ShareholdersDto,
-  TradeDto,
 } from '../contracts'
 import { answer, route, send } from './define'
 import type { HistoryRange } from './market'
@@ -29,8 +30,8 @@ export const securitiesRoutes = {
   profile: route('GET', '/securities/{id}', answer<SecurityProfileDto>()),
   quote: route('GET', '/securities/{id}/quote', answer<QuoteDto>()),
   history: route('GET', '/securities/{id}/history', answer<PriceBarDto[]>()),
-  orderBook: route('GET', '/securities/{id}/orderbook', answer<OrderBookDto>()),
-  trades: route('GET', '/securities/{id}/trades', answer<TradeDto[]>()),
+  sessions: route('GET', '/securities/{id}/sessions', answer<SecuritySessionsDto>()),
+  description: route('GET', '/securities/{id}/description', answer<DescriptionDto>()),
   dividends: route('GET', '/securities/{id}/dividends', answer<DividendDto[]>()),
   shareholders: route('GET', '/securities/{id}/shareholders', answer<ShareholdersDto>()),
 }
@@ -44,13 +45,16 @@ export const securitiesApi = {
   list: (filters: SecurityFilters, signal?: AbortSignal) =>
     send(securitiesRoutes.list, { query: { ...filters }, signal }),
   profile: (id: string, signal?: AbortSignal) => send(securitiesRoutes.profile, of(id, signal)),
-  /** The snapshot behind the live values, with the session's open, high and low. */
+  /** The last fixing behind the live values, its date and the previous one's price. */
   quote: (id: string, signal?: AbortSignal) => send(securitiesRoutes.quote, of(id, signal)),
   history: (id: string, range: HistoryRange, signal?: AbortSignal) =>
     send(securitiesRoutes.history, { ...of(id, signal), query: { ...range } }),
-  /** Best limits; not part of a Student account (spec section 12). */
-  orderBook: (id: string, signal?: AbortSignal) => send(securitiesRoutes.orderBook, of(id, signal)),
-  trades: (id: string, signal?: AbortSignal) => send(securitiesRoutes.trades, of(id, signal)),
+  /** The latest sessions with trades, newest first (fifth version, in place of the order book). */
+  sessions: (id: string, last: number, signal?: AbortSignal) =>
+    send(securitiesRoutes.sessions, { ...of(id, signal), query: { last } }),
+  /** The description in a language, else in the other one; 404 when none is written. */
+  description: (id: string, lang: DescriptionLanguage, signal?: AbortSignal) =>
+    send(securitiesRoutes.description, { ...of(id, signal), query: { lang } }),
   dividends: (id: string, signal?: AbortSignal) => send(securitiesRoutes.dividends, of(id, signal)),
   shareholders: (id: string, signal?: AbortSignal) =>
     send(securitiesRoutes.shareholders, of(id, signal)),

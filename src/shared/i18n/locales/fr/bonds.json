@@ -150,7 +150,74 @@
   "bondPricing": {
     "inputs": "Saisie",
     "characteristics": "A. Caractéristiques de l'obligation",
-    "marketInput": "B. Donnée de marché (interne)",
+    "discount": {
+      "title": "B. Taux d'actualisation",
+      "mode": "Mode d'actualisation des flux",
+      "modes": {
+        "yield": "Rendement unique (YTM)",
+        "curve": "Courbe des taux",
+        "rates": "Taux saisis par échéance"
+      },
+      "enterBy": "Saisir par",
+      "entries": {
+        "dates": "Date de flux",
+        "tenors": "Maturité standard"
+      },
+      "byTenor": "Taux des maturités standard",
+      "tenors": {
+        "3M": "3M",
+        "6M": "6M",
+        "1Y": "1A",
+        "2Y": "2A",
+        "3Y": "3A",
+        "5Y": "5A",
+        "7Y": "7A",
+        "10Y": "10A"
+      },
+      "columns": {
+        "date": "Date de flux",
+        "years": "t (années)",
+        "rate": "Taux %"
+      },
+      "rateOn": "Taux au {{date}}, %",
+      "rateAt": "Taux à {{tenor}} ({{years}} ans), %",
+      "noDates": "Les dates de flux de l'obligation s'affichent une fois ses caractéristiques complètes.",
+      "tableCaption": "Taux d'actualisation de chaque date de flux restante",
+      "notes": {
+        "yield": "Même taux pour toutes les dates de flux (grisé). Prérempli avec le dernier YTM calculé ; modifiable.",
+        "curve": "Un taux par date de flux, lu sur la courbe choisie (interpolation linéaire). Chaque taux reste modifiable : les taux deviennent alors des taux saisis, enregistrables comme courbe personnalisée.",
+        "rates": "Une ligne par date de flux restante de l'obligation.",
+        "dates": "Une ligne par date de flux restante de l'obligation, préremplie avec les taux affichés auparavant.",
+        "tenors": "Taux des maturités standard, interpolés aux dates de flux de l'obligation (linéaire, constants au-delà de la première et de la dernière maturité)."
+      },
+      "byPrice": "Saisir le prix pied de coupon au lieu du rendement",
+      "byYield": "Saisir le rendement au lieu du prix pied de coupon",
+      "priceHint": "Le rendement est calculé à partir du prix.",
+      "priceYield": "Rendement à ce prix : {{value}}"
+    },
+    "curves": {
+      "label": "Courbe",
+      "cmarket": "CMarket {{country}} · zéro · {{date}}",
+      "cmarketOf": "CMarket {{country}} · zéro",
+      "custom": "{{name}} · {{date}}",
+      "ofColleague": "{{name}} · {{date}} · {{owner}}",
+      "save": "Enregistrer comme courbe personnalisée",
+      "saveButton": "Enregistrer",
+      "cancel": "Annuler",
+      "name": "Nom de la courbe",
+      "nameRequired": "Saisissez un nom.",
+      "share": "Partager avec mon organisation",
+      "saved": "Courbe « {{name}} » enregistrée.",
+      "renamed": "Courbe mise à jour.",
+      "rename": "Renommer ou partager",
+      "delete": "Supprimer",
+      "deleteTitle": "Supprimer la courbe « {{name}} » ?",
+      "deleteMessage": "Elle ne vous sera plus proposée, ni à votre organisation. Les calculs déjà affichés ne changent pas.",
+      "deleted": "Courbe « {{name}} » supprimée.",
+      "sharedBy": "Courbe personnalisée partagée par {{owner}}.",
+      "sharedMine": "Votre courbe, partagée avec votre organisation.",
+      "private": "Votre courbe, privée."
+    },
     "bond": "Obligation",
     "ofTheList": "{{code}} (liste de référence)",
     "byHand": "Caractéristiques saisies à la main",
@@ -166,7 +233,8 @@
       "dayCount": "Base de décompte des jours",
       "redemption": "Remboursement",
       "ytm": "Rendement à l'échéance visé (YTM)",
-      "faceAmount": "Nominal ({{currency}})"
+      "faceAmount": "Nominal ({{currency}})",
+      "cleanPrice": "Prix pied de coupon (%)"
     },
     "frequencies": {
       "1": "Annuelle (1)",
@@ -205,7 +273,9 @@
     "ranges": {
       "faceValue": "Au-dessus de 0 %.",
       "couponRate": "Entre 0 % et 100 %.",
-      "ytm": "Entre -50 % et 100 %."
+      "ytm": "Entre -50 % et 100 %.",
+      "cleanPrice": "Entre 0 et 1 000.",
+      "rates": "Chaque taux entre -5 % et 50 %."
     },
     "required": "Obligatoire.",
     "dateRequired": "Saisissez une date JJ/MM/AAAA.",
@@ -235,11 +305,12 @@
       "coupon": "Coupon",
       "principal": "Principal",
       "cashFlow": "Flux total",
+      "zeroRatePct": "Taux zéro %",
       "discountFactor": "Facteur d'actualisation",
       "presentValue": "Valeur actuelle"
     },
     "total": "Total",
-    "cashFlowsNote": "Montants pour 100 de nominal restant dû au règlement. Pour une obligation amortissable, la colonne Principal suit l'échéancier de remboursement.",
+    "cashFlowsNote": "Facteur d'actualisation = 1 / (1 + taux zéro)^t. Montants pour 100 de nominal restant dû au règlement ; pour une obligation amortissable, la colonne Principal suit l'échéancier de remboursement. Avec un rendement unique, la colonne Taux zéro montre le même taux sur chaque ligne.",
     "priceYield": "Relation prix-rendement",
     "cleanPriceCurve": "Prix pied de coupon",
     "priceAxis": "Prix (%)",
@@ -254,7 +325,73 @@
       "dirtyChange": "Var. prix plein %"
     },
     "shift": "{{value}} pb",
-    "sensitivityNote": "Variation du prix plein en % : à comparer avec −Dmod × Δy (approximation du premier ordre)."
+    "sensitivityNote": "Variation du prix plein en % : à comparer avec −Dmod × Δy (approximation du premier ordre).",
+    "asOfMode": "Au {{date}} · {{mode}}",
+    "modes": {
+      "yield": "Rendement unique",
+      "curve": "Selon la courbe",
+      "rates": "Taux saisis"
+    },
+    "yieldAndRisk": "B. Rendement et risque",
+    "comparison": "C. Comparaison",
+    "equivalentYield": "Rendement équivalent (YTM)",
+    "marketPrice": "Prix de marché (dernier)",
+    "zSpread": {
+      "yield": "Écart (Z-spread)",
+      "curve": "Écart à la courbe (Z-spread)",
+      "rates": "Écart aux taux saisis (Z-spread)"
+    },
+    "sensitivityTitles": {
+      "yield": "Sensibilité au rendement",
+      "curve": "Sensibilité à la courbe",
+      "rates": "Sensibilité aux taux saisis"
+    },
+    "shockOnYield": "Choc sur le rendement",
+    "shockAt": "Choc à {{tenor}}",
+    "shockLabel": "Choc",
+    "sensitivityNotes": {
+      "curve": "Le même choc s'applique à tous les taux de la courbe.",
+      "rates": "Le même choc s'applique à tous les taux saisis.",
+      "tenor": "Le choc déplace le seul taux à {{tenor}}, en s'atténuant jusqu'aux maturités voisines.",
+      "byTenor": "Courbe personnalisée : chocs par maturité possibles.",
+      "onceSaved": "Une fois enregistrés, chocs par maturité possibles."
+    },
+    "curveUsed": {
+      "title": "Courbe utilisée",
+      "ratesTitle": "Taux utilisés",
+      "options": "Zéro-coupon · {{country}}",
+      "customOptions": "Personnalisée · {{name}}",
+      "ratesOptions": "Saisis · comparaison",
+      "nodes": "nœuds de la courbe",
+      "flowDates": "dates de flux de l'obligation",
+      "cmarketCurve": "Courbe CMarket {{country}}",
+      "ratesEntered": "taux saisis",
+      "yearTick": "{{value}} a",
+      "point": "{{years}} ans · {{rate}}",
+      "summary": "Taux utilisé à chaque date de flux : {{rates}}.",
+      "note": "Courbe du {{date}}, construite à partir des rendements CEMAC importés.",
+      "customNote": "Courbe personnalisée « {{name}} » du {{date}}.",
+      "ratesNote": "En pointillés : courbe CMarket du {{date}}, pour comparaison."
+    },
+    "methods": {
+      "title": "Méthode de calcul",
+      "yield": {
+        "title": "Rendement unique (YTM)",
+        "text": "Tous les flux actualisés à un seul taux ; prix ↔ rendement (cas de test A)."
+      },
+      "curve": {
+        "title": "Courbe des taux",
+        "text": "Chaque flux actualisé au taux de la courbe à sa date ; rendement équivalent recalculé."
+      },
+      "rates": {
+        "title": "Taux saisis par échéance",
+        "text": "Même calcul, avec les taux saisis par l'utilisateur pour chaque date de flux."
+      },
+      "zSpread": {
+        "title": "Z-spread",
+        "text": "Écart constant ajouté à la courbe qui reproduit le prix de marché de l'obligation."
+      }
+    }
   },
   "bondProfile": {
     "categories": {

@@ -153,7 +153,13 @@
     },
     "fallback": "Not written in English yet: the text in {{language}}.",
     "none": "No description of {{code}} yet.",
-    "noSecurity": "Select a security in the results."
+    "noSecurity": "Select a security in the results.",
+    "footer": "Source: {{source}} · written by CMarket · updated {{date}}",
+    "footerNoSource": "Written by CMarket · updated {{date}}",
+    "eodhd": "Description in English, source EODHD · updated {{date}}",
+    "edit": "Edit",
+    "editLabel": "Edit the description of {{code}}",
+    "editTitle": "{{code}} — Description"
   },
   "ratios": {
     "titleShort": "Ratios",

@@ -14,7 +14,8 @@ interface BondPricingState {
   edit: (change: Partial<Omit<PricingForm, Characteristic | 'bondId'>>) => void
   /** A characteristic of block A: the bond becomes one entered by hand. */
   editCharacteristics: (change: Partial<Pick<PricingForm, Characteristic>>) => void
-  calculate: () => void
+  /** Sends the form; the rates entered by date need the bond's cash-flow dates. */
+  calculate: (dates?: readonly string[] | null) => void
 }
 
 /** Lives outside the page, so the inputs and the figures survive a visit to another screen. */
@@ -31,8 +32,8 @@ export const useBondPricingStore = create<BondPricingState>()((set, get) => ({
     const form = get().form
     if (form) set({ form: { ...form, ...change, bondId: null } })
   },
-  calculate: () => {
+  calculate: (dates = null) => {
     const form = get().form
-    if (form) set({ submitted: toRequest(form) })
+    if (form) set({ submitted: toRequest(form, dates) })
   },
 }))

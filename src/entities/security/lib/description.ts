@@ -1,6 +1,10 @@
-import type { DescriptionSource, SecurityDescriptionDto } from '@/shared/api/contracts'
+import type {
+  DescriptionLanguage,
+  DescriptionSource,
+  SecurityDescriptionDto,
+} from '@/shared/api/contracts'
 
-export type DescriptionLanguage = 'fr' | 'en'
+export type { DescriptionLanguage }
 
 export const DESCRIPTION_LANGUAGES: readonly DescriptionLanguage[] = ['fr', 'en']
 

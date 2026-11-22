@@ -25,6 +25,10 @@ what is still to do. The Data admin's and the Admin's screens are in
   movers follow the live prices (B06), live columns sort on the values shown (B42), a news alert's
   tags give way to its subject (B23), the lists holding a security are ticked for screen readers
   (B44), a reload shows the watchlist worked on (B46).
+- **Built in step 54 (fifth version)**: a BVMAC security's quote moves at each fixing only, once
+  a session at the close (decision 38).
+- **Fifth version (steps 56 and 57)**: a double click on an index opens its profile (screen 31);
+  the Indices panel gets the Download button (screen 30).
 
 ## DES · Security profile (screen 2): done
 
@@ -50,6 +54,13 @@ what is still to do. The Data admin's and the Admin's screens are in
   account's permissions (B21); the key data keeps its figures whole (B25) and the header its
   "Delayed" badge (B27); the sector reads in French on a French page (B17); an unknown security
   offers no Retry (B07).
+- **Built in step 54 (fifth version)** ([step 54](steps/step-54-security-profile-at-the-fixing.md)):
+  redrawn for the BVMAC fixing: the header's last fixing with its date, the previous price and the
+  value traded; "Closing price (fixing)", a line of the closes without candles; "Prices of recent
+  sessions" in place of the order book and the latest trades; the sessions with trades in the key
+  data; the description under the chart (FR · EN, its source and date, edited by CMarket's
+  analyst, decision 40); GP without 1D, 5D, candles or bars for a BVMAC security (decision 38); ANA
+  stays (decision 39). The Download button in step 57.
 
 ## N · News (no mockup): done
 
@@ -109,6 +120,8 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the history gives a news
   alert's subject the room (B23); the New alert form closes when the screen changes (B47). The form
   keeps no version: the later save of two tabs stands (B101, left as is).
+- **Built in step 54 (fifth version)**: a price alert on a BVMAC security goes off at the fixing,
+  the only price of its session (decision 38).
 
 ## EQS / FA · Equity screener and fundamental analysis (screen 3): done
 
@@ -142,6 +155,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   values (B42), their ratios follow the live price (B95), the sector reads in French (B17); COLUMNS
   ticks its entries for screen readers (B44); the saved screens say when they could not be read
   (B63).
+- **Built in step 54 (fifth version)**: the description panel reads the latest version on the
+  spec's route, with its source and date (decision 40). The Download button in step 57.
 
 ## YCRV / YAS · Yield curves and bond calculator (screen 4): done
 
@@ -453,6 +468,13 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): an input out of range is said
   on its field (B54), the API's refusals on theirs (B55), an unknown bond shows no other bond's
   figures (B56), and no Retry (B07).
+- **Built in step 55 (fifth version)**: block B's three ways to discount (a single yield or a
+  clean price, a yield curve, rates entered by cash-flow date or by tenor), the custom curves
+  saved, renamed, shared and deleted (decision 45), the equivalent yield and the Z-spread, the
+  zero rate of each cash flow, the curve used or the rates used, the sensitivity to them with a
+  shock by tenor on a custom curve, the calculation method; section 14.1's curve cases B and C
+  (see [step 55](steps/step-55-bond-pricing-from-a-curve.md)). Step 55's part 2 adds the
+  client's entry panel (decision 46); the Download button in step 57.
 
 ## BS · Bond screener (screen 17): done
 
@@ -627,3 +649,22 @@ what is still to do. The Data admin's and the Admin's screens are in
   once (B59); OPT RES keeps its saved scenario in its address (B60); an unknown list or id is said
   (B61), a capital that buys nothing too (B62). The demo's prices move independently, their
   correlations near zero (B12, left as is).
+
+## DES on an index · Index profile (screen 31): to do
+
+- **Fifth version (step 56)**: the security profile's layout for BVMAC-A and the five CMarket
+  indices: the header, the tabs DES, GP, MEMB, PERF and DOC, the index value based 100 and
+  compared, the description, the values of recent sessions, the constituents and their
+  contributions at a date, the performance and risk, the methodology and notices; from
+  `BVMAC-A DES`, a search or a double click on MKT's Indices panel (decision 44), the members dated
+  (decision 42). See [step 56](steps/step-56-index-profile.md).
+
+## DL · Data download (screen 30): to do
+
+- **Fifth version (step 57)**: the eight datasets the profile allows, their settings, a preview of
+  10 rows, the user's files of 7 days and their limits; a file above 50,000 rows made in the
+  background; scheduled exports; from the command bar and the user menu, for every account type
+  (decision 43), the sources the Admin allows (decision 41). The Download button that opens it
+  filled in on MKT's indices, DES, EQS, YCRV, PORT, ETFS, BP, BS, the ETF, bond and commodity
+  profiles, RFQ, RFQ AGR, ECO, FX, SVT, OPT RES and the index profile. See
+  [step 57](steps/step-57-data-download.md).

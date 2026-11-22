@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useBond, useBondPrice, useBonds, useMarketYield } from '@/entities/bond'
 import { isApiError } from '@/shared/api'
@@ -9,7 +9,6 @@ import {
   type DayCount,
   type MarketYieldDto,
 } from '@/shared/api/contracts'
-import { useFormat } from '@/shared/i18n'
 import { Button } from '@/shared/ui/form/Button'
 import { DateInput } from '@/shared/ui/form/DateInput'
 import { Field } from '@/shared/ui/form/Field'
@@ -24,11 +23,14 @@ import {
   hasChanged,
   nextRepayment,
   rangeErrors,
+  scheduleRequest,
   toRequest,
   type PricingForm,
   type RangeError,
   type RedemptionKind,
 } from '../model/pricingForm'
+import { BlockHeading } from './BlockHeading'
+import { DiscountRatesBlock } from './DiscountRatesBlock'
 import { RedemptionScheduleEditor } from './RedemptionScheduleEditor'
 
 /** The value of the bond drop-down for characteristics entered by hand. */
@@ -42,9 +44,10 @@ interface BondPricingInputsPanelProps {
 
 /**
  * Screen 16, inputs: A, the characteristics of a bond of the master list (changing one makes it a
- * bond entered by hand); B, the yield the platform supplies (BS's last, else the country curve and
- * the bond's spread), which the user may change, and the face amount. Calculate sends POST
- * /bonds/price; the bond opens calculated.
+ * bond entered by hand) and the face amount; B, the discount rates: the yield the platform
+ * supplies (BS's last, else the country curve and the bond's spread), which the user may change, a
+ * curve, or rates entered (fifth version). Calculate sends POST /bonds/price; the bond opens
+ * calculated at its yield.
  */
 export function BondPricingInputsPanel({ bondId, onBondChange }: BondPricingInputsPanelProps) {
   const { t } = useTranslation()
@@ -104,10 +107,18 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
   const submitted = useBondPricingStore((state) => state.submitted)
   const { edit, editCharacteristics, calculate } = useBondPricingStore.getState()
   const price = useBondPrice(submitted)
+  // The bond's remaining cash-flow dates, for block B's table and the rates entered by date.
+  const datesRequest = scheduleRequest(form)
+  const schedule = useBondPrice(datesRequest)
+  const rows =
+    datesRequest && schedule.data && !schedule.isPlaceholderData
+      ? schedule.data.cashFlows.map(({ date, years }) => ({ date, years }))
+      : null
+  const dates = rows?.map((row) => row.date) ?? null
   const serverErrors = isApiError(price.error, 400) ? (price.error.problem.errors ?? {}) : {}
   const serverError = (field: string) => serverErrors[field]?.at(0)
-  const request = toRequest(form)
-  const changed = hasChanged(form, submitted)
+  const request = toRequest(form, dates)
+  const changed = hasChanged(form, submitted, dates)
   const outOfRange = rangeErrors(form)
   const rangeError = (field: RangeError, message: string) =>
     outOfRange.has(field) ? message : serverError(field)
@@ -129,11 +140,11 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
       className="flex min-h-0 flex-1 flex-col"
       onSubmit={(event) => {
         event.preventDefault()
-        if (request) calculate()
+        if (request) calculate(dates)
       }}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-2">
-        <Heading>{t('bondPricing.characteristics')}</Heading>
+        <BlockHeading>{t('bondPricing.characteristics')}</BlockHeading>
         <Field label={t('bondPricing.bond')} hint={t('bondPricing.orByHand')}>
           <Select
             value={form.bondId ?? BY_HAND}
@@ -231,25 +242,6 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
             error={serverError('redemptionSchedule')}
           />
         )}
-
-        <Heading>{t('bondPricing.marketInput')}</Heading>
-        <Field
-          label={t('bondPricing.fields.ytm')}
-          hint={<YieldSource form={form} bond={bond} market={market} />}
-          error={
-            form.ytm === null
-              ? t('bondPricing.required')
-              : rangeError('ytm', t('bondPricing.ranges.ytm'))
-          }
-        >
-          <NumberInput
-            value={form.ytm}
-            onChange={(ytm) => edit({ ytm })}
-            decimals={4}
-            suffix="%"
-            highlight
-          />
-        </Field>
         <Field
           label={t('bondPricing.fields.faceAmount', { currency: form.currency })}
           error={
@@ -264,6 +256,15 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
             decimals={0}
           />
         </Field>
+
+        <DiscountRatesBlock
+          form={form}
+          bond={bond}
+          market={market}
+          rows={rows}
+          outOfRange={outOfRange}
+          serverError={serverError}
+        />
       </div>
       <div className="flex shrink-0 flex-col gap-1.5 border-t p-2">
         <Button
@@ -284,67 +285,5 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
         )}
       </div>
     </form>
-  )
-}
-
-function Heading({ children }: { children: ReactNode }) {
-  return (
-    <h3 className="pt-1 font-mono text-label font-semibold tracking-title text-accent-amber uppercase">
-      {children}
-    </h3>
-  )
-}
-
-/** Where the yield comes from (BS, a curve, none, the user), and the platform's to go back to. */
-function YieldSource({
-  form,
-  bond,
-  market,
-}: {
-  form: PricingForm
-  bond: BondDto
-  market: MarketYieldDto | undefined
-}) {
-  const { t } = useTranslation()
-  const format = useFormat()
-  const edit = useBondPricingStore((state) => state.edit)
-  if (!form.bondId) return t('bondPricing.source.byHand')
-  if (!market || market.ytmPct === null) return t('bondPricing.source.none')
-  const date = market.asOf ? format.isoDate(market.asOf) : '—'
-  const country = format.country(bond.country)
-  if (form.ytm !== null && Math.abs(form.ytm - market.ytmPct) < 1e-9) {
-    if (market.source === 'curve') {
-      return t('bondPricing.source.curve', {
-        country,
-        spread:
-          market.spreadBp === null
-            ? ''
-            : t('bondPricing.shift', { value: format.signed(market.spreadBp, 0) }),
-        date,
-      })
-    }
-    return market.priceSource === 'model'
-      ? t('bondPricing.source.bsModel', { date })
-      : t('bondPricing.source.bs', { date })
-  }
-  const platform = market.ytmPct
-  return (
-    <>
-      {t('bondPricing.source.yours', {
-        value: format.percent(platform, 4, false),
-        source:
-          market.source === 'curve'
-            ? t('bondPricing.source.curveShort', { country })
-            : t('bondPricing.source.bsShort'),
-        date,
-      })}{' '}
-      <button
-        type="button"
-        onClick={() => edit({ ytm: platform })}
-        className="inline-flex min-h-6 items-center text-info hover:underline"
-      >
-        {t('bondPricing.source.useIt')}
-      </button>
-    </>
   )
 }

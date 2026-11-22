@@ -153,7 +153,13 @@
     },
     "fallback": "Pas encore rédigée en français : le texte en {{language}}.",
     "none": "Pas encore de description de {{code}}.",
-    "noSecurity": "Sélectionnez un titre dans les résultats."
+    "noSecurity": "Sélectionnez un titre dans les résultats.",
+    "footer": "Source : {{source}} · rédigée par CMarket · mise à jour le {{date}}",
+    "footerNoSource": "Rédigée par CMarket · mise à jour le {{date}}",
+    "eodhd": "Description en anglais, source EODHD · mise à jour le {{date}}",
+    "edit": "Modifier",
+    "editLabel": "Modifier la description de {{code}}",
+    "editTitle": "{{code}} — Description"
   },
   "ratios": {
     "titleShort": "Ratios",

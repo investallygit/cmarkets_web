@@ -1,4 +1,5 @@
 import { lazy, Suspense, type ReactNode } from 'react'
+import { tradesAtFixing } from '@/entities/security'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
 import type { SecurityFunction } from '@/shared/routes/paths'
@@ -9,10 +10,10 @@ import {
   FinancialSummaryPanel,
 } from '@/widgets/financial-statements-panel'
 import { KeyDataPanel } from '@/widgets/key-data-panel'
-import { LatestTradesPanel } from '@/widgets/latest-trades-panel'
-import { OrderBookPanel } from '@/widgets/order-book-panel'
 import { PriceChartPanel } from '@/widgets/price-chart-panel'
 import { RatiosPanel } from '@/widgets/ratios-panel'
+import { RecentSessionsPanel } from '@/widgets/recent-sessions-panel'
+import { SecurityDescriptionPanel } from '@/widgets/security-description-panel'
 import { SecurityDocumentsPanel } from '@/widgets/security-documents-panel'
 import { ShareholdersPanel } from '@/widgets/shareholders-panel'
 import { defaultLayout, layoutKey } from '../config/layouts'
@@ -27,8 +28,9 @@ const FundamentalsComparison = lazy(() =>
 export type EquityFunction = Extract<SecurityFunction, 'des' | 'gp' | 'fa' | 'dvd' | 'hds'>
 
 /**
- * Screen 2, an equity's own tabs: DES as its mockup (chart, order book, trades, key data,
- * dividends, documents and news), GP, FA with the panels of EQS, DVD and HDS.
+ * Screen 2, an equity's own tabs: DES as its mockup of the fifth version (the closing prices, the
+ * description, the prices of recent sessions, key data, dividends, documents and news), GP, FA with
+ * the panels of EQS, DVD and HDS.
  */
 export function EquityTab({ fn, security }: { fn: EquityFunction; security: SecurityProfileDto }) {
   const { id, type, currency, code } = security
@@ -39,14 +41,15 @@ export function EquityTab({ fn, security }: { fn: EquityFunction; security: Secu
       securityType={type}
       currency={currency}
       variant={variant}
+      atFixing={tradesAtFixing(security)}
     />
   )
   const keyData = <KeyDataPanel profile={security} />
   const panels: Record<EquityFunction, Record<string, ReactNode>> = {
     des: {
       chart: chart('compact'),
-      orderbook: <OrderBookPanel securityId={id} securityType={type} currency={currency} />,
-      trades: <LatestTradesPanel securityId={id} securityType={type} currency={currency} />,
+      description: <SecurityDescriptionPanel id={id} code={code} screen="DES" />,
+      sessions: <RecentSessionsPanel profile={security} />,
       keydata: keyData,
       income: <DividendsPanel securityId={id} />,
       documents: <SecurityDocumentsPanel securityId={id} />,

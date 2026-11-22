@@ -1,4 +1,6 @@
+export { CalculationMethodPanel } from './ui/CalculationMethodPanel'
 export { CashFlowSchedulePanel } from './ui/CashFlowSchedulePanel'
+export { CurveUsedPanel } from './ui/CurveUsedPanel'
 export { PriceYieldPanel } from './ui/PriceYieldPanel'
 export { PricingResultsPanel } from './ui/PricingResultsPanel'
 export { RateSensitivityPanel } from './ui/RateSensitivityPanel'

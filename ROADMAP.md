@@ -1,11 +1,11 @@
 # Roadmap
 
 Screen-by-screen plan to finish the front end of `CMarket-developer-spec-EN.pdf`, the version of
-13 November 2026; the earlier versions are kept as `CMarket-developer-spec-EN-v1.pdf` (29 October),
-`CMarket-developer-spec-EN-v2.pdf` (2 November) and `CMarket-developer-spec-EN-v3.pdf` (10
-November). This file is the entry point: what is built, the order of the steps and their status;
-the rest is in the [`roadmap/`](roadmap) folder, listed under
-[Where things are](#where-things-are).
+21 November 2026; the earlier versions are kept as `CMarket-developer-spec-EN-v1.pdf` (29 October),
+`CMarket-developer-spec-EN-v2.pdf` (2 November), `CMarket-developer-spec-EN-v3.pdf` (10 November)
+and `CMarket-developer-spec-EN-v4.pdf` (13 November). This file is the entry point: what is built,
+the order of the steps and their status; the rest is in the [`roadmap/`](roadmap) folder, listed
+under [Where things are](#where-things-are).
 
 Every screen of the first three versions is built: the client terminal (MKT, DES with its FA and ANA
 tabs, EQS, ETFS, YCRV, BP, BS, PORT, PUB, PUB NEW, NET, MSG, NET ME, N, NEWS NEW, CAL, ALRT and
@@ -20,7 +20,10 @@ version added a ninth account type, the News provider, a news feed rebuilt aroun
 newspapers paid per unique click, and eight screens (13 to 20): steps 23 to 36, under
 [Third version of the spec](roadmap/third-version.md). The fourth version adds a tenth account
 type, the SVT, requests for quotes on government securities, and nine screens (21 to 29): steps 37
-to 49, under [Fourth version of the spec](roadmap/fourth-version.md). What remains is listed
+to 49, under [Fourth version of the spec](roadmap/fourth-version.md). The fifth version sets the
+BVMAC equities at their fixing, which redraws the security profile (screen 2), prices bonds from a
+yield curve (screen 16) and adds the data download (screen 30) and the index profile (screen 31):
+steps 52 to 58, under [Fifth version of the spec](roadmap/fifth-version.md). What remains is listed
 under "Still to do" for each screen and for the [shared groundwork](roadmap/shared-groundwork.md),
 in those steps and in the [open questions for the spec author](roadmap/open-questions.md).
 
@@ -33,7 +36,8 @@ relative: S < M < L < XL.
 | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | [Second version of the spec](roadmap/second-version.md) | What the spec of 2 November 2026 changed                                                                               |
 | [Third version of the spec](roadmap/third-version.md)   | What the spec of 10 November 2026 changed, the decisions taken where it is silent (1 to 13), the spec author's answers |
-| [Fourth version of the spec](roadmap/fourth-version.md) | What the spec of 13 November 2026 changes, the decisions taken (from 14)                                               |
+| [Fourth version of the spec](roadmap/fourth-version.md) | What the spec of 13 November 2026 changed, the decisions taken (14 to 37)                                              |
+| [Fifth version of the spec](roadmap/fifth-version.md)   | What the spec of 21 November 2026 changes, the decisions taken (from 38)                                               |
 | [Steps](roadmap/steps)                                  | A file per step from step 11, named after its number: what it built, checked, fixed and left to do                     |
 | [Client screens](roadmap/client-screens.md)             | Each screen of the terminal: what is built, by which step, what is still to do                                         |
 | [Back-office screens](roadmap/back-office-screens.md)   | The same for the screens of the Data admin and of the Admin                                                            |
@@ -43,8 +47,9 @@ relative: S < M < L < XL.
 
 The code's comments cite a step or a decision by its number ("ROADMAP step 27", "ROADMAP decision
 6"): a step is its file of [`roadmap/steps/`](roadmap/steps), decisions 1 to 13 are in the
-[third version](roadmap/third-version.md#decisions-taken) and those from 14 in the
-[fourth](roadmap/fourth-version.md#decisions-taken).
+[third version](roadmap/third-version.md#decisions-taken), 14 to 37 in the
+[fourth](roadmap/fourth-version.md#decisions-taken) and those from 38 in the
+[fifth](roadmap/fifth-version.md#decisions-taken).
 
 A step has its file from the day it is planned. When it is done, its title says so, and its line
 in the order below, the screens it touched and the README's status are brought up to date.
@@ -104,11 +109,21 @@ in the order below, the screens it touched and the README's status are brought u
 | 49   | [The CMarket curve fed by the RFQ agreements above an amount](roadmap/steps/step-49-rfq-curve-feed.md)               | Done   |
 | 50   | [Every page checked for bugs, then the bugs fixed](roadmap/steps/step-50-page-bug-sweep.md)                          | Done   |
 | 51   | [CMarket.Api's messages in the user's language](roadmap/steps/step-51-api-messages-by-language.md)                   | Done   |
+| 52   | [MSG and N on the live site, the client's report](roadmap/steps/step-52-msg-and-n-on-the-live-site.md)               | Done   |
+| 53   | [Fifth version of the spec: the plan, its decisions, questions](roadmap/steps/step-53-fifth-version-plan.md)         | Done   |
+| 54   | [DES at the BVMAC fixing, the descriptions (screen 2)](roadmap/steps/step-54-security-profile-at-the-fixing.md)      | Done   |
+| 55   | [BP from a curve, custom curves (screen 16)](roadmap/steps/step-55-bond-pricing-from-a-curve.md)                     | Part 2 |
+| 56   | [DES on an index: the index profile (screen 31)](roadmap/steps/step-56-index-profile.md)                             | To do  |
+| 57   | [DL: data download (screen 30), the Download buttons](roadmap/steps/step-57-data-download.md)                        | To do  |
+| 58   | [Fifth version done: README, accessibility, every flow](roadmap/steps/step-58-fifth-version-done.md)                 | To do  |
 
 Steps 41 to 48 run in three lanes at once, each with its own steps: see [Lanes](roadmap/lanes.md),
 which also says what waits for what. Step 49 came after them, on a rule step 48 had left open.
 Step 50 then uses every page as each account type, to find the bugs before fixing them; step 51
 translates CMarket.Api's messages, which step 50 found in English on French pages (B18).
+Step 52 checked the menus a client found "not working" (MSG and N): they work, and the client's
+answer named the fifth version's four screens instead; steps 53 to 58 are the fifth version, in
+one lane, step 55's second part adding the entry panel of that answer (decision 46).
 
 Steps 1 to 10 built the first version, screen by screen, and have no file of their own: their
 record is under each screen in [Client screens](roadmap/client-screens.md) and

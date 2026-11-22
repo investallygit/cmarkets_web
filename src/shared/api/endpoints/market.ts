@@ -7,6 +7,8 @@ import type {
   CommodityListItemDto,
   CommodityProfileDto,
   CommodityRelatedDto,
+  DescriptionDto,
+  DescriptionLanguage,
   FxConversionDto,
   FxHistoryDto,
   FxInterval,
@@ -53,6 +55,7 @@ export const marketRoutes = {
   sectors: route('GET', '/market/sectors', answer<SectorDto[]>()),
   indices: route('GET', '/indices', answer<IndexQuoteDto[]>()),
   indexHistory: route('GET', '/indices/{code}/history', answer<HistoryPointDto[]>()),
+  indexDescription: route('GET', '/indices/{code}/description', answer<DescriptionDto>()),
   policyRates: route('GET', '/rates/policy', answer<PolicyRateDto[]>()),
   fx: route('GET', '/fx', answer<FxRateDto[]>()),
   xafCrosses: route('GET', '/fx/xaf-crosses', answer<XafCrossesDto>()),
@@ -86,6 +89,9 @@ export const marketApi = {
   indices: (signal?: AbortSignal) => send(marketRoutes.indices, { signal }),
   indexHistory: (code: string, range: HistoryRange, signal?: AbortSignal) =>
     send(marketRoutes.indexHistory, { params: { code }, query: { ...range }, signal }),
+  /** An index's description in a language, else in the other one (screen 31, fifth version). */
+  indexDescription: (code: string, lang: DescriptionLanguage, signal?: AbortSignal) =>
+    send(marketRoutes.indexDescription, { params: { code }, query: { lang }, signal }),
   policyRates: (signal?: AbortSignal) => send(marketRoutes.policyRates, { signal }),
   /** Pairs such as EURXAF. */
   fx: (pairs: readonly string[], signal?: AbortSignal) =>

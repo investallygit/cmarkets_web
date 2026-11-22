@@ -21,6 +21,8 @@ export const devToolsRoutes = {
   codes: route('GET', '/_prototype/codes', answer<{ code: string }>(), devOnly),
   /** The account switch: a session for the demo user of the type, as its refresh cookie. */
   session: route('PUT', '/_prototype/session', undefined, devOnly),
+  /** The demo market's fixing now, whatever the time (ROADMAP decision 38): the flows that wait for prices. */
+  fixing: route('POST', '/_prototype/market/fixing', undefined, devOnly),
 }
 
 const anonymous = true
@@ -31,4 +33,5 @@ export const devToolsApi = {
     send(devToolsRoutes.codes, { query, signal, anonymous }),
   switchAccount: (accountType: AccountType) =>
     send(devToolsRoutes.session, { body: { accountType } }),
+  fixNow: () => send(devToolsRoutes.fixing, {}),
 }

@@ -17,7 +17,8 @@
       "etf-profiles": "ETF profiles",
       "etf-nav": "ETF NAV and spreads",
       "macro": "Macro indicators",
-      "commodity-prices": "Commodity prices"
+      "commodity-prices": "Commodity prices",
+      "descriptions": "Descriptions"
     },
     "frequencies": {
       "session": "Every session",
@@ -251,7 +252,8 @@
       "etf-profiles": "the provider's factsheet",
       "etf-nav": "the provider's or the market maker's data",
       "macro": "the report named in the row",
-      "commodity-prices": "the source named in the row"
+      "commodity-prices": "the source named in the row",
+      "descriptions": "the source named in the row"
     },
     "selected": {
       "alert": "Row {{row}} selected: check the {{field}} against {{source}}, fix it if needed, then tick “Alert checked”.",
@@ -295,7 +297,8 @@
       "etf-profiles": "On publish: the ETFs are listed or described again, their holdings and allocations replaced where the file gives them, and their figures recalculated (ETFS, DES); a DataPublished event is sent to open screens.",
       "etf-nav": "On publish: the ETFs' premiums, discounts and spreads are recalculated (ETFS); a DataPublished event is sent to open screens.",
       "macro": "On publish: the macro indicators of ECO (tiles, chart, CEMAC comparison) are read again, the source shown beside each figure; a DataPublished event is sent to open screens.",
-      "commodity-prices": "On publish: the CEMAC complement of CMDTY (list, history, statistics) is read again, the source shown in its data, and the alerts on a new value go off; a DataPublished event is sent to open screens."
+      "commodity-prices": "On publish: the CEMAC complement of CMDTY (list, history, statistics) is read again, the source shown in its data, and the alerts on a new value go off; a DataPublished event is sent to open screens.",
+      "descriptions": "On publish: each row is a new version of its security's description, shown at once on DES and EQS; a rollback removes the versions it added."
     },
     "fix": {
       "title": "Fix row {{row}}",
@@ -409,7 +412,7 @@
     "description": {
       "title": "{{code}} — Description",
       "pick": "Pick a security in the price correction to write its description.",
-      "intro": "Business, markets, listing history: what EQS shows under its results, 2,000 characters in each language.",
+      "intro": "Business, markets, shareholders, strategy, key dates: what DES and EQS show, 1,500 characters in each language, with the documents it was written from. Each save is a new version.",
       "languages": {
         "fr": "French",
         "en": "English"
@@ -419,17 +422,27 @@
         "en": "English"
       },
       "count": "{{count}} / {{max}} characters",
-      "written": "written by {{who}} on {{when}}",
+      "written": "version {{version}}, written by {{who}} on {{when}}",
       "empty": {
-        "eodhd": "empty: EQS shows EODHD's English, below",
-        "other": "empty: EQS shows the {{other}} text, marked",
-        "none": "empty: EQS shows no description"
+        "eodhd": "empty: DES and EQS show EODHD's English, below",
+        "other": "empty: DES and EQS show the {{other}} text, marked",
+        "none": "empty: DES and EQS show no description"
       },
       "eodhd": "EODHD's English, loaded on {{when}}",
       "tooLong": "{{max}} characters at most.",
       "submit": "Save the description",
       "unchanged": "Change a text to save it.",
-      "saved": "{{code}}: description saved."
+      "saved": "{{code}}: description saved.",
+      "sources": {
+        "fr": "Source of the French text",
+        "en": "Source of the English text"
+      },
+      "sourceHint": "The documents it was written from, e.g. the issuer's 2025 annual report.",
+      "history_one": "An earlier version",
+      "history_other": "{{count}} earlier versions",
+      "versionLine": "Version {{version}}, {{who}}, {{when}}",
+      "fromFile": "DESCRIPTIONS file",
+      "removed": "Language removed."
     }
   },
   "content": {

@@ -37,6 +37,11 @@ interface PriceChartPanelProps {
   currency: CurrencyCode
   /** full: the GP tab, with intraday periods, more indicators, comparison and drawing tools. */
   variant?: 'compact' | 'full'
+  /**
+   * A BVMAC security, which trades at a fixing (ROADMAP decision 38): a line of its closes,
+   * without intraday periods, candles or bars.
+   */
+  atFixing?: boolean
 }
 
 function Separator() {
@@ -45,7 +50,9 @@ function Separator() {
 
 /**
  * Screen 2, price chart (DES and GP tabs): candles and 20- / 50-day moving averages by default,
- * volume below. API /securities/{id}/history, /indicators/{id}, /charts/{id}/drawings.
+ * volume below; for a BVMAC security, "Closing price (fixing)", a line of the closes, one point a
+ * session with trades (spec section 9, fifth version). API /securities/{id}/history,
+ * /indicators/{id}, /charts/{id}/drawings.
  */
 export function PriceChartPanel({
   securityId,
@@ -53,21 +60,24 @@ export function PriceChartPanel({
   securityType,
   currency,
   variant = 'compact',
+  atFixing = false,
 }: PriceChartPanelProps) {
   const { t } = useTranslation()
   const full = variant === 'full'
-  // Intraday data comes with the order book: not for Students (spec section 12).
-  const intradayAllowed = useHasPermission('market:orderbook')
+  // Intraday data, of the European and US securities: not for Students (spec section 12).
+  const intradayAllowed = useHasPermission('market:intraday')
   // "Read" accounts (Journalist, CEO) view the chart without saving drawings (spec section 12).
   const canDraw = useHasPermission('analysis:save')
   // The indicators come from the analysis (GET /indicators): an account without it (the SVT)
   // has none, rather than averages on that draw no line (B21).
   const canAnalyse = useHasPermission('analysis:read')
   const periods = (full ? FULL_PERIODS : COMPACT_PERIODS).filter(
-    (candidate) => intradayAllowed || !isIntraday(candidate),
+    (candidate) => (intradayAllowed && !atFixing) || !isIntraday(candidate),
   )
   const [period, setPeriod] = useState<ChartPeriod>(full ? '1Y' : '6M')
-  const [chartType, setChartType] = useState<PriceChartType>('candles')
+  const [chosenType, setChartType] = useState<PriceChartType>('candles')
+  // A fixing's open, high and low are its close: no candles (spec section 9, screen 2).
+  const chartType: PriceChartType = atFixing ? 'line' : chosenType
   const [indicators, setIndicators] = useState<ReadonlySet<Indicator>>(
     () => new Set(canAnalyse ? ['ma20', 'ma50'] : []),
   )
@@ -213,7 +223,9 @@ export function PriceChartPanel({
         onChange={setPeriod}
       />
       <Separator />
-      {full ? (
+      {atFixing ? (
+        <span className="uppercase">{typeLabel('line')}</span>
+      ) : full ? (
         <PanelTabs
           value={chartType}
           options={CHART_TYPES.map((value) => ({ value, label: typeLabel(value) }))}
@@ -270,7 +282,11 @@ export function PriceChartPanel({
   )
 
   return (
-    <Panel title={t('panels.priceChart')} code="GP" options={options}>
+    <Panel
+      title={atFixing ? t('chart.closingFixing') : t('panels.priceChart')}
+      code="GP"
+      options={options}
+    >
       <div className="flex h-full flex-col">
         {full && (compareOpen || comparing) && (
           <CompareBar securityId={securityId} items={compared} onChange={setCompared} />

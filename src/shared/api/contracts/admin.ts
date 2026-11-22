@@ -387,6 +387,8 @@ export const AUDIT_ACTIONS = [
   'security-describe',
   /** A commodity's names, texts, CEMAC countries or related securities (CORR, screen 21). */
   'commodity-describe',
+  /** An index's French or English description (screen 31, fifth version). */
+  'index-describe',
 ] as const
 export type AuditAction = (typeof AUDIT_ACTIONS)[number]
 
@@ -413,6 +415,8 @@ export type AuditTargetType =
   | 'invoice'
   /** A security, by its id (CORR's description). */
   | 'security'
+  /** A market index, by its code (its description, fifth version). */
+  | 'index'
 
 /** What a change is about; `scope` says which account type, permission or security. */
 export const AUDIT_FIELDS = [

@@ -68,12 +68,17 @@
       "volume": "Volume",
       "marketCap": "Capitalisation",
       "pe": "PER",
-      "yield": "Rendement"
+      "yield": "Rendement",
+      "previous": "Cours précédent",
+      "valueTraded": "Capitaux échangés"
     },
     "delayed": "Différé",
     "notFound": "Aucune valeur {{id}}.",
     "notApplicable": "{{code}} ne s'applique pas à {{security}}.",
-    "notAllowed": "{{code}} ne fait pas partie de votre compte."
+    "notAllowed": "{{code}} ne fait pas partie de votre compte.",
+    "fixingAuction": "cotation au fixing",
+    "fixingOf": "Fixing du {{date}}",
+    "closeOf": "Clôture du {{date}}"
   },
   "keyData": {
     "isin": "Code ISIN",
@@ -89,15 +94,27 @@
       "halfYearly": "semestriel",
       "quarterly": "trimestriel"
     },
-    "insufficientData": "Données insuffisantes"
+    "insufficientData": "Données insuffisantes",
+    "sessionsTraded": "Séances avec échanges (3 mois)",
+    "sessionsOf": "{{traded}} sur {{held}}",
+    "dividendOn": "{{amount}} ({{month}})"
   },
-  "orderBook": {
-    "bestLimits": "5 meilleures limites",
-    "bidQty": "Qté achat",
-    "bid": "Achat",
-    "ask": "Vente",
-    "askQty": "Qté vente",
-    "notIncluded": "Le carnet d'ordres et les transactions de la séance ne font pas partie d'un compte {{type}}."
+  "sessions": {
+    "label": "Dernières séances",
+    "session": "Séance",
+    "price": "Cours",
+    "change": "Var.",
+    "changePct": "Var. %",
+    "volume": "Volume",
+    "value": "Capitaux M",
+    "last": "{{count}} dernières séances",
+    "count": "{{count}}",
+    "fixingNote": "Un cours par séance, fixé par la BVMAC.",
+    "untraded": "Les séances sans échange (par exemple le {{date}}) n'ont pas de cours et ne sont pas listées.",
+    "allTraded": "Toutes les séances listées ont eu des échanges.",
+    "closeNote": "Une clôture par séance.",
+    "history": "Tout l'historique dans GP",
+    "none": "Pas encore de séance avec échanges."
   },
   "dividendKinds": {
     "final": "Solde",

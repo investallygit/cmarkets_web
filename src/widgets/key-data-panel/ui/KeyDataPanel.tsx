@@ -35,7 +35,8 @@ function KeyValues({ rows }: { rows: readonly Row[] }) {
 }
 
 /**
- * Screen 2, key data: an equity's reference figures (a bond's terms are its profile's
+ * Screen 2, key data (spec section 9, fifth version): an equity's reference figures and its
+ * sessions with trades over three months, "58 of 63" (a bond's terms are its profile's
  * characteristics, screen 20). API /securities/{id}.
  */
 export function KeyDataPanel({ profile }: { profile: SecurityProfileDto }) {
@@ -62,9 +63,14 @@ export function KeyDataPanel({ profile }: { profile: SecurityProfileDto }) {
       t('keyData.range52w'),
       `${format.number(profile.high52w, decimals)} / ${format.number(profile.low52w, decimals)}`,
     ],
+    // The liquidity in place of the beta (fifth version): BVMAC trades at a fixing, and a
+    // session without trades has no price.
     [
-      t('keyData.beta', { index: profile.betaIndex }),
-      profile.beta1y === null ? t('keyData.insufficientData') : format.number(profile.beta1y, 2),
+      t('keyData.sessionsTraded'),
+      t('keyData.sessionsOf', {
+        traded: format.number(profile.sessionsTraded3m, 0),
+        held: format.number(profile.sessions3m, 0),
+      }),
     ],
     [
       t('keyData.lastDividend'),

@@ -53,7 +53,7 @@ export type OtpChannel = 'email' | 'sms'
 export const PERMISSIONS = [
   'market:read',
   'market:realtime',
-  'market:orderbook',
+  'market:intraday',
   'analysis:read',
   'analysis:export',
   'analysis:save',
@@ -75,6 +75,9 @@ export const PERMISSIONS = [
   'news:payments',
   'data:import',
   'content:publish',
+  // The descriptions of the securities and the indices: the Data admin, an Analyst of CMarket
+  // (fifth version, ROADMAP decision 40).
+  'descriptions:write',
   'users:manage',
   'subscriptions:manage',
   'moderation:manage',

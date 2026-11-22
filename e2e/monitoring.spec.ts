@@ -190,7 +190,7 @@ test('GP draws nothing over the lines it could not read, and draws once they are
     return route.fallback()
   })
   await page.goto('/securities/SEMC/gp')
-  const chart = panel(page, 'Price chart')
+  const chart = panel(page, 'Closing price (fixing)')
   // Read three times (a 5xx is retried twice), then said.
   await expect(chart.getByRole('alert')).toContainText('Your lines could not be loaded', {
     timeout: 10_000,

@@ -6,6 +6,8 @@ GET /admin/analyst-requests/{id}/documents/{kind}
 POST /admin/analyst-requests/{id}/reject
 GET /admin/audit-log
 GET /admin/conversations/{id}
+GET /admin/descriptions/{type}/{id}
+PUT /admin/descriptions/{type}/{id}
 GET /admin/ingest-clients
 POST /admin/ingest-clients
 DELETE /admin/ingest-clients/{id}
@@ -162,6 +164,8 @@ POST /conversations/{id}/mute
 POST /conversations/{id}/read
 POST /conversations/{id}/report
 GET /conversations/contacts
+GET /curves
+GET /curves/{id}/points
 PUT /data/commodities/{code}
 GET /data/corrections
 GET /data/coverage
@@ -180,8 +184,6 @@ PATCH /data/imports/{id}/rows/{rowId}
 POST /data/news
 PUT /data/news/{id}
 GET /data/providers/eodhd/status
-GET /data/securities/{id}/description
-PUT /data/securities/{id}/description
 GET /data/securities/{id}/prices
 PUT /data/securities/{id}/prices/{date}
 GET /directory
@@ -205,6 +207,7 @@ GET /fx/matrix
 GET /fx/xaf-crosses
 GET /indicators/{securityId}
 GET /indices
+GET /indices/{code}/description
 GET /indices/{code}/history
 GET /ingest/excluded-sources
 POST /ingest/news
@@ -236,6 +239,10 @@ GET /market/ticker
 GET /me
 PUT /me
 GET /me/blocks
+GET /me/curves
+POST /me/curves
+DELETE /me/curves/{id}
+PUT /me/curves/{id}
 GET /me/layouts/{screen}
 PUT /me/layouts/{screen}
 PUT /me/password
@@ -375,14 +382,14 @@ GET /rfq/setup
 GET /search
 GET /securities
 GET /securities/{id}
+GET /securities/{id}/description
 GET /securities/{id}/dividends
 GET /securities/{id}/financials
 GET /securities/{id}/history
-GET /securities/{id}/orderbook
 GET /securities/{id}/quote
 GET /securities/{id}/ratios
+GET /securities/{id}/sessions
 GET /securities/{id}/shareholders
-GET /securities/{id}/trades
 GET /subscription
 POST /subscription/checkout
 GET /subscription/plans

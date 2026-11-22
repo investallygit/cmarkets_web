@@ -11,13 +11,15 @@ test('the market dashboard loads its panels and real-time data', async ({ page }
   await expect(page.getByText('Real-time connected')).toBeVisible()
   // The hub sends IndexUpdated to the screens that follow the index: the panel follows its own.
   // Once the panels' first reads are over (the summary is read again every minute only), only
-  // the hub moves the value.
+  // the hub moves the value. BVMAC trades at a fixing, once a session (ROADMAP decision 38): the
+  // development tool publishes one now.
   const indices = page.locator('section', {
     has: page.getByRole('heading', { name: 'Indices', exact: true }),
   })
   const first = indices.getByRole('row').nth(1)
   await page.waitForLoadState('networkidle')
   const before = (await first.textContent()) ?? ''
+  await page.evaluate(() => fetch('/api/v1/_prototype/market/fixing', { method: 'POST' }))
   await expect(first).not.toHaveText(before, { timeout: 15_000 })
 })
 
@@ -28,7 +30,7 @@ test('the command bar opens a security profile', async ({ page }) => {
   await page.keyboard.type('SEMC DES')
   await page.keyboard.press('Enter')
   await expect(page).toHaveURL(/\/securities\/SEMC\/des$/)
-  await expect(page.getByRole('heading', { name: 'Price chart' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Closing price (fixing)' })).toBeVisible()
 })
 
 test('the command bar says an unknown function and a code the account may not run', async ({
@@ -60,9 +62,9 @@ test('the command bar says an unknown function and a code the account may not ru
 test('the security profile follows the mockup and opens a document', async ({ page }) => {
   await page.goto('/securities/SEMC/des')
   for (const title of [
-    'Price chart',
-    'Order book',
-    'Latest trades',
+    'Closing price (fixing)',
+    'Description',
+    'Prices of recent sessions',
     'Key data',
     'Dividends',
     'Documents and news',
