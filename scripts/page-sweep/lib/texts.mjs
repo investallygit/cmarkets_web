@@ -52,7 +52,7 @@ export async function loadTexts(webRoot) {
     status: {
       notFound: status('status.notFound'),
       forbidden: status('status.forbidden'),
-      crash: status('status.unexpected'),
+      crash: [...status('status.unexpected'), ...status('status.notLoaded')],
       locked: status('subscription.locked.title'),
     },
     loading: [en.get('common.loading'), fr.get('common.loading')],

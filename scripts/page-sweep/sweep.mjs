@@ -145,7 +145,7 @@ async function apiAs(page) {
 /** The live site read only: every write refused, but the login and the computing POSTs. */
 async function guard(context) {
   const reads =
-    /\/auth\/(login|otp\/verify|refresh)$|\/analysis\/screener$|\/bonds\/[^/]+\/calculate$|\/bonds\/price$|\/optimizer\/(estimates|check|run|frontier-point)$/
+    /\/auth\/(login|otp\/verify|refresh)$|\/analysis\/screener$|\/bonds\/[^/]+\/calculate$|\/bonds\/price$|\/optimizer\/(estimates|check|run|frontier-point)$|\/exports\/preview$/
   await context.route('**/api/v1/**', (route) => {
     const request = route.request()
     const allowed = request.method() === 'GET' || reads.test(new URL(request.url()).pathname)

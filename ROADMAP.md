@@ -116,6 +116,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 56   | [DES on an index: the index profile (screen 31)](roadmap/steps/step-56-index-profile.md)                             | Done   |
 | 57   | [DL: data download (screen 30), the Download buttons](roadmap/steps/step-57-data-download.md)                        | Done   |
 | 58   | [Fifth version done: README, accessibility, every flow](roadmap/steps/step-58-fifth-version-done.md)                 | Doing  |
+| 59   | [Tabs open across a release, the client's report](roadmap/steps/step-59-tabs-open-across-a-release.md)               | Done   |
 
 Steps 41 to 48 run in three lanes at once, each with its own steps: see [Lanes](roadmap/lanes.md),
 which also says what waits for what. Step 49 came after them, on a rule step 48 had left open.
@@ -123,7 +124,8 @@ Step 50 then uses every page as each account type, to find the bugs before fixin
 translates CMarket.Api's messages, which step 50 found in English on French pages (B18).
 Step 52 checked the menus a client found "not working" (MSG and N): they work, and the client's
 answer named the fifth version's four screens instead; steps 53 to 58 are the fifth version, in
-one lane, step 55's second part adding the entry panel of that answer (decision 46).
+one lane, step 55's second part adding the entry panel of that answer (decision 46). Step 59 answers
+the client's report of errors on opening screens, after the fifth version's release.
 
 Steps 1 to 10 built the first version, screen by screen, and have no file of their own: their
 record is under each screen in [Client screens](roadmap/client-screens.md) and

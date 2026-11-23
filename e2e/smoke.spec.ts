@@ -138,3 +138,46 @@ test('the back-office menu replaces the client menu for a Data admin', async ({ 
   await expect(page.getByRole('link', { name: /IMP/ })).toBeVisible()
   await expect(page.getByRole('link', { name: /MKT/ })).toHaveCount(0)
 })
+
+test('a tab open since before a release loads the new build for the screen it opens', async ({
+  page,
+}) => {
+  await page.goto('/mkt')
+  await expect(page.getByRole('heading', { name: 'Indices', exact: true })).toBeVisible()
+  // The site serves another build, whose release took away the files of the one this tab runs.
+  let released = false
+  await page.route('**/pages/equity-screener/index.ts*', (route) =>
+    released ? route.continue() : route.fulfill({ status: 404, body: '' }),
+  )
+  await page.route('http://localhost:*/', (route) => {
+    released = true
+    return route.fulfill({
+      contentType: 'text/html',
+      body: '<script type="module" src="/assets/index-new.js"></script>',
+    })
+  })
+  const menu = page.getByRole('navigation', { name: 'Main menu' })
+  const reload = page.waitForEvent('load')
+  await menu.locator('a[href="/eqs"]').click()
+  await reload
+  await expect(page).toHaveURL(/\/eqs$/)
+  await expect(page.getByRole('heading', { name: 'Results' })).toBeVisible()
+})
+
+test('a screen whose files do not come says so beside the menu, and a reload asks again', async ({
+  page,
+}) => {
+  await page.goto('/mkt')
+  await expect(page.getByRole('heading', { name: 'Indices', exact: true })).toBeVisible()
+  const files = '**/pages/equity-screener/index.ts*'
+  await page.route(files, (route) => route.abort())
+  const menu = page.getByRole('navigation', { name: 'Main menu' })
+  await menu.locator('a[href="/eqs"]').click()
+  await expect(page.getByText('This screen could not be loaded')).toBeVisible()
+  await menu.locator('a[href="/mkt"]').click()
+  await expect(page.getByRole('heading', { name: 'Indices', exact: true })).toBeVisible()
+  await menu.locator('a[href="/eqs"]').click()
+  await page.unroute(files)
+  await page.getByRole('button', { name: 'Reload the page' }).click()
+  await expect(page.getByRole('heading', { name: 'Results' })).toBeVisible()
+})

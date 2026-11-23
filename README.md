@@ -410,7 +410,8 @@ each other; the app shell mounts the form once.
 
 ### A new screen
 
-1. Add it to `SCREENS` in `shared/routes/screens.ts`, and its page to `app/routes/pages.ts`.
+1. Add it to `SCREENS` in `shared/routes/screens.ts`, and its page to `app/routes/pages.ts`, with
+   `lazyPage`: a tab opened before a release then loads the new build by itself.
 2. Write its DTOs in `shared/api/contracts`, its routes and calls in `shared/api/endpoints` (the
    file of the API's controller folder). A route the API does not serve yet fails the OpenAPI
    test until `CMarket.Api` has it and `npm run api:routes` reads it again.

@@ -143,6 +143,8 @@
     "notFound": "This screen does not exist.",
     "forbidden": "This screen is not open to your account: its type, or a setting of CMarket's, keeps it closed.",
     "unexpected": "Something went wrong on this screen.",
+    "notLoaded": "This screen could not be loaded: check your connection, then reload the page.",
+    "reload": "Reload the page",
     "backHome": "Back to home",
     "notFoundTitle": "Screen not found"
   },

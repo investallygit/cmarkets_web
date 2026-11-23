@@ -59,15 +59,21 @@ export const router = createBrowserRouter([
     ),
     errorElement: <RouteErrorPage />,
     children: [
-      { path: routes.app, element: <HomeRedirect /> },
-      { path: routes.bondCalculatorLegacy, element: <YasRedirect /> },
-      ...SCREENS.map((screen) => ({
-        path: screen.routePattern ?? screen.path,
-        element: <ScreenRoute screen={screen} page={pageOf(screen)} />,
-        handle: { screen } satisfies ScreenRouteHandle,
-      })),
-      ...prototypeRoutes,
-      { path: '*', element: <NotFoundPage /> },
+      {
+        // Inside the shell: a screen that fails leaves the menu, which opens another.
+        errorElement: <RouteErrorPage />,
+        children: [
+          { path: routes.app, element: <HomeRedirect /> },
+          { path: routes.bondCalculatorLegacy, element: <YasRedirect /> },
+          ...SCREENS.map((screen) => ({
+            path: screen.routePattern ?? screen.path,
+            element: <ScreenRoute screen={screen} page={pageOf(screen)} />,
+            handle: { screen } satisfies ScreenRouteHandle,
+          })),
+          ...prototypeRoutes,
+          { path: '*', element: <NotFoundPage /> },
+        ],
+      },
     ],
   },
 ])

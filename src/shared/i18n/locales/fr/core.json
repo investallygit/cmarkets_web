@@ -143,6 +143,8 @@
     "notFound": "Cet écran n'existe pas.",
     "forbidden": "Cet écran n'est pas ouvert à votre compte : son type, ou un réglage de CMarket, le tient fermé.",
     "unexpected": "Une erreur est survenue sur cet écran.",
+    "notLoaded": "Cet écran n'a pas pu être chargé : vérifiez votre connexion, puis rechargez la page.",
+    "reload": "Recharger la page",
     "backHome": "Retour à l'accueil",
     "notFoundTitle": "Écran introuvable"
   },

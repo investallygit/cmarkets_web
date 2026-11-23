@@ -28,6 +28,8 @@ No CMarket.Api phase of its own: the operations' part of phase 12 for what phase
 - **CMarket.Api**: Domain 713, Application 837, integration 315, architecture 21; `POST /exports`
   under k6 (`tests/load/exports.js`, 20 users, on SQLite): 2,812 checks, none failed, p95 10 ms for
   a file, 7 ms for a preview, 8 ms for the catalogue; past 50 files a day, 429.
+- **SQL Server**: the suite's 41 tests pass in the CI (79d15c8), `DataDownloadsMigrationTests` among
+  them, once its setup had the country and the user the constraints ask for.
 - The README's status and structure, the client and back-office screens: up to date for 54 to 57.
 
 ### Found and fixed
@@ -41,9 +43,9 @@ No CMarket.Api phase of its own: the operations' part of phase 12 for what phase
 
 ### Left
 
-- CMarket.Api's SQL Server suite, where `DataDownloadsMigrationTests` is new: compiled, not run
-  here (Docker is off); the CI runs it on a push.
 - The load test on SQL Server: run on SQLite only.
-- The read-only check of the live site, after the release.
+- After the release, the read-only check of the live site found no fault on any screen
+  ([step 59](step-59-tabs-open-across-a-release.md)); building a file from DL, which writes, was
+  not tried there.
 - In French, an index keeps its one name ("BVMAC Equities"), and the RFQ's statuses their codes in
   DL's preview, as in the file.
