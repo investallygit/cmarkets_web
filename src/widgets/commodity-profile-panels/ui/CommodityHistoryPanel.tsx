@@ -5,9 +5,11 @@ import {
   COMMODITY_INTERVALS,
   COMMODITY_PERIODS,
   commodityDecimals,
+  DEFAULT_COMMODITY_PERIOD,
   periodStart,
   useCommodity,
   useCommodityHistory,
+  useCommodityItem,
   useCommodityNames,
   type CommodityPeriod,
 } from '@/entities/commodity'
@@ -32,19 +34,26 @@ export function CommodityHistoryPanel({ code }: { code: string }) {
   const format = useFormat()
   const names = useCommodityNames()
   const profile = useCommodity(code).data
+  const item = useCommodityItem(code)
   const [chosen, setChosen] = useState<CommodityFrequency | null>(null)
-  const [period, setPeriod] = useState<CommodityPeriod>('5Y')
+  const [period, setPeriod] = useState<CommodityPeriod>(DEFAULT_COMMODITY_PERIOD)
   const [average, setAverage] = useState(true)
   const today = useMarketDay()
-  const interval = chosen ?? profile?.frequency ?? 'daily'
+  const intervals = profile?.intervals
+  // The interval chosen on the series before stays where this one offers it. Without a choice, the
+  // list's frequency tells the interval before the profile comes.
+  const kept = chosen && intervals?.includes(chosen) ? chosen : null
+  const interval = kept ?? profile?.frequency ?? item?.frequency ?? 'daily'
   // The period's values only: Brent's whole daily history is ten thousand of them.
   const history = useCommodityHistory(
     code,
     interval,
     periodStart(period, today),
-    profile !== undefined,
+    profile !== undefined || (chosen === null && item !== undefined),
   )
-  const unit = profile?.unit ?? 'USD/bbl'
+  const named = profile ?? item
+  const unit = named?.unit ?? 'USD/bbl'
+  const name = named ? `${names.name(named, true)} (${names.unit(unit)})` : code
   const shown = useMemo(() => history.data?.points ?? [], [history.data])
   const chartPoints = useMemo(
     (): TwoAxisPoint[] =>
@@ -61,7 +70,7 @@ export function CommodityHistoryPanel({ code }: { code: string }) {
     const value = (figure: number) => format.number(figure, commodityDecimals(figure, unit))
     return {
       primary: {
-        label: profile ? `${names.name(profile, true)} (${names.unit(unit)})` : code,
+        label: name,
         format: value,
         color: '--accent-amber',
         axis: 'right',
@@ -74,7 +83,7 @@ export function CommodityHistoryPanel({ code }: { code: string }) {
         axis: 'right',
       },
     }
-  }, [format, unit, profile, names, code, t])
+  }, [format, unit, name, t])
 
   const first = shown.at(0)
   const last = shown.at(-1)
@@ -95,7 +104,7 @@ export function CommodityHistoryPanel({ code }: { code: string }) {
       <PanelTabs
         value={interval}
         options={COMMODITY_INTERVALS.map((value) => {
-          const offered = profile?.intervals.includes(value) ?? value === interval
+          const offered = intervals?.includes(value) ?? value === interval
           return {
             value,
             label: t(`commodities.frequencies.${value}`),

@@ -128,3 +128,17 @@ CMarket.Api's phase 32. Lane 2 of the [lanes](../lanes.md), its first step.
   keep theirs. A fresh database's start failed once the commodities, seeded with the reference data,
   made the demo market believe it was there: `DemoMarketSeeder` now looks for a security other than
   a commodity.
+
+## Since (24 November 2026)
+
+- **Another series picked in the list no longer loads the whole page again.** Each series is an
+  address of its own (decision 19), and the page waited for `GET /securities/{code}` before drawing
+  anything: the list went with the rest and came back scrolled to its top. A series of the list on
+  screen now opens at once beside it (`useListedCommodity`): the list keeps its place, the header
+  shows what the list knows, each panel says "Loading" for itself.
+- A line pointed at or focused for 100 ms loads its profile, its chart and its links ahead of the
+  click (`usePrefetchCommodity`).
+- The history never shows another series' values under this one's name while it loads, and an
+  interval chosen on one series is dropped on a series that does not offer it.
+- CMP starts again with each series, not only when the reference series changes.
+- A flow of `e2e/commodities.spec.ts` holds it, with the answers of the series held back.

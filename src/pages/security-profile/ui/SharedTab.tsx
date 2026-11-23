@@ -7,7 +7,6 @@ import {
   type LibraryQuery,
 } from '@/entities/publication'
 import { ScreenWorkspace } from '@/features/workspace-layout'
-import type { SecurityProfileDto } from '@/shared/api/contracts'
 import type { SecurityFunction } from '@/shared/routes/paths'
 import { AnalystPanel } from '@/widgets/analyst-panel'
 import { DocumentListPanel } from '@/widgets/document-list-panel'
@@ -17,11 +16,12 @@ import { NewsListPanel } from '@/widgets/news-list-panel'
 import { PublicationListPanel } from '@/widgets/publication-list-panel'
 import { PublicationPreviewPanel } from '@/widgets/publication-preview-panel'
 import { defaultLayout, layoutKey } from '../config/layouts'
+import type { ProfiledSecurity } from '../model/profiledSecurity'
 
 export type SharedFunction = Extract<SecurityFunction, 'n' | 'doc' | 'ana'>
 
 /** The tabs every profile shows alike: the security's news, its documents and the research on it. */
-export function SharedTab({ fn, security }: { fn: SharedFunction; security: SecurityProfileDto }) {
+export function SharedTab({ fn, security }: { fn: SharedFunction; security: ProfiledSecurity }) {
   const [searchParams, setSearchParams] = useSearchParams()
   const { id } = security
   const panels: Record<SharedFunction, Record<string, ReactNode>> = {
@@ -67,7 +67,7 @@ export function SharedTab({ fn, security }: { fn: SharedFunction; security: Secu
  * research on its issuing country. The open publication and the page live in the URL; the first
  * publication opens when none is chosen.
  */
-function useResearchSelection(security: SecurityProfileDto) {
+function useResearchSelection(security: ProfiledSecurity) {
   const [searchParams] = useSearchParams()
   const query: LibraryQuery = {
     tab: 'all',
@@ -82,7 +82,7 @@ function useResearchSelection(security: SecurityProfileDto) {
   return { query, selectedId }
 }
 
-function ResearchList({ security }: { security: SecurityProfileDto }) {
+function ResearchList({ security }: { security: ProfiledSecurity }) {
   const [, setSearchParams] = useSearchParams()
   const { query, selectedId } = useResearchSelection(security)
   const page: Record<string, string> = query.page > 1 ? { page: String(query.page) } : {}
@@ -98,11 +98,11 @@ function ResearchList({ security }: { security: SecurityProfileDto }) {
   )
 }
 
-function ResearchPreview({ security }: { security: SecurityProfileDto }) {
+function ResearchPreview({ security }: { security: ProfiledSecurity }) {
   return <PublicationPreviewPanel publicationId={useResearchSelection(security).selectedId} />
 }
 
-function ResearchAnalyst({ security }: { security: SecurityProfileDto }) {
+function ResearchAnalyst({ security }: { security: ProfiledSecurity }) {
   const { selectedId } = useResearchSelection(security)
   return <AnalystPanel analystId={useLibraryPublication(selectedId).data?.analyst.id ?? null} />
 }

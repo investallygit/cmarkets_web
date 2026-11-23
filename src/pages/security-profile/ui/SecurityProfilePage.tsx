@@ -3,7 +3,6 @@ import { Navigate, useParams } from 'react-router'
 import { useCommodity } from '@/entities/commodity'
 import { useSecurityProfile } from '@/entities/security'
 import { ModuleLocked, useCurrentUser } from '@/entities/session'
-import type { SecurityProfileDto } from '@/shared/api/contracts'
 import { useSymbolSubscription } from '@/shared/realtime'
 import { isSecurityFunction, securityPath, type SecurityFunction } from '@/shared/routes/paths'
 import { hasProfileTab } from '@/shared/routes/profiles'
@@ -13,6 +12,7 @@ import { CommodityListPanel, CommodityProfileHeader } from '@/widgets/commodity-
 import { EtfProfileHeader } from '@/widgets/etf-profile-panels'
 import { SecurityHeader } from '@/widgets/security-header'
 import { TAB_CODES, TAB_PERMISSIONS } from '../config/tabs'
+import { useListedCommodity, type ProfiledSecurity } from '../model/profiledSecurity'
 import { BondTab, type BondFunction } from './BondTab'
 import { CommodityTab, type CommodityFunction } from './CommodityTab'
 import { EquityTab, type EquityFunction } from './EquityTab'
@@ -36,11 +36,15 @@ const isShared = (fn: SecurityFunction): fn is SharedFunction =>
 export function SecurityProfilePage() {
   const { securityId = '', fn } = useParams()
   const profile = useSecurityProfile(securityId)
+  const listed = useListedCommodity(securityId)
   // Real-time quotes of this security while the profile is open.
   useSymbolSubscription([securityId])
 
   if (!isSecurityFunction(fn)) return <Navigate to={securityPath(securityId)} replace />
-  if (profile.isPending) return <PanelLoading />
+  if (profile.isPending) {
+    // Another series of CMDTY's list: its profile loads panel by panel, beside the list.
+    return listed ? <CommodityProfile fn={fn} security={listed} /> : <PanelLoading />
+  }
   if (profile.isError) {
     return <PanelError error={profile.error} onRetry={() => void profile.refetch()} />
   }
@@ -70,13 +74,7 @@ export function SecurityProfilePage() {
  * Screen 21: the list of every series on the left, as the mockup draws it (above the profile on a
  * narrow screen), then the commodity's header, its tabs and the panels of the tab.
  */
-function CommodityProfile({
-  fn,
-  security,
-}: {
-  fn: SecurityFunction
-  security: SecurityProfileDto
-}) {
+function CommodityProfile({ fn, security }: { fn: SecurityFunction; security: ProfiledSecurity }) {
   // CMP starts with the series the statistics correlate it with: known once the profile is.
   const reference = useCommodity(security.id).data?.statistics.correlation1y?.code ?? null
   return (
@@ -90,9 +88,10 @@ function CommodityProfile({
           <SecurityTabs security={security} />
         </div>
         <div className="min-h-0 flex-1">
-          {/* CMP starts again once the reference series is known; the other tabs stay as they are. */}
+          {/* CMP starts again with each series and once its reference is known; the other tabs stay
+              as they are. */}
           <ProfileTab
-            key={fn === 'cmp' ? `cmp-${reference ?? ''}` : fn}
+            key={fn === 'cmp' ? `cmp-${security.id}-${reference ?? ''}` : fn}
             fn={fn}
             security={security}
             reference={reference}
@@ -109,7 +108,7 @@ function ProfileTab({
   reference = null,
 }: {
   fn: SecurityFunction
-  security: SecurityProfileDto
+  security: ProfiledSecurity
   reference?: string | null
 }) {
   const { t } = useTranslation()

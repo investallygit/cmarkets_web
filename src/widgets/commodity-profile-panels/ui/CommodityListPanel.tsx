@@ -1,5 +1,5 @@
 import { clsx } from 'clsx'
-import { useState, type KeyboardEvent, type MouseEvent } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import {
@@ -7,10 +7,12 @@ import {
   FrequencyBadge,
   useCommodities,
   useCommodityNames,
+  usePrefetchCommodity,
 } from '@/entities/commodity'
 import { useSecurityMenu } from '@/features/security-actions'
 import type { CommodityCategory, CommodityListItemDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
+import { useMarketDay } from '@/shared/lib/useMarketDay'
 import { securityPath } from '@/shared/routes/paths'
 import { ChangeText } from '@/shared/ui/ChangeText'
 import { ContextMenu } from '@/shared/ui/ContextMenu'
@@ -24,6 +26,9 @@ const CATEGORIES: readonly CommodityCategory[] = [
   'indices',
   'cemacComplement',
 ]
+
+/** The pointer rests on a line before its series loads: moving across the list asks for nothing. */
+const INTENT_MS = 100
 
 interface OpenMenu {
   x: number
@@ -44,6 +49,17 @@ export function CommodityListPanel({ selected }: { selected: string }) {
   const commodities = useCommodities()
   const securityMenu = useSecurityMenu()
   const [menu, setMenu] = useState<OpenMenu | null>(null)
+
+  // A line pointed at or focused loads its series ahead of the click.
+  const today = useMarketDay()
+  const prefetch = usePrefetchCommodity()
+  const intent = useRef<number | undefined>(undefined)
+  const cancelIntent = () => window.clearTimeout(intent.current)
+  const startIntent = (item: CommodityListItemDto) => {
+    cancelIntent()
+    intent.current = window.setTimeout(() => prefetch(item, today), INTENT_MS)
+  }
+  useEffect(() => () => window.clearTimeout(intent.current), [])
 
   const openAt = (item: CommodityListItemDto, x: number, y: number) => setMenu({ x, y, item })
   const onContextMenu = (item: CommodityListItemDto) => (event: MouseEvent) => {
@@ -91,6 +107,10 @@ export function CommodityListPanel({ selected }: { selected: string }) {
                           <Link
                             to={securityPath(item.code)}
                             aria-current={current ? 'page' : undefined}
+                            onPointerEnter={() => startIntent(item)}
+                            onPointerLeave={cancelIntent}
+                            onFocus={() => startIntent(item)}
+                            onBlur={cancelIntent}
                             onContextMenu={onContextMenu(item)}
                             onKeyDown={onKeyDown(item)}
                             className={clsx(

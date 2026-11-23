@@ -68,6 +68,60 @@ test('CMDTY opens Brent’s profile beside the list, as the mockup, and another 
   await expect(page).toHaveURL(/\/eco\?country=CMR$/)
 })
 
+test('another commodity opens beside the list, which stays where it was scrolled', async ({
+  page,
+}) => {
+  // Too low for the whole list.
+  await page.setViewportSize({ width: 1600, height: 600 })
+  await page.goto('/securities/BRENT/des')
+  const list = page.getByRole('navigation', { name: 'Commodities by category' })
+  const cocoa = list.getByRole('link', { name: /^Cocoa/ })
+  await expect(panel(page, 'Statistics')).toContainText('Last value')
+  await cocoa.scrollIntoViewIfNeeded()
+  const before = await list.evaluate((element) => {
+    element.setAttribute('data-kept', 'yes')
+    return element.scrollTop
+  })
+  expect(before).toBeGreaterThan(0)
+
+  // Cocoa's answers wait: the list, the header and the panels stay meanwhile.
+  let release = () => {}
+  const released = new Promise<void>((resolve) => (release = resolve))
+  await page.route(/\/api\/v1\/(securities|commodities)\/COCOA/, async (route) => {
+    await released
+    await route.continue()
+  })
+  await cocoa.click()
+  await expect(page).toHaveURL(/\/securities\/COCOA\/des$/)
+  await expect(cocoa).toHaveAttribute('aria-current', 'page')
+  const header = page.getByRole('region', { name: 'COCOA' })
+  await expect(header).toContainText('USD per metric ton · Daily')
+  await expect(panel(page, 'Statistics')).toContainText('Loading')
+  await expect(panel(page, 'History')).toContainText('Loading')
+  await expect(page.getByRole('link', { name: /^CMP/ })).toBeVisible()
+  release()
+  await expect(panel(page, 'Data')).toContainText('ICCO')
+  await expect(panel(page, 'History').locator('canvas').first()).toBeVisible()
+  await expect(list).toHaveAttribute('data-kept', 'yes')
+  expect(await list.evaluate((element) => element.scrollTop)).toBe(before)
+
+  // An interval Brent offers and cocoa does not is not asked of cocoa's history.
+  await list.getByRole('link', { name: /^Brent/ }).click()
+  await panel(page, 'History')
+    .getByRole('tab', { name: /Weekly/ })
+    .click()
+  await expect(panel(page, 'History').getByRole('tab', { name: /Weekly/ })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  )
+  await cocoa.click()
+  await expect(panel(page, 'History').getByRole('tab', { name: /Daily/ })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  )
+  await expect(panel(page, 'History').locator('canvas').first()).toBeVisible()
+})
+
 test('`BRENT CMP` compares Brent with WTI rebased to 100 and gives their correlations', async ({
   page,
 }) => {

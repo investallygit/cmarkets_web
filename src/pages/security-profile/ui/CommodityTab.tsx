@@ -1,6 +1,5 @@
 import { useState, type ReactNode } from 'react'
 import { ScreenWorkspace } from '@/features/workspace-layout'
-import type { SecurityProfileDto } from '@/shared/api/contracts'
 import type { SecurityFunction } from '@/shared/routes/paths'
 import {
   CommodityComparePanel,
@@ -14,6 +13,7 @@ import {
   type ComparisonChoice,
 } from '@/widgets/commodity-profile-panels'
 import { defaultLayout, layoutKey } from '../config/layouts'
+import type { ProfiledSecurity } from '../model/profiledSecurity'
 
 export type CommodityFunction = Extract<SecurityFunction, 'des' | 'gp' | 'cmp'>
 
@@ -28,7 +28,7 @@ export function CommodityTab({
   reference,
 }: {
   fn: CommodityFunction
-  security: SecurityProfileDto
+  security: ProfiledSecurity
   /** The series the statistics correlate it with, CMP's second at first. */
   reference: string | null
 }) {

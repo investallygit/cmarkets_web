@@ -37,6 +37,9 @@ export function commodityDecimals(value: number, unit: CommodityUnit): number {
   return 3
 }
 
+/** The history's period at first, the mockup's. */
+export const DEFAULT_COMMODITY_PERIOD: CommodityPeriod = '5Y'
+
 /** The first day of a period that ends on `last` (ISO dates); null for MAX, the whole history. */
 export function periodStart(
   period: CommodityPeriod | ComparisonPeriod,
