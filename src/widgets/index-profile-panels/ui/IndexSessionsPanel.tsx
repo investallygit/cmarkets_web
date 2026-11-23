@@ -12,6 +12,7 @@ import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs } from '@/shared/ui/PanelTabs'
 import { QueryView } from '@/shared/ui/QueryView'
 import { TableExportContext } from '@/shared/ui/tableExport'
+import { DownloadDataLink } from '@/features/download-data'
 
 const helper = createDataColumnHelper<IndexSessionDto>()
 
@@ -70,6 +71,7 @@ export function IndexSessionsPanel({ code }: { code: string }) {
       code="DES"
       options={
         <>
+          <DownloadDataLink dataset="indices" items={[code]} what={code} />
           <PanelTabs
             value={count}
             options={COUNTS.map((value) => ({

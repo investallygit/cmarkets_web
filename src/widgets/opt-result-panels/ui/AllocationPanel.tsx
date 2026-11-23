@@ -4,6 +4,7 @@ import type { OptResultDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { Panel } from '@/shared/ui/Panel'
 import { ScrollArea } from '@/shared/ui/ScrollArea'
+import { DownloadDataLink } from '@/features/download-data'
 
 /**
  * Screen 29's optimal allocation: each security's weight with its bar, the amount of whole
@@ -22,7 +23,12 @@ export function AllocationPanel({ result }: { result: OptResultDto }) {
       title={t('opt.allocation.title')}
       code="OPT RES"
       options={
-        <span className="font-sans text-label text-secondary uppercase">
+        <span className="flex items-center gap-2 font-sans text-label text-secondary uppercase">
+          <DownloadDataLink
+            dataset="prices"
+            items={result.lines.map((line) => line.securityId)}
+            what={t('opt.allocation.title')}
+          />
           {t('opt.allocation.capital', { amount: format.number(result.capital, 0) })}
         </span>
       }

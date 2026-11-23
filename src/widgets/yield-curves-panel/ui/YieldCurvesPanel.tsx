@@ -22,6 +22,7 @@ import { PanelSelect } from '@/shared/ui/PanelSelect'
 import { QueryView } from '@/shared/ui/QueryView'
 import { pointNote } from '../lib/pointNote'
 import { COMPARE_OFFSETS, compareDate, useCurveView } from '../model/curveView'
+import { DownloadDataLink } from '@/features/download-data'
 
 /** Data key of the comparison curve in the chart rows. */
 const PAST = 'past'
@@ -62,6 +63,11 @@ export function YieldCurvesPanel({ focusCountry }: YieldCurvesPanelProps) {
       code="YCRV"
       options={
         <>
+          <DownloadDataLink
+            dataset="curves"
+            items={[focusCountry ?? 'CM']}
+            what={t('panels.yieldCurves')}
+          />
           {date && <span>{t('curves.date', { date: format.isoDate(date) })}</span>}
           <span aria-hidden>·</span>
           <span>{t('curves.compareTo')}</span>

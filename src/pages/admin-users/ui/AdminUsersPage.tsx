@@ -6,6 +6,7 @@ import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchPara
 import { AccountCounters } from '@/widgets/account-counters'
 import { AccountDetailsPanel } from '@/widgets/account-details-panel'
 import { AccountsPanel } from '@/widgets/accounts-panel'
+import { ExportLogPanel } from '@/widgets/export-admin-panels'
 import { PendingRequestsPanel } from '@/widgets/analyst-requests-panel'
 import { ModerationQueuePanel } from '@/widgets/moderation-queue-panel'
 
@@ -15,6 +16,8 @@ const LAYOUT: readonly ScreenPanel[] = [
   { i: 'details', name: 'accountDetails', x: 8, y: 0, w: 4, h: 15, minW: 3, minH: 8 },
   { i: 'requests', name: 'analystRequests', x: 0, y: 15, w: 6, h: 11, minW: 4, minH: 5 },
   { i: 'moderation', name: 'moderationQueue', x: 6, y: 15, w: 6, h: 11, minW: 4, minH: 5 },
+  // DL's download log, for the licences (screen 30, fifth version).
+  { i: 'downloads', name: 'exportLog', x: 0, y: 26, w: 12, h: 12, minW: 6, minH: 6 },
 ]
 
 /**
@@ -40,6 +43,7 @@ export function AdminUsersPage() {
         onOpen={(item) => void navigate(moderationPath(item.publicationId))}
       />
     ),
+    downloads: <ExportLogPanel />,
   }
   return (
     <div className="flex h-full flex-col">

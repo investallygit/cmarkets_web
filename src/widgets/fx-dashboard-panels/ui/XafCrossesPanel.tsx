@@ -9,6 +9,7 @@ import { DataTable } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { crossDecimals, ecbDecimals } from '../lib/fxDecimals'
+import { DownloadDataLink } from '@/features/download-data'
 
 const helper = createDataColumnHelper<XafCrossDto>()
 const getCurrency = (cross: XafCrossDto) => cross.currency
@@ -82,7 +83,20 @@ export function XafCrossesPanel({ selected, onSelect }: XafCrossesPanelProps) {
   )
 
   return (
-    <Panel title={t('panels.fxCrosses')} code="FX" options={<span>{t('fx.perUnit')}</span>}>
+    <Panel
+      title={t('panels.fxCrosses')}
+      code="FX"
+      options={
+        <>
+          <DownloadDataLink
+            dataset="fx"
+            items={(crosses.data?.crosses ?? []).map(getCurrency).filter((code) => code !== 'EUR')}
+            what={t('panels.fxCrosses')}
+          />
+          <span>{t('fx.perUnit')}</span>
+        </>
+      }
+    >
       <QueryView
         query={crosses}
         isEmpty={(data) => data.crosses.length === 0}

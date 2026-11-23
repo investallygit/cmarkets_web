@@ -29,7 +29,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   a session at the close (decision 38).
 - **Built in step 56 (fifth version)**: a double click on an index, or its name in the ticker,
   opens its profile (screen 31).
-- **Fifth version (step 57)**: the Indices panel gets the Download button (screen 30).
+- **Built in step 57 (fifth version)**: the Indices panel's Download button opens DL on the indices
+  (screen 30).
 
 ## DES · Security profile (screen 2): done
 
@@ -662,14 +663,14 @@ what is still to do. The Data admin's and the Admin's screens are in
   and notices; from `BVMAC-A DES`, a double click on MKT's Indices panel or the ticker (decision
   44), the members dated (decision 42), BVMAC's reviews uploaded on IMP. See
   [step 56](steps/step-56-index-profile.md).
-- **Fifth version (step 57)**: the Download button.
+- **Built in step 57 (fifth version)**: the Download button of the sessions.
 
-## DL · Data download (screen 30): to do
+## DL · Data download (screen 30): done
 
-- **Fifth version (step 57)**: the eight datasets the profile allows, their settings, a preview of
-  10 rows, the user's files of 7 days and their limits; a file above 50,000 rows made in the
-  background; scheduled exports; from the command bar and the user menu, for every account type
+- **Built in step 57 (fifth version)**: the eight datasets the profile allows, their settings, a
+  preview of 10 rows, the user's files of 7 days and their limits; a file above 50,000 rows made in
+  the background; scheduled exports; from the command bar and the user menu, for every account type
   (decision 43), the sources the Admin allows (decision 41). The Download button that opens it
   filled in on MKT's indices, DES, EQS, YCRV, PORT, ETFS, BP, BS, the ETF, bond and commodity
-  profiles, RFQ, RFQ AGR, ECO, FX, SVT, OPT RES and the index profile. See
-  [step 57](steps/step-57-data-download.md).
+  profiles, RFQ, RFQ AGR, ECO, FX, SVT, OPT RES and the index profile; the formats, the portfolios'
+  three tables and the schedules of decision 48. See [step 57](steps/step-57-data-download.md).

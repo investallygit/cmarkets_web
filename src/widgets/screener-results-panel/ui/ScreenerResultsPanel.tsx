@@ -21,6 +21,7 @@ import { QueryView } from '@/shared/ui/QueryView'
 import { TableExportContext } from '@/shared/ui/tableExport'
 import { liveRow } from '../lib/liveRow'
 import { RESULT_COLUMNS, useResultColumns, type ResultColumn } from '../model/columns'
+import { DownloadDataLink } from '@/features/download-data'
 
 const helper = createDataColumnHelper<ScreenerRowDto>()
 const getSecurityId = (row: ScreenerRowDto) => row.securityId
@@ -167,6 +168,11 @@ export function ScreenerResultsPanel({
       code="EQS"
       options={
         <>
+          <DownloadDataLink
+            dataset="prices"
+            items={(items ?? []).slice(0, 100).map(getSecurityId)}
+            what={t('screener.resultsTitle', { defaultValue: 'EQS' })}
+          />
           {canExport && (
             <span className="panel-no-drag flex items-center gap-1.5">
               <span>{t('screener.export')}</span>

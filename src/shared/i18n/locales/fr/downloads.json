@@ -1,0 +1,245 @@
+{
+  "downloads": {
+    "datasetsNote": "Le même téléchargement est proposé par le bouton « Télécharger » de chaque écran concerné, les paramètres préremplis.",
+    "datasets": {
+      "prices": {
+        "name": "Cours historiques",
+        "description": "Actions et ETF · OHLC, volume"
+      },
+      "bonds": {
+        "name": "Obligations",
+        "description": "Prix, rendements, durations"
+      },
+      "curves": {
+        "name": "Courbes de taux",
+        "description": "Souverains CEMAC et mondiaux"
+      },
+      "portfolios": {
+        "name": "Portefeuilles",
+        "description": "Positions, transactions, performance"
+      },
+      "fx": {
+        "name": "Change",
+        "description": "Taux contre XAF, taux BCE"
+      },
+      "commodities": {
+        "name": "Matières premières",
+        "description": "Séries EODHD et complément CEMAC"
+      },
+      "rfq": {
+        "name": "Transactions RFQ",
+        "description": "Les accords de votre organisation"
+      },
+      "indices": {
+        "name": "Indices",
+        "description": "Indices BVMAC et CMarket"
+      }
+    },
+    "settingsTitle": "{{dataset}} · Paramètres",
+    "selection": {
+      "securities": "Valeurs ({{count}})",
+      "countries": "Pays ({{count}})",
+      "currencies": "Devises ({{count}})",
+      "series": "Séries ({{count}})",
+      "indices": "Indices ({{count}})",
+      "add": "Ajouter une valeur",
+      "remove": "Retirer {{code}}",
+      "watchlist": "Ajouter une liste",
+      "tenors": "Maturités",
+      "allTenors": "Toutes les maturités",
+      "portfolios": "Portefeuilles ({{count}})"
+    },
+    "from": "Du",
+    "to": "Au",
+    "frequency": "Fréquence",
+    "frequencies": {
+      "day": "Quotidienne",
+      "week": "Hebdomadaire",
+      "month": "Mensuelle"
+    },
+    "prices": "Cours",
+    "priceModes": {
+      "raw": "Bruts",
+      "adjusted": "Ajustés (dividendes)"
+    },
+    "fieldsLabel": "Champs",
+    "fields": {
+      "date": "Date",
+      "open": "Ouverture",
+      "high": "Plus haut",
+      "low": "Plus bas",
+      "close": "Clôture",
+      "volume": "Volume",
+      "valueTraded": "Capitaux échangés",
+      "changePct": "Var. %",
+      "currency": "Devise",
+      "priceXaf": "Cours en XAF",
+      "cleanPrice": "Prix pied de coupon",
+      "dirtyPrice": "Prix coupon couru",
+      "accrued": "Coupon couru",
+      "ytm": "Rendement %",
+      "ytw": "Rendement au pire %",
+      "macaulayDuration": "Duration de Macaulay",
+      "modifiedDuration": "Duration modifiée",
+      "spreadBp": "Spread (pb)",
+      "priceType": "Coté ou modèle",
+      "country": "Pays",
+      "tenor": "Maturité",
+      "yieldPct": "Taux %",
+      "source": "Source",
+      "xafRate": "XAF pour 1 unité",
+      "ecbRate": "Taux BCE",
+      "name": "Nom",
+      "value": "Valeur",
+      "unit": "Unité",
+      "flow": "Flux",
+      "dailyReturnPct": "Rendement du jour %",
+      "cumulativeReturnPct": "Rendement cumulé %",
+      "code": "Code",
+      "quantity": "Quantité",
+      "averageCost": "Coût moyen",
+      "unrealizedGain": "Plus-value latente",
+      "weightPct": "Poids %",
+      "type": "Type",
+      "fees": "Frais",
+      "amount": "Montant",
+      "number": "Accord",
+      "security": "Valeur",
+      "side": "Sens",
+      "role": "Rôle",
+      "counterparty": "Contrepartie",
+      "svt": "SVT",
+      "faceAmount": "Nominal",
+      "price": "Prix",
+      "ratePct": "Taux %",
+      "settlementDate": "Date de règlement",
+      "status": "Statut"
+    },
+    "format": "Format",
+    "layout": "Disposition",
+    "layouts": {
+      "sheets": "Une feuille par valeur",
+      "table": "Table unique"
+    },
+    "decimal": "Séparateur décimal",
+    "decimals": {
+      "comma": "virgule",
+      "point": "point"
+    },
+    "timeZone": "Fuseau horaire",
+    "csvOnly": "Votre profil télécharge en CSV uniquement.",
+    "estimate": "Estimation : {{rows}} lignes · environ {{size}}",
+    "download": "Télécharger",
+    "immediate": "Jusqu'à {{rows}} lignes : immédiat",
+    "background": "Au-delà de {{rows}} lignes : préparé en arrière-plan",
+    "downloaded": "{{file}} téléchargé.",
+    "queued": "Le fichier est en préparation : vous serez prévenu dès qu'il sera prêt.",
+    "previewTitle": "Aperçu · {{code}}",
+    "firstRows": "10 premières lignes",
+    "previewEmpty": "Choisissez au moins un élément pour voir ses premières lignes.",
+    "previewNote": "Les jours sans cotation, la BVMAC ne publie pas de cours : aucune ligne n'est créée.",
+    "mine": {
+      "kept": "Conservés 7 jours",
+      "none": "Aucun téléchargement ces 7 derniers jours.",
+      "ready": "Prêt",
+      "inProgress": "En cours {{progress}} %",
+      "failed": "Échec",
+      "expired": "Expiré",
+      "file": "fichier",
+      "fileOf": "Télécharger le fichier : {{name}}",
+      "delete": "Supprimer {{name}}",
+      "deleted": "{{name}} supprimé.",
+      "note": "Au-delà de 50 000 lignes, le fichier est préparé en arrière-plan : vous recevez un e-mail et une notification quand il est prêt."
+    },
+    "limits": {
+      "profile": "Profil {{profile}}",
+      "perDay": "Téléchargements par jour",
+      "rowsPerFile": "Lignes par fichier",
+      "history": "Historique disponible",
+      "fullHistory": "historique complet",
+      "since": "depuis le {{date}}",
+      "schedules": "Exports programmés",
+      "unlimited": "illimité",
+      "csvOnly": "CSV uniquement",
+      "terms": "Usage personnel ou interne uniquement : les données des fournisseurs ne peuvent être redistribuées (conditions d'utilisation)."
+    },
+    "toast": {
+      "ready": "{{file}} est prêt dans Mes téléchargements.",
+      "failed": "Un fichier n'a pas pu être préparé."
+    },
+    "table": "Table",
+    "tables": {
+      "performance": "Performance quotidienne",
+      "positions": "Positions",
+      "transactions": "Transactions"
+    },
+    "statuses": "Statuts",
+    "allStatuses": "Tous les statuts",
+    "role": "Rôle",
+    "roles": {
+      "all": "Les deux côtés",
+      "requester": "Demandeur",
+      "responder": "Répondant"
+    },
+    "rfqStatuses": {
+      "awaitingSvt": "En attente des SVT",
+      "concluded": "Conclu",
+      "cancelled": "Annulé",
+      "expired": "Expiré",
+      "rejected": "Rejeté par une SVT"
+    },
+    "schedule": {
+      "open": "Programmer",
+      "title": "Programmer cet export",
+      "frequency": "Chaque",
+      "frequencies": {
+        "daily": "jour",
+        "weekly": "lundi",
+        "monthly": "premier du mois"
+      },
+      "email": "M'envoyer un e-mail quand il est prêt",
+      "save": "Programmer",
+      "saved": "Programmé : {{summary}}.",
+      "note": "Préparé à 6 h, heure de Douala, sur une période de même durée finissant ce jour-là.",
+      "list": "Exports programmés",
+      "next": "prochain {{date}}",
+      "every": {
+        "daily": "Quotidien",
+        "weekly": "Hebdomadaire",
+        "monthly": "Mensuel"
+      },
+      "delete": "Arrêter l'export programmé {{name}}",
+      "deleted": "Export programmé arrêté."
+    },
+    "sourcesOff": "Non téléchargeables, réservées à l'écran : {{sources}} (conditions du fournisseur).",
+    "sources": {
+      "files": "Fichiers BVMAC et BEAC",
+      "cmarket": "Calculs de CMarket",
+      "eodhd": "EODHD"
+    },
+    "button": "Télécharger",
+    "buttonOf": "Télécharger {{what}}",
+    "log": {
+      "date": "Date",
+      "user": "Utilisateur",
+      "profile": "Profil",
+      "dataset": "Jeu de données",
+      "settings": "Paramètres",
+      "rows": "Lignes",
+      "status": "Statut",
+      "deleted": "Supprimé",
+      "allDatasets": "Tous les jeux de données",
+      "none": "Aucun téléchargement sur cette période."
+    },
+    "admin": {
+      "sources": "Sources téléchargeables",
+      "eodhdNote": "Les données EODHD restent à l'écran tant que sa licence ne couvre pas les téléchargements (spec section 9, écran 30).",
+      "limits": "Limites par profil",
+      "perDay": "Fichiers par jour",
+      "rowsPerFile": "Lignes par fichier",
+      "historyYears": "Années d'historique",
+      "schedules": "Programmés",
+      "saved": "Paramètres de téléchargement enregistrés."
+    }
+  }
+}

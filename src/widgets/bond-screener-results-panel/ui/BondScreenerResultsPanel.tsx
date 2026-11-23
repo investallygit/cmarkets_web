@@ -13,6 +13,7 @@ import { DataTable, type TableExporter } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { TableExportContext } from '@/shared/ui/tableExport'
+import { DownloadDataLink } from '@/features/download-data'
 
 const helper = createDataColumnHelper<BondScreenerRowDto>()
 const getBondId = (row: BondScreenerRowDto) => row.bondId
@@ -166,6 +167,11 @@ export function BondScreenerResultsPanel({
       code="BS"
       options={
         <span className="panel-no-drag flex items-center gap-1.5">
+          <DownloadDataLink
+            dataset="bonds"
+            items={(results.data?.items ?? []).slice(0, 100).map(getBondId)}
+            what={t('bondScreener.resultsTitle')}
+          />
           {computedAt && (
             <span>
               {t('bondScreener.computed', {

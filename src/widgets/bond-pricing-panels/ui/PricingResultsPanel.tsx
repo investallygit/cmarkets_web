@@ -7,6 +7,7 @@ import { useFormat } from '@/shared/i18n'
 import { Panel } from '@/shared/ui/Panel'
 import { PricedView } from './PricedView'
 import { modeKey } from '../lib/modes'
+import { DownloadDataLink } from '@/features/download-data'
 
 interface PricingResultsPanelProps {
   request: BondPriceRequestDto | null
@@ -33,15 +34,19 @@ export function PricingResultsPanel({ request, currency }: PricingResultsPanelPr
       title={t('bondPricing.results')}
       code="BP"
       options={
-        settlementDate &&
-        data && (
-          <span>
-            {t('bondPricing.asOfMode', {
-              date: format.isoDate(settlementDate),
-              mode: t(`bondPricing.modes.${modeKey(data.discount.mode)}`),
-            })}
-          </span>
-        )
+        <>
+          {request?.bondId && (
+            <DownloadDataLink dataset="bonds" items={[request.bondId]} what={request.bondId} />
+          )}
+          {settlementDate && data && (
+            <span>
+              {t('bondPricing.asOfMode', {
+                date: format.isoDate(settlementDate),
+                mode: t(`bondPricing.modes.${modeKey(data.discount.mode)}`),
+              })}
+            </span>
+          )}
+        </>
       }
       bodyClassName="@container overflow-y-auto"
     >

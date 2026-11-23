@@ -16,6 +16,7 @@ import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { TableExportContext } from '@/shared/ui/tableExport'
 import { aumInFrancs } from '../lib/aumInFrancs'
+import { DownloadDataLink } from '@/features/download-data'
 
 const helper = createDataColumnHelper<EtfScreenerRowDto>()
 const getEtfId = (row: EtfScreenerRowDto) => row.etfId
@@ -152,6 +153,11 @@ export function EtfScreenerResultsPanel({
       code="ETFS"
       options={
         <span className="panel-no-drag flex items-center gap-1.5">
+          <DownloadDataLink
+            dataset="prices"
+            items={(results.data?.items ?? []).slice(0, 100).map(getEtfId)}
+            what={t('etfScreener.resultsTitle')}
+          />
           {computedAt && (
             <span>
               {t('etfScreener.computed', {

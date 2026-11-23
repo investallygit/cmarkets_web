@@ -114,7 +114,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 54   | [DES at the BVMAC fixing, the descriptions (screen 2)](roadmap/steps/step-54-security-profile-at-the-fixing.md)      | Done   |
 | 55   | [BP from a curve, custom curves (screen 16)](roadmap/steps/step-55-bond-pricing-from-a-curve.md)                     | Done   |
 | 56   | [DES on an index: the index profile (screen 31)](roadmap/steps/step-56-index-profile.md)                             | Done   |
-| 57   | [DL: data download (screen 30), the Download buttons](roadmap/steps/step-57-data-download.md)                        | To do  |
+| 57   | [DL: data download (screen 30), the Download buttons](roadmap/steps/step-57-data-download.md)                        | Done   |
 | 58   | [Fifth version done: README, accessibility, every flow](roadmap/steps/step-58-fifth-version-done.md)                 | To do  |
 
 Steps 41 to 48 run in three lanes at once, each with its own steps: see [Lanes](roadmap/lanes.md),

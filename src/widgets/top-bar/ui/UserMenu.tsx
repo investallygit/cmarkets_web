@@ -1,4 +1,4 @@
-import { IdCard, Settings, UserRound } from 'lucide-react'
+import { Download, IdCard, Settings, UserRound } from 'lucide-react'
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
@@ -29,6 +29,10 @@ export function UserMenu() {
     canAccessScreen(user, screen),
   )
   const profile = screenById('NETME')
+  // DL, a client's or an employee's (screen 30; ROADMAP decision 43): every account type.
+  const download = [screenById('DL'), screenById('ADMDL')].find((screen) =>
+    canAccessScreen(user, screen),
+  )
 
   const badge = t(`accountBadge.${user.accountType}`)
   const label =
@@ -53,6 +57,16 @@ export function UserMenu() {
             label: t(settings.titleKey),
             icon: Settings,
             onSelect: () => navigate(settings.path),
+          },
+        ]
+      : []),
+    ...(download
+      ? [
+          {
+            id: 'download',
+            label: t(download.titleKey),
+            icon: Download,
+            onSelect: () => navigate(download.path),
           },
         ]
       : []),

@@ -14,6 +14,7 @@ import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs } from '@/shared/ui/PanelTabs'
 import { QueryView } from '@/shared/ui/QueryView'
 import { TableExportContext } from '@/shared/ui/tableExport'
+import { DownloadDataLink } from '@/features/download-data'
 
 const helper = createDataColumnHelper<SessionPriceDto>()
 
@@ -88,6 +89,7 @@ export function RecentSessionsPanel({ profile }: { profile: SecurityProfileDto }
       code="DES"
       options={
         <>
+          <DownloadDataLink dataset="prices" items={[profile.id]} what={profile.code} />
           <PanelTabs
             value={count}
             options={COUNTS.map((value) => ({

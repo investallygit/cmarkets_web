@@ -15,6 +15,7 @@ import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { DataTable } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
+import { DownloadDataLink } from '@/features/download-data'
 
 const helper = createDataColumnHelper<IndexQuoteDto>()
 const getIndexId = (index: IndexQuoteDto) => index.code
@@ -62,7 +63,17 @@ export function IndicesPanel({ selectedCode = null, onSelect }: IndicesPanelProp
   )
 
   return (
-    <Panel title={t('panels.indices')} code="MKT">
+    <Panel
+      title={t('panels.indices')}
+      code="MKT"
+      options={
+        <DownloadDataLink
+          dataset="indices"
+          items={indices.map((index) => index.code).filter((code) => code !== 'MCAP')}
+          what={t('panels.indices')}
+        />
+      }
+    >
       <QueryView query={summary}>
         {() => (
           <DataTable

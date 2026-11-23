@@ -6,6 +6,7 @@ import { useFormat, useLocale } from '@/shared/i18n'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { ScrollArea } from '@/shared/ui/ScrollArea'
+import { DownloadDataLink } from '@/features/download-data'
 
 const MISSING = '—'
 
@@ -39,7 +40,16 @@ export function SovereignRatesPanel() {
     <Panel
       title={t('panels.sovereignRates')}
       code="ECO"
-      options={<span>{t('eco.ratesScope')}</span>}
+      options={
+        <>
+          <DownloadDataLink
+            dataset="curves"
+            items={['CM', 'GA', 'CG', 'TD', 'CF', 'GQ']}
+            what={t('panels.sovereignRates')}
+          />
+          <span>{t('eco.ratesScope')}</span>
+        </>
+      }
     >
       <QueryView
         query={rates}

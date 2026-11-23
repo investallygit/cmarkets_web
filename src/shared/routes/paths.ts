@@ -20,6 +20,8 @@ export const routes = {
   security: '/securities/:securityId/:fn',
   /** The index profile (screen 31, fifth version): /indices/{code}/{tab}. */
   indexProfile: '/indices/:code/:fn',
+  /** DL, data download (screen 30, fifth version): a client's; the employees' below. */
+  dataDownload: '/dl',
   screener: '/eqs',
   yieldCurves: '/ycrv',
   /** Screen 4 with its calculator on a bond: /ycrv/{bondId}. */
@@ -84,6 +86,8 @@ export const routes = {
   adminSettings: '/admin/settings',
   // An employee's own settings (B72 of ROADMAP step 50): profile and security.
   account: '/account',
+  /** DL for the Data admin and the Admin (ROADMAP decision 43), from the user menu. */
+  adminDataDownload: '/admin/dl',
   adminAudit: '/admin/audit',
   /** The Admin's RFQ (ROADMAP decision 17): every agreement; RFQ REP below it (step 47). */
   adminRfq: '/admin/rfq',

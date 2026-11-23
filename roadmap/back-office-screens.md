@@ -171,8 +171,8 @@ by which step, and what is still to do. The terminal's screens are in
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): an employee's type stays
   readable on a selected row (B22), the counters keep their names (B29), Last login sorts both ways
   (B81), Change type offers the account's family only (B92); ANLY's columns keep their text (B34).
-- **Fifth version (step 57)**: the download log, by period and dataset, for the data licences
-  (`GET /admin/exports/log`).
+- **Built in step 57 (fifth version)**: the download log, by period and dataset, for the data
+  licences (`GET /admin/exports/log`).
 
 ## ADMCFG · Platform settings (no mockup): done
 
@@ -218,7 +218,7 @@ by which step, and what is still to do. The terminal's screens are in
 - **Fourth version (steps 42 to 47)**: the key of OPT in the matrix (step 42).
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the quotas fit their panel
   (B35) and a quota refused is said (B91).
-- **Fifth version (step 57)**: the sources whose data may be downloaded and each profile's
+- **Built in step 57 (fifth version)**: the sources whose data may be downloaded and each profile's
   download limits (decision 41).
 
 ## AUDT · Audit log (no mockup): done

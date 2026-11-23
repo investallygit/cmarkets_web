@@ -206,3 +206,20 @@ contradicts itself, steps 54 to 58 follow these; each is also an
     members by their capitalisations at the close before each review, as its level is computed, so
     that its contributions add up to its change; the mockup's weights (24.5 %, 18.2 %...) are not
     the demo's. A review published on the date of another replaces it; a rollback brings it back.
+48. **DL's files** (step 57): a download up to 50,000 rows answers 201 with the file ready, which
+    the screen saves at once; above, 202 and a job, then a notification, an e-mail and
+    `ExportReady`. "My downloads" lists the files of 7 days and, as expired, those of the 7 before;
+    a file deleted leaves the list, its row the log. CSV writes a semicolon with a decimal comma
+    and a comma with a decimal point; XLSX one sheet per item or one table, dates as dates; every
+    file opens with its source, its extraction time in the zone chosen and the terms of use, in the
+    reader's language. Adjusted prices are adjusted backwards for dividends and splits; the price in
+    XAF uses the peg or the ECB's rate of the day. The portfolios come as three tables, their daily
+    performance, their transactions and their positions valued now; the RFQ trades are the
+    agreements RFQ AGR reads, the requests and answers staying on RFQ. A scheduled export runs at
+    06:00 in Douala (each day, each Monday, the first of the month) over a period of the same
+    length ending that day; it is logged but outside the day's count; a Student keeps 1, a
+    Journalist, a News provider and a CEO 5, the others 10, the Admin and the Data admin without
+    limit. EODHD's items are the prices of the markets other than BVMAC, GBOND and Euribor, the
+    ECB's rates and its commodity series; with its source off, FX leaves DL and its items are
+    refused elsewhere. DL is `/dl` for the clients and `/admin/dl` for the Data admin and the
+    Admin; a panel's Download button shows only when the profile downloads its dataset.

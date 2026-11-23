@@ -18,6 +18,7 @@ import { Pager } from '@/shared/ui/Pager'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { toast } from '@/shared/ui/toast'
+import { DownloadDataLink } from '@/features/download-data'
 
 /** A status's colour as text, the mockup's list: "Concluded" green, "SVT rejected" red. */
 const TONE_TEXT = {
@@ -215,6 +216,7 @@ export function AgreementListPanel({
       code="RFQ AGR"
       options={
         <span className="flex items-center gap-2 uppercase">
+          <DownloadDataLink dataset="rfq" what={t('panels.rfqAgreements')} />
           <span className="text-secondary">{t('rfqAgreements.list.export')}</span>
           {(['xlsx', 'csv'] as const).map((kind) => (
             <button

@@ -1,0 +1,245 @@
+{
+  "downloads": {
+    "datasetsNote": "The same download is offered by the \"Download\" button on each relevant screen, with the settings pre-filled.",
+    "datasets": {
+      "prices": {
+        "name": "Historical prices",
+        "description": "Equities and ETFs · OHLC, volume"
+      },
+      "bonds": {
+        "name": "Bonds",
+        "description": "Prices, yields, durations"
+      },
+      "curves": {
+        "name": "Yield curves",
+        "description": "CEMAC and global sovereigns"
+      },
+      "portfolios": {
+        "name": "Portfolios",
+        "description": "Positions, transactions, performance"
+      },
+      "fx": {
+        "name": "FX",
+        "description": "Rates against XAF, ECB rates"
+      },
+      "commodities": {
+        "name": "Commodities",
+        "description": "EODHD series and CEMAC complement"
+      },
+      "rfq": {
+        "name": "RFQ trades",
+        "description": "Your organisation's agreements"
+      },
+      "indices": {
+        "name": "Indices",
+        "description": "BVMAC and CMarket indices"
+      }
+    },
+    "settingsTitle": "{{dataset}} · Settings",
+    "selection": {
+      "securities": "Securities ({{count}})",
+      "countries": "Countries ({{count}})",
+      "currencies": "Currencies ({{count}})",
+      "series": "Series ({{count}})",
+      "indices": "Indices ({{count}})",
+      "add": "Add a security",
+      "remove": "Remove {{code}}",
+      "watchlist": "Add a watchlist",
+      "tenors": "Tenors",
+      "allTenors": "All tenors",
+      "portfolios": "Portfolios ({{count}})"
+    },
+    "from": "From",
+    "to": "To",
+    "frequency": "Frequency",
+    "frequencies": {
+      "day": "Daily",
+      "week": "Weekly",
+      "month": "Monthly"
+    },
+    "prices": "Prices",
+    "priceModes": {
+      "raw": "Raw",
+      "adjusted": "Adjusted (dividends)"
+    },
+    "fieldsLabel": "Fields",
+    "fields": {
+      "date": "Date",
+      "open": "Open",
+      "high": "High",
+      "low": "Low",
+      "close": "Close",
+      "volume": "Volume",
+      "valueTraded": "Value traded",
+      "changePct": "Change %",
+      "currency": "Currency",
+      "priceXaf": "Price in XAF",
+      "cleanPrice": "Clean price",
+      "dirtyPrice": "Dirty price",
+      "accrued": "Accrued interest",
+      "ytm": "YTM %",
+      "ytw": "YTW %",
+      "macaulayDuration": "Macaulay duration",
+      "modifiedDuration": "Modified duration",
+      "spreadBp": "Spread (bp)",
+      "priceType": "Quoted or model",
+      "country": "Country",
+      "tenor": "Tenor",
+      "yieldPct": "Yield %",
+      "source": "Source",
+      "xafRate": "XAF for 1 unit",
+      "ecbRate": "ECB rate",
+      "name": "Name",
+      "value": "Value",
+      "unit": "Unit",
+      "flow": "Flow",
+      "dailyReturnPct": "Daily return %",
+      "cumulativeReturnPct": "Cumulative return %",
+      "code": "Code",
+      "quantity": "Quantity",
+      "averageCost": "Average cost",
+      "unrealizedGain": "Unrealized gain",
+      "weightPct": "Weight %",
+      "type": "Type",
+      "fees": "Fees",
+      "amount": "Amount",
+      "number": "Agreement",
+      "security": "Security",
+      "side": "Side",
+      "role": "Role",
+      "counterparty": "Counterparty",
+      "svt": "SVT",
+      "faceAmount": "Face amount",
+      "price": "Price",
+      "ratePct": "Rate %",
+      "settlementDate": "Settlement date",
+      "status": "Status"
+    },
+    "format": "Format",
+    "layout": "Layout",
+    "layouts": {
+      "sheets": "One sheet per security",
+      "table": "Single table"
+    },
+    "decimal": "Decimal separator",
+    "decimals": {
+      "comma": "comma",
+      "point": "point"
+    },
+    "timeZone": "Time zone",
+    "csvOnly": "Your profile downloads CSV only.",
+    "estimate": "Estimate: {{rows}} rows · about {{size}}",
+    "download": "Download",
+    "immediate": "Up to {{rows}} rows: immediate",
+    "background": "Above {{rows}} rows: prepared in the background",
+    "downloaded": "{{file}} downloaded.",
+    "queued": "The file is being prepared: you will be told when it is ready.",
+    "previewTitle": "Preview · {{code}}",
+    "firstRows": "First 10 rows",
+    "previewEmpty": "Choose at least one item to see its first rows.",
+    "previewNote": "On days without trading, BVMAC publishes no price: no row is created.",
+    "mine": {
+      "kept": "Kept 7 days",
+      "none": "No download in the last 7 days.",
+      "ready": "Ready",
+      "inProgress": "In progress {{progress}}%",
+      "failed": "Failed",
+      "expired": "Expired",
+      "file": "file",
+      "fileOf": "Download the file: {{name}}",
+      "delete": "Delete {{name}}",
+      "deleted": "{{name}} deleted.",
+      "note": "Above 50,000 rows, the file is prepared in the background: you get an e-mail and a notification when it is ready."
+    },
+    "limits": {
+      "profile": "{{profile}} profile",
+      "perDay": "Downloads per day",
+      "rowsPerFile": "Rows per file",
+      "history": "History available",
+      "fullHistory": "full history",
+      "since": "since {{date}}",
+      "schedules": "Scheduled exports",
+      "unlimited": "no limit",
+      "csvOnly": "CSV only",
+      "terms": "Personal or internal use only: provider data may not be redistributed (terms of use)."
+    },
+    "toast": {
+      "ready": "{{file}} is ready in My downloads.",
+      "failed": "A file could not be prepared."
+    },
+    "table": "Table",
+    "tables": {
+      "performance": "Daily performance",
+      "positions": "Positions",
+      "transactions": "Transactions"
+    },
+    "statuses": "Statuses",
+    "allStatuses": "All statuses",
+    "role": "Role",
+    "roles": {
+      "all": "Both sides",
+      "requester": "Requester",
+      "responder": "Responder"
+    },
+    "rfqStatuses": {
+      "awaitingSvt": "Awaiting SVT",
+      "concluded": "Concluded",
+      "cancelled": "Cancelled",
+      "expired": "Expired",
+      "rejected": "Rejected by an SVT"
+    },
+    "schedule": {
+      "open": "Schedule",
+      "title": "Schedule this export",
+      "frequency": "Every",
+      "frequencies": {
+        "daily": "day",
+        "weekly": "Monday",
+        "monthly": "first of the month"
+      },
+      "email": "E-mail me when it is ready",
+      "save": "Schedule",
+      "saved": "Scheduled: {{summary}}.",
+      "note": "Made at 06:00 in Douala over a period of the same length ending that day.",
+      "list": "Scheduled exports",
+      "next": "next {{date}}",
+      "every": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly"
+      },
+      "delete": "Stop the scheduled export {{name}}",
+      "deleted": "Scheduled export stopped."
+    },
+    "sourcesOff": "Not downloadable, kept on the screens: {{sources}} (provider's terms).",
+    "sources": {
+      "files": "BVMAC and BEAC files",
+      "cmarket": "CMarket's computations",
+      "eodhd": "EODHD"
+    },
+    "button": "Download",
+    "buttonOf": "Download {{what}}",
+    "log": {
+      "date": "Date",
+      "user": "User",
+      "profile": "Profile",
+      "dataset": "Dataset",
+      "settings": "Settings",
+      "rows": "Rows",
+      "status": "Status",
+      "deleted": "Deleted",
+      "allDatasets": "All datasets",
+      "none": "No download in this period."
+    },
+    "admin": {
+      "sources": "Sources DL downloads",
+      "eodhdNote": "EODHD's data stay on the screens until its licence is confirmed to cover downloads (spec section 9, screen 30).",
+      "limits": "Limits by profile",
+      "perDay": "Files a day",
+      "rowsPerFile": "Rows a file",
+      "historyYears": "Years of history",
+      "schedules": "Scheduled",
+      "saved": "Data download settings saved."
+    }
+  }
+}

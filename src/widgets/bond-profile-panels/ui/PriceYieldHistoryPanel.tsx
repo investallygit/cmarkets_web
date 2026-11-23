@@ -17,6 +17,7 @@ import {
   type HistoryPeriod,
   type HistorySeries,
 } from '../lib/history'
+import { DownloadDataLink } from '@/features/download-data'
 
 /**
  * Screen 20, price and yield history (the DES tab, and alone on the GP tab): the clean price of
@@ -101,6 +102,7 @@ export function PriceYieldHistoryPanel({ bondId }: { bondId: string }) {
 
   const options = (
     <>
+      <DownloadDataLink dataset="bonds" items={[bondId]} what={bondId} />
       <PanelTabs
         value={period}
         options={HISTORY_PERIODS.map((value) => ({

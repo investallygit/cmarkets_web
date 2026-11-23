@@ -16,6 +16,7 @@ import {
   type PriceLines,
   type PricePeriod,
 } from '../lib/history'
+import { DownloadDataLink } from '@/features/download-data'
 
 /**
  * Screen 19, price history (the DES tab): the market price in amber over its filled area and the
@@ -84,6 +85,7 @@ export function EtfPriceHistoryPanel({ etfId }: { etfId: string }) {
     setLines((current) => ({ ...current, [line]: active }))
   const options = (
     <>
+      <DownloadDataLink dataset="prices" items={[etfId]} what={etfId} />
       <PanelTabs
         value={period}
         options={PRICE_PERIODS.map((value) => ({ value, label: t(`etfProfile.periods.${value}`) }))}

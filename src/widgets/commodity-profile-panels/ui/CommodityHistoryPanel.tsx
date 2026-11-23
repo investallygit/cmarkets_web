@@ -18,6 +18,7 @@ import { TwoAxisChart, type TwoAxisLine, type TwoAxisPoint } from '@/shared/ui/c
 import { Panel } from '@/shared/ui/Panel'
 import { PanelTabs, PanelToggle } from '@/shared/ui/PanelTabs'
 import { PanelEmpty, PanelError, PanelLoading } from '@/shared/ui/StatusViews'
+import { DownloadDataLink } from '@/features/download-data'
 
 /**
  * Screen 21, the history (spec section 9): the value in amber over its filled area and its
@@ -90,6 +91,7 @@ export function CommodityHistoryPanel({ code }: { code: string }) {
 
   const options = (
     <>
+      <DownloadDataLink dataset="commodities" items={[code]} what={code} />
       <PanelTabs
         value={interval}
         options={COMMODITY_INTERVALS.map((value) => {

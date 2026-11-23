@@ -1,5 +1,7 @@
 import type {
   AccountCountsDto,
+  ExportAdminSettingsDto,
+  ExportLogRowDto,
   AccountListStatus,
   AccountType,
   AdminConversationDto,
@@ -154,6 +156,10 @@ export const adminRoutes = {
   dismissReports: route('POST', '/admin/reports/{type}/{id}/dismiss'),
   reportedConversation: route('GET', '/admin/conversations/{id}', answer<AdminConversationDto>()),
   settings: route('GET', '/admin/settings', answer<PlatformSettingsDto>()),
+  // DL seen by the Admin (screen 30, fifth version): the download log of USER, the sources and limits of ADMCFG.
+  exportLog: route('GET', '/admin/exports/log', answer<ExportLogRowDto[]>()),
+  exportSettings: route('GET', '/admin/exports/settings', answer<ExportAdminSettingsDto>()),
+  saveExportSettings: route('PUT', '/admin/exports/settings', answer<ExportAdminSettingsDto>()),
   saveSettings: route('PUT', '/admin/settings', answer<PlatformSettingsDto>()),
   rolePermissions: route('GET', '/admin/roles/{role}/permissions', answer<RolePermissionsDto>()),
   saveRolePermissions: route(
@@ -410,6 +416,13 @@ export const adminApi = {
     send(adminRoutes.reportedConversation, of(id, signal)),
   /** Quotas, research pricing and moderation, risk-free rate. */
   settings: (signal?: AbortSignal) => send(adminRoutes.settings, { signal }),
+  /** Every download of the period (the last 30 days without one), of a dataset or all, newest first. */
+  exportLog: (query: { from?: string; to?: string; dataset?: string }, signal?: AbortSignal) =>
+    send(adminRoutes.exportLog, { query, signal }),
+  exportSettings: (signal?: AbortSignal) => send(adminRoutes.exportSettings, { signal }),
+  /** The sources DL downloads and the profiles' limits, audited. */
+  saveExportSettings: (settings: ExportAdminSettingsDto) =>
+    send(adminRoutes.saveExportSettings, { body: settings }),
   saveSettings: (settings: PlatformSettingsUpdateDto) =>
     send(adminRoutes.saveSettings, { body: settings }),
   rolePermissions: (role: AccountType, signal?: AbortSignal) =>

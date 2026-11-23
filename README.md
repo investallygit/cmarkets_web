@@ -99,7 +99,7 @@ before upload.
 | 2 · Security profile at the BVMAC fixing (fifth version), descriptions    | Done; recent sessions, descriptions in versions, DES's Edit   |
 | 16 · Bond pricing from a yield curve, custom curves                       | Done; spreads to a reference, paste from Excel, saved curves  |
 | 31 · Index profile (DES on an index)                                      | Done; constituents' contributions, BVMAC's reviews on IMP     |
-| 30 · Data download (DL), the Download buttons                             | To do, step 57                                                |
+| 30 · Data download (DL), the Download buttons                             | Done; 8 datasets, files over 50,000 rows by a job, schedules  |
 
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
@@ -156,6 +156,7 @@ src/
               fx-dashboard (FX), security-profile (the
               profile of each security type: an equity's, screen 2, a bond's, screen 20, an
               ETF's, screen 19, a commodity's, screen 21), index-profile (screen 31),
+              data-download (DL, screen 30),
               equity-screener, etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which
               YAS opens), bond-screener (BS), rfq (RFQ), rfq-agreements (RFQ AGR, the SVT's AGR,
               the Admin's RFQ), svt-approval (SVT), svt-traders (TRD), portfolio,
@@ -176,14 +177,15 @@ src/
               subscription-admin-panels,
               bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
               bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
-              etf-profile-panels, index-profile-panels, security-description-panel,
+              etf-profile-panels, index-profile-panels, data-download-panels,
+              export-admin-panels, security-description-panel,
               description-editor-panel,
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
               trader-links-panel, rfq-new-request, rfq-my-request, rfq-board, rfq-blotter,
               rfq-tabs, rfq-report-panels, svt-approval-panels, rfq-agreement-filters,
               rfq-agreement-list, rfq-agreement-detail, opt-setup-panels, opt-result-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
-  features/   user actions: log-in, sign-up, reset-password, log-out, command-bar,
+  features/   user actions: log-in, sign-up, reset-password, log-out, command-bar, download-data,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
               screen-etfs, price-bond, manage-svt-links, decide-trader-link, publish-rfq, answer-rfq,
               confirm-rfq, export-rfq-audit, send-daily-report,
@@ -207,7 +209,8 @@ src/
               review-analyst-request, moderate-publication, moderate-report, mark-payout-paid,
               edit-platform-settings, edit-permissions, switch-language, switch-account,
               workspace-layout
-  entities/   business data: session, subscription (CFG's plan and checkout, SUBS's
+  entities/   business data: session, data-export (DL), subscription (CFG's plan and
+              checkout, SUBS's
               subscriptions, payments and actions), organization, security (with its
               description in French and English), quote (live
               prices), market, bond (with BS's screener and labels, BP's pricing, the bond

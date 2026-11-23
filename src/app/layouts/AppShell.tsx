@@ -6,6 +6,7 @@ import { useBondScreenerRealtimeSync } from '@/entities/bond'
 import { useEtfRealtimeSync } from '@/entities/etf'
 import { useChatRealtimeSync } from '@/entities/conversation'
 import { useDataImportRealtimeSync } from '@/entities/data-import'
+import { useExportRealtimeSync } from '@/entities/data-export'
 import { useMarketRealtimeSync } from '@/entities/market'
 import { useNewsRealtimeSync } from '@/entities/news'
 import { useStatementRealtimeSync } from '@/entities/news-statement'
@@ -52,6 +53,7 @@ export function AppShell() {
   useBondScreenerRealtimeSync()
   useEtfRealtimeSync()
   useDataImportRealtimeSync()
+  useExportRealtimeSync()
   // The second hub, of the messaging, for the users who write to others.
   useChatRealtimeSync(me.data ? mayWriteMessages(me.data) : false, me.data?.id)
   useRfqRealtimeSync(me.data ? holdsRfqKey(me.data) : false)

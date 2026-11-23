@@ -23,6 +23,7 @@ import { DataTable, type TableExporter } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { TableExportContext } from '@/shared/ui/tableExport'
+import { DownloadDataLink } from '@/features/download-data'
 
 const helper = createDataColumnHelper<PositionDto>()
 const getSecurityId = (position: PositionDto) => position.securityId
@@ -200,6 +201,12 @@ export function PortfolioPositionsPanel({ portfolioId, onImport }: PortfolioPosi
       code="PORT"
       options={
         <span className="panel-no-drag flex items-center gap-1.5">
+          <DownloadDataLink
+            dataset="portfolios"
+            items={[portfolioId]}
+            table="positions"
+            what={t('panels.positions')}
+          />
           {canExport && (
             <>
               <span>{t('portfolio.positions.export')}</span>

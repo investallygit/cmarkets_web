@@ -8,6 +8,9 @@ GET /admin/audit-log
 GET /admin/conversations/{id}
 GET /admin/descriptions/{type}/{id}
 PUT /admin/descriptions/{type}/{id}
+GET /admin/exports/log
+GET /admin/exports/settings
+PUT /admin/exports/settings
 GET /admin/ingest-clients
 POST /admin/ingest-clients
 DELETE /admin/ingest-clients/{id}
@@ -200,6 +203,16 @@ GET /etfs/{id}/history
 GET /etfs/{id}/holdings
 GET /etfs/{id}/performance
 GET /etfs/facets
+GET /exports
+POST /exports
+DELETE /exports/{id}
+GET /exports/{id}
+GET /exports/{id}/file
+GET /exports/catalog
+POST /exports/preview
+GET /exports/schedules
+POST /exports/schedules
+DELETE /exports/schedules/{id}
 GET /fx
 GET /fx/{ccy}/history
 GET /fx/convert

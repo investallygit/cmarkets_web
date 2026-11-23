@@ -6,6 +6,7 @@ import { useFormat, useLocale } from '@/shared/i18n'
 import { Badge, type BadgeTone } from '@/shared/ui/Badge'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
+import { DownloadDataLink } from '@/features/download-data'
 
 /** The mockup's colours: "AWAITING SVT" yellow, "SELECTED" and "CONCLUDED" green, "NOT SELECTED" grey. */
 const TONES: Readonly<Record<RfqBlotterEventKind, BadgeTone>> = {
@@ -38,7 +39,11 @@ export function BlotterPanel({ scope }: { scope: RfqScope }) {
   ] as const
 
   return (
-    <Panel title={t('panels.rfqBlotter')} code="RFQ BLT">
+    <Panel
+      title={t('panels.rfqBlotter')}
+      code="RFQ BLT"
+      options={<DownloadDataLink dataset="rfq" what={t('panels.rfqBlotter')} />}
+    >
       <QueryView query={blotter}>
         {(data) => (
           <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-auto p-2">

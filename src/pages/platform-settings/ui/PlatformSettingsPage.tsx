@@ -7,6 +7,7 @@ import {
   RfqSettingsPanel,
   SpecialtiesPanel,
 } from '@/widgets/platform-settings-panels'
+import { ExportSettingsPanel } from '@/widgets/export-admin-panels'
 
 /**
  * ADMCFG has no mockup: the settings on the left, the permission matrix on the right, and below
@@ -20,6 +21,8 @@ const LAYOUT: readonly ScreenPanel[] = [
   { i: 'specialties', name: 'specialties', x: 8, y: 14, w: 4, h: 12, minW: 3, minH: 8 },
   { i: 'macro', name: 'macroSettings', x: 0, y: 26, w: 6, h: 16, minW: 3, minH: 8 },
   { i: 'rfq', name: 'rfqSettings', x: 6, y: 26, w: 6, h: 16, minW: 3, minH: 8 },
+  // DL's sources and limits (screen 30, fifth version; ROADMAP decision 41).
+  { i: 'exports', name: 'exportAdmin', x: 0, y: 42, w: 8, h: 16, minW: 5, minH: 8 },
 ]
 
 /**
@@ -37,6 +40,7 @@ export function PlatformSettingsPage() {
     specialties: <SpecialtiesPanel />,
     macro: <MacroSettingsPanel />,
     rfq: <RfqSettingsPanel />,
+    exports: <ExportSettingsPanel />,
   }
   return <ScreenWorkspace screenId="ADMCFG" defaultLayout={LAYOUT} panels={panels} />
 }

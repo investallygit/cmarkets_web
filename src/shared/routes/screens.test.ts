@@ -68,12 +68,14 @@ describe('the left menu (spec section 9)', () => {
       'RFQAGR',
       'DES',
       'IDX',
+      'DL',
       'PUBNEW',
       'CAL',
       'NETME',
       'OPTRES',
       'RFQREP',
       'MYCFG',
+      'ADMDL',
     ])
   })
 })

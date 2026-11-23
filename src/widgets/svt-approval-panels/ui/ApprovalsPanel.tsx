@@ -21,6 +21,7 @@ import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { reasonText } from '../lib/reasonText'
+import { DownloadDataLink } from '@/features/download-data'
 
 const helper = createDataColumnHelper<SvtApprovalItemDto>()
 
@@ -179,14 +180,17 @@ export function ApprovalsPanel({ selectedId, onSelect }: ApprovalsPanelProps) {
       title={t('panels.svtApprovals')}
       code="SVT"
       options={
-        approvalWindow && (
-          <span>
-            {t('svt.window', {
-              minutes: approvalWindow.minutes,
-              cutOff: approvalWindow.cutOffTime.slice(0, 5),
-            })}
-          </span>
-        )
+        <>
+          <DownloadDataLink dataset="rfq" what={t('panels.svtApprovals')} />
+          {approvalWindow && (
+            <span>
+              {t('svt.window', {
+                minutes: approvalWindow.minutes,
+                cutOff: approvalWindow.cutOffTime.slice(0, 5),
+              })}
+            </span>
+          )}
+        </>
       }
     >
       <QueryView query={pending}>

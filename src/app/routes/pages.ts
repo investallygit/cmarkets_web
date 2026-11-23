@@ -17,6 +17,9 @@ const MacroDashboardPage = lazy(() =>
 const FxDashboardPage = lazy(() =>
   import('@/pages/fx-dashboard').then((module) => ({ default: module.FxDashboardPage })),
 )
+const DataDownloadPage = lazy(() =>
+  import('@/pages/data-download').then((module) => ({ default: module.DataDownloadPage })),
+)
 const IndexProfilePage = lazy(() =>
   import('@/pages/index-profile').then((module) => ({ default: module.IndexProfilePage })),
 )
@@ -152,6 +155,8 @@ const PAGES: Record<ScreenTextKey, Page> = {
   FX: FxDashboardPage,
   DES: SecurityProfilePage,
   IDX: IndexProfilePage,
+  DL: DataDownloadPage,
+  ADMDL: DataDownloadPage,
   EQS: EquityScreenerPage,
   YCRV: YieldCurvesPage,
   BP: BondPricingPage,

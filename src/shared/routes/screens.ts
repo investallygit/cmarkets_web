@@ -12,6 +12,7 @@ import {
   ChartSpline,
   CreditCard,
   Database,
+  Download,
   FileCheck2,
   FileText,
   Globe,
@@ -153,6 +154,8 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('DES', 'DES', routes.security, 'client', FileText, { permission: 'market:read', module: 'monitoring' }),
   // Screen 31, the index profile (fifth version): "BVMAC-A DES"; it lights MKT's entry (ROADMAP decision 44).
   screen('IDX', 'IDX', routes.indexProfile, 'client', ChartLine, { permission: 'market:read', module: 'monitoring' }),
+  // Screen 30, DL (fifth version): every account type, from the command bar and the user menu, not the left menu (ROADMAP decision 43).
+  screen('DL', 'DL', routes.dataDownload, 'client', Download),
   screen('PUBNEW', 'PUB NEW', routes.publishingStudio, 'client', PenLine, { permission: 'publications:write' }),
   screen('CAL', 'CAL', routes.calendar, 'client', CalendarDays, { permission: 'market:read', module: 'monitoring' }),
   screen('NETME', 'NET ME', routes.networkProfile, 'client', IdCard, { permission: 'directory:profile' }),
@@ -185,6 +188,7 @@ export const SCREENS: readonly ScreenDefinition[] = [
   // An employee's own profile and security, CFG's two panels (B72 of ROADMAP step 50: the Data admin and the Admin had none):
   // from the user menu and the command bar, as NET ME.
   screen('MYCFG', 'ME', routes.account, 'backoffice', IdCard),
+  screen('ADMDL', 'DL', routes.adminDataDownload, 'backoffice', Download),
   screen('AUDT', 'AUDT', routes.adminAudit, 'backoffice', ScrollText, { permission: 'audit:read', inMenu: true }),
 ]
 

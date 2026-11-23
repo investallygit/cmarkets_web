@@ -39,9 +39,10 @@ test('USER counts the accounts by type, filters them and opens the audit log of 
   await asAdmin(page)
   await expect(page).toHaveURL(/\/admin\/users/)
   const counters = page.getByRole('group', { name: 'Active accounts by type' })
+  // The mockup's counters, and R. Biyiti, CMarket's own Analyst (fifth version, decision 40).
   for (const [type, count] of [
     ['Student', '1,284'],
-    ['Analyst', '96'],
+    ['Analyst', '97'],
     ['Portfolio manager', '212'],
     ['Trader', '348'],
     ['Journalist', '37'],
@@ -58,7 +59,7 @@ test('USER counts the accounts by type, filters them and opens the audit log of 
   // A counter filters the list on its type.
   await counters.getByRole('button', { name: /^Analyst/ }).click()
   const accounts = panel(page, 'Accounts')
-  await expect(accounts).toContainText('96 accounts')
+  await expect(accounts).toContainText('97 accounts')
   await expect(accounts.getByRole('row', { name: /R\. Essomba/ })).toContainText('Under review')
   await counters.getByRole('button', { name: /^Analyst/ }).click()
 

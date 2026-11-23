@@ -40,6 +40,8 @@ export interface RealtimeEventMap {
   DataPublished: { importId: string; type: string; date: IsoDate }
   ImportStatusChanged: { importId: string; status: string; errors: number; warnings: number }
   PublicationPublished: { publicationId: string; subjectId: string; analystId: string }
+  /** A file of DL prepared in the background is ready, or failed (screen 30, fifth version). */
+  ExportReady: { exportId: string; status: string; rows: number; fileName: string | null }
 }
 
 export type RealtimeEventName = keyof RealtimeEventMap
