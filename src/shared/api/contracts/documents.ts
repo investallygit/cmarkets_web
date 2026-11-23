@@ -9,6 +9,8 @@ export type DocumentType =
   | 'release'
   | 'decision'
   | 'articles'
+  | 'methodology'
+  | 'factsheet'
 
 /** GET /documents?securityId=&type=&q= (paginated). The file is GET /documents/{id}/file. */
 export interface DocumentDto {
@@ -21,6 +23,8 @@ export interface DocumentDto {
   securityIds: string[]
   pages: number
   sizeBytes: number
+  /** The index it is about (screen 31's DOC tab, fifth version); absent for any other. */
+  indexCode?: string
 }
 
 /**
@@ -32,4 +36,6 @@ export interface DocumentWriteDto {
   title: string
   source: string
   securityIds: string[]
+  /** The index it is about, or none. */
+  indexCode?: string | null
 }

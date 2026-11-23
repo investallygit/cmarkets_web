@@ -15,8 +15,14 @@ import type {
   FxMatrixDto,
   FxRateDto,
   GlobalRatesSet,
+  DocumentDto,
   HistoryPointDto,
+  IndexConstituentsDto,
+  IndexMemberDto,
+  IndexPerformanceDto,
+  IndexProfileDto,
   IndexQuoteDto,
+  IndexSessionsDto,
   MacroComparisonDto,
   MacroCountryDto,
   MacroIndicatorInfoDto,
@@ -56,6 +62,12 @@ export const marketRoutes = {
   indices: route('GET', '/indices', answer<IndexQuoteDto[]>()),
   indexHistory: route('GET', '/indices/{code}/history', answer<HistoryPointDto[]>()),
   indexDescription: route('GET', '/indices/{code}/description', answer<DescriptionDto>()),
+  indexProfile: route('GET', '/indices/{code}', answer<IndexProfileDto>()),
+  indexSessions: route('GET', '/indices/{code}/sessions', answer<IndexSessionsDto>()),
+  indexConstituents: route('GET', '/indices/{code}/constituents', answer<IndexConstituentsDto>()),
+  indexMembers: route('GET', '/indices/{code}/constituents/history', answer<IndexMemberDto[]>()),
+  indexPerformance: route('GET', '/indices/{code}/performance', answer<IndexPerformanceDto>()),
+  indexDocuments: route('GET', '/indices/{code}/documents', answer<DocumentDto[]>()),
   policyRates: route('GET', '/rates/policy', answer<PolicyRateDto[]>()),
   fx: route('GET', '/fx', answer<FxRateDto[]>()),
   xafCrosses: route('GET', '/fx/xaf-crosses', answer<XafCrossesDto>()),
@@ -92,6 +104,27 @@ export const marketApi = {
   /** An index's description in a language, else in the other one (screen 31, fifth version). */
   indexDescription: (code: string, lang: DescriptionLanguage, signal?: AbortSignal) =>
     send(marketRoutes.indexDescription, { params: { code }, query: { lang }, signal }),
+  /** The index profile (screen 31, fifth version): its header. */
+  indexProfile: (code: string, signal?: AbortSignal) =>
+    send(marketRoutes.indexProfile, { params: { code }, signal }),
+  /** The latest sessions' values, newest first (10, 20 or 60 on the profile). */
+  indexSessions: (code: string, last: number, signal?: AbortSignal) =>
+    send(marketRoutes.indexSessions, { params: { code }, query: { last }, signal }),
+  /** The composition in force on a session, the latest without a date. */
+  indexConstituents: (code: string, date: string | null, signal?: AbortSignal) =>
+    send(marketRoutes.indexConstituents, {
+      params: { code },
+      query: date ? { date } : {},
+      signal,
+    }),
+  /** Every member the index had: the constituents' history. */
+  indexMembers: (code: string, signal?: AbortSignal) =>
+    send(marketRoutes.indexMembers, { params: { code }, signal }),
+  indexPerformance: (code: string, signal?: AbortSignal) =>
+    send(marketRoutes.indexPerformance, { params: { code }, signal }),
+  /** Its methodology, notices and factsheets, newest first; the PDFs are /documents/{id}/file. */
+  indexDocuments: (code: string, signal?: AbortSignal) =>
+    send(marketRoutes.indexDocuments, { params: { code }, signal }),
   policyRates: (signal?: AbortSignal) => send(marketRoutes.policyRates, { signal }),
   /** Pairs such as EURXAF. */
   fx: (pairs: readonly string[], signal?: AbortSignal) =>

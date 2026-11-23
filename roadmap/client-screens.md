@@ -27,8 +27,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   (B44), a reload shows the watchlist worked on (B46).
 - **Built in step 54 (fifth version)**: a BVMAC security's quote moves at each fixing only, once
   a session at the close (decision 38).
-- **Fifth version (steps 56 and 57)**: a double click on an index opens its profile (screen 31);
-  the Indices panel gets the Download button (screen 30).
+- **Built in step 56 (fifth version)**: a double click on an index, or its name in the ticker,
+  opens its profile (screen 31).
+- **Fifth version (step 57)**: the Indices panel gets the Download button (screen 30).
 
 ## DES · Security profile (screen 2): done
 
@@ -651,14 +652,17 @@ what is still to do. The Data admin's and the Admin's screens are in
   (B61), a capital that buys nothing too (B62). The demo's prices move independently, their
   correlations near zero (B12, left as is).
 
-## DES on an index · Index profile (screen 31): to do
+## DES on an index · Index profile (screen 31): done
 
-- **Fifth version (step 56)**: the security profile's layout for BVMAC-A and the five CMarket
-  indices: the header, the tabs DES, GP, MEMB, PERF and DOC, the index value based 100 and
+- **Built in step 56 (fifth version)**: the security profile's layout for BVMAC-A and the five
+  CMarket indices: the header, the tabs DES, GP, MEMB, PERF and DOC, the index value based 100 and
   compared, the description, the values of recent sessions, the constituents and their
-  contributions at a date, the performance and risk, the methodology and notices; from
-  `BVMAC-A DES`, a search or a double click on MKT's Indices panel (decision 44), the members dated
-  (decision 42). See [step 56](steps/step-56-index-profile.md).
+  contributions, which add up to the index change (decision 47), the composition on a date with
+  each member's entry and exit, the performance and risk, the returns by month, the methodology
+  and notices; from `BVMAC-A DES`, a double click on MKT's Indices panel or the ticker (decision
+  44), the members dated (decision 42), BVMAC's reviews uploaded on IMP. See
+  [step 56](steps/step-56-index-profile.md).
+- **Fifth version (step 57)**: the Download button.
 
 ## DL · Data download (screen 30): to do
 

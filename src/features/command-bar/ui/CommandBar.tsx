@@ -4,14 +4,17 @@ import { CornerDownLeft, SquareTerminal, TrendingUp } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
+import { findIndex } from '@/entities/market'
 import { findSecurity, useSecuritySearch } from '@/entities/security'
 import { useCurrentUser } from '@/entities/session'
 import type { SecuritySearchItemDto } from '@/shared/api/contracts'
+import { indexPath } from '@/shared/routes/paths'
 import { useCurrentRoute } from '@/shared/routes/useCurrentRoute'
 import {
   appliesToSecurity,
   availableFunctions,
   FUNCTION_CODES,
+  INDEX_CODES,
   type FunctionCode,
 } from '../config/functionCodes'
 import { commandOf } from '../lib/currentCommand'
@@ -148,6 +151,10 @@ export function CommandBar() {
     }
     if (!securityQuery) return setError(t('shell.needsSecurity', { code }))
     try {
+      // An index's code opens its profile on the tab of the code (screen 31): "BVMAC-A DES".
+      const indexFn = INDEX_CODES[code]
+      const index = indexFn && !picked ? await findIndex(queryClient, securityQuery) : null
+      if (index && indexFn) return go(indexPath(index.code, indexFn))
       // "SEMC XYZ": a security's code then a word that is no code of the terminal (B40).
       const words = securityQuery.split(' ')
       if (!functionCode && words.length > 1) {

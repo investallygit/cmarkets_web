@@ -18,7 +18,8 @@
       "etf-nav": "ETF NAV and spreads",
       "macro": "Macro indicators",
       "commodity-prices": "Commodity prices",
-      "descriptions": "Descriptions"
+      "descriptions": "Descriptions",
+      "index-constituents": "Index constituents"
     },
     "frequencies": {
       "session": "Every session",
@@ -253,7 +254,8 @@
       "etf-nav": "the provider's or the market maker's data",
       "macro": "the report named in the row",
       "commodity-prices": "the source named in the row",
-      "descriptions": "the source named in the row"
+      "descriptions": "the source named in the row",
+      "index-constituents": "BVMAC's published review"
     },
     "selected": {
       "alert": "Row {{row}} selected: check the {{field}} against {{source}}, fix it if needed, then tick “Alert checked”.",
@@ -298,7 +300,8 @@
       "etf-nav": "On publish: the ETFs' premiums, discounts and spreads are recalculated (ETFS); a DataPublished event is sent to open screens.",
       "macro": "On publish: the macro indicators of ECO (tiles, chart, CEMAC comparison) are read again, the source shown beside each figure; a DataPublished event is sent to open screens.",
       "commodity-prices": "On publish: the CEMAC complement of CMDTY (list, history, statistics) is read again, the source shown in its data, and the alerts on a new value go off; a DataPublished event is sent to open screens.",
-      "descriptions": "On publish: each row is a new version of its security's description, shown at once on DES and EQS; a rollback removes the versions it added."
+      "descriptions": "On publish: each row is a new version of its security's description, shown at once on DES and EQS; a rollback removes the versions it added.",
+      "index-constituents": "On publish: the review ends the members in force on its date and starts its own, with their weights, shown at once on the index profile (DES, MEMB); a rollback brings the earlier members back."
     },
     "fix": {
       "title": "Fix row {{row}}",
@@ -468,6 +471,9 @@
     "securities": "Securities",
     "securitiesHint": "{{max}} at most: their profiles list the item.",
     "addSecurity": "Add a security",
+    "index": "Index",
+    "indexHint": "An index whose profile lists it in its DOC tab: methodology, review notice, factsheet.",
+    "noIndex": "None",
     "removeSecurity": "Remove {{code}}",
     "standfirst": "Standfirst",
     "flashText": "Text of the FLASH",

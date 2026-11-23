@@ -67,6 +67,7 @@ describe('the left menu (spec section 9)', () => {
     expect(outside).toEqual([
       'RFQAGR',
       'DES',
+      'IDX',
       'PUBNEW',
       'CAL',
       'NETME',

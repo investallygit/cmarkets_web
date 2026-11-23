@@ -9,6 +9,8 @@ export const DOCUMENT_TYPES: readonly DocumentType[] = [
   'notice',
   'decision',
   'articles',
+  'methodology',
+  'factsheet',
 ]
 
 export function isDocumentType(value: string): value is DocumentType {

@@ -1,9 +1,62 @@
-# Step 56 · DES on an index: the index profile (screen 31) (L): to do
+# Step 56 · DES on an index: the index profile (screen 31) (L): done
 
 Step 56 of the [roadmap](../../ROADMAP.md#order), for the
 [fifth version of the spec](../fifth-version.md).
 
-CMarket.Api's phase 44. Builds on step 54: the description panel and the recent sessions' table.
+CMarket.Api's phase 44 (ADR-070). Builds on step 54: the description panel and the recent sessions'
+table.
+
+## Built
+
+- **The page** (`pages/index-profile`): `/indices/{code}/{fn}`, screen `IDX` (not in the menu, MKT
+  lit), its tabs DES Profile, GP Chart, MEMB Constituents, PERF Performance and DOC Methodology,
+  each with its own saved layout (`IDX`, `IDX-GP`...); `?doc=` opens a document in DOC. The command
+  bar reads `BVMAC-A DES` (or GP, MEMB, PERF, DOC) before a security's code; a double click on MKT's
+  Indices panel and an index of the ticker (now a link) open DES. MCAP says it has no profile.
+- **The panels** (`widgets/index-profile-panels`): the header; the index value (recharts, 1M to 5Y,
+  10Y on GP, base 100, compared with another index or a constituent, both based on their first
+  common session); the values of recent sessions (10, 20, 60, XLSX and CSV, the note of a computed
+  or an uploaded index); the constituents (sector in the page's language, weight at the previous
+  close, price, change, contribution in points, their sum beside the index change; a double click
+  opens the security); on MEMB the composition on a date typed, each member's entry and exit, and
+  the constituents' history as XLSX; the performance and risk; the returns by month and year; the
+  methodology and notices, opened in the PDF viewer. The description is step 54's panel, for an
+  index (`type="index"`).
+- **NEWS**: a document's form gets an Index field, the documents of an index its DOC tab
+  (decision 44); two document types, Methodology and Factsheet. **IMP**: the `index-constituents`
+  file.
+- **CMarket.Api** (phase 44, ADR-070):
+  - `ref.IndexConstituents` (migration `IndexProfile`): each member, its weight, entry and exit,
+    the import that wrote or ended it. The CMarket indices' members follow their filters at each
+    recalculation (`IndexMembership`); BVMAC-A's come from `INDEX_CONSTITUENTS` (date, index,
+    code, weight: a known BVMAC index, a known security, not in the future, the weights of a
+    review adding up to 100 within 0.5): a review ends the members in force on its date; a rollback
+    deletes its rows and reopens those it ended. A review on the date of another replaces it, the
+    replaced rows ended on their own entry so that a rollback brings them back (decision 47).
+  - `GET /indices/{code}`, `/sessions?last=`, `/constituents?date=`, `/constituents/history`,
+    `/performance`, `/documents`. The contributions are the weight at the previous close times
+    the day's change: BVMAC's weights moved by each price since the review, else the
+    capitalisations (`IndexContributions`, decision 47); they add up to the index change, to
+    rounding. The performance: 1 and 3 months, YTD, 1 year, 3 years annualised, section 14.3's
+    volatility and maximum drawdown on a year of closes, the members' dividend yield weighted.
+  - `POST` and `PUT` of a document take an `indexCode`. Demo (`DemoIndexProfiles`): BVMAC-A's three
+    reviews (its first close, 30/06 and 30/09/2026), weighted by capitalisation at the close before
+    each; the CMarket indices' members; the six indices' descriptions in both languages; BVMAC-A's
+    methodology, review notice, SAFACAM adjustment and factsheet, each CMarket index's methodology.
+- **Checked**: web typecheck, lint, 533 unit tests; the routes against CMarket.Api's OpenAPI;
+  Playwright, `index-profile.spec.ts` (MKT's double click to DES, whose contributions add up to the
+  change; `CMK-BANK DES` from the command bar; MEMB on 15/07/2026, the history's XLSX, PERF, GP,
+  DOC's methodology opened; IMP's review on the last session shown on MEMB and rolled back,
+  `@fresh-db`) with the smoke and security profile flows; axe clean on the five tabs, MEMB on a
+  date, the comparison and CMK-BANK, in English and in French. CMarket.Api: the domain (710),
+  application (821), integration (312) and architecture (21) suites; the SQL Server suite waits
+  for Docker.
+- **Fixed on the way**: BVMAC-A's contributions added up to −0.81 for a change of −0.62 %: the
+  mockup's weights, fixed since the review, weighed a level computed from capitalisations
+  (decision 47); a French page named the sectors in English.
+- **Left**: the Download button comes with step 57; BVMAC-A TR is not built (decision 44).
+
+## Planned
 
 - **The page** (decision 44): `/indices/{code}/{fn}`, the tabs DES Profile, GP Chart, MEMB
   Constituents, PERF Performance and DOC Methodology, each with its saved layout; the Download

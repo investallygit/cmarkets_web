@@ -18,7 +18,8 @@
       "etf-nav": "VL et fourchettes des ETF",
       "macro": "Indicateurs macroéconomiques",
       "commodity-prices": "Cours des matières premières",
-      "descriptions": "Descriptions"
+      "descriptions": "Descriptions",
+      "index-constituents": "Composition des indices"
     },
     "frequencies": {
       "session": "Chaque séance",
@@ -253,7 +254,8 @@
       "etf-nav": "les données du gestionnaire ou du teneur de marché",
       "macro": "le rapport indiqué sur la ligne",
       "commodity-prices": "la source indiquée sur la ligne",
-      "descriptions": "la source indiquée sur la ligne"
+      "descriptions": "la source indiquée sur la ligne",
+      "index-constituents": "la revue publiée par la BVMAC"
     },
     "selected": {
       "alert": "Ligne {{row}} sélectionnée : vérifiez {{field}} dans {{source}}, corrigez si besoin, puis cochez « Alerte vérifiée ».",
@@ -298,7 +300,8 @@
       "etf-nav": "À la publication : les primes, décotes et fourchettes des ETF sont recalculées (ETFS) ; un événement DataPublished est envoyé aux écrans ouverts.",
       "macro": "À la publication : les indicateurs macroéconomiques d’ECO (tuiles, graphique, comparaison CEMAC) sont relus, la source affichée à côté de chaque chiffre ; un événement DataPublished est envoyé aux écrans ouverts.",
       "commodity-prices": "À la publication : le complément CEMAC de CMDTY (liste, historique, statistiques) est relu, la source affichée dans ses données, et les alertes sur une nouvelle valeur se déclenchent ; un événement DataPublished est envoyé aux écrans ouverts.",
-      "descriptions": "À la publication : chaque ligne est une nouvelle version de la description de sa valeur, affichée aussitôt sur DES et EQS ; une annulation retire les versions qu'elle a ajoutées."
+      "descriptions": "À la publication : chaque ligne est une nouvelle version de la description de sa valeur, affichée aussitôt sur DES et EQS ; une annulation retire les versions qu'elle a ajoutées.",
+      "index-constituents": "À la publication : la revue clôt les membres en vigueur à sa date et ouvre les siens, avec leurs poids, affichés aussitôt sur la fiche de l'indice (DES, MEMB) ; une annulation rétablit les membres précédents."
     },
     "fix": {
       "title": "Corriger la ligne {{row}}",
@@ -468,6 +471,9 @@
     "securities": "Titres",
     "securitiesHint": "{{max}} au plus : leurs fiches listent l'actualité.",
     "addSecurity": "Ajouter un titre",
+    "index": "Indice",
+    "indexHint": "Un indice dont la fiche le liste dans son onglet DOC : méthodologie, avis de revue, fiche mensuelle.",
+    "noIndex": "Aucun",
     "removeSecurity": "Retirer {{code}}",
     "standfirst": "Chapô",
     "flashText": "Texte du FLASH",

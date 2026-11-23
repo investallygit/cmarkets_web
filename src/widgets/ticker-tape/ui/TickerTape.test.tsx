@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
 import { marketKeys } from '@/entities/market'
 import type { TickerItemDto } from '@/shared/api/contracts'
@@ -43,12 +44,18 @@ describe('TickerTape', () => {
     render(
       <QueryClientProvider client={queryClient}>
         <RealtimeProvider client={market} chat={{} as ChatClient}>
-          <TickerTape />
+          <MemoryRouter>
+            <TickerTape />
+          </MemoryRouter>
         </RealtimeProvider>
       </QueryClientProvider>,
     )
 
-    expect(screen.getByText('BVMAC-A')).toBeInTheDocument()
+    // An index opens its profile (screen 31, fifth version).
+    expect(screen.getByRole('link', { name: 'BVMAC-A' })).toHaveAttribute(
+      'href',
+      '/indices/BVMAC-A/des',
+    )
     expect(subscribe).toHaveBeenCalledWith(['BVMAC-A', 'SEMC'])
   })
 })

@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import { useTicker } from '@/entities/market'
+import { Link } from 'react-router'
+import { hasIndexProfile, useTicker } from '@/entities/market'
 import { priceDecimals, useLiveIndex, useLiveQuote } from '@/entities/quote'
 import type { TickerItemDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { useSymbolSubscription } from '@/shared/realtime'
+import { indexPath } from '@/shared/routes/paths'
 import { ChangeText } from '@/shared/ui/ChangeText'
 import { Flash } from '@/shared/ui/Flash'
 
@@ -42,7 +44,17 @@ function TickerEntry({ item }: { item: TickerItemDto }) {
 
   return (
     <span className="inline-flex h-full items-center gap-2">
-      <span className="font-semibold text-accent-amber">{item.label}</span>
+      {/* An index opens its profile (screen 31, fifth version; ROADMAP decision 44). */}
+      {item.kind === 'index' && hasIndexProfile(item.symbol) ? (
+        <Link
+          to={indexPath(item.symbol)}
+          className="font-semibold text-accent-amber hover:underline"
+        >
+          {item.label}
+        </Link>
+      ) : (
+        <span className="font-semibold text-accent-amber">{item.label}</span>
+      )}
       <Flash value={last}>{format.number(last, priceDecimals(item.type, item.currency))}</Flash>
       <ChangeText value={changePct} percent showIcon />
     </span>

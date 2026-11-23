@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DOCUMENT_TYPES, useSaveDocument } from '@/entities/document'
+import { hasIndexProfile, useIndices } from '@/entities/market'
 import { SecurityListField } from '@/entities/security'
 import { isApiError } from '@/shared/api'
 import type { DocumentDto, DocumentType } from '@/shared/api/contracts'
@@ -32,6 +33,9 @@ export function DocumentForm({ document, onSaved }: DocumentFormProps) {
   const [title, setTitle] = useState(document?.title ?? '')
   const [source, setSource] = useState(document?.source ?? '')
   const [securityIds, setSecurityIds] = useState<string[]>(document?.securityIds ?? [])
+  // The index it is about: an index profile's DOC tab lists it (screen 31, ROADMAP decision 44).
+  const [indexCode, setIndexCode] = useState(document?.indexCode ?? '')
+  const indices = (useIndices().data ?? []).filter((index) => hasIndexProfile(index.code))
   const [file, setFile] = useState<File | null>(null)
   const errors = isApiError(save.error, 400) ? (save.error.problem.errors ?? {}) : {}
 
@@ -49,6 +53,7 @@ export function DocumentForm({ document, onSaved }: DocumentFormProps) {
               title: title.trim(),
               source: source.trim().toUpperCase(),
               securityIds,
+              indexCode: indexCode || null,
             },
             file,
           },
@@ -85,6 +90,19 @@ export function DocumentForm({ document, onSaved }: DocumentFormProps) {
           onChange={setSecurityIds}
           addLabel={t('content.addSecurity')}
           removeLabel={(code) => t('content.removeSecurity', { code })}
+        />
+      </Field>
+      <Field label={t('content.index')} hint={t('content.indexHint')} error={errors.indexCode?.[0]}>
+        <Select
+          value={indexCode}
+          options={[
+            { value: '', label: t('content.noIndex') },
+            ...indices.map((index) => ({
+              value: index.code,
+              label: `${index.code} · ${index.name}`,
+            })),
+          ]}
+          onChange={(value: string) => setIndexCode(value)}
         />
       </Field>
       <Field

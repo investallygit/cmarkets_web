@@ -29,7 +29,10 @@ export function SideMenu() {
   // A profile lights the entry of the screener that lists its type: a bond's BS, an ETF's ETFS.
   const profileType = useSecurityProfile(matchPath(routes.security, pathname)?.params.securityId)
     .data?.type
-  const litParent = profileType && SECURITY_PROFILES[profileType].menuParent
+  // An index profile lights MKT, as the screen 31 mockup draws it (ROADMAP decision 44).
+  const litParent = matchPath(routes.indexProfile, pathname)
+    ? 'MKT'
+    : profileType && SECURITY_PROFILES[profileType].menuParent
   const listRef = useRef<HTMLUListElement>(null)
   // The open screen's entry stays in view when the menu scrolls, without moving the page.
   useEffect(() => {

@@ -1,0 +1,88 @@
+{
+  "indexProfile": {
+    "tabsLabel": "Onglets de la fiche indice",
+    "tabs": {
+      "des": "Fiche",
+      "gp": "Graphique",
+      "memb": "Composition",
+      "perf": "Performance",
+      "doc": "Méthodologie"
+    },
+    "noProfile": "{{code}} n'a pas de fiche : c'est la capitalisation du marché, pas un indice.",
+    "kinds": {
+      "price": "Indice de prix",
+      "totalReturn": "Indice de rendement global"
+    },
+    "billions": "{{value}} Md",
+    "header": {
+      "capWeighted": "pondéré par la capitalisation",
+      "constituents": "{{count}} valeurs",
+      "fixing": "fixing",
+      "closeOf": "Clôture du {{date}}",
+      "previous": "Précédent",
+      "ytd": "Depuis le 1er janv.",
+      "oneYear": "1 an",
+      "high52": "Plus haut 52 sem.",
+      "low52": "Plus bas 52 sem.",
+      "marketCap": "Capitalisation"
+    },
+    "chart": {
+      "base100": "Base 100",
+      "compare": "Comparer avec",
+      "noComparison": "Sans comparaison",
+      "summary": "{{name}} du {{from}} au {{to}} : de {{first}} à {{last}}.",
+      "basedNote": "Les deux courbes en base 100 à leur première séance commune."
+    },
+    "sessions": {
+      "session": "Séance",
+      "value": "Valeur",
+      "change": "Var.",
+      "changePct": "Var. %",
+      "marketCap": "Cap. Md",
+      "none": "Aucune séance pour l'instant.",
+      "note": "Une valeur par séance, calculée après le fixing à partir des cours de clôture des valeurs de l'indice.",
+      "fileNote": "Une valeur par séance : la valeur officielle publiée par la BVMAC, chargée après le fixing.",
+      "history": "Historique complet dans GP"
+    },
+    "constituents": {
+      "security": "Valeur",
+      "sector": "Secteur",
+      "weight": "Poids",
+      "price": "Cours",
+      "change": "Var. %",
+      "contribution": "Contribution",
+      "points": "pt",
+      "entry": "Entrée",
+      "exit": "Sortie",
+      "on": "Composition au",
+      "options": "{{count}} valeurs · {{date}}",
+      "none": "Aucune valeur à cette date.",
+      "sum": "Somme des contributions : {{sum}} pt ; variation de l'indice : {{change}}.",
+      "publishedNote": "Poids : ceux publiés par la BVMAC lors de sa dernière revue, portés par le cours de chaque valeur jusqu'à la clôture précédente.",
+      "capNote": "Poids : capitalisation de chaque valeur à la clôture précédente."
+    },
+    "history": {
+      "title": "Historique de la composition",
+      "short": "XLSX",
+      "download": "Historique de la composition (XLSX)",
+      "name": "Nom"
+    },
+    "performance": {
+      "oneMonth": "1 mois",
+      "threeMonths": "3 mois",
+      "ytd": "Depuis le 1er janvier",
+      "oneYear": "1 an",
+      "threeYears": "3 ans (annualisé)",
+      "volatility": "Volatilité 1 an",
+      "drawdown": "Perte maximale 1 an",
+      "dividendYield": "Rendement du dividende",
+      "note": "Sur les clôtures jusqu'au {{date}} ; rendement du dividende des valeurs, pondéré comme l'indice les pondère.",
+      "year": "Année",
+      "total": "Année"
+    },
+    "documents": {
+      "none": "Aucun document pour cet indice pour l'instant.",
+      "note": "Indices CMarket (Banques, Agro-industrie, Cameroun, Gabon, Obligations) : même fiche, méthodologie publiée par CMarket."
+    }
+  }
+}

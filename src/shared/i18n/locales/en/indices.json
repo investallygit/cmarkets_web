@@ -1,0 +1,88 @@
+{
+  "indexProfile": {
+    "tabsLabel": "Index profile tabs",
+    "tabs": {
+      "des": "Profile",
+      "gp": "Chart",
+      "memb": "Constituents",
+      "perf": "Performance",
+      "doc": "Methodology"
+    },
+    "noProfile": "{{code}} has no profile: it is the market's capitalisation, not an index.",
+    "kinds": {
+      "price": "Price index",
+      "totalReturn": "Total-return index"
+    },
+    "billions": "{{value}} bn",
+    "header": {
+      "capWeighted": "cap-weighted",
+      "constituents": "{{count}} constituents",
+      "fixing": "fixing",
+      "closeOf": "Close of {{date}}",
+      "previous": "Previous",
+      "ytd": "YTD",
+      "oneYear": "1 year",
+      "high52": "52-wk high",
+      "low52": "52-wk low",
+      "marketCap": "Market cap"
+    },
+    "chart": {
+      "base100": "Base 100",
+      "compare": "Compare with",
+      "noComparison": "No comparison",
+      "summary": "{{name}} from {{from}} to {{to}}: {{first}} to {{last}}.",
+      "basedNote": "Both lines based 100 on their first common session."
+    },
+    "sessions": {
+      "session": "Session",
+      "value": "Value",
+      "change": "Chg.",
+      "changePct": "Chg. %",
+      "marketCap": "Cap. bn",
+      "none": "No session yet.",
+      "note": "One value per session, computed after the fixing from the closing prices of the index constituents.",
+      "fileNote": "One value per session: the official value BVMAC publishes, uploaded after the fixing.",
+      "history": "Full history in GP"
+    },
+    "constituents": {
+      "security": "Security",
+      "sector": "Sector",
+      "weight": "Weight",
+      "price": "Price",
+      "change": "Chg. %",
+      "contribution": "Contribution",
+      "points": "pt",
+      "entry": "Entry",
+      "exit": "Exit",
+      "on": "Composition on",
+      "options": "{{count}} constituents · {{date}}",
+      "none": "No constituent on this date.",
+      "sum": "Sum of contributions: {{sum}} pt; index change: {{change}}.",
+      "publishedNote": "Weights: those BVMAC published at its last review, moved by each price up to the previous close.",
+      "capNote": "Weights: each constituent's capitalisation at the previous close."
+    },
+    "history": {
+      "title": "Constituent history",
+      "short": "XLSX",
+      "download": "Constituent history (XLSX)",
+      "name": "Name"
+    },
+    "performance": {
+      "oneMonth": "1 month",
+      "threeMonths": "3 months",
+      "ytd": "Year to date",
+      "oneYear": "1 year",
+      "threeYears": "3 years (annualised)",
+      "volatility": "1-year volatility",
+      "drawdown": "1-year max drawdown",
+      "dividendYield": "Dividend yield",
+      "note": "On the closes up to {{date}}; dividend yield of the constituents, weighted as the index weighs them.",
+      "year": "Year",
+      "total": "Year"
+    },
+    "documents": {
+      "none": "No document for this index yet.",
+      "note": "CMarket indices (Banks, Agribusiness, Cameroon, Gabon, Bonds): same profile, methodology published by CMarket."
+    }
+  }
+}

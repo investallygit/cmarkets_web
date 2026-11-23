@@ -207,8 +207,14 @@ GET /fx/matrix
 GET /fx/xaf-crosses
 GET /indicators/{securityId}
 GET /indices
+GET /indices/{code}
+GET /indices/{code}/constituents
+GET /indices/{code}/constituents/history
 GET /indices/{code}/description
+GET /indices/{code}/documents
 GET /indices/{code}/history
+GET /indices/{code}/performance
+GET /indices/{code}/sessions
 GET /ingest/excluded-sources
 POST /ingest/news
 DELETE /ingest/news/{externalId}

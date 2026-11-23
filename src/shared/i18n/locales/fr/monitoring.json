@@ -141,7 +141,9 @@
       "notice": "Avis",
       "release": "Communiqué",
       "decision": "Décision",
-      "articles": "Statuts"
+      "articles": "Statuts",
+      "methodology": "Méthodologie",
+      "factsheet": "Fiche de l'indice"
     },
     "noMatch": "Aucun document ne correspond à ces filtres"
   },

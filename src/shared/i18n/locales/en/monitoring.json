@@ -141,7 +141,9 @@
       "notice": "Notice",
       "release": "Release",
       "decision": "Decision",
-      "articles": "Articles of association"
+      "articles": "Articles of association",
+      "methodology": "Methodology",
+      "factsheet": "Factsheet"
     },
     "noMatch": "No document matches these filters"
   },

@@ -17,6 +17,7 @@ export const IMPORT_TYPES: readonly ImportType[] = [
   'macro',
   'commodity-prices',
   'descriptions',
+  'index-constituents',
 ]
 
 /**

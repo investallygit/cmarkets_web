@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useMarketSummary } from '@/entities/market'
+import { useNavigate } from 'react-router'
+import { hasIndexProfile, useMarketSummary } from '@/entities/market'
 import {
   LiveIndexChange,
   LiveIndexChangePct,
@@ -9,6 +10,7 @@ import {
 } from '@/entities/quote'
 import type { IndexQuoteDto } from '@/shared/api/contracts'
 import { useSymbolSubscription } from '@/shared/realtime'
+import { indexPath } from '@/shared/routes/paths'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { DataTable } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
@@ -23,9 +25,13 @@ interface IndicesPanelProps {
   onSelect?: (code: string) => void
 }
 
-/** Screen 1, Indices: value, change, % change; click = index chart. API /market/summary. */
+/**
+ * Screen 1, Indices: value, change, % change; click = index chart, double click = the index
+ * profile (screen 31, fifth version). API /market/summary.
+ */
 export function IndicesPanel({ selectedCode = null, onSelect }: IndicesPanelProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const summary = useMarketSummary()
   // IndexUpdated reaches only the screens that follow the index.
   useSymbolSubscription(summary.data?.indices.map((index) => index.code) ?? [])
@@ -65,6 +71,9 @@ export function IndicesPanel({ selectedCode = null, onSelect }: IndicesPanelProp
             getRowId={getIndexId}
             selectedRowId={selectedCode ?? indices.at(0)?.code}
             onRowClick={onSelect && ((index: IndexQuoteDto) => onSelect(index.code))}
+            onRowDoubleClick={(index: IndexQuoteDto) => {
+              if (hasIndexProfile(index.code)) void navigate(indexPath(index.code))
+            }}
             exportName="indices"
           />
         )}

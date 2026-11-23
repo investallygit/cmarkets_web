@@ -98,7 +98,7 @@ before upload.
 | CMarket.Api's messages in the page's language                             | Done; its errors in French on a French page, dates day first  |
 | 2 · Security profile at the BVMAC fixing (fifth version), descriptions    | Done; recent sessions, descriptions in versions, DES's Edit   |
 | 16 · Bond pricing from a yield curve, custom curves                       | Done; spreads to a reference, paste from Excel, saved curves  |
-| 31 · Index profile (DES on an index)                                      | To do, step 56                                                |
+| 31 · Index profile (DES on an index)                                      | Done; constituents' contributions, BVMAC's reviews on IMP     |
 | 30 · Data download (DL), the Download buttons                             | To do, step 57                                                |
 
 How the screens were built, step by step, what the second version of the spec added (the
@@ -155,7 +155,7 @@ src/
   pages/      one slice per screen: market-dashboard, commodities (CMDTY), macro-dashboard (ECO),
               fx-dashboard (FX), security-profile (the
               profile of each security type: an equity's, screen 2, a bond's, screen 20, an
-              ETF's, screen 19, a commodity's, screen 21),
+              ETF's, screen 19, a commodity's, screen 21), index-profile (screen 31),
               equity-screener, etf-screener (ETFS), yield-curves (YCRV), bond-pricing (BP, which
               YAS opens), bond-screener (BS), rfq (RFQ), rfq-agreements (RFQ AGR, the SVT's AGR,
               the Admin's RFQ), svt-approval (SVT), svt-traders (TRD), portfolio,
@@ -176,7 +176,8 @@ src/
               subscription-admin-panels,
               bond-screener-results-panel, bond-analytics-panel, bond-pricing-panels,
               bond-profile-panels, etf-screener-results-panel, etf-blocks-panel,
-              etf-profile-panels, security-description-panel, description-editor-panel,
+              etf-profile-panels, index-profile-panels, security-description-panel,
+              description-editor-panel,
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
               trader-links-panel, rfq-new-request, rfq-my-request, rfq-board, rfq-blotter,
               rfq-tabs, rfq-report-panels, svt-approval-panels, rfq-agreement-filters,

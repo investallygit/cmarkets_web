@@ -1,9 +1,10 @@
 import { canAccessScreen } from '@/entities/session'
-import type { MeDto, SecurityType } from '@/shared/api/contracts'
+import type { IndexFunction, MeDto, SecurityType } from '@/shared/api/contracts'
 import type { TranslationKey } from '@/shared/i18n'
 import {
   bondPricingPath,
   ecoPath,
+  indexPath,
   routes,
   securityPath,
   type SecurityFunction,
@@ -53,7 +54,7 @@ const SECURITY_TABS: readonly SecurityTab[] = [
 ]
 
 /** The screens whose code reads a security or a word beside it, listed apart below. */
-const SECURITY_SCREENS = new Set(['DES', 'BP', 'N', 'ECO'])
+const SECURITY_SCREENS = new Set(['DES', 'IDX', 'BP', 'N', 'ECO'])
 
 /** Every function code of the command bar (spec section 8). */
 export const FUNCTION_CODES: readonly FunctionCode[] = [
@@ -65,6 +66,15 @@ export const FUNCTION_CODES: readonly FunctionCode[] = [
     appliesTo: securityFunctionTypes(fn),
     resolve: (securityId) => securityPath(securityId ?? '', fn),
   })),
+  // MEMB, an index's constituents (screen 31, fifth version): "BVMAC-A MEMB"; no security has it.
+  {
+    code: 'MEMB',
+    labelKey: 'functions.MEMB',
+    target: 'security',
+    screen: screenById('IDX'),
+    appliesTo: [],
+    resolve: (code) => indexPath(code ?? '', 'memb'),
+  },
   // BP, bond pricing, with or without a bond ("ECMR 6.25 2029 BP"); YAS opens it too (spec section 8).
   ...(['BP', 'YAS'] as const).map((code): FunctionCode => ({
     code,
@@ -100,6 +110,15 @@ export const FUNCTION_CODES: readonly FunctionCode[] = [
 
 export function appliesToSecurity(fn: FunctionCode, type: SecurityType): boolean {
   return !fn.appliesTo || fn.appliesTo.includes(type)
+}
+
+/** The index profile's tab of a command code: "BVMAC-A DES", "BVMAC-A PERF" (screen 31). */
+export const INDEX_CODES: Readonly<Record<string, IndexFunction>> = {
+  DES: 'des',
+  GP: 'gp',
+  MEMB: 'memb',
+  PERF: 'perf',
+  DOC: 'doc',
 }
 
 /** Codes the user may run. Shared codes such as CFG resolve to the screen of the user's audience. */

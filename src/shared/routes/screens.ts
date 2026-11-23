@@ -7,6 +7,7 @@ import {
   Briefcase,
   Calculator,
   CalendarDays,
+  ChartLine,
   ChartScatter,
   ChartSpline,
   CreditCard,
@@ -150,6 +151,8 @@ export const SCREENS: readonly ScreenDefinition[] = [
 
   // Client screens opened from the command bar or from another screen.
   screen('DES', 'DES', routes.security, 'client', FileText, { permission: 'market:read', module: 'monitoring' }),
+  // Screen 31, the index profile (fifth version): "BVMAC-A DES"; it lights MKT's entry (ROADMAP decision 44).
+  screen('IDX', 'IDX', routes.indexProfile, 'client', ChartLine, { permission: 'market:read', module: 'monitoring' }),
   screen('PUBNEW', 'PUB NEW', routes.publishingStudio, 'client', PenLine, { permission: 'publications:write' }),
   screen('CAL', 'CAL', routes.calendar, 'client', CalendarDays, { permission: 'market:read', module: 'monitoring' }),
   screen('NETME', 'NET ME', routes.networkProfile, 'client', IdCard, { permission: 'directory:profile' }),

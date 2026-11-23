@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
 import { marketKeys } from '@/entities/market'
 import type { MarketSummaryDto } from '@/shared/api/contracts'
@@ -43,7 +44,9 @@ describe('IndicesPanel', () => {
     const { unmount } = render(
       <QueryClientProvider client={queryClient}>
         <RealtimeProvider client={market} chat={{} as ChatClient}>
-          <IndicesPanel />
+          <MemoryRouter>
+            <IndicesPanel />
+          </MemoryRouter>
         </RealtimeProvider>
       </QueryClientProvider>,
     )

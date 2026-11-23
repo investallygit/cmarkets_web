@@ -198,3 +198,11 @@ contradicts itself, steps 54 to 58 follow these; each is also an
     emptied, Calculate waits for them). `POST /bonds/{id}/calculate` takes the `discount` of
     `/bonds/price` and answers the same discount, comparison and zero rates, as section 9 and the
     client name it.
+47. **The weight at the previous close** (step 56): section 14 adds up the contributions to the
+    index change with "the weight at the previous close". Under a review BVMAC published, that is
+    the review's weight moved by the member's price since the close before the review, the weights
+    scaled back to 100, as a cap-weighted index's weights drift between reviews; without one, the
+    member's capitalisation over the total, as decision 42 says. The demo's reviews weigh BVMAC-A's
+    members by their capitalisations at the close before each review, as its level is computed, so
+    that its contributions add up to its change; the mockup's weights (24.5 %, 18.2 %...) are not
+    the demo's. A review published on the date of another replaces it; a rollback brings it back.

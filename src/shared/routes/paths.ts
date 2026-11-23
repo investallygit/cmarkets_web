@@ -1,4 +1,4 @@
-import type { ClientAccountType } from '@/shared/api/contracts'
+import { INDEX_FUNCTIONS, type ClientAccountType, type IndexFunction } from '@/shared/api/contracts'
 
 /** Route patterns, shared by the router (app/) and by features that link to other screens. */
 export const routes = {
@@ -18,6 +18,8 @@ export const routes = {
   eco: '/eco',
   fx: '/fx',
   security: '/securities/:securityId/:fn',
+  /** The index profile (screen 31, fifth version): /indices/{code}/{tab}. */
+  indexProfile: '/indices/:code/:fn',
   screener: '/eqs',
   yieldCurves: '/ycrv',
   /** Screen 4 with its calculator on a bond: /ycrv/{bondId}. */
@@ -116,6 +118,15 @@ export function isSecurityFunction(value: string | undefined): value is Security
 
 export function securityPath(securityId: string, fn: SecurityFunction = 'des'): string {
   return `/securities/${encodeURIComponent(securityId)}/${fn}`
+}
+
+export function isIndexFunction(value: string | undefined): value is IndexFunction {
+  return INDEX_FUNCTIONS.some((fn) => fn === value)
+}
+
+/** The index profile on one of its tabs: "/indices/BVMAC-A/des" (screen 31, fifth version). */
+export function indexPath(code: string, fn: IndexFunction = 'des'): string {
+  return `/indices/${encodeURIComponent(code)}/${fn}`
 }
 
 /** Tabs of the N screen: the news feed and the document library (spec section 5). */
