@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { decimalsOf, isExportField } from './fields'
+import { EXPORT_FIELDS, decimalsOf, isExportField } from './fields'
+import en from '@/shared/i18n/locales/en/downloads.json'
 
 describe('DL fields', () => {
   it('names the fields it knows and counts their decimals', () => {
     expect(isExportField('close')).toBe(true)
     expect(isExportField('somethingNew')).toBe(false)
     expect([decimalsOf('volume'), decimalsOf('xafRate'), decimalsOf('close')]).toEqual([0, 4, 2])
+  })
+
+  it('names every field the locale does, so that no column shows its code', () => {
+    expect([...EXPORT_FIELDS].sort()).toEqual(Object.keys(en.downloads.fields).sort())
   })
 })
 

@@ -39,16 +39,11 @@ test('MKT opens BVMAC-A, whose DES shows its value, sessions and constituents', 
   const sessions = panel(page, 'Values of recent sessions')
   await expect(sessions.getByRole('row').nth(1)).toBeVisible()
 
-  // The seven members of the last review, BVMAC's weights moved by each price since; the
-  // contributions add up to the index's change, to rounding.
+  // The seven members of the last review.
   const constituents = panel(page, 'Constituents')
   await expect(constituents.getByRole('row')).toHaveCount(8)
   await expect(constituents.getByRole('row').nth(1)).toContainText(/\d+\.\d%/)
-  const sum = constituents.getByText(/^Sum of contributions: /)
-  const [contributions, change] = ((await sum.textContent()) ?? '')
-    .match(/[+−-]?\d+\.\d+/g)!
-    .map((figure) => Number(figure.replace('−', '-')))
-  expect(Math.abs(contributions! - change!)).toBeLessThanOrEqual(0.05)
+  await expect(constituents.getByText(/^Sum of contributions: /)).toBeVisible()
   await expect(constituents).toContainText('those BVMAC published at its last review')
 
   await expect(panel(page, 'Performance and risk')).toContainText('1-year volatility')
@@ -57,6 +52,17 @@ test('MKT opens BVMAC-A, whose DES shows its value, sessions and constituents', 
   // A double click on a constituent opens its profile.
   await constituents.getByRole('row', { name: /SEMC/ }).dblclick()
   await expect(page).toHaveURL(/\/securities\/SEMC\/des$/)
+})
+
+// @fresh-db: BVMAC's weights moved by each price since its review; the contributions add up to the
+// index's change, to rounding. Another flow's price file moves the prices without BVMAC's level.
+test("BVMAC-A's contributions add up to its change", { tag: '@fresh-db' }, async ({ page }) => {
+  await page.goto('/indices/BVMAC-A/des')
+  const sum = panel(page, 'Constituents').getByText(/^Sum of contributions: /)
+  const [contributions, change] = ((await sum.textContent()) ?? '')
+    .match(/[+−-]?\d+\.\d+/g)!
+    .map((figure) => Number(figure.replace('−', '-')))
+  expect(Math.abs(contributions! - change!)).toBeLessThanOrEqual(0.05)
 })
 
 test('the command bar opens a CMarket index, weighted by capitalisation', async ({ page }) => {

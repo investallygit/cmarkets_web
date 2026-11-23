@@ -67,8 +67,9 @@ the buttons and the Admin's side.
   previewed, downloaded as CSV, listed and counted; a file above 50,000 rows prepared in the
   background until `ExportReady`; a Student's CSV-only year and four datasets; DES's Download
   button opening DL filled in, scheduled every month and stopped; the Admin's log, and EODHD turned
-  off then on. The whole suite on a fresh database: the flows that failed did so on a database
-  left by the others, or on a stalled run, and pass alone; the two others are fixed below.
+  off then on. The whole suite's first run had 12 failures: most while the Mac slept, two
+  fixed below, and the index profile's, whose cause [step 58](step-58-fifth-version-done.md) found
+  (other flows moved the prices its contributions are read from).
 - axe in English and in French: DL on each dataset and the schedule window, USER, ADMCFG and
   ADMDL clean once the file button of "My downloads" says its visible word.
 
@@ -86,7 +87,7 @@ the buttons and the Admin's side.
 ### Left
 
 - The RFQ's requests and answers are not downloaded: the agreements only, as RFQ AGR reads them.
-- A portfolio's positions are valued at the last close, not at a date of the past.
+- A portfolio's positions are valued now, not at a date of the past.
 
 ## Planned
 

@@ -64,7 +64,7 @@ before upload.
 | Settings (CFG): profile, security, subscription, organisation, invoices   | Done; a change of plan prorated by the day, as in SUBS        |
 | Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
 | Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
-| 10 · Professional directory (NET), public profile page                    | Done; the demo data lists 1,177 profiles                      |
+| 10 · Professional directory (NET), public profile page                    | Done; the demo data lists 1,178 profiles                      |
 | 11 · Messaging (MSG)                                                      | Done; read, typing and presence in real time                  |
 | 12 · My profile, visibility and contact (NET ME)                          | Done; the API applies the contact rules of section 15         |
 | 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the API checks, publishes and rolls back the files      |

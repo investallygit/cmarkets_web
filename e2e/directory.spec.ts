@@ -33,10 +33,11 @@ test(
     await expect(filters.getByRole('checkbox', { name: /^News provider/ })).toHaveAccessibleName(
       /14/,
     )
-    await expect(panel(page, /^Professionals: 1,177 results$/)).toBeVisible()
+    // The mockup's 1,177 and 96 Analysts, and R. Biyiti, CMarket's Analyst (decision 40).
+    await expect(panel(page, /^Professionals: 1,178 results$/)).toBeVisible()
 
     // The URL holds the filters: a box shows ticked once the address changed.
-    await tick(filters, 'Analyst 96')
+    await tick(filters, 'Analyst 97')
     await tick(filters, 'Manager 212')
     await filters.getByLabel('Specialty', { exact: true }).selectOption('sovereign-bonds')
     await tick(filters, 'Only profiles I can contact')

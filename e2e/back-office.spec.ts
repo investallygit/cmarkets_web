@@ -250,6 +250,7 @@ test('CORR corrects a stored session with a reason, kept in the log', async ({ p
   await expect(correction).toContainText('Stored from:')
   const close = correction.getByRole('textbox', { name: 'Close', exact: true })
   const high = correction.getByRole('textbox', { name: 'High', exact: true })
+  const stored = { high: await high.inputValue(), close: await close.inputValue() }
   await high.fill('99000')
   await close.fill('99000')
   await correction.getByRole('button', { name: 'Correct the session' }).click()
@@ -261,6 +262,18 @@ test('CORR corrects a stored session with a reason, kept in the log', async ({ p
   await expect(panel(page, 'Corrections log').getByRole('row').nth(1)).toContainText(
     'Close of the BVMAC bulletin.',
   )
+
+  // Corrected back: BVMAC-A's contributions are read from this close (index-profile.spec.ts).
+  await sessions.getByRole('row').nth(2).click()
+  await expect(close).toHaveValue(/99.?000/)
+  await high.fill(stored.high)
+  await close.fill(stored.close)
+  await correction.getByRole('textbox', { name: 'Reason' }).fill('The bulletin was misread.')
+  await correction.getByRole('button', { name: 'Correct the session' }).click()
+  await expect(panel(page, 'Corrections log').getByRole('row').nth(1)).toContainText(
+    'The bulletin was misread.',
+  )
+  await expect(sessions.getByRole('row').nth(2)).not.toContainText('99,000')
 })
 
 test("CORR writes a security's French description, which EQS shows", async ({ page }) => {

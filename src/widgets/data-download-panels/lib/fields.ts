@@ -28,6 +28,29 @@ export const EXPORT_FIELDS = [
   'name',
   'value',
   'unit',
+  // The portfolios' tables and the RFQ's agreements.
+  'flow',
+  'dailyReturnPct',
+  'cumulativeReturnPct',
+  'code',
+  'quantity',
+  'averageCost',
+  'price',
+  'unrealizedGain',
+  'weightPct',
+  'type',
+  'fees',
+  'amount',
+  'number',
+  'security',
+  'side',
+  'role',
+  'counterparty',
+  'svt',
+  'faceAmount',
+  'ratePct',
+  'settlementDate',
+  'status',
 ] as const
 export type ExportField = (typeof EXPORT_FIELDS)[number]
 
@@ -37,7 +60,7 @@ export function isExportField(field: string): field is ExportField {
 
 /** Decimals a preview shows of a field: whole numbers, rates to four, the rest to two. */
 export function decimalsOf(field: string): number {
-  if (field === 'volume' || field === 'valueTraded' || field === 'spreadBp') return 0
+  if (['volume', 'valueTraded', 'spreadBp', 'quantity', 'faceAmount'].includes(field)) return 0
   if (field === 'xafRate' || field === 'ecbRate') return 4
   return 2
 }

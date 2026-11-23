@@ -1,7 +1,7 @@
 // What the sweep opens: every screen of shared/routes/screens.ts with what gives access to it, the
 // demo accounts, and each account's pages beyond its menu (tabs, addresses that name an item).
 
-/** The 45 screens: [path, audience, permission, module], as `SCREENS` declares them. */
+/** The 48 screens: [path, audience, permission, module], as `SCREENS` declares them. */
 export const SCREENS = [
   ['/mkt', 'client', 'market:read', 'monitoring'],
   ['/cmdty', 'client', 'market:read', 'monitoring'],
@@ -31,6 +31,8 @@ export const SCREENS = [
   ['/cal', 'client', 'market:read', 'monitoring'],
   ['/cfg', 'client'],
   ['/securities/SEMC/des', 'client', 'market:read', 'monitoring'],
+  ['/indices/BVMAC-A/des', 'client', 'market:read', 'monitoring'],
+  ['/dl', 'client'],
   ['/data/session', 'backoffice', 'data:import'],
   ['/imp', 'backoffice', 'data:import'],
   ['/data/corrections', 'backoffice', 'data:import'],
@@ -48,6 +50,7 @@ export const SCREENS = [
   ['/admin/rfq/reports', 'backoffice', 'rfq:report'],
   ['/admin/settings', 'backoffice', 'settings:manage'],
   ['/admin/audit', 'backoffice', 'audit:read'],
+  ['/admin/dl', 'backoffice'],
 ].map(([path, audience, permission, module]) => ({ path, audience, permission, module }))
 
 /** What a screen shows the user of `/me`: entities/session's canAccessScreen and lockedModule. */
@@ -101,6 +104,8 @@ const PROFILES = [
   ...tabs('COMPANY-X-7.00-2028', ['des', 'cf']),
   ...tabs('VUSA.LSE', ['dist']),
   ...tabs('OKOUME', ['des']),
+  ...['des', 'gp', 'memb', 'perf', 'doc'].map((fn) => ({ path: `/indices/BVMAC-A/${fn}` })),
+  { path: '/indices/CMK-BANK/des' },
 ]
 
 const portfolioTabs = (id) =>
@@ -157,6 +162,9 @@ export function extrasFor(key, ids) {
         ...PROFILES,
         { path: '/securities/SEMC/hld', expect: 'redirect' },
         missing('/securities/NO-SUCH-SECURITY/des'),
+        missing('/indices/NO-SUCH-INDEX/des'),
+        { path: '/dl?dataset=prices&items=SEMC' },
+        { path: '/dl?dataset=portfolios' },
         ...portfolioTabs(ids.portfolio),
         missing(`/port/${NONE}`),
         { path: '/n/documents' },
@@ -229,17 +237,18 @@ export const ROUTES = [
   '/app',
   '/_kit',
   '/securities/[^/]+/(des|gp|fa|dvd|n|doc|hds|ana|bp|cf|rat|hld|perf|dist|cmp)',
+  '/indices/[^/]+/(des|gp|memb|perf|doc)',
   '/(ycrv|bp|yas)(/[^/]+)?',
   '/port(/[^/]+(/(transactions|performance|risk|income|reports))?)?',
   '/n(/(documents|new))?',
-  '/(mkt|cmdty|eco|fx|eqs|bs|etfs|rfq|svt|opt|pub|cal|alrt|cfg|net|msg|imp)',
+  '/(mkt|cmdty|eco|fx|eqs|bs|etfs|rfq|svt|opt|pub|cal|alrt|cfg|net|msg|imp|dl)',
   '/(rfq|svt)/agreements',
   '/svt/traders',
   '/opt/result',
   '/pub/new',
   '/net/me',
   '/data/(session|corrections|content|eodhd|history)',
-  '/admin/(users|subscriptions|sources|media-payments|analysts|moderation|payouts|settings|audit|rfq)',
+  '/admin/(users|subscriptions|sources|media-payments|analysts|moderation|payouts|settings|audit|rfq|dl)',
   '/admin/rfq/reports',
   '/api/v1/.+',
 ].map((source) => `^${source}/?$`)

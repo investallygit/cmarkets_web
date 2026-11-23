@@ -6,7 +6,10 @@
 //
 //   npm run sweep -- [--accounts analyst,svt,visitor] [--langs en,fr] [--widths 1600,390]
 //                    [--extra-widths 1280,1279,1024,768,320] [--no-axe] [--no-reload] [--readonly]
-//                    [--browser chromium|firefox|webkit] [--out <folder>]
+//                    [--browser chromium|firefox|webkit] [--only <regex>] [--out <folder>]
+//
+// --only keeps the pages whose address the regular expression matches, as step 58 sweeps the
+// screens the fifth version changed.
 //
 // It writes <out>/results.jsonl (a line per page visit), <out>/summary.md (the findings by kind
 // and cause), and <out>/shots (each page at 1600 px in English and 390 px in French).
@@ -67,6 +70,7 @@ const extraWidths = list(option('extra-widths', '1280,1279,1024,768,320'))
 const axe = !flag('no-axe')
 const reloads = !flag('no-reload')
 const exploring = flag('explore')
+const only = option('only') ? new RegExp(option('only')) : null
 const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')
 const out = path.resolve(option('out', path.join(webRoot, 'test-results', 'page-sweep', stamp)))
 
@@ -260,7 +264,7 @@ function plan(me, menu, extras) {
   }
   for (const address of menu) add({ path: address, kind: 'menu' })
   for (const extra of extras) add({ kind: 'extra', ...extra })
-  return [...targets.values()]
+  return [...targets.values()].filter((target) => !only || only.test(target.path))
 }
 
 /**
