@@ -1,11 +1,12 @@
 import { useCallback, useState } from 'react'
 import { useSearchParams } from 'react-router'
-import { useHasPermission } from '@/entities/session'
+import { useCurrentUser, useHasPermission } from '@/entities/session'
 import type { RfqEligibleQuery, RfqRequestDto } from '@/shared/api/contracts'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import { MySvtsPanel } from '@/widgets/my-svts-panel'
 import { BlotterPanel } from '@/widgets/rfq-blotter'
 import { BoardPanel } from '@/widgets/rfq-board'
+import { CompletionDialog } from '@/widgets/rfq-completion'
 import { EligibleSecuritiesPanel, type EligibleSource } from '@/widgets/rfq-eligible-securities'
 import { MyRequestPanel } from '@/widgets/rfq-my-request'
 import { NewRequestPanel } from '@/widgets/rfq-new-request'
@@ -20,10 +21,15 @@ import { RFQ_LAYOUT, RFQ_READER_LAYOUT } from '../config/layout'
  * organisation's requests and blotter. "Request a price (RFQ)" on BS or a bond's profile opens it
  * with the security (`?security=`). A request by criteria (sixth version) shows its eligible
  * securities in the place of "My SVTs": the new request's preview while its criteria are entered,
- * the request's own list once it is shown in "My request" or picked on the board.
+ * the request's own list once it is shown in "My request" or picked on the board. The blotter's
+ * "My completion" opens the ratio's detail (ROADMAP step 62): the trader's own, its CEO's
+ * organisation's.
  */
 export function RfqPage() {
   const trader = useHasPermission('rfq:trade')
+  const user = useCurrentUser()
+  const [completionOpen, setCompletionOpen] = useState(false)
+  const showCompletion = () => setCompletionOpen(true)
   const [params] = useSearchParams()
   // The request "My request" shows: the one just published, or one picked; the page holds it.
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -74,13 +80,13 @@ export function RfqPage() {
         ) : (
           <MySvtsPanel />
         ),
-        blotter: <BlotterPanel scope="mine" />,
+        blotter: <BlotterPanel scope="mine" onShowCompletion={showCompletion} />,
       }
     : {
         organization: (
           <MyRequestPanel scope="organization" selectedId={selectedId} onSelect={setSelectedId} />
         ),
-        blotter: <BlotterPanel scope="organization" />,
+        blotter: <BlotterPanel scope="organization" onShowCompletion={showCompletion} />,
       }
 
   return (
@@ -95,6 +101,11 @@ export function RfqPage() {
           panels={panels}
         />
       </div>
+      <CompletionDialog
+        organizationId={completionOpen ? (user?.organization?.id ?? null) : null}
+        traderId={trader ? user?.id : undefined}
+        onClose={() => setCompletionOpen(false)}
+      />
     </div>
   )
 }

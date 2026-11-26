@@ -463,7 +463,9 @@
       "invoice-resend": "Invoice sent again",
       "security-describe": "Security description",
       "commodity-describe": "Commodity description",
-      "index-describe": "Index description"
+      "index-describe": "Index description",
+      "rfq-case-neutralize": "RFQ completion case neutralised",
+      "rfq-dispute-reject": "RFQ completion dispute turned down"
     },
     "fields": {
       "accountType": "Type",
@@ -542,7 +544,8 @@
       "nilReport": "BEAC nil report",
       "approvalWindow": "SVT approval window",
       "curveFeed": "RFQ agreements feed the curve",
-      "curveFeedMinimum": "Curve feed from a face of"
+      "curveFeedMinimum": "Curve feed from a face of",
+      "completionWindow": "Completion window (months)"
     },
     "targetTypes": {
       "user": "Account",
@@ -565,7 +568,8 @@
       "subscription": "Subscription",
       "invoice": "Invoice",
       "security": "Security",
-      "index": "Index"
+      "index": "Index",
+      "rfqCase": "RFQ completion case"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",

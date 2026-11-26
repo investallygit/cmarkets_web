@@ -107,7 +107,7 @@ test('T. Bekale buys by criteria, B. Ngoma offers an eligible security, T. Bekal
   const ranked = mine.getByRole('row', { name: /B\. Ngoma · Pension fund G/ })
   await expect(ranked).toContainText(
     new RegExp(
-      `1\\s*B\\. Ngoma · Pension fund G\\s*${offered!.replace(/[.()/]/g, '\\$&')}\\s*(CMR|GAB|COG)`,
+      `1\\s*B\\. Ngoma · Pension fund G\\s*\\d+% \\(\\d+\\)\\s*${offered!.replace(/[.()/]/g, '\\$&')}\\s*(CMR|GAB|COG)`,
     ),
   )
   await expect(mine).toContainText(

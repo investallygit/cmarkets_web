@@ -102,6 +102,10 @@ export function RequestDetail({ request }: { request: RfqRequestDto }) {
               request.requester &&
                 !request.mine &&
                 t('rfqTrading.myRequest.by', { name: request.requester.name }),
+              // The requester's filter on the responders (sixth version, ROADMAP decision 53).
+              request.minResponderCompletion !== null &&
+                t('rfqCompletion.myRequest.minimum', { percent: request.minResponderCompletion }),
+              request.excludeNewcomers && t('rfqCompletion.myRequest.noNewcomers'),
             ]
               .filter(Boolean)
               .join(' · ')}
@@ -180,7 +184,8 @@ export function RequestDetail({ request }: { request: RfqRequestDto }) {
       )}
       {open && (
         <p className="font-sans text-label text-secondary">
-          {criteria ? t('rfqCriteria.myRequest.note') : t('rfqTrading.myRequest.note')}
+          {criteria ? t('rfqCriteria.myRequest.note') : t('rfqTrading.myRequest.note')}{' '}
+          {t('rfqCompletion.myRequest.note')}
         </p>
       )}
 

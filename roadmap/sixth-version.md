@@ -182,8 +182,8 @@ itself, steps 61 to 68 follow these; each is also an
     the curve fed by agreements (step 49) take it unchanged. RFQ AGR's and DL's "security" column
     reads the agreement's, a request's row reading "By criteria".
 51. **What a completion case is**: as a requester, a request that ended (confirmed, cancelled or
-    expired) with at least one valid answer, one standing (sent, not withdrawn, not expired) when
-    it ended; it succeeds with one agreement concluded, fails when it was cancelled or expired
+    expired) with at least one valid answer, one not withdrawn (step 62: an answer that ran out
+    of validity before the request expired still counts); it succeeds with one agreement concluded, fails when it was cancelled or expired
     unconfirmed or when none was concluded and one failed through the requester's SVT, and is
     neutral when every agreement failed through the other side. As a responder, an answer selected
     in a confirmed selection, successful when its agreement is concluded. An agreement that expires

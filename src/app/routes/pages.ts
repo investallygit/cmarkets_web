@@ -142,6 +142,9 @@ const AuditLogPage = lazyPage(() =>
 const RfqReportingPage = lazyPage(() =>
   import('@/pages/rfq-reporting').then((module) => ({ default: module.RfqReportingPage })),
 )
+const RfqCompletionPage = lazyPage(() =>
+  import('@/pages/rfq-completion').then((module) => ({ default: module.RfqCompletionPage })),
+)
 const OptimisationSetupPage = lazyPage(() =>
   import('@/pages/portfolio-optimisation').then((module) => ({
     default: module.OptimisationSetupPage,
@@ -203,6 +206,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   ADMCFG: PlatformSettingsPage,
   MYCFG: AccountSettingsPage,
   RFQREP: RfqReportingPage,
+  RFQCPL: RfqCompletionPage,
   AUDT: AuditLogPage,
 }
 

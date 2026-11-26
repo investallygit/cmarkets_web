@@ -463,7 +463,9 @@
       "invoice-resend": "Facture renvoyée",
       "security-describe": "Description d'un titre",
       "commodity-describe": "Description d'une matière première",
-      "index-describe": "Description d'un indice"
+      "index-describe": "Description d'un indice",
+      "rfq-case-neutralize": "Cas de complétion RFQ neutralisé",
+      "rfq-dispute-reject": "Contestation de complétion RFQ rejetée"
     },
     "fields": {
       "accountType": "Type",
@@ -542,7 +544,8 @@
       "nilReport": "Rapport néant BEAC",
       "approvalWindow": "Fenêtre d'approbation des SVT",
       "curveFeed": "Les accords RFQ alimentent la courbe",
-      "curveFeedMinimum": "Courbe alimentée à partir d'un nominal de"
+      "curveFeedMinimum": "Courbe alimentée à partir d'un nominal de",
+      "completionWindow": "Période de complétion (mois)"
     },
     "targetTypes": {
       "user": "Compte",
@@ -565,7 +568,8 @@
       "subscription": "Abonnement",
       "invoice": "Facture",
       "security": "Titre",
-      "index": "Indice"
+      "index": "Indice",
+      "rfqCase": "Cas de complétion RFQ"
     },
     "quotaOf": "{{quota}}, {{type}}",
     "fieldOf": "{{field}}, {{type}}",

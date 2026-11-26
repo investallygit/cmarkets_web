@@ -126,7 +126,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 59   | [Tabs open across a release, the client's report](roadmap/steps/step-59-tabs-open-across-a-release.md)               | Done   |
 | 60   | [Sixth version of the spec: the plan, its decisions, questions](roadmap/steps/step-60-sixth-version-plan.md)         | Done   |
 | 61   | [RFQ: a request by criteria (screen 22)](roadmap/steps/step-61-rfq-by-criteria.md)                                   | Done   |
-| 62   | [RFQ: the completion ratio (screens 22, 10, 27)](roadmap/steps/step-62-rfq-completion-ratio.md)                      | To do  |
+| 62   | [RFQ: the completion ratio (screens 22, 10, 27)](roadmap/steps/step-62-rfq-completion-ratio.md)                      | Done   |
 | 63   | [BP: the rate entry panel as the spec draws it (screen 16)](roadmap/steps/step-63-bp-rate-entry-panel.md)            | To do  |
 | 64   | [AUC: the BTA and OTA auctions (screen 33)](roadmap/steps/step-64-auctions.md)                                       | To do  |
 | 65   | [BEAC: monetary policy and liquidity (screen 34)](roadmap/steps/step-65-beac-monetary-policy.md)                     | To do  |

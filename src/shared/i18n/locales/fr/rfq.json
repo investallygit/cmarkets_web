@@ -49,7 +49,9 @@
       "columns": {
         "trader": "Trader · organisation",
         "limit": "Limite",
-        "since": "Depuis"
+        "since": "Depuis",
+        "completionRequester": "Complétion · dem.",
+        "completionResponder": "Complétion · rép."
       },
       "noLimit": "sans limite",
       "perDay": "{{amount}} / jour",
@@ -116,15 +118,20 @@
       "window": "De 15 à 240 minutes.",
       "cutOff": "De 08:00 à 20:00.",
       "nextDay": "À partir de 07:00, avant l'heure limite.",
-      "curveFeedMinimum": "De 1 million à 10 milliards de XAF, en francs entiers."
-    }
+      "curveFeedMinimum": "De 1 million à 10 milliards de XAF, en francs entiers.",
+      "completionWindow": "De 1 à 24 mois."
+    },
+    "completion": "Taux de complétion",
+    "completionWindow": "Période glissante (mois)",
+    "completionHint": "Les taux de complétion des demandeurs et des répondants comptent les cas de ces derniers mois, de 1 à 24 (6 par défaut)."
   },
   "rfqTrading": {
     "tabs": {
       "label": "Écrans du RFQ",
       "trading": "Négociation",
       "agreements": "Accords",
-      "reporting": "Reporting BEAC"
+      "reporting": "Reporting BEAC",
+      "completion": "Complétion"
     },
     "side": {
       "buy": "Achat",
@@ -248,7 +255,7 @@
       "anonymous": "Anonyme",
       "columns": {
         "request": "Demande",
-        "requester": "Demandeur",
+        "requester": "Demandeur · complétion",
         "side": "Sens",
         "security": "Titre ou critères",
         "face": "Nominal",

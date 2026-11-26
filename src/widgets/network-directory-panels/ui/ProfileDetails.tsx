@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifiedBadge } from '@/entities/account'
+import { CompletionRatio } from '@/entities/rfq'
 import {
   AccountTypeBadge,
   ExperiencePeriod,
@@ -9,7 +10,7 @@ import {
   ProfileStats,
   useSpecialties,
 } from '@/entities/profile'
-import type { PublicProfileDto } from '@/shared/api/contracts'
+import type { ProfileDto, PublicProfileDto } from '@/shared/api/contracts'
 import { useFormat, useLocale } from '@/shared/i18n'
 
 const SECTION_TITLE =
@@ -39,6 +40,8 @@ export function ProfileDetails({ profile, headingLevel }: ProfileDetailsProps) {
       {children}
     </section>
   )
+  // A member's view of a Trader or a Manager (ProfileDto): its organisation's RFQ completion.
+  const completion = (profile as Partial<ProfileDto>).rfqCompletion
   const names = profile.specialties.map(
     (id) => specialties.find((specialty) => specialty.id === id)?.name[locale] ?? id,
   )
@@ -74,6 +77,7 @@ export function ProfileDetails({ profile, headingLevel }: ProfileDetailsProps) {
             .join(' · ')}
         </p>
         <ProfileStats stats={profile.stats} memberSince={profile.memberSince} className="mt-1" />
+        {completion && <RfqCompletionLine completion={completion} />}
       </div>
       {profile.about &&
         section(
@@ -106,5 +110,29 @@ export function ProfileDetails({ profile, headingLevel }: ProfileDetailsProps) {
           </ul>,
         )}
     </div>
+  )
+}
+
+/**
+ * A Trader's or a Manager's organisation's RFQ completion, as a requester and as a responder
+ * (screen 10, sixth version; ROADMAP decision 53: the directory has no profile of an organisation).
+ */
+function RfqCompletionLine({
+  completion,
+}: {
+  completion: NonNullable<ProfileDto['rfqCompletion']>
+}) {
+  const { t } = useTranslation()
+  return (
+    <p className="mt-1 flex flex-wrap items-baseline gap-x-2 font-sans text-data">
+      <span className="text-secondary">{t('rfqCompletion.profile.label')}</span>
+      <span>
+        {t('rfqCompletion.profile.requester')} <CompletionRatio completion={completion.requester} />
+      </span>
+      <span className="text-secondary">·</span>
+      <span>
+        {t('rfqCompletion.profile.responder')} <CompletionRatio completion={completion.responder} />
+      </span>
+    </p>
   )
 }

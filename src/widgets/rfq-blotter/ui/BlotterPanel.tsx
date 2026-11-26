@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { formatFace, shortNumber, useRfqBlotter } from '@/entities/rfq'
+import { CompletionRatio, formatFace, shortNumber, useRfqBlotter } from '@/entities/rfq'
 import type { RfqBlotterEventDto, RfqBlotterEventKind } from '@/shared/api/contracts'
 import type { RfqScope } from '@/shared/api/endpoints'
 import { useFormat, useLocale } from '@/shared/i18n'
@@ -26,9 +26,16 @@ const TONES: Readonly<Record<RfqBlotterEventKind, BadgeTone>> = {
 /**
  * Screen 22's "Today's blotter" (spec section 9; API /rfq/blotter): the day's requests published,
  * answers sent and selected, agreements made; then the latest events, newest first. The trader's
- * own, or its organisation's for its CEO.
+ * own, or its organisation's for its CEO; "My completion" as requester and as responder (sixth
+ * version, ROADMAP step 62), whose detail `onShowCompletion` opens.
  */
-export function BlotterPanel({ scope }: { scope: RfqScope }) {
+export function BlotterPanel({
+  scope,
+  onShowCompletion,
+}: {
+  scope: RfqScope
+  onShowCompletion?: () => void
+}) {
   const { t } = useTranslation()
   const blotter = useRfqBlotter(scope)
   const counts = [
@@ -57,6 +64,41 @@ export function BlotterPanel({ scope }: { scope: RfqScope }) {
                   <dd className="font-mono font-semibold text-primary tabular-nums">{data[key]}</dd>
                 </div>
               ))}
+              {data.myCompletion &&
+                (['requester', 'responder'] as const).map((role) => (
+                  <div
+                    key={role}
+                    className="flex items-baseline justify-between gap-2 py-0.5 font-sans text-data"
+                  >
+                    <dt id={`rfq-completion-${scope}-${role}`} className="text-secondary">
+                      {t(
+                        scope === 'organization'
+                          ? `rfqCompletion.blotter.organization.${role}`
+                          : `rfqCompletion.blotter.mine.${role}`,
+                      )}
+                    </dt>
+                    <dd>
+                      {onShowCompletion ? (
+                        // Named by its row and its ratio ("My completion · requester 94% (32)"),
+                        // the text it shows; its title says it opens the detail.
+                        <button
+                          type="button"
+                          id={`rfq-completion-${scope}-${role}-open`}
+                          onClick={onShowCompletion}
+                          className="inline-flex min-h-6 items-center font-semibold underline-offset-2 hover:underline focus-visible:ring-1 focus-visible:ring-accent-amber focus-visible:outline-none"
+                          aria-labelledby={`rfq-completion-${scope}-${role} rfq-completion-${scope}-${role}-open`}
+                          title={t('rfqCompletion.blotter.open', {
+                            role: t(`rfqCompletion.roles.${role}`),
+                          })}
+                        >
+                          <CompletionRatio completion={data.myCompletion![role]} />
+                        </button>
+                      ) : (
+                        <CompletionRatio completion={data.myCompletion![role]} />
+                      )}
+                    </dd>
+                  </div>
+                ))}
             </dl>
             <section aria-labelledby={`rfq-blotter-${scope}`} className="flex flex-col gap-1">
               <h3

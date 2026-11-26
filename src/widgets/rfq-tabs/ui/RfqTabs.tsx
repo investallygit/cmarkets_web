@@ -9,6 +9,7 @@ const TABS: readonly (readonly [code: string, label: TranslationKey])[] = [
   ['RFQ', 'rfqTrading.tabs.trading'],
   ['RFQ AGR', 'rfqTrading.tabs.agreements'],
   ['RFQ REP', 'rfqTrading.tabs.reporting'],
+  ['RFQ CPL', 'rfqTrading.tabs.completion'],
 ]
 
 /**

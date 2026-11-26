@@ -1,5 +1,6 @@
 import type { IsoDateTime } from './common'
 import type { AccountType, ClientAccountType, UserLanguage } from './me'
+import type { RfqCompletionPairDto } from './rfqCompletion'
 
 /**
  * Who sees a profile (spec section 15): nobody in the directory, the users logged in (the
@@ -212,6 +213,8 @@ export interface ProfileDto extends PublicProfileDto {
   contact: ProfileContactDto
   /** Who may write, by type: "Accepts messages from…". */
   contactRules: ContactRules
+  /** A Trader's or a Manager's organisation's RFQ completion, while the RFQ is on (screen 10). */
+  rfqCompletion: RfqCompletionPairDto | null
 }
 
 /** GET /profiles/{userId}/contact-permission */

@@ -1,5 +1,6 @@
 import type { IsoDateTime, TimeOfDay } from './common'
 import type { AccountType } from './me'
+import type { RfqCompletionPairDto } from './rfqCompletion'
 
 /**
  * A trader's link to an SVT (spec, screen 22, "Linking a trader to an SVT"): asked by the trader,
@@ -49,6 +50,8 @@ export interface LinkedTraderDto {
   name: string
   organization: string | null
   accountType: AccountType
+  /** Its organisation's completion ratios (screen 27, sixth version). */
+  completion: RfqCompletionPairDto | null
 }
 
 /** A link as the SVT's bank sees it (TRD, and screen 27's "Trader links"). */
@@ -112,6 +115,8 @@ export interface RfqAdminSettingsDto {
   svts: AdminLicensedSvtDto[]
   updatedAt: IsoDateTime | null
   updatedBy: string | null
+  /** The completion ratios' rolling window, 1 to 24 months (sixth version, decision 52). */
+  completionWindowMonths: number
 }
 
 /** A licensed SVT as ADMCFG sends it: its id once on the list, a bank's name to add one. */
@@ -133,4 +138,5 @@ export interface RfqAdminSettingsInput {
   curveFeedEnabled: boolean
   curveFeedMinimum: number
   svts: LicensedSvtInput[]
+  completionWindowMonths: number
 }

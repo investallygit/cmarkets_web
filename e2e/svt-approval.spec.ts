@@ -72,17 +72,18 @@ test('B. Sima approves one agreement and rejects the other, A. Okala concludes t
   )
   const [first, second] = confirmed.agreements.map((agreement) => agreement.number)
 
-  // B. Sima on the SVT's home screen: both agreements to approve, the second within the client's
-  // limit.
+  // B. Sima on the SVT's home screen: both agreements to approve, the first within the client's
+  // limit (B. Ngoma's billion a day; A. Tchakounté's 500 million already hold the demo's purchase by
+  // criteria, ROADMAP step 61).
   await page.goto('/mkt')
   await switchAccount(page, /analyst/i, 'SVT', /svt/i)
   await expect(page).toHaveURL(/\/svt$/)
   const approvals = panel(page, 'Agreements to approve')
   await expect(approvals.getByRole('row', { name: new RegExp(short(first)) })).toContainText(
-    /B\. Ngoma · Pension fund G\s*SELL\s*OTA CMR 3 yr \d{4}\s*300\sM\s*100\.20\s*Bank C · Bank D/,
+    /B\. Ngoma · Pension fund G\s*SELL\s*OTA CMR 3 yr \d{4}\s*300\sM\s*100\.20\s*Bank C · Bank D\s*OK/,
   )
   await expect(approvals.getByRole('row', { name: new RegExp(short(second)) })).toContainText(
-    /A\. Tchakounté · Insurer F\s*SELL\s*OTA CMR 3 yr \d{4}\s*200\sM\s*100\.25\s*Bank C · Bank D\s*OK/,
+    /A\. Tchakounté · Insurer F\s*SELL\s*OTA CMR 3 yr \d{4}\s*200\sM\s*100\.25\s*Bank C · Bank D/,
   )
 
   // The first, approved for Bank E: it waits for Bank D.

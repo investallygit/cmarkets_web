@@ -1,0 +1,116 @@
+{
+  "rfqCompletion": {
+    "percent": "{{percent}}%",
+    "percentCases": "{{percent}}% ({{cases}})",
+    "new_one": "New ({{count}})",
+    "new_other": "New ({{count}})",
+    "ratioTitle_one": "Completion: the share of cases that ended in an agreement approved by both SVTs ({{count}} case)",
+    "ratioTitle_other": "Completion: the share of cases that ended in an agreement approved by both SVTs ({{count}} cases)",
+    "column": "Completion",
+    "roles": {
+      "requester": "As requester",
+      "responder": "As responder"
+    },
+    "outcomes": {
+      "success": "Success",
+      "failure": "Failure",
+      "neutral": "Neutral",
+      "neutralized": "Neutralised"
+    },
+    "causes": {
+      "concluded": "agreement concluded",
+      "requestCancelled": "request cancelled after an answer",
+      "requestExpired": "request expired without confirmation",
+      "svtRejected": "agreement rejected by its SVT",
+      "svtExpired": "agreement expired, its SVT not deciding",
+      "counterparty": "failure of the counterparty or its SVT",
+      "mutualCancellation": "cancelled by mutual consent"
+    },
+    "disputeStatus": {
+      "open": "Disputed",
+      "upheld": "Dispute upheld",
+      "rejected": "Dispute turned down"
+    },
+    "newRequest": {
+      "minimum": "Minimum responder completion",
+      "excludeNewcomers": "Exclude new profiles (fewer than 5 cases)",
+      "invalid": "A percent from 1 to 100."
+    },
+    "myRequest": {
+      "minimum": "responders from {{percent}}% completion",
+      "noNewcomers": "no new profiles",
+      "note": "Completion: the share of cases that ended in an agreement approved by both SVTs (cases in brackets); it does not rank the answers."
+    },
+    "answer": {
+      "belowMinimum": "This request takes answers from a responder completion of {{percent}}%: your organisation's is under it.",
+      "noNewcomers": "This request excludes new profiles: your organisation has fewer than 5 cases as a responder."
+    },
+    "blotter": {
+      "mine": {
+        "requester": "My completion · requester",
+        "responder": "My completion · responder"
+      },
+      "organization": {
+        "requester": "Completion · requester",
+        "responder": "Completion · responder"
+      },
+      "open": "Completion {{role}}: open the detail"
+    },
+    "detail": {
+      "title": "Completion ratio",
+      "window_one": "{{who}}, over the last month.",
+      "window_other": "{{who}}, over the last {{count}} months.",
+      "successes": "Concluded",
+      "failures": "Failures",
+      "neutral": "Neutral (out of the count)",
+      "withdrawals": "Answers withdrawn before the confirmation:",
+      "withdrawalRate": "{{percent}}% ({{withdrawn}} of {{sent}})",
+      "cases": "Failures and neutral cases",
+      "noCase": "No failure nor neutral case over the period."
+    },
+    "dispute": {
+      "open": "Dispute",
+      "title": "Dispute {{number}}",
+      "intro": "Counted as your failure: {{cause}}. Say why to the Admin, with your evidence; the Admin may neutralise the case.",
+      "reason": "Reason",
+      "reasonRequired": "Say why this failure is not yours.",
+      "evidence_one": "Evidence (PDF or image, 5 MB, {{count}} file at most)",
+      "evidence_other": "Evidence (PDF or image, 5 MB, {{count}} files at most)",
+      "full_one": "{{count}} file attached: the most a dispute takes.",
+      "full_other": "{{count}} files attached: the most a dispute takes.",
+      "files": "Files attached",
+      "remove": "Remove {{name}}",
+      "send": "Send to the Admin",
+      "sent": "Dispute sent to the Admin."
+    },
+    "admin": {
+      "disputes": "Completion disputes",
+      "noDispute": "No dispute.",
+      "participants": "Participants' completion",
+      "participant": "Participant's cases",
+      "pickParticipant": "Pick a participant to read its cases.",
+      "noParticipant": "No participant has a case over the period.",
+      "columns": {
+        "organization": "Organisation",
+        "openDisputes": "Disputes"
+      },
+      "raisedBy": "Raised by {{name}}:",
+      "answer": "Admin: {{answer}}",
+      "reason": "Reason (sent to the participant, in the audit log)",
+      "reasonRequired": "Give a reason.",
+      "neutralize": "Neutralise",
+      "neutralizeTitle": "Neutralise {{number}}",
+      "neutralizeIntro": "The failure leaves the ratio: an incident confirmed, or the dispute upheld. The case keeps its outcome, marked neutralised.",
+      "neutralizeDone": "{{number}} neutralised.",
+      "reject": "Turn down",
+      "rejectTitle": "Turn down the dispute of {{number}}",
+      "rejectIntro": "The failure stays counted; the participant reads your reason.",
+      "rejectDone": "The dispute of {{number}} turned down."
+    },
+    "profile": {
+      "label": "RFQ completion of the organisation:",
+      "requester": "requester",
+      "responder": "responder"
+    }
+  }
+}

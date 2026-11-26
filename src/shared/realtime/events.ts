@@ -113,6 +113,8 @@ export interface RfqEventMap {
   AgreementConcluded: { agreementId: string; rfqId: string }
   /** An SVT rejected the agreement, or no decision came in time (expired). */
   AgreementRejected: { agreementId: string; rfqId: string; status: RfqAgreementStatus }
+  /** A completion case of these organisations was written or neutralised (ROADMAP step 62). */
+  RfqCompletionChanged: { organizationIds: string[] }
 }
 
 export type RfqEventName = keyof RfqEventMap

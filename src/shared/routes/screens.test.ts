@@ -74,6 +74,7 @@ describe('the left menu (spec section 9)', () => {
       'NETME',
       'OPTRES',
       'RFQREP',
+      'RFQCPL',
       'MYCFG',
       'ADMDL',
     ])

@@ -67,6 +67,9 @@ export function useRfqTradingSync() {
       svtApprovalKeys.detail(agreementId),
     ),
   )
+  // A completion case written or neutralised (sixth version, ROADMAP step 62): the ratios beside
+  // the requests, the answers, the blotter, NET and the SVT's traders are read again.
+  useRfqEvent('RfqCompletionChanged', () => refresh(rfqKeys.all))
   // The counters count the bank's links.
   useRfqEvent('LinkRequested', () => refresh(svtApprovalKeys.summary()))
   useRfqEvent('LinkChanged', () => refresh(svtApprovalKeys.summary()))

@@ -316,8 +316,8 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Fourth version (step 43)**: the SVT, a tenth type, has no profile and is not listed.
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the lists say when they could
   not be read (B63), a page past the last goes to the last (B66).
-- **Sixth version (step 62)**: a Trader's or a Manager's profile shows its organisation's RFQ
-  completion as requester and responder (decision 53).
+- **Built in step 62 (sixth version)**: a Trader's or a Manager's profile shows its organisation's
+  RFQ completion as requester and responder (decision 53).
 
 ## MSG · Messaging (screen 11): done
 
@@ -578,9 +578,9 @@ what is still to do. The Data admin's and the Admin's screens are in
   SVTs"; the responders offering a security of the list, its price and quantity, checked as they
   type; answers ranked by yield; one agreement per security (decisions 49 and 50). See
   [step 61](steps/step-61-rfq-by-criteria.md).
-- **Sixth version (step 62)**: the completion ratio, the organisation's on the board and in the
-  answers, the trader's in the blotter; a minimum responder completion on a request; the ratio's
-  detail and its disputes (decisions 51 to 55). See
+- **Built in step 62 (sixth version)**: the completion ratio, the organisation's on the board and
+  in the answers, the trader's in the blotter; a minimum responder completion on a request, the
+  answer form locked below it; the ratio's detail and its disputes (decisions 51 to 55). See
   [step 62](steps/step-62-rfq-completion-ratio.md).
 
 ## RFQ AGR · Agreements (screen 23): done
@@ -653,7 +653,8 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the time left ticks between
   reloads (B80); with one SVT account the bank approves alone, which its settings say (B84, decision
   32); TRD exports its linked traders in XLSX and CSV (B86, decision 34).
-- **Sixth version (step 62)**: each linked trader's organisation's completion (decision 53).
+- **Built in step 62 (sixth version)**: each linked trader's organisation's completion (decision
+  53).
 
 ## OPT / OPT RES · Portfolio optimisation (screens 28 and 29): done
 

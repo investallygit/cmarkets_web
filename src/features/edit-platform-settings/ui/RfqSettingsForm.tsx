@@ -19,6 +19,8 @@ import { Section } from './Section'
 const MIN_AMOUNT = 1_000_000
 const MAX_AMOUNT = 10_000_000_000
 const MAX_MONTHS = 36
+/** The completion ratios' window (sixth version, ROADMAP decision 52). */
+const MAX_COMPLETION_MONTHS = 24
 /** The SVTs' window (RfqSettings.SetApprovalWindow): 15 to 240 minutes, a cut-off from 08:00 to 20:00. */
 const MIN_WINDOW = 15
 const MAX_WINDOW = 240
@@ -67,6 +69,9 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
   const [nextDay, setNextDay] = useState(hhmm(settings.nextDayDeadline))
   const [feedsCurve, setFeedsCurve] = useState(settings.curveFeedEnabled)
   const [curveMinimum, setCurveMinimum] = useState<number | null>(settings.curveFeedMinimum)
+  const [completionMonths, setCompletionMonths] = useState<number | null>(
+    settings.completionWindowMonths,
+  )
   const [rows, setRows] = useState<SvtRow[]>(initial)
   const [newName, setNewName] = useState('')
   const [newEmail, setNewEmail] = useState('')
@@ -94,6 +99,13 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
         ? t('rfqSettings.errors.nextDay')
         : null,
     curveFeedMinimum: isAmount(curveMinimum) ? null : t('rfqSettings.errors.curveFeedMinimum'),
+    completionWindowMonths:
+      completionMonths === null ||
+      completionMonths < 1 ||
+      completionMonths > MAX_COMPLETION_MONTHS ||
+      !Number.isInteger(completionMonths)
+        ? t('rfqSettings.errors.completionWindow')
+        : null,
     svts: rows.some((row) => !isEmailAddress(row.backOfficeEmail))
       ? t('rfqSettings.errors.email')
       : null,
@@ -109,6 +121,7 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
     nextDay !== hhmm(settings.nextDayDeadline) ||
     feedsCurve !== settings.curveFeedEnabled ||
     curveMinimum !== settings.curveFeedMinimum ||
+    completionMonths !== settings.completionWindowMonths ||
     JSON.stringify(rows.map(({ id, backOfficeEmail, active }) => [id, backOfficeEmail, active])) !==
       JSON.stringify(
         settings.svts.map(({ id, backOfficeEmail, active }) => [id, backOfficeEmail, active]),
@@ -145,6 +158,7 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
     setNextDay(hhmm(settings.nextDayDeadline))
     setFeedsCurve(settings.curveFeedEnabled)
     setCurveMinimum(settings.curveFeedMinimum)
+    setCompletionMonths(settings.completionWindowMonths)
     setRows(initial())
   }
 
@@ -166,6 +180,7 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
             nextDayDeadline: `${nextDay}:00`,
             curveFeedEnabled: feedsCurve,
             curveFeedMinimum: curveMinimum ?? 0,
+            completionWindowMonths: completionMonths ?? 0,
             svts: rows.map(({ id, name, backOfficeEmail, active }) => ({
               id,
               name: id ? null : name,
@@ -244,6 +259,22 @@ export function RfqSettingsForm({ settings }: { settings: RfqAdminSettingsDto })
             </Field>
           </div>
           <p className="font-sans text-data text-secondary">{t('rfqSettings.curveFeedHint')}</p>
+        </Section>
+        <Section title={t('rfqSettings.completion')}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <Field
+              label={t('rfqSettings.completionWindow')}
+              error={error('completionWindowMonths')}
+            >
+              <NumberInput
+                value={completionMonths}
+                onChange={setCompletionMonths}
+                decimals={0}
+                highlight
+              />
+            </Field>
+          </div>
+          <p className="font-sans text-data text-secondary">{t('rfqSettings.completionHint')}</p>
         </Section>
         <Section title={t('rfqSettings.svts')}>
           <p className="font-sans text-data text-secondary">{t('rfqSettings.svtsHint')}</p>

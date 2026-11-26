@@ -26,6 +26,17 @@ export {
   useSvtSettings,
   useSvtSummary,
 } from './api/svtApprovals'
+export {
+  adminCompletionKeys,
+  completionKeys,
+  useAdminRfqCompletion,
+  useDecideRfqCase,
+  useRaiseRfqDispute,
+  useRfqCompletion,
+  useRfqDisputeFile,
+  useRfqDisputes,
+  useRfqParticipants,
+} from './api/completion'
 export { useRfqTradingSync } from './api/useRfqTradingSync'
 export {
   APPROVAL_TONES,
@@ -36,6 +47,7 @@ export {
   timeLeft,
   type CheckResult,
 } from './lib/approvalDisplay'
+export { COMPLETION_TEXT, completionTone, formatCompletion } from './lib/completion'
 export { useDescribeCriteria } from './lib/describeCriteria'
 export {
   criteriaChecks,
@@ -59,3 +71,4 @@ export {
   RESPONSE_TONES,
   shortNumber,
 } from './lib/rfqDisplay'
+export { CompletionRatio } from './ui/CompletionRatio'

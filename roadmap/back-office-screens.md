@@ -228,8 +228,9 @@ by which step, and what is still to do. The terminal's screens are in
   (B35) and a quota refused is said (B91).
 - **Built in step 57 (fifth version)**: the sources whose data may be downloaded and each profile's
   download limits (decision 41).
-- **Sixth version (steps 62, 66 and 67)**: under "RFQ", the completion's window (6 months, 1 to
-  24, decision 52); the switches of the agencies' ratings (decision 60) and of EODHD's
+- **Built in step 62 (sixth version)**: under "RFQ", the completion's window (6 months, 1 to 24,
+  decision 52).
+- **Sixth version (steps 66 and 67)**: the switches of the agencies' ratings (decision 60) and of EODHD's
   international events (decision 57).
 
 ## AUDT · Audit log (no mockup): done
@@ -296,8 +297,9 @@ by which step, and what is still to do. The terminal's screens are in
   it under the RFQ's tabs, the entry lit on both. See [step 46](steps/step-46-rfq-agreements.md).
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the agreements sort both ways
   on a third click (B81).
-- **Sixth version (step 62)**: the completion disputes, a case neutralised or a dispute turned down
-  with a reason, in AUDT (decision 54); every participant's ratios.
+- **Built in step 62 (sixth version)**: RFQ CPL beside RFQ AGR and RFQ REP under the RFQ's tabs:
+  the completion disputes and their evidence, a case neutralised or a dispute turned down with a
+  reason, in AUDT (decision 54); every participant's ratios and the cases of the one picked.
 
 ## RFQ REP · Daily reporting to the BEAC (screen 24): done
 

@@ -77,6 +77,13 @@ import type {
   VerificationStatus,
   RfqAdminSettingsDto,
   RfqAdminSettingsInput,
+  RfqCompletionCaseDecidedDto,
+  RfqCompletionDetailDto,
+  RfqCompletionQuery,
+  RfqCompletionReasonInput,
+  RfqDisputeDto,
+  RfqDisputeStatus,
+  RfqParticipantDto,
 } from '../contracts'
 import { answer, route, send, sendBlob, sendForm } from './define'
 
@@ -174,6 +181,28 @@ export const adminRoutes = {
   rfqSettings: route('GET', '/admin/rfq/svt', answer<RfqAdminSettingsDto>()),
   saveRfqSettings: route('PUT', '/admin/rfq/svt', answer<RfqAdminSettingsDto>()),
   rfqAudit: route('GET', '/admin/rfq/audit', answer<Blob>()),
+  rfqParticipants: route(
+    'GET',
+    '/admin/rfq/completion/participants',
+    answer<RfqParticipantDto[]>(),
+  ),
+  rfqParticipant: route(
+    'GET',
+    '/admin/rfq/completion/participants/{orgId}',
+    answer<RfqCompletionDetailDto>(),
+  ),
+  rfqDisputes: route('GET', '/admin/rfq/completion/disputes', answer<RfqDisputeDto[]>()),
+  rfqDisputeFile: route('GET', '/admin/rfq/completion/disputes/{id}/files/{index}', answer<Blob>()),
+  neutralizeRfqCase: route(
+    'POST',
+    '/admin/rfq/completion/{caseId}/neutralize',
+    answer<RfqCompletionCaseDecidedDto>(),
+  ),
+  rejectRfqDispute: route(
+    'POST',
+    '/admin/rfq/completion/disputes/{id}/reject',
+    answer<RfqCompletionCaseDecidedDto>(),
+  ),
   dailyReportSettings: route(
     'GET',
     '/admin/rfq/daily-report-settings',
@@ -442,6 +471,21 @@ export const adminApi = {
   /** The RFQ's compliance export: every event of the days from `from` to `to` (Douala), as CSV. */
   rfqAudit: (from: string, to: string) =>
     sendBlob(adminRoutes.rfqAudit, { query: { from, to, format: 'csv' } }),
+  /** The organisations with completion cases over the window, their ratios, their open disputes. */
+  rfqParticipants: (signal?: AbortSignal) => send(adminRoutes.rfqParticipants, { signal }),
+  /** An organisation's ratios and cases, or one of its traders'. */
+  rfqParticipant: (orgId: string, query: RfqCompletionQuery = {}, signal?: AbortSignal) =>
+    send(adminRoutes.rfqParticipant, { params: { orgId }, query: { ...query }, signal }),
+  /** The completion disputes, the open ones first. */
+  rfqDisputes: (status?: RfqDisputeStatus, signal?: AbortSignal) =>
+    send(adminRoutes.rfqDisputes, { query: status ? { status } : {}, signal }),
+  rfqDisputeFile: (id: string, index: number) =>
+    sendBlob(adminRoutes.rfqDisputeFile, { params: { id, index: String(index) } }),
+  /** Takes a failure out of the count, its open dispute upheld; traced in AUDT. */
+  neutralizeRfqCase: (caseId: string, input: RfqCompletionReasonInput) =>
+    send(adminRoutes.neutralizeRfqCase, { params: { caseId }, body: input }),
+  rejectRfqDispute: (id: string, input: RfqCompletionReasonInput) =>
+    send(adminRoutes.rejectRfqDispute, { params: { id }, body: input }),
   /** The whole list in its order: a bank added by its name, none taken off (untick it instead). */
   saveRfqSettings: (settings: RfqAdminSettingsInput) =>
     send(adminRoutes.saveRfqSettings, { body: settings }),

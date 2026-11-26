@@ -1,5 +1,6 @@
 import type { IsoDate, IsoDateTime } from './common'
 import type { LicensedSvtDto } from './rfq'
+import type { RfqCompletionDto, RfqCompletionPairDto } from './rfqCompletion'
 
 /** The requester's side: a buyer's answers sell to it, a seller's buy from it. */
 export type RfqSide = 'buy' | 'sell'
@@ -187,12 +188,23 @@ export interface RfqBoardItemDto {
   expiresAt: IsoDateTime
   ownOrganization: boolean
   myResponse: RfqMyResponseDto | null
+  /** The requester's organisation's ratio as a requester, named or not (decision 53). */
+  requesterCompletion: RfqCompletionDto | null
+  /** The requester's threshold on the responders' completion, in percent. */
+  minResponderCompletion: number | null
+  excludeNewcomers: boolean
+  /** The reader's organisation's ratio as a responder meets the threshold. */
+  completionAllows: boolean
 }
 
-/** GET /rfq/board; `canAnswer` with a confirmed SVT. */
+/**
+ * GET /rfq/board; `canAnswer` with a confirmed SVT; `myCompletion`, the reader's organisation's
+ * ratio as a responder, which the thresholds compare.
+ */
 export interface RfqBoardDto {
   requests: RfqBoardItemDto[]
   canAnswer: boolean
+  myCompletion: RfqCompletionDto | null
 }
 
 /** An answer as the requester's organisation reads it, ranked by the selection in force. */
@@ -215,6 +227,8 @@ export interface RfqResponseDto {
   security: RfqSecurityRefDto | null
   yieldPct: number | null
   remainingYears: number | null
+  /** Its responder's organisation's ratio as a responder (decision 53); it ranks nothing. */
+  completion: RfqCompletionDto | null
 }
 
 export interface RfqAllocationLineDto {
@@ -298,6 +312,8 @@ export interface RfqRequestDto {
   allocation: RfqAllocationDto | null
   myResponse: RfqMyResponseDto | null
   agreements: RfqAgreementDto[]
+  minResponderCompletion: number | null
+  excludeNewcomers: boolean
 }
 
 /** GET /rfq/mine: the trader's requests of the day and those open, or its organisation's. */
@@ -354,6 +370,8 @@ export interface RfqBlotterDto {
   answersSelected: number
   agreements: number
   events: RfqBlotterEventDto[]
+  /** "My completion": the trader's own, its organisation's with `scope=organization`. */
+  myCompletion: RfqCompletionPairDto | null
 }
 
 interface RfqPublishCommon {
@@ -362,6 +380,9 @@ interface RfqPublishCommon {
   durationSeconds: number
   svtId: string
   anonymous: boolean
+  /** The minimum responder completion, in percent (sixth version, decision 53). */
+  minResponderCompletion: number | null
+  excludeNewcomers: boolean
 }
 
 /** POST /rfq: for a security, or by criteria (a purchase; an empty criterion imposes nothing). */

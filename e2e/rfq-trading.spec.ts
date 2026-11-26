@@ -69,7 +69,8 @@ test('T. Bekale publishes, B. Ngoma answers on the board and improves, T. Bekale
   await ngoma.goto('/rfq')
   const board = panel(ngoma, 'Demandes ouvertes sur la plateforme')
   const row = board.getByRole('row', { name: new RegExp(short) })
-  await expect(row).toContainText(/Anonyme\s*ACHAT\s*OTA CMR 3 yr \d{4}\s*300\sM/)
+  // The requester unnamed, with its organisation's completion as a requester (ROADMAP step 62).
+  await expect(row).toContainText(/Anonyme\s*·\s*\d+ %\s*ACHAT\s*OTA CMR 3 yr \d{4}\s*300\sM/)
   await row.click()
   const answer = ngoma.getByRole('form', { name: `Ma réponse à ${number}` })
   await expect(answer).toContainText(/le demandeur achète 300\sM OTA CMR 3 yr/)
@@ -82,7 +83,7 @@ test('T. Bekale publishes, B. Ngoma answers on the board and improves, T. Bekale
 
   // On T. Bekale's screen at once: ranked, with its responder, and the selection.
   await expect(mine.getByRole('row', { name: /B\. Ngoma · Pension fund G/ })).toContainText(
-    /1\s*B\. Ngoma · Pension fund G\s*Bank E\s*100\.20\s*\d+\.\d\d%\s*300\sM/,
+    /1\s*B\. Ngoma · Pension fund G\s*\d+% \(\d+\)\s*Bank E\s*100\.20\s*\d+\.\d\d%\s*300\sM/,
   )
   await expect(mine).toContainText(
     /Automatic selection: 300\sM \/ 300\sM · 1 agreement · weighted average price 100\.20/,

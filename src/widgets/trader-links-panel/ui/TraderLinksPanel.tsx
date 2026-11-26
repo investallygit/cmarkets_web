@@ -2,6 +2,7 @@ import { MessageSquare, Pencil } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { mayWriteMessages, useCurrentUser } from '@/entities/session'
+import { CompletionRatio } from '@/entities/rfq'
 import { formatDailyLimit, useSvtLinks } from '@/entities/svt-link'
 import { DeclineLinkButton, LimitDialog, RevokeLinkButton } from '@/features/decide-trader-link'
 import type { TraderLinkDto } from '@/shared/api/contracts'
@@ -144,6 +145,24 @@ function LinkedTraders({
             cell: ({ getValue }) => <span className="text-primary">{getValue()}</span>,
           },
         ),
+        // Each trader's organisation's completion, as a requester and as a responder (sixth
+        // version, ROADMAP decision 53).
+        helper.accessor((link) => link.trader.completion?.requester.percent ?? -1, {
+          id: 'completionRequester',
+          header: t('rfq.links.columns.completionRequester'),
+          meta: { align: 'right', width: 'minmax(88px, 0.8fr)' },
+          cell: ({ row }) => (
+            <CompletionRatio completion={row.original.trader.completion?.requester ?? null} />
+          ),
+        }),
+        helper.accessor((link) => link.trader.completion?.responder.percent ?? -1, {
+          id: 'completionResponder',
+          header: t('rfq.links.columns.completionResponder'),
+          meta: { align: 'right', width: 'minmax(88px, 0.8fr)' },
+          cell: ({ row }) => (
+            <CompletionRatio completion={row.original.trader.completion?.responder ?? null} />
+          ),
+        }),
         helper.accessor((link) => link.dailyLimit ?? Number.POSITIVE_INFINITY, {
           id: 'limit',
           header: t('rfq.links.columns.limit'),

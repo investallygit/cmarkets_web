@@ -83,6 +83,8 @@ export const routes = {
   adminPayouts: '/admin/payouts',
   /** RFQ REP, the BEAC's daily reporting (screen 24, ROADMAP step 47): the Admin's RFQ entry. */
   adminRfqReports: '/admin/rfq/reports',
+  /** RFQ CPL, the completion's disputes and ratios (sixth version, ROADMAP step 62). */
+  adminRfqCompletion: '/admin/rfq/completion',
   adminSettings: '/admin/settings',
   // An employee's own settings (B72 of ROADMAP step 50): profile and security.
   account: '/account',

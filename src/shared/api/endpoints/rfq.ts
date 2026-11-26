@@ -15,7 +15,11 @@ import type {
   RfqBlotterDto,
   RfqBoardDto,
   RfqCancelAgreementInput,
+  RfqCompletionDetailDto,
+  RfqCompletionQuery,
   RfqConfirmInput,
+  RfqDisputeInput,
+  RfqDisputeSummaryDto,
   RfqEligibleQuery,
   RfqEligibleSecurityDto,
   RfqMyResponseDto,
@@ -113,6 +117,12 @@ export const rfqRoutes = {
   answer: route('POST', '/rfq/{id}/responses', answer<RfqMyResponseDto>()),
   improve: route('PUT', '/rfq/{id}/responses/{responseId}', answer<RfqMyResponseDto>()),
   withdraw: route('DELETE', '/rfq/{id}/responses/{responseId}'),
+  completion: route(
+    'GET',
+    '/rfq/participants/{orgId}/completion',
+    answer<RfqCompletionDetailDto>(),
+  ),
+  raiseDispute: route('POST', '/rfq/completion/{caseId}/disputes', answer<RfqDisputeSummaryDto>()),
   // RFQ REP, the daily reporting to the BEAC (screen 24, ROADMAP step 47): the Admin's.
   dailyReports: route('GET', '/rfq/daily-reports', answer<DailyReportMonthDto>()),
   dailyReport: route('GET', '/rfq/daily-reports/{date}', answer<DailyReportDto>()),
@@ -201,6 +211,16 @@ export const rfqApi = {
     send(rfqRoutes.improve, { params: { id, responseId }, body: input }),
   withdraw: (id: string, responseId: string) =>
     send(rfqRoutes.withdraw, { params: { id, responseId } }),
+  /** An organisation's completion ratios, or one of its traders'; its cases for its members. */
+  completion: (orgId: string, query: RfqCompletionQuery = {}, signal?: AbortSignal) =>
+    send(rfqRoutes.completion, { params: { orgId }, query: { ...query }, signal }),
+  /** Disputes a failure with the Admin: a reason and up to three files. */
+  raiseDispute: (caseId: string, input: RfqDisputeInput) => {
+    const form = new FormData()
+    form.append('reason', input.reason)
+    for (const file of input.files) form.append('files', file)
+    return sendForm(rfqRoutes.raiseDispute, form, { params: { caseId } })
+  },
   /** The month's business days (yyyy-MM), newest first, with each one's send. */
   dailyReports: (month: string, signal?: AbortSignal) =>
     send(rfqRoutes.dailyReports, { query: { month }, signal }),

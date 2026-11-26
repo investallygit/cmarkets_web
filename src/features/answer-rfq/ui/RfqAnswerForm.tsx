@@ -106,7 +106,11 @@ function SecurityAnswerForm({
     answerSide(request.side) === 'buy' ? t('rfqTrading.answer.bid') : t('rfqTrading.answer.offer')
   const open = Date.parse(request.closesAt) > now
   const confirmable = Date.parse(request.expiresAt) > now
-  const blocked = !canAnswer || request.ownOrganization || (live ? !confirmable : !open)
+  // A new answer meets the requester's completion threshold (sixth version, ROADMAP decision 53);
+  // an answer in force is improved or withdrawn as before.
+  const belowThreshold = !live && !request.completionAllows
+  const blocked =
+    !canAnswer || request.ownOrganization || (live ? !confirmable : !open || belowThreshold)
   const least = Math.min(minimumTradingAmount, request.faceAmount)
   const quantityInvalid =
     quantity === null ||
@@ -261,11 +265,17 @@ function SecurityAnswerForm({
       <p className="font-sans text-label text-secondary">
         {request.ownOrganization
           ? t('rfqTrading.answer.ownOrganization')
-          : !canAnswer
-            ? t('rfqTrading.board.readOnly')
-            : !open && !live
-              ? t('rfqTrading.answer.closed')
-              : t('rfqTrading.answer.note')}
+          : belowThreshold && open
+            ? request.minResponderCompletion !== null
+              ? t('rfqCompletion.answer.belowMinimum', {
+                  percent: request.minResponderCompletion,
+                })
+              : t('rfqCompletion.answer.noNewcomers')
+            : !canAnswer
+              ? t('rfqTrading.board.readOnly')
+              : !open && !live
+                ? t('rfqTrading.answer.closed')
+                : t('rfqTrading.answer.note')}
       </p>
     </form>
   )

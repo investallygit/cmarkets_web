@@ -389,6 +389,9 @@ export const AUDIT_ACTIONS = [
   'commodity-describe',
   /** An index's French or English description (screen 31, fifth version). */
   'index-describe',
+  /** An RFQ completion case neutralised, a dispute of one turned down (sixth version, step 62). */
+  'rfq-case-neutralize',
+  'rfq-dispute-reject',
 ] as const
 export type AuditAction = (typeof AUDIT_ACTIONS)[number]
 
@@ -417,6 +420,8 @@ export type AuditTargetType =
   | 'security'
   /** A market index, by its code (its description, fifth version). */
   | 'index'
+  /** An RFQ completion case, by its id, labelled by its agreement's or request's number. */
+  | 'rfqCase'
 
 /** What a change is about; `scope` says which account type, permission or security. */
 export const AUDIT_FIELDS = [
@@ -511,6 +516,8 @@ export const AUDIT_FIELDS = [
   /** The CMarket curve fed by the concluded agreements, and from which face in XAF (step 49). */
   'curveFeed',
   'curveFeedMinimum',
+  /** The completion ratios' window, in months (ROADMAP step 62). */
+  'completionWindow',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

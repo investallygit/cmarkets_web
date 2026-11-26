@@ -22,6 +22,7 @@ import research from './fr/research.json'
 import rfq from './fr/rfq.json'
 import rfqReports from './fr/rfqReports.json'
 import rfqAgreements from './fr/rfqAgreements.json'
+import rfqCompletion from './fr/rfqCompletion.json'
 import rfqCriteria from './fr/rfqCriteria.json'
 import subscriptions from './fr/subscriptions.json'
 
@@ -44,6 +45,7 @@ const fr = {
   ...rfq,
   ...rfqReports,
   ...rfqAgreements,
+  ...rfqCompletion,
   ...rfqCriteria,
   ...network,
   ...newsStudio,

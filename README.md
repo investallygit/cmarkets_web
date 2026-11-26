@@ -101,7 +101,7 @@ before upload.
 | 31 · Index profile (DES on an index)                                      | Done; constituents' contributions, BVMAC's reviews on IMP     |
 | 30 · Data download (DL), the Download buttons                             | Done; 8 datasets, files over 50,000 rows by a job, schedules  |
 | 22 · RFQ by criteria (sixth version): the amount alone                    | Done; eligible list, offers checked and ranked by yield       |
-| 22 · RFQ completion ratio, on the board, NET and SVT                      | To do, step 62                                                |
+| 22 · RFQ completion ratio, on the board, NET and SVT                      | Done; thresholds, disputes, the Admin's RFQ CPL               |
 | 16 · Bond pricing: the rate entry panel of the sixth version              | To do, step 63                                                |
 | 33 · BTA and OTA auctions (AUC, AUC NEXT, APE)                            | To do, step 64                                                |
 | 34 · BEAC monetary policy and liquidity (BEAC)                            | To do, step 65                                                |
@@ -177,7 +177,7 @@ src/
               content (NEWS), admin-users (USER), subscription-management (SUBS), news-sources
               (SRC), media-payments (MPAY),
               analyst-requests (ANLY),
-              moderation (MOD), payouts (PAY), rfq-reporting (RFQ REP), platform-settings (ADMCFG),
+              moderation (MOD), payouts (PAY), rfq-reporting (RFQ REP), rfq-completion (RFQ CPL), platform-settings (ADMCFG),
               audit-log (AUDT), account-settings (ME), home,
               auth (login, sign-up, password reset), status, ui-kit (/_kit)
   widgets/    self-contained blocks: the panels (indices-panel, recent-sessions-panel, news-panel,
@@ -191,14 +191,14 @@ src/
               description-editor-panel,
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
               trader-links-panel, rfq-new-request, rfq-my-request, rfq-board, rfq-blotter,
-              rfq-eligible-securities,
+              rfq-eligible-securities, rfq-completion,
               rfq-tabs, rfq-report-panels, svt-approval-panels, rfq-agreement-filters,
               rfq-agreement-list, rfq-agreement-detail, opt-setup-panels, opt-result-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar, download-data,
               security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
               screen-etfs, price-bond, manage-svt-links, decide-trader-link, publish-rfq, answer-rfq,
-              confirm-rfq, export-rfq-audit, send-daily-report,
+              confirm-rfq, dispute-rfq-case, decide-rfq-case, export-rfq-audit, send-daily-report,
               download-daily-report, edit-daily-report-settings, decide-svt-approval,
               edit-svt-settings, cancel-rfq-agreement, resend-rfq-ticket,
               manage-portfolios, record-transaction, generate-portfolio-report, import-opt-universe,
@@ -439,6 +439,7 @@ Every UI string is in French and English, in `shared/i18n/locales/en/` and `fr/`
 per area of the app (`core` for the shell and the shared UI, `home`, `account` for the login and
 the settings, `monitoring`, `analysis`, `bonds`, `etfs`, `macro` (ECO, FX and their settings),
 `rfq` (RFQ, SVT, TRD and the RFQ's settings), `rfqCriteria` (RFQ's requests by criteria),
+`rfqCompletion` (RFQ's completion ratio, its disputes and RFQ CPL),
 `rfqReports` (RFQ REP), `rfqAgreements` (RFQ AGR),
 `portfolio`, `optimizer` (OPT and OPT RES), `research`, `network`, `messaging`, `newsStudio`,
 `newsAdmin`, `payments`,

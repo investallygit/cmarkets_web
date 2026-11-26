@@ -68,6 +68,12 @@ DELETE /admin/publishers/{id}
 GET /admin/reports
 POST /admin/reports/{type}/{id}/dismiss
 GET /admin/rfq/audit
+POST /admin/rfq/completion/{caseId}/neutralize
+GET /admin/rfq/completion/disputes
+GET /admin/rfq/completion/disputes/{id}/files/{index}
+POST /admin/rfq/completion/disputes/{id}/reject
+GET /admin/rfq/completion/participants
+GET /admin/rfq/completion/participants/{orgId}
 GET /admin/rfq/daily-report-settings
 PUT /admin/rfq/daily-report-settings
 GET /admin/rfq/svt
@@ -391,6 +397,7 @@ GET /rfq/agreements/export
 GET /rfq/agreements/options
 GET /rfq/blotter
 GET /rfq/board
+POST /rfq/completion/{caseId}/disputes
 GET /rfq/daily-reports
 GET /rfq/daily-reports/{date}
 POST /rfq/daily-reports/{date}/send
@@ -398,6 +405,7 @@ GET /rfq/daily-reports/{date}/summary.pdf
 GET /rfq/daily-reports/{date}/transactions.xlsx
 GET /rfq/eligible-securities
 GET /rfq/mine
+GET /rfq/participants/{orgId}/completion
 GET /rfq/pricing
 GET /rfq/setup
 GET /search

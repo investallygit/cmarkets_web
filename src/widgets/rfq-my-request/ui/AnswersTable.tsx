@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { countryCode3, formatFace, formatQuote } from '@/entities/rfq'
+import { CompletionRatio, countryCode3, formatFace, formatQuote } from '@/entities/rfq'
 import type { RfqRequestDto, RfqResponseDto } from '@/shared/api/contracts'
 import { useFormat, useLocale } from '@/shared/i18n'
 import { DataTable } from '@/shared/ui/DataTable'
@@ -12,7 +12,8 @@ const helper = createDataColumnHelper<RfqResponseDto>()
  * The answers of a request as its organisation reads them, in the selection's order (spec, screen
  * 22: "rank, trader and organisation, chosen SVT, price, yield, quantity, time"), each with the
  * face allocated; an answer withdrawn or expired, out of the ranking, says so. By criteria (sixth
- * version), as the mockup: the security each offers, its country, maturity, price and yield.
+ * version), as the mockup: the security each offers, its country, maturity, price and yield. Each
+ * with its responder's completion (ROADMAP step 62).
  */
 export function AnswersTable({
   request,
@@ -44,6 +45,14 @@ export function AnswersTable({
         cell: ({ getValue }) => <span className="text-primary">{getValue()}</span>,
       },
     )
+    // The responder's organisation's ratio as a responder (sixth version, ROADMAP decision 53):
+    // for information and the threshold, never the ranking.
+    const completion = helper.accessor((response) => response.completion?.percent ?? -1, {
+      id: 'completion',
+      header: t('rfqCompletion.column'),
+      meta: { align: 'right', width: 'minmax(72px, 1fr)' },
+      cell: ({ row }) => <CompletionRatio completion={row.original.completion} />,
+    })
     const price = helper.accessor('price', {
       header: byCriteria
         ? t('rfqCriteria.myRequest.columns.price')
@@ -78,6 +87,7 @@ export function AnswersTable({
       return helper.columns([
         rank,
         trader,
+        completion,
         helper.accessor((response) => response.security?.code ?? '', {
           id: 'security',
           header: t('rfqCriteria.myRequest.columns.security'),
@@ -112,6 +122,7 @@ export function AnswersTable({
     return helper.columns([
       rank,
       trader,
+      completion,
       helper.accessor((response) => response.svt.name, {
         id: 'svt',
         header: t('rfqTrading.myRequest.columns.svt'),

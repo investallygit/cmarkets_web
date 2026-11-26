@@ -1,0 +1,116 @@
+{
+  "rfqCompletion": {
+    "percent": "{{percent}} %",
+    "percentCases": "{{percent}} % ({{cases}})",
+    "new_one": "Nouveau ({{count}})",
+    "new_other": "Nouveau ({{count}})",
+    "ratioTitle_one": "Complétion : part des cas menés jusqu'à un accord approuvé par les deux SVT ({{count}} cas)",
+    "ratioTitle_other": "Complétion : part des cas menés jusqu'à un accord approuvé par les deux SVT ({{count}} cas)",
+    "column": "Complétion",
+    "roles": {
+      "requester": "Comme demandeur",
+      "responder": "Comme répondant"
+    },
+    "outcomes": {
+      "success": "Succès",
+      "failure": "Échec",
+      "neutral": "Neutre",
+      "neutralized": "Neutralisé"
+    },
+    "causes": {
+      "concluded": "accord conclu",
+      "requestCancelled": "demande annulée après une réponse",
+      "requestExpired": "demande expirée sans confirmation",
+      "svtRejected": "accord rejeté par son SVT",
+      "svtExpired": "accord expiré faute de décision de son SVT",
+      "counterparty": "échec de la contrepartie ou de son SVT",
+      "mutualCancellation": "annulé d'un commun accord"
+    },
+    "disputeStatus": {
+      "open": "Contesté",
+      "upheld": "Contestation admise",
+      "rejected": "Contestation rejetée"
+    },
+    "newRequest": {
+      "minimum": "Complétion minimale des répondants",
+      "excludeNewcomers": "Exclure les nouveaux profils (moins de 5 cas)",
+      "invalid": "Un pourcentage de 1 à 100."
+    },
+    "myRequest": {
+      "minimum": "répondants à partir de {{percent}} % de complétion",
+      "noNewcomers": "sans nouveaux profils",
+      "note": "Complétion : part des cas menés jusqu'à un accord approuvé par les deux SVT (nombre de cas entre parenthèses) ; elle ne classe pas les réponses."
+    },
+    "answer": {
+      "belowMinimum": "Cette demande accepte les répondants à partir de {{percent}} % de complétion : celle de votre organisation est inférieure.",
+      "noNewcomers": "Cette demande exclut les nouveaux profils : votre organisation compte moins de 5 cas comme répondant."
+    },
+    "blotter": {
+      "mine": {
+        "requester": "Ma complétion · demandeur",
+        "responder": "Ma complétion · répondant"
+      },
+      "organization": {
+        "requester": "Complétion · demandeur",
+        "responder": "Complétion · répondant"
+      },
+      "open": "Complétion {{role}} : ouvrir le détail"
+    },
+    "detail": {
+      "title": "Taux de complétion",
+      "window_one": "{{who}}, sur le dernier mois.",
+      "window_other": "{{who}}, sur les {{count}} derniers mois.",
+      "successes": "Conclus",
+      "failures": "Échecs",
+      "neutral": "Neutres (hors calcul)",
+      "withdrawals": "Réponses retirées avant la confirmation :",
+      "withdrawalRate": "{{percent}} % ({{withdrawn}} sur {{sent}})",
+      "cases": "Échecs et cas neutres",
+      "noCase": "Aucun échec ni cas neutre sur la période."
+    },
+    "dispute": {
+      "open": "Contester",
+      "title": "Contester {{number}}",
+      "intro": "Compté comme votre échec : {{cause}}. Expliquez-vous à l'Admin, avec vos preuves ; l'Admin peut neutraliser le cas.",
+      "reason": "Motif",
+      "reasonRequired": "Expliquez pourquoi cet échec ne vous est pas imputable.",
+      "evidence_one": "Preuves (PDF ou image, 5 Mo, {{count}} fichier au plus)",
+      "evidence_other": "Preuves (PDF ou image, 5 Mo, {{count}} fichiers au plus)",
+      "full_one": "{{count}} fichier joint : le maximum d'une contestation.",
+      "full_other": "{{count}} fichiers joints : le maximum d'une contestation.",
+      "files": "Fichiers joints",
+      "remove": "Retirer {{name}}",
+      "send": "Envoyer à l'Admin",
+      "sent": "Contestation envoyée à l'Admin."
+    },
+    "admin": {
+      "disputes": "Contestations de complétion",
+      "noDispute": "Aucune contestation.",
+      "participants": "Complétion des participants",
+      "participant": "Cas du participant",
+      "pickParticipant": "Choisissez un participant pour lire ses cas.",
+      "noParticipant": "Aucun participant n'a de cas sur la période.",
+      "columns": {
+        "organization": "Organisation",
+        "openDisputes": "Contestations"
+      },
+      "raisedBy": "Déposée par {{name}} :",
+      "answer": "Admin : {{answer}}",
+      "reason": "Motif (envoyé au participant, dans le journal d'audit)",
+      "reasonRequired": "Indiquez un motif.",
+      "neutralize": "Neutraliser",
+      "neutralizeTitle": "Neutraliser {{number}}",
+      "neutralizeIntro": "L'échec sort du taux : incident confirmé ou contestation admise. Le cas garde son résultat, marqué neutralisé.",
+      "neutralizeDone": "{{number}} neutralisé.",
+      "reject": "Rejeter",
+      "rejectTitle": "Rejeter la contestation de {{number}}",
+      "rejectIntro": "L'échec reste compté ; le participant lit votre motif.",
+      "rejectDone": "Contestation de {{number}} rejetée."
+    },
+    "profile": {
+      "label": "Complétion RFQ de l'organisation :",
+      "requester": "demandeur",
+      "responder": "répondant"
+    }
+  }
+}

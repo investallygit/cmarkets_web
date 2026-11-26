@@ -22,6 +22,7 @@ import type {
 import { useFormat, useLocale } from '@/shared/i18n'
 import { useDebouncedValue } from '@/shared/lib/useDebouncedValue'
 import { Button } from '@/shared/ui/form/Button'
+import { Checkbox } from '@/shared/ui/form/Checkbox'
 import { Field } from '@/shared/ui/form/Field'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
@@ -77,6 +78,9 @@ export function NewRfqForm({
   const [duration, setDuration] = useState('5')
   const [svtId, setSvtId] = useState(setup.svts[0]?.id ?? '')
   const [anonymous, setAnonymous] = useState(true)
+  // The requester's filter on the responders (sixth version, ROADMAP decision 53).
+  const [minCompletion, setMinCompletion] = useState<number | null>(null)
+  const [excludeNewcomers, setExcludeNewcomers] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [mode, setMode] = useState<RfqMode>('security')
   const [criteria, setCriteria] = useState<CriteriaDraft>(NO_CRITERIA)
@@ -107,6 +111,12 @@ export function NewRfqForm({
       : undefined) ?? serverErrors?.faceAmount?.[0]
   const otherError =
     publish.error && !isApiError(publish.error, 400) ? publish.error.message : undefined
+  const completionInvalid =
+    minCompletion !== null &&
+    (minCompletion < 1 || minCompletion > 100 || !Number.isInteger(minCompletion))
+  const completionError =
+    (submitted && completionInvalid ? t('rfqCompletion.newRequest.invalid') : undefined) ??
+    serverErrors?.minResponderCompletion?.[0]
 
   const chooseSecurity = (id: string) => {
     setSecurityId(id)
@@ -119,12 +129,15 @@ export function NewRfqForm({
     setSubmitted(true)
     if (faceInvalid || (!byCriteria && !security) || !svtId || !settlementDate) return
     if (byCriteria && eligibleCount === 0) return
+    if (completionInvalid) return
     const common = {
       faceAmount: faceAmount!,
       settlementDate,
       durationSeconds: Number(duration) * 60,
       svtId,
       anonymous,
+      minResponderCompletion: minCompletion,
+      excludeNewcomers,
     }
     publish.mutate(
       byCriteria
@@ -268,6 +281,22 @@ export function NewRfqForm({
           ]}
         />
       </Field>
+      <Field
+        label={
+          <span className="flex justify-between gap-2">
+            {t('rfqCompletion.newRequest.minimum')}
+            <span className="text-label text-secondary">{t('rfqCriteria.optional')}</span>
+          </span>
+        }
+        error={completionError}
+      >
+        <NumberInput value={minCompletion} onChange={setMinCompletion} decimals={0} suffix="%" />
+      </Field>
+      <Checkbox
+        checked={excludeNewcomers}
+        onChange={setExcludeNewcomers}
+        label={t('rfqCompletion.newRequest.excludeNewcomers')}
+      />
       {byCriteria ? (
         <>
           <p

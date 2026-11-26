@@ -2,6 +2,7 @@ import { clsx } from 'clsx'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  CompletionRatio,
   formatCountdown,
   formatFace,
   RESPONSE_TONES,
@@ -63,10 +64,26 @@ export function BoardPanel({
             id: 'requester',
             header: t('rfqTrading.board.columns.requester'),
             meta: { width: 'minmax(120px, 2fr)' },
-            cell: ({ getValue }) =>
-              getValue() || (
-                <span className="text-secondary">{t('rfqTrading.board.anonymous')}</span>
-              ),
+            // With the requester's organisation's ratio as a requester, named or not (sixth
+            // version, ROADMAP decision 53): "Anonymous · 93%".
+            cell: ({ getValue, row }) => (
+              <span className="flex min-w-0 items-baseline gap-1">
+                {getValue() ? (
+                  <span className="truncate">{getValue()}</span>
+                ) : (
+                  <span className="text-secondary">{t('rfqTrading.board.anonymous')}</span>
+                )}
+                {row.original.requesterCompletion && (
+                  <>
+                    <span className="text-secondary">·</span>
+                    <CompletionRatio
+                      completion={row.original.requesterCompletion}
+                      withCases={false}
+                    />
+                  </>
+                )}
+              </span>
+            ),
           },
         ),
         helper.accessor('side', {
