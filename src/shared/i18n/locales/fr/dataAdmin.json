@@ -20,7 +20,11 @@
       "commodity-prices": "Cours des matières premières",
       "descriptions": "Descriptions",
       "index-constituents": "Composition des indices",
-      "auction-calendar": "Calendrier des adjudications"
+      "auction-calendar": "Calendrier des adjudications",
+      "beac-policy": "Politique monétaire de la BEAC",
+      "beac-operations": "Opérations de liquidité de la BEAC",
+      "interbank-rates": "Taux interbancaires",
+      "monetary-aggregates": "Agrégats monétaires"
     },
     "frequencies": {
       "session": "Chaque séance",
@@ -257,7 +261,11 @@
       "commodity-prices": "la source indiquée sur la ligne",
       "descriptions": "la source indiquée sur la ligne",
       "index-constituents": "la revue publiée par la BVMAC",
-      "auction-calendar": "le calendrier d'émissions du Trésor"
+      "auction-calendar": "le calendrier d'émissions du Trésor",
+      "beac-policy": "le communiqué du Comité de politique monétaire",
+      "beac-operations": "les communiqués d'opérations de la BEAC",
+      "interbank-rates": "le bulletin du marché interbancaire de la BEAC",
+      "monetary-aggregates": "les bulletins et rapports de politique monétaire de la BEAC"
     },
     "selected": {
       "alert": "Ligne {{row}} sélectionnée : vérifiez {{field}} dans {{source}}, corrigez si besoin, puis cochez « Alerte vérifiée ».",
@@ -304,7 +312,11 @@
       "commodity-prices": "À la publication : le complément CEMAC de CMDTY (liste, historique, statistiques) est relu, la source affichée dans ses données, et les alertes sur une nouvelle valeur se déclenchent ; un événement DataPublished est envoyé aux écrans ouverts.",
       "descriptions": "À la publication : chaque ligne est une nouvelle version de la description de sa valeur, affichée aussitôt sur DES et EQS ; une annulation retire les versions qu'elle a ajoutées.",
       "index-constituents": "À la publication : la revue clôt les membres en vigueur à sa date et ouvre les siens, avec leurs poids, affichés aussitôt sur la fiche de l'indice (DES, MEMB) ; une annulation rétablit les membres précédents.",
-      "auction-calendar": "À la publication : les adjudications prévues sont ajoutées ou mises à jour dans AUC NEXT ; un résultat déjà publié marque son adjudication tenue ; un événement DataPublished est envoyé aux écrans ouverts."
+      "auction-calendar": "À la publication : les adjudications prévues sont ajoutées ou mises à jour dans AUC NEXT ; un résultat déjà publié marque son adjudication tenue ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "beac-policy": "À la publication : les réunions sont ajoutées ou mises à jour dans BEAC, et le taux directeur et la facilité de prêt marginal de chaque réunion deviennent ceux de MKT ; un événement BeacDecisionPublished est envoyé aux écrans ouverts.",
+      "beac-operations": "À la publication : les appels d'offres sont ajoutés ou mis à jour dans les opérations de liquidité de BEAC ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "interbank-rates": "À la publication : les semaines sont ajoutées ou mises à jour dans le marché interbancaire de BEAC, avec leurs variations d'une semaine à l'autre ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "monetary-aggregates": "À la publication : les chiffres sont ajoutés ou mis à jour dans les agrégats monétaires de BEAC, la dernière inflation dans ses indicateurs ; un événement DataPublished est envoyé aux écrans ouverts."
     },
     "fix": {
       "title": "Corriger la ligne {{row}}",

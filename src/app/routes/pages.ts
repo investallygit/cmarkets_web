@@ -164,6 +164,9 @@ const OptimisationResultPage = lazyPage(() =>
     default: module.OptimisationResultPage,
   })),
 )
+const BeacPage = lazyPage(() =>
+  import('@/pages/beac-monetary-policy').then((module) => ({ default: module.BeacPage })),
+)
 
 const PAGES: Record<ScreenTextKey, Page> = {
   MKT: MarketDashboardPage,
@@ -218,6 +221,7 @@ const PAGES: Record<ScreenTextKey, Page> = {
   RFQCPL: RfqCompletionPage,
   AUC: AuctionsPage,
   AUCNEXT: AuctionsNextPage,
+  BEAC: BeacPage,
   APE: PublicOffersPage,
   AUDT: AuditLogPage,
 }

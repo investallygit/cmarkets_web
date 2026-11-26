@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Outlet } from 'react-router'
 import { useAlertRealtimeSync } from '@/entities/alert'
 import { useAuctionRealtimeSync } from '@/entities/auction'
+import { useBeacRealtimeSync } from '@/entities/beac'
 import { useBondScreenerRealtimeSync } from '@/entities/bond'
 import { useEtfRealtimeSync } from '@/entities/etf'
 import { useChatRealtimeSync } from '@/entities/conversation'
@@ -13,6 +14,7 @@ import { useStatementRealtimeSync } from '@/entities/news-statement'
 import { usePublicationRealtimeSync, usePurchaseFollowUp } from '@/entities/publication'
 import { useNotificationRealtimeSync } from '@/entities/notification'
 import { useQuoteRealtimeSync } from '@/entities/quote'
+import { usePolicyRateRealtimeSync } from '@/entities/rate'
 import { useRfqTradingSync } from '@/entities/rfq'
 import { useRfqAgreementSync } from '@/entities/rfq-agreement'
 import { useSecurityRealtimeSync } from '@/entities/security'
@@ -49,6 +51,8 @@ export function AppShell() {
   useAlertRealtimeSync()
   useSecurityRealtimeSync()
   useAuctionRealtimeSync()
+  useBeacRealtimeSync()
+  usePolicyRateRealtimeSync()
   useYieldCurveRealtimeSync()
   useBondScreenerRealtimeSync()
   useEtfRealtimeSync()

@@ -121,6 +121,7 @@
     },
     "AUCNEXT": { "title": "Upcoming BTA and OTA auctions", "menu": "Upcoming" },
     "APE": { "title": "Public bond issues", "menu": "Public issues" },
+    "BEAC": { "title": "Monetary policy and liquidity — BEAC (CEMAC zone)", "menu": "BEAC" },
     "RFQREP": { "title": "Daily reporting to the BEAC", "menu": "RFQ" },
     "ADMCFG": { "title": "Platform settings", "menu": "Settings" },
     "MYCFG": { "title": "My settings", "menu": "My settings" },
@@ -156,6 +157,11 @@
     "notFoundTitle": "Screen not found"
   },
   "panels": {
+    "beacCorridor": "BEAC interest rate corridor",
+    "beacDecisions": "Monetary Policy Committee decisions",
+    "beacOperations": "Liquidity injection operations",
+    "beacInterbank": "CEMAC interbank market",
+    "beacAggregates": "CEMAC monetary aggregates",
     "publicOfferEditor": "Public bond issues (APE)",
     "auctionResults": "Latest results",
     "auctionRates": "Average rate by country",

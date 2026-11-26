@@ -29,7 +29,8 @@ const getRowId = (row: RateRow) => row.id
 /**
  * Screen 1, Rates and FX: BEAC policy rates and XAF exchange rates, the ECB's reference rates of FX
  * (ROADMAP decision 22). The panel opens FX (spec section 9, screen 26): its title bar, and an
- * exchange rate opened (double click or Enter) on its currency. API /rates/policy, /fx.
+ * exchange rate opened (double click or Enter) on its currency; a policy rate opens BEAC (screen
+ * 34, sixth version). API /rates/policy, /fx.
  */
 export function RatesFxPanel() {
   const { t } = useTranslation()
@@ -116,9 +117,10 @@ export function RatesFxPanel() {
           getRowId={getRowId}
           enableSorting={false}
           onRowDoubleClick={(row) => {
-            // The euro is pegged: FX opens on its table's first currency.
-            if (!row.isRate)
-              void navigate(fxPath(row.id === 'EURXAF' ? undefined : row.id.slice(0, 3)))
+            // A policy rate opens BEAC (screen 34, sixth version); the euro is pegged: FX opens on
+            // its table's first currency.
+            if (row.isRate) void navigate(routes.beac)
+            else void navigate(fxPath(row.id === 'EURXAF' ? undefined : row.id.slice(0, 3)))
           }}
           exportName="rates-fx"
         />

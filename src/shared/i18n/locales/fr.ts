@@ -2,6 +2,7 @@ import account from './fr/account.json'
 import admin from './fr/admin.json'
 import analysis from './fr/analysis.json'
 import auctionMarket from './fr/auctionMarket.json'
+import beac from './fr/beac.json'
 import bonds from './fr/bonds.json'
 import commodities from './fr/commodities.json'
 import core from './fr/core.json'
@@ -34,6 +35,7 @@ const fr = {
   ...account,
   ...monitoring,
   ...auctionMarket,
+  ...beac,
   ...indices,
   ...downloads,
   ...analysis,

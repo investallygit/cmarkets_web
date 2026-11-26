@@ -20,6 +20,8 @@ export const routes = {
   auctions: '/auc',
   auctionsNext: '/auc/next',
   publicOffers: '/ape',
+  /** BEAC (screen 34, sixth version): the monetary policy and the CEMAC's liquidity. */
+  beac: '/beac',
   fx: '/fx',
   security: '/securities/:securityId/:fn',
   /** The index profile (screen 31, fifth version): /indices/{code}/{tab}. */

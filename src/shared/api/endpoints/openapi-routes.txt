@@ -139,6 +139,12 @@ POST /auth/otp/verify
 POST /auth/password/reset
 POST /auth/refresh
 POST /auth/register
+GET /beac/aggregates
+GET /beac/decisions
+GET /beac/interbank
+GET /beac/operations
+GET /beac/rates/history
+GET /beac/summary
 DELETE /blocks/{userId}
 POST /blocks/{userId}
 GET /bonds

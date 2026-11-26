@@ -726,12 +726,16 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Mockup**: its values are fictitious (it says so); the demo keeps screen 4's auctions as the
   latest and adds two years before them.
 
-## BEAC · Monetary policy and liquidity (screen 34): to do
+## BEAC · Monetary policy and liquidity (screen 34): done
 
-- **Sixth version (step 65)**: the policy rate and the facilities, the corridor since 2019, the
-  MPC's decisions and releases, the liquidity injections, the interbank rates, the monetary
-  aggregates; from four files of the Data admin (decision 59). See
-  [step 65](steps/step-65-beac-monetary-policy.md).
+- **Built in step 65 (sixth version)**: the six indicators (the policy rate, the two facilities,
+  the reserve requirements, the CEMAC's inflation, the next meeting), the corridor since 2019 as
+  steps, the Monetary Policy Committee's decisions (announced first, unchanged or the change in
+  bp, the release in the PDF viewer or by its link, a meeting picked shows its summary), the
+  liquidity injections, the interbank market's latest week and the monetary aggregates; from the
+  Data admin's four files (decision 59). The demo's history is marked illustrative. ECO's rates
+  and MKT's policy rates open it. See [step 65](steps/step-65-beac-monetary-policy.md).
+- **To do**: the alert on a decision is the calendar's, with CAL (step 67).
 
 ## DEBT · Sovereign debt (screen 35): to do
 

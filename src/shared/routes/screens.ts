@@ -1,6 +1,7 @@
 import {
   ArrowRightLeft,
   BadgeCheck,
+  Banknote,
   Bell,
   BookOpen,
   BookUser,
@@ -135,6 +136,8 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('AUC', 'AUC', routes.auctions, 'client', Gavel, { permission: 'market:read', module: 'monitoring', menuCode: 'YCRV' }),
   screen('AUCNEXT', 'AUC NEXT', routes.auctionsNext, 'client', Gavel, { permission: 'market:read', module: 'monitoring', menuCode: 'YCRV' }),
   screen('APE', 'APE', routes.publicOffers, 'client', Landmark, { permission: 'market:read', module: 'monitoring', menuCode: 'YCRV' }),
+  // BEAC (screen 34): the same audience, lighting YCRV as its mockup (decision 61).
+  screen('BEAC', 'BEAC', routes.beac, 'client', Banknote, { permission: 'market:read', module: 'monitoring', menuCode: 'YCRV' }),
   // RFQ (screen 22) after BS (ROADMAP decision 15), for the Traders, Managers and CEO of an organisation while the RFQ is
   // on (its CEO reads the organisation's requests, ROADMAP step 44); SVT (screen 27, step 45), the approvals, and TRD, an
   // SVT's trader links, in the SVT's menu (decision 16).

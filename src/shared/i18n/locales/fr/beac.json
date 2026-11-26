@@ -1,0 +1,96 @@
+{
+  "beac": {
+    "bn": "{{amount}} Md",
+    "indicators": {
+      "label": "Indicateurs de la BEAC",
+      "policy": "Taux directeur (TIAO)",
+      "lending": "Facilité de prêt marginal",
+      "deposit": "Facilité de dépôt",
+      "reserves": "Réserves obligatoires",
+      "reservesValue": "{{sight}} / {{term}}",
+      "reservesHint": "{{sight}} des dépôts à vue, {{term}} des dépôts à terme",
+      "inflation": "Inflation CEMAC (1 an)",
+      "inflationHint": "{{period}} ; le plafond de la CEMAC est de 3 %",
+      "next": "Prochain CPM",
+      "none": "—"
+    },
+    "corridor": {
+      "options": "{{from}} – {{to}} · en %",
+      "chartLabel": "Graphique en escalier depuis {{from}} : le taux directeur (TIAO), à {{policy}}, entre la facilité de dépôt, à {{deposit}}, et la facilité de prêt marginal, à {{lending}}",
+      "empty": "Aucune réunion du Comité de politique monétaire n'est encore chargée.",
+      "illustrative": "Historique illustratif : les dates et niveaux réels sont chargés depuis les communiqués du CPM.",
+      "source": "Source : les communiqués du CPM, chargés par l'Admin données."
+    },
+    "decisions": {
+      "options": "Communiqués",
+      "columns": {
+        "meeting": "Réunion",
+        "policy": "TIAO",
+        "lending": "FPM",
+        "decision": "Décision",
+        "doc": "Doc"
+      },
+      "upcoming": "à venir",
+      "awaiting": "en attente",
+      "unchanged": "Inchangé",
+      "bp": "pb",
+      "pdf": "PDF",
+      "openRelease": "PDF du communiqué du {{date}}",
+      "releaseTitle": "Communiqué du CPM du {{date}}",
+      "empty": "Aucune réunion du Comité de politique monétaire n'est encore chargée.",
+      "pick": "Choisissez une réunion pour lire le résumé de son communiqué.",
+      "summaryOf": "Réunion du {{date}}",
+      "noSummary": "Aucun résumé n'a été chargé avec cette réunion.",
+      "note": "Alerte à la publication : celle du calendrier (CAL).",
+      "illustrative": "Dates et niveaux illustratifs."
+    },
+    "operations": {
+      "options": "Appels d'offres hebdomadaires",
+      "columns": {
+        "date": "Date",
+        "term": "Durée",
+        "offered": "Offert Md",
+        "bid": "Demandé",
+        "allotted": "Servi",
+        "rate": "Taux"
+      },
+      "days_one": "{{count}} jour",
+      "days_other": "{{count}} jours",
+      "absorption": "{{term}}, ponction",
+      "tight": "Demande supérieure à l'offre : la liquidité bancaire est tendue.",
+      "ample": "Demande inférieure à l'offre : la liquidité bancaire est abondante.",
+      "source": "Source : communiqués de la BEAC, chargés par l'Admin données.",
+      "empty": "Aucun appel d'offres n'est encore chargé."
+    },
+    "interbank": {
+      "options": "Taux moyens",
+      "tenors": {
+        "overnight": "Jour le jour",
+        "1w": "1 semaine",
+        "1m": "1 mois",
+        "3m": "3 mois"
+      },
+      "volume": "Volume hebdomadaire",
+      "week": "Semaine du {{from}} au {{to}}.",
+      "empty": "Aucune semaine du marché interbancaire n'est encore chargée."
+    },
+    "aggregates": {
+      "options": "Dernières données",
+      "items": {
+        "m2": "Masse monétaire M2 (1 an)",
+        "credit": "Crédit à l'économie (1 an)",
+        "fx_reserves": "Réserves de change",
+        "external_coverage": "Taux de couverture extérieure",
+        "inflation": "Inflation (1 an)",
+        "gdp_growth": "Croissance du PIB (prévision)"
+      },
+      "months": "{{value}} mois d'importations",
+      "illustrative": "Valeurs illustratives ; sources BEAC (bulletins, rapports de politique monétaire).",
+      "source": "Sources : bulletins et rapports de politique monétaire de la BEAC.",
+      "empty": "Aucun agrégat monétaire n'est encore chargé."
+    },
+    "links": {
+      "eco": "Politique monétaire de la BEAC (BEAC)"
+    }
+  }
+}

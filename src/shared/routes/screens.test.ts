@@ -69,6 +69,7 @@ describe('the left menu (spec section 9)', () => {
       'AUC',
       'AUCNEXT',
       'APE',
+      'BEAC',
       'RFQAGR',
       'DES',
       'IDX',

@@ -121,6 +121,7 @@
     },
     "AUCNEXT": { "title": "Adjudications de BTA et d'OTA à venir", "menu": "À venir" },
     "APE": { "title": "Appels publics à l'épargne", "menu": "Appels publics" },
+    "BEAC": { "title": "Politique monétaire et liquidité — BEAC (zone CEMAC)", "menu": "BEAC" },
     "RFQREP": { "title": "Déclaration quotidienne à la BEAC", "menu": "RFQ" },
     "ADMCFG": { "title": "Paramètres de la plateforme", "menu": "Réglages" },
     "MYCFG": { "title": "Mes paramètres", "menu": "Mes paramètres" },
@@ -156,6 +157,11 @@
     "notFoundTitle": "Écran introuvable"
   },
   "panels": {
+    "beacCorridor": "Corridor des taux de la BEAC",
+    "beacDecisions": "Décisions du Comité de politique monétaire",
+    "beacOperations": "Opérations d'injection de liquidité",
+    "beacInterbank": "Marché interbancaire CEMAC",
+    "beacAggregates": "Agrégats monétaires CEMAC",
     "publicOfferEditor": "Appels publics à l'épargne (APE)",
     "auctionResults": "Derniers résultats",
     "auctionRates": "Taux moyen par pays",

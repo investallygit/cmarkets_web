@@ -1,4 +1,10 @@
 import type {
+  BeacAggregatesDto,
+  BeacDecisionDto,
+  BeacInterbankDto,
+  BeacOperationsDto,
+  BeacRateHistoryDto,
+  BeacSummaryDto,
   CemacTableDto,
   CommodityCategory,
   CommodityComparisonDto,
@@ -69,6 +75,12 @@ export const marketRoutes = {
   indexPerformance: route('GET', '/indices/{code}/performance', answer<IndexPerformanceDto>()),
   indexDocuments: route('GET', '/indices/{code}/documents', answer<DocumentDto[]>()),
   policyRates: route('GET', '/rates/policy', answer<PolicyRateDto[]>()),
+  beacSummary: route('GET', '/beac/summary', answer<BeacSummaryDto>()),
+  beacRateHistory: route('GET', '/beac/rates/history', answer<BeacRateHistoryDto>()),
+  beacDecisions: route('GET', '/beac/decisions', answer<BeacDecisionDto[]>()),
+  beacOperations: route('GET', '/beac/operations', answer<BeacOperationsDto>()),
+  beacInterbank: route('GET', '/beac/interbank', answer<BeacInterbankDto>()),
+  beacAggregates: route('GET', '/beac/aggregates', answer<BeacAggregatesDto>()),
   fx: route('GET', '/fx', answer<FxRateDto[]>()),
   xafCrosses: route('GET', '/fx/xaf-crosses', answer<XafCrossesDto>()),
   fxHistory: route('GET', '/fx/{ccy}/history', answer<FxHistoryDto>()),
@@ -126,6 +138,15 @@ export const marketApi = {
   indexDocuments: (code: string, signal?: AbortSignal) =>
     send(marketRoutes.indexDocuments, { params: { code }, signal }),
   policyRates: (signal?: AbortSignal) => send(marketRoutes.policyRates, { signal }),
+  /** BEAC (screen 34, sixth version): the indicators, the corridor since `from`, the meetings. */
+  beacSummary: (signal?: AbortSignal) => send(marketRoutes.beacSummary, { signal }),
+  beacRateHistory: (from: string, signal?: AbortSignal) =>
+    send(marketRoutes.beacRateHistory, { query: { from }, signal }),
+  beacDecisions: (signal?: AbortSignal) => send(marketRoutes.beacDecisions, { signal }),
+  /** The tenders, the interbank market's latest week and the monetary aggregates. */
+  beacOperations: (signal?: AbortSignal) => send(marketRoutes.beacOperations, { signal }),
+  beacInterbank: (signal?: AbortSignal) => send(marketRoutes.beacInterbank, { signal }),
+  beacAggregates: (signal?: AbortSignal) => send(marketRoutes.beacAggregates, { signal }),
   /** Pairs such as EURXAF. */
   fx: (pairs: readonly string[], signal?: AbortSignal) =>
     send(marketRoutes.fx, { query: { pairs: pairs.join(',') }, signal }),

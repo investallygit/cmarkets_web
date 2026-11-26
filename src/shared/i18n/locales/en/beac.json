@@ -1,0 +1,96 @@
+{
+  "beac": {
+    "bn": "{{amount}} bn",
+    "indicators": {
+      "label": "BEAC indicators",
+      "policy": "Policy rate (TIAO)",
+      "lending": "Marginal lending facility",
+      "deposit": "Deposit facility",
+      "reserves": "Reserve requirements",
+      "reservesValue": "{{sight}} / {{term}}",
+      "reservesHint": "{{sight}} of sight deposits, {{term}} of term deposits",
+      "inflation": "CEMAC inflation (1 yr)",
+      "inflationHint": "{{period}}; the CEMAC's ceiling is 3%",
+      "next": "Next MPC",
+      "none": "—"
+    },
+    "corridor": {
+      "options": "{{from}} – {{to}} · in %",
+      "chartLabel": "Step chart since {{from}}: the policy rate (TIAO), now {{policy}}, between the deposit facility, {{deposit}}, and the marginal lending facility, {{lending}}",
+      "empty": "No meeting of the Monetary Policy Committee is loaded yet.",
+      "illustrative": "Illustrative history: actual dates and levels are loaded from the MPC press releases.",
+      "source": "Source: the MPC press releases, uploaded by the Data admin."
+    },
+    "decisions": {
+      "options": "Press releases",
+      "columns": {
+        "meeting": "Meeting",
+        "policy": "TIAO",
+        "lending": "MLF",
+        "decision": "Decision",
+        "doc": "Doc"
+      },
+      "upcoming": "upcoming",
+      "awaiting": "awaiting",
+      "unchanged": "Unchanged",
+      "bp": "bp",
+      "pdf": "PDF",
+      "openRelease": "PDF of the release of {{date}}",
+      "releaseTitle": "MPC release of {{date}}",
+      "empty": "No meeting of the Monetary Policy Committee is loaded yet.",
+      "pick": "Pick a meeting to read its release's summary.",
+      "summaryOf": "Meeting of {{date}}",
+      "noSummary": "No summary was loaded with this meeting.",
+      "note": "Alert on publication: the calendar's (CAL).",
+      "illustrative": "Illustrative dates and levels."
+    },
+    "operations": {
+      "options": "Weekly tenders",
+      "columns": {
+        "date": "Date",
+        "term": "Term",
+        "offered": "Offered bn",
+        "bid": "Bid",
+        "allotted": "Allotted",
+        "rate": "Rate"
+      },
+      "days_one": "{{count}} day",
+      "days_other": "{{count}} days",
+      "absorption": "{{term}}, absorption",
+      "tight": "Demand above the offer: bank liquidity is tight.",
+      "ample": "Demand below the offer: bank liquidity is ample.",
+      "source": "Source: BEAC releases, uploaded by the Data admin.",
+      "empty": "No tender is loaded yet."
+    },
+    "interbank": {
+      "options": "Average rates",
+      "tenors": {
+        "overnight": "Overnight",
+        "1w": "1 week",
+        "1m": "1 month",
+        "3m": "3 months"
+      },
+      "volume": "Weekly volume",
+      "week": "Week of {{from}} to {{to}}.",
+      "empty": "No week of the interbank market is loaded yet."
+    },
+    "aggregates": {
+      "options": "Latest data",
+      "items": {
+        "m2": "Money supply M2 (1 yr)",
+        "credit": "Credit to the economy (1 yr)",
+        "fx_reserves": "FX reserves",
+        "external_coverage": "External coverage ratio",
+        "inflation": "Inflation (1 yr)",
+        "gdp_growth": "GDP growth (forecast)"
+      },
+      "months": "{{value}} months of imports",
+      "illustrative": "Illustrative values; BEAC sources (bulletins, monetary policy reports).",
+      "source": "Sources: BEAC bulletins and monetary policy reports.",
+      "empty": "No monetary aggregate is loaded yet."
+    },
+    "links": {
+      "eco": "BEAC monetary policy (BEAC)"
+    }
+  }
+}

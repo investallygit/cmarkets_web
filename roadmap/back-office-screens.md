@@ -98,6 +98,12 @@ by which step, and what is still to do. The terminal's screens are in
   the value date) and `AUCTION_RESULTS`, the earlier auctions file under its sixth-version name,
   which takes the value date, the bidders and the bids by rate ("5.30:6000 | 5.40:8000") when the
   BEAC publishes them. See [step 64](steps/step-64-auctions.md).
+- **Built in step 65**: `BEAC_POLICY` (a meeting a row: the policy rate, the two facilities, the
+  reserve requirements, the release as an https link or a library document's id, the summary; a
+  row without rates announces the next meeting), `BEAC_OPERATIONS` (a tender: injection or
+  absorption, its term, its amounts in billions and its rate), `INTERBANK_RATES` (a week: four
+  tenors and the volume) and `MONETARY_AGGREGATES` (an indicator, its month or year, its value).
+  A meeting's rates are MKT's policy rates. See [step 65](steps/step-65-beac-monetary-policy.md).
 
 ## CORR · Data corrections (no mockup): done
 

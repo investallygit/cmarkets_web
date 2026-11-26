@@ -1,8 +1,10 @@
 import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import { useGlobalRates } from '@/entities/rate'
 import type { RateSeriesDto } from '@/shared/api/contracts'
 import { useFormat, useLocale } from '@/shared/i18n'
+import { routes } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 import { ScrollArea } from '@/shared/ui/ScrollArea'
@@ -48,6 +50,9 @@ export function SovereignRatesPanel() {
             what={t('panels.sovereignRates')}
           />
           <span>{t('eco.ratesScope')}</span>
+          <Link to={routes.beac} className="panel-no-drag hover:text-primary">
+            {t('beac.links.eco')}
+          </Link>
         </>
       }
     >

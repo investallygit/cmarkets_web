@@ -20,7 +20,11 @@
       "commodity-prices": "Commodity prices",
       "descriptions": "Descriptions",
       "index-constituents": "Index constituents",
-      "auction-calendar": "Auction calendar"
+      "auction-calendar": "Auction calendar",
+      "beac-policy": "BEAC monetary policy",
+      "beac-operations": "BEAC liquidity operations",
+      "interbank-rates": "Interbank rates",
+      "monetary-aggregates": "Monetary aggregates"
     },
     "frequencies": {
       "session": "Every session",
@@ -257,7 +261,11 @@
       "commodity-prices": "the source named in the row",
       "descriptions": "the source named in the row",
       "index-constituents": "BVMAC's published review",
-      "auction-calendar": "the Treasury's issuance calendar"
+      "auction-calendar": "the Treasury's issuance calendar",
+      "beac-policy": "the Monetary Policy Committee's release",
+      "beac-operations": "the BEAC's operation releases",
+      "interbank-rates": "the BEAC's interbank market bulletin",
+      "monetary-aggregates": "the BEAC's bulletins and monetary policy reports"
     },
     "selected": {
       "alert": "Row {{row}} selected: check the {{field}} against {{source}}, fix it if needed, then tick “Alert checked”.",
@@ -304,7 +312,11 @@
       "commodity-prices": "On publish: the CEMAC complement of CMDTY (list, history, statistics) is read again, the source shown in its data, and the alerts on a new value go off; a DataPublished event is sent to open screens.",
       "descriptions": "On publish: each row is a new version of its security's description, shown at once on DES and EQS; a rollback removes the versions it added.",
       "index-constituents": "On publish: the review ends the members in force on its date and starts its own, with their weights, shown at once on the index profile (DES, MEMB); a rollback brings the earlier members back.",
-      "auction-calendar": "On publish: the planned auctions are added or updated on AUC NEXT; a result already published marks its auction held; a DataPublished event is sent to open screens."
+      "auction-calendar": "On publish: the planned auctions are added or updated on AUC NEXT; a result already published marks its auction held; a DataPublished event is sent to open screens.",
+      "beac-policy": "On publish: the meetings are added or updated on BEAC, and the policy rate and marginal lending facility of each meeting become MKT's; a BeacDecisionPublished event is sent to open screens.",
+      "beac-operations": "On publish: the tenders are added or updated on BEAC's liquidity operations; a DataPublished event is sent to open screens.",
+      "interbank-rates": "On publish: the weeks are added or updated on BEAC's interbank market, with their changes from the week before; a DataPublished event is sent to open screens.",
+      "monetary-aggregates": "On publish: the figures are added or updated on BEAC's monetary aggregates, the latest inflation in its indicators; a DataPublished event is sent to open screens."
     },
     "fix": {
       "title": "Fix row {{row}}",

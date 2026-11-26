@@ -19,6 +19,10 @@ export const IMPORT_TYPES: readonly ImportType[] = [
   'descriptions',
   'index-constituents',
   'auction-calendar',
+  'beac-policy',
+  'beac-operations',
+  'interbank-rates',
+  'monetary-aggregates',
 ]
 
 /**

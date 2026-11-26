@@ -255,7 +255,12 @@ itself, steps 61 to 68 follow these; each is also an
     and MKT read already, a row dated later without rates being the next MPC; the decision
     (unchanged, hike or cut in bp) is worked out from the previous rate. The release is a document
     the Data admin publishes in NEWS with the BEAC as subject, its link kept on the row. The demo's
-    history since 2019 is marked illustrative, as the mockup.
+    history since 2019 is marked illustrative, as the mockup. Built in step 65: MKT reads
+    `mkt.PolicyRates`, ECO does not (it links to BEAC), and a meeting writes the policy rate and
+    the marginal lending facility there; the row's release is an https link or the id of a
+    document of the library, shown in the PDF viewer, and the file carries the release's summary,
+    which a meeting picked shows. The alert on a decision is the calendar's of step 67. A demo row
+    no upload wrote is illustrative.
 60. **DEBT**: a security's outstanding is the sum allotted at its auctions, or the master's amount
     issued for an OTA issued before CMarket's auctions, less the principal its schedule repaid; no
     buyback is recorded until a file brings one. The rate of a BTA is its auction's average rate, of
