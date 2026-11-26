@@ -1,0 +1,86 @@
+{
+  "rfqCriteria": {
+    "requestType": "Request type",
+    "types": {
+      "security": "Specific security",
+      "criteria": "By criteria"
+    },
+    "buyOnly": "by criteria: buy only",
+    "amount": "Amount (face, XAF)",
+    "minYield": "Minimum yield",
+    "maxMaturity": "Maximum remaining maturity (years)",
+    "optional": "optional",
+    "countries": "Country",
+    "countriesLabel": "Issuing countries",
+    "securityType": "Security type",
+    "securityTypes": {
+      "both": "BTA and OTA",
+      "BTA": "BTA",
+      "OTA": "OTA"
+    },
+    "emptyNote": "An empty field = no constraint. Only the amount is required. Responders propose a security that meets the criteria.",
+    "eligible_one": "{{count}} eligible security today",
+    "eligible_other": "{{count}} eligible securities today",
+    "noneEligible": "No outstanding security meets these criteria: widen them to publish the request.",
+    "allCountries": "all countries",
+    "describe": {
+      "prefix": "Criteria: {{criteria}}",
+      "yield": "≥ {{value}}%",
+      "maturity": "≤ {{value}} yrs",
+      "yieldLong": "yield ≥ {{value}}%",
+      "maturityLong": "maturity ≤ {{value}} yrs"
+    },
+    "myRequest": {
+      "summary": "{{side}} · XAF {{face}} · {{criteria}}",
+      "rankedByYield": "ranked by yield, highest first",
+      "selection": "Selection: {{total}} / {{face}} · {{agreements}} on {{securities}} · average yield {{yield}}% · average maturity {{maturity}} yrs",
+      "securities_one": "{{count}} security",
+      "securities_other": "{{count}} securities",
+      "note": "Since the securities offered differ, ranking is by yield (highest first), then quantity, then time; the last answer selected may be filled in part.",
+      "columns": {
+        "responder": "Responder",
+        "security": "Security offered",
+        "country": "Country",
+        "maturity": "Maturity",
+        "price": "Price",
+        "yield": "Yield"
+      }
+    },
+    "eligiblePanel": {
+      "title": "Eligible securities",
+      "count_one": "{{count}} security",
+      "count_other": "{{count}} securities",
+      "columns": {
+        "security": "Security",
+        "country": "Country",
+        "maturity": "Maturity",
+        "yield": "CMarket yield"
+      },
+      "note": "Outstanding securities meeting the criteria, with the last yield computed by CMarket. List visible to the requester and to responders.",
+      "preview": "Preview of the new request: the list is drawn again at its publication.",
+      "for": "For {{number}}",
+      "close": "Back to my SVTs",
+      "empty": "No security meets these criteria."
+    },
+    "answer": {
+      "title": "My answer to {{number}} (request by criteria: {{criteria}})",
+      "security": "Security offered (eligible only)",
+      "price": "Price",
+      "rate": "Rate (BTA)",
+      "checks": {
+        "label": "Checks of the criteria",
+        "yieldOk": "Computed yield: {{value}}% ≥ {{min}}%",
+        "yieldLow": "Computed yield: {{value}}% < {{min}}%",
+        "maturityOk": "Remaining maturity: {{value}} yrs ≤ {{max}} yrs",
+        "maturityLong": "Remaining maturity: {{value}} yrs > {{max}} yrs",
+        "countryOk": "Country: {{country}}, accepted",
+        "countryRefused": "Country: {{country}}, not accepted"
+      },
+      "note": "The list only offers securities that meet the criteria; the yield is recomputed with every price change.",
+      "errors": {
+        "security": "Choose a security of the eligible list."
+      },
+      "yieldOnly": "Computed yield: {{value}}%"
+    }
+  }
+}

@@ -250,7 +250,7 @@
         "request": "Demande",
         "requester": "Demandeur",
         "side": "Sens",
-        "security": "Titre",
+        "security": "Titre ou critères",
         "face": "Nominal",
         "left": "Reste",
         "mine": "Ma réponse"

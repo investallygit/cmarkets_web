@@ -1,15 +1,33 @@
-import { useState, type FormEvent } from 'react'
+import { clsx } from 'clsx'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { formatQuote, usePublishRfq, useRfqPricing, type RfqPricingQuery } from '@/entities/rfq'
+import {
+  criteriaQuery,
+  formatQuote,
+  usePublishRfq,
+  useRfqEligiblePreview,
+  useRfqPricing,
+  type CriteriaDraft,
+  type RfqPricingQuery,
+} from '@/entities/rfq'
 import { isApiError } from '@/shared/api'
-import type { RfqQuoteType, RfqRequestDto, RfqSetupDto, RfqSide } from '@/shared/api/contracts'
+import type {
+  RfqEligibleQuery,
+  RfqMode,
+  RfqQuoteType,
+  RfqRequestDto,
+  RfqSetupDto,
+  RfqSide,
+} from '@/shared/api/contracts'
 import { useFormat, useLocale } from '@/shared/i18n'
+import { useDebouncedValue } from '@/shared/lib/useDebouncedValue'
 import { Button } from '@/shared/ui/form/Button'
 import { Field } from '@/shared/ui/form/Field'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
 import { Select } from '@/shared/ui/form/Select'
 import { toast } from '@/shared/ui/toast'
+import { CriteriaFields } from './CriteriaFields'
 
 /** "Request duration (1 to 30 minutes)". */
 const DURATIONS = [1, 2, 3, 5, 10, 15, 20, 30] as const
@@ -19,6 +37,15 @@ interface NewRfqFormProps {
   /** A security to start from: "Request a price (RFQ)" on BS or a bond's profile. */
   initialSecurityId?: string | null
   onPublished: (request: RfqRequestDto) => void
+  /** By criteria, the preview's question as the criteria change (the page shows its list); null otherwise. */
+  onCriteriaChange?: (query: RfqEligibleQuery | null) => void
+}
+
+const NO_CRITERIA: CriteriaDraft = {
+  minYield: null,
+  maxMaturityYears: null,
+  countries: [],
+  securityTypes: [],
 }
 
 /**
@@ -26,9 +53,16 @@ interface NewRfqFormProps {
  * sell, the face amount, how the answers quote (a BTA in rate, an OTA in clean price or yield), the
  * agreed delivery-versus-payment date among the BEAC's business days, 1 to 30 minutes, one of the
  * trader's confirmed SVTs, anonymous or not; the CMarket curve's reference for the security at
- * that date. Without a confirmed SVT the trader reads the board only.
+ * that date. Without a confirmed SVT the trader reads the board only. By criteria (sixth version,
+ * ROADMAP decision 49): a purchase of the amount alone, its criteria optional, the securities they
+ * accept counted as they change; none, and the request is not published.
  */
-export function NewRfqForm({ setup, initialSecurityId, onPublished }: NewRfqFormProps) {
+export function NewRfqForm({
+  setup,
+  initialSecurityId,
+  onPublished,
+  onCriteriaChange,
+}: NewRfqFormProps) {
   const { t } = useTranslation()
   const format = useFormat()
   const locale = useLocale()
@@ -44,10 +78,23 @@ export function NewRfqForm({ setup, initialSecurityId, onPublished }: NewRfqForm
   const [svtId, setSvtId] = useState(setup.svts[0]?.id ?? '')
   const [anonymous, setAnonymous] = useState(true)
   const [submitted, setSubmitted] = useState(false)
+  const [mode, setMode] = useState<RfqMode>('security')
+  const [criteria, setCriteria] = useState<CriteriaDraft>(NO_CRITERIA)
+  const byCriteria = mode === 'criteria'
+
+  // By criteria, the securities the criteria accept now, asked again a moment after a change.
+  const typedCriteria = useDebouncedValue(criteria, 300)
+  const preview = useMemo(
+    () => (byCriteria && settlementDate ? criteriaQuery(typedCriteria, settlementDate) : null),
+    [byCriteria, settlementDate, typedCriteria],
+  )
+  const eligible = useRfqEligiblePreview(preview)
+  const eligibleCount = eligible.data?.length ?? null
+  useEffect(() => onCriteriaChange?.(preview), [onCriteriaChange, preview])
 
   const security = setup.securities.find((candidate) => candidate.id === securityId)
   const pricingQuery: RfqPricingQuery | null =
-    securityId && settlementDate ? { securityId, settlementDate } : null
+    securityId && settlementDate && mode === 'security' ? { securityId, settlementDate } : null
   const pricing = useRfqPricing(pricingQuery)
   const reference = pricing.data?.reference
 
@@ -70,18 +117,19 @@ export function NewRfqForm({ setup, initialSecurityId, onPublished }: NewRfqForm
   const submit = (event: FormEvent) => {
     event.preventDefault()
     setSubmitted(true)
-    if (faceInvalid || !security || !svtId || !settlementDate) return
+    if (faceInvalid || (!byCriteria && !security) || !svtId || !settlementDate) return
+    if (byCriteria && eligibleCount === 0) return
+    const common = {
+      faceAmount: faceAmount!,
+      settlementDate,
+      durationSeconds: Number(duration) * 60,
+      svtId,
+      anonymous,
+    }
     publish.mutate(
-      {
-        securityId,
-        side,
-        faceAmount: faceAmount!,
-        quoteType,
-        settlementDate,
-        durationSeconds: Number(duration) * 60,
-        svtId,
-        anonymous,
-      },
+      byCriteria
+        ? { mode: 'criteria', ...common, ...criteria }
+        : { mode: 'security', ...common, securityId, side, quoteType },
       {
         onSuccess: (request) => {
           toast.success(
@@ -107,39 +155,71 @@ export function NewRfqForm({ setup, initialSecurityId, onPublished }: NewRfqForm
       onSubmit={submit}
       noValidate
     >
-      <Field label={t('rfqTrading.newRequest.security')}>
-        <Select
-          value={securityId}
-          onChange={chooseSecurity}
-          options={setup.securities.map((candidate) => ({
-            value: candidate.id,
-            label: candidate.code,
-          }))}
-        />
-      </Field>
-      <Field label={t('rfqTrading.newRequest.side')} group>
+      <Field label={t('rfqCriteria.requestType')} group>
         <SegmentedControl
-          value={side}
-          onChange={setSide}
+          value={mode}
+          onChange={setMode}
           options={[
-            { value: 'buy', label: t('rfqTrading.side.buy'), tone: 'up' },
-            { value: 'sell', label: t('rfqTrading.side.sell'), tone: 'down' },
+            { value: 'security', label: t('rfqCriteria.types.security') },
+            { value: 'criteria', label: t('rfqCriteria.types.criteria') },
           ]}
         />
       </Field>
-      <Field label={t('rfqTrading.newRequest.faceAmount')} error={faceError}>
-        <NumberInput value={faceAmount} onChange={setFaceAmount} decimals={0} />
-      </Field>
-      <Field label={t('rfqTrading.newRequest.quoteType')} error={serverErrors?.quoteType?.[0]}>
-        <Select
-          value={quoteType}
-          onChange={setQuoteType}
-          options={security.quoteTypes.map((type) => ({
-            value: type,
-            label: t(`rfqTrading.quoteType.${type}`),
-          }))}
+      {!byCriteria && (
+        <Field label={t('rfqTrading.newRequest.security')}>
+          <Select
+            value={securityId}
+            onChange={chooseSecurity}
+            options={setup.securities.map((candidate) => ({
+              value: candidate.id,
+              label: candidate.code,
+            }))}
+          />
+        </Field>
+      )}
+      <Field
+        label={t('rfqTrading.newRequest.side')}
+        hint={byCriteria ? t('rfqCriteria.buyOnly') : undefined}
+        group
+      >
+        <SegmentedControl
+          value={byCriteria ? 'buy' : side}
+          onChange={setSide}
+          options={[
+            { value: 'buy', label: t('rfqTrading.side.buy'), tone: 'up' },
+            { value: 'sell', label: t('rfqTrading.side.sell'), tone: 'down', disabled: byCriteria },
+          ]}
         />
       </Field>
+      <Field
+        label={byCriteria ? t('rfqCriteria.amount') : t('rfqTrading.newRequest.faceAmount')}
+        error={faceError}
+      >
+        <NumberInput value={faceAmount} onChange={setFaceAmount} decimals={0} />
+      </Field>
+      {byCriteria ? (
+        <CriteriaFields
+          draft={criteria}
+          onChange={setCriteria}
+          errors={{
+            minYield: serverErrors?.minYield?.[0],
+            maxMaturityYears: serverErrors?.maxMaturityYears?.[0],
+            countries: serverErrors?.countries?.[0],
+            securityTypes: serverErrors?.securityTypes?.[0],
+          }}
+        />
+      ) : (
+        <Field label={t('rfqTrading.newRequest.quoteType')} error={serverErrors?.quoteType?.[0]}>
+          <Select
+            value={quoteType}
+            onChange={setQuoteType}
+            options={security.quoteTypes.map((type) => ({
+              value: type,
+              label: t(`rfqTrading.quoteType.${type}`),
+            }))}
+          />
+        </Field>
+      )}
       <Field
         label={t('rfqTrading.newRequest.settlementDate')}
         error={serverErrors?.settlementDate?.[0]}
@@ -188,14 +268,32 @@ export function NewRfqForm({ setup, initialSecurityId, onPublished }: NewRfqForm
           ]}
         />
       </Field>
-      <p className="flex flex-wrap justify-between gap-2 font-sans text-data">
-        <span className="text-secondary">{t('rfqTrading.newRequest.reference')}</span>
-        <span className="font-mono tabular-nums text-info">
-          {reference
-            ? `${formatQuote(reference.price, locale)} · ${format.number(reference.ratePct, 2)}%`
-            : t('rfqTrading.newRequest.noReference')}
-        </span>
-      </p>
+      {byCriteria ? (
+        <>
+          <p
+            className={clsx('font-sans text-data', eligibleCount === 0 ? 'text-down' : 'text-info')}
+            aria-live="polite"
+          >
+            {eligibleCount === null
+              ? ' '
+              : eligibleCount === 0
+                ? t('rfqCriteria.noneEligible')
+                : t('rfqCriteria.eligible', { count: eligibleCount })}
+          </p>
+          <p className="border px-2 py-1 font-sans text-label text-secondary">
+            {t('rfqCriteria.emptyNote')}
+          </p>
+        </>
+      ) : (
+        <p className="flex flex-wrap justify-between gap-2 font-sans text-data">
+          <span className="text-secondary">{t('rfqTrading.newRequest.reference')}</span>
+          <span className="font-mono tabular-nums text-info">
+            {reference
+              ? `${formatQuote(reference.price, locale)} · ${format.number(reference.ratePct, 2)}%`
+              : t('rfqTrading.newRequest.noReference')}
+          </span>
+        </p>
+      )}
       <p className="font-sans text-label text-secondary">
         {setup.canTrade ? t('rfqTrading.newRequest.note') : t('rfqTrading.newRequest.noSvt')}
       </p>
@@ -209,7 +307,7 @@ export function NewRfqForm({ setup, initialSecurityId, onPublished }: NewRfqForm
         variant="primary"
         className="mt-auto w-full"
         busy={publish.isPending}
-        disabled={!setup.canTrade}
+        disabled={!setup.canTrade || (byCriteria && eligibleCount === 0)}
       >
         {t('rfqTrading.newRequest.publish')}
       </Button>

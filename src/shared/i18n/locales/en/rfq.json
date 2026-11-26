@@ -250,7 +250,7 @@
         "request": "Request",
         "requester": "Requester",
         "side": "Side",
-        "security": "Security",
+        "security": "Security or criteria",
         "face": "Nominal",
         "left": "Left",
         "mine": "My answer"

@@ -375,6 +375,7 @@ GET /rfq/{id}
 GET /rfq/{id}/allocation
 POST /rfq/{id}/cancel
 POST /rfq/{id}/confirm
+GET /rfq/{id}/eligible-securities
 POST /rfq/{id}/responses
 DELETE /rfq/{id}/responses/{responseId}
 PUT /rfq/{id}/responses/{responseId}
@@ -395,6 +396,7 @@ GET /rfq/daily-reports/{date}
 POST /rfq/daily-reports/{date}/send
 GET /rfq/daily-reports/{date}/summary.pdf
 GET /rfq/daily-reports/{date}/transactions.xlsx
+GET /rfq/eligible-securities
 GET /rfq/mine
 GET /rfq/pricing
 GET /rfq/setup

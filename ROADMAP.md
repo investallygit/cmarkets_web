@@ -125,7 +125,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 58   | [Fifth version done: README, accessibility, every flow](roadmap/steps/step-58-fifth-version-done.md)                 | Doing  |
 | 59   | [Tabs open across a release, the client's report](roadmap/steps/step-59-tabs-open-across-a-release.md)               | Done   |
 | 60   | [Sixth version of the spec: the plan, its decisions, questions](roadmap/steps/step-60-sixth-version-plan.md)         | Done   |
-| 61   | [RFQ: a request by criteria (screen 22)](roadmap/steps/step-61-rfq-by-criteria.md)                                   | To do  |
+| 61   | [RFQ: a request by criteria (screen 22)](roadmap/steps/step-61-rfq-by-criteria.md)                                   | Done   |
 | 62   | [RFQ: the completion ratio (screens 22, 10, 27)](roadmap/steps/step-62-rfq-completion-ratio.md)                      | To do  |
 | 63   | [BP: the rate entry panel as the spec draws it (screen 16)](roadmap/steps/step-63-bp-rate-entry-panel.md)            | To do  |
 | 64   | [AUC: the BTA and OTA auctions (screen 33)](roadmap/steps/step-64-auctions.md)                                       | To do  |

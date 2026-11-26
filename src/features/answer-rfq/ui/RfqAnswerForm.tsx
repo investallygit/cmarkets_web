@@ -22,6 +22,7 @@ import { Field } from '@/shared/ui/form/Field'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
 import { Select } from '@/shared/ui/form/Select'
 import { toast } from '@/shared/ui/toast'
+import { CriteriaAnswerForm } from './CriteriaAnswerForm'
 import { WithdrawAnswerButton } from './WithdrawAnswerButton'
 
 /** How long an answer stays firm, in minutes (1 to 40: the request's life). */
@@ -48,9 +49,19 @@ interface RfqAnswerFormProps {
  * a price or a rate in the request's quote type, the other worked out by CMarket (a BTA's price on
  * 360 days, an OTA's through the calculator of section 14.1), a quantity up to the face amount, the
  * responder's SVT and a validity; sent, then improved (the price kept or bettered) or withdrawn
- * until the requester confirms. A colleague's request is read, not answered.
+ * until the requester confirms. A colleague's request is read, not answered. A request by criteria
+ * gets its own form, a security of its eligible list offered (sixth version).
  */
-export function RfqAnswerForm({
+export function RfqAnswerForm(props: RfqAnswerFormProps) {
+  const { request } = props
+  return request.mode === 'criteria' && request.criteria ? (
+    <CriteriaAnswerForm {...props} request={{ ...request, criteria: request.criteria }} />
+  ) : (
+    <SecurityAnswerForm {...props} />
+  )
+}
+
+function SecurityAnswerForm({
   request,
   svts,
   canAnswer,
@@ -81,7 +92,7 @@ export function RfqAnswerForm({
 
   const typed = useDebouncedValue(value, 300)
   const pricing = useRfqPricing({
-    securityId: request.security.id,
+    securityId: request.security?.id ?? '',
     settlementDate: request.settlementDate,
     ...(typed !== null && typed > 0 ? { quoteType: request.quoteType, value: typed } : {}),
   })
@@ -155,7 +166,7 @@ export function RfqAnswerForm({
               : 'rfqTrading.answer.requesterSells',
           ),
           face: formatFace(request.faceAmount, locale),
-          security: request.security.code,
+          security: request.security?.code ?? '',
         })}
       </h3>
       {mine && (

@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { RfqAnswerInput, RfqQuoteType } from '@/shared/api/contracts'
+import type { RfqAnswerInput, RfqEligibleQuery, RfqQuoteType } from '@/shared/api/contracts'
 import { rfqApi, type RfqBoardQuery, type RfqScope } from '@/shared/api/endpoints'
 
 /** What GET /rfq/pricing is asked: a security at a settlement date, a value in a quote type. */
@@ -21,6 +21,8 @@ export const rfqKeys = {
   blotters: () => ['rfq', 'blotter'] as const,
   blotter: (scope: RfqScope) => ['rfq', 'blotter', scope] as const,
   request: (id: string) => ['rfq', 'request', id] as const,
+  eligiblePreview: (query: RfqEligibleQuery) => ['rfq', 'eligible-preview', query] as const,
+  eligible: (id: string) => ['rfq', 'eligible', id] as const,
 }
 
 /** GET /rfq/setup: the BTA and OTA traded, the settlement dates, the minimum, the confirmed SVTs. */
@@ -43,6 +45,31 @@ export function useRfqPricing(query: RfqPricingQuery | null) {
     enabled: query !== null,
     placeholderData: keepPreviousData,
     retry: false,
+  })
+}
+
+/**
+ * GET /rfq/eligible-securities: the securities a request by criteria would accept now (screen 22,
+ * sixth version), the last list kept on screen while the next one comes.
+ */
+export function useRfqEligiblePreview(query: RfqEligibleQuery | null) {
+  return useQuery({
+    queryKey: rfqKeys.eligiblePreview(query ?? { settlementDate: '' }),
+    queryFn: ({ signal }) => rfqApi.eligibleSecurities(query!, signal),
+    enabled: query !== null,
+    placeholderData: keepPreviousData,
+    retry: false,
+  })
+}
+
+/** GET /rfq/{id}/eligible-securities: a request by criteria's list, drawn at its publication. */
+export function useRfqRequestEligible(id: string | null) {
+  return useQuery({
+    queryKey: rfqKeys.eligible(id ?? ''),
+    queryFn: ({ signal }) => rfqApi.requestEligible(id!, signal),
+    enabled: id !== null,
+    // Drawn once: it never changes.
+    staleTime: Number.POSITIVE_INFINITY,
   })
 }
 

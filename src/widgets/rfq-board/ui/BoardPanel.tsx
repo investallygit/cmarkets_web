@@ -6,6 +6,7 @@ import {
   formatFace,
   RESPONSE_TONES,
   shortNumber,
+  useDescribeCriteria,
   useRfqBoard,
   useRfqSetup,
   useServerNow,
@@ -26,9 +27,16 @@ const helper = createDataColumnHelper<RfqBoardItemDto>()
  * requests, the soonest to end first, with the time each has left and the trader's answer; an
  * anonymous requester hidden. The request picked gets the answer form under the table; a
  * colleague's is read, not answered, and a trader without a confirmed SVT reads the board only.
+ * A request by criteria shows its criteria in place of a security (sixth version); picked, the
+ * page shows its eligible securities beside it.
  */
-export function BoardPanel() {
+export function BoardPanel({
+  onPick,
+}: {
+  onPick?: (request: Pick<RfqBoardItemDto, 'id' | 'number' | 'mode'>) => void
+}) {
   const { t } = useTranslation()
+  const describe = useDescribeCriteria()
   const locale = useLocale()
   const board = useRfqBoard()
   const setup = useRfqSetup()
@@ -70,12 +78,19 @@ export function BoardPanel() {
             </span>
           ),
         }),
-        helper.accessor((request) => request.security.code, {
-          id: 'security',
-          header: t('rfqTrading.board.columns.security'),
-          meta: { width: 'minmax(120px, 2fr)' },
-          cell: ({ getValue }) => <span className="text-accent-amber">{getValue()}</span>,
-        }),
+        helper.accessor(
+          (request) =>
+            request.security?.code ??
+            (request.criteria
+              ? t('rfqCriteria.describe.prefix', { criteria: describe(request.criteria).short })
+              : ''),
+          {
+            id: 'security',
+            header: t('rfqTrading.board.columns.security'),
+            meta: { width: 'minmax(140px, 2fr)' },
+            cell: ({ getValue }) => <span className="text-accent-amber">{getValue()}</span>,
+          },
+        ),
         helper.accessor('faceAmount', {
           header: t('rfqTrading.board.columns.face'),
           meta: { align: 'right', width: 'minmax(64px, 1fr)' },
@@ -113,7 +128,7 @@ export function BoardPanel() {
           },
         }),
       ]),
-    [locale, now, t],
+    [describe, locale, now, t],
   )
 
   return (
@@ -131,7 +146,10 @@ export function BoardPanel() {
                 columns={columns}
                 getRowId={(request) => request.id}
                 selectedRowId={selected?.id ?? null}
-                onRowClick={(request) => setSelectedId(request.id)}
+                onRowClick={(request) => {
+                  setSelectedId(request.id)
+                  onPick?.(request)
+                }}
                 emptyMessage={t('rfqTrading.board.empty')}
                 exportName="rfq-board"
               />

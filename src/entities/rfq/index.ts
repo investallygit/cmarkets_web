@@ -7,8 +7,10 @@ export {
   usePublishRfq,
   useRfqBlotter,
   useRfqBoard,
+  useRfqEligiblePreview,
   useRfqPricing,
   useRfqRequest,
+  useRfqRequestEligible,
   useRfqSetup,
   useSendRfqAnswer,
   useWithdrawRfqAnswer,
@@ -34,6 +36,14 @@ export {
   timeLeft,
   type CheckResult,
 } from './lib/approvalDisplay'
+export { useDescribeCriteria } from './lib/describeCriteria'
+export {
+  criteriaChecks,
+  criteriaQuery,
+  countryCode3,
+  type CriteriaChecks,
+  type CriteriaDraft,
+} from './lib/criteria'
 export { useServerNow } from './model/useServerNow'
 export {
   AGREEMENT_TONES,

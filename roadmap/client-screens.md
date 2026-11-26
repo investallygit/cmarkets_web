@@ -510,6 +510,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   mockup lights ([the spec author's answers](third-version.md#the-spec-authors-answers)).
 - **Built in step 44 (fourth version)**: "Request a price (RFQ)" beside "Open in BP" on a BTA or an
   OTA of the BEAC, for a Trader or a Manager: RFQ opens with its new request on the security.
+- **Sixth version (step 61)**: ten more BEAC government securities in the demo, of Cameroon, Gabon,
+  Congo and Chad, at model prices, which the requests by criteria offer: 15 bonds by default.
 
 ## DES on an ETF · ETF profile (screen 19): done
 
@@ -571,10 +573,10 @@ what is still to do. The Data admin's and the Admin's screens are in
   only itself (B79); a screen closed to the account says it is not open to it (B85); Confirm
   selection and Cancel request say how they went though the hub's event takes their button away
   before the answer comes.
-- **Sixth version (step 61)**: a request by criteria: the amount alone, an optional minimum
-  yield, maximum maturity, countries and types; the eligible securities beside it; the responders
-  offering a security of the list, its price and quantity, checked as they type; answers ranked
-  by yield; one agreement per security (decisions 49 and 50). See
+- **Built in step 61 (sixth version)**: a request by criteria: the amount alone, an optional
+  minimum yield, maximum maturity, countries and types; the eligible securities in the place of "My
+  SVTs"; the responders offering a security of the list, its price and quantity, checked as they
+  type; answers ranked by yield; one agreement per security (decisions 49 and 50). See
   [step 61](steps/step-61-rfq-by-criteria.md).
 - **Sixth version (step 62)**: the completion ratio, the organisation's on the board and in the
   answers, the trader's in the blotter; a minimum responder completion on a request; the ratio's

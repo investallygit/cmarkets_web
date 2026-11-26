@@ -10,6 +10,13 @@ export type RfqQuoteType = 'rate' | 'price' | 'yield'
 /** A security the RFQ trades: a BTA (bill) or an OTA (bond) of the BEAC. */
 export type RfqInstrument = 'BTA' | 'OTA'
 
+/**
+ * A request names its security, or only criteria, the responders offering the securities that
+ * meet them (screen 22, sixth version; ROADMAP decisions 49 and 50). A request by criteria is a
+ * purchase, ranked by yield.
+ */
+export type RfqMode = 'security' | 'criteria'
+
 /** Spec, screen 22: "Published, Answers received, Confirmed, Partially filled, Cancelled, Expired". */
 export type RfqRequestStatus =
   'published' | 'answersReceived' | 'confirmed' | 'partiallyFilled' | 'cancelled' | 'expired'
@@ -72,6 +79,50 @@ export interface RfqPricingDto {
   auction: RfqAuctionDto | null
   quote: RfqQuoteDto | null
   accruedInterest: number | null
+  /**
+   * The quote's yield to maturity, annual, comparable between a BTA and an OTA (an OTA's yield, a
+   * BTA's worked out from its price): what a request by criteria ranks and checks.
+   */
+  yieldPct: number | null
+}
+
+/** A request's criteria: an empty field imposes nothing. */
+export interface RfqCriteriaDto {
+  /** The lowest yield accepted, in percent. */
+  minYield: number | null
+  /** The longest remaining maturity at the settlement date, in years. */
+  maxMaturityYears: number | null
+  /** The issuing states' codes ("CM"); empty: the six CEMAC countries. */
+  countries: string[]
+  /** Empty: both. */
+  securityTypes: RfqInstrument[]
+  /** The securities eligible, drawn at publication. */
+  eligible: number
+}
+
+/**
+ * A security a request by criteria accepts: outstanding at the settlement date, of a country and
+ * type accepted, within the maximum maturity, its last computed yield (BS's, else its state's
+ * curve) at or above the minimum. Highest yield first.
+ */
+export interface RfqEligibleSecurityDto {
+  security: RfqSecurityRefDto
+  /** From the settlement date to the maturity, in years of 365 days. */
+  remainingYears: number
+  yieldPct: number
+}
+
+/**
+ * GET /rfq/eligible-securities (the new request's preview: "the request cannot be published if no
+ * security is eligible"); GET /rfq/{id}/eligible-securities answers a request's list as drawn at
+ * its publication.
+ */
+export interface RfqEligibleQuery {
+  settlementDate: IsoDate
+  minYield?: number
+  maxMaturityYears?: number
+  countries?: string[]
+  securityTypes?: RfqInstrument[]
 }
 
 /** A trader and its organisation. */
@@ -108,6 +159,9 @@ export interface RfqMyResponseDto {
   version: number
   /** At the confirmation: the face allocated to it. */
   allocatedQuantity: number | null
+  /** By criteria, the security offered and its yield; null on a request for a security. */
+  security: RfqSecurityRefDto | null
+  yieldPct: number | null
 }
 
 /**
@@ -119,7 +173,11 @@ export interface RfqBoardItemDto {
   number: string
   requester: RfqPartyDto | null
   side: RfqSide
-  security: RfqSecurityRefDto
+  mode: RfqMode
+  /** Null by criteria. */
+  security: RfqSecurityRefDto | null
+  /** Null for a security. */
+  criteria: RfqCriteriaDto | null
   faceAmount: number
   quoteType: RfqQuoteType
   settlementDate: IsoDate
@@ -153,6 +211,10 @@ export interface RfqResponseDto {
   status: RfqResponseStatus
   /** The face the selection allocates to it. */
   allocated: number
+  /** By criteria: the security offered, its yield, its remaining maturity in years. */
+  security: RfqSecurityRefDto | null
+  yieldPct: number | null
+  remainingYears: number | null
 }
 
 export interface RfqAllocationLineDto {
@@ -167,8 +229,13 @@ export interface RfqAllocationDto {
   lines: RfqAllocationLineDto[]
   total: number
   agreements: number
+  /** Null by criteria, whose securities differ. */
   averagePrice: number | null
+  /** By criteria, the yield's. */
   averageRatePct: number | null
+  /** The securities of the agreements; by criteria, their maturity weighted by the face allocated. */
+  securities: number
+  averageMaturityYears: number | null
 }
 
 /** An agreement made at a confirmation: its parties and SVTs, its amounts (ROADMAP step 44). */
@@ -205,8 +272,13 @@ export interface RfqRequestDto {
   requester: RfqPartyDto | null
   svt: LicensedSvtDto | null
   side: RfqSide
-  security: RfqSecurityRefDto
+  mode: RfqMode
+  /** Null by criteria. */
+  security: RfqSecurityRefDto | null
+  /** Null for a security. */
+  criteria: RfqCriteriaDto | null
   faceAmount: number
+  /** By criteria, 'yield': the answers rank by yield. */
   quoteType: RfqQuoteType
   settlementDate: IsoDate
   durationSeconds: number
@@ -234,7 +306,9 @@ export interface RfqRequestSummaryDto {
   number: string
   requester: RfqPartyDto
   side: RfqSide
-  security: RfqSecurityRefDto
+  mode: RfqMode
+  security: RfqSecurityRefDto | null
+  criteria: RfqCriteriaDto | null
   faceAmount: number
   publishedAt: IsoDateTime
   closesAt: IsoDateTime
@@ -282,20 +356,32 @@ export interface RfqBlotterDto {
   events: RfqBlotterEventDto[]
 }
 
-/** POST /rfq. */
-export interface RfqPublishInput {
-  securityId: string
-  side: RfqSide
+interface RfqPublishCommon {
   faceAmount: number
-  quoteType: RfqQuoteType
   settlementDate: IsoDate
   durationSeconds: number
   svtId: string
   anonymous: boolean
 }
 
+/** POST /rfq: for a security, or by criteria (a purchase; an empty criterion imposes nothing). */
+export type RfqPublishInput = RfqPublishCommon &
+  (
+    | { mode: 'security'; securityId: string; side: RfqSide; quoteType: RfqQuoteType }
+    | {
+        mode: 'criteria'
+        minYield: number | null
+        maxMaturityYears: number | null
+        countries: string[]
+        securityTypes: RfqInstrument[]
+      }
+  )
+
 /** POST /rfq/{id}/responses and PUT /rfq/{id}/responses/{responseId}: `value` in the request's quote type. */
 export interface RfqAnswerInput {
+  /** By criteria, required: a security of the request's eligible list. */
+  securityId?: string
+  /** By criteria, a BTA's rate or an OTA's clean price; else in the request's quote type. */
   value: number
   quantity: number
   svtId: string

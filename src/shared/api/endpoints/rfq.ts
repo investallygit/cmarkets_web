@@ -16,6 +16,8 @@ import type {
   RfqBoardDto,
   RfqCancelAgreementInput,
   RfqConfirmInput,
+  RfqEligibleQuery,
+  RfqEligibleSecurityDto,
   RfqMyResponseDto,
   RfqPricingDto,
   RfqPublishInput,
@@ -95,6 +97,12 @@ export const rfqRoutes = {
   setup: route('GET', '/rfq/setup', answer<RfqSetupDto>()),
   pricing: route('GET', '/rfq/pricing', answer<RfqPricingDto>()),
   publish: route('POST', '/rfq', answer<RfqRequestDto>()),
+  eligibleSecurities: route('GET', '/rfq/eligible-securities', answer<RfqEligibleSecurityDto[]>()),
+  requestEligible: route(
+    'GET',
+    '/rfq/{id}/eligible-securities',
+    answer<RfqEligibleSecurityDto[]>(),
+  ),
   board: route('GET', '/rfq/board', answer<RfqBoardDto>()),
   mine: route('GET', '/rfq/mine', answer<RfqRequestSummaryDto[]>()),
   blotter: route('GET', '/rfq/blotter', answer<RfqBlotterDto>()),
@@ -167,6 +175,12 @@ export const rfqApi = {
     signal?: AbortSignal,
   ) => send(rfqRoutes.pricing, { query: { ...query }, signal }),
   publish: (input: RfqPublishInput) => send(rfqRoutes.publish, { body: input }),
+  /** The securities a request by criteria would accept now, highest yield first. */
+  eligibleSecurities: (query: RfqEligibleQuery, signal?: AbortSignal) =>
+    send(rfqRoutes.eligibleSecurities, { query: { ...query }, signal }),
+  /** A request by criteria's eligible securities, as drawn at its publication. */
+  requestEligible: (id: string, signal?: AbortSignal) =>
+    send(rfqRoutes.requestEligible, { params: { id }, signal }),
   board: (query: RfqBoardQuery = {}, signal?: AbortSignal) =>
     send(rfqRoutes.board, { query: { ...query }, signal }),
   mine: (scope: RfqScope, signal?: AbortSignal) =>

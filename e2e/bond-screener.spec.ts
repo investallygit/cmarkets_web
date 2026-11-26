@@ -33,7 +33,8 @@ test('BS lists the mockup’s bonds, model prices starred, and shows a callable 
   ).toHaveClass(/border-accent-amber/)
 
   const list = results(page)
-  await expect(list.getByRole('heading')).toHaveText(/Results: 6 bonds/i)
+  // The mockup's six and the BEAC's nine others of the sixth version within the default criteria.
+  await expect(list.getByRole('heading')).toHaveText(/Results: 15 bonds/i)
   await expect(list.getByRole('row', { name: /ECMR 6\.25% 29/ })).toContainText(
     /Sovereign · CM\s*BVMAC\s*6\.25\s*04\/11\/2029/,
   )
@@ -85,7 +86,7 @@ test('the criteria narrow the bonds, a screen is saved and the results export', 
   await page.goto('/bs')
   const criteria = panel(page, 'Criteria')
   const list = results(page)
-  await expect(list.getByRole('heading')).toHaveText(/Results: 6 bonds/i)
+  await expect(list.getByRole('heading')).toHaveText(/Results: 15 bonds/i)
 
   // The BEAC's government securities only.
   for (const market of ['BVMAC (listed)', 'Other markets']) {
@@ -94,7 +95,7 @@ test('the criteria narrow the bonds, a screen is saved and the results export', 
   }
   await expect(criteria.getByText(/The criteria changed/)).toBeVisible()
   await criteria.getByRole('button', { name: 'Run' }).click()
-  await expect(list.getByRole('heading')).toHaveText(/Results: 2 bonds/i)
+  await expect(list.getByRole('heading')).toHaveText(/Results: 11 bonds/i)
   await expect(list.getByRole('row', { name: /BDEAC/ })).toHaveCount(0)
 
   // Saved, then loaded back after a reset.
@@ -104,9 +105,9 @@ test('the criteria narrow the bonds, a screen is saved and the results export', 
   await dialog.getByRole('button', { name: 'Save' }).click()
   await expect(dialog).toBeHidden()
   await criteria.getByRole('button', { name: 'Reset' }).click()
-  await expect(list.getByRole('heading')).toHaveText(/Results: 6 bonds/i)
+  await expect(list.getByRole('heading')).toHaveText(/Results: 15 bonds/i)
   await criteria.getByRole('button', { name: 'BEAC bills', exact: true }).click()
-  await expect(list.getByRole('heading')).toHaveText(/Results: 2 bonds/i)
+  await expect(list.getByRole('heading')).toHaveText(/Results: 11 bonds/i)
 
   // A rating as good as B- or better: Gabon's only.
   await criteria.getByRole('button', { name: 'Reset' }).click()
@@ -147,7 +148,7 @@ test('a bond list published in IMP adds its bond to BS', async ({ page }) => {
   await switchAccount(page, /data admin/i, 'Analyst', /analyst/i)
   await page.goto('/bs')
   const list = results(page)
-  await expect(list.getByRole('heading')).toHaveText(/Results: 7 bonds/i, { timeout: 20_000 })
+  await expect(list.getByRole('heading')).toHaveText(/Results: 16 bonds/i, { timeout: 20_000 })
   await list.getByRole('row', { name: /COMPANY Y 6\.00% 2031/ }).click()
   const profile = panel(page, 'COMPANY Y 6.00% 2031 · CM0000040017')
   await expect(profile.getByRole('region', { name: 'D. Cash flow and structure' })).toContainText(

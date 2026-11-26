@@ -15,7 +15,7 @@ const TCHAKOUNTE = 'a.tchakounte@insurer-f.example'
 const OKALA = 'a.okala@bank-d.example'
 
 interface Setup {
-  securities: { id: string; instrument: string }[]
+  securities: { id: string; code: string; instrument: string }[]
   settlementDates: string[]
   svts: { id: string; name: string }[]
 }
@@ -41,7 +41,8 @@ test('B. Sima approves one agreement and rejects the other, A. Okala concludes t
   const asBekale = await apiAs(bekale)
   const setup = await asBekale<Setup>('GET', '/rfq/setup')
   const request = await asBekale<{ id: string; number: string }>('POST', '/rfq', {
-    securityId: setup.securities.find((security) => security.instrument === 'OTA')!.id,
+    // The demo's OTA CMR 3 yr: the BEAC's other OTAs of the sixth version come before it.
+    securityId: setup.securities.find((security) => security.code.startsWith('OTA CMR 3 yr'))!.id,
     side: 'buy',
     faceAmount: 500_000_000,
     quoteType: 'price',
@@ -134,6 +135,10 @@ test('B. Sima approves one agreement and rejects the other, A. Okala concludes t
     `${short(first)} approved by B. Sima · agreement concluded, PDF sent`,
   )
   await bekale.goto('/rfq')
+  // His open requests come first (the demo's by criteria): his own picked in the list.
+  await panel(bekale, /^My request/)
+    .getByRole('combobox', { name: 'Request' })
+    .selectOption(request.id)
   const agreements = panel(bekale, `My request · ${request.number}`).getByRole('region', {
     name: 'Agreements',
   })

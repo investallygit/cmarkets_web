@@ -100,7 +100,7 @@ before upload.
 | 16 · Bond pricing from a yield curve, custom curves                       | Done; spreads to a reference, paste from Excel, saved curves  |
 | 31 · Index profile (DES on an index)                                      | Done; constituents' contributions, BVMAC's reviews on IMP     |
 | 30 · Data download (DL), the Download buttons                             | Done; 8 datasets, files over 50,000 rows by a job, schedules  |
-| 22 · RFQ by criteria (sixth version): the amount alone                    | To do, step 61                                                |
+| 22 · RFQ by criteria (sixth version): the amount alone                    | Done; eligible list, offers checked and ranked by yield       |
 | 22 · RFQ completion ratio, on the board, NET and SVT                      | To do, step 62                                                |
 | 16 · Bond pricing: the rate entry panel of the sixth version              | To do, step 63                                                |
 | 33 · BTA and OTA auctions (AUC, AUC NEXT, APE)                            | To do, step 64                                                |
@@ -191,6 +191,7 @@ src/
               description-editor-panel,
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
               trader-links-panel, rfq-new-request, rfq-my-request, rfq-board, rfq-blotter,
+              rfq-eligible-securities,
               rfq-tabs, rfq-report-panels, svt-approval-panels, rfq-agreement-filters,
               rfq-agreement-list, rfq-agreement-detail, opt-setup-panels, opt-result-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
@@ -437,7 +438,8 @@ each other; the app shell mounts the form once.
 Every UI string is in French and English, in `shared/i18n/locales/en/` and `fr/`: one JSON file
 per area of the app (`core` for the shell and the shared UI, `home`, `account` for the login and
 the settings, `monitoring`, `analysis`, `bonds`, `etfs`, `macro` (ECO, FX and their settings),
-`rfq` (RFQ, SVT, TRD and the RFQ's settings), `rfqReports` (RFQ REP), `rfqAgreements` (RFQ AGR),
+`rfq` (RFQ, SVT, TRD and the RFQ's settings), `rfqCriteria` (RFQ's requests by criteria),
+`rfqReports` (RFQ REP), `rfqAgreements` (RFQ AGR),
 `portfolio`, `optimizer` (OPT and OPT RES), `research`, `network`, `messaging`, `newsStudio`,
 `newsAdmin`, `payments`,
 `dataAdmin`, `admin`), which `en.ts` and `fr.ts` merge. Add a key to the same area file in both languages. Keys are typed:

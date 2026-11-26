@@ -1,0 +1,86 @@
+{
+  "rfqCriteria": {
+    "requestType": "Type de demande",
+    "types": {
+      "security": "Titre précis",
+      "criteria": "Par critères"
+    },
+    "buyOnly": "par critères : achat seulement",
+    "amount": "Montant (nominal, XAF)",
+    "minYield": "Rendement minimum",
+    "maxMaturity": "Maturité résiduelle maximale (ans)",
+    "optional": "facultatif",
+    "countries": "Pays",
+    "countriesLabel": "Pays émetteurs",
+    "securityType": "Type de titre",
+    "securityTypes": {
+      "both": "BTA et OTA",
+      "BTA": "BTA",
+      "OTA": "OTA"
+    },
+    "emptyNote": "Un champ vide = aucune contrainte. Seul le montant est obligatoire. Les répondants proposent un titre qui remplit les critères.",
+    "eligible_one": "{{count}} titre éligible aujourd'hui",
+    "eligible_other": "{{count}} titres éligibles aujourd'hui",
+    "noneEligible": "Aucun titre en circulation ne remplit ces critères : élargissez-les pour publier la demande.",
+    "allCountries": "tous pays",
+    "describe": {
+      "prefix": "Critères : {{criteria}}",
+      "yield": "≥ {{value}} %",
+      "maturity": "≤ {{value}} ans",
+      "yieldLong": "rendement ≥ {{value}} %",
+      "maturityLong": "maturité ≤ {{value}} ans"
+    },
+    "myRequest": {
+      "summary": "{{side}} · XAF {{face}} · {{criteria}}",
+      "rankedByYield": "classées par rendement, le plus élevé d'abord",
+      "selection": "Sélection : {{total}} / {{face}} · {{agreements}} sur {{securities}} · rendement moyen {{yield}} % · maturité moyenne {{maturity}} ans",
+      "securities_one": "{{count}} titre",
+      "securities_other": "{{count}} titres",
+      "note": "Les titres proposés étant différents, le classement se fait par rendement (le plus élevé d'abord), puis par quantité, puis par heure ; la dernière réponse retenue peut être servie en partie.",
+      "columns": {
+        "responder": "Répondant",
+        "security": "Titre proposé",
+        "country": "Pays",
+        "maturity": "Maturité",
+        "price": "Prix",
+        "yield": "Rendement"
+      }
+    },
+    "eligiblePanel": {
+      "title": "Titres éligibles",
+      "count_one": "{{count}} titre",
+      "count_other": "{{count}} titres",
+      "columns": {
+        "security": "Titre",
+        "country": "Pays",
+        "maturity": "Maturité",
+        "yield": "Rendement CMarket"
+      },
+      "note": "Titres en circulation qui remplissent les critères, avec le dernier rendement calculé par CMarket. Liste visible par le demandeur et par les répondants.",
+      "preview": "Aperçu de la nouvelle demande : la liste est tirée de nouveau à sa publication.",
+      "for": "Pour {{number}}",
+      "close": "Revenir à mes SVT",
+      "empty": "Aucun titre ne remplit ces critères."
+    },
+    "answer": {
+      "title": "Ma réponse à {{number}} (demande par critères : {{criteria}})",
+      "security": "Titre proposé (éligibles seulement)",
+      "price": "Prix",
+      "rate": "Taux (BTA)",
+      "checks": {
+        "label": "Contrôle des critères",
+        "yieldOk": "Rendement calculé : {{value}} % ≥ {{min}} %",
+        "yieldLow": "Rendement calculé : {{value}} % < {{min}} %",
+        "maturityOk": "Maturité résiduelle : {{value}} ans ≤ {{max}} ans",
+        "maturityLong": "Maturité résiduelle : {{value}} ans > {{max}} ans",
+        "countryOk": "Pays : {{country}}, accepté",
+        "countryRefused": "Pays : {{country}}, non accepté"
+      },
+      "note": "La liste ne propose que les titres qui remplissent les critères ; le rendement est recalculé à chaque changement de prix.",
+      "errors": {
+        "security": "Choisissez un titre de la liste des titres éligibles."
+      },
+      "yieldOnly": "Rendement calculé : {{value}} %"
+    }
+  }
+}

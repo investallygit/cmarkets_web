@@ -405,7 +405,12 @@ export function DataTable<TRow extends RowData>({
       onContextMenu={(event) => {
         if (event.target === event.currentTarget && openActiveMenu()) event.preventDefault()
       }}
-      className="group relative h-full overflow-auto outline-none focus-visible:ring-1 focus-visible:ring-accent-amber focus-visible:ring-inset"
+      // An empty table, which takes no focus, scrolls nothing sideways either: its headers wider than
+      // the panel would make a scrollable region the keyboard cannot reach (axe).
+      className={clsx(
+        'group relative h-full outline-none focus-visible:ring-1 focus-visible:ring-accent-amber focus-visible:ring-inset',
+        rows.length > 0 ? 'overflow-auto' : 'overflow-x-hidden overflow-y-auto',
+      )}
     >
       <table className="grid w-full">
         <thead className="sticky top-0 z-1 grid bg-panel-header">

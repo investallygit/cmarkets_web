@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useRfqSetup } from '@/entities/rfq'
 import { NewRfqForm } from '@/features/publish-rfq'
-import type { RfqRequestDto } from '@/shared/api/contracts'
+import type { RfqEligibleQuery, RfqRequestDto } from '@/shared/api/contracts'
 import { Panel } from '@/shared/ui/Panel'
 import { QueryView } from '@/shared/ui/QueryView'
 
@@ -9,10 +9,16 @@ interface NewRequestPanelProps {
   /** The security "Request a price (RFQ)" opened the screen with. */
   initialSecurityId?: string | null
   onPublished: (request: RfqRequestDto) => void
+  /** By criteria, the preview's question as the criteria change; null otherwise. */
+  onCriteriaChange?: (query: RfqEligibleQuery | null) => void
 }
 
 /** Screen 22's left column, "New request" (spec section 9): the form, on the RFQ's setup. */
-export function NewRequestPanel({ initialSecurityId, onPublished }: NewRequestPanelProps) {
+export function NewRequestPanel({
+  initialSecurityId,
+  onPublished,
+  onCriteriaChange,
+}: NewRequestPanelProps) {
   const { t } = useTranslation()
   const setup = useRfqSetup()
   return (
@@ -25,6 +31,7 @@ export function NewRequestPanel({ initialSecurityId, onPublished }: NewRequestPa
             setup={data}
             initialSecurityId={initialSecurityId}
             onPublished={onPublished}
+            onCriteriaChange={onCriteriaChange}
           />
         )}
       </QueryView>
