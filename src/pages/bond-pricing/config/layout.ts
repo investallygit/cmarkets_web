@@ -6,6 +6,9 @@ import type { ScreenPanel } from '@/features/workspace-layout'
  *   inputs | results            | price-yield (or curve used)
  *   inputs | cash-flow schedule | rate sensitivity
  *   inputs | calculation method | rate sensitivity
+ *
+ * With a curve or rates entered, the rate entry takes the calculation method's place (sixth
+ * version, ROADMAP decision 56).
  */
 export const BOND_PRICING_LAYOUT: readonly ScreenPanel[] = [
   { i: 'inputs', name: 'bondPricingInputs', x: 0, y: 0, w: 3, h: 26, minW: 2, minH: 10 },

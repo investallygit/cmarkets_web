@@ -188,10 +188,6 @@
       "tableCaption": "Discount rate of each remaining cash-flow date",
       "referenceNote": "Reference: {{curve}}. Spread = rate − reference, in bp.",
       "helpers": {
-        "label": "Rate helpers",
-        "start": "Start from a curve",
-        "shift": "Shift all rows",
-        "paste": "Paste from Excel",
         "clear": "Clear",
         "apply": "Apply",
         "shiftBy": "Shift (bp)",
@@ -203,15 +199,46 @@
       },
       "notes": {
         "yield": "Same rate for every cash-flow date (greyed). Pre-filled with the last computed YTM; editable.",
-        "curve": "One rate per cash-flow date, read on the chosen curve (linear interpolation). Each rate can still be edited: the rates then become rates entered, which can be saved as a custom curve.",
-        "rates": "One row per remaining cash-flow date of the bond.",
-        "dates": "One row per remaining cash-flow date of the bond, pre-filled with the rates shown before.",
-        "tenors": "Rates of the standard tenors, interpolated to the bond's cash-flow dates (linear, flat beyond the first and last tenor)."
+        "curve": "One rate per cash-flow date, read on the chosen curve (linear interpolation). Each rate can still be edited: the rates then become rates entered, which can be saved as a custom curve."
       },
       "byPrice": "Enter the clean price instead of the yield",
       "byYield": "Enter the yield instead of the clean price",
       "priceHint": "The yield is computed from the price.",
       "priceYield": "Yield at this price: {{value}}"
+    },
+    "entry": {
+      "title": "Rate entry by cash-flow date",
+      "titleTenors": "Rate entry by standard tenor",
+      "helpers": "Entry helpers",
+      "start": "1. Start from",
+      "copy": "Copy",
+      "shift": "2. Shift all rows",
+      "bp": "bp",
+      "paste": "3. Paste from Excel",
+      "pasteButton": "Paste (date ; rate)",
+      "clear": "4. Clear entries",
+      "keys": "Enter: confirm · Tab or ↓: next row · Shift+Tab or ↑: previous row",
+      "notes": {
+        "dates": "Cell-by-cell entry; the spread to the curve updates with each keystroke. An empty cell blocks the calculation and turns red.",
+        "tenors": "By tenor (3M to 10Y): the same columns, the rates interpolated to the cash-flow dates (linear, flat beyond the first and last tenor). A tenor left empty is not used."
+      },
+      "status": "Entry status",
+      "enteredDates_one": "{{count}} rate entered for {{total}} cash-flow dates",
+      "enteredDates_other": "{{count}} rates entered for {{total}} cash-flow dates",
+      "enteredTenors_one": "{{count}} rate entered for {{total}} standard tenors",
+      "enteredTenors_other": "{{count}} rates entered for {{total}} standard tenors",
+      "inRange": "All rates between 0 and 30%",
+      "outside_one": "{{count}} rate outside 0 to 30%",
+      "outside_other": "{{count}} rates outside 0 to 30%",
+      "averageSpread": "Average spread to curve: {{spread}} bp",
+      "startModified": "Starting point: {{curve}}, modified.",
+      "startSame": "Starting point: {{curve}}, unchanged.",
+      "inPanel": "The rates are entered in the panel “Rate entry by cash-flow date”.",
+      "inPanelTenors": "The rates are entered in the panel “Rate entry by standard tenor”.",
+      "inPanelCurve": "The curve's rates show in the panel “Rate entry by cash-flow date”, where each stays editable: a rate changed makes them rates entered.",
+      "goTo": "Go to the entry →",
+      "waiting_one": "{{count}} cash-flow date has no rate: Calculate waits for it.",
+      "waiting_other": "{{count}} cash-flow dates have no rate: Calculate waits for them."
     },
     "curves": {
       "label": "Curve",

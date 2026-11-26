@@ -4,6 +4,7 @@ import { TENOR_YEARS } from '@/entities/bond'
 import { STANDARD_TENORS, type StandardTenor } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
+import { rateOutOfRange } from '../model/discountForm'
 import { cellsPasted } from '../model/rateEntry'
 import { SpreadCell } from './SpreadCell'
 
@@ -55,7 +56,7 @@ export function TenorTable({ tenors, references, onEdit, onPasteAt }: TenorTable
           const label = t(`bondPricing.discount.tenors.${tenor}`)
           const reference = references[tenor]
           return (
-            <tr key={tenor} className="h-8">
+            <tr key={tenor} className="h-8 focus-within:bg-selected">
               <th scope="row" className="px-1 text-left font-normal">
                 {label}
               </th>
@@ -74,6 +75,7 @@ export function TenorTable({ tenors, references, onEdit, onPasteAt }: TenorTable
                   }}
                   decimals={3}
                   highlight
+                  invalid={rateOutOfRange(tenors[tenor])}
                   aria-label={t('bondPricing.discount.rateAt', {
                     tenor: label,
                     years: format.number(TENOR_YEARS[tenor], 2),

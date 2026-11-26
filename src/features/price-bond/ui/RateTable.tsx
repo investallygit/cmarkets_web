@@ -17,6 +17,8 @@ interface RateTableProps {
   onEdit?: (date: string, rate: number | null) => void
   /** Several cells pasted into a row's rate (from Excel): the table fills from that row down. */
   onPasteAt?: (index: number, text: string) => void
+  /** A rate the calculation cannot take: its cell red (an empty one, by date). */
+  isInvalid?: (rate: number | null) => boolean
   caption: string
 }
 
@@ -25,7 +27,15 @@ interface RateTableProps {
  * its time in years and its rate (spec section 9, screen 16, fifth version); with a curve or rates
  * entered, the reference curve's rate and the spread to it in bp (ROADMAP decision 46).
  */
-export function RateTable({ rows, rates, references, onEdit, onPasteAt, caption }: RateTableProps) {
+export function RateTable({
+  rows,
+  rates,
+  references,
+  onEdit,
+  onPasteAt,
+  isInvalid,
+  caption,
+}: RateTableProps) {
   const { t } = useTranslation()
   const format = useFormat()
   if (rows === null) {
@@ -80,7 +90,7 @@ export function RateTable({ rows, rates, references, onEdit, onPasteAt, caption 
           const rate = rates[index] ?? null
           const reference = references?.[index] ?? null
           return (
-            <tr key={row.date} className="h-8">
+            <tr key={row.date} className={clsx('h-8', onEdit && 'focus-within:bg-selected')}>
               <th scope="row" className="px-1 text-left font-normal">
                 {format.isoDate(row.date)}
               </th>
@@ -103,6 +113,7 @@ export function RateTable({ rows, rates, references, onEdit, onPasteAt, caption 
                     }}
                     decimals={3}
                     highlight
+                    invalid={isInvalid?.(rate)}
                     aria-label={t('bondPricing.discount.rateOn', {
                       date: format.isoDate(row.date),
                     })}

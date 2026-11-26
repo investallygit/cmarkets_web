@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 import { useBonds } from '@/entities/bond'
-import { BondPricingInputsPanel, useBondPricingStore } from '@/features/price-bond'
+import { BondPricingInputsPanel, RateEntryPanel, useBondPricingStore } from '@/features/price-bond'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import { bondPricingPath } from '@/shared/routes/paths'
 import { Panel } from '@/shared/ui/Panel'
@@ -22,8 +22,8 @@ const XAF = 'XAF'
 /**
  * Screen 16, bond pricing (BP): "ECMR 6.25 2029 BP" (/bp/{bondId}) opens it on that bond, BP and
  * YAS alone on the first of the master list. The inputs on the left; the results, the cash-flow
- * schedule, the calculation method, the price-yield curve (or the curve used, fifth version) and
- * the rate sensitivity of the last calculation.
+ * schedule, the calculation method (or the rate entry, sixth version), the price-yield curve (or
+ * the curve used, fifth version) and the rate sensitivity of the last calculation.
  */
 export function BondPricingPage() {
   const { t } = useTranslation()
@@ -35,6 +35,7 @@ export function BondPricingPage() {
   const seededFrom = useBondPricingStore((state) => state.seededFrom)
   const currency = useBondPricingStore((state) => state.form?.currency ?? XAF)
   const country = useBondPricingStore((state) => state.form?.country ?? null)
+  const mode = useBondPricingStore((state) => state.form?.discount.mode ?? 'yield')
   // The figures of the bond the inputs hold: not the last bond's beside a bond the address names
   // and the API does not know (B56).
   const submitted = seededFrom === current ? calculated : null
@@ -66,7 +67,8 @@ export function BondPricingPage() {
       <PriceYieldPanel request={submitted} />
     ),
     sensitivity: <RateSensitivityPanel request={submitted} />,
-    method: <CalculationMethodPanel request={submitted} />,
+    // A curve or rates entered: their entry panel in the method's place (sixth version, decision 56).
+    method: mode === 'yield' ? <CalculationMethodPanel request={submitted} /> : <RateEntryPanel />,
   }
   return <ScreenWorkspace screenId="BP" defaultLayout={BOND_PRICING_LAYOUT} panels={panels} />
 }

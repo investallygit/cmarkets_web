@@ -23,12 +23,12 @@ import {
   hasChanged,
   nextRepayment,
   rangeErrors,
-  scheduleRequest,
   toRequest,
   type PricingForm,
   type RangeError,
   type RedemptionKind,
 } from '../model/pricingForm'
+import { useScheduleRows } from '../model/useDiscountRates'
 import { BlockHeading } from './BlockHeading'
 import { DiscountRatesBlock } from './DiscountRatesBlock'
 import { RedemptionScheduleEditor } from './RedemptionScheduleEditor'
@@ -108,12 +108,7 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
   const { edit, editCharacteristics, calculate } = useBondPricingStore.getState()
   const price = useBondPrice(submitted)
   // The bond's remaining cash-flow dates, for block B's table and the rates entered by date.
-  const datesRequest = scheduleRequest(form)
-  const schedule = useBondPrice(datesRequest)
-  const rows =
-    datesRequest && schedule.data && !schedule.isPlaceholderData
-      ? schedule.data.cashFlows.map(({ date, years }) => ({ date, years }))
-      : null
+  const rows = useScheduleRows(form)
   const dates = rows?.map((row) => row.date) ?? null
   const serverErrors = isApiError(price.error, 400) ? (price.error.problem.errors ?? {}) : {}
   const serverError = (field: string) => serverErrors[field]?.at(0)
@@ -122,6 +117,11 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
   const outOfRange = rangeErrors(form)
   const rangeError = (field: RangeError, message: string) =>
     outOfRange.has(field) ? message : serverError(field)
+  // Rates entered by date: Calculate says how many dates still wait for a rate (decision 56).
+  const missingRates =
+    form.discount.mode === 'rates' && form.discount.entry === 'dates' && rows
+      ? rows.filter((row) => (form.discount.rates[row.date] ?? null) === null).length
+      : 0
 
   const bondOptions = [
     { value: BY_HAND, label: t('bondPricing.byHand') },
@@ -278,7 +278,11 @@ function Inputs({ form, bond, market, onBondChange }: InputsProps) {
         </Button>
         {request === null ? (
           <p className="font-sans text-title text-warning">
-            {outOfRange.size > 0 ? t('bondPricing.outOfRange') : t('bondPricing.incomplete')}
+            {outOfRange.size > 0
+              ? t('bondPricing.outOfRange')
+              : missingRates > 0
+                ? t('bondPricing.entry.waiting', { count: missingRates })
+                : t('bondPricing.incomplete')}
           </p>
         ) : (
           changed && <p className="font-sans text-title text-warning">{t('bondPricing.changed')}</p>

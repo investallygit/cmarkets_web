@@ -102,7 +102,7 @@ before upload.
 | 30 · Data download (DL), the Download buttons                             | Done; 8 datasets, files over 50,000 rows by a job, schedules  |
 | 22 · RFQ by criteria (sixth version): the amount alone                    | Done; eligible list, offers checked and ranked by yield       |
 | 22 · RFQ completion ratio, on the board, NET and SVT                      | Done; thresholds, disputes, the Admin's RFQ CPL               |
-| 16 · Bond pricing: the rate entry panel of the sixth version              | To do, step 63                                                |
+| 16 · Bond pricing: the rate entry panel of the sixth version              | Done; entry status, keyboard, helpers beside the table        |
 | 33 · BTA and OTA auctions (AUC, AUC NEXT, APE)                            | To do, step 64                                                |
 | 34 · BEAC monetary policy and liquidity (BEAC)                            | To do, step 65                                                |
 | 35 · Sovereign debt (DEBT)                                                | To do, step 66                                                |

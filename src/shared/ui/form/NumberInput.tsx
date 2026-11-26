@@ -18,6 +18,8 @@ interface NumberInputProps extends Omit<
   /** Unit inside the field, e.g. "%" or "months". */
   suffix?: ReactNode
   highlight?: boolean
+  /** Red as an error without a field around it (an empty cell of a table that needs one). */
+  invalid?: boolean
   className?: string
 }
 
@@ -32,6 +34,7 @@ export function NumberInput({
   decimals = 2,
   suffix,
   highlight,
+  invalid: flagged,
   className,
   id,
   onFocus,
@@ -44,7 +47,7 @@ export function NumberInput({
   const [draft, setDraft] = useState<string | null>(null)
   const formatted = value === null ? '' : formatNumber(value, locale, decimals)
   const unreadable = draft !== null && draft.trim() !== '' && parseNumber(draft, locale) === null
-  const invalid = unreadable || field?.invalid
+  const invalid = unreadable || field?.invalid || flagged
 
   return (
     <InputFrame

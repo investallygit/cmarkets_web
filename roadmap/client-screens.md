@@ -492,9 +492,12 @@ what is still to do. The Data admin's and the Admin's screens are in
   (see [step 55](steps/step-55-bond-pricing-from-a-curve.md)). Its part 2, the client's entry
   panel (decision 46): each rate beside its reference and the spread in bp, start from a curve,
   shift all rows, paste from Excel, clear. The Download button in step 57.
-- **Sixth version (step 63)**: the spec draws decision 46's entry panel at the bottom centre, in
-  the place of "Calculation method" while rates are entered, block B keeping the entry status and
-  the save; Enter, Tab and ↓ move through the cells, an empty one red (decision 56). See
+- **Built in step 63 (sixth version)**: decision 46's entry panel where the spec draws it, "Rate
+  entry by cash-flow date" (or by standard tenor) in the place of "Calculation method" with a
+  curve or rates entered: the table, the keyboard (Enter stays, Tab and ↓ go on, Shift+Tab and ↑
+  back), an empty date red, and the four entry helpers beside it; block B keeps the mode, the
+  entry status (the rates entered, the 0–30% check, the average spread, the starting point) and
+  the save, Calculate saying how many dates wait for a rate (decision 56). See
   [step 63](steps/step-63-bp-rate-entry-panel.md).
 
 ## BS · Bond screener (screen 17): done

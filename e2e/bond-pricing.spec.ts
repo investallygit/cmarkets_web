@@ -10,6 +10,7 @@ const panel = (page: Page, title: string | RegExp) =>
   page.locator('section', { has: page.getByRole('heading', { name: title }) })
 
 const inputs = (page: Page) => panel(page, 'Inputs')
+const entry = (page: Page) => panel(page, 'Rate entry by cash-flow date')
 
 async function command(page: Page, text: string) {
   await page.getByRole('combobox', { name: 'Command bar' }).fill(text)
@@ -136,8 +137,13 @@ test("the CMarket curve of the bond's country discounts each cash flow at its ow
   await expect(form.getByRole('combobox', { name: 'Redemption' })).toHaveValue('amortizing')
   await form.getByRole('radio', { name: 'Yield curve' }).check()
   await expect(form.getByRole('combobox', { name: 'Curve' })).toHaveValue('cmkt-CM')
-  // The rates of the curve, read at the bond's dates, fill the table.
-  await expect(form.getByRole('textbox', { name: /^Rate on / }).first()).not.toHaveValue('')
+  // The rates of the curve, read at the bond's dates, fill the entry panel in the method's place.
+  await expect(
+    entry(page)
+      .getByRole('textbox', { name: /^Rate on / })
+      .first(),
+  ).not.toHaveValue('')
+  await expect(panel(page, 'Calculation method')).toBeHidden()
   await form.getByRole('button', { name: 'Calculate' }).click()
 
   const results = panel(page, 'Results')
@@ -154,9 +160,6 @@ test("the CMarket curve of the bond's country discounts each cash flow at its ow
   await expect(panel(page, 'Sensitivity to the curve')).toContainText(
     'The same shock is applied to every rate on the curve.',
   )
-  await expect(panel(page, 'Calculation method').locator('[aria-current="true"]')).toContainText(
-    'Yield curve',
-  )
 })
 
 test('rates entered by date give cases B and C, saved as a curve, reused and deleted', async ({
@@ -171,12 +174,13 @@ test('rates entered by date give cases B and C, saved as a curve, reused and del
   await form.getByRole('textbox', { name: 'Face amount (XAF)' }).fill('100000000')
   await form.getByRole('radio', { name: 'Rates entered by maturity' }).check()
 
-  const rate = (date: string) => form.getByRole('textbox', { name: `Rate on ${date}, %` })
-  const enter = async (rates: string[]) => {
-    for (const [index, value] of rates.entries()) await rate(`04/11/${2026 + index}`).fill(value)
+  const rates = entry(page)
+  const rate = (date: string) => rates.getByRole('textbox', { name: `Rate on ${date}, %` })
+  const enter = async (values: string[]) => {
+    for (const [index, value] of values.entries()) await rate(`04/11/${2026 + index}`).fill(value)
     await form.getByRole('button', { name: 'Calculate' }).click()
   }
-  await expect(form.getByRole('textbox', { name: /^Rate on / })).toHaveCount(4)
+  await expect(rates.getByRole('textbox', { name: /^Rate on / })).toHaveCount(4)
 
   // Case B of section 14.1: the CMarket curve's rates at the four dates.
   await enter(['4.6', '5.1', '5.55', '5.85'])
@@ -195,8 +199,14 @@ test('rates entered by date give cases B and C, saved as a curve, reused and del
     'Once saved, shocks by tenor are possible.',
   )
 
-  // Case C: 15 to 20 bp higher, the mockup's rate-rise scenario.
+  // Case C: 15 to 20 bp higher, the mockup's rate-rise scenario, and block B's entry status.
   await enter(['4.8', '5.3', '5.7', '6'])
+  const status = form.getByRole('region', { name: 'Entry status' })
+  await expect(status).toContainText('4 rates entered for 4 cash-flow dates')
+  await expect(status).toContainText('All rates between 0 and 30%')
+  // The reference is CMarket's curve at the settlement date (the mockup's +17.5 bp is over case B).
+  await expect(status).toContainText(/Average spread to curve: [+−-]?\d+\.\d bp/)
+  await expect(status).toContainText(/Starting point: CMarket Cameroon · zero · .+, modified\./)
   await expect(results.getByRole('region', { name: 'A. Pricing' })).toContainText(
     /Clean price\s*100\.7410%/,
   )
@@ -249,20 +259,22 @@ test('the entry panel pastes, starts from a curve, shifts and clears the rates',
   await form.getByRole('textbox', { name: /^Settlement date/ }).fill('30/10/2026')
   await form.getByRole('textbox', { name: 'Face amount (XAF)' }).fill('100000000')
   await form.getByRole('radio', { name: 'Rates entered by maturity' }).check()
-  const rate = (date: string) => form.getByRole('textbox', { name: `Rate on ${date}, %` })
+  const rates = entry(page)
+  const rate = (date: string) => rates.getByRole('textbox', { name: `Rate on ${date}, %` })
   const dates = ['04/11/2026', '04/11/2027', '04/11/2028', '04/11/2029']
-  const table = form.getByRole('table', { name: 'Discount rate of each remaining cash-flow date' })
+  const table = rates.getByRole('table', { name: 'Discount rate of each remaining cash-flow date' })
   const results = panel(page, 'Results')
   const calculate = form.getByRole('button', { name: 'Calculate' })
   await expect(rate(dates[3]!)).toBeVisible()
 
   // Case B pasted from Excel, a header, French decimals, a date and a rate a line.
-  const helpers = form.getByRole('group', { name: 'Rate helpers' })
-  await helpers.getByRole('button', { name: 'Paste from Excel' }).click()
-  await form
+  const helpers = rates.getByRole('region', { name: 'Entry helpers' })
+  const paste = helpers.getByRole('group', { name: '3. Paste from Excel' })
+  await paste.getByRole('button', { name: 'Paste (date ; rate)' }).click()
+  await paste
     .getByRole('textbox', { name: 'Rates copied from Excel' })
     .fill('Date\tRate\n04/11/2026\t4,6\n04/11/2027\t5,1\n04/11/2028\t5,55\n04/11/2029\t5,85')
-  await form.getByRole('button', { name: 'Apply' }).click()
+  await paste.getByRole('button', { name: 'Apply' }).click()
   await expect(rate(dates[2]!)).toHaveValue('5.550')
   await calculate.click()
   await expect(results.getByRole('region', { name: 'A. Pricing' })).toContainText(
@@ -270,13 +282,11 @@ test('the entry panel pastes, starts from a curve, shifts and clears the rates',
   )
 
   // Started from the CMarket curve: each rate is its reference, a spread of 0.0.
-  await helpers.getByRole('button', { name: 'Start from a curve' }).click()
-  await form.getByRole('button', { name: 'Apply' }).click()
+  await helpers.getByRole('button', { name: 'Copy' }).click()
   await expect(table.getByRole('row', { name: dates[0] })).toContainText(/0\.0$/)
   // Shifted by 20 bp: each spread +20.0.
-  await helpers.getByRole('button', { name: 'Shift all rows' }).click()
-  await form.getByRole('textbox', { name: 'Shift (bp)' }).fill('20')
-  await form.getByRole('textbox', { name: 'Shift (bp)' }).press('Enter')
+  await helpers.getByRole('textbox', { name: 'Shift (bp)' }).fill('20')
+  await helpers.getByRole('textbox', { name: 'Shift (bp)' }).press('Enter')
   for (const date of dates) {
     await expect(table.getByRole('row', { name: date })).toContainText('+20.0')
   }
@@ -294,12 +304,66 @@ test('the entry panel pastes, starts from a curve, shifts and clears the rates',
   )
 
   // A line the bond does not pay on changes nothing; Clear empties the rows.
-  await helpers.getByRole('button', { name: 'Paste from Excel' }).click()
-  await form.getByRole('textbox', { name: 'Rates copied from Excel' }).fill('04/12/2029\t6')
-  await form.getByRole('button', { name: 'Apply' }).click()
-  await expect(form.getByRole('alert')).toContainText('Some lines match no row of the table')
+  await paste.getByRole('button', { name: 'Paste (date ; rate)' }).click()
+  await paste.getByRole('textbox', { name: 'Rates copied from Excel' }).fill('04/12/2029\t6')
+  await paste.getByRole('button', { name: 'Apply' }).click()
+  await expect(rates.getByRole('alert')).toContainText('Some lines match no row of the table')
   await expect(rate(dates[3]!)).toHaveValue('6.000')
   await helpers.getByRole('button', { name: 'Clear' }).click()
   await expect(rate(dates[0]!)).toHaveValue('')
+  await expect(rate(dates[0]!)).toHaveAttribute('aria-invalid', 'true')
   await expect(calculate).toBeDisabled()
+  await expect(form).toContainText('4 cash-flow dates have no rate: Calculate waits for them.')
+})
+
+test('the rates are typed from the keyboard: Enter stays, ↓ and Tab go on, ↑ goes back', async ({
+  page,
+}) => {
+  await page.goto('/bp/ECMR-6.25-2029')
+  const form = inputs(page)
+  await expect(form.getByRole('combobox', { name: 'Redemption' })).toHaveValue('amortizing')
+  await form.getByRole('combobox', { name: 'Redemption' }).selectOption('bullet')
+  await form.getByRole('textbox', { name: /^Settlement date/ }).fill('30/10/2026')
+  await form.getByRole('radio', { name: 'Rates entered by maturity' }).check()
+  const rates = entry(page)
+  const rate = (date: string) => rates.getByRole('textbox', { name: `Rate on ${date}, %` })
+  await expect(rate('04/11/2029')).toBeVisible()
+  await rates.getByRole('button', { name: 'Clear' }).click()
+
+  // Block B's link reaches the first cell; each value typed, then Enter, ↓, Tab and ↑.
+  await form.getByRole('button', { name: 'Go to the entry →' }).click()
+  await expect(rate('04/11/2026')).toBeFocused()
+  await page.keyboard.type('4.8')
+  await page.keyboard.press('Enter')
+  await expect(rate('04/11/2026')).toBeFocused()
+  await expect(rate('04/11/2026')).toHaveValue('4.800')
+  await page.keyboard.press('ArrowDown')
+  await expect(rate('04/11/2027')).toBeFocused()
+  await page.keyboard.type('5.3')
+  await page.keyboard.press('Tab')
+  await expect(rate('04/11/2028')).toBeFocused()
+  await page.keyboard.type('5.7')
+  await page.keyboard.press('ArrowDown')
+  await page.keyboard.type('6')
+  await page.keyboard.press('ArrowUp')
+  await expect(rate('04/11/2028')).toBeFocused()
+  await expect(rate('04/11/2029')).toHaveValue('6.000')
+  await expect(form.getByRole('region', { name: 'Entry status' })).toContainText(
+    '4 rates entered for 4 cash-flow dates',
+  )
+
+  // Calculate gives case C; by standard tenor, the panel follows.
+  await form.getByRole('button', { name: 'Calculate' }).click()
+  await expect(panel(page, 'Results').getByRole('region', { name: 'A. Pricing' })).toContainText(
+    /Clean price\s*100\.7410%/,
+  )
+  // A segment's radio is hidden under its label, which takes the click.
+  await form.getByRole('radiogroup', { name: 'Enter by' }).getByText('Standard tenor').click()
+  await expect(form.getByRole('radio', { name: 'Standard tenor' })).toBeChecked()
+  await expect(panel(page, 'Rate entry by standard tenor')).toContainText('3M')
+  await expect(form.getByRole('region', { name: 'Entry status' })).toContainText(
+    /\d+ rates? entered for 8 standard tenors/,
+  )
+  await form.getByRole('radio', { name: 'Single yield (YTM)' }).check()
+  await expect(panel(page, 'Calculation method')).toBeVisible()
 })

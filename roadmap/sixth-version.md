@@ -182,16 +182,17 @@ itself, steps 61 to 68 follow these; each is also an
     the curve fed by agreements (step 49) take it unchanged. RFQ AGR's and DL's "security" column
     reads the agreement's, a request's row reading "By criteria".
 51. **What a completion case is**: as a requester, a request that ended (confirmed, cancelled or
-    expired) with at least one valid answer, one not withdrawn (step 62: an answer that ran out
-    of validity before the request expired still counts); it succeeds with one agreement concluded, fails when it was cancelled or expired
-    unconfirmed or when none was concluded and one failed through the requester's SVT, and is
-    neutral when every agreement failed through the other side. As a responder, an answer selected
-    in a confirmed selection, successful when its agreement is concluded. An agreement that expires
-    unapproved is the fault of the side whose SVT did not decide, both when neither did. An
-    agreement concluded then cancelled by both (step 46) is neutral. The withdrawal rate is the
-    answers withdrawn before the confirmation over the answers sent. Each case is an event of
-    `rfq.CompletionEvents`, written when its outcome is known, once per organisation and trader and
-    role; the ratios are counted from them over the window when read.
+    expired) with at least one valid answer, one not withdrawn (step 62: an answer that ran out of
+    validity before the request expired still counts); it succeeds with one agreement concluded,
+    fails when it was cancelled or expired unconfirmed or when none was concluded and one failed
+    through the requester's SVT, and is neutral when every agreement failed through the other side.
+    As a responder, an answer selected in a confirmed selection, successful when its agreement is
+    concluded. An agreement that expires unapproved is the fault of the side whose SVT did not
+    decide, both when neither did. An agreement concluded then cancelled by both (step 46) is
+    neutral. The withdrawal rate is the answers withdrawn before the confirmation over the answers
+    sent. Each case is an event of `rfq.CompletionEvents`, written when its outcome is known, once
+    per organisation and trader and role; the ratios are counted from them over the window when
+    read.
 52. **The window and the display**: 6 months by default, from 1 to 24 in ADMCFG's RFQ panel; the
     ratio rounded to the whole percent, "96% (48)" with the cases counted, green from 90%, amber
     from 75%, red below; "New (n)" under 5 cases. A Trader and a Manager read their own ratios and
@@ -222,6 +223,9 @@ itself, steps 61 to 68 follow these; each is also an
     it, Tab and ↓ go to the next row, Shift+Tab and ↑ to the one before; an empty cell is red and
     Calculate says why it waits. "Start from" copies the CMarket curve of the bond's country at the
     settlement date or a curve of the list, as before; decision 46's reference rule stands.
+    Built in step 63 with the curve mode too: its rates stay editable (spec section 9), and a rate
+    changed makes them rates entered in the same panel rather than moving the table under the
+    cursor; "Calculation method" shows with a single yield.
 57. **CAL, rebuilt**: the spec's nine types (BTA and OTA auctions coming, auction results,
     redemptions, dividends, general meetings, earnings releases, BEAC monetary policy, CEMAC
     statistics, international); BVMAC's closed days stay as a note on their day, no longer a type.
@@ -257,6 +261,6 @@ itself, steps 61 to 68 follow these; each is also an
     with the country as subject.
 61. **Who reads the new screens**: section 12's matrix leaves them out; CAL, AUC, BEAC and DEBT
     follow ECO and FX (`market:read`, the monitoring module), every client account type that reads
-    ECO, the SVT among them from the command bar (decision 16). Not in the left menu (decision
-    15): CAL lights MKT, AUC, BEAC and DEBT light YCRV, as their mockups; YCRV, ECO, the bond
-    profile and each other open them. The Data admin uploads their files; the Admin reads them as a client.
+    ECO, the SVT among them from the command bar (decision 16). Not in the left menu (decision 15):
+    CAL lights MKT, AUC, BEAC and DEBT light YCRV, as their mockups; YCRV, ECO, the bond profile and
+    each other open them. The Data admin uploads their files; the Admin reads them as a client.

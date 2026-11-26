@@ -188,10 +188,6 @@
       "tableCaption": "Taux d'actualisation de chaque date de flux restante",
       "referenceNote": "Référence : {{curve}}. Écart = taux − référence, en pb.",
       "helpers": {
-        "label": "Outils de saisie des taux",
-        "start": "Partir d'une courbe",
-        "shift": "Décaler toutes les lignes",
-        "paste": "Coller depuis Excel",
         "clear": "Effacer",
         "apply": "Appliquer",
         "shiftBy": "Décalage (pb)",
@@ -203,15 +199,46 @@
       },
       "notes": {
         "yield": "Même taux pour toutes les dates de flux (grisé). Prérempli avec le dernier YTM calculé ; modifiable.",
-        "curve": "Un taux par date de flux, lu sur la courbe choisie (interpolation linéaire). Chaque taux reste modifiable : les taux deviennent alors des taux saisis, enregistrables comme courbe personnalisée.",
-        "rates": "Une ligne par date de flux restante de l'obligation.",
-        "dates": "Une ligne par date de flux restante de l'obligation, préremplie avec les taux affichés auparavant.",
-        "tenors": "Taux des maturités standard, interpolés aux dates de flux de l'obligation (linéaire, constants au-delà de la première et de la dernière maturité)."
+        "curve": "Un taux par date de flux, lu sur la courbe choisie (interpolation linéaire). Chaque taux reste modifiable : les taux deviennent alors des taux saisis, enregistrables comme courbe personnalisée."
       },
       "byPrice": "Saisir le prix pied de coupon au lieu du rendement",
       "byYield": "Saisir le rendement au lieu du prix pied de coupon",
       "priceHint": "Le rendement est calculé à partir du prix.",
       "priceYield": "Rendement à ce prix : {{value}}"
+    },
+    "entry": {
+      "title": "Saisie des taux par date de flux",
+      "titleTenors": "Saisie des taux par maturité standard",
+      "helpers": "Aides à la saisie",
+      "start": "1. Partir de",
+      "copy": "Copier",
+      "shift": "2. Décaler toutes les lignes",
+      "bp": "pb",
+      "paste": "3. Coller depuis Excel",
+      "pasteButton": "Coller (date ; taux)",
+      "clear": "4. Effacer la saisie",
+      "keys": "Entrée : valider · Tab ou ↓ : ligne suivante · Maj+Tab ou ↑ : ligne précédente",
+      "notes": {
+        "dates": "Saisie cellule par cellule ; l'écart à la courbe se met à jour à chaque frappe. Une cellule vide bloque le calcul et passe en rouge.",
+        "tenors": "Par maturité (3M à 10A) : les mêmes colonnes, les taux interpolés aux dates de flux (linéaire, constants au-delà de la première et de la dernière maturité). Une maturité laissée vide n'est pas utilisée."
+      },
+      "status": "État de la saisie",
+      "enteredDates_one": "{{count}} taux saisi pour {{total}} dates de flux",
+      "enteredDates_other": "{{count}} taux saisis pour {{total}} dates de flux",
+      "enteredTenors_one": "{{count}} taux saisi pour {{total}} maturités standard",
+      "enteredTenors_other": "{{count}} taux saisis pour {{total}} maturités standard",
+      "inRange": "Tous les taux entre 0 et 30 %",
+      "outside_one": "{{count}} taux hors de 0 à 30 %",
+      "outside_other": "{{count}} taux hors de 0 à 30 %",
+      "averageSpread": "Écart moyen à la courbe : {{spread}} pb",
+      "startModified": "Point de départ : {{curve}}, modifiée.",
+      "startSame": "Point de départ : {{curve}}, inchangée.",
+      "inPanel": "Les taux se saisissent dans le panneau « Saisie des taux par date de flux ».",
+      "inPanelTenors": "Les taux se saisissent dans le panneau « Saisie des taux par maturité standard ».",
+      "inPanelCurve": "Les taux de la courbe s'affichent dans le panneau « Saisie des taux par date de flux », où chacun reste modifiable : un taux changé en fait des taux saisis.",
+      "goTo": "Aller à la saisie →",
+      "waiting_one": "{{count}} date de flux sans taux : le calcul l'attend.",
+      "waiting_other": "{{count}} dates de flux sans taux : le calcul les attend."
     },
     "curves": {
       "label": "Courbe",
