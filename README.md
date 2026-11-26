@@ -1,6 +1,6 @@
 # CMarket web
 
-Front end of CMarket, built from `CMarket-developer-spec-EN.pdf` (fourth version, 13 November
+Front end of CMarket, built from `CMarket-developer-spec-EN.pdf` (sixth version, 26 November
 2026): the client terminal with its professional directory and messaging, the news of partner
 newspapers, the bond and ETF screens, the commodities, the macroeconomic and FX dashboards, the
 portfolio optimiser and the requests for quotes on government securities with their SVTs'
@@ -100,13 +100,22 @@ before upload.
 | 16 · Bond pricing from a yield curve, custom curves                       | Done; spreads to a reference, paste from Excel, saved curves  |
 | 31 · Index profile (DES on an index)                                      | Done; constituents' contributions, BVMAC's reviews on IMP     |
 | 30 · Data download (DL), the Download buttons                             | Done; 8 datasets, files over 50,000 rows by a job, schedules  |
+| 22 · RFQ by criteria (sixth version): the amount alone                    | To do, step 61                                                |
+| 22 · RFQ completion ratio, on the board, NET and SVT                      | To do, step 62                                                |
+| 16 · Bond pricing: the rate entry panel of the sixth version              | To do, step 63                                                |
+| 33 · BTA and OTA auctions (AUC, AUC NEXT, APE)                            | To do, step 64                                                |
+| 34 · BEAC monetary policy and liquidity (BEAC)                            | To do, step 65                                                |
+| 35 · Sovereign debt (DEBT)                                                | To do, step 66                                                |
+| 32 · Event calendar (CAL), calendar alerts                                | To do, step 67                                                |
 
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
 third added (the News provider, the news rebuilt, screens 13 to 20 and what they change on
 screens 1, 3, 9, 10 and 12), what the fourth added (the SVT account type, requests for quotes on
 government securities, screens 21 to 29), what the fifth changes (the BVMAC equities at their
-fixing, screen 2 redrawn, bonds priced from a yield curve, screens 30 and 31) and the open
+fixing, screen 2 redrawn, bonds priced from a yield curve, screens 30 and 31), what the sixth adds
+(a request by criteria and a completion ratio on the RFQ, BP's entry panel, screens 32 to 35) and
+the open
 questions for the spec author are in the roadmap: [ROADMAP.md](ROADMAP.md) gives the order of
 the steps and their status, and leads to the files of [`roadmap/`](roadmap): one per version of
 the spec, one per step, the state of each screen and the open questions. The screens follow WCAG

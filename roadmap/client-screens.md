@@ -31,6 +31,7 @@ what is still to do. The Data admin's and the Admin's screens are in
   opens its profile (screen 31).
 - **Built in step 57 (fifth version)**: the Indices panel's Download button opens DL on the indices
   (screen 30).
+- **Sixth version (step 67)**: the calendar panel reads the events of screen 32.
 
 ## DES · Security profile (screen 2): done
 
@@ -94,6 +95,13 @@ what is still to do. The Data admin's and the Admin's screens are in
   above 1 and red below. The view, the day and the filters are in the URL.
 - **Mock**: holidays at fixed dates close BVMAC, redemptions come from the bond schedules, held
   auctions from the auction results.
+- **Sixth version (step 67)**: screen 32 gives CAL its mockup: the filters with each type's count
+  (the spec's nine types, BVMAC's closed days as a note), the countries, the views by day, week,
+  list and month, "only my securities", the ICS and XLSX export; the agenda by day in Douala time;
+  the event picked with "Create an alert", "Add to my calendar" and its screen; the calendar
+  alerts. The events entered by the Data admin, "announced" until confirmed; EODHD's
+  international events behind a switch (decision 57). See
+  [step 67](steps/step-67-event-calendar.md).
 
 ## ALRT · Alerts (no mockup): done
 
@@ -124,6 +132,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   keeps no version: the later save of two tabs stands (B101, left as is).
 - **Built in step 54 (fifth version)**: a price alert on a BVMAC security goes off at the fixing,
   the only price of its session (decision 38).
+- **Sixth version (steps 65 and 67)**: the calendar alerts (decision 57), the BEAC's decisions
+  among them.
 
 ## EQS / FA · Equity screener and fundamental analysis (screen 3): done
 
@@ -196,6 +206,8 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the calculator settles on the
   market's calendar, T+2 skipping Christmas as BP's does (B51), says an input out of range rather
   than keep the last result (B52), and describes a BTA as a zero-coupon bill (B53).
+- **Sixth version (steps 64 to 66)**: the auctions panel links to AUC; AUC, BEAC and DEBT light
+  YCRV's entry (decision 61).
 
 ## PORT · Portfolio (screen 5): done
 
@@ -304,6 +316,8 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Fourth version (step 43)**: the SVT, a tenth type, has no profile and is not listed.
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the lists say when they could
   not be read (B63), a page past the last goes to the last (B66).
+- **Sixth version (step 62)**: a Trader's or a Manager's profile shows its organisation's RFQ
+  completion as requester and responder (decision 53).
 
 ## MSG · Messaging (screen 11): done
 
@@ -478,6 +492,10 @@ what is still to do. The Data admin's and the Admin's screens are in
   (see [step 55](steps/step-55-bond-pricing-from-a-curve.md)). Its part 2, the client's entry
   panel (decision 46): each rate beside its reference and the spread in bp, start from a curve,
   shift all rows, paste from Excel, clear. The Download button in step 57.
+- **Sixth version (step 63)**: the spec draws decision 46's entry panel at the bottom centre, in
+  the place of "Calculation method" while rates are entered, block B keeping the entry status and
+  the save; Enter, Tab and ↓ move through the cells, an empty one red (decision 56). See
+  [step 63](steps/step-63-bp-rate-entry-panel.md).
 
 ## BS · Bond screener (screen 17): done
 
@@ -514,6 +532,8 @@ what is still to do. The Data admin's and the Admin's screens are in
   [step 31](steps/step-31-bond-profile.md).
 - **Built in step 44 (fourth version)**: "Request a price (RFQ)" in the header of a BTA or an OTA
   of the BEAC, for a Trader or a Manager.
+- **Sixth version (steps 64 and 66)**: a BTA or an OTA links to its auctions (AUC) and to its
+  State's debt (DEBT).
 
 ## CMDTY · Commodities (screen 21): done
 
@@ -551,6 +571,15 @@ what is still to do. The Data admin's and the Admin's screens are in
   only itself (B79); a screen closed to the account says it is not open to it (B85); Confirm
   selection and Cancel request say how they went though the hub's event takes their button away
   before the answer comes.
+- **Sixth version (step 61)**: a request by criteria: the amount alone, an optional minimum
+  yield, maximum maturity, countries and types; the eligible securities beside it; the responders
+  offering a security of the list, its price and quantity, checked as they type; answers ranked
+  by yield; one agreement per security (decisions 49 and 50). See
+  [step 61](steps/step-61-rfq-by-criteria.md).
+- **Sixth version (step 62)**: the completion ratio, the organisation's on the board and in the
+  answers, the trader's in the blotter; a minimum responder completion on a request; the ratio's
+  detail and its disputes (decisions 51 to 55). See
+  [step 62](steps/step-62-rfq-completion-ratio.md).
 
 ## RFQ AGR · Agreements (screen 23): done
 
@@ -582,6 +611,7 @@ what is still to do. The Data admin's and the Admin's screens are in
   See [step 40](steps/step-40-macro-dashboard.md).
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the tile titles wrap (B20), the
   country bar says a failure with Retry (B50), the CEMAC comparison exports in its units (B45).
+- **Sixth version (step 65)**: the BEAC's rates link to BEAC (screen 34).
 
 ## FX · FX dashboard (screen 26): done
 
@@ -621,6 +651,7 @@ what is still to do. The Data admin's and the Admin's screens are in
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the time left ticks between
   reloads (B80); with one SVT account the bank approves alone, which its settings say (B84, decision
   32); TRD exports its linked traders in XLSX and CSV (B86, decision 34).
+- **Sixth version (step 62)**: each linked trader's organisation's completion (decision 53).
 
 ## OPT / OPT RES · Portfolio optimisation (screens 28 and 29): done
 
@@ -674,3 +705,24 @@ what is still to do. The Data admin's and the Admin's screens are in
   filled in on MKT's indices, DES, EQS, YCRV, PORT, ETFS, BP, BS, the ETF, bond and commodity
   profiles, RFQ, RFQ AGR, ECO, FX, SVT, OPT RES and the index profile; the formats, the portfolios'
   three tables and the schedules of decision 48. See [step 57](steps/step-57-data-download.md).
+
+## AUC · BTA and OTA auctions (screen 33): to do
+
+- **Sixth version (step 64)**: the results, the coming auctions and the public bond issues in
+  three tabs (AUC, AUC NEXT, APE); the indicators, the latest results with the change from the
+  previous auction, the 52-week BTA rate by country, an auction's bids by rate, the coming
+  auctions; from the `AUCTION_CALENDAR` and `AUCTION_RESULTS` files (decision 58). See
+  [step 64](steps/step-64-auctions.md).
+
+## BEAC · Monetary policy and liquidity (screen 34): to do
+
+- **Sixth version (step 65)**: the policy rate and the facilities, the corridor since 2019, the
+  MPC's decisions and releases, the liquidity injections, the interbank rates, the monetary
+  aggregates; from four files of the Data admin (decision 59). See
+  [step 65](steps/step-65-beac-monetary-policy.md).
+
+## DEBT · Sovereign debt (screen 35): to do
+
+- **Sixth version (step 66)**: a State's government securities outstanding, their redemptions, the
+  six compared, the securities, the ratings and documents; computed from the auctions and the
+  master (decision 60). See [step 66](steps/step-66-sovereign-debt.md).

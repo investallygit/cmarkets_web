@@ -197,7 +197,7 @@ contradicts itself, steps 54 to 58 follow these; each is also an
     from the row in focus down, or by date when the lines carry dates), "Clear" (every row
     emptied, Calculate waits for them). `POST /bonds/{id}/calculate` takes the `discount` of
     `/bonds/price` and answers the same discount, comparison and zero rates, as section 9 and the
-    client name it.
+    client name it. The sixth version draws this panel at the bottom centre: decision 56.
 47. **The weight at the previous close** (step 56): section 14 adds up the contributions to the
     index change with "the weight at the previous close". Under a review BVMAC published, that is
     the review's weight moved by the member's price since the close before the review, the weights

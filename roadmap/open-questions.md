@@ -642,3 +642,39 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   in bp and the helpers (start from a curve, shift all rows, paste from Excel, clear) are not in the
   spec. Which curve is the reference when the rates were typed from nothing (the plan: the CMarket
   curve of the bond's country, decision 46), and is the spread in bp to one decimal?
+
+## Sixth version
+
+- **BP's entry panel, sixth version**: the spec now draws the entry panel of the client's answer
+  of 22 November, which answers the question above; the reference when the rates were typed from
+  nothing stays the CMarket curve of the bond's country (decision 46). Does Enter only confirm the
+  cell, while Tab and ↓ move on (the plan: yes, decision 56)?
+- **A request by criteria**: does the eligible list also leave out the securities whose last yield
+  is under the minimum, as the mockup's nine are all above 6.00% (the plan: yes, decision 49), and
+  is it drawn at publication or as the yields move? Which yield of a BTA, its rate or its money-
+  market yield, is compared with the minimum? May a responder answer two securities of the list
+  (the plan: one answer a responder, the security changeable while improving it)?
+- **The completion ratio**: the answers' column shows a ratio beside each trader's name, where the
+  text says the ratio shown is the organisation's (the plan: the organisation's, decision 53).
+  "Traders below the threshold cannot answer": the trader's ratio or its organisation's (the plan:
+  the organisation's as a responder, the one the requester sees)? A request whose agreements all
+  failed through the responders' SVTs: neutral for the requester (the plan)? An agreement expired
+  with neither SVT deciding: both sides at fault (the plan)? The directory has no profile of an
+  organisation: the ratio goes on its traders' profiles (the plan). How does a participant send a
+  dispute (the plan: a form under the ratio's detail, decision 54)? The demo's history: six months
+  of cases without their requests (the plan, decision 55).
+- **CAL, sixth version**: BVMAC's closed days are no longer an event type (the plan: a note on the
+  day). "Only my securities" and the events of a country, an auction or an MPC (the plan: left out).
+  EODHD's Economic Events API: is it in the client's plan and may it be shown (the plan: off until
+  checked, decision 57)? Which "CEMAC statistics" and from which file: the spec's files bring the
+  aggregates' figures, not their release dates (the plan: entered by hand in CORR)?
+- **AUC**: APE has neither columns nor a file in the spec (the plan: entered in CORR, decision
+  58). "The previous auction of the same security": a BTA is a new security at each auction (the
+  plan: the same country, instrument and term). Who are the "bidders" when the BEAC publishes
+  only a count (the plan: a count)?
+- **BEAC and DEBT**: the mockups' levels are "illustrative": which history should the launch load
+  (the plan: the Data admin's files from 2019)? The ratings of S&P, Moody's and Fitch need their
+  licences, which the spec flags (the plan: an ADMCFG switch, off by default). An OTA issued before
+  the auctions CMarket holds: its outstanding from the master's amount issued (the plan)?
+- **Section 12, sixth version**: the matrix has no row for CAL, AUC, BEAC and DEBT (the plan: as
+  ECO and FX, decision 61); section 11's list of files leaves out screen 6's eight new ones.

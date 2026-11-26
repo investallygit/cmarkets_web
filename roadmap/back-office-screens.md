@@ -90,6 +90,10 @@ by which step, and what is still to do. The terminal's screens are in
   description (decision 40), rolled back with its upload.
 - **Fifth version (step 56)**: the `INDEX_CONSTITUENTS` file, BVMAC-A's members and weights
   (decision 42).
+- **Sixth version (steps 64 to 67)**: the files `AUCTION_CALENDAR` and `AUCTION_RESULTS` (the old
+  `AUCTION` read as the latter), `BEAC_POLICY`, `BEAC_OPERATIONS`, `INTERBANK_RATES`,
+  `MONETARY_AGGREGATES`, `SOVEREIGN_RATINGS` and `CORPORATE_EVENTS`, with their templates and the
+  coverage of the sessions they are expected on.
 
 ## CORR · Data corrections (no mockup): done
 
@@ -111,6 +115,8 @@ by which step, and what is still to do. The terminal's screens are in
   value (B33).
 - **Built in step 54 (fifth version)**: a description's versions, each language with its source,
   1,500 characters, on the spec's routes (decision 40); an index's description in step 56.
+- **Sixth version (steps 64 and 67)**: the public bond issues of APE (decision 58) and the
+  calendar's events entered by hand, "announced" until confirmed (decision 57).
 
 ## NEWS · News and documents (no mockup): done
 
@@ -133,6 +139,8 @@ by which step, and what is still to do. The terminal's screens are in
   submits only itself (B79), the panel's actions stay in its title bar (B28).
 - **Fifth version (step 56)**: an index as a document's subject: its methodology, notices,
   factsheets and constituents' history (decision 44).
+- **Sixth version (steps 65 and 66)**: the BEAC's releases and a country's debt documents, with the
+  BEAC or the country as their subject (decisions 59 and 60).
 
 ## USER · Account administration (screen 9): done, with ANLY and MOD
 
@@ -220,6 +228,9 @@ by which step, and what is still to do. The terminal's screens are in
   (B35) and a quota refused is said (B91).
 - **Built in step 57 (fifth version)**: the sources whose data may be downloaded and each profile's
   download limits (decision 41).
+- **Sixth version (steps 62, 66 and 67)**: under "RFQ", the completion's window (6 months, 1 to
+  24, decision 52); the switches of the agencies' ratings (decision 60) and of EODHD's
+  international events (decision 57).
 
 ## AUDT · Audit log (no mockup): done
 
@@ -285,6 +296,8 @@ by which step, and what is still to do. The terminal's screens are in
   it under the RFQ's tabs, the entry lit on both. See [step 46](steps/step-46-rfq-agreements.md).
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): the agreements sort both ways
   on a third click (B81).
+- **Sixth version (step 62)**: the completion disputes, a case neutralised or a dispute turned down
+  with a reason, in AUDT (decision 54); every participant's ratios.
 
 ## RFQ REP · Daily reporting to the BEAC (screen 24): done
 
