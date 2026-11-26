@@ -16,6 +16,10 @@ export const routes = {
   commodities: '/cmdty',
   /** FX (screen 26): the CFA franc against the ECB's currencies; ?currency= picks the chart's. */
   eco: '/eco',
+  /** AUC, AUC NEXT and APE (screen 33, sixth version): the BTA and OTA auctions, coming ones, public issues. */
+  auctions: '/auc',
+  auctionsNext: '/auc/next',
+  publicOffers: '/ape',
   fx: '/fx',
   security: '/securities/:securityId/:fn',
   /** The index profile (screen 31, fifth version): /indices/{code}/{tab}. */
@@ -169,6 +173,11 @@ export function shareableUrl(path: string): string {
 
 export function newsTabPath(tab: NewsTab): string {
   return tab === 'news' ? routes.news : `${routes.news}/${tab}`
+}
+
+/** AUC (screen 33) on a CEMAC state's auctions: /auc?country=CM. */
+export function auctionsPath(country?: string): string {
+  return country ? `${routes.auctions}?country=${encodeURIComponent(country)}` : routes.auctions
 }
 
 /** ECO (screen 25) on an economy, by its World Bank code: /eco?country=CMR (`ECO CMR`). */

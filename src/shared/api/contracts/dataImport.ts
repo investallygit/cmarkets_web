@@ -25,6 +25,7 @@ export type ImportType =
   | 'descriptions'
   /** A review of BVMAC-A's members and weights (INDEX_CONSTITUENTS, screen 31, fifth version). */
   | 'index-constituents'
+  | 'auction-calendar'
 
 /** How often a file is expected: each session, each auction, weekly, or when there is news. */
 export type ImportFrequency = 'session' | 'auction' | 'weekly' | 'onDemand' | 'periodic' | 'once'

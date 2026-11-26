@@ -63,8 +63,12 @@ describe('the left menu (spec section 9)', () => {
     const outside = SCREENS.filter((screen) => !screen.inMenu).map((screen) => screen.id)
     // RFQ AGR under RFQ's tabs, which RFQ's entry lights (ROADMAP step 46); RFQ REP under the
     // Admin's, beside every agreement (step 47).
-    // ME, an employee's settings, from the user menu (B72 of ROADMAP step 50).
+    // ME, an employee's settings, from the user menu (B72 of ROADMAP step 50). AUC, AUC NEXT and
+    // APE from YCRV, ECO and the bond profile, which light YCRV (decision 61).
     expect(outside).toEqual([
+      'AUC',
+      'AUCNEXT',
+      'APE',
       'RFQAGR',
       'DES',
       'IDX',

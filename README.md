@@ -103,7 +103,7 @@ before upload.
 | 22 · RFQ by criteria (sixth version): the amount alone                    | Done; eligible list, offers checked and ranked by yield       |
 | 22 · RFQ completion ratio, on the board, NET and SVT                      | Done; thresholds, disputes, the Admin's RFQ CPL               |
 | 16 · Bond pricing: the rate entry panel of the sixth version              | Done; entry status, keyboard, helpers beside the table        |
-| 33 · BTA and OTA auctions (AUC, AUC NEXT, APE)                            | To do, step 64                                                |
+| 33 · BTA and OTA auctions (AUC, AUC NEXT, APE)                            | Done; bids by rate, coming auctions, APE entered in CORR      |
 | 34 · BEAC monetary policy and liquidity (BEAC)                            | To do, step 65                                                |
 | 35 · Sovereign debt (DEBT)                                                | To do, step 66                                                |
 | 32 · Event calendar (CAL), calendar alerts                                | To do, step 67                                                |
@@ -178,6 +178,7 @@ src/
               (SRC), media-payments (MPAY),
               analyst-requests (ANLY),
               moderation (MOD), payouts (PAY), rfq-reporting (RFQ REP), rfq-completion (RFQ CPL), platform-settings (ADMCFG),
+              auction-market (AUC, AUC NEXT, APE),
               audit-log (AUDT), account-settings (ME), home,
               auth (login, sign-up, password reset), status, ui-kit (/_kit)
   widgets/    self-contained blocks: the panels (indices-panel, recent-sessions-panel, news-panel,
@@ -191,7 +192,7 @@ src/
               description-editor-panel,
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
               trader-links-panel, rfq-new-request, rfq-my-request, rfq-board, rfq-blotter,
-              rfq-eligible-securities, rfq-completion,
+              rfq-eligible-securities, rfq-completion, auction-market, public-offer-editor-panel,
               rfq-tabs, rfq-report-panels, svt-approval-panels, rfq-agreement-filters,
               rfq-agreement-list, rfq-agreement-detail, opt-setup-panels, opt-result-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
@@ -214,7 +215,8 @@ src/
               dispute-statement, draw-on-chart,
               compare-securities, edit-profile, edit-network-profile, change-password,
               choose-plan, manage-members, upload-data-file, review-import, roll-back-import,
-              correct-price, describe-security, describe-commodity, publish-content, create-account,
+              correct-price, describe-security, describe-commodity, edit-public-offer, publish-content,
+              create-account,
               manage-account,
               review-analyst-request, moderate-publication, moderate-report, mark-payout-paid,
               edit-platform-settings, edit-permissions, switch-language, switch-account,

@@ -130,6 +130,9 @@ POST /analysts/{id}/follow
 POST /attachments
 GET /attachments/{id}
 GET /auctions
+GET /auctions/{id}
+GET /auctions/rates
+GET /auctions/summary
 POST /auth/login
 POST /auth/logout
 POST /auth/otp/verify
@@ -193,6 +196,9 @@ PATCH /data/imports/{id}/rows/{rowId}
 POST /data/news
 PUT /data/news/{id}
 GET /data/providers/eodhd/status
+POST /data/public-offers
+DELETE /data/public-offers/{id}
+PUT /data/public-offers/{id}
 GET /data/securities/{id}/prices
 PUT /data/securities/{id}/prices/{date}
 GET /directory
@@ -357,6 +363,7 @@ PUT /provider/source
 GET /provider/statements
 POST /provider/statements/{id}/dispute
 GET /provider/statements/{id}/pdf
+GET /public-offers
 GET /public/profiles/{slug}
 POST /publications
 GET /publications/{id}

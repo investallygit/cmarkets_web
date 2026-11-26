@@ -46,6 +46,8 @@ export {
   bondsApi,
   bondsRoutes,
   type AuctionQuery,
+  type AuctionRatesQuery,
+  type AuctionSummaryQuery,
   type PriceYieldQuery,
   type YieldCurveQuery,
 } from './bonds'

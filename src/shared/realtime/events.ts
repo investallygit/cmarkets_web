@@ -38,6 +38,8 @@ export interface RealtimeEventMap {
   AlertTriggered: { alertId: string; message: string; ts: IsoDateTime }
   /** A data import was published: refresh the affected screens. */
   DataPublished: { importId: string; type: string; date: IsoDate }
+  /** BTA or OTA results published by an AUCTION_RESULTS file (sixth version, screen 33). */
+  AuctionResultPublished: { auctionIds: string[]; countries: string[] }
   ImportStatusChanged: { importId: string; status: string; errors: number; warnings: number }
   PublicationPublished: { publicationId: string; subjectId: string; analystId: string }
   /** A file of DL prepared in the background is ready, or failed (screen 30, fifth version). */

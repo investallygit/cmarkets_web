@@ -168,10 +168,12 @@ test(
     await expect(page.getByRole('region', { name: /^Sunday / })).toContainText('No session')
 
     const auctions = panel(page, 'Latest government securities auctions (BEAC)')
-    // The nine auctions of the screen 4 mockup and an older one, under the header row.
-    await expect(auctions.getByRole('row')).toHaveCount(11)
+    // The auctions of the screen 4 mockup first, AUC's two years after them (ROADMAP step 64).
+    await expect(auctions.getByRole('row').nth(1)).toContainText('BTA 26 wk')
     await auctions.getByRole('combobox', { name: 'Country' }).selectOption('CM')
-    await expect(auctions.getByRole('row')).toHaveCount(4)
+    for (const [index, security] of ['BTA 26 wk', 'OTA 5 yr', 'BTA 13 wk'].entries()) {
+      await expect(auctions.getByRole('row').nth(index + 1)).toContainText(security)
+    }
 
     await panel(page, 'Market calendar').getByRole('tab', { name: 'Day' }).click()
     await expect(page).toHaveURL(/\/cal\?view=day$/)

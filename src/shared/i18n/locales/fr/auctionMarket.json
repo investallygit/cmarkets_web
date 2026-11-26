@@ -1,0 +1,157 @@
+{
+  "auctionMarket": {
+    "tabs": {
+      "label": "Adjudications de BTA et d'OTA",
+      "results": "Résultats",
+      "next": "À venir",
+      "offers": "Appels publics à l'épargne"
+    },
+    "filters": {
+      "label": "Filtres des résultats",
+      "country": "Pays",
+      "allCountries": "tous",
+      "type": "Type",
+      "allTypes": "BTA et OTA",
+      "bta": "BTA",
+      "ota": "OTA",
+      "period": "Période",
+      "download": "Télécharger"
+    },
+    "bn": "{{amount}} Md XAF",
+    "indicators": {
+      "label": "Indicateurs du marché primaire",
+      "raised": "Montant levé en {{year}}",
+      "auctions": "Adjudications en {{year}}",
+      "cover": "Couverture moyenne",
+      "reference": "{{country}} {{security}} · dernier",
+      "referenceNone": "{{security}} · dernier",
+      "next": "Prochaine",
+      "nextValue": "{{country}} {{security}} · {{date}}",
+      "none": "—"
+    },
+    "results": {
+      "title": "Derniers résultats",
+      "amounts": "Montants en Md XAF",
+      "columns": {
+        "date": "Date",
+        "country": "Pays",
+        "security": "Titre",
+        "maturity": "Échéance",
+        "offered": "Offert",
+        "bid": "Soumis",
+        "allotted": "Servi",
+        "cover": "Couverture",
+        "average": "Taux moyen",
+        "marginal": "Marginal",
+        "change": "Var. préc."
+      },
+      "note": "Var. préc. : variation depuis l'adjudication précédente du même titre. Une couverture sous 100 % s'affiche en rouge.",
+      "empty": "Aucun résultat d'adjudication pour ces filtres."
+    },
+    "rates": {
+      "title": "Taux moyen {{security}}",
+      "options": "Par pays · 24 mois",
+      "tenor": "Maturité",
+      "note": "Cliquez une ligne du tableau : historique de ce titre. Un mois sans adjudication laisse un vide.",
+      "chartLabel": "Taux moyen {{security}} par mois sur 24 mois, {{countries}}",
+      "empty": "Aucune adjudication de cette maturité sur 24 mois."
+    },
+    "detail": {
+      "title": "Détail · {{security}} du {{date}}",
+      "titleNone": "Détail de l'adjudication",
+      "options": "Soumissions par taux",
+      "pick": "Choisissez un résultat dans le tableau pour voir ses soumissions par taux.",
+      "noBids": "La BEAC n'a pas publié les soumissions par taux de cette adjudication.",
+      "marginal": "Taux marginal {{rate}}",
+      "chartNote": "Montants soumis (Md) par taux · ambre : soumissions servies",
+      "chartLabel": "Soumissions de {{security}} du {{date}} par taux, servies jusqu'au taux marginal de {{rate}}",
+      "figures": {
+        "label": "Chiffres de l'adjudication",
+        "offered": "Montant offert",
+        "bid": "Montant soumis",
+        "allotted": "Montant servi",
+        "cover": "Taux de couverture",
+        "average": "Taux moyen pondéré",
+        "marginal": "Taux marginal",
+        "bidders": "Soumissionnaires",
+        "valueDate": "Date de valeur",
+        "security": "Titre"
+      },
+      "bidders_one": "{{count}} SVT",
+      "bidders_other": "{{count}} SVT"
+    },
+    "upcoming": {
+      "title": "Adjudications à venir",
+      "columns": {
+        "date": "Date",
+        "country": "Pays",
+        "security": "Titre",
+        "offered": "Offert (Md XAF)",
+        "valueDate": "Date de valeur",
+        "maturity": "Échéance"
+      },
+      "source": "Source : les calendriers trimestriels d'émission des Trésors et les résultats publiés par la BEAC, chargés par le Data admin.",
+      "empty": "Aucune adjudication prévue."
+    },
+    "offers": {
+      "title": "Appels publics à l'épargne",
+      "columns": {
+        "issuer": "Émetteur",
+        "country": "Pays",
+        "sought": "Montant recherché",
+        "coupon": "Coupon",
+        "maturity": "Échéance",
+        "subscription": "Souscription",
+        "arranger": "Arrangeur",
+        "status": "Statut",
+        "raised": "Levé"
+      },
+      "kinds": {
+        "sovereign": "Souverain",
+        "company": "Entreprise"
+      },
+      "statuses": {
+        "upcoming": "À venir",
+        "open": "Ouvert",
+        "closed": "Clos",
+        "withdrawn": "Retiré"
+      },
+      "period": "du {{from}} au {{to}}",
+      "source": "Appels publics saisis par le Data admin ; montants en Md XAF.",
+      "empty": "Aucun appel public à l'épargne."
+    },
+    "links": {
+      "auc": "Toutes les adjudications (AUC)",
+      "security": "Adjudications de ce titre (AUC)"
+    },
+    "corr": {
+      "title": "Appels publics à l'épargne (APE)",
+      "add": "Nouvel appel",
+      "edit": "Modifier {{issuer}}",
+      "delete": "Supprimer {{issuer}}",
+      "confirmTitle": "Supprimer l'appel de {{issuer}} ?",
+      "confirmMessage": "Il quitte APE aussitôt. Ne supprimez qu'un appel saisi par erreur ; marquez retiré un appel annulé.",
+      "saved": "Appel de {{issuer}} enregistré.",
+      "deleted": "Appel de {{issuer}} supprimé.",
+      "formTitle": "Appel public à l'épargne",
+      "fields": {
+        "issuer": "Émetteur",
+        "issuerKind": "Type d'émetteur",
+        "country": "Pays",
+        "amountSought": "Montant recherché (M XAF)",
+        "couponPct": "Coupon (%)",
+        "maturityDate": "Échéance",
+        "subscriptionStart": "Souscription du",
+        "subscriptionEnd": "Souscription au",
+        "arranger": "Arrangeur",
+        "amountRaised": "Montant levé (M XAF)",
+        "withdrawn": "Retiré"
+      },
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "required": "Obligatoire.",
+      "empty": "Aucun appel saisi."
+    },
+    "bp": "pb"
+  }
+}

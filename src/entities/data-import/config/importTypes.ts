@@ -18,6 +18,7 @@ export const IMPORT_TYPES: readonly ImportType[] = [
   'commodity-prices',
   'descriptions',
   'index-constituents',
+  'auction-calendar',
 ]
 
 /**

@@ -246,7 +246,11 @@ itself, steps 61 to 68 follow these; each is also an
     rate chart takes a month's average, a month without an auction leaving a gap. APE lists the
     public bond issues the Data admin enters in CORR (issuer, sovereign or corporate, the amount
     sought, the coupon, the maturity, the subscription period, the arranger, the status, the
-    amount raised), the spec naming neither their columns nor a file.
+    amount raised), the spec naming neither their columns nor a file. Built in step 64 with the
+    planned auctions in a table of their own, `mkt.PlannedAuctions`, which the result names: the
+    results keep their figures required, and the curve, the alerts and the RFQ read them as before.
+    No method: neither the mockup nor the files give one. A BTA the master lacks is created, not an
+    OTA, whose coupon the result does not give.
 59. **BEAC**: `BEAC_POLICY` writes the MPC's decisions and the rates of `mkt.PolicyRates` that ECO
     and MKT read already, a row dated later without rates being the next MPC; the decision
     (unchanged, hike or cut in bp) is worked out from the previous rate. The release is a document

@@ -31,7 +31,8 @@ async function switchAccount(page: Page, from: RegExp, account: string, badge: R
 /** "ACC-0012" for "ACC-261115-0012", as the lists write it. */
 const short = (number: string) => number.replace(/-\d{6}-/, '-')
 
-test('B. Sima approves one agreement and rejects the other, A. Okala concludes the first', async ({
+// @fresh-db: B. Ngoma's limit at Bank E is a billion a day, which the RFQ flows before use up.
+test('B. Sima approves one agreement and rejects the other, A. Okala concludes the first @fresh-db', async ({
   page,
   person,
 }) => {

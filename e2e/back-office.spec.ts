@@ -49,7 +49,7 @@ test('the BEAC auctions of the session are checked, published and reach the term
   await expect(publish).toBeEnabled()
   await publish.click()
   await expect(upload.getByText(/^Published .* 6 rows\.$/)).toBeVisible()
-  await expect(panel(page, 'Session coverage')).toContainText('BEAC auctions1 file published')
+  await expect(panel(page, 'Session coverage')).toContainText('Auction results1 file published')
 
   // The terminals get the new auctions.
   await switchAccount(page, /data admin/i, 'Analyst', /analyst/i)
@@ -57,6 +57,22 @@ test('the BEAC auctions of the session are checked, published and reach the term
   const auctions = panel(page, 'Latest government securities auctions (BEAC)')
   await auctions.getByRole('combobox', { name: 'Country' }).selectOption('GA')
   await expect(auctions.getByRole('row', { name: /7\.45%/ })).toBeVisible()
+
+  // Rolled back, as the demo seeded it: its BTAs created in the master leave BS (ROADMAP step 64).
+  await switchAccount(page, /analyst/i, 'Data admin', /data admin/i)
+  await page.goto('/data/history')
+  const history = panel(page, 'Upload history')
+  await history.getByRole('combobox', { name: 'File type' }).selectOption('auctions')
+  const row = history.getByRole('row', { name: /adjudications_beac_/ }).first()
+  await row.click({ button: 'right' })
+  await page.getByRole('menuitem', { name: 'Roll back…' }).click()
+  const rollBack = page.getByRole('dialog', { name: 'Roll back the publication' })
+  await rollBack
+    .getByRole('textbox', { name: 'Reason' })
+    .fill('The flow leaves the demo as seeded.')
+  await rollBack.getByRole('button', { name: 'Roll back' }).click()
+  await expect(row).toContainText('Rolled back')
+  await switchAccount(page, /data admin/i, 'Analyst', /analyst/i)
 })
 
 test('the CEMAC sovereign yields replace a point once confirmed, reach YCRV and roll back', async ({

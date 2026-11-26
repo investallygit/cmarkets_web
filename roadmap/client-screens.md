@@ -712,13 +712,19 @@ what is still to do. The Data admin's and the Admin's screens are in
   profiles, RFQ, RFQ AGR, ECO, FX, SVT, OPT RES and the index profile; the formats, the portfolios'
   three tables and the schedules of decision 48. See [step 57](steps/step-57-data-download.md).
 
-## AUC · BTA and OTA auctions (screen 33): to do
+## AUC · BTA and OTA auctions (screen 33): done
 
-- **Sixth version (step 64)**: the results, the coming auctions and the public bond issues in
-  three tabs (AUC, AUC NEXT, APE); the indicators, the latest results with the change from the
-  previous auction, the 52-week BTA rate by country, an auction's bids by rate, the coming
-  auctions; from the `AUCTION_CALENDAR` and `AUCTION_RESULTS` files (decision 58). See
+- **Built in step 64 (sixth version)**: three tabs (AUC, AUC NEXT, APE) with the filters (state,
+  type, year, Download); the indicators (amount raised, auctions, average cover, the latest
+  52-week BTA and 5-year OTA, the next auction); the latest results with the cover (red below
+  100%) and the change from the previous auction of the same security; the average rate of a
+  tenor by state over 24 months; the picked result's bids by rate, amber up to the marginal
+  rate's cut-off, its bidders, value date and security; the coming auctions; APE's public bond
+  issues, entered in CORR. From the `AUCTION_CALENDAR` and `AUCTION_RESULTS` files (decision
+  58). YCRV's auctions panel and a BEAC bond's profile open it on their state. See
   [step 64](steps/step-64-auctions.md).
+- **Mockup**: its values are fictitious (it says so); the demo keeps screen 4's auctions as the
+  latest and adds two years before them.
 
 ## BEAC · Monetary policy and liquidity (screen 34): to do
 

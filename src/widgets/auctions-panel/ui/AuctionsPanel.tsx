@@ -1,10 +1,14 @@
 import { clsx } from 'clsx'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import { useAuctionLabel, useAuctions } from '@/entities/auction'
+import { canAccessScreen, useCurrentUser } from '@/entities/session'
 import type { AuctionDto, AuctionInstrument } from '@/shared/api/contracts'
 import { CEMAC_COUNTRIES } from '@/shared/config/countries'
 import { useFormat } from '@/shared/i18n'
+import { auctionsPath } from '@/shared/routes/paths'
+import { SCREENS } from '@/shared/routes/screens'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { DataTable } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
@@ -17,12 +21,17 @@ const INSTRUMENTS = ['', 'BTA', 'OTA'] as const
 
 /**
  * Screen 4 mockup, latest government securities auctions (BEAC): amounts in millions of XAF,
- * cover ratio in green above 1 and red below. Shown by CAL and YCRV. API /auctions.
+ * cover ratio in green above 1 and red below. Shown by CAL and YCRV, which link to AUC (sixth
+ * version). API /auctions.
  */
 export function AuctionsPanel() {
   const { t } = useTranslation()
   const format = useFormat()
   const auctionLabel = useAuctionLabel()
+  const user = useCurrentUser()
+  const canOpenAuc = SCREENS.some(
+    (screen) => screen.code === 'AUC' && canAccessScreen(user, screen),
+  )
   const [country, setCountry] = useState('')
   const [instrument, setInstrument] = useState<'' | AuctionInstrument>('')
   const auctions = useAuctions({
@@ -111,6 +120,14 @@ export function AuctionsPanel() {
             onChange={setInstrument}
             aria-label={t('auctions.instrument')}
           />
+          {canOpenAuc && (
+            <Link
+              to={auctionsPath(country || undefined)}
+              className="panel-no-drag inline-flex min-h-6 items-center text-info hover:underline"
+            >
+              {t('auctionMarket.links.auc')}
+            </Link>
+          )}
         </>
       }
     >

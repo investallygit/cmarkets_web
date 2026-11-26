@@ -5,7 +5,7 @@
       "daily-prices": "Cours quotidiens BVMAC",
       "indices": "Indices BVMAC",
       "corporate-actions": "Opérations sur titres",
-      "auctions": "Adjudications BEAC",
+      "auctions": "Résultats d'adjudication",
       "cemac-sov-yields": "Taux souverains CEMAC",
       "curves": "Courbes et taux",
       "financial-statements": "États financiers",
@@ -19,7 +19,8 @@
       "macro": "Indicateurs macroéconomiques",
       "commodity-prices": "Cours des matières premières",
       "descriptions": "Descriptions",
-      "index-constituents": "Composition des indices"
+      "index-constituents": "Composition des indices",
+      "auction-calendar": "Calendrier des adjudications"
     },
     "frequencies": {
       "session": "Chaque séance",
@@ -255,7 +256,8 @@
       "macro": "le rapport indiqué sur la ligne",
       "commodity-prices": "la source indiquée sur la ligne",
       "descriptions": "la source indiquée sur la ligne",
-      "index-constituents": "la revue publiée par la BVMAC"
+      "index-constituents": "la revue publiée par la BVMAC",
+      "auction-calendar": "le calendrier d'émissions du Trésor"
     },
     "selected": {
       "alert": "Ligne {{row}} sélectionnée : vérifiez {{field}} dans {{source}}, corrigez si besoin, puis cochez « Alerte vérifiée ».",
@@ -289,7 +291,7 @@
       "history": "À la publication : l’historique des cours, les indices et les portefeuilles sont recalculés ; un événement DataPublished est envoyé aux écrans ouverts.",
       "indices": "À la publication : les indices des écrans de marché sont remplacés ; un événement DataPublished est envoyé aux écrans ouverts.",
       "corporate-actions": "À la publication : dividendes et calendrier sont mis à jour ; un événement DataPublished est envoyé aux écrans ouverts.",
-      "auctions": "À la publication : courbes de taux, indices et alertes sont recalculés ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "auctions": "À la publication : les courbes des taux, les indices et les alertes sont recalculés ; l'adjudication prévue est marquée tenue, son BTA ajouté au référentiel s'il manque ; AuctionResultPublished et DataPublished sont envoyés aux écrans ouverts.",
       "cemac-sov-yields": "À la publication : les séries de taux souverains CEMAC, les courbes de taux et les écarts des obligations sont recalculés ; un événement DataPublished est envoyé aux écrans ouverts.",
       "curves": "À la publication : les courbes de taux et les écarts des obligations sont recalculés ; un événement DataPublished est envoyé aux écrans ouverts.",
       "financial-statements": "À la publication : ratios et filtre d’actions sont recalculés ; un événement DataPublished est envoyé aux écrans ouverts.",
@@ -301,7 +303,8 @@
       "macro": "À la publication : les indicateurs macroéconomiques d’ECO (tuiles, graphique, comparaison CEMAC) sont relus, la source affichée à côté de chaque chiffre ; un événement DataPublished est envoyé aux écrans ouverts.",
       "commodity-prices": "À la publication : le complément CEMAC de CMDTY (liste, historique, statistiques) est relu, la source affichée dans ses données, et les alertes sur une nouvelle valeur se déclenchent ; un événement DataPublished est envoyé aux écrans ouverts.",
       "descriptions": "À la publication : chaque ligne est une nouvelle version de la description de sa valeur, affichée aussitôt sur DES et EQS ; une annulation retire les versions qu'elle a ajoutées.",
-      "index-constituents": "À la publication : la revue clôt les membres en vigueur à sa date et ouvre les siens, avec leurs poids, affichés aussitôt sur la fiche de l'indice (DES, MEMB) ; une annulation rétablit les membres précédents."
+      "index-constituents": "À la publication : la revue clôt les membres en vigueur à sa date et ouvre les siens, avec leurs poids, affichés aussitôt sur la fiche de l'indice (DES, MEMB) ; une annulation rétablit les membres précédents.",
+      "auction-calendar": "À la publication : les adjudications prévues sont ajoutées ou mises à jour dans AUC NEXT ; un résultat déjà publié marque son adjudication tenue ; un événement DataPublished est envoyé aux écrans ouverts."
     },
     "fix": {
       "title": "Corriger la ligne {{row}}",

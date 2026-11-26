@@ -1,6 +1,12 @@
 import type {
+  AuctionDetailDto,
   AuctionDto,
   AuctionInstrument,
+  AuctionRatesDto,
+  AuctionSummaryDto,
+  PlannedAuctionDto,
+  PublicOfferDto,
+  PublicOfferStatus,
   BondAnalyticsDayDto,
   BondAnalyticsDto,
   BondCashFlowsDto,
@@ -25,6 +31,23 @@ import { answer, route, send } from './define'
 export interface AuctionQuery {
   country?: string
   instrument?: AuctionInstrument
+  /** Both included (sixth version, screen 33). */
+  from?: string
+  to?: string
+}
+
+/** AUC's indicators and results (screen 33): a year, a state, BTA or OTA. */
+export interface AuctionSummaryQuery {
+  year?: number
+  country?: string
+  type?: AuctionInstrument
+}
+
+export interface AuctionRatesQuery {
+  /** "52W" by default, "26W", "13W", "2Y", "3Y", "5Y"… */
+  tenor?: string
+  /** "CM,GA"; every CEMAC state by default. */
+  countries?: string
 }
 
 export interface PriceYieldQuery {
@@ -66,6 +89,10 @@ export const bondsRoutes = {
   marketYield: route('GET', '/bonds/{id}/market-yield', answer<MarketYieldDto>()),
   priceYield: route('GET', '/bonds/{id}/price-yield', answer<PriceYieldCurveDto>()),
   auctions: route('GET', '/auctions', answer<AuctionDto[]>()),
+  auctionSummary: route('GET', '/auctions/summary', answer<AuctionSummaryDto>()),
+  auctionRates: route('GET', '/auctions/rates', answer<AuctionRatesDto>()),
+  auction: route('GET', '/auctions/{id}', answer<AuctionDetailDto>()),
+  publicOffers: route('GET', '/public-offers', answer<PublicOfferDto[]>()),
   yieldCurves: route('GET', '/yield-curves', answer<YieldCurveDto[]>()),
   screener: route('GET', '/bonds/screener', answer<BondScreenerResultDto>()),
   screenerFacets: route('GET', '/bonds/screener/facets', answer<BondScreenerFacetsDto>()),
@@ -97,6 +124,25 @@ export const bondsApi = {
   /** BEAC auction results, newest first. */
   auctions: (query: AuctionQuery, signal?: AbortSignal) =>
     send(bondsRoutes.auctions, { query: { ...query }, signal }),
+  /** AUC NEXT: the auctions the Treasuries plan, still to come, soonest first. */
+  plannedAuctions: (query: AuctionQuery, signal?: AbortSignal) =>
+    // One route of the API answers both: with status=planned, the planned auctions alone.
+    send(bondsRoutes.auctions, {
+      query: { ...query, status: 'planned' },
+      signal,
+    }) as Promise<unknown> as Promise<PlannedAuctionDto[]>,
+  /** AUC's indicators of a year. */
+  auctionSummary: (query: AuctionSummaryQuery, signal?: AbortSignal) =>
+    send(bondsRoutes.auctionSummary, { query: { ...query }, signal }),
+  /** A tenor's monthly average rate by state over 24 months. */
+  auctionRates: (query: AuctionRatesQuery, signal?: AbortSignal) =>
+    send(bondsRoutes.auctionRates, { query: { ...query }, signal }),
+  /** A result and its bids by rate. */
+  auction: (id: string, signal?: AbortSignal) =>
+    send(bondsRoutes.auction, { params: { id }, signal }),
+  /** APE: the public bond issues. */
+  publicOffers: (status: PublicOfferStatus | undefined, signal?: AbortSignal) =>
+    send(bondsRoutes.publicOffers, { query: { status }, signal }),
   /** One curve per country, shortest maturity first. */
   yieldCurves: (query: YieldCurveQuery, signal?: AbortSignal) =>
     send(bondsRoutes.yieldCurves, { query: { ...query }, signal }),

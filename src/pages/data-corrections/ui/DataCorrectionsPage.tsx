@@ -4,6 +4,7 @@ import { addDays } from '@/shared/lib/isoDate'
 import { useMarketDay } from '@/shared/lib/useMarketDay'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
 import { DescriptionEditorPanel } from '@/widgets/description-editor-panel'
+import { PublicOfferEditorPanel } from '@/widgets/public-offer-editor-panel'
 import {
   CorrectionsLogPanel,
   PriceCorrectionPanel,
@@ -12,13 +13,15 @@ import {
 
 /**
  * CORR has no mockup: the correction on the left over its log, the stored sessions on the right
- * over the security's description.
+ * over the security's description; APE's public bond issues below.
  */
 const LAYOUT: readonly ScreenPanel[] = [
   { i: 'correction', name: 'priceCorrection', x: 0, y: 0, w: 6, h: 13, minW: 4, minH: 10 },
   { i: 'log', name: 'corrections', x: 0, y: 13, w: 6, h: 13, minW: 4, minH: 5 },
   { i: 'sessions', name: 'storedPrices', x: 6, y: 0, w: 6, h: 11, minW: 4, minH: 8 },
   { i: 'description', name: 'descriptionEditor', x: 6, y: 11, w: 6, h: 15, minW: 4, minH: 8 },
+  // APE's public bond issues (sixth version, ROADMAP step 64): the spec gives no file for them.
+  { i: 'offers', name: 'publicOfferEditor', x: 0, y: 26, w: 12, h: 10, minW: 4, minH: 5 },
 ]
 
 /**
@@ -58,6 +61,7 @@ export function DataCorrectionsPage() {
       />
     ),
     description: <DescriptionEditorPanel securityId={securityId} />,
+    offers: <PublicOfferEditorPanel />,
   }
   return <ScreenWorkspace screenId="CORR" defaultLayout={LAYOUT} panels={panels} />
 }

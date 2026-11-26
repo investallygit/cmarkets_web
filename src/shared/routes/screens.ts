@@ -16,7 +16,9 @@ import {
   FileCheck2,
   FileText,
   Globe,
+  Gavel,
   HandCoins,
+  Landmark,
   Handshake,
   History,
   IdCard,
@@ -129,6 +131,10 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('YCRV', 'YCRV', routes.yieldCurves, 'client', ChartSpline, { permission: 'analysis:read', module: 'analysis', inMenu: true, routePattern: routes.yieldCurvesBond }),
   screen('BP', 'BP', routes.bondPricing, 'client', Calculator, { permission: 'analysis:read', module: 'analysis', inMenu: true, routePattern: routes.bondPricingBond }),
   screen('BS', 'BS', routes.bondScreener, 'client', ScanLine, { permission: 'analysis:read', module: 'analysis', inMenu: true }),
+  // AUC, AUC NEXT and APE (screen 33, sixth version): ECO's audience; not in the menu, they light YCRV as their mockup (decision 61).
+  screen('AUC', 'AUC', routes.auctions, 'client', Gavel, { permission: 'market:read', module: 'monitoring', menuCode: 'YCRV' }),
+  screen('AUCNEXT', 'AUC NEXT', routes.auctionsNext, 'client', Gavel, { permission: 'market:read', module: 'monitoring', menuCode: 'YCRV' }),
+  screen('APE', 'APE', routes.publicOffers, 'client', Landmark, { permission: 'market:read', module: 'monitoring', menuCode: 'YCRV' }),
   // RFQ (screen 22) after BS (ROADMAP decision 15), for the Traders, Managers and CEO of an organisation while the RFQ is
   // on (its CEO reads the organisation's requests, ROADMAP step 44); SVT (screen 27, step 45), the approvals, and TRD, an
   // SVT's trader links, in the SVT's menu (decision 16).

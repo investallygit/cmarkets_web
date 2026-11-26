@@ -1,0 +1,157 @@
+{
+  "auctionMarket": {
+    "tabs": {
+      "label": "BTA and OTA auctions",
+      "results": "Results",
+      "next": "Upcoming",
+      "offers": "Public bond issues"
+    },
+    "filters": {
+      "label": "Filters of the results",
+      "country": "Country",
+      "allCountries": "all",
+      "type": "Type",
+      "allTypes": "BTA and OTA",
+      "bta": "BTA",
+      "ota": "OTA",
+      "period": "Period",
+      "download": "Download"
+    },
+    "bn": "XAF {{amount}} bn",
+    "indicators": {
+      "label": "Primary market indicators",
+      "raised": "Amount raised in {{year}}",
+      "auctions": "Auctions in {{year}}",
+      "cover": "Average cover",
+      "reference": "{{country}} {{security}} · last",
+      "referenceNone": "{{security}} · last",
+      "next": "Next",
+      "nextValue": "{{country}} {{security}} · {{date}}",
+      "none": "—"
+    },
+    "results": {
+      "title": "Latest results",
+      "amounts": "Amounts in XAF bn",
+      "columns": {
+        "date": "Date",
+        "country": "Country",
+        "security": "Security",
+        "maturity": "Maturity",
+        "offered": "Offered",
+        "bid": "Bid",
+        "allotted": "Allotted",
+        "cover": "Cover",
+        "average": "Avg rate",
+        "marginal": "Marginal",
+        "change": "Chg. prev."
+      },
+      "note": "Chg. prev.: change from the previous auction of the same security. A cover below 100% shows in red.",
+      "empty": "No auction result for these filters."
+    },
+    "rates": {
+      "title": "{{security}} average rate",
+      "options": "By country · 24 months",
+      "tenor": "Tenor",
+      "note": "Click a table row: history of that security. A month without an auction leaves a gap.",
+      "chartLabel": "{{security}} average rate by month over 24 months, {{countries}}",
+      "empty": "No auction of this tenor over 24 months."
+    },
+    "detail": {
+      "title": "Detail · {{security}} of {{date}}",
+      "titleNone": "Auction detail",
+      "options": "Bids by rate",
+      "pick": "Pick a result in the table to see its bids by rate.",
+      "noBids": "The BEAC did not publish the bids by rate of this auction.",
+      "marginal": "Marginal rate {{rate}}",
+      "chartNote": "Amounts bid (bn) by rate · amber: bids allotted",
+      "chartLabel": "Bids of {{security}} of {{date}} by rate, those allotted up to the marginal rate of {{rate}}",
+      "figures": {
+        "label": "Figures of the auction",
+        "offered": "Amount offered",
+        "bid": "Amount bid",
+        "allotted": "Amount allotted",
+        "cover": "Cover ratio",
+        "average": "Weighted average rate",
+        "marginal": "Marginal rate",
+        "bidders": "Bidders",
+        "valueDate": "Value date",
+        "security": "Security"
+      },
+      "bidders_one": "{{count}} SVT",
+      "bidders_other": "{{count}} SVTs"
+    },
+    "upcoming": {
+      "title": "Upcoming auctions",
+      "columns": {
+        "date": "Date",
+        "country": "Country",
+        "security": "Security",
+        "offered": "Offered (XAF bn)",
+        "valueDate": "Value date",
+        "maturity": "Maturity"
+      },
+      "source": "Source: the Treasuries' quarterly issuance calendars and the results published by the BEAC, uploaded by the Data admin.",
+      "empty": "No auction planned."
+    },
+    "offers": {
+      "title": "Public bond issues",
+      "columns": {
+        "issuer": "Issuer",
+        "country": "Country",
+        "sought": "Amount sought",
+        "coupon": "Coupon",
+        "maturity": "Maturity",
+        "subscription": "Subscription",
+        "arranger": "Arranger",
+        "status": "Status",
+        "raised": "Raised"
+      },
+      "kinds": {
+        "sovereign": "Sovereign",
+        "company": "Corporate"
+      },
+      "statuses": {
+        "upcoming": "Upcoming",
+        "open": "Open",
+        "closed": "Closed",
+        "withdrawn": "Withdrawn"
+      },
+      "period": "{{from}} to {{to}}",
+      "source": "Public offers entered by the Data admin; amounts in XAF bn.",
+      "empty": "No public bond issue."
+    },
+    "links": {
+      "auc": "All auctions (AUC)",
+      "security": "Auctions of this security (AUC)"
+    },
+    "corr": {
+      "title": "Public bond issues (APE)",
+      "add": "New issue",
+      "edit": "Edit {{issuer}}",
+      "delete": "Delete {{issuer}}",
+      "confirmTitle": "Delete the issue of {{issuer}}?",
+      "confirmMessage": "It leaves APE at once. Delete only an issue entered by mistake; mark a cancelled one withdrawn.",
+      "saved": "Issue of {{issuer}} saved.",
+      "deleted": "Issue of {{issuer}} deleted.",
+      "formTitle": "Public bond issue",
+      "fields": {
+        "issuer": "Issuer",
+        "issuerKind": "Issuer type",
+        "country": "Country",
+        "amountSought": "Amount sought (XAF M)",
+        "couponPct": "Coupon (%)",
+        "maturityDate": "Maturity",
+        "subscriptionStart": "Subscription from",
+        "subscriptionEnd": "Subscription to",
+        "arranger": "Arranger",
+        "amountRaised": "Amount raised (XAF M)",
+        "withdrawn": "Withdrawn"
+      },
+      "save": "Save",
+      "cancel": "Cancel",
+      "required": "Required.",
+      "empty": "No issue entered yet."
+    },
+    "bp": "bp"
+  }
+}

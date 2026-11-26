@@ -142,6 +142,15 @@ const AuditLogPage = lazyPage(() =>
 const RfqReportingPage = lazyPage(() =>
   import('@/pages/rfq-reporting').then((module) => ({ default: module.RfqReportingPage })),
 )
+const AuctionsPage = lazyPage(() =>
+  import('@/pages/auction-market').then((module) => ({ default: module.AuctionsPage })),
+)
+const AuctionsNextPage = lazyPage(() =>
+  import('@/pages/auction-market').then((module) => ({ default: module.AuctionsNextPage })),
+)
+const PublicOffersPage = lazyPage(() =>
+  import('@/pages/auction-market').then((module) => ({ default: module.PublicOffersPage })),
+)
 const RfqCompletionPage = lazyPage(() =>
   import('@/pages/rfq-completion').then((module) => ({ default: module.RfqCompletionPage })),
 )
@@ -207,6 +216,9 @@ const PAGES: Record<ScreenTextKey, Page> = {
   MYCFG: AccountSettingsPage,
   RFQREP: RfqReportingPage,
   RFQCPL: RfqCompletionPage,
+  AUC: AuctionsPage,
+  AUCNEXT: AuctionsNextPage,
+  APE: PublicOffersPage,
   AUDT: AuditLogPage,
 }
 

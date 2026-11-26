@@ -115,6 +115,12 @@
     "MOD": { "title": "Moderation", "menu": "Moderat." },
     "PAY": { "title": "Analyst payouts", "menu": "Payouts" },
     "RFQCPL": { "title": "RFQ completion: disputes and ratios", "menu": "RFQ" },
+    "AUC": {
+      "title": "BTA / OTA government securities auctions — BEAC primary market",
+      "menu": "Auctions"
+    },
+    "AUCNEXT": { "title": "Upcoming BTA and OTA auctions", "menu": "Upcoming" },
+    "APE": { "title": "Public bond issues", "menu": "Public issues" },
     "RFQREP": { "title": "Daily reporting to the BEAC", "menu": "RFQ" },
     "ADMCFG": { "title": "Platform settings", "menu": "Settings" },
     "MYCFG": { "title": "My settings", "menu": "My settings" },
@@ -150,6 +156,12 @@
     "notFoundTitle": "Screen not found"
   },
   "panels": {
+    "publicOfferEditor": "Public bond issues (APE)",
+    "auctionResults": "Latest results",
+    "auctionRates": "Average rate by country",
+    "auctionDetail": "Auction detail",
+    "auctionUpcoming": "Upcoming auctions",
+    "publicOffers": "Public bond issues",
     "macroChart": "Indicator chart",
     "sovereignRates": "Sovereign and reference rates",
     "optUniverse": "Investment universe",

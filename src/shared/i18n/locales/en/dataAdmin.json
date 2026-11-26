@@ -5,7 +5,7 @@
       "daily-prices": "BVMAC daily prices",
       "indices": "BVMAC indices",
       "corporate-actions": "Corporate actions",
-      "auctions": "BEAC auctions",
+      "auctions": "Auction results",
       "cemac-sov-yields": "CEMAC sovereign yields",
       "curves": "Curves and rates",
       "financial-statements": "Financial statements",
@@ -19,7 +19,8 @@
       "macro": "Macro indicators",
       "commodity-prices": "Commodity prices",
       "descriptions": "Descriptions",
-      "index-constituents": "Index constituents"
+      "index-constituents": "Index constituents",
+      "auction-calendar": "Auction calendar"
     },
     "frequencies": {
       "session": "Every session",
@@ -255,7 +256,8 @@
       "macro": "the report named in the row",
       "commodity-prices": "the source named in the row",
       "descriptions": "the source named in the row",
-      "index-constituents": "BVMAC's published review"
+      "index-constituents": "BVMAC's published review",
+      "auction-calendar": "the Treasury's issuance calendar"
     },
     "selected": {
       "alert": "Row {{row}} selected: check the {{field}} against {{source}}, fix it if needed, then tick “Alert checked”.",
@@ -289,7 +291,7 @@
       "history": "On publish: the price history, indices and portfolios are recalculated; a DataPublished event is sent to open screens.",
       "indices": "On publish: the indices of the market screens are replaced; a DataPublished event is sent to open screens.",
       "corporate-actions": "On publish: dividends and the calendar are updated; a DataPublished event is sent to open screens.",
-      "auctions": "On publish: yield curves, indices and alerts are recalculated; a DataPublished event is sent to open screens.",
+      "auctions": "On publish: yield curves, indices and alerts are recalculated; the planned auction is marked held, its BTA added to the master when missing; AuctionResultPublished and DataPublished are sent to open screens.",
       "cemac-sov-yields": "On publish: the CEMAC sovereign yield series, the yield curves and the bond spreads are recalculated; a DataPublished event is sent to open screens.",
       "curves": "On publish: the yield curves and the bond spreads are recalculated; a DataPublished event is sent to open screens.",
       "financial-statements": "On publish: ratios and the screener are recalculated; a DataPublished event is sent to open screens.",
@@ -301,7 +303,8 @@
       "macro": "On publish: the macro indicators of ECO (tiles, chart, CEMAC comparison) are read again, the source shown beside each figure; a DataPublished event is sent to open screens.",
       "commodity-prices": "On publish: the CEMAC complement of CMDTY (list, history, statistics) is read again, the source shown in its data, and the alerts on a new value go off; a DataPublished event is sent to open screens.",
       "descriptions": "On publish: each row is a new version of its security's description, shown at once on DES and EQS; a rollback removes the versions it added.",
-      "index-constituents": "On publish: the review ends the members in force on its date and starts its own, with their weights, shown at once on the index profile (DES, MEMB); a rollback brings the earlier members back."
+      "index-constituents": "On publish: the review ends the members in force on its date and starts its own, with their weights, shown at once on the index profile (DES, MEMB); a rollback brings the earlier members back.",
+      "auction-calendar": "On publish: the planned auctions are added or updated on AUC NEXT; a result already published marks its auction held; a DataPublished event is sent to open screens."
     },
     "fix": {
       "title": "Fix row {{row}}",

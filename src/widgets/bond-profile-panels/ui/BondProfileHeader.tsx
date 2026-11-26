@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { useBond, useBondAnalytics, ytwDiffers } from '@/entities/bond'
-import { useHasPermission } from '@/entities/session'
+import { canAccessScreen, useCurrentUser, useHasPermission } from '@/entities/session'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
-import { rfqPath } from '@/shared/routes/paths'
+import { auctionsPath, rfqPath } from '@/shared/routes/paths'
+import { SCREENS } from '@/shared/routes/screens'
 import { ChangeText } from '@/shared/ui/ChangeText'
 import { DASH, useBondWords } from '../lib/words'
 
@@ -24,6 +25,8 @@ export function BondProfileHeader({ profile }: { profile: SecurityProfileDto }) 
   const { t } = useTranslation()
   const format = useFormat()
   const words = useBondWords()
+  const user = useCurrentUser()
+  const auctions = SCREENS.some((screen) => screen.code === 'AUC' && canAccessScreen(user, screen))
   const bond = useBond(profile.id).data
   const trader = useHasPermission('rfq:trade')
   const analytics = useBondAnalytics(profile.id).data
@@ -106,6 +109,15 @@ export function BondProfileHeader({ profile }: { profile: SecurityProfileDto }) 
           className="inline-flex h-6 items-center border border-accent-amber/60 px-3 font-sans text-data text-accent-amber outline-none hover:bg-selected focus-visible:ring-1 focus-visible:ring-accent-amber"
         >
           {t('rfqTrading.requestPrice')}
+        </Link>
+      )}
+      {/* Its state's BTA and OTA auctions (AUC, screen 33, sixth version). */}
+      {auctions && bond?.market === 'beac' && (
+        <Link
+          to={auctionsPath(profile.country)}
+          className="inline-flex h-6 items-center font-sans text-data text-info hover:underline"
+        >
+          {t('auctionMarket.links.security')}
         </Link>
       )}
       <dl className="ml-auto flex flex-wrap gap-x-8 gap-y-1">

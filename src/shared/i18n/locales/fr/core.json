@@ -115,6 +115,12 @@
     "MOD": { "title": "Modération", "menu": "Modérat." },
     "PAY": { "title": "Versements aux analystes", "menu": "Versem." },
     "RFQCPL": { "title": "Complétion RFQ : contestations et taux", "menu": "RFQ" },
+    "AUC": {
+      "title": "Adjudications de BTA / OTA — marché primaire de la BEAC",
+      "menu": "Adjudications"
+    },
+    "AUCNEXT": { "title": "Adjudications de BTA et d'OTA à venir", "menu": "À venir" },
+    "APE": { "title": "Appels publics à l'épargne", "menu": "Appels publics" },
     "RFQREP": { "title": "Déclaration quotidienne à la BEAC", "menu": "RFQ" },
     "ADMCFG": { "title": "Paramètres de la plateforme", "menu": "Réglages" },
     "MYCFG": { "title": "Mes paramètres", "menu": "Mes paramètres" },
@@ -150,6 +156,12 @@
     "notFoundTitle": "Écran introuvable"
   },
   "panels": {
+    "publicOfferEditor": "Appels publics à l'épargne (APE)",
+    "auctionResults": "Derniers résultats",
+    "auctionRates": "Taux moyen par pays",
+    "auctionDetail": "Détail de l'adjudication",
+    "auctionUpcoming": "Adjudications à venir",
+    "publicOffers": "Appels publics à l'épargne",
     "macroChart": "Graphique d’un indicateur",
     "sovereignRates": "Taux souverains et de référence",
     "optUniverse": "Univers d'investissement",

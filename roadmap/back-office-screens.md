@@ -94,6 +94,10 @@ by which step, and what is still to do. The terminal's screens are in
   `AUCTION` read as the latter), `BEAC_POLICY`, `BEAC_OPERATIONS`, `INTERBANK_RATES`,
   `MONETARY_AGGREGATES`, `SOVEREIGN_RATINGS` and `CORPORATE_EVENTS`, with their templates and the
   coverage of the sessions they are expected on.
+- **Built in step 64**: `AUCTION_CALENDAR` (the day, the state, the security, the amount offered,
+  the value date) and `AUCTION_RESULTS`, the earlier auctions file under its sixth-version name,
+  which takes the value date, the bidders and the bids by rate ("5.30:6000 | 5.40:8000") when the
+  BEAC publishes them. See [step 64](steps/step-64-auctions.md).
 
 ## CORR · Data corrections (no mockup): done
 
@@ -113,6 +117,10 @@ by which step, and what is still to do. The terminal's screens are in
   and equities, ten at most, in place of the description; AUDT keeps what changed.
 - **Fixed in step 50** ([step 50](steps/step-50-page-bug-sweep.md)): each price field holds its
   value (B33).
+- **Built in step 64 (sixth version)**: APE's public bond issues, which the spec gives no file
+  for (decision 58): the issuer and its kind, the state, the amount sought, the coupon, the
+  maturity, the subscription period, the arranger, the amount raised, withdrawn; entered, changed
+  or deleted, each in AUDT. See [step 64](steps/step-64-auctions.md).
 - **Built in step 54 (fifth version)**: a description's versions, each language with its source,
   1,500 characters, on the spec's routes (decision 40); an index's description in step 56.
 - **Sixth version (steps 64 and 67)**: the public bond issues of APE (decision 58) and the

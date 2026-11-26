@@ -20,6 +20,8 @@ import type {
   Paged,
   PriceCorrectionDto,
   PriceCorrectionRequestDto,
+  PublicOfferDto,
+  PublicOfferInput,
   StoredPriceDto,
 } from '../contracts'
 import { answer, route, send, sendBlob, sendForm } from './define'
@@ -68,6 +70,9 @@ export const dataAdminRoutes = {
   descriptions: route('GET', '/admin/descriptions/{type}/{id}', answer<DescriptionVersionsDto>()),
   describe: route('PUT', '/admin/descriptions/{type}/{id}', answer<DescriptionVersionsDto>()),
   describeCommodity: route('PUT', '/data/commodities/{code}', answer<CommodityProfileDto>()),
+  createPublicOffer: route('POST', '/data/public-offers', answer<PublicOfferDto>()),
+  updatePublicOffer: route('PUT', '/data/public-offers/{id}', answer<PublicOfferDto>()),
+  deletePublicOffer: route('DELETE', '/data/public-offers/{id}'),
   eodhdStatus: route('GET', '/data/providers/eodhd/status', answer<EodhdStatusDto>()),
   createNews: route('POST', '/data/news', answer<NewsArticleDto>()),
   updateNews: route('PUT', '/data/news/{id}', answer<NewsArticleDto>()),
@@ -139,6 +144,12 @@ export const dataAdminApi = {
   /** A commodity's names, texts, CEMAC countries and related securities (CORR). */
   describeCommodity: (code: string, commodity: CommodityWriteDto) =>
     send(dataAdminRoutes.describeCommodity, { params: { code }, body: commodity }),
+  /** APE's public bond issues entered in CORR (sixth version): a new one, or a change. */
+  savePublicOffer: (id: string | null, offer: PublicOfferInput) =>
+    id
+      ? send(dataAdminRoutes.updatePublicOffer, { params: { id }, body: offer })
+      : send(dataAdminRoutes.createPublicOffer, { body: offer }),
+  deletePublicOffer: (id: string) => send(dataAdminRoutes.deletePublicOffer, { params: { id } }),
   eodhdStatus: (signal?: AbortSignal) => send(dataAdminRoutes.eodhdStatus, { signal }),
   /** News entered by the Data admin: a new item, or an edit of one. */
   saveNews: (id: string | null, news: NewsWriteDto) =>
