@@ -1,0 +1,93 @@
+{
+  "debt": {
+    "zone": "CEMAC zone",
+    "country": "Country",
+    "all": "All",
+    "unknownCountry": "{{code}} is neither a CEMAC state nor CEMAC: {{country}} is shown.",
+    "asOf": "Outstanding at {{date}}",
+    "download": "Download",
+    "downloadLabel": "Download the outstanding securities of {{country}} (CSV)",
+    "bn": "{{value}} bn",
+    "years": "{{value}} yrs",
+    "indicators": {
+      "label": "Debt indicators",
+      "outstanding": "Government securities outstanding",
+      "split": "Of which BTA / OTA",
+      "maturity": "Average maturity",
+      "rate": "Weighted average rate",
+      "maturing": "Maturing within 12 months",
+      "rating": "Rating",
+      "ratingExample": "Rating (example)",
+      "ratingHint": "S&P / Moody's in force",
+      "hidden": "Hidden",
+      "hiddenHint": "The agencies' ratings show once their licences are confirmed (ADMCFG).",
+      "zoneRating": "By state",
+      "none": "—"
+    },
+    "schedule": {
+      "options": "XAF bn · principal",
+      "quarter": "Q{{quarter}} {{year}}",
+      "label": "Principal to repay by {{country}}, in billions of XAF: {{bars}}.",
+      "bar": "{{label}} {{total}} (BTA {{bta}}, OTA {{ota}})",
+      "total": "Total: {{total}} bn. Maturing BTAs are usually rolled over through new issues (refinancing need).",
+      "empty": "No security outstanding."
+    },
+    "compare": {
+      "options": "Outstanding on the BEAC market",
+      "columns": {
+        "country": "Country",
+        "outstanding": "Outst. bn",
+        "btaShare": "BTA share",
+        "maturity": "Maturity (yrs)",
+        "rate": "Avg rate"
+      },
+      "note": "The higher the BTA share and the shorter the maturity, the larger the refinancing need. Click a row to show its state.",
+      "empty": "No state has securities outstanding."
+    },
+    "securities": {
+      "options": "{{count}} securities · double-click: profile",
+      "columns": {
+        "security": "Security",
+        "country": "Country",
+        "type": "Type",
+        "issue": "Issue date",
+        "maturity": "Maturity",
+        "outstanding": "Outst. bn",
+        "rate": "Coupon / rate",
+        "yield": "Yield",
+        "yearsLeft": "Years left"
+      },
+      "bta": "BTA",
+      "ota": "OTA",
+      "note": "Yield: the last computed yield (BP), or the auction rate for a BTA. Rate: a BTA's auction average rate, an OTA's coupon.",
+      "empty": "No security outstanding."
+    },
+    "documents": {
+      "agencies": {
+        "sp": "S&P Global",
+        "moodys": "Moody's",
+        "fitch": "Fitch"
+      },
+      "ratings": "Agency ratings",
+      "example": "{{rating}} (example)",
+      "notRated": "not rated",
+      "outlooks": {
+        "stable": "stable",
+        "positive": "positive",
+        "negative": "negative",
+        "developing": "developing"
+      },
+      "hidden": "The agencies' ratings are hidden until their licences are confirmed (ADMCFG).",
+      "zone": "Pick a state for its ratings.",
+      "title": "Documents",
+      "pdf": "PDF",
+      "open": "PDF of {{title}}",
+      "none": "No document about this state yet: the Data admin publishes them in NEWS with the state as subject.",
+      "note": "Ratings: shown subject to the agencies' licences; \"(example)\" marks the demo's values."
+    },
+    "links": {
+      "eco": "Sovereign debt (DEBT)",
+      "bond": "Sovereign debt (DEBT {{code}})"
+    }
+  }
+}

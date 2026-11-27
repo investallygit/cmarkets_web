@@ -25,6 +25,8 @@ export interface DocumentDto {
   sizeBytes: number
   /** The index it is about (screen 31's DOC tab, fifth version); absent for any other. */
   indexCode?: string
+  /** The CEMAC state it is about (DEBT's documents, sixth version), by its two letters. */
+  countryCode?: string
 }
 
 /**
@@ -38,4 +40,6 @@ export interface DocumentWriteDto {
   securityIds: string[]
   /** The index it is about, or none. */
   indexCode?: string | null
+  /** The CEMAC state it is about (two letters), or none. */
+  countryCode?: string | null
 }

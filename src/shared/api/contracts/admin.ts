@@ -257,6 +257,11 @@ export interface PlatformSettingsDto {
   xafReferenceCurve: string
   /** A point of a CEMAC yield curve older than this many days is marked stale (spec section 11): 90 by default. */
   curveStaleDays: number
+  /**
+   * Whether DEBT shows the agencies' sovereign ratings (screen 35, sixth version): off until their
+   * licences are confirmed (ROADMAP decision 60).
+   */
+  sovereignRatings: boolean
   updatedAt: IsoDateTime | null
   updatedBy: string | null
 }
@@ -518,6 +523,7 @@ export const AUDIT_FIELDS = [
   'curveFeedMinimum',
   /** The completion ratios' window, in months (ROADMAP step 62). */
   'completionWindow',
+  'sovereignRatings',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

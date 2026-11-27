@@ -88,6 +88,7 @@ function documentForm(document: DocumentWriteDto, file: File | null): FormData {
   form.set('source', document.source)
   document.securityIds.forEach((securityId) => form.append('securityIds', securityId))
   if (document.indexCode) form.append('indexCode', document.indexCode)
+  if (document.countryCode) form.append('countryCode', document.countryCode)
   if (file) form.set('file', file)
   return form
 }

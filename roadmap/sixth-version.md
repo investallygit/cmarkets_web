@@ -265,9 +265,14 @@ itself, steps 61 to 68 follow these; each is also an
     issued for an OTA issued before CMarket's auctions, less the principal its schedule repaid; no
     buyback is recorded until a file brings one. The rate of a BTA is its auction's average rate, of
     an OTA its coupon; the schedule groups the current year's quarters, then the years, beyond seven
-    years in one bar. The agencies' ratings show behind an ADMCFG switch, off by default until
-    their licences are confirmed, on in the demo with "(example)"; the documents are NEWS documents
-    with the country as subject.
+    years in one bar. The agencies' ratings show behind an ADMCFG switch, off by default until their
+    licences are confirmed, on in the demo with "(example)"; the documents are NEWS documents with
+    the country as subject. Built in step 66: a security is a state's XAF bond, the BEAC's zero
+    coupons its BTAs and every other one, the listed included, an OTA; a security that no auction
+    names counts its amount issued; the yield is the last computed, else a BTA's auction rate; a
+    NEWS document gets a state of its own (none by default), and the zone (CEMAC) adds the six
+    states up without a rating. The demo's securities issued before CMarket's auctions bring each
+    state near the mockup's comparison; its ratings are the mockup's, marked as examples.
 61. **Who reads the new screens**: section 12's matrix leaves them out; CAL, AUC, BEAC and DEBT
     follow ECO and FX (`market:read`, the monitoring module), every client account type that reads
     ECO, the SVT among them from the command bar (decision 16). Not in the left menu (decision 15):

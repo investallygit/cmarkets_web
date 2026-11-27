@@ -23,6 +23,7 @@ export const IMPORT_TYPES: readonly ImportType[] = [
   'beac-operations',
   'interbank-rates',
   'monetary-aggregates',
+  'sovereign-ratings',
 ]
 
 /**

@@ -7,6 +7,7 @@ import bonds from './fr/bonds.json'
 import commodities from './fr/commodities.json'
 import core from './fr/core.json'
 import dataAdmin from './fr/dataAdmin.json'
+import debt from './fr/debt.json'
 import etfs from './fr/etfs.json'
 import home from './fr/home.json'
 import indices from './fr/indices.json'
@@ -36,6 +37,7 @@ const fr = {
   ...monitoring,
   ...auctionMarket,
   ...beac,
+  ...debt,
   ...indices,
   ...downloads,
   ...analysis,

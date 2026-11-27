@@ -207,6 +207,11 @@ DELETE /data/public-offers/{id}
 PUT /data/public-offers/{id}
 GET /data/securities/{id}/prices
 PUT /data/securities/{id}/prices/{date}
+GET /debt/{country}/documents
+GET /debt/{country}/redemptions
+GET /debt/{country}/securities
+GET /debt/{country}/summary
+GET /debt/compare
 GET /directory
 GET /directory/facets
 GET /directory/specialties

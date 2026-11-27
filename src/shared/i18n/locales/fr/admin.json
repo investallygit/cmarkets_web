@@ -291,6 +291,8 @@
     "xafReferenceCurveHint": "La courbe souveraine CEMAC sur laquelle se lisent le spread de crédit et le Z-spread des obligations en XAF (BS). Les chiffres du jour sont recalculés.",
     "curveStaleDays": "Point de courbe ancien après",
     "curveStaleDaysHint": "Un point d’une courbe de taux CEMAC plus ancien est signalé sur YCRV (section 11 de la spécification). Rien n’est recalculé.",
+    "sovereignRatings": "Afficher les notations souveraines des agences sur DEBT",
+    "sovereignRatingsHint": "Les notations des États de la CEMAC par S&P, Moody's et Fitch, chargées par SOVEREIGN_RATINGS. Désactivé tant que les licences des agences ne sont pas confirmées (spec section 9, écran 35).",
     "days": "jours",
     "countryCurve": "Courbe souveraine {{country}}",
     "otherCurrencies": "EUR et USD : les courbes d'État d'EODHD, n.d. tant que leurs codes ne sont pas confirmés.",
@@ -545,7 +547,8 @@
       "approvalWindow": "Fenêtre d'approbation des SVT",
       "curveFeed": "Les accords RFQ alimentent la courbe",
       "curveFeedMinimum": "Courbe alimentée à partir d'un nominal de",
-      "completionWindow": "Période de complétion (mois)"
+      "completionWindow": "Période de complétion (mois)",
+      "sovereignRatings": "Notations souveraines sur DEBT"
     },
     "targetTypes": {
       "user": "Compte",

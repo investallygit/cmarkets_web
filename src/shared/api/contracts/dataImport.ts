@@ -30,6 +30,8 @@ export type ImportType =
   | 'beac-operations'
   | 'interbank-rates'
   | 'monetary-aggregates'
+  /** The agencies' ratings of the CEMAC states, with their outlooks (SOVEREIGN_RATINGS, screen 35). */
+  | 'sovereign-ratings'
 
 /** How often a file is expected: each session, each auction, weekly, or when there is news. */
 export type ImportFrequency = 'session' | 'auction' | 'weekly' | 'onDemand' | 'periodic' | 'once'

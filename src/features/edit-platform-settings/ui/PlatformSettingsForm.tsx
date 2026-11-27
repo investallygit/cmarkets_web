@@ -15,6 +15,7 @@ import { Field } from '@/shared/ui/form/Field'
 import { NumberInput } from '@/shared/ui/form/NumberInput'
 import { SegmentedControl } from '@/shared/ui/form/SegmentedControl'
 import { Select } from '@/shared/ui/form/Select'
+import { Switch } from '@/shared/ui/form/Switch'
 import { toast } from '@/shared/ui/toast'
 import { Section } from './Section'
 
@@ -48,6 +49,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
   const [riskFreeRatePct, setRiskFreeRatePct] = useState<number | null>(settings.riskFreeRatePct)
   const [xafReferenceCurve, setXafReferenceCurve] = useState(settings.xafReferenceCurve)
   const [curveStaleDays, setCurveStaleDays] = useState<number | null>(settings.curveStaleDays)
+  const [sovereignRatings, setSovereignRatings] = useState(settings.sovereignRatings)
   // The ETFs' currencies (spec section 14.5): EUR, USD, GBP.
   const [rates, setRates] = useState<{ currency: string; ratePct: number | null }[]>(
     settings.riskFreeRates,
@@ -106,6 +108,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     riskFreeRates: rates.map((rate) => ({ currency: rate.currency, ratePct: rate.ratePct ?? 0 })),
     xafReferenceCurve,
     curveStaleDays: curveStaleDays ?? 0,
+    sovereignRatings,
   }
   const changed =
     JSON.stringify(update) !==
@@ -119,6 +122,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
       riskFreeRates: settings.riskFreeRates,
       xafReferenceCurve: settings.xafReferenceCurve,
       curveStaleDays: settings.curveStaleDays,
+      sovereignRatings: settings.sovereignRatings,
     })
 
   const reset = () => {
@@ -133,6 +137,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     setRates(settings.riskFreeRates)
     setXafReferenceCurve(settings.xafReferenceCurve)
     setCurveStaleDays(settings.curveStaleDays)
+    setSovereignRatings(settings.sovereignRatings)
   }
 
   const quotaInput = (type: ClientAccountType, quota: keyof QuotaDto) => (
@@ -335,6 +340,16 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
               className="w-28"
             />
           </Field>
+          <div className="max-w-xl space-y-1">
+            <Switch
+              checked={sovereignRatings}
+              onChange={setSovereignRatings}
+              label={t('platformSettings.sovereignRatings')}
+            />
+            <p className="font-sans text-data text-secondary">
+              {t('platformSettings.sovereignRatingsHint')}
+            </p>
+          </div>
         </Section>
       </div>
 

@@ -24,7 +24,8 @@
       "beac-policy": "BEAC monetary policy",
       "beac-operations": "BEAC liquidity operations",
       "interbank-rates": "Interbank rates",
-      "monetary-aggregates": "Monetary aggregates"
+      "monetary-aggregates": "Monetary aggregates",
+      "sovereign-ratings": "Sovereign ratings"
     },
     "frequencies": {
       "session": "Every session",
@@ -265,7 +266,8 @@
       "beac-policy": "the Monetary Policy Committee's release",
       "beac-operations": "the BEAC's operation releases",
       "interbank-rates": "the BEAC's interbank market bulletin",
-      "monetary-aggregates": "the BEAC's bulletins and monetary policy reports"
+      "monetary-aggregates": "the BEAC's bulletins and monetary policy reports",
+      "sovereign-ratings": "the agencies' rating actions (S&P, Moody's, Fitch), on each change"
     },
     "selected": {
       "alert": "Row {{row}} selected: check the {{field}} against {{source}}, fix it if needed, then tick “Alert checked”.",
@@ -316,7 +318,8 @@
       "beac-policy": "On publish: the meetings are added or updated on BEAC, and the policy rate and marginal lending facility of each meeting become MKT's; a BeacDecisionPublished event is sent to open screens.",
       "beac-operations": "On publish: the tenders are added or updated on BEAC's liquidity operations; a DataPublished event is sent to open screens.",
       "interbank-rates": "On publish: the weeks are added or updated on BEAC's interbank market, with their changes from the week before; a DataPublished event is sent to open screens.",
-      "monetary-aggregates": "On publish: the figures are added or updated on BEAC's monetary aggregates, the latest inflation in its indicators; a DataPublished event is sent to open screens."
+      "monetary-aggregates": "On publish: the figures are added or updated on BEAC's monetary aggregates, the latest inflation in its indicators; a DataPublished event is sent to open screens.",
+      "sovereign-ratings": "On publish: the ratings are added or updated on DEBT, behind ADMCFG's switch; a DataPublished event is sent to open screens."
     },
     "fix": {
       "title": "Fix row {{row}}",
@@ -489,6 +492,9 @@
     "index": "Index",
     "indexHint": "An index whose profile lists it in its DOC tab: methodology, review notice, factsheet.",
     "noIndex": "None",
+    "country": "State",
+    "countryHint": "A CEMAC state whose debt screen (DEBT) lists it: issuance calendar, budget law, debt bulletin.",
+    "noCountry": "None",
     "removeSecurity": "Remove {{code}}",
     "standfirst": "Standfirst",
     "flashText": "Text of the FLASH",

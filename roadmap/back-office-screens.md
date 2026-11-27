@@ -104,6 +104,9 @@ by which step, and what is still to do. The terminal's screens are in
   absorption, its term, its amounts in billions and its rate), `INTERBANK_RATES` (a week: four
   tenors and the volume) and `MONETARY_AGGREGATES` (an indicator, its month or year, its value).
   A meeting's rates are MKT's policy rates. See [step 65](steps/step-65-beac-monetary-policy.md).
+- **Built in step 66**: `SOVEREIGN_RATINGS` (a state by its three letters, two or its name, the
+  agency, the rating on its scale, the outlook, the date; the earlier dates kept as the history),
+  shown on DEBT. See [step 66](steps/step-66-sovereign-debt.md).
 
 ## CORR · Data corrections (no mockup): done
 
@@ -155,6 +158,8 @@ by which step, and what is still to do. The terminal's screens are in
   factsheets and constituents' history (decision 44).
 - **Sixth version (steps 65 and 66)**: the BEAC's releases and a country's debt documents, with the
   BEAC or the country as their subject (decisions 59 and 60).
+- **Built in step 66**: a document's state (one of the six, or none), which DEBT lists beside its
+  ratings: an issuance calendar, a budget law, a debt bulletin.
 
 ## USER · Account administration (screen 9): done, with ANLY and MOD
 
@@ -246,6 +251,8 @@ by which step, and what is still to do. The terminal's screens are in
   decision 52).
 - **Sixth version (steps 66 and 67)**: the switches of the agencies' ratings (decision 60) and of EODHD's
   international events (decision 57).
+- **Built in step 66**: under Bonds, "Show the agencies' sovereign ratings on DEBT", off until
+  their licences are confirmed (on in the demo), audited as "Sovereign ratings on DEBT".
 
 ## AUDT · Audit log (no mockup): done
 

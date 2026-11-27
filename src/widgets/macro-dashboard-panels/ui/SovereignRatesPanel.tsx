@@ -53,6 +53,9 @@ export function SovereignRatesPanel() {
           <Link to={routes.beac} className="panel-no-drag hover:text-primary">
             {t('beac.links.eco')}
           </Link>
+          <Link to={routes.debt} className="panel-no-drag hover:text-primary">
+            {t('debt.links.eco')}
+          </Link>
         </>
       }
     >

@@ -737,8 +737,14 @@ what is still to do. The Data admin's and the Admin's screens are in
   and MKT's policy rates open it. See [step 65](steps/step-65-beac-monetary-policy.md).
 - **To do**: the alert on a decision is the calendar's, with CAL (step 67).
 
-## DEBT · Sovereign debt (screen 35): to do
+## DEBT · Sovereign debt (screen 35): done
 
-- **Sixth version (step 66)**: a State's government securities outstanding, their redemptions, the
-  six compared, the securities, the ratings and documents; computed from the auctions and the
-  master (decision 60). See [step 66](steps/step-66-sovereign-debt.md).
+- **Built in step 66 (sixth version)**: the country bar (the six states and the CEMAC; `DEBT CMR`
+  from the command bar), the six indicators (the outstanding, BTA and OTA, the average maturity
+  and rate weighted by the outstanding, the principal due within 12 months, S&P / Moody's), the
+  redemption schedule (the current year's quarters, then the years, beyond seven in one bar; BTA
+  and OTA apart), the CEMAC comparison (a row opens its state), the outstanding securities (a
+  double click opens the profile), the ratings with their outlooks and the state's documents,
+  Download; computed from the auctions and the master (decision 60). The ratings show behind
+  ADMCFG's switch, "(example)" in the demo. ECO's rates and a state's bond profile open it. See
+  [step 66](steps/step-66-sovereign-debt.md).

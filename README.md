@@ -48,65 +48,65 @@ before upload.
 
 ### Status
 
-| Screen                                                                    | State                                                         |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Home page: the product, markets, users and plans; trial and login         | Done; the plans come from the server before login             |
-| App shell: top bar, command bar, ticker, menu by account type, status bar | Done; MSG in the menu counts the unread messages              |
-| Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                        |
-| 1 · Market dashboard (MKT)                                                | Done, real-time quotes and indices, watchlists                |
-| 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done; DES opens the profile of the security's type            |
-| 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done, saved screens; each security's description              |
-| 4 · Yield curves and bond calculator (YCRV)                               | Done; the API computes spec section 14.1                      |
-| 5 · Portfolio (PORT)                                                      | Done; sections 14.2 and 14.3, other currencies at the ECB's   |
-| 7 · Publishing studio (PUB NEW)                                           | Done, autosave, versions, frozen charts                       |
-| 8 · Research library (PUB)                                                | Done; mobile money and card payments                          |
-| News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done; each news item has a link to share                      |
-| Settings (CFG): profile, security, subscription, organisation, invoices   | Done; a change of plan prorated by the day, as in SUBS        |
-| Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                |
-| Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation |
-| 10 · Professional directory (NET), public profile page                    | Done; the demo data lists 1,178 profiles                      |
-| 11 · Messaging (MSG)                                                      | Done; read, typing and presence in real time                  |
-| 12 · My profile, visibility and contact (NET ME)                          | Done; the API applies the contact rules of section 15         |
-| 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the API checks, publishes and rolls back the files      |
-| Data corrections (CORR), news and documents (NEWS): no mockup             | Done; NEWS moderates the news and names the publishers        |
-| 9 · Account administration (USER) with ANLY and MOD                       | Done; MOD reviews the directory reports and the news too      |
-| Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged  |
-| An employee's own settings (ME): profile and security, no mockup          | Done; the Data admin's and the Admin's, from the user menu    |
-| News provider account type (third version)                                | Done; it writes in its studio, NEWS NEW                       |
-| News rebuilt: ARTICLE and FLASH, newspapers, tags, unique clicks          | Done; the content shown 3 seconds counts a unique click       |
-| 13 · News studio (NEWS NEW)                                               | Done; drafts, schedule, withdrawal, file import, earnings     |
-| News sources (SRC), AI ingestion, international news: no mockup           | Done; the AI pushes signed items, EODHD news every 15 minutes |
-| 18 · Media payments (MPAY)                                                | Done; a second Admin above XAF 300,000; disputes in NEWS NEW  |
-| 17 · Bond screener (BS)                                                   | Done; computed each evening, model prices, yield to worst     |
-| 16 · Bond pricing (BP), which YAS opens                                   | Done; a bond of the list or by hand, at the platform's yield  |
-| 20 · Bond profile (DES on a bond: DES, GP, BP, CF, RAT, DOC)              | Done; a year of daily figures, model prices drawn lighter     |
-| 15 · ETF screener (ETFS)                                                  | Done; figures computed each evening, saved screens, export    |
-| 19 · ETF profile (DES on an ETF)                                          | Done; history with NAV, holdings, allocation, PERF, DIST      |
-| 14 · Subscription management (SUBS)                                       | Done; renewals charged, failures retried, plans prorated      |
-| Security descriptions on EQS (screen 3), written in CORR                  | Done; in French and English, EODHD's English standing in      |
-| Rate series, CEMAC sovereign yields file (IMP), stale points on YCRV      | Done; EODHD's yields each day, a replaced point confirmed     |
-| 26 · FX dashboard (FX)                                                    | Done; the ECB's rates each business day, MKT's on them too    |
-| 25 · Macroeconomic dashboard (ECO)                                        | Done; the World Bank's figures each month, a file fills gaps  |
-| 21 · Commodities (CMDTY, DES on a commodity)                              | Done; EODHD's 23 series twice a day, the CEMAC's by file      |
-| 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | Done; section 14.6's solver, scenarios computed again         |
-| SVT account type (fourth version), licensed SVTs, trader links            | Done; links confirmed on TRD, the traders written to on MSG   |
-| 22 · Government securities RFQ (RFQ)                                      | Done; ranked answers, the selection confirmed at its version  |
-| 27 · SVT approval (SVT)                                                   | Done; both SVTs approve, the ticket e-mailed to four          |
-| 23 · Agreements (RFQ AGR)                                                 | Done; tickets downloaded and resent, cancelled on two letters |
-| 24 · Daily reporting to the BEAC (RFQ REP)                                | Done; PDF and Excel at 18:00, every send logged, kept 5 years |
-| The CMarket curve fed by the RFQ agreements (ADMCFG, YCRV)                | Done; an Admin option, off, from XAF 250 million of face      |
-| CMarket.Api's messages in the page's language                             | Done; its errors in French on a French page, dates day first  |
-| 2 · Security profile at the BVMAC fixing (fifth version), descriptions    | Done; recent sessions, descriptions in versions, DES's Edit   |
-| 16 · Bond pricing from a yield curve, custom curves                       | Done; spreads to a reference, paste from Excel, saved curves  |
-| 31 · Index profile (DES on an index)                                      | Done; constituents' contributions, BVMAC's reviews on IMP     |
-| 30 · Data download (DL), the Download buttons                             | Done; 8 datasets, files over 50,000 rows by a job, schedules  |
-| 22 · RFQ by criteria (sixth version): the amount alone                    | Done; eligible list, offers checked and ranked by yield       |
-| 22 · RFQ completion ratio, on the board, NET and SVT                      | Done; thresholds, disputes, the Admin's RFQ CPL               |
-| 16 · Bond pricing: the rate entry panel of the sixth version              | Done; entry status, keyboard, helpers beside the table        |
-| 33 · BTA and OTA auctions (AUC, AUC NEXT, APE)                            | Done; bids by rate, coming auctions, APE entered in CORR      |
-| 34 · BEAC monetary policy and liquidity (BEAC)                            | Done; corridor since 2019, MPC releases, four BEAC files      |
-| 35 · Sovereign debt (DEBT)                                                | To do, step 66                                                |
-| 32 · Event calendar (CAL), calendar alerts                                | To do, step 67                                                |
+| Screen                                                                    | State                                                          |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Home page: the product, markets, users and plans; trial and login         | Done; the plans come from the server before login              |
+| App shell: top bar, command bar, ticker, menu by account type, status bar | Done; MSG in the menu counts the unread messages               |
+| Shared UI kit: form controls, dialogs, toasts, price chart, Excel export  | Done, shown on `/_kit`                                         |
+| 1 · Market dashboard (MKT)                                                | Done, real-time quotes and indices, watchlists                 |
+| 2 · Security profile (DES, GP, FA, DVD, N, DOC, HDS, ANA)                 | Done; DES opens the profile of the security's type             |
+| 3 · Equity screener and fundamental analysis (EQS, FA)                    | Done, saved screens; each security's description               |
+| 4 · Yield curves and bond calculator (YCRV)                               | Done; the API computes spec section 14.1                       |
+| 5 · Portfolio (PORT)                                                      | Done; sections 14.2 and 14.3, other currencies at the ECB's    |
+| 7 · Publishing studio (PUB NEW)                                           | Done, autosave, versions, frozen charts                        |
+| 8 · Research library (PUB)                                                | Done; mobile money and card payments                           |
+| News (N), market calendar (CAL), alerts (ALRT): no mockup                 | Done; each news item has a link to share                       |
+| Settings (CFG): profile, security, subscription, organisation, invoices   | Done; a change of plan prorated by the day, as in SUBS         |
+| Login, OTP, sign-up, password reset, token refresh, logout                | Done; logout after 30 minutes without activity                 |
+| Journalist and CEO account types                                          | Done; a CEO reads the portfolios shared with the organisation  |
+| 10 · Professional directory (NET), public profile page                    | Done; the demo data lists 1,178 profiles                       |
+| 11 · Messaging (MSG)                                                      | Done; read, typing and presence in real time                   |
+| 12 · My profile, visibility and contact (NET ME)                          | Done; the API applies the contact rules of section 15          |
+| 6 · Data import (IMP) with DATA, HIST and EODH                            | Done; the API checks, publishes and rolls back the files       |
+| Data corrections (CORR), news and documents (NEWS): no mockup             | Done; NEWS moderates the news and names the publishers         |
+| 9 · Account administration (USER) with ANLY and MOD                       | Done; MOD reviews the directory reports and the news too       |
+| Platform settings (ADMCFG), audit log (AUDT), payouts (PAY): no mockup    | Done; ADMCFG also sets the directory; every action is logged   |
+| An employee's own settings (ME): profile and security, no mockup          | Done; the Data admin's and the Admin's, from the user menu     |
+| News provider account type (third version)                                | Done; it writes in its studio, NEWS NEW                        |
+| News rebuilt: ARTICLE and FLASH, newspapers, tags, unique clicks          | Done; the content shown 3 seconds counts a unique click        |
+| 13 · News studio (NEWS NEW)                                               | Done; drafts, schedule, withdrawal, file import, earnings      |
+| News sources (SRC), AI ingestion, international news: no mockup           | Done; the AI pushes signed items, EODHD news every 15 minutes  |
+| 18 · Media payments (MPAY)                                                | Done; a second Admin above XAF 300,000; disputes in NEWS NEW   |
+| 17 · Bond screener (BS)                                                   | Done; computed each evening, model prices, yield to worst      |
+| 16 · Bond pricing (BP), which YAS opens                                   | Done; a bond of the list or by hand, at the platform's yield   |
+| 20 · Bond profile (DES on a bond: DES, GP, BP, CF, RAT, DOC)              | Done; a year of daily figures, model prices drawn lighter      |
+| 15 · ETF screener (ETFS)                                                  | Done; figures computed each evening, saved screens, export     |
+| 19 · ETF profile (DES on an ETF)                                          | Done; history with NAV, holdings, allocation, PERF, DIST       |
+| 14 · Subscription management (SUBS)                                       | Done; renewals charged, failures retried, plans prorated       |
+| Security descriptions on EQS (screen 3), written in CORR                  | Done; in French and English, EODHD's English standing in       |
+| Rate series, CEMAC sovereign yields file (IMP), stale points on YCRV      | Done; EODHD's yields each day, a replaced point confirmed      |
+| 26 · FX dashboard (FX)                                                    | Done; the ECB's rates each business day, MKT's on them too     |
+| 25 · Macroeconomic dashboard (ECO)                                        | Done; the World Bank's figures each month, a file fills gaps   |
+| 21 · Commodities (CMDTY, DES on a commodity)                              | Done; EODHD's 23 series twice a day, the CEMAC's by file       |
+| 28, 29 · Portfolio optimisation (OPT, OPT RES)                            | Done; section 14.6's solver, scenarios computed again          |
+| SVT account type (fourth version), licensed SVTs, trader links            | Done; links confirmed on TRD, the traders written to on MSG    |
+| 22 · Government securities RFQ (RFQ)                                      | Done; ranked answers, the selection confirmed at its version   |
+| 27 · SVT approval (SVT)                                                   | Done; both SVTs approve, the ticket e-mailed to four           |
+| 23 · Agreements (RFQ AGR)                                                 | Done; tickets downloaded and resent, cancelled on two letters  |
+| 24 · Daily reporting to the BEAC (RFQ REP)                                | Done; PDF and Excel at 18:00, every send logged, kept 5 years  |
+| The CMarket curve fed by the RFQ agreements (ADMCFG, YCRV)                | Done; an Admin option, off, from XAF 250 million of face       |
+| CMarket.Api's messages in the page's language                             | Done; its errors in French on a French page, dates day first   |
+| 2 · Security profile at the BVMAC fixing (fifth version), descriptions    | Done; recent sessions, descriptions in versions, DES's Edit    |
+| 16 · Bond pricing from a yield curve, custom curves                       | Done; spreads to a reference, paste from Excel, saved curves   |
+| 31 · Index profile (DES on an index)                                      | Done; constituents' contributions, BVMAC's reviews on IMP      |
+| 30 · Data download (DL), the Download buttons                             | Done; 8 datasets, files over 50,000 rows by a job, schedules   |
+| 22 · RFQ by criteria (sixth version): the amount alone                    | Done; eligible list, offers checked and ranked by yield        |
+| 22 · RFQ completion ratio, on the board, NET and SVT                      | Done; thresholds, disputes, the Admin's RFQ CPL                |
+| 16 · Bond pricing: the rate entry panel of the sixth version              | Done; entry status, keyboard, helpers beside the table         |
+| 33 · BTA and OTA auctions (AUC, AUC NEXT, APE)                            | Done; bids by rate, coming auctions, APE entered in CORR       |
+| 34 · BEAC monetary policy and liquidity (BEAC)                            | Done; corridor since 2019, MPC releases, four BEAC files       |
+| 35 · Sovereign debt (DEBT)                                                | Done; outstanding, schedule, comparison, ratings behind ADMCFG |
+| 32 · Event calendar (CAL), calendar alerts                                | To do, step 67                                                 |
 
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
@@ -178,7 +178,7 @@ src/
               (SRC), media-payments (MPAY),
               analyst-requests (ANLY),
               moderation (MOD), payouts (PAY), rfq-reporting (RFQ REP), rfq-completion (RFQ CPL), platform-settings (ADMCFG),
-              auction-market (AUC, AUC NEXT, APE), beac-monetary-policy (BEAC),
+              auction-market (AUC, AUC NEXT, APE), beac-monetary-policy (BEAC), sovereign-debt (DEBT),
               audit-log (AUDT), account-settings (ME), home,
               auth (login, sign-up, password reset), status, ui-kit (/_kit)
   widgets/    self-contained blocks: the panels (indices-panel, recent-sessions-panel, news-panel,
@@ -193,6 +193,7 @@ src/
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
               trader-links-panel, rfq-new-request, rfq-my-request, rfq-board, rfq-blotter,
               rfq-eligible-securities, rfq-completion, auction-market, public-offer-editor-panel, beac-panels,
+              debt-panels,
               rfq-tabs, rfq-report-panels, svt-approval-panels, rfq-agreement-filters,
               rfq-agreement-list, rfq-agreement-detail, opt-setup-panels, opt-result-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
@@ -230,7 +231,8 @@ src/
               performance and distributions, the profile's history, holdings, allocation and
               calendar years, its labels), yield-curve, fundamentals,
               screener, portfolio, optimizer (OPT's setup, result and scenarios), publication,
-              analyst, document, chart-drawing, watchlist, alert, auction, beac, rate, macro (ECO's
+              analyst, document, chart-drawing, watchlist, alert, auction, beac, debt (DEBT's
+              outstanding, schedule, securities, ratings and documents), rate, macro (ECO's
               economies, indicators and figures), commodity (CMDTY's series, values and
               statistics), svt-link (a trader's links to the SVTs, a bank's requests and linked
               traders, the RFQ's hub), rfq (the requests for quotes, the board, the answers and the

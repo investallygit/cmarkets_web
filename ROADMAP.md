@@ -130,7 +130,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 63   | [BP: the rate entry panel as the spec draws it (screen 16)](roadmap/steps/step-63-bp-rate-entry-panel.md)            | Done   |
 | 64   | [AUC: the BTA and OTA auctions (screen 33)](roadmap/steps/step-64-auctions.md)                                       | Done   |
 | 65   | [BEAC: monetary policy and liquidity (screen 34)](roadmap/steps/step-65-beac-monetary-policy.md)                     | Done   |
-| 66   | [DEBT: the sovereign debt (screen 35)](roadmap/steps/step-66-sovereign-debt.md)                                      | To do  |
+| 66   | [DEBT: the sovereign debt (screen 35)](roadmap/steps/step-66-sovereign-debt.md)                                      | Done   |
 | 67   | [CAL: the event calendar (screen 32)](roadmap/steps/step-67-event-calendar.md)                                       | To do  |
 | 68   | [Sixth version done: README, accessibility, every flow](roadmap/steps/step-68-sixth-version-done.md)                 | To do  |
 

@@ -4,7 +4,8 @@ import { useBond, useBondAnalytics, ytwDiffers } from '@/entities/bond'
 import { canAccessScreen, useCurrentUser, useHasPermission } from '@/entities/session'
 import type { SecurityProfileDto } from '@/shared/api/contracts'
 import { useFormat } from '@/shared/i18n'
-import { auctionsPath, rfqPath } from '@/shared/routes/paths'
+import { cemacCode3, isCemacCountry } from '@/shared/config/countries'
+import { auctionsPath, debtPath, rfqPath } from '@/shared/routes/paths'
 import { SCREENS } from '@/shared/routes/screens'
 import { ChangeText } from '@/shared/ui/ChangeText'
 import { DASH, useBondWords } from '../lib/words'
@@ -27,6 +28,7 @@ export function BondProfileHeader({ profile }: { profile: SecurityProfileDto }) 
   const words = useBondWords()
   const user = useCurrentUser()
   const auctions = SCREENS.some((screen) => screen.code === 'AUC' && canAccessScreen(user, screen))
+  const debt = SCREENS.some((screen) => screen.code === 'DEBT' && canAccessScreen(user, screen))
   const bond = useBond(profile.id).data
   const trader = useHasPermission('rfq:trade')
   const analytics = useBondAnalytics(profile.id).data
@@ -118,6 +120,15 @@ export function BondProfileHeader({ profile }: { profile: SecurityProfileDto }) 
           className="inline-flex h-6 items-center font-sans text-data text-info hover:underline"
         >
           {t('auctionMarket.links.security')}
+        </Link>
+      )}
+      {/* A CEMAC state's security: its debt (DEBT, screen 35, sixth version). */}
+      {debt && bond?.issuerCategory === 'sovereign' && isCemacCountry(profile.country) && (
+        <Link
+          to={debtPath(cemacCode3(profile.country))}
+          className="inline-flex h-6 items-center font-sans text-data text-info hover:underline"
+        >
+          {t('debt.links.bond', { code: cemacCode3(profile.country) })}
         </Link>
       )}
       <dl className="ml-auto flex flex-wrap gap-x-8 gap-y-1">

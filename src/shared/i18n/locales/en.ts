@@ -7,6 +7,7 @@ import bonds from './en/bonds.json'
 import commodities from './en/commodities.json'
 import core from './en/core.json'
 import dataAdmin from './en/dataAdmin.json'
+import debt from './en/debt.json'
 import etfs from './en/etfs.json'
 import home from './en/home.json'
 import indices from './en/indices.json'
@@ -40,6 +41,7 @@ const en = {
   ...monitoring,
   ...auctionMarket,
   ...beac,
+  ...debt,
   ...indices,
   ...downloads,
   ...analysis,

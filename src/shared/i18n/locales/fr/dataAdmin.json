@@ -24,7 +24,8 @@
       "beac-policy": "Politique monétaire de la BEAC",
       "beac-operations": "Opérations de liquidité de la BEAC",
       "interbank-rates": "Taux interbancaires",
-      "monetary-aggregates": "Agrégats monétaires"
+      "monetary-aggregates": "Agrégats monétaires",
+      "sovereign-ratings": "Notations souveraines"
     },
     "frequencies": {
       "session": "Chaque séance",
@@ -265,7 +266,8 @@
       "beac-policy": "le communiqué du Comité de politique monétaire",
       "beac-operations": "les communiqués d'opérations de la BEAC",
       "interbank-rates": "le bulletin du marché interbancaire de la BEAC",
-      "monetary-aggregates": "les bulletins et rapports de politique monétaire de la BEAC"
+      "monetary-aggregates": "les bulletins et rapports de politique monétaire de la BEAC",
+      "sovereign-ratings": "les actions de notation des agences (S&P, Moody's, Fitch), à chaque changement"
     },
     "selected": {
       "alert": "Ligne {{row}} sélectionnée : vérifiez {{field}} dans {{source}}, corrigez si besoin, puis cochez « Alerte vérifiée ».",
@@ -316,7 +318,8 @@
       "beac-policy": "À la publication : les réunions sont ajoutées ou mises à jour dans BEAC, et le taux directeur et la facilité de prêt marginal de chaque réunion deviennent ceux de MKT ; un événement BeacDecisionPublished est envoyé aux écrans ouverts.",
       "beac-operations": "À la publication : les appels d'offres sont ajoutés ou mis à jour dans les opérations de liquidité de BEAC ; un événement DataPublished est envoyé aux écrans ouverts.",
       "interbank-rates": "À la publication : les semaines sont ajoutées ou mises à jour dans le marché interbancaire de BEAC, avec leurs variations d'une semaine à l'autre ; un événement DataPublished est envoyé aux écrans ouverts.",
-      "monetary-aggregates": "À la publication : les chiffres sont ajoutés ou mis à jour dans les agrégats monétaires de BEAC, la dernière inflation dans ses indicateurs ; un événement DataPublished est envoyé aux écrans ouverts."
+      "monetary-aggregates": "À la publication : les chiffres sont ajoutés ou mis à jour dans les agrégats monétaires de BEAC, la dernière inflation dans ses indicateurs ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "sovereign-ratings": "À la publication : les notations sont ajoutées ou mises à jour sur DEBT, derrière l'interrupteur d'ADMCFG ; un événement DataPublished est envoyé aux écrans ouverts."
     },
     "fix": {
       "title": "Corriger la ligne {{row}}",
@@ -489,6 +492,9 @@
     "index": "Indice",
     "indexHint": "Un indice dont la fiche le liste dans son onglet DOC : méthodologie, avis de revue, fiche mensuelle.",
     "noIndex": "Aucun",
+    "country": "État",
+    "countryHint": "Un État de la CEMAC dont l'écran de la dette (DEBT) le liste : calendrier d'émissions, loi de finances, bulletin de la dette.",
+    "noCountry": "Aucun",
     "removeSecurity": "Retirer {{code}}",
     "standfirst": "Chapô",
     "flashText": "Texte du FLASH",

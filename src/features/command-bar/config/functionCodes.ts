@@ -3,6 +3,7 @@ import type { IndexFunction, MeDto, SecurityType } from '@/shared/api/contracts'
 import type { TranslationKey } from '@/shared/i18n'
 import {
   bondPricingPath,
+  debtPath,
   ecoPath,
   indexPath,
   routes,
@@ -54,7 +55,7 @@ const SECURITY_TABS: readonly SecurityTab[] = [
 ]
 
 /** The screens whose code reads a security or a word beside it, listed apart below. */
-const SECURITY_SCREENS = new Set(['DES', 'IDX', 'BP', 'N', 'ECO'])
+const SECURITY_SCREENS = new Set(['DES', 'IDX', 'BP', 'N', 'ECO', 'DEBT'])
 
 /** Every function code of the command bar (spec section 8). */
 export const FUNCTION_CODES: readonly FunctionCode[] = [
@@ -98,6 +99,14 @@ export const FUNCTION_CODES: readonly FunctionCode[] = [
     target: 'argument',
     screen: screenById('ECO'),
     resolve: (country) => ecoPath(country),
+  },
+  // DEBT, the sovereign debt, on a state or the zone: "DEBT CMR" opens Cameroon (screen 35).
+  {
+    code: 'DEBT',
+    labelKey: 'screens.DEBT.title',
+    target: 'argument',
+    screen: screenById('DEBT'),
+    resolve: (country) => debtPath(country),
   },
   ...SCREENS.filter((screen) => !SECURITY_SCREENS.has(screen.id)).map((screen): FunctionCode => ({
     code: screen.code,

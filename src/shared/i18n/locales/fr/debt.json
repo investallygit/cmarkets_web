@@ -1,0 +1,93 @@
+{
+  "debt": {
+    "zone": "Zone CEMAC",
+    "country": "Pays",
+    "all": "Tous",
+    "unknownCountry": "{{code}} n'est ni un État de la CEMAC ni la CEMAC : {{country}} est affiché.",
+    "asOf": "Encours au {{date}}",
+    "download": "Télécharger",
+    "downloadLabel": "Télécharger les titres en circulation de {{country}} (CSV)",
+    "bn": "{{value}} Md",
+    "years": "{{value}} ans",
+    "indicators": {
+      "label": "Indicateurs de la dette",
+      "outstanding": "Encours des titres publics",
+      "split": "Dont BTA / OTA",
+      "maturity": "Maturité moyenne",
+      "rate": "Taux moyen pondéré",
+      "maturing": "Échéances à 12 mois",
+      "rating": "Notation",
+      "ratingExample": "Notation (exemple)",
+      "ratingHint": "S&P / Moody's en vigueur",
+      "hidden": "Masquée",
+      "hiddenHint": "Les notations des agences s'affichent une fois leurs licences confirmées (ADMCFG).",
+      "zoneRating": "Par État",
+      "none": "—"
+    },
+    "schedule": {
+      "options": "Md XAF · principal",
+      "quarter": "T{{quarter}} {{year}}",
+      "label": "Principal à rembourser par {{country}}, en milliards de XAF : {{bars}}.",
+      "bar": "{{label}} {{total}} (BTA {{bta}}, OTA {{ota}})",
+      "total": "Total : {{total}} Md. Les BTA à échéance sont d'ordinaire renouvelés par de nouvelles émissions (besoin de refinancement).",
+      "empty": "Aucun titre en circulation."
+    },
+    "compare": {
+      "options": "Encours sur le marché de la BEAC",
+      "columns": {
+        "country": "Pays",
+        "outstanding": "Encours Md",
+        "btaShare": "Part BTA",
+        "maturity": "Maturité (ans)",
+        "rate": "Taux moyen"
+      },
+      "note": "Plus la part des BTA est forte et la maturité courte, plus le besoin de refinancement est grand. Cliquer une ligne affiche son État.",
+      "empty": "Aucun État n'a de titres en circulation."
+    },
+    "securities": {
+      "options": "{{count}} titres · double-clic : profil",
+      "columns": {
+        "security": "Titre",
+        "country": "Pays",
+        "type": "Type",
+        "issue": "Émission",
+        "maturity": "Échéance",
+        "outstanding": "Encours Md",
+        "rate": "Coupon / taux",
+        "yield": "Rendement",
+        "yearsLeft": "Années restantes"
+      },
+      "bta": "BTA",
+      "ota": "OTA",
+      "note": "Rendement : le dernier rendement calculé (BP), ou le taux d'adjudication pour un BTA. Taux : le taux moyen d'adjudication d'un BTA, le coupon d'une OTA.",
+      "empty": "Aucun titre en circulation."
+    },
+    "documents": {
+      "agencies": {
+        "sp": "S&P Global",
+        "moodys": "Moody's",
+        "fitch": "Fitch"
+      },
+      "ratings": "Notations des agences",
+      "example": "{{rating}} (exemple)",
+      "notRated": "non noté",
+      "outlooks": {
+        "stable": "stable",
+        "positive": "positive",
+        "negative": "négative",
+        "developing": "en évolution"
+      },
+      "hidden": "Les notations des agences sont masquées tant que leurs licences ne sont pas confirmées (ADMCFG).",
+      "zone": "Choisir un État pour ses notations.",
+      "title": "Documents",
+      "pdf": "PDF",
+      "open": "PDF de {{title}}",
+      "none": "Aucun document sur cet État pour l'instant : l'administrateur des données les publie dans NEWS avec l'État pour sujet.",
+      "note": "Notations : affichées sous réserve des licences des agences ; « (exemple) » signale les valeurs de la démo."
+    },
+    "links": {
+      "eco": "Dette souveraine (DEBT)",
+      "bond": "Dette souveraine (DEBT {{code}})"
+    }
+  }
+}

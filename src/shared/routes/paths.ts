@@ -22,6 +22,8 @@ export const routes = {
   publicOffers: '/ape',
   /** BEAC (screen 34, sixth version): the monetary policy and the CEMAC's liquidity. */
   beac: '/beac',
+  /** DEBT (screen 35, sixth version): a CEMAC state's debt on the BEAC's market, or the zone's. */
+  debt: '/debt',
   fx: '/fx',
   security: '/securities/:securityId/:fn',
   /** The index profile (screen 31, fifth version): /indices/{code}/{tab}. */
@@ -180,6 +182,13 @@ export function newsTabPath(tab: NewsTab): string {
 /** AUC (screen 33) on a CEMAC state's auctions: /auc?country=CM. */
 export function auctionsPath(country?: string): string {
   return country ? `${routes.auctions}?country=${encodeURIComponent(country)}` : routes.auctions
+}
+
+/** DEBT (screen 35) on a state, by its three letters, or CEMAC: /debt?country=CMR (`DEBT CMR`). */
+export function debtPath(country?: string): string {
+  return country
+    ? `${routes.debt}?country=${encodeURIComponent(country.toUpperCase())}`
+    : routes.debt
 }
 
 /** ECO (screen 25) on an economy, by its World Bank code: /eco?country=CMR (`ECO CMR`). */

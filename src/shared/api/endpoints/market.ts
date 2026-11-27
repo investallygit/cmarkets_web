@@ -13,6 +13,11 @@ import type {
   CommodityListItemDto,
   CommodityProfileDto,
   CommodityRelatedDto,
+  DebtCompareDto,
+  DebtDocumentsDto,
+  DebtRedemptionsDto,
+  DebtSecuritiesDto,
+  DebtSummaryDto,
   DescriptionDto,
   DescriptionLanguage,
   FxConversionDto,
@@ -81,6 +86,11 @@ export const marketRoutes = {
   beacOperations: route('GET', '/beac/operations', answer<BeacOperationsDto>()),
   beacInterbank: route('GET', '/beac/interbank', answer<BeacInterbankDto>()),
   beacAggregates: route('GET', '/beac/aggregates', answer<BeacAggregatesDto>()),
+  debtSummary: route('GET', '/debt/{country}/summary', answer<DebtSummaryDto>()),
+  debtRedemptions: route('GET', '/debt/{country}/redemptions', answer<DebtRedemptionsDto>()),
+  debtSecurities: route('GET', '/debt/{country}/securities', answer<DebtSecuritiesDto>()),
+  debtDocuments: route('GET', '/debt/{country}/documents', answer<DebtDocumentsDto>()),
+  debtCompare: route('GET', '/debt/compare', answer<DebtCompareDto>()),
   fx: route('GET', '/fx', answer<FxRateDto[]>()),
   xafCrosses: route('GET', '/fx/xaf-crosses', answer<XafCrossesDto>()),
   fxHistory: route('GET', '/fx/{ccy}/history', answer<FxHistoryDto>()),
@@ -147,6 +157,16 @@ export const marketApi = {
   beacOperations: (signal?: AbortSignal) => send(marketRoutes.beacOperations, { signal }),
   beacInterbank: (signal?: AbortSignal) => send(marketRoutes.beacInterbank, { signal }),
   beacAggregates: (signal?: AbortSignal) => send(marketRoutes.beacAggregates, { signal }),
+  /** DEBT (screen 35, sixth version): a state by its three letters, or CEMAC. */
+  debtSummary: (country: string, signal?: AbortSignal) =>
+    send(marketRoutes.debtSummary, { params: { country }, signal }),
+  debtRedemptions: (country: string, signal?: AbortSignal) =>
+    send(marketRoutes.debtRedemptions, { params: { country }, signal }),
+  debtSecurities: (country: string, signal?: AbortSignal) =>
+    send(marketRoutes.debtSecurities, { params: { country }, signal }),
+  debtDocuments: (country: string, signal?: AbortSignal) =>
+    send(marketRoutes.debtDocuments, { params: { country }, signal }),
+  debtCompare: (signal?: AbortSignal) => send(marketRoutes.debtCompare, { signal }),
   /** Pairs such as EURXAF. */
   fx: (pairs: readonly string[], signal?: AbortSignal) =>
     send(marketRoutes.fx, { query: { pairs: pairs.join(',') }, signal }),

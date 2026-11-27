@@ -32,6 +32,7 @@ import {
   Rss,
   ScanLine,
   ScanSearch,
+  Scale,
   ScrollText,
   Server,
   SquarePen,
@@ -138,6 +139,8 @@ export const SCREENS: readonly ScreenDefinition[] = [
   screen('APE', 'APE', routes.publicOffers, 'client', Landmark, { permission: 'market:read', module: 'monitoring', menuCode: 'YCRV' }),
   // BEAC (screen 34): the same audience, lighting YCRV as its mockup (decision 61).
   screen('BEAC', 'BEAC', routes.beac, 'client', Banknote, { permission: 'market:read', module: 'monitoring', menuCode: 'YCRV' }),
+  // DEBT (screen 35): the same audience, lighting YCRV as its mockup (decision 61); `DEBT CMR` opens a state.
+  screen('DEBT', 'DEBT', routes.debt, 'client', Scale, { permission: 'market:read', module: 'monitoring', menuCode: 'YCRV' }),
   // RFQ (screen 22) after BS (ROADMAP decision 15), for the Traders, Managers and CEO of an organisation while the RFQ is
   // on (its CEO reads the organisation's requests, ROADMAP step 44); SVT (screen 27, step 45), the approvals, and TRD, an
   // SVT's trader links, in the SVT's menu (decision 16).

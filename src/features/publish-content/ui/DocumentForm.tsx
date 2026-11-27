@@ -5,6 +5,7 @@ import { hasIndexProfile, useIndices } from '@/entities/market'
 import { SecurityListField } from '@/entities/security'
 import { isApiError } from '@/shared/api'
 import type { DocumentDto, DocumentType } from '@/shared/api/contracts'
+import { CEMAC_COUNTRIES, cemacCode3 } from '@/shared/config/countries'
 import { useFormat } from '@/shared/i18n'
 import { Button } from '@/shared/ui/form/Button'
 import { Field } from '@/shared/ui/form/Field'
@@ -36,6 +37,8 @@ export function DocumentForm({ document, onSaved }: DocumentFormProps) {
   // The index it is about: an index profile's DOC tab lists it (screen 31, ROADMAP decision 44).
   const [indexCode, setIndexCode] = useState(document?.indexCode ?? '')
   const indices = (useIndices().data ?? []).filter((index) => hasIndexProfile(index.code))
+  // The state it is about: DEBT lists it beside the ratings (screen 35, ROADMAP decision 60).
+  const [countryCode, setCountryCode] = useState(document?.countryCode ?? '')
   const [file, setFile] = useState<File | null>(null)
   const errors = isApiError(save.error, 400) ? (save.error.problem.errors ?? {}) : {}
 
@@ -54,6 +57,7 @@ export function DocumentForm({ document, onSaved }: DocumentFormProps) {
               source: source.trim().toUpperCase(),
               securityIds,
               indexCode: indexCode || null,
+              countryCode: countryCode || null,
             },
             file,
           },
@@ -103,6 +107,23 @@ export function DocumentForm({ document, onSaved }: DocumentFormProps) {
             })),
           ]}
           onChange={(value: string) => setIndexCode(value)}
+        />
+      </Field>
+      <Field
+        label={t('content.country')}
+        hint={t('content.countryHint')}
+        error={errors.countryCode?.[0]}
+      >
+        <Select
+          value={countryCode}
+          options={[
+            { value: '', label: t('content.noCountry') },
+            ...CEMAC_COUNTRIES.map((code) => ({
+              value: code,
+              label: `${cemacCode3(code)} · ${format.country(code)}`,
+            })),
+          ]}
+          onChange={(value: string) => setCountryCode(value)}
         />
       </Field>
       <Field
