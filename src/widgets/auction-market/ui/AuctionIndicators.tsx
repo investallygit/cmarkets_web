@@ -83,7 +83,7 @@ function Tile({ title, children }: { title: string; children: ReactNode }) {
       <p className="truncate font-mono text-title font-semibold tracking-title text-secondary uppercase">
         {title}
       </p>
-      <p className="truncate font-mono text-figure text-primary tabular-nums">{children}</p>
+      <p className="font-mono text-figure break-words text-primary tabular-nums">{children}</p>
     </div>
   )
 }

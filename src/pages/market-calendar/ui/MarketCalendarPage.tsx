@@ -1,5 +1,6 @@
 import { openAlertDialog } from '@/entities/alert'
 import { rangeOf, stepOf, useCalendar } from '@/entities/calendar-event'
+import { useHasPermission } from '@/entities/session'
 import { ScreenWorkspace } from '@/features/workspace-layout'
 import type { CalendarEventDto, CalendarEventType } from '@/shared/api/contracts'
 import { contentApi } from '@/shared/api/endpoints'
@@ -43,6 +44,8 @@ export function MarketCalendarPage() {
 
   const download = (blob: Promise<Blob>, name: string) =>
     blob.then((file) => saveBlob(file, name)).catch((error: Error) => toast.error(error.message))
+  // An SVT's account reads CAL without alerts (ROADMAP step 68: its /alerts answered 403).
+  const canAlert = useHasPermission('alerts:write')
   const alertOn = (event: CalendarEventDto) =>
     openAlertDialog({
       calendar: {
@@ -76,7 +79,7 @@ export function MarketCalendarPage() {
         range={range}
         selectedId={state.event}
         onSelect={(event) => change({ event: event.id })}
-        onAlert={alertOn}
+        onAlert={canAlert ? alertOn : undefined}
         onStep={(step) => change({ date: stepOf(state.view, state.date, step) })}
         onToday={() => change({ date: today })}
       />
@@ -85,7 +88,7 @@ export function MarketCalendarPage() {
       <EventDetailPanel
         eventId={state.event}
         today={today}
-        onAlert={alertOn}
+        onAlert={canAlert ? alertOn : undefined}
         onIcs={(event) =>
           void download(
             contentApi.calendarExport('ics', { id: event.id }),
@@ -94,7 +97,7 @@ export function MarketCalendarPage() {
         }
       />
     ),
-    alerts: <CalendarAlertsPanel />,
+    alerts: <CalendarAlertsPanel allowed={canAlert} />,
   }
   return <ScreenWorkspace screenId="CAL" defaultLayout={MARKET_CALENDAR_LAYOUT} panels={panels} />
 }

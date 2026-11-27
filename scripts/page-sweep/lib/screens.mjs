@@ -1,7 +1,7 @@
 // What the sweep opens: every screen of shared/routes/screens.ts with what gives access to it, the
 // demo accounts, and each account's pages beyond its menu (tabs, addresses that name an item).
 
-/** The 48 screens: [path, audience, permission, module], as `SCREENS` declares them. */
+/** The 54 screens: [path, audience, permission, module], as `SCREENS` declares them. */
 export const SCREENS = [
   ['/mkt', 'client', 'market:read', 'monitoring'],
   ['/cmdty', 'client', 'market:read', 'monitoring'],
@@ -12,6 +12,11 @@ export const SCREENS = [
   ['/ycrv', 'client', 'analysis:read', 'analysis'],
   ['/bp', 'client', 'analysis:read', 'analysis'],
   ['/bs', 'client', 'analysis:read', 'analysis'],
+  ['/auc', 'client', 'market:read', 'monitoring'],
+  ['/auc/next', 'client', 'market:read', 'monitoring'],
+  ['/ape', 'client', 'market:read', 'monitoring'],
+  ['/beac', 'client', 'market:read', 'monitoring'],
+  ['/debt', 'client', 'market:read', 'monitoring'],
   ['/rfq', 'client', 'rfq:read'],
   ['/svt', 'client', 'svt:approve'],
   ['/svt/traders', 'client', 'svt:approve'],
@@ -48,6 +53,7 @@ export const SCREENS = [
   ['/admin/payouts', 'backoffice', 'payouts:manage'],
   ['/admin/rfq', 'backoffice', 'rfq:report'],
   ['/admin/rfq/reports', 'backoffice', 'rfq:report'],
+  ['/admin/rfq/completion', 'backoffice', 'rfq:report'],
   ['/admin/settings', 'backoffice', 'settings:manage'],
   ['/admin/audit', 'backoffice', 'audit:read'],
   ['/admin/dl', 'backoffice'],
@@ -174,6 +180,10 @@ export function extrasFor(key, ids) {
         { path: '/eco?country=CMR' },
         missing('/eco?country=XYZ'),
         { path: '/fx?currency=USD' },
+        { path: '/auc?country=CM' },
+        { path: '/debt?country=CMR' },
+        { path: '/cal?view=week' },
+        { path: '/cal?view=month' },
         missing('/fx?currency=XYZ'),
         ...named('/n?article=', ids.news),
         missing(`/n?article=${NONE}`),
@@ -241,7 +251,8 @@ export const ROUTES = [
   '/(ycrv|bp|yas)(/[^/]+)?',
   '/port(/[^/]+(/(transactions|performance|risk|income|reports))?)?',
   '/n(/(documents|new))?',
-  '/(mkt|cmdty|eco|fx|eqs|bs|etfs|rfq|svt|opt|pub|cal|alrt|cfg|net|msg|imp|dl)',
+  '/(mkt|cmdty|eco|fx|eqs|bs|etfs|rfq|svt|opt|pub|cal|alrt|cfg|net|msg|imp|dl|auc|ape|beac|debt)',
+  '/auc/next',
   '/(rfq|svt)/agreements',
   '/svt/traders',
   '/opt/result',
@@ -249,6 +260,6 @@ export const ROUTES = [
   '/net/me',
   '/data/(session|corrections|content|eodhd|history)',
   '/admin/(users|subscriptions|sources|media-payments|analysts|moderation|payouts|settings|audit|rfq|dl)',
-  '/admin/rfq/reports',
+  '/admin/rfq/(reports|completion)',
   '/api/v1/.+',
 ].map((source) => `^${source}/?$`)

@@ -13,7 +13,8 @@ import { linkOf } from '../lib/links'
 interface EventDetailPanelProps {
   eventId: string | null
   today: string
-  onAlert: (event: CalendarEventDto) => void
+  /** None where the user may not set alerts (an SVT's account): the button is left out. */
+  onAlert?: (event: CalendarEventDto) => void
   onIcs: (event: CalendarEventDto) => void
 }
 
@@ -68,7 +69,7 @@ function Detail({
 }: {
   data: CalendarEventDetailDto
   today: string
-  onAlert: (event: CalendarEventDto) => void
+  onAlert?: (event: CalendarEventDto) => void
   onIcs: (event: CalendarEventDto) => void
 }) {
   const { t } = useTranslation()
@@ -153,13 +154,15 @@ function Detail({
           ))}
         </dl>
         <div className="flex flex-col gap-1.5 pt-1">
-          <button
-            type="button"
-            onClick={() => onAlert(event)}
-            className="min-h-7 border border-accent-amber text-accent-amber hover:bg-accent-amber/10"
-          >
-            {t('calendar.detail.createAlert')}
-          </button>
+          {onAlert && (
+            <button
+              type="button"
+              onClick={() => onAlert(event)}
+              className="min-h-7 border border-accent-amber text-accent-amber hover:bg-accent-amber/10"
+            >
+              {t('calendar.detail.createAlert')}
+            </button>
+          )}
           <button
             type="button"
             onClick={() => onIcs(event)}

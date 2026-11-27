@@ -59,7 +59,8 @@ test(
     await page.goto('/mkt')
     await switchAccount(page, /analyst/i, 'Trader', /trader/i)
     await openAgreements(page)
-    await expect(list(page)).toContainText('10 results')
+    // Step 61's purchase by criteria added T. Bekale's sale to A. Tchakounté (ACC-0012).
+    await expect(list(page)).toContainText('11 results')
     await expect(rows(page).first()).toContainText(
       /ACC-0011.*BUY.*OTA CMR 3 yr 2029.*Asset manager A/,
     )
@@ -91,7 +92,7 @@ test(
 
     // Reset, then the demo's saved filter.
     await filters.getByRole('button', { name: 'Reset' }).click()
-    await expect(list(page)).toContainText('10 results')
+    await expect(list(page)).toContainText('11 results')
     await filters
       .getByRole('combobox', { name: 'Saved filters' })
       .selectOption({ label: 'Concluded OTA' })
@@ -102,10 +103,10 @@ test(
     await list(page).getByRole('button', { name: /^csv$/i }).click()
     expect((await download).suggestedFilename()).toBe('cmarket-agreements.csv')
 
-    // E. Fouda, C. Abena's CEO: Asset manager A's five, read only.
+    // E. Fouda, C. Abena's CEO: Asset manager A's six (ACC-0013 by criteria), read only.
     await switchAccount(page, /trader/i, 'CEO', /ceo/i)
     await openAgreements(page)
-    await expect(list(page)).toContainText('5 results')
+    await expect(list(page)).toContainText('6 results')
     await rows(page).filter({ hasText: 'ACC-0001' }).click()
     await expect(panel(page, number('0001'))).toBeVisible()
     await expect(page.getByRole('button', { name: 'Download ticket PDF' })).toBeVisible()
@@ -124,14 +125,15 @@ test(
     await menu.getByRole('link', { name: /^AGR/ }).click()
     await expect(page).toHaveURL(/\/svt\/agreements$/)
     await expect(page.getByRole('navigation', { name: 'RFQ screens' })).toHaveCount(0)
-    await expect(list(page)).toContainText('11 results')
+    // Every agreement Bank E is an SVT of, the two by criteria (step 61) included.
+    await expect(list(page)).toContainText('13 results')
     // From its client's side: C. Abena sold to Bank C through Bank E.
     await expect(rows(page).filter({ hasText: 'ACC-0001' })).toContainText(/SELL.*Bank C/)
 
     await switchAccount(page, /svt/i, 'Admin', /^admin$/i)
     await menu.getByRole('link', { name: /^RFQ/ }).click()
     await expect(page).toHaveURL(/\/admin\/rfq$/)
-    await expect(list(page)).toContainText('11 results')
+    await expect(list(page)).toContainText('13 results')
     await expect(list(page).getByRole('columnheader', { name: 'Buyer' })).toBeVisible()
     await expect(list(page).getByRole('columnheader', { name: 'Side' })).toHaveCount(0)
     await expect(panel(page, 'Filters').getByRole('combobox', { name: 'Role' })).toHaveCount(0)

@@ -212,6 +212,18 @@ describe('DataTable', () => {
     expect(screen.queryByRole('cell', { name: 'Real 52500' })).not.toBeInTheDocument()
   })
 
+  it('shares the width among the columns of an empty table, which scrolls nothing sideways', () => {
+    const fixed = helper.columns([
+      helper.accessor('code', { header: 'Security', meta: { width: '240px' } }),
+      helper.accessor('last', { header: 'Last', meta: { width: '200px' } }),
+    ])
+    const { rerender } = render(<DataTable data={[]} columns={fixed} getRowId={getRowId} />)
+    const header = () => screen.getAllByRole('row')[0]
+    expect(header().style.gridTemplateColumns).toBe('repeat(2, minmax(0, 1fr))')
+    rerender(<DataTable data={data} columns={fixed} getRowId={getRowId} />)
+    expect(header().style.gridTemplateColumns).toBe('240px 200px')
+  })
+
   it('tells screen readers the column sorted and which way (B43)', async () => {
     const user = userEvent.setup()
     render(<DataTable data={data} columns={columns} getRowId={getRowId} />)

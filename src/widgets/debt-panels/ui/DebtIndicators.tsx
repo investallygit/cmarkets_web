@@ -80,7 +80,7 @@ function Tile({ title, hint, children }: { title: string; hint?: string; childre
       <p className="truncate font-mono text-title font-semibold tracking-title text-secondary uppercase">
         {title}
       </p>
-      <p className="truncate font-mono text-figure text-primary tabular-nums">{children}</p>
+      <p className="font-mono text-figure break-words text-primary tabular-nums">{children}</p>
       {hint && <span className="sr-only">{hint}</span>}
     </div>
   )

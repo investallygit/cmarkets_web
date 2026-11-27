@@ -217,16 +217,24 @@ export function DataTable<TRow extends RowData>({
   // What its header and its figures need, measured on the rows shown when the data, the columns or
   // the language change: a column narrower than that widens, and the table scrolls sideways in its
   // panel rather than cut a figure (WCAG 1.4.10 lets a data table do so; ROADMAP step 48).
+  // A virtualized table draws no row before its scroll box is measured: the columns are measured
+  // again once its rows show (AUC's 114 results were cut; ROADMAP step 68).
   const [fitted, setFitted] = useState<Record<string, number>>({})
   const columnIds = JSON.stringify(leafColumns.map((column) => column.id))
+  const shownRows = virtualize ? virtualizer.getVirtualItems().length : rows.length
   useLayoutEffect(() => {
     if (!scrollRef.current) return
     const next = measureColumns(scrollRef.current, JSON.parse(columnIds) as string[])
     setFitted((current) => (sameWidths(current, next) ? current : next))
-  }, [data, columns, columnIds, i18n.language])
-  const gridTemplateColumns = leafColumns
-    .map((column) => columnTrack(column.columnDef.meta?.width, fitted[column.id]))
-    .join(' ')
+  }, [data, columns, columnIds, i18n.language, shownRows])
+  // An empty table scrolls nothing sideways (it takes no focus): its columns share the panel's
+  // width, each header shortened rather than cut at the edge (CORR's log at 390 px; step 68).
+  const gridTemplateColumns =
+    rows.length === 0
+      ? `repeat(${leafColumns.length}, minmax(0, 1fr))`
+      : leafColumns
+          .map((column) => columnTrack(column.columnDef.meta?.width, fitted[column.id]))
+          .join(' ')
 
   /** The rows as shown, sorting included. */
   const exportTable: TableExporter = (format) => {

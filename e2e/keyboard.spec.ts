@@ -196,3 +196,120 @@ test('BS, BP and ETFS from the keyboard: a bond picked with the arrows and price
   await expect(page).toHaveURL(new RegExp(`/securities/${reached}\\.[A-Z]+/des$`))
   await expect(page).toHaveTitle(/ — ETF profile · CMarket$/)
 })
+
+// The sixth version's keyboard walks (ROADMAP step 68): RFQ by criteria, BP's rate entry panel, CAL.
+
+test('RFQ by criteria from the keyboard: the type by the arrows, the criteria typed, the states toggled', async ({
+  page,
+}) => {
+  await ownSession(page, 't.bekale@bank.example')
+  await page.goto('/rfq')
+  const form = panel(page, 'New request')
+  await tabTo(page, form.getByRole('radio', { name: 'Specific security' }), 120)
+  await page.keyboard.press('ArrowRight')
+  await expect(form.getByRole('radio', { name: 'By criteria' })).toBeChecked()
+  await expect(form).toContainText('by criteria: buy only')
+
+  await tabTo(page, form.getByRole('textbox', { name: 'Amount (face, XAF)' }))
+  await page.keyboard.type('400000000')
+  await tabTo(page, form.getByRole('textbox', { name: /^Minimum yield/ }))
+  await page.keyboard.type('6')
+  await tabTo(page, form.getByRole('textbox', { name: /^Maximum remaining maturity/ }))
+  await page.keyboard.type('3')
+  const gabon = form.getByRole('button', { name: 'GAB (Gabon)' })
+  await tabTo(page, gabon)
+  await page.keyboard.press('Enter')
+  await expect(gabon).toHaveAttribute('aria-pressed', 'true')
+  await page.keyboard.press('Space')
+  await expect(gabon).toHaveAttribute('aria-pressed', 'false')
+  await page.keyboard.press('Enter')
+  await expect(form).toContainText(/\d+ eligible securit(y|ies) today/)
+  await expect(panel(page, 'Eligible securities')).toContainText('Preview of the new request')
+
+  // The request is published from the keyboard too; the flow leaves the board as it found it.
+  const publish = form.getByRole('button', { name: 'Publish request' })
+  await tabTo(page, publish)
+  await expect(publish).toBeEnabled()
+})
+
+test("BP's rate entry panel from the keyboard: the method by the arrows, a rate per date, Calculate", async ({
+  page,
+}) => {
+  await page.goto('/bp/ECMR-6.25-2029')
+  const form = panel(page, 'Inputs')
+  await expect(form.getByRole('combobox', { name: 'Redemption' })).toHaveValue('amortizing')
+  await tabTo(page, form.getByRole('radio', { name: 'Single yield (YTM)' }), 120)
+  await page.keyboard.press('ArrowDown')
+  await page.keyboard.press('ArrowDown')
+  await expect(form.getByRole('radio', { name: 'Rates entered by maturity' })).toBeChecked()
+
+  // Each cash-flow date's rate, reached by Tab and typed.
+  const rates = panel(page, 'Rate entry by cash-flow date').getByRole('textbox', {
+    name: /^Rate on /,
+  })
+  await expect(rates.first()).toBeVisible()
+  const count = await rates.count()
+  for (let index = 0; index < count; index += 1) {
+    await tabTo(page, rates.nth(index))
+    await page.keyboard.press('ControlOrMeta+A')
+    await page.keyboard.type((5 + index * 0.25).toFixed(2))
+  }
+  await tabTo(page, form.getByRole('button', { name: 'Calculate' }), 120)
+  await page.keyboard.press('Enter')
+  await expect(panel(page, 'Results')).toContainText(/As of \d{2}\/\d{2}\/\d{4} · Rates entered/)
+  await expect(form.getByRole('region', { name: 'Entry status' })).toContainText(
+    `${count} rates entered for ${count} cash-flow dates`,
+  )
+})
+
+test('CAL from the keyboard: a type and the view toggled, an event picked and opened, the bell', async ({
+  page,
+}) => {
+  await page.goto('/mkt')
+  await expect(page.getByRole('heading', { name: 'Indices' })).toBeVisible()
+  await page.keyboard.press('Control+K')
+  await page.keyboard.type('CAL')
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/\/cal$/)
+  await expect(page).toHaveTitle('Market calendar · CMarket')
+
+  // A type off and on again with Space; the view by the arrows.
+  const filters = panel(page, 'Filters')
+  const auctions = filters.getByRole('checkbox', { name: 'BTA / OTA auctions' })
+  await tabTo(page, auctions)
+  await page.keyboard.press('Space')
+  await expect(page).toHaveURL(/types=/)
+  await expect(auctions).not.toBeChecked()
+  await page.keyboard.press('Space')
+  await expect(auctions).toBeChecked()
+  await tabTo(page, filters.getByRole('radio', { name: 'List' }))
+  await page.keyboard.press('ArrowRight')
+  await expect(page).toHaveURL(/view=month/)
+  // The address changes before the page draws the month: the arrow back waits for it.
+  await expect(filters.getByRole('radio', { name: 'Month' })).toBeChecked()
+  await page.keyboard.press('ArrowLeft')
+  await expect(page).not.toHaveURL(/view=/)
+  await expect(filters.getByRole('radio', { name: 'List' })).toBeChecked()
+
+  // The bell's form keeps the focus and gives it back on Escape.
+  const agenda = panel(page, 'Agenda')
+  const bell = agenda
+    .getByRole('button', { name: 'Create an alert on BTA 26 weeks', exact: true })
+    .first()
+  await tabTo(page, bell, 200)
+  await page.keyboard.press('Enter')
+  const dialog = page.getByRole('dialog', { name: 'New alert' })
+  await expect(dialog.getByRole('combobox', { name: 'Type' })).toHaveValue('calendar')
+  await page.keyboard.press('Escape')
+  await expect(dialog).toHaveCount(0)
+  await expect(bell).toBeFocused()
+
+  // Enter picks the event, Enter again opens its screen: AUC on the auction's state.
+  await page.keyboard.press('Shift+Tab')
+  await expect(page.locator(':focus')).toHaveAccessibleName(/BTA 26 weeks/)
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/event=planned-/)
+  await expect(panel(page, 'Event')).toContainText(/Auction · CMR BTA 26 weeks/)
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/\/auc\?country=CM$/)
+})

@@ -95,6 +95,7 @@
     "alerts": {
       "options": "ALRT",
       "empty": "Aucune alerte de calendrier : choisissez un événement et créez-en une.",
+      "notAllowed": "Les alertes ne font pas partie de ce compte : le calendrier est en lecture seule.",
       "any": "Tous",
       "mine": "mes titres",
       "on": "{{type}} — {{scope}}",

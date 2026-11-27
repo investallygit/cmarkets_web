@@ -18,7 +18,8 @@ interface AgendaPanelProps {
   range: { from: string; to: string }
   selectedId: string | null
   onSelect: (event: CalendarEventDto) => void
-  onAlert: (event: CalendarEventDto) => void
+  /** None where the user may not set alerts (an SVT's account): no bell. */
+  onAlert?: (event: CalendarEventDto) => void
   onStep: (step: 1 | -1) => void
   onToday: () => void
 }
@@ -149,14 +150,16 @@ export function AgendaPanel({
                             {words.detail(event)}
                           </span>
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => onAlert(event)}
-                          aria-label={t('calendar.agenda.alert', { event: title })}
-                          className="mr-2 inline-flex size-6 shrink-0 items-center justify-center text-secondary hover:text-accent-amber"
-                        >
-                          <BellPlus aria-hidden className="size-3.5" />
-                        </button>
+                        {onAlert && (
+                          <button
+                            type="button"
+                            onClick={() => onAlert(event)}
+                            aria-label={t('calendar.agenda.alert', { event: title })}
+                            className="mr-2 inline-flex size-6 shrink-0 items-center justify-center text-secondary hover:text-accent-amber"
+                          >
+                            <BellPlus aria-hidden className="size-3.5" />
+                          </button>
+                        )}
                       </li>
                     )
                   })}

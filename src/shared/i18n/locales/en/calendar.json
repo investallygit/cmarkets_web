@@ -95,6 +95,7 @@
     "alerts": {
       "options": "ALRT",
       "empty": "No calendar alert yet: pick an event and create one.",
+      "notAllowed": "Alerts are not part of this account: the calendar is read only.",
       "any": "Any",
       "mine": "my securities",
       "on": "{{type}} — {{scope}}",

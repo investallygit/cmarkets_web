@@ -59,7 +59,8 @@ test('CAL shows the agenda by day with its filters, an event’s detail and ICS,
   // The types and the states narrow the agenda; the counts stay those of every type.
   await filters.getByText('BTA / OTA auctions', { exact: true }).click()
   await expect(page).toHaveURL(/types=/)
-  await expect(agenda.getByRole('button', { name: /BTA 26 weeks/ })).toHaveCount(0)
+  // The auctions' results stay: a type of their own.
+  await expect(agenda.getByRole('button', { name: /Auction\s*CMR\s*BTA 26 weeks/ })).toHaveCount(0)
   await filters.getByRole('button', { name: 'GNQ' }).click()
   await expect(agenda.getByRole('button', { name: /BANGE · extraordinary GM/ })).toHaveCount(0)
   await filters.getByRole('button', { name: 'Reset' }).click()
@@ -113,9 +114,11 @@ test('The Data admin enters an announced statistic; an alert on Cameroon’s auc
   // The bell of a Cameroonian auction: a calendar alert on Cameroon's auctions, the day before.
   const auction = agenda
     .getByRole('listitem')
-    .filter({ hasText: /CMR\s*BTA 26 weeks/ })
+    .filter({ hasText: /10:00\s*Auction\s*CMR\s*BTA 26 weeks/ })
     .first()
-  await auction.getByRole('button', { name: 'Create an alert on BTA 26 weeks' }).click()
+  await auction
+    .getByRole('button', { name: 'Create an alert on BTA 26 weeks', exact: true })
+    .click()
   const dialog = page.getByRole('dialog', { name: 'New alert' })
   await expect(dialog.getByRole('combobox', { name: 'Type' })).toHaveValue('calendar')
   await expect(dialog.getByRole('combobox', { name: 'Event' })).toHaveValue('auction')
