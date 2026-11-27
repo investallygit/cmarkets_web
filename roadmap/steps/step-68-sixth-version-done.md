@@ -32,9 +32,11 @@ phases 46 to 51 added.
   (a type by Space, the view by the arrows, the bell's form giving the focus back on Escape, an
   event picked by Enter and opened by Enter again on AUC).
 - **CMarket.Api**: Domain 741, Application 868, integration 322, architecture 21; SQL Server: 47
-  (Docker). The board under k6 (`tests/load/rfq-board.js`, 40 users on SQLite, seven of the demo's
-  participants): 7,798 checks, none failed, no request failed; p95 8 ms for the board with its
-  ratios, 4 ms for the requests, the blotter and a completion detail.
+  (Docker). The board under k6 (`tests/load/rfq-board.js`, 40 users, seven of the demo's
+  participants): on SQLite 7,798 checks, none failed, no request failed; p95 8 ms for the board with
+  its ratios, 4 ms for the requests, the blotter and a completion detail. On SQL Server 2022
+  (Docker, the x64 image emulated on the Mac): 7,741 checks, none failed, no request failed; p95 58
+  ms for the board, 31 ms for the requests, 35 ms for the blotter, 49 ms for a completion detail.
 - **Operations** (CMarket.Api's runbooks): `eodhd-economic-events` in the EODHD outage, and the
   calendar alerts, keyed per event so that a replay notifies no one twice.
 - The README's status and structure, the client and back-office screens: up to date for 61 to 67.
@@ -62,6 +64,5 @@ phases 46 to 51 added.
 - The CEMAC sovereign yields flow of `back-office.spec.ts` fails before the BVMAC session (IMP
   proposes today's session, the stored point is the day before), passes after it: as before this
   version.
-- The load test on SQL Server: run on SQLite only.
 - After the release, the read-only check of the live site: CAL, AUC, BEAC, DEBT, RFQ by criteria
   and the completion ratio.
