@@ -678,3 +678,10 @@ after }], reason }`; `?userId=` matches who acted or the account acted on, and `
   the auctions CMarket holds: its outstanding from the master's amount issued (the plan)?
 - **Section 12, sixth version**: the matrix has no row for CAL, AUC, BEAC and DEBT (the plan: as
   ECO and FX, decision 61); section 11's list of files leaves out screen 6's eight new ones.
+- **What EODHD does not have, the client's answer of 27 November**: "manual data to be uploaded
+  manually", through screen 6's files
+  ([sixth version](sixth-version.md#the-clients-answer-of-27-november)).
+  It answers where the BEAC's policy and money-market rates come from (`BEAC_POLICY` and
+  `INTERBANK_RATES`, fourth version), the CEMAC commodities' source (`COMMODITY_PRICES`), BVMAC's
+  weights (`INDEX_CONSTITUENTS`, fifth version) and CAL's CEMAC statistics (by hand). Still open:
+  the licences, how much history the launch loads, and who sends the files to the Data admin.

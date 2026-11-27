@@ -156,6 +156,30 @@ and quantity, and a ratio representing the number of RFQs completed by the user"
 - **BP**: the reference rate, the spread and the four helpers of decision 46, in block B; the
   "Calculation method" panel below the schedule.
 
+## The client's answer of 27 November
+
+Asked where the real data of what EODHD does not cover would come from (EODHD's 70 exchanges hold
+15 African ones but not BVMAC, its GBOND series no CEMAC state, and the BEAC publishes PDFs only),
+the client answered: "All that is not on eodhd are manual data to be uploaded manually." That is
+section 11's rule, and the files the Data admin uploads on screen 6 hold it already:
+
+- BVMAC: the daily prices, the indices, the securities, the corporate actions, the financial
+  statements, the history once at launch, `DESCRIPTIONS` and `INDEX_CONSTITUENTS` (decision 42).
+- Bonds and rates: `BOND_MASTER`, `BOND_RATINGS`, `CEMAC_SOV_YIELDS`, `AUCTION_CALENDAR` and
+  `AUCTION_RESULTS`.
+- The BEAC: `BEAC_POLICY` (the policy and marginal lending rates of `/rates/policy`, decision 59),
+  `BEAC_OPERATIONS`, `INTERBANK_RATES` and `MONETARY_AGGREGATES`.
+- The rest: `SOVEREIGN_RATINGS`, `CORPORATE_EVENTS`, `COMMODITY_PRICES` (the CEMAC complement),
+  `MACRO` where the World Bank has no figure, the ETF profiles and their NAV.
+
+Nothing to build. The answer settles where the data comes from in the questions on the BEAC's
+rates and the CEMAC commodities (fourth version), on BVMAC's index weights (fifth) and on CAL's
+CEMAC statistics (sixth). It leaves open the licences (EODHD's commercial licence, the agencies'
+ratings), the history the launch loads and who sends the files to the Data admin. Before the first
+real upload, the live site needs a database without the demo's data and the market simulator off:
+the demo's rows carry the source `FILE` as an upload does, and the simulator trades over the
+uploaded prices.
+
 ## Decisions taken
 
 The decisions of the earlier versions stand (1 to 48). Where the sixth is silent or contradicts
