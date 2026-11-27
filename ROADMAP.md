@@ -132,7 +132,7 @@ in the order below, the screens it touched and the README's status are brought u
 | 65   | [BEAC: monetary policy and liquidity (screen 34)](roadmap/steps/step-65-beac-monetary-policy.md)                     | Done   |
 | 66   | [DEBT: the sovereign debt (screen 35)](roadmap/steps/step-66-sovereign-debt.md)                                      | Done   |
 | 67   | [CAL: the event calendar (screen 32)](roadmap/steps/step-67-event-calendar.md)                                       | Done   |
-| 68   | [Sixth version done: README, accessibility, every flow](roadmap/steps/step-68-sixth-version-done.md)                 | Doing  |
+| 68   | [Sixth version done: README, accessibility, every flow](roadmap/steps/step-68-sixth-version-done.md)                 | Done   |
 
 Steps 41 to 48 run in three lanes at once, each with its own steps: see [Lanes](roadmap/lanes.md),
 which also says what waits for what. Step 49 came after them, on a rule step 48 had left open.

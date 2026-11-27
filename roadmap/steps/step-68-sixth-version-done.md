@@ -1,4 +1,4 @@
-# Step 68 · Sixth version done: README, accessibility, every flow (M): under way
+# Step 68 · Sixth version done: README, accessibility, every flow (M): done
 
 Step 68 of the [roadmap](../../ROADMAP.md#order), for the
 [sixth version of the spec](../sixth-version.md). CMarket.Api's operations (phase 12) for what
@@ -64,5 +64,25 @@ phases 46 to 51 added.
 - The CEMAC sovereign yields flow of `back-office.spec.ts` fails before the BVMAC session (IMP
   proposes today's session, the stored point is the day before), passes after it: as before this
   version.
-- After the release, the read-only check of the live site: CAL, AUC, BEAC, DEBT, RFQ by criteria
-  and the completion ratio.
+
+## After the release
+
+The live site, read only, on 27 November 2026: steps 60 to 68 and phases 46 to 51, pushed together;
+the web from 15:14 UTC, CMarket.Api from 15:15 UTC (its CI green at 15:23).
+
+- The live API's OpenAPI has the web's 466 routes, no more, no fewer (`openapi-routes.txt`).
+- The page sweep (`--readonly --no-reload`, the API host's token as in step 50) on the screens of
+  this version: RFQ and its agreements, SVT, BP, CAL, AUC, AUC NEXT, APE, BEAC, DEBT, NET, IMP,
+  CORR, ADMCFG, the Admin's RFQ and RFQ CPL; twelve accounts and the visitor, each in its profile's
+  language, 1600 and 390 px, axe on each, every write blocked: 348 visits, 590 API answers. No 5xx,
+  no page error, no raw key, no axe finding, nothing cut; the 4xx are the designed ones (the
+  visitor's 401, the unknown ids' 404). Left: the known groups ("BVMAC Equities" in French, the
+  Admin's French specialty names).
+- Read through the API: CAL's next 14 days, 17 events of six types, seven of them EODHD's
+  international events (`eodhd-economic-events` runs live); AUC 286 results and its summary; BEAC's
+  summary and 18 decisions; DEBT CMR and the comparison of the six states; the trader's board, a
+  request by criteria with its requester's ratio (90 %, 21 cases) and the trader's own as a
+  responder (93 %, 74 cases).
+- Slow: the calls take 1.3 to 2.5 s, the RFQ board 3.4 s (median; 5 s at most), its blotter 2.8 s.
+  The board's dozen queries, one after another, each cross from West US 3 to the database in
+  France Central: the region of step 49's check, still to move.
