@@ -1,0 +1,164 @@
+{
+  "calendar": {
+    "badges": {
+      "auction": "Auction",
+      "result": "Result",
+      "redemption": "Redemption",
+      "dividend": "Dividend",
+      "meeting": "AGM",
+      "earnings": "Earnings",
+      "beac": "BEAC",
+      "statistic": "Statistic",
+      "international": "Intl"
+    },
+    "types": {
+      "auction": "BTA / OTA auctions",
+      "result": "Auction results",
+      "redemption": "Redemptions",
+      "dividend": "Dividends",
+      "meeting": "General meetings",
+      "earnings": "Earnings releases",
+      "beac": "BEAC monetary policy",
+      "statistic": "CEMAC statistics",
+      "international": "International (EODHD)"
+    },
+    "filters": {
+      "options": "Reset",
+      "eventTypes": "Event types",
+      "countries": "Countries",
+      "view": "View",
+      "views": {
+        "day": "Day",
+        "week": "Week",
+        "list": "List",
+        "month": "Month"
+      },
+      "mine": "Only my securities (portfolios, watchlists)",
+      "export": "Export",
+      "exportIcs": "ICS",
+      "exportXlsx": "XLSX",
+      "exportLabel": "Export the events shown as {{format}}",
+      "internationalOff": "Off until the Admin turns EODHD's events on (ADMCFG).",
+      "countOf": "{{count}} events of this type"
+    },
+    "agenda": {
+      "options": "{{count}} events · Douala time",
+      "previous": "Previous",
+      "next": "Next",
+      "today": "Today",
+      "todayMark": "today",
+      "range": "{{from}} to {{to}}",
+      "empty": "No event in these days for these filters.",
+      "wholeDay": "—",
+      "note": "Click: detail · double-click: linked screen (auction, profile, BEAC) · bell: create an alert",
+      "alert": "Create an alert on {{event}}"
+    },
+    "detail": {
+      "pick": "Pick an event in the agenda: its detail, an alert, your calendar.",
+      "today": "Today {{time}}",
+      "on": "{{date}} {{time}}",
+      "resultsAround": "Results around 15:00",
+      "announced": "Announced date",
+      "rows": {
+        "issuer": "Issuer",
+        "security": "Security",
+        "valueDate": "Value date",
+        "maturity": "Maturity",
+        "offered": "Amount offered",
+        "averageRate": "Average rate",
+        "marginalRate": "Marginal rate",
+        "cover": "Cover ratio",
+        "bidders": "Participants",
+        "previous": "Previous comparable",
+        "previousCover": "Previous cover ratio",
+        "exDate": "Ex-dividend date",
+        "paymentDate": "Payment date",
+        "amount": "Amount",
+        "policyRate": "Policy rate",
+        "detail": "Detail",
+        "source": "Source"
+      },
+      "sources": {
+        "file": "Data admin file",
+        "entry": "Entered by the Data admin",
+        "eodhd": "EODHD",
+        "cmarket": "CMarket"
+      },
+      "createAlert": "Create an alert on this event",
+      "addIcs": "Add to my calendar (ICS)",
+      "open": {
+        "auction": "See this state's auctions (AUC)",
+        "security": "Open the security's profile",
+        "beac": "Open the BEAC's monetary policy (BEAC)"
+      }
+    },
+    "alerts": {
+      "options": "ALRT",
+      "empty": "No calendar alert yet: pick an event and create one.",
+      "any": "Any",
+      "mine": "my securities",
+      "on": "{{type}} — {{scope}}",
+      "daysBefore": "D−{{days}}",
+      "channels": {
+        "push": "screen",
+        "email": "e-mail",
+        "sms": "SMS"
+      },
+      "sources": "Sources: auction calendars (Data admin), BVMAC corporate actions, BEAC releases, issuer publications; international: EODHD."
+    },
+    "words": {
+      "bta": "BTA {{term}} weeks",
+      "ota": "OTA {{term}} yr",
+      "resultOf": "{{security}} of {{date}}",
+      "phases": {
+        "ex": "ex-dividend",
+        "payment": "payment",
+        "partial": "partial redemption",
+        "final": "maturity"
+      },
+      "mpc": "Monetary Policy Committee",
+      "offered": "Offered {{amount}} bn",
+      "value": "value {{date}}",
+      "averageRate": "Average rate {{rate}}",
+      "cover": "cover {{cover}}",
+      "outstanding": "Outstanding {{amount}} bn",
+      "perShare": "{{amount}} / share",
+      "toBeConfirmed": "Amount to be confirmed",
+      "policyRate": "Policy rate {{rate}}",
+      "example": "(example)",
+      "announced": "announced date"
+    },
+    "corr": {
+      "title": "Calendar events",
+      "add": "Enter an event",
+      "empty": "No event entered or loaded around today.",
+      "formTitle": "A new event of the calendar",
+      "edit": "Edit {{title}}",
+      "delete": "Delete {{title}}",
+      "confirmTitle": "Delete {{title}}?",
+      "confirmMessage": "The event leaves CAL and MKT's calendar; the deletion is written to the audit log.",
+      "deleted": "{{title}} deleted.",
+      "saved": "{{title}} saved.",
+      "isConfirmed": "confirmed",
+      "isAnnounced": "announced date",
+      "zone": "CEMAC zone, or the security's state",
+      "timeHint": "In Douala; empty for the whole day.",
+      "detailHint": "Agenda: capital increase · Previous 3.8% year on year",
+      "confirmed": "Date confirmed (otherwise shown as an announced date)",
+      "fields": {
+        "date": "Date",
+        "time": "Time",
+        "type": "Type",
+        "title": "Event",
+        "detail": "Detail",
+        "security": "Security",
+        "country": "State",
+        "confirmed": "Confirmed"
+      },
+      "errors": {
+        "required": "Required",
+        "time": "A time such as 10:00"
+      }
+    }
+  }
+}

@@ -1,9 +1,10 @@
+import type { CalendarEventType } from './calendar'
 import type { IsoDateTime } from './common'
 
 /** Push notification, e-mail or SMS (spec section 5). */
 export type AlertChannel = 'push' | 'email' | 'sms'
 
-/** What an alert watches: the six alert types of spec section 5. */
+/** What an alert watches: the six alert types of spec section 5, and the calendar's (sixth version). */
 export type AlertCondition =
   /** A price or percentage-change threshold is crossed. */
   | {
@@ -30,6 +31,19 @@ export type AlertCondition =
       about: 'analysts' | 'security' | 'country'
       securityId: string | null
       country: string | null
+    }
+  /**
+   * An event of the calendar (CAL, screen 32; ROADMAP decision 57): a type, of a country, of a
+   * security, of the user's securities (one at most) or of any; results and BEAC decisions told
+   * when published, the others `daysBefore` days ahead (D−2 for a dividend by default).
+   */
+  | {
+      type: 'calendar'
+      event: CalendarEventType
+      country: string | null
+      securityId: string | null
+      mine: boolean
+      daysBefore: number
     }
 
 export type AlertType = AlertCondition['type']

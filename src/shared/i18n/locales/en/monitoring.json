@@ -12,12 +12,15 @@
     },
     "next7Days": "Next 7 days",
     "eventTypes": {
-      "session": "Session",
       "auction": "Auction",
+      "result": "Result",
+      "redemption": "Redemption",
       "dividend": "Dividend",
       "meeting": "Meeting",
-      "maturity": "Maturity",
-      "earnings": "Earnings"
+      "earnings": "Earnings",
+      "beac": "BEAC",
+      "statistic": "Statistic",
+      "international": "International"
     },
     "summary": {
       "advancers": "Advancers",
@@ -276,8 +279,19 @@
       "release": "News",
       "auction": "Auction results",
       "portfolio": "Portfolio limit",
-      "publication": "New research"
+      "publication": "New research",
+      "calendar": "Calendar event"
     },
+    "calendarEvent": "Event",
+    "calendarScope": "Follows",
+    "calendarScopes": {
+      "any": "Any event of this type",
+      "mine": "My securities (portfolios, watchlists)",
+      "security": "A security",
+      "country": "A country"
+    },
+    "daysBefore": "Days before",
+    "daysBeforeHint": "0 for the day itself; results and BEAC decisions are told when published.",
     "publicationAbout": "Research",
     "newsAbout": "News",
     "about": {
@@ -319,6 +333,7 @@
       "required": "Required",
       "positive": "Must be above 0",
       "aboveOne": "Must be above 1",
+      "daysRange": "From 0 to 30 days",
       "channels": "Choose at least one channel"
     },
     "conditions": {
@@ -336,6 +351,8 @@
       }
     },
     "subjects": {
+      "mySecurities": "My securities",
+      "allEvents": "All events",
       "portfolios": "My portfolios",
       "analysts": "Followed analysts"
     },
@@ -354,22 +371,6 @@
     "allPortfolios": "All my portfolios",
     "channelsTo": "E-mail to {{email}}, SMS to {{phone}}.",
     "smsNeedsPhone": "E-mail to {{email}}. For SMS, add a mobile phone in Settings (CFG)."
-  },
-  "calendar": {
-    "views": {
-      "day": "Day",
-      "week": "Week"
-    },
-    "previous": "Previous",
-    "next": "Next",
-    "today": "Today",
-    "types": "Event types",
-    "allCountries": "All countries",
-    "country": "Country",
-    "weekOf": "Week of {{date}}",
-    "noEvents": "No event",
-    "noSession": "No session",
-    "openSecurity": "Double-click or Enter opens the security profile"
   },
   "auctions": {
     "bta_one": "BTA {{count}} wk",

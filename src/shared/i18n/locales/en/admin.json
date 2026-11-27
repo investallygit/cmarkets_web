@@ -293,6 +293,8 @@
     "curveStaleDaysHint": "A point of a CEMAC yield curve older than this is marked stale on YCRV (spec section 11). Nothing is computed again.",
     "sovereignRatings": "Show the agencies' sovereign ratings on DEBT",
     "sovereignRatingsHint": "S&P's, Moody's and Fitch's ratings of the CEMAC states, uploaded as SOVEREIGN_RATINGS. Off until the agencies' licences are confirmed (spec section 9, screen 35).",
+    "internationalEvents": "Show EODHD's international events on CAL",
+    "internationalEventsHint": "The economic events of the US, the euro area, China and the CEMAC's partners, loaded each morning from EODHD. Off until the licence and the key's plan are checked (spec section 9, screen 32).",
     "days": "days",
     "countryCurve": "{{country}} sovereign curve",
     "otherCurrencies": "EUR and USD: the government curves of EODHD, n/a until their codes are confirmed.",
@@ -548,7 +550,8 @@
       "curveFeed": "RFQ agreements feed the curve",
       "curveFeedMinimum": "Curve feed from a face of",
       "completionWindow": "Completion window (months)",
-      "sovereignRatings": "Sovereign ratings on DEBT"
+      "sovereignRatings": "Sovereign ratings on DEBT",
+      "internationalEvents": "International events on CAL"
     },
     "targetTypes": {
       "user": "Account",

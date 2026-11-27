@@ -12,12 +12,15 @@
     },
     "next7Days": "7 prochains jours",
     "eventTypes": {
-      "session": "Séance",
       "auction": "Adjudication",
+      "result": "Résultat",
+      "redemption": "Remboursement",
       "dividend": "Dividende",
       "meeting": "Assemblée",
-      "maturity": "Échéance",
-      "earnings": "Résultats"
+      "earnings": "Publication",
+      "beac": "BEAC",
+      "statistic": "Statistique",
+      "international": "International"
     },
     "summary": {
       "advancers": "En hausse",
@@ -276,8 +279,19 @@
       "release": "Actualités",
       "auction": "Résultats d'adjudication",
       "portfolio": "Limite de portefeuille",
-      "publication": "Nouvelle recherche"
+      "publication": "Nouvelle recherche",
+      "calendar": "Événement du calendrier"
     },
+    "calendarEvent": "Événement",
+    "calendarScope": "Suit",
+    "calendarScopes": {
+      "any": "Tout événement de ce type",
+      "mine": "Mes titres (portefeuilles, listes)",
+      "security": "Un titre",
+      "country": "Un pays"
+    },
+    "daysBefore": "Jours avant",
+    "daysBeforeHint": "0 pour le jour même ; les résultats et les décisions de la BEAC sont annoncés à leur publication.",
     "publicationAbout": "Recherche",
     "newsAbout": "Actualités",
     "about": {
@@ -319,6 +333,7 @@
       "required": "Obligatoire",
       "positive": "Doit être supérieur à 0",
       "aboveOne": "Doit être supérieur à 1",
+      "daysRange": "De 0 à 30 jours",
       "channels": "Choisissez au moins un canal"
     },
     "conditions": {
@@ -336,6 +351,8 @@
       }
     },
     "subjects": {
+      "mySecurities": "Mes titres",
+      "allEvents": "Tous les événements",
       "portfolios": "Mes portefeuilles",
       "analysts": "Analystes suivis"
     },
@@ -354,22 +371,6 @@
     "allPortfolios": "Tous mes portefeuilles",
     "channelsTo": "E-mail à {{email}}, SMS au {{phone}}.",
     "smsNeedsPhone": "E-mail à {{email}}. Pour les SMS, ajoutez un mobile dans les Paramètres (CFG)."
-  },
-  "calendar": {
-    "views": {
-      "day": "Jour",
-      "week": "Semaine"
-    },
-    "previous": "Précédent",
-    "next": "Suivant",
-    "today": "Aujourd'hui",
-    "types": "Types d'événement",
-    "allCountries": "Tous les pays",
-    "country": "Pays",
-    "weekOf": "Semaine du {{date}}",
-    "noEvents": "Aucun événement",
-    "noSession": "Pas de séance",
-    "openSecurity": "Double-clic ou Entrée ouvre la fiche valeur"
   },
   "auctions": {
     "bta_one": "BTA {{count}} sem.",

@@ -107,6 +107,9 @@ by which step, and what is still to do. The terminal's screens are in
 - **Built in step 66**: `SOVEREIGN_RATINGS` (a state by its three letters, two or its name, the
   agency, the rating on its scale, the outlook, the date; the earlier dates kept as the history),
   shown on DEBT. See [step 66](steps/step-66-sovereign-debt.md).
+- **Built in step 67**: `CORPORATE_EVENTS` (an issuer's general meeting or release: the day, the
+  time in Douala, the security, the type, the title and a detail), confirmed, on CAL and MKT's
+  calendar. See [step 67](steps/step-67-event-calendar.md).
 
 ## CORR · Data corrections (no mockup): done
 
@@ -134,6 +137,10 @@ by which step, and what is still to do. The terminal's screens are in
   1,500 characters, on the spec's routes (decision 40); an index's description in step 56.
 - **Sixth version (steps 64 and 67)**: the public bond issues of APE (decision 58) and the
   calendar's events entered by hand, "announced" until confirmed (decision 57).
+- **Built in step 67 (sixth version)**: CAL's events entered by hand (a meeting, a release, a
+  BEAC meeting, a statistic, an international event, an auction announced): the day, the time,
+  the state or the security, the title and the detail, "announced date" until confirmed; each
+  save and deletion in AUDT. See [step 67](steps/step-67-event-calendar.md).
 
 ## NEWS · News and documents (no mockup): done
 
@@ -253,6 +260,9 @@ by which step, and what is still to do. The terminal's screens are in
   international events (decision 57).
 - **Built in step 66**: under Bonds, "Show the agencies' sovereign ratings on DEBT", off until
   their licences are confirmed (on in the demo), audited as "Sovereign ratings on DEBT".
+- **Built in step 67**: "Show EODHD's international events on CAL", off until the licence and the
+  key's plan are checked (on in the demo), audited as "International events on CAL"; turned on, the
+  events load at once, then each morning.
 
 ## AUDT · Audit log (no mockup): done
 

@@ -3,6 +3,7 @@ import admin from './en/admin.json'
 import analysis from './en/analysis.json'
 import auctionMarket from './en/auctionMarket.json'
 import beac from './en/beac.json'
+import calendar from './en/calendar.json'
 import bonds from './en/bonds.json'
 import commodities from './en/commodities.json'
 import core from './en/core.json'
@@ -41,6 +42,7 @@ const en = {
   ...monitoring,
   ...auctionMarket,
   ...beac,
+  ...calendar,
   ...debt,
   ...indices,
   ...downloads,

@@ -32,6 +32,8 @@ export type ImportType =
   | 'monetary-aggregates'
   /** The agencies' ratings of the CEMAC states, with their outlooks (SOVEREIGN_RATINGS, screen 35). */
   | 'sovereign-ratings'
+  /** The issuers' general meetings and releases (CORPORATE_EVENTS, screen 32). */
+  | 'corporate-events'
 
 /** How often a file is expected: each session, each auction, weekly, or when there is news. */
 export type ImportFrequency = 'session' | 'auction' | 'weekly' | 'onDemand' | 'periodic' | 'once'

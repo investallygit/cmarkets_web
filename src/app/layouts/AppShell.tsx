@@ -3,6 +3,7 @@ import { Outlet } from 'react-router'
 import { useAlertRealtimeSync } from '@/entities/alert'
 import { useAuctionRealtimeSync } from '@/entities/auction'
 import { useBeacRealtimeSync } from '@/entities/beac'
+import { useCalendarRealtimeSync } from '@/entities/calendar-event'
 import { useDebtRealtimeSync } from '@/entities/debt'
 import { useBondScreenerRealtimeSync } from '@/entities/bond'
 import { useEtfRealtimeSync } from '@/entities/etf'
@@ -53,6 +54,7 @@ export function AppShell() {
   useSecurityRealtimeSync()
   useAuctionRealtimeSync()
   useBeacRealtimeSync()
+  useCalendarRealtimeSync()
   useDebtRealtimeSync()
   usePolicyRateRealtimeSync()
   useYieldCurveRealtimeSync()

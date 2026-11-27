@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
-import { useUpcomingEvents } from '@/entities/calendar-event'
+import { EventTypeBadge, useCalendarWords, useUpcomingEvents } from '@/entities/calendar-event'
 import type { CalendarEventDto } from '@/shared/api/contracts'
+import { cemacCode3 } from '@/shared/config/countries'
 import { useFormat } from '@/shared/i18n'
-import { securityPath } from '@/shared/routes/paths'
+import { auctionsPath, routes, securityPath } from '@/shared/routes/paths'
 import { createDataColumnHelper } from '@/shared/ui/dataColumns'
 import { DataTable } from '@/shared/ui/DataTable'
 import { Panel } from '@/shared/ui/Panel'
@@ -13,11 +14,23 @@ import { QueryView } from '@/shared/ui/QueryView'
 const helper = createDataColumnHelper<CalendarEventDto>()
 const getEventId = (event: CalendarEventDto) => event.id
 
-/** Screen 1, Market calendar: the next 7 days; a double-click opens the security. API /calendar. */
+/** The screen an event opens: its auctions, its security, BEAC. */
+function pathOf(event: CalendarEventDto): string | null {
+  if (event.type === 'auction' || event.type === 'result')
+    return auctionsPath(event.country ?? undefined)
+  if (event.type === 'beac' || event.type === 'statistic') return routes.beac
+  return event.securityId ? securityPath(event.securityId) : null
+}
+
+/**
+ * Screen 1, Market calendar: the next 7 days of CAL's events (screen 32, sixth version), the
+ * international ones aside; a double-click opens the auctions, the security or BEAC. API /calendar.
+ */
 export function CalendarPanel() {
   const { t } = useTranslation()
   const format = useFormat()
   const navigate = useNavigate()
+  const words = useCalendarWords()
   const events = useUpcomingEvents()
 
   const columns = useMemo(
@@ -26,18 +39,22 @@ export function CalendarPanel() {
         helper.accessor('date', {
           header: t('columns.date'),
           meta: { width: '96px' },
-          cell: ({ row }) => format.dayMonth(row.original.date),
+          cell: ({ row }) =>
+            `${format.dayMonth(row.original.date)}${row.original.time ? ` ${row.original.time}` : ''}`,
         }),
         helper.accessor('type', {
           header: t('columns.type'),
-          meta: { width: '160px' },
-          cell: ({ row }) => (
-            <span className="text-info">{t(`market.eventTypes.${row.original.type}`)}</span>
-          ),
+          meta: { width: '120px' },
+          cell: ({ row }) => <EventTypeBadge type={row.original.type} />,
         }),
-        helper.accessor('title', { header: t('columns.event') }),
+        helper.accessor((event) => (event.country ? cemacCode3(event.country) : 'CEMAC'), {
+          id: 'country',
+          header: t('columns.country'),
+          meta: { width: '64px' },
+        }),
+        helper.accessor((event) => words.title(event), { id: 'title', header: t('columns.event') }),
       ]),
-    [t, format],
+    [t, format, words],
   )
 
   return (
@@ -45,11 +62,12 @@ export function CalendarPanel() {
       <QueryView query={events}>
         {(data) => (
           <DataTable
-            data={data}
+            data={data.events.filter((event) => event.type !== 'international')}
             columns={columns}
             getRowId={getEventId}
             onRowDoubleClick={(event) => {
-              if (event.securityId) void navigate(securityPath(event.securityId))
+              const path = pathOf(event)
+              if (path) void navigate(path)
             }}
             exportName="calendar"
           />

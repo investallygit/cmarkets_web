@@ -53,7 +53,7 @@ test('the BEAC auctions of the session are checked, published and reach the term
 
   // The terminals get the new auctions.
   await switchAccount(page, /data admin/i, 'Analyst', /analyst/i)
-  await page.goto('/cal')
+  await page.goto('/ycrv')
   const auctions = panel(page, 'Latest government securities auctions (BEAC)')
   await auctions.getByRole('combobox', { name: 'Country' }).selectOption('GA')
   await expect(auctions.getByRole('row', { name: /7\.45%/ })).toBeVisible()

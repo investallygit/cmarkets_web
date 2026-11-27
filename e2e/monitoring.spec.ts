@@ -158,28 +158,6 @@ test(
   },
 )
 
-// @fresh-db: the auctions as seeded, to which the Data admin's flows add.
-test(
-  'the CAL screen shows the week and the BEAC auctions',
-  { tag: '@fresh-db' },
-  async ({ page }) => {
-    await page.goto('/cal')
-    await expect(page.getByRole('region', { name: /^Monday / })).toBeVisible()
-    await expect(page.getByRole('region', { name: /^Sunday / })).toContainText('No session')
-
-    const auctions = panel(page, 'Latest government securities auctions (BEAC)')
-    // The auctions of the screen 4 mockup first, AUC's two years after them (ROADMAP step 64).
-    await expect(auctions.getByRole('row').nth(1)).toContainText('BTA 26 wk')
-    await auctions.getByRole('combobox', { name: 'Country' }).selectOption('CM')
-    for (const [index, security] of ['BTA 26 wk', 'OTA 5 yr', 'BTA 13 wk'].entries()) {
-      await expect(auctions.getByRole('row').nth(index + 1)).toContainText(security)
-    }
-
-    await panel(page, 'Market calendar').getByRole('tab', { name: 'Day' }).click()
-    await expect(page).toHaveURL(/\/cal\?view=day$/)
-  },
-)
-
 test('GP draws nothing over the lines it could not read, and draws once they are (B48)', async ({
   page,
 }) => {

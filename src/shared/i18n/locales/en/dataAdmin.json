@@ -25,7 +25,8 @@
       "beac-operations": "BEAC liquidity operations",
       "interbank-rates": "Interbank rates",
       "monetary-aggregates": "Monetary aggregates",
-      "sovereign-ratings": "Sovereign ratings"
+      "sovereign-ratings": "Sovereign ratings",
+      "corporate-events": "Corporate events"
     },
     "frequencies": {
       "session": "Every session",
@@ -267,7 +268,8 @@
       "beac-operations": "the BEAC's operation releases",
       "interbank-rates": "the BEAC's interbank market bulletin",
       "monetary-aggregates": "the BEAC's bulletins and monetary policy reports",
-      "sovereign-ratings": "the agencies' rating actions (S&P, Moody's, Fitch), on each change"
+      "sovereign-ratings": "the agencies' rating actions (S&P, Moody's, Fitch), on each change",
+      "corporate-events": "the issuers' notices of general meetings and release dates, as they occur"
     },
     "selected": {
       "alert": "Row {{row}} selected: check the {{field}} against {{source}}, fix it if needed, then tick “Alert checked”.",
@@ -319,7 +321,8 @@
       "beac-operations": "On publish: the tenders are added or updated on BEAC's liquidity operations; a DataPublished event is sent to open screens.",
       "interbank-rates": "On publish: the weeks are added or updated on BEAC's interbank market, with their changes from the week before; a DataPublished event is sent to open screens.",
       "monetary-aggregates": "On publish: the figures are added or updated on BEAC's monetary aggregates, the latest inflation in its indicators; a DataPublished event is sent to open screens.",
-      "sovereign-ratings": "On publish: the ratings are added or updated on DEBT, behind ADMCFG's switch; a DataPublished event is sent to open screens."
+      "sovereign-ratings": "On publish: the ratings are added or updated on DEBT, behind ADMCFG's switch; a DataPublished event is sent to open screens.",
+      "corporate-events": "On publish: the meetings and releases are added or updated on CAL and MKT's calendar, confirmed; a CalendarEventChanged event is sent to open screens."
     },
     "fix": {
       "title": "Fix row {{row}}",

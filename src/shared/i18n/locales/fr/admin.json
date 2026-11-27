@@ -293,6 +293,8 @@
     "curveStaleDaysHint": "Un point d’une courbe de taux CEMAC plus ancien est signalé sur YCRV (section 11 de la spécification). Rien n’est recalculé.",
     "sovereignRatings": "Afficher les notations souveraines des agences sur DEBT",
     "sovereignRatingsHint": "Les notations des États de la CEMAC par S&P, Moody's et Fitch, chargées par SOVEREIGN_RATINGS. Désactivé tant que les licences des agences ne sont pas confirmées (spec section 9, écran 35).",
+    "internationalEvents": "Afficher les événements internationaux d'EODHD sur CAL",
+    "internationalEventsHint": "Les événements économiques des États-Unis, de la zone euro, de la Chine et des partenaires de la CEMAC, chargés chaque matin depuis EODHD. Désactivé tant que la licence et le forfait de la clé ne sont pas vérifiés (spec section 9, écran 32).",
     "days": "jours",
     "countryCurve": "Courbe souveraine {{country}}",
     "otherCurrencies": "EUR et USD : les courbes d'État d'EODHD, n.d. tant que leurs codes ne sont pas confirmés.",
@@ -548,7 +550,8 @@
       "curveFeed": "Les accords RFQ alimentent la courbe",
       "curveFeedMinimum": "Courbe alimentée à partir d'un nominal de",
       "completionWindow": "Période de complétion (mois)",
-      "sovereignRatings": "Notations souveraines sur DEBT"
+      "sovereignRatings": "Notations souveraines sur DEBT",
+      "internationalEvents": "Événements internationaux sur CAL"
     },
     "targetTypes": {
       "user": "Compte",

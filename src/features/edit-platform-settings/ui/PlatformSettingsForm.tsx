@@ -50,6 +50,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
   const [xafReferenceCurve, setXafReferenceCurve] = useState(settings.xafReferenceCurve)
   const [curveStaleDays, setCurveStaleDays] = useState<number | null>(settings.curveStaleDays)
   const [sovereignRatings, setSovereignRatings] = useState(settings.sovereignRatings)
+  const [internationalEvents, setInternationalEvents] = useState(settings.internationalEvents)
   // The ETFs' currencies (spec section 14.5): EUR, USD, GBP.
   const [rates, setRates] = useState<{ currency: string; ratePct: number | null }[]>(
     settings.riskFreeRates,
@@ -109,6 +110,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     xafReferenceCurve,
     curveStaleDays: curveStaleDays ?? 0,
     sovereignRatings,
+    internationalEvents,
   }
   const changed =
     JSON.stringify(update) !==
@@ -123,6 +125,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
       xafReferenceCurve: settings.xafReferenceCurve,
       curveStaleDays: settings.curveStaleDays,
       sovereignRatings: settings.sovereignRatings,
+      internationalEvents: settings.internationalEvents,
     })
 
   const reset = () => {
@@ -138,6 +141,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
     setXafReferenceCurve(settings.xafReferenceCurve)
     setCurveStaleDays(settings.curveStaleDays)
     setSovereignRatings(settings.sovereignRatings)
+    setInternationalEvents(settings.internationalEvents)
   }
 
   const quotaInput = (type: ClientAccountType, quota: keyof QuotaDto) => (
@@ -348,6 +352,16 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettingsD
             />
             <p className="font-sans text-data text-secondary">
               {t('platformSettings.sovereignRatingsHint')}
+            </p>
+          </div>
+          <div className="max-w-xl space-y-1">
+            <Switch
+              checked={internationalEvents}
+              onChange={setInternationalEvents}
+              label={t('platformSettings.internationalEvents')}
+            />
+            <p className="font-sans text-data text-secondary">
+              {t('platformSettings.internationalEventsHint')}
             </p>
           </div>
         </Section>

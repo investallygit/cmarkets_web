@@ -160,6 +160,8 @@ POST /bonds/price
 GET /bonds/screener
 GET /bonds/screener/facets
 GET /calendar
+GET /calendar/{id}
+GET /calendar/export
 GET /charts/{securityId}/drawings
 PUT /charts/{securityId}/drawings
 GET /commodities
@@ -184,6 +186,10 @@ POST /conversations/{id}/report
 GET /conversations/contacts
 GET /curves
 GET /curves/{id}/points
+GET /data/calendar
+POST /data/calendar
+DELETE /data/calendar/{id}
+PUT /data/calendar/{id}
 PUT /data/commodities/{code}
 GET /data/corrections
 GET /data/coverage

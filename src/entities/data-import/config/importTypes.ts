@@ -24,6 +24,7 @@ export const IMPORT_TYPES: readonly ImportType[] = [
   'interbank-rates',
   'monetary-aggregates',
   'sovereign-ratings',
+  'corporate-events',
 ]
 
 /**

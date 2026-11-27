@@ -1,5 +1,6 @@
 import type {
-  CalendarEventDto,
+  CalendarDto,
+  CalendarEventDetailDto,
   CalendarEventType,
   DocumentDto,
   DocumentType,
@@ -37,8 +38,10 @@ export interface CalendarRange {
   to: string
   /** All types when empty. */
   types?: readonly CalendarEventType[]
-  /** A country keeps the regional events too. */
-  country?: string
+  /** The CEMAC states, two letters; any when empty. The zone's and the international events stay. */
+  countries?: readonly string[]
+  /** Only the events of the securities of the user's portfolios and watchlists. */
+  mine?: boolean
 }
 
 export interface Page {
@@ -55,7 +58,9 @@ export const contentRoutes = {
   reportNews: route('POST', '/news/{id}/report'),
   documents: route('GET', '/documents', answer<Paged<DocumentDto>>()),
   documentFile: route('GET', '/documents/{id}/file', answer<Blob>()),
-  calendar: route('GET', '/calendar', answer<CalendarEventDto[]>()),
+  calendar: route('GET', '/calendar', answer<CalendarDto>()),
+  calendarEvent: route('GET', '/calendar/{id}', answer<CalendarEventDetailDto>()),
+  calendarExport: route('GET', '/calendar/export', answer<Blob>()),
 }
 
 export const contentApi = {
@@ -81,6 +86,32 @@ export const contentApi = {
   /** The PDF, which never changes once published. */
   documentFile: (id: string, signal?: AbortSignal) =>
     sendBlob(contentRoutes.documentFile, { params: { id }, signal }),
-  calendar: ({ from, to, types, country }: CalendarRange, signal?: AbortSignal) =>
-    send(contentRoutes.calendar, { query: { from, to, type: types, country }, signal }),
+  calendar: ({ from, to, types, countries, mine }: CalendarRange, signal?: AbortSignal) =>
+    send(contentRoutes.calendar, {
+      query: {
+        from,
+        to,
+        types: types?.join(','),
+        countries: countries?.join(','),
+        mine: mine || undefined,
+      },
+      signal,
+    }),
+  calendarEvent: (id: string, signal?: AbortSignal) =>
+    send(contentRoutes.calendarEvent, { params: { id }, signal }),
+  /** One event (id) or the filtered list, as an iCalendar file or a workbook, in Douala time. */
+  calendarExport: (format: 'ics' | 'xlsx', range: CalendarRange | { id: string }) =>
+    sendBlob(contentRoutes.calendarExport, {
+      query:
+        'id' in range
+          ? { format, id: range.id }
+          : {
+              format,
+              from: range.from,
+              to: range.to,
+              types: range.types?.join(','),
+              countries: range.countries?.join(','),
+              mine: range.mine || undefined,
+            },
+    }),
 }

@@ -3,6 +3,7 @@ import { ScreenWorkspace, type ScreenPanel } from '@/features/workspace-layout'
 import { addDays } from '@/shared/lib/isoDate'
 import { useMarketDay } from '@/shared/lib/useMarketDay'
 import { useSearchParamsUpdate, withParams } from '@/shared/routes/useSearchParamsUpdate'
+import { CalendarEditorPanel } from '@/widgets/calendar-editor-panel'
 import { DescriptionEditorPanel } from '@/widgets/description-editor-panel'
 import { PublicOfferEditorPanel } from '@/widgets/public-offer-editor-panel'
 import {
@@ -13,7 +14,7 @@ import {
 
 /**
  * CORR has no mockup: the correction on the left over its log, the stored sessions on the right
- * over the security's description; APE's public bond issues below.
+ * over the security's description; APE's public bond issues, then CAL's events entered, below.
  */
 const LAYOUT: readonly ScreenPanel[] = [
   { i: 'correction', name: 'priceCorrection', x: 0, y: 0, w: 6, h: 13, minW: 4, minH: 10 },
@@ -22,6 +23,8 @@ const LAYOUT: readonly ScreenPanel[] = [
   { i: 'description', name: 'descriptionEditor', x: 6, y: 11, w: 6, h: 15, minW: 4, minH: 8 },
   // APE's public bond issues (sixth version, ROADMAP step 64): the spec gives no file for them.
   { i: 'offers', name: 'publicOfferEditor', x: 0, y: 26, w: 12, h: 10, minW: 4, minH: 5 },
+  // CAL's events entered by hand (sixth version, ROADMAP step 67): "announced date" until confirmed.
+  { i: 'calendar', name: 'calendarEditor', x: 0, y: 36, w: 12, h: 10, minW: 4, minH: 5 },
 ]
 
 /**
@@ -62,6 +65,7 @@ export function DataCorrectionsPage() {
     ),
     description: <DescriptionEditorPanel securityId={securityId} />,
     offers: <PublicOfferEditorPanel />,
+    calendar: <CalendarEditorPanel today={today} />,
   }
   return <ScreenWorkspace screenId="CORR" defaultLayout={LAYOUT} panels={panels} />
 }

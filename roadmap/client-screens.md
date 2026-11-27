@@ -86,7 +86,7 @@ what is still to do. The Data admin's and the Admin's screens are in
   category (instead of topic), type and newspaper; the content read from `GET /news/{id}`, with
   its newspaper, author, original link and "Updated on …", and its unique click.
 
-## CAL · Market calendar (no mockup): done
+## CAL · Event calendar (screen 32): done
 
 - **Built**: week (Monday to Sunday, today in amber, weekends without a session) or day view
   (a table that sorts and exports) of sessions, auctions, ex-dividend dates, bond redemptions,
@@ -102,6 +102,13 @@ what is still to do. The Data admin's and the Admin's screens are in
   alerts. The events entered by the Data admin, "announced" until confirmed; EODHD's
   international events behind a switch (decision 57). See
   [step 67](steps/step-67-event-calendar.md).
+- **Built in step 67 (sixth version)**: CAL as the mockup: the filters (the nine types with
+  their colours and counts, the six states, the four views, "only my securities", Export ICS ·
+  XLSX), the agenda by day in Douala time (time, type, state, event, the detail that matters;
+  the BVMAC's closed days as notes), the event picked (its facts, the previous comparable auction,
+  "Create an alert on this event", "Add to my calendar (ICS)", AUC, the profile or BEAC) and "My
+  calendar alerts". MKT's calendar panel shows the same events; the latest auctions panel stays on
+  YCRV. ALRT's new type, `calendar`. See [step 67](steps/step-67-event-calendar.md).
 
 ## ALRT · Alerts (no mockup): done
 

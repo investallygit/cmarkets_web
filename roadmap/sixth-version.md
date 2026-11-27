@@ -236,7 +236,15 @@ itself, steps 61 to 68 follow these; each is also an
     channels and quotas; ALRT lists it. The ICS has one event or the filtered list, in Douala time.
     The Data admin enters an event by hand in CORR ("announced date" until confirmed) and loads
     `CORPORATE_EVENTS` on IMP. The international events come through EODHD behind ADMCFG's source
-    switch, off by default until the licence and the key's plan are checked (decision 41).
+    switch, off by default until the licence and the key's plan are checked (decision 41). Built in
+    step 67: the events entered or loaded are `mkt.CalendarEvents` (data.CalendarEntries moved), the
+    others read from their tables (the planned auctions not held, the results at 15:00, the
+    redemptions, the dividends, the BEAC's meetings at 10:00); a country keeps the zone's and the
+    international events; "only my securities" reads the portfolios' transactions and the
+    watchlists; CORPORATE_EVENTS maps its types to meetings and releases ("other" a release); a
+    calendar alert goes off each morning the days it asks ahead, with the results, or with a BEAC
+    decision published, once an event; the demo turns EODHD's events on with fourteen examples; CAL
+    opens on the list of two weeks from today, without the international events, which a click adds.
 58. **The auctions**: `mkt.Auctions` gains the security (the master's BTA or OTA it issued, created
     or found by its code), the status (planned or done), the value date, the method and the
     bidders; `mkt.AuctionBids` the bids by rate when published. `AUCTION_CALENDAR` adds or updates

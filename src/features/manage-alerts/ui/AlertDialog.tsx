@@ -6,6 +6,7 @@ import {
   useUpdateAlert,
   type AlertDialogRequest,
 } from '@/entities/alert'
+import { CALENDAR_EVENT_TYPES, PUBLISHED_EVENT_TYPES } from '@/entities/calendar-event'
 import { usePortfolios } from '@/entities/portfolio'
 import { priceDecimals, useQuote } from '@/entities/quote'
 import { SecurityPicker, useSecurityProfile } from '@/entities/security'
@@ -24,6 +25,8 @@ import { toast } from '@/shared/ui/toast'
 import {
   ALERT_CHANNELS,
   ALERT_TYPES,
+  calendarScopes,
+  defaultDaysBefore,
   initialAlertForm,
   needsCountry,
   needsSecurity,
@@ -38,7 +41,7 @@ interface AlertDialogProps {
   onClose: () => void
 }
 
-/** Creates or edits an alert of one of the six types of spec section 5. */
+/** Creates or edits an alert of one of the six types of spec section 5, or a calendar alert (CAL). */
 export function AlertDialog({ request, onClose }: AlertDialogProps) {
   const { t } = useTranslation()
   return (
@@ -62,7 +65,9 @@ function AlertForm({ request, onClose }: { request: AlertDialogRequest; onClose:
   // The code of a security given by id (right-click menu) comes with its profile.
   const givenId = request.alert ? undefined : request.securityId
   const given = useSecurityProfile(givenId).data
-  const [form, setForm] = useState(() => initialAlertForm(editing))
+  const [form, setForm] = useState(() =>
+    initialAlertForm(editing, undefined, request.alert ? undefined : request.calendar),
+  )
   const [submitted, setSubmitted] = useState(false)
   const alerts = useAlerts()
   // Portfolio limits are set on the portfolios held or read: none for a Journalist.
@@ -136,6 +141,53 @@ function AlertForm({ request, onClose }: { request: AlertDialogRequest; onClose:
             onChange={(type) => set({ type })}
           />
         </Field>
+
+        {form.type === 'calendar' && (
+          <>
+            <Field label={t('alerts.calendarEvent')}>
+              <Select
+                value={form.calendarEvent}
+                options={CALENDAR_EVENT_TYPES.map((event) => ({
+                  value: event,
+                  label: t(`calendar.types.${event}`),
+                }))}
+                onChange={(calendarEvent) => {
+                  const scopes = calendarScopes(calendarEvent)
+                  set({
+                    calendarEvent,
+                    calendarScope: scopes.includes(form.calendarScope) ? form.calendarScope : 'any',
+                    daysBefore: defaultDaysBefore(calendarEvent),
+                  })
+                }}
+              />
+            </Field>
+            <Field label={t('alerts.calendarScope')} group>
+              <SegmentedControl
+                value={form.calendarScope}
+                options={calendarScopes(form.calendarEvent).map((scope) => ({
+                  value: scope,
+                  label: t(`alerts.calendarScopes.${scope}`),
+                }))}
+                onChange={(calendarScope) => set({ calendarScope })}
+              />
+            </Field>
+            {!PUBLISHED_EVENT_TYPES.includes(form.calendarEvent) && (
+              <Field
+                label={t('alerts.daysBefore')}
+                hint={t('alerts.daysBeforeHint')}
+                error={errorText(errors.daysBefore)}
+              >
+                <NumberInput
+                  value={form.daysBefore}
+                  onChange={(daysBefore) => set({ daysBefore })}
+                  decimals={0}
+                  highlight
+                  className="w-24"
+                />
+              </Field>
+            )}
+          </>
+        )}
 
         {form.type === 'release' && (
           <Field label={t('alerts.newsAbout')} group>

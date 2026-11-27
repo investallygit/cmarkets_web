@@ -262,6 +262,11 @@ export interface PlatformSettingsDto {
    * licences are confirmed (ROADMAP decision 60).
    */
   sovereignRatings: boolean
+  /**
+   * Whether CAL loads and shows EODHD's international events (screen 32, sixth version): off until
+   * the licence and the key's plan are checked (ROADMAP decision 57).
+   */
+  internationalEvents: boolean
   updatedAt: IsoDateTime | null
   updatedBy: string | null
 }
@@ -524,6 +529,7 @@ export const AUDIT_FIELDS = [
   /** The completion ratios' window, in months (ROADMAP step 62). */
   'completionWindow',
   'sovereignRatings',
+  'internationalEvents',
 ] as const
 export type AuditField = (typeof AUDIT_FIELDS)[number]
 

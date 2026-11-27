@@ -1,0 +1,164 @@
+{
+  "calendar": {
+    "badges": {
+      "auction": "Adjudication",
+      "result": "Résultat",
+      "redemption": "Rembours.",
+      "dividend": "Dividende",
+      "meeting": "AG",
+      "earnings": "Publication",
+      "beac": "BEAC",
+      "statistic": "Statistique",
+      "international": "Intl"
+    },
+    "types": {
+      "auction": "Adjudications BTA / OTA",
+      "result": "Résultats d'adjudication",
+      "redemption": "Remboursements",
+      "dividend": "Dividendes",
+      "meeting": "Assemblées générales",
+      "earnings": "Publications de résultats",
+      "beac": "Politique monétaire BEAC",
+      "statistic": "Statistiques CEMAC",
+      "international": "International (EODHD)"
+    },
+    "filters": {
+      "options": "Réinitialiser",
+      "eventTypes": "Types d'événements",
+      "countries": "Pays",
+      "view": "Vue",
+      "views": {
+        "day": "Jour",
+        "week": "Semaine",
+        "list": "Liste",
+        "month": "Mois"
+      },
+      "mine": "Seulement mes titres (portefeuilles, listes)",
+      "export": "Exporter",
+      "exportIcs": "ICS",
+      "exportXlsx": "XLSX",
+      "exportLabel": "Exporter les événements affichés en {{format}}",
+      "internationalOff": "Désactivé tant que l'administrateur n'active pas les événements EODHD (ADMCFG).",
+      "countOf": "{{count}} événements de ce type"
+    },
+    "agenda": {
+      "options": "{{count}} événements · heure de Douala",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "today": "Aujourd'hui",
+      "todayMark": "aujourd'hui",
+      "range": "Du {{from}} au {{to}}",
+      "empty": "Aucun événement ces jours-là pour ces filtres.",
+      "wholeDay": "—",
+      "note": "Clic : détail · double-clic : écran lié (adjudication, profil, BEAC) · cloche : créer une alerte",
+      "alert": "Créer une alerte sur {{event}}"
+    },
+    "detail": {
+      "pick": "Choisir un événement dans l'agenda : son détail, une alerte, votre calendrier.",
+      "today": "Aujourd'hui {{time}}",
+      "on": "{{date}} {{time}}",
+      "resultsAround": "Résultats vers 15:00",
+      "announced": "Date annoncée",
+      "rows": {
+        "issuer": "Émetteur",
+        "security": "Titre",
+        "valueDate": "Date de valeur",
+        "maturity": "Échéance",
+        "offered": "Montant offert",
+        "averageRate": "Taux moyen",
+        "marginalRate": "Taux marginal",
+        "cover": "Taux de couverture",
+        "bidders": "Participants",
+        "previous": "Précédente comparable",
+        "previousCover": "Couverture précédente",
+        "exDate": "Date de détachement",
+        "paymentDate": "Date de paiement",
+        "amount": "Montant",
+        "policyRate": "Taux directeur",
+        "detail": "Détail",
+        "source": "Source"
+      },
+      "sources": {
+        "file": "Fichier de l'administrateur des données",
+        "entry": "Saisi par l'administrateur des données",
+        "eodhd": "EODHD",
+        "cmarket": "CMarket"
+      },
+      "createAlert": "Créer une alerte sur cet événement",
+      "addIcs": "Ajouter à mon calendrier (ICS)",
+      "open": {
+        "auction": "Voir les adjudications de cet État (AUC)",
+        "security": "Ouvrir le profil du titre",
+        "beac": "Ouvrir la politique monétaire de la BEAC (BEAC)"
+      }
+    },
+    "alerts": {
+      "options": "ALRT",
+      "empty": "Aucune alerte de calendrier : choisissez un événement et créez-en une.",
+      "any": "Tous",
+      "mine": "mes titres",
+      "on": "{{type}} — {{scope}}",
+      "daysBefore": "J−{{days}}",
+      "channels": {
+        "push": "écran",
+        "email": "e-mail",
+        "sms": "SMS"
+      },
+      "sources": "Sources : calendriers d'émission (administrateur des données), opérations sur titres BVMAC, communiqués de la BEAC, publications des émetteurs ; international : EODHD."
+    },
+    "words": {
+      "bta": "BTA {{term}} semaines",
+      "ota": "OTA {{term}} ans",
+      "resultOf": "{{security}} du {{date}}",
+      "phases": {
+        "ex": "détachement",
+        "payment": "paiement",
+        "partial": "remboursement partiel",
+        "final": "échéance"
+      },
+      "mpc": "Comité de politique monétaire",
+      "offered": "Offert {{amount}} Md",
+      "value": "valeur {{date}}",
+      "averageRate": "Taux moyen {{rate}}",
+      "cover": "couverture {{cover}}",
+      "outstanding": "Encours {{amount}} Md",
+      "perShare": "{{amount}} / action",
+      "toBeConfirmed": "Montant à confirmer",
+      "policyRate": "Taux directeur {{rate}}",
+      "example": "(exemple)",
+      "announced": "date annoncée"
+    },
+    "corr": {
+      "title": "Événements du calendrier",
+      "add": "Saisir un événement",
+      "empty": "Aucun événement saisi ou chargé autour d'aujourd'hui.",
+      "formTitle": "Un nouvel événement du calendrier",
+      "edit": "Modifier {{title}}",
+      "delete": "Supprimer {{title}}",
+      "confirmTitle": "Supprimer {{title}} ?",
+      "confirmMessage": "L'événement quitte CAL et le calendrier de MKT ; la suppression est inscrite au journal d'audit.",
+      "deleted": "{{title}} supprimé.",
+      "saved": "{{title}} enregistré.",
+      "isConfirmed": "confirmé",
+      "isAnnounced": "date annoncée",
+      "zone": "Zone CEMAC, ou l'État du titre",
+      "timeHint": "À Douala ; vide pour toute la journée.",
+      "detailHint": "Ordre du jour : augmentation de capital · Précédent 3,8 % sur un an",
+      "confirmed": "Date confirmée (sinon affichée comme date annoncée)",
+      "fields": {
+        "date": "Date",
+        "time": "Heure",
+        "type": "Type",
+        "title": "Événement",
+        "detail": "Détail",
+        "security": "Titre",
+        "country": "État",
+        "confirmed": "Confirmé"
+      },
+      "errors": {
+        "required": "Obligatoire",
+        "time": "Une heure telle que 10:00"
+      }
+    }
+  }
+}

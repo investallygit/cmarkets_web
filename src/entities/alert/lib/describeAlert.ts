@@ -66,6 +66,21 @@ export function useDescribeAlert(): (
                     : country(value.country),
               condition: t(`alerts.conditions.publication.${value.about}`),
             }
+          case 'calendar':
+            return {
+              subject: value.mine
+                ? t('alerts.subjects.mySecurities')
+                : value.securityId
+                  ? security
+                  : value.country
+                    ? country(value.country)
+                    : t('alerts.subjects.allEvents'),
+              condition:
+                t(`calendar.types.${value.event}`) +
+                (value.daysBefore > 0
+                  ? ` · ${t('calendar.alerts.daysBefore', { days: value.daysBefore })}`
+                  : ''),
+            }
         }
       }
       return describe(condition)

@@ -1,4 +1,6 @@
 import type {
+  CalendarEntryDto,
+  CalendarEntryInputDto,
   CommodityProfileDto,
   CommodityWriteDto,
   CoverageDto,
@@ -73,6 +75,10 @@ export const dataAdminRoutes = {
   createPublicOffer: route('POST', '/data/public-offers', answer<PublicOfferDto>()),
   updatePublicOffer: route('PUT', '/data/public-offers/{id}', answer<PublicOfferDto>()),
   deletePublicOffer: route('DELETE', '/data/public-offers/{id}'),
+  calendarEntries: route('GET', '/data/calendar', answer<CalendarEntryDto[]>()),
+  createCalendarEntry: route('POST', '/data/calendar', answer<CalendarEntryDto>()),
+  updateCalendarEntry: route('PUT', '/data/calendar/{id}', answer<CalendarEntryDto>()),
+  deleteCalendarEntry: route('DELETE', '/data/calendar/{id}'),
   eodhdStatus: route('GET', '/data/providers/eodhd/status', answer<EodhdStatusDto>()),
   createNews: route('POST', '/data/news', answer<NewsArticleDto>()),
   updateNews: route('PUT', '/data/news/{id}', answer<NewsArticleDto>()),
@@ -151,6 +157,15 @@ export const dataAdminApi = {
       ? send(dataAdminRoutes.updatePublicOffer, { params: { id }, body: offer })
       : send(dataAdminRoutes.createPublicOffer, { body: offer }),
   deletePublicOffer: (id: string) => send(dataAdminRoutes.deletePublicOffer, { params: { id } }),
+  /** CORR's calendar (screen 32, sixth version): the events entered or loaded of a range. */
+  calendarEntries: (from: string, to: string, signal?: AbortSignal) =>
+    send(dataAdminRoutes.calendarEntries, { query: { from, to }, signal }),
+  saveCalendarEntry: (id: string | null, entry: CalendarEntryInputDto) =>
+    id
+      ? send(dataAdminRoutes.updateCalendarEntry, { params: { id }, body: entry })
+      : send(dataAdminRoutes.createCalendarEntry, { body: entry }),
+  deleteCalendarEntry: (id: string) =>
+    send(dataAdminRoutes.deleteCalendarEntry, { params: { id } }),
   eodhdStatus: (signal?: AbortSignal) => send(dataAdminRoutes.eodhdStatus, { signal }),
   /** News entered by the Data admin: a new item, or an edit of one. */
   saveNews: (id: string | null, news: NewsWriteDto) =>

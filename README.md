@@ -106,7 +106,7 @@ before upload.
 | 33 · BTA and OTA auctions (AUC, AUC NEXT, APE)                            | Done; bids by rate, coming auctions, APE entered in CORR       |
 | 34 · BEAC monetary policy and liquidity (BEAC)                            | Done; corridor since 2019, MPC releases, four BEAC files       |
 | 35 · Sovereign debt (DEBT)                                                | Done; outstanding, schedule, comparison, ratings behind ADMCFG |
-| 32 · Event calendar (CAL), calendar alerts                                | To do, step 67                                                 |
+| 32 · Event calendar (CAL), calendar alerts                                | Done; nine types, agenda by day, ICS, calendar alerts, CORR    |
 
 How the screens were built, step by step, what the second version of the spec added (the
 Journalist and CEO account types, screens 10 to 12 and what they change on screen 9), what the
@@ -193,12 +193,14 @@ src/
               macro-dashboard-panels, fx-dashboard-panels, commodity-profile-panels, my-svts-panel,
               trader-links-panel, rfq-new-request, rfq-my-request, rfq-board, rfq-blotter,
               rfq-eligible-securities, rfq-completion, auction-market, public-offer-editor-panel, beac-panels,
+              calendar-panels (CAL's filters, agenda, event and alerts), calendar-editor-panel (CORR),
               debt-panels,
               rfq-tabs, rfq-report-panels, svt-approval-panels, rfq-agreement-filters,
               rfq-agreement-list, rfq-agreement-detail, opt-setup-panels, opt-result-panels...),
               the security header and the shell bars (top-bar, side-menu, status-bar, ticker-tape)
   features/   user actions: log-in, sign-up, reset-password, log-out, command-bar, download-data,
-              security-actions, manage-watchlists, manage-alerts, screen-equities, screen-bonds,
+              security-actions, manage-watchlists, manage-alerts, edit-calendar-event (CORR's
+              calendar events), screen-equities, screen-bonds,
               screen-etfs, price-bond, manage-svt-links, decide-trader-link, publish-rfq, answer-rfq,
               confirm-rfq, dispute-rfq-case, decide-rfq-case, export-rfq-audit, send-daily-report,
               download-daily-report, edit-daily-report-settings, decide-svt-approval,
@@ -242,7 +244,7 @@ src/
               filters, the ticket), news, news-source
               (SRC's newspapers, the publishers, CMarket AI's settings and clients), news-statement
               (MPAY's statements, click anomalies and payment settings),
-              calendar-event, notification, data-import, data-provider (EODHD), stored-price,
+              calendar-event (CAL's events, agenda by day, words and badges), notification, data-import, data-provider (EODHD), stored-price,
               account, analyst-request, moderation, payout, platform-settings, audit, profile
               (the professional profiles of the directory), conversation (the messaging)
   shared/     no business knowledge: the API (client, contracts and the module of its endpoints,

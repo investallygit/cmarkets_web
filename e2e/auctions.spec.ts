@@ -19,7 +19,7 @@ test('AUC shows the indicators, the results, the bids of a result and its rates;
   page,
 }) => {
   // YCRV's auctions panel opens AUC on a state.
-  await page.goto('/cal')
+  await page.goto('/ycrv')
   const latest = panel(page, 'Latest government securities auctions (BEAC)')
   await latest.getByRole('combobox', { name: 'Country' }).selectOption('CM')
   await latest.getByRole('link', { name: 'All auctions (AUC)' }).click()

@@ -1,8 +1,17 @@
 import { create } from 'zustand'
-import type { AlertDto } from '@/shared/api/contracts'
+import type { AlertDto, CalendarEventType } from '@/shared/api/contracts'
 
-/** An alert to edit, or a new one, possibly on a given security. */
-export type AlertDialogRequest = { alert: AlertDto } | { alert?: undefined; securityId?: string }
+/** What a calendar alert opened from an event of CAL starts from: its type, its state or its security. */
+export interface CalendarAlertSeed {
+  event: CalendarEventType
+  country: string | null
+  securityId: string | null
+  securityCode: string | null
+}
+
+/** An alert to edit, or a new one, possibly on a given security or on an event of the calendar. */
+export type AlertDialogRequest =
+  { alert: AlertDto } | { alert?: undefined; securityId?: string; calendar?: CalendarAlertSeed }
 
 interface AlertDialogState {
   request: AlertDialogRequest | null

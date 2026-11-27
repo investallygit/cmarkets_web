@@ -25,7 +25,8 @@
       "beac-operations": "Opérations de liquidité de la BEAC",
       "interbank-rates": "Taux interbancaires",
       "monetary-aggregates": "Agrégats monétaires",
-      "sovereign-ratings": "Notations souveraines"
+      "sovereign-ratings": "Notations souveraines",
+      "corporate-events": "Événements des émetteurs"
     },
     "frequencies": {
       "session": "Chaque séance",
@@ -267,7 +268,8 @@
       "beac-operations": "les communiqués d'opérations de la BEAC",
       "interbank-rates": "le bulletin du marché interbancaire de la BEAC",
       "monetary-aggregates": "les bulletins et rapports de politique monétaire de la BEAC",
-      "sovereign-ratings": "les actions de notation des agences (S&P, Moody's, Fitch), à chaque changement"
+      "sovereign-ratings": "les actions de notation des agences (S&P, Moody's, Fitch), à chaque changement",
+      "corporate-events": "les avis d'assemblée et les dates de publication des émetteurs, au fil de l'eau"
     },
     "selected": {
       "alert": "Ligne {{row}} sélectionnée : vérifiez {{field}} dans {{source}}, corrigez si besoin, puis cochez « Alerte vérifiée ».",
@@ -319,7 +321,8 @@
       "beac-operations": "À la publication : les appels d'offres sont ajoutés ou mis à jour dans les opérations de liquidité de BEAC ; un événement DataPublished est envoyé aux écrans ouverts.",
       "interbank-rates": "À la publication : les semaines sont ajoutées ou mises à jour dans le marché interbancaire de BEAC, avec leurs variations d'une semaine à l'autre ; un événement DataPublished est envoyé aux écrans ouverts.",
       "monetary-aggregates": "À la publication : les chiffres sont ajoutés ou mis à jour dans les agrégats monétaires de BEAC, la dernière inflation dans ses indicateurs ; un événement DataPublished est envoyé aux écrans ouverts.",
-      "sovereign-ratings": "À la publication : les notations sont ajoutées ou mises à jour sur DEBT, derrière l'interrupteur d'ADMCFG ; un événement DataPublished est envoyé aux écrans ouverts."
+      "sovereign-ratings": "À la publication : les notations sont ajoutées ou mises à jour sur DEBT, derrière l'interrupteur d'ADMCFG ; un événement DataPublished est envoyé aux écrans ouverts.",
+      "corporate-events": "À la publication : les assemblées et publications sont ajoutées ou mises à jour dans CAL et le calendrier de MKT, confirmées ; un événement CalendarEventChanged est envoyé aux écrans ouverts."
     },
     "fix": {
       "title": "Corriger la ligne {{row}}",

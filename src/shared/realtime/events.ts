@@ -46,6 +46,8 @@ export interface RealtimeEventMap {
     policyRate: number | null
     nextMeeting: IsoDate | null
   }
+  /** An event entered, corrected or removed in CORR, or a CORPORATE_EVENTS file published (screen 32). */
+  CalendarEventChanged: { id: string | null; date: IsoDate | null }
   ImportStatusChanged: { importId: string; status: string; errors: number; warnings: number }
   PublicationPublished: { publicationId: string; subjectId: string; analystId: string }
   /** A file of DL prepared in the background is ready, or failed (screen 30, fifth version). */
