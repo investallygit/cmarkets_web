@@ -1,4 +1,4 @@
-# Step 58 · Fifth version done: README, accessibility, every flow (M): under way
+# Step 58 · Fifth version done: README, accessibility, every flow (M): done
 
 Step 58 of the [roadmap](../../ROADMAP.md#order), for the
 [fifth version of the spec](../fifth-version.md).
@@ -27,7 +27,10 @@ No CMarket.Api phase of its own: the operations' part of phase 12 for what phase
   dataset, field and schedule window by key, the focus back on its button.
 - **CMarket.Api**: Domain 713, Application 837, integration 315, architecture 21; `POST /exports`
   under k6 (`tests/load/exports.js`, 20 users, on SQLite): 2,812 checks, none failed, p95 10 ms for
-  a file, 7 ms for a preview, 8 ms for the catalogue; past 50 files a day, 429.
+  a file, 7 ms for a preview, 8 ms for the catalogue; past 50 files a day, 429. On SQL Server 2022
+  (27 November 2026, Docker, the x64 image emulated on the Mac): 2,744 checks, none failed, no
+  request failed; p95 60 ms for a file, 37 ms for a preview, 67 ms for the catalogue, 8 ms for the
+  list of files.
 - **SQL Server**: the suite's 41 tests pass in the CI (79d15c8), `DataDownloadsMigrationTests` among
   them, once its setup had the country and the user the constraints ask for.
 - The README's status and structure, the client and back-office screens: up to date for 54 to 57.
@@ -43,7 +46,6 @@ No CMarket.Api phase of its own: the operations' part of phase 12 for what phase
 
 ### Left
 
-- The load test on SQL Server: run on SQLite only.
 - After the release, the read-only check of the live site found no fault on any screen
   ([step 59](step-59-tabs-open-across-a-release.md)); building a file from DL, which writes, was
   not tried there.
